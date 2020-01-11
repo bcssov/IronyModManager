@@ -17,11 +17,7 @@ using System.Globalization;
 using System.Threading;
 using Avalonia;
 using Avalonia.Logging.Serilog;
-using Avalonia.ReactiveUI;
 using IronyModManager.DI;
-using ReactiveUI;
-using Splat;
-using Splat.SimpleInjector;
 using System.Linq;
 
 namespace IronyModManager
@@ -58,20 +54,6 @@ namespace IronyModManager
             InitDI();
 
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-        }
-
-        /// <summary>
-        /// Configures the di.
-        /// </summary>
-        private static void ConfigureDI()
-        {
-            var container = DIContainer.Container;
-
-            var resolver = new SimpleInjectorDependencyResolver(container);
-            resolver.InitializeSplat();
-            resolver.InitializeReactiveUI();
-
-            RxApp.MainThreadScheduler = Avalonia.Threading.AvaloniaScheduler.Instance;
         }
 
         /// <summary>
@@ -115,11 +97,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitDI()
         {
-            Bootstrap.Start(AppDomain.CurrentDomain.BaseDirectory);
-
-            ConfigureDI();
-
-            RegisterServices();
+            Bootstrap.Init(Constants.PluginsPath);
 
             Bootstrap.Finish();
         }
@@ -134,22 +112,6 @@ namespace IronyModManager
             {
                 // TODO: Add logger
             }
-        }
-
-        /// <summary>
-        /// Registers the services.
-        /// </summary>
-        private static void RegisterServices()
-        {
-            var container = DIContainer.Container;
-
-            #region Avalonia Reactive UI
-
-            // Have to manually bind Avalonia services... it doesn't really work best with SimpleInjector...
-            container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();
-            container.Register<IPropertyBindingHook, AutoDataTemplateBindingHook>();
-
-            #endregion Avalonia Reactive UI
         }
 
         #endregion Methods
@@ -177,6 +139,11 @@ namespace IronyModManager
             /// The error title
             /// </summary>
             public const string ErrorTitle = "Error";
+
+            /// <summary>
+            /// The plugins path
+            /// </summary>
+            public const string PluginsPath = "Plugins";
 
             #endregion Fields
         }

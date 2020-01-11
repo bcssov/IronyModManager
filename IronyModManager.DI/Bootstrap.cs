@@ -11,13 +11,14 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using IronyModManager.DI.Extensions;
-using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
+using IronyModManager.DI.Extensions;
+using SimpleInjector;
 
 namespace IronyModManager.DI
 {
@@ -42,28 +43,27 @@ namespace IronyModManager.DI
         /// </summary>
         public static void Finish()
         {
-            var files = new DirectoryInfo(DIContainer.PluginsPath).GetFiles().ToList();
-            var assemblies = from file in files
-                             where file.Extension.Equals(dllExtension, StringComparison.InvariantCultureIgnoreCase)
-                             select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));
+            var appPath = AppDomain.CurrentDomain.BaseDirectory;
+            var pluginsPath = Path.Combine(appPath, DIContainer.PluginsPath);
 
-            DIContainer.Container.RegisterPackages(assemblies);
+            RegisterDIAssemblies(appPath, pluginsPath);
+
+            RegisterAutomapperProfiles(appPath, pluginsPath);
 
             DIContainer.Container.Verify();
         }
 
         /// <summary>
-        /// Starts the specified plugins path.
+        /// Initializes the specified plugins path.
         /// </summary>
         /// <param name="pluginsPath">The plugins path.</param>
-        public static void Start(string pluginsPath)
+        public static void Init(string pluginsPath)
         {
             var container = new Container();
+            DIContainer.Init(container, pluginsPath);
 
             ConfigureOptions(container);
             ConfigureExtensions(container);
-
-            DIContainer.Init(container, pluginsPath);
         }
 
         /// <summary>
@@ -84,6 +84,65 @@ namespace IronyModManager.DI
         private static void ConfigureOptions(Container container)
         {
             container.Options.AllowOverridingRegistrations = true;
+        }
+
+        /// <summary>
+        /// Gets the valid assemblies.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IEnumerable&lt;Assembly&gt;.</returns>
+        private static IEnumerable<Assembly> GetValidAssemblies(string path)
+        {
+            var files = new DirectoryInfo(path).GetFiles().Where(p => p.Name.Contains(nameof(IronyModManager), StringComparison.InvariantCultureIgnoreCase) &&
+                                                                 p.Extension.Equals(dllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
+
+            var assemblies = from file in files
+                             select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));
+            return assemblies;
+        }
+
+        /// <summary>
+        /// Registers the automapper profiles.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        private static void RegisterAutomapperProfiles(params string[] paths)
+        {
+            var assemblies = new List<Assembly>() { };
+            foreach (var path in paths)
+            {
+                assemblies.AddRange(GetValidAssemblies(path));
+            }
+
+            var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
+            var config = new MapperConfiguration(cfg =>
+            {
+                foreach (var assemblyProfiles in profiles)
+                {
+                    foreach (var assemblyProfile in assemblyProfiles)
+                    {
+                        cfg.AddProfile(Activator.CreateInstance(assemblyProfile) as Profile);
+                    }
+                }
+            });
+
+            var container = DIContainer.Container;
+            container.RegisterInstance(config);
+            container.Register(() => config.CreateMapper(container.GetInstance));
+        }
+
+        /// <summary>
+        /// Registers the di assemblies.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        private static void RegisterDIAssemblies(params string[] paths)
+        {
+            var assemblies = new List<Assembly>();
+            foreach (var path in paths)
+            {
+                assemblies.AddRange(GetValidAssemblies(path));
+            }
+
+            DIContainer.Container.RegisterPackages(assemblies);
         }
 
         #endregion Methods

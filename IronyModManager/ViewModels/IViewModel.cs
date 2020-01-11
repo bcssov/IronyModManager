@@ -1,30 +1,25 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 01-10-2020
+// Created          : 01-11-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 01-11-2020
 // ***********************************************************************
-// <copyright file="ViewModelBase.cs" company="Mario">
+// <copyright file="IViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
-using ReactiveUI;
+using System.Collections.Generic;
 
 namespace IronyModManager.ViewModels
 {
     /// <summary>
-    /// Class ViewModelBase.
-    /// Implements the <see cref="ReactiveUI.ReactiveObject" />
-    /// Implements the <see cref="IronyModManager.ViewModels.IViewModel" />
+    /// Interface IViewModel
     /// </summary>
-    /// <seealso cref="ReactiveUI.ReactiveObject" />
-    /// <seealso cref="IronyModManager.ViewModels.IViewModel" />
-    public class ViewModelBase : ReactiveObject, IViewModel
+    public interface IViewModel
     {
     }
 }

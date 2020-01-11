@@ -1,35 +1,34 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager
+// Assembly         : IronyModManager.Storage
 // Author           : Mario
-// Created          : 01-10-2020
+// Created          : 01-11-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 01-11-2020
 // ***********************************************************************
-// <copyright file="MainWindowViewModel.cs" company="Mario">
+// <copyright file="IDatabase.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using IronyModManager.Models;
 
-namespace IronyModManager.ViewModels
+namespace IronyModManager.Storage
 {
     /// <summary>
-    /// Class MainWindowViewModel.
-    /// Implements the <see cref="IronyModManager.ViewModels.ViewModelBase" />
+    /// Interface IDatabase
     /// </summary>
-    /// <seealso cref="IronyModManager.ViewModels.ViewModelBase" />
-    public class MainWindowViewModel : ViewModelBase
+    internal interface IDatabase
     {
         #region Properties
 
         /// <summary>
-        /// Gets the greeting.
+        /// Gets or sets the preferences.
         /// </summary>
-        /// <value>The greeting.</value>
-        public virtual string Greeting => "Welcome to Avalonia!";
+        /// <value>The preferences.</value>
+        IPreferences Preferences { get; set; }
 
         #endregion Properties
     }

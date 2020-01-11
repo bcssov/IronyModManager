@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Authors>Mario</Authors>
-    <Company>Mario</Company>
-    <Description>Stellaris Mod Manager DI Component</Description>
+    <Description>Stellaris Mod Manager Services Component</Description>
     <Copyright>Mario</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
@@ -12,16 +10,10 @@
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <PackageTags>Stellaris Mod Manager DI Component</PackageTags>
-    <PackageReleaseNotes>Stellaris Mod Manager DI Component</PackageReleaseNotes>
+    <PackageTags>Stellaris Mod Manager Storage Component</PackageTags>
+    <PackageReleaseNotes>Stellaris Mod Manager Storage Component</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="SimpleInjector" Version="4.9.0" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\IronyModManager\Assets\avalonia-logo.png">
@@ -32,6 +24,15 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
   </ItemGroup>
 
 </Project>
