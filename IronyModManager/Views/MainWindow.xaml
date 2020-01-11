@@ -6,12 +6,23 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="IronyModManager.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="IronyModManager">
+        Title="Irony Mod Manager"
+        Width="800"
+        Height="450"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <Panel>
+    <Grid>
+      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Right" VerticalAlignment="Top"></TextBlock>
+    </Grid>
+  </Panel>
+
 
 </Window>

@@ -3,6 +3,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <ApplicationIcon />
+    <StartupObject>IronyModManager.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -19,5 +20,11 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.1" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.3.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
   </ItemGroup>
 </Project>
