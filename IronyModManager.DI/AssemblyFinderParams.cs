@@ -24,6 +24,12 @@ namespace IronyModManager.DI
         #region Properties
 
         /// <summary>
+        /// Gets or sets the assembly pattern match.
+        /// </summary>
+        /// <value>The assembly pattern match.</value>
+        public string AssemblyPatternMatch { get; set; }
+
+        /// <summary>
         /// Gets or sets the embeded resource key.
         /// </summary>
         /// <value>The embeded resource key.</value>

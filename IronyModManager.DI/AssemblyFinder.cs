@@ -33,7 +33,7 @@ namespace IronyModManager.DI
         /// <returns>IEnumerable&lt;Assembly&gt;.</returns>
         public static IEnumerable<Assembly> FindAndValidateAssemblies(AssemblyFinderParams finderParams)
         {
-            var files = new DirectoryInfo(finderParams.Path).GetFiles().Where(p => p.Name.Contains(nameof(IronyModManager), StringComparison.InvariantCultureIgnoreCase) &&
+            var files = new DirectoryInfo(finderParams.Path).GetFiles().Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.InvariantCultureIgnoreCase) &&
                                                                  p.Extension.Equals(Constants.DllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
 
             var assemblies = from file in files

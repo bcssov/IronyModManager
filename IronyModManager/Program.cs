@@ -97,7 +97,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitDI()
         {
-            Bootstrap.Init(Constants.PluginsPath);
+            Bootstrap.Init(Constants.PluginsPathAndName);
 
             Bootstrap.Finish();
         }
@@ -141,9 +141,9 @@ namespace IronyModManager
             public const string ErrorTitle = "Error";
 
             /// <summary>
-            /// The plugins path
+            /// The plugins path and name
             /// </summary>
-            public const string PluginsPath = "Plugins";
+            public const string PluginsPathAndName = "Plugins";
 
             #endregion Fields
         }

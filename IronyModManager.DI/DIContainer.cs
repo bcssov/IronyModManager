@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-12-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -31,10 +31,10 @@ namespace IronyModManager.DI
         internal static Container Container { get; private set; }
 
         /// <summary>
-        /// Gets the plugins path.
+        /// Gets the name of the plugin path and.
         /// </summary>
-        /// <value>The plugins path.</value>
-        internal static string PluginsPath { get; private set; }
+        /// <value>The name of the plugin path and.</value>
+        internal static string PluginPathAndName { get; private set; }
 
         #endregion Properties
 
@@ -44,11 +44,11 @@ namespace IronyModManager.DI
         /// Initializes the specified container.
         /// </summary>
         /// <param name="container">The container.</param>
-        /// <param name="pluginsPath">The plugins path.</param>
-        internal static void Init(Container container, string pluginsPath)
+        /// <param name="pluginPathAndName">Name of the plugin path and.</param>
+        internal static void Init(Container container, string pluginPathAndName)
         {
             Container = container;
-            PluginsPath = pluginsPath;
+            PluginPathAndName = pluginPathAndName;
         }
 
         #endregion Methods

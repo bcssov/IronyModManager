@@ -35,17 +35,19 @@ namespace IronyModManager.DI
         public static void Finish()
         {
             var appPath = AppDomain.CurrentDomain.BaseDirectory;
-            var pluginsPath = Path.Combine(appPath, DIContainer.PluginsPath);
+            var pluginsPath = Path.Combine(appPath, DIContainer.PluginPathAndName);
 
             var appParams = new AssemblyFinderParams()
             {
                 EmbededResourceKey = Constants.MainKey,
-                Path = appPath
+                Path = appPath,
+                AssemblyPatternMatch = nameof(IronyModManager)
             };
             var pluginParams = new AssemblyFinderParams()
             {
                 EmbededResourceKey = Constants.PluginKey,
-                Path = pluginsPath
+                Path = pluginsPath,
+                AssemblyPatternMatch = $"{nameof(IronyModManager)}.{DIContainer.PluginPathAndName}"
             };
 
             RegisterDIAssemblies(appParams, pluginParams);
@@ -56,13 +58,13 @@ namespace IronyModManager.DI
         }
 
         /// <summary>
-        /// Initializes the specified plugins path.
+        /// Initializes the specified plugins path and name.
         /// </summary>
-        /// <param name="pluginsPath">The plugins path.</param>
-        public static void Init(string pluginsPath)
+        /// <param name="pluginsPathAndName">Name of the plugins path and.</param>
+        public static void Init(string pluginsPathAndName)
         {
             var container = new Container();
-            DIContainer.Init(container, pluginsPath);
+            DIContainer.Init(container, pluginsPathAndName);
 
             ConfigureOptions(container);
             ConfigureExtensions(container);
