@@ -32,7 +32,7 @@ namespace IronyModManager.DI
         /// <summary>
         /// The DLL extension
         /// </summary>
-        private const string dllExtension = ".dll";
+        private const string DllExtension = ".dll";
 
         #endregion Fields
 
@@ -94,7 +94,7 @@ namespace IronyModManager.DI
         private static IEnumerable<Assembly> GetValidAssemblies(string path)
         {
             var files = new DirectoryInfo(path).GetFiles().Where(p => p.Name.Contains(nameof(IronyModManager), StringComparison.InvariantCultureIgnoreCase) &&
-                                                                 p.Extension.Equals(dllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
+                                                                 p.Extension.Equals(DllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
 
             var assemblies = from file in files
                              select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));

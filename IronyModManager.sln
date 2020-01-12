@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Storage", "IronyModManager.Storage\IronyModManager.Storage.csproj", "{29672C40-6613-4EDF-A22D-42FFBBC2BD40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Storage", "IronyModManager.Storage\IronyModManager.Storage.csproj", "{29672C40-6613-4EDF-A22D-42FFBBC2BD40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Models", "IronyModManager.Models\IronyModManager.Models.csproj", "{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Models", "IronyModManager.Models\IronyModManager.Models.csproj", "{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Services", "IronyModManager.Services\IronyModManager.Services.csproj", "{C16EC3BD-E6F1-42EE-BD41-D375201A7129}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Services", "IronyModManager.Services\IronyModManager.Services.csproj", "{C16EC3BD-E6F1-42EE-BD41-D375201A7129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

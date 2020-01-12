@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-12-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -20,7 +20,8 @@ namespace IronyModManager.Views
 {
     /// <summary>
     /// Class MainWindow.
-    /// Implements the <see cref="Avalonia.Controls.Window" /></summary>
+    /// Implements the <see cref="Avalonia.Controls.Window" />
+    /// </summary>
     /// <seealso cref="Avalonia.Controls.Window" />
     public class MainWindow : Window
     {
@@ -47,11 +48,6 @@ namespace IronyModManager.Views
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
-
-            var svc = DI.DIResolver.Get<Services.IPreferencesService>();
-            var pref = svc.Get();
-            pref.Theme = Models.Enums.Theme.Dark;
-            svc.Save(pref);                        
         }
 
         #endregion Methods
