@@ -15,12 +15,28 @@
     <PackageTags>Stellaris Mod Manager DI Component</PackageTags>
     <PackageReleaseNotes>Stellaris Mod Manager DI Component</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Irony-Main-Public.snk" />
+    <None Remove="Irony-Plugin-Public.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Irony-Plugin-Public.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Irony-Main-Public.snk" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+    <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
   <ItemGroup>

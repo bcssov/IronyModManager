@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-12-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -27,15 +27,6 @@ namespace IronyModManager.DI
     /// </summary>
     public static class Bootstrap
     {
-        #region Fields
-
-        /// <summary>
-        /// The DLL extension
-        /// </summary>
-        private const string DllExtension = ".dll";
-
-        #endregion Fields
-
         #region Methods
 
         /// <summary>
@@ -46,9 +37,20 @@ namespace IronyModManager.DI
             var appPath = AppDomain.CurrentDomain.BaseDirectory;
             var pluginsPath = Path.Combine(appPath, DIContainer.PluginsPath);
 
-            RegisterDIAssemblies(appPath, pluginsPath);
+            var appParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.MainKey,
+                Path = appPath
+            };
+            var pluginParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.PluginKey,
+                Path = pluginsPath
+            };
 
-            RegisterAutomapperProfiles(appPath, pluginsPath);
+            RegisterDIAssemblies(appParams, pluginParams);
+
+            RegisterAutomapperProfiles(appParams, pluginParams);
 
             DIContainer.Container.Verify();
         }
@@ -87,30 +89,15 @@ namespace IronyModManager.DI
         }
 
         /// <summary>
-        /// Gets the valid assemblies.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>IEnumerable&lt;Assembly&gt;.</returns>
-        private static IEnumerable<Assembly> GetValidAssemblies(string path)
-        {
-            var files = new DirectoryInfo(path).GetFiles().Where(p => p.Name.Contains(nameof(IronyModManager), StringComparison.InvariantCultureIgnoreCase) &&
-                                                                 p.Extension.Equals(DllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
-
-            var assemblies = from file in files
-                             select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));
-            return assemblies;
-        }
-
-        /// <summary>
         /// Registers the automapper profiles.
         /// </summary>
-        /// <param name="paths">The paths.</param>
-        private static void RegisterAutomapperProfiles(params string[] paths)
+        /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
+        private static void RegisterAutomapperProfiles(params AssemblyFinderParams[] assemblyFinderParams)
         {
             var assemblies = new List<Assembly>() { };
-            foreach (var path in paths)
+            foreach (var assemblyFinderParam in assemblyFinderParams)
             {
-                assemblies.AddRange(GetValidAssemblies(path));
+                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
             }
 
             var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
@@ -133,13 +120,13 @@ namespace IronyModManager.DI
         /// <summary>
         /// Registers the di assemblies.
         /// </summary>
-        /// <param name="paths">The paths.</param>
-        private static void RegisterDIAssemblies(params string[] paths)
+        /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
+        private static void RegisterDIAssemblies(params AssemblyFinderParams[] assemblyFinderParams)
         {
-            var assemblies = new List<Assembly>();
-            foreach (var path in paths)
+            var assemblies = new List<Assembly>() { };
+            foreach (var assemblyFinderParam in assemblyFinderParams)
             {
-                assemblies.AddRange(GetValidAssemblies(path));
+                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
             }
 
             DIContainer.Container.RegisterPackages(assemblies);

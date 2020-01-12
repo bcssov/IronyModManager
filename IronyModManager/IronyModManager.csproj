@@ -18,6 +18,8 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageTags>Stellaris Mod Manager</PackageTags>
     <PackageReleaseNotes>Stellaris Mod Manager</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">
@@ -37,6 +39,7 @@
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
     <PackageReference Include="Splat.SimpleInjector" Version="9.3.4" />
+    <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />

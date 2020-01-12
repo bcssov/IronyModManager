@@ -13,6 +13,8 @@
     <PackageTags>Stellaris Mod Manager Storage Component</PackageTags>
     <PackageReleaseNotes>Stellaris Mod Manager Storage Component</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+    <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
   <ItemGroup>
