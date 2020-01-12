@@ -5,7 +5,18 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager", "IronyModManager\IronyModManager.csproj", "{BE022738-8D57-4CD6-8DCC-4CE916FB9768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.DI", "IronyModManager.DI\IronyModManager.DI.csproj", "{662745E4-BBED-4FF0-BD9E-45A67B97E573}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.DI", "IronyModManager.DI\IronyModManager.DI.csproj", "{662745E4-BBED-4FF0-BD9E-45A67B97E573}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E597BDB8-F0DC-4D21-8BA6-E7F72878F219}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Storage", "IronyModManager.Storage\IronyModManager.Storage.csproj", "{29672C40-6613-4EDF-A22D-42FFBBC2BD40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Models", "IronyModManager.Models\IronyModManager.Models.csproj", "{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Services", "IronyModManager.Services\IronyModManager.Services.csproj", "{C16EC3BD-E6F1-42EE-BD41-D375201A7129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +32,18 @@ Global
 		{662745E4-BBED-4FF0-BD9E-45A67B97E573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{662745E4-BBED-4FF0-BD9E-45A67B97E573}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{662745E4-BBED-4FF0-BD9E-45A67B97E573}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29672C40-6613-4EDF-A22D-42FFBBC2BD40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29672C40-6613-4EDF-A22D-42FFBBC2BD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29672C40-6613-4EDF-A22D-42FFBBC2BD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29672C40-6613-4EDF-A22D-42FFBBC2BD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF086552-42A7-4B9F-BB1F-53CF63A62FDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C16EC3BD-E6F1-42EE-BD41-D375201A7129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C16EC3BD-E6F1-42EE-BD41-D375201A7129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C16EC3BD-E6F1-42EE-BD41-D375201A7129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C16EC3BD-E6F1-42EE-BD41-D375201A7129}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

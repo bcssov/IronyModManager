@@ -2,11 +2,26 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon />
+    <ApplicationIcon>Assets\avalonia-logo.ico</ApplicationIcon>
     <StartupObject>IronyModManager.Program</StartupObject>
+    <Authors>Mario</Authors>
+    <Company>Mario</Company>
+    <Description>Stellaris Mod Manager</Description>
+    <Copyright>Mario</Copyright>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
+    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageTags>Stellaris Mod Manager</PackageTags>
+    <PackageReleaseNotes>Stellaris Mod Manager</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
@@ -16,15 +31,50 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Views\SampleControlView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\SampleControlView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.1" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
+    <PackageReference Include="ReactiveUI.Fody" Version="11.1.6" />
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
     <PackageReference Include="Splat.SimpleInjector" Version="9.3.4" />
+    <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
+    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="Assets\avalonia-logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SampleControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\SampleControlView.xaml.cs">
+      <DependentUpon>SampleControlView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Plugins\Note.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

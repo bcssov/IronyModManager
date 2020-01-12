@@ -15,14 +15,11 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Logging.Serilog;
-using Avalonia.ReactiveUI;
 using IronyModManager.DI;
-using ReactiveUI;
-using Splat;
-using Splat.SimpleInjector;
-using System.Linq;
 
 namespace IronyModManager
 {
@@ -61,20 +58,6 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Configures the di.
-        /// </summary>
-        private static void ConfigureDI()
-        {
-            var container = DIContainer.Container;
-
-            var resolver = new SimpleInjectorDependencyResolver(container);
-            resolver.InitializeSplat();
-            resolver.InitializeReactiveUI();
-
-            RxApp.MainThreadScheduler = Avalonia.Threading.AvaloniaScheduler.Instance;
-        }
-
-        /// <summary>
         /// Handles the UnhandledException event of the CurrentDomain control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -96,6 +79,7 @@ namespace IronyModManager
             if (!Debugger.IsAttached)
             {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             }
         }
 
@@ -115,11 +99,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitDI()
         {
-            Bootstrap.Start(AppDomain.CurrentDomain.BaseDirectory);
-
-            ConfigureDI();
-
-            RegisterServices();
+            Bootstrap.Init(Constants.PluginsPathAndName);
 
             Bootstrap.Finish();
         }
@@ -137,19 +117,13 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Registers the services.
+        /// Handles the UnobservedTaskException event of the TaskScheduler control.
         /// </summary>
-        private static void RegisterServices()
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs"/> instance containing the event data.</param>
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            var container = DIContainer.Container;
-
-            #region Avalonia Reactive UI
-
-            // Have to manually bind Avalonia services... it doesn't really work best with SimpleInjector...
-            container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();
-            container.Register<IPropertyBindingHook, AutoDataTemplateBindingHook>();
-
-            #endregion Avalonia Reactive UI
+            LogError(e.Exception);
         }
 
         #endregion Methods
@@ -177,6 +151,11 @@ namespace IronyModManager
             /// The error title
             /// </summary>
             public const string ErrorTitle = "Error";
+
+            /// <summary>
+            /// The plugins path and name
+            /// </summary>
+            public const string PluginsPathAndName = "Plugins";
 
             #endregion Fields
         }

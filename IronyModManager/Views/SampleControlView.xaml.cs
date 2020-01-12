@@ -1,41 +1,36 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 01-10-2020
+// Created          : 01-12-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 01-12-2020
 // ***********************************************************************
-// <copyright file="MainWindow.xaml.cs" company="Mario">
+// <copyright file="SampleControl.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace IronyModManager.Views
 {
     /// <summary>
-    /// Class MainWindow.
-    /// Implements the <see cref="Avalonia.Controls.Window" />
+    /// Class SampleControlView.
+    /// Implements the <see cref="Avalonia.Controls.UserControl" />
     /// </summary>
-    /// <seealso cref="Avalonia.Controls.Window" />
-    public class MainWindow : Window
+    /// <seealso cref="Avalonia.Controls.UserControl" />
+    public class SampleControlView : UserControl
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainWindow" /> class.
+        /// Initializes a new instance of the <see cref="SampleControlView"/> class.
         /// </summary>
-        public MainWindow()
+        public SampleControlView()
         {
-            InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
+            this.InitializeComponent();
         }
 
         #endregion Constructors

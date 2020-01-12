@@ -4,20 +4,21 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-12-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using IronyModManager.DI.Extensions;
-using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
+using IronyModManager.DI.Extensions;
+using SimpleInjector;
 
 namespace IronyModManager.DI
 {
@@ -26,15 +27,6 @@ namespace IronyModManager.DI
     /// </summary>
     public static class Bootstrap
     {
-        #region Fields
-
-        /// <summary>
-        /// The DLL extension
-        /// </summary>
-        private const string dllExtension = ".dll";
-
-        #endregion Fields
-
         #region Methods
 
         /// <summary>
@@ -42,28 +34,38 @@ namespace IronyModManager.DI
         /// </summary>
         public static void Finish()
         {
-            var files = new DirectoryInfo(DIContainer.PluginsPath).GetFiles().ToList();
-            var assemblies = from file in files
-                             where file.Extension.Equals(dllExtension, StringComparison.InvariantCultureIgnoreCase)
-                             select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));
+            var appPath = AppDomain.CurrentDomain.BaseDirectory;
+            var pluginsPath = Path.Combine(appPath, DIContainer.PluginPathAndName);
 
-            DIContainer.Container.RegisterPackages(assemblies);
+            var appParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.MainKey,
+                Path = appPath,
+                AssemblyPatternMatch = nameof(IronyModManager)
+            };
+            var pluginParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.PluginKey,
+                Path = pluginsPath,
+                AssemblyPatternMatch = $"{nameof(IronyModManager)}.{DIContainer.PluginPathAndName}"
+            };
 
-            DIContainer.Container.Verify();
+            RegisterDIAssemblies(appParams, pluginParams);
+
+            RegisterAutomapperProfiles(appParams, pluginParams);
         }
 
         /// <summary>
-        /// Starts the specified plugins path.
+        /// Initializes the specified plugins path and name.
         /// </summary>
-        /// <param name="pluginsPath">The plugins path.</param>
-        public static void Start(string pluginsPath)
+        /// <param name="pluginsPathAndName">Name of the plugins path and.</param>
+        public static void Init(string pluginsPathAndName)
         {
             var container = new Container();
+            DIContainer.Init(container, pluginsPathAndName);
 
             ConfigureOptions(container);
             ConfigureExtensions(container);
-
-            DIContainer.Init(container, pluginsPath);
         }
 
         /// <summary>
@@ -84,6 +86,50 @@ namespace IronyModManager.DI
         private static void ConfigureOptions(Container container)
         {
             container.Options.AllowOverridingRegistrations = true;
+        }
+
+        /// <summary>
+        /// Registers the automapper profiles.
+        /// </summary>
+        /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
+        private static void RegisterAutomapperProfiles(params AssemblyFinderParams[] assemblyFinderParams)
+        {
+            var assemblies = new List<Assembly>() { };
+            foreach (var assemblyFinderParam in assemblyFinderParams)
+            {
+                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
+            }
+
+            var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
+            var config = new MapperConfiguration(cfg =>
+            {
+                foreach (var assemblyProfiles in profiles)
+                {
+                    foreach (var assemblyProfile in assemblyProfiles)
+                    {
+                        cfg.AddProfile(Activator.CreateInstance(assemblyProfile) as Profile);
+                    }
+                }
+            });
+
+            var container = DIContainer.Container;
+            container.RegisterInstance(config);
+            container.Register(() => config.CreateMapper(container.GetInstance));
+        }
+
+        /// <summary>
+        /// Registers the di assemblies.
+        /// </summary>
+        /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
+        private static void RegisterDIAssemblies(params AssemblyFinderParams[] assemblyFinderParams)
+        {
+            var assemblies = new List<Assembly>() { };
+            foreach (var assemblyFinderParam in assemblyFinderParams)
+            {
+                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
+            }
+
+            DIContainer.Container.RegisterPackages(assemblies);
         }
 
         #endregion Methods

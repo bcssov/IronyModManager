@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-10-2020
+// Last Modified On : 01-12-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -20,22 +20,21 @@ namespace IronyModManager.DI
     /// <summary>
     /// Class DIContainer.
     /// </summary>
-    public static class DIContainer
+    internal static class DIContainer
     {
         #region Properties
 
-        // TODO: Container is leaking, see in the future if I can fix the design requirements. In my defense I've never used this configuration before so it's a learning experience...
         /// <summary>
         /// Gets the container.
         /// </summary>
         /// <value>The container.</value>
-        public static Container Container { get; private set; }
+        internal static Container Container { get; private set; }
 
         /// <summary>
-        /// Gets the plugins path.
+        /// Gets the name of the plugin path and.
         /// </summary>
-        /// <value>The plugins path.</value>
-        public static string PluginsPath { get; private set; }
+        /// <value>The name of the plugin path and.</value>
+        internal static string PluginPathAndName { get; private set; }
 
         #endregion Properties
 
@@ -45,11 +44,11 @@ namespace IronyModManager.DI
         /// Initializes the specified container.
         /// </summary>
         /// <param name="container">The container.</param>
-        /// <param name="pluginsPath">The plugins path.</param>
-        internal static void Init(Container container, string pluginsPath)
+        /// <param name="pluginPathAndName">Name of the plugin path and.</param>
+        internal static void Init(Container container, string pluginPathAndName)
         {
             Container = container;
-            PluginsPath = pluginsPath;
+            PluginPathAndName = pluginPathAndName;
         }
 
         #endregion Methods

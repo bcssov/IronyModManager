@@ -38,6 +38,21 @@ namespace IronyModManager.DI
             return DIContainer.Container.GetInstance<T>();
         }
 
+        /// <summary>
+        /// Gets the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="NullReferenceException">Container is null.</exception>
+        public static object Get(Type type)
+        {
+            if (DIContainer.Container == null)
+            {
+                throw new NullReferenceException("Container is null.");
+            }
+            return DIContainer.Container.GetInstance(type);
+        }
+
         #endregion Methods
     }
 }
