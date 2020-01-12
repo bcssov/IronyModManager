@@ -53,8 +53,6 @@ namespace IronyModManager.DI
             RegisterDIAssemblies(appParams, pluginParams);
 
             RegisterAutomapperProfiles(appParams, pluginParams);
-
-            DIContainer.Container.Verify();
         }
 
         /// <summary>

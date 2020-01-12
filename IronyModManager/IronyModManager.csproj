@@ -31,6 +31,12 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Views\SampleControlView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Views\SampleControlView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.1" />
@@ -55,6 +61,16 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\SampleControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\SampleControlView.xaml.cs">
+      <DependentUpon>SampleControlView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Update="Plugins\Note.txt">

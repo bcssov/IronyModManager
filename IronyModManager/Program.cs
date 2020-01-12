@@ -15,10 +15,11 @@ using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Logging.Serilog;
 using IronyModManager.DI;
-using System.Linq;
 
 namespace IronyModManager
 {
@@ -78,6 +79,7 @@ namespace IronyModManager
             if (!Debugger.IsAttached)
             {
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             }
         }
 
@@ -112,6 +114,16 @@ namespace IronyModManager
             {
                 // TODO: Add logger
             }
+        }
+
+        /// <summary>
+        /// Handles the UnobservedTaskException event of the TaskScheduler control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs"/> instance containing the event data.</param>
+        private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            LogError(e.Exception);
         }
 
         #endregion Methods

@@ -14,6 +14,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using IronyModManager.DI;
 using IronyModManager.ViewModels;
 using IronyModManager.Views;
 
@@ -42,10 +43,10 @@ namespace IronyModManager
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
+                var resolver = DIResolver.Get<IViewResolver>();
+                var mainWindow = DIResolver.Get<MainWindow>();
+                mainWindow.DataContext = resolver.ResolveViewModel<MainWindow>();
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();
