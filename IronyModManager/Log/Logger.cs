@@ -29,7 +29,7 @@ namespace IronyModManager.Log
         /// <summary>
         /// The log
         /// </summary>
-        private static NLog.Logger log = LogManager.GetCurrentClassLogger();
+        protected static NLog.Logger log = LogManager.GetCurrentClassLogger();
 
         #endregion Fields
 

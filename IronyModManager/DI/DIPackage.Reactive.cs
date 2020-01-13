@@ -4,9 +4,9 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
-// <copyright file="DIPackage.Avalonia.cs" company="Mario">
+// <copyright file="DIPackage.Reactive.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,16 +14,17 @@
 
 using System.Collections.Generic;
 using System;
-using Avalonia.ReactiveUI;
-using ReactiveUI;
+using Splat;
+using Splat.NLog;
 using Container = SimpleInjector.Container;
-using IronyModManager.Log;
 
 namespace IronyModManager.DI
 {
     /// <summary>
     /// Class DIPackage.
+    /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
     /// </summary>
+    /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
         #region Methods
@@ -32,12 +33,11 @@ namespace IronyModManager.DI
         /// Registers the avalonia services.
         /// </summary>
         /// <param name="container">The container.</param>
-        private void RegisterAvaloniaServices(Container container)
+        private void RegisterReactiveServices(Container container)
         {
-            // Have to manually bind Avalonia services... it doesn't really work best with SimpleInjector...
-            container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();
-            container.Register<IPropertyBindingHook, AutoDataTemplateBindingHook>();
-            Avalonia.Logging.Logger.Sink = new AvaloniaLogger();
+#if DEBUG
+            Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
+#endif
         }
 
         #endregion Methods
