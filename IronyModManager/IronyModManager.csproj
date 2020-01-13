@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -19,7 +19,7 @@
     <PackageTags>Irony Mod Manager</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">

@@ -1,0 +1,5 @@
+RD /s /q "IronyModManager/bin"
+RD /s /q "IronyModManager.DI/bin"
+RD /s /q "IronyModManager.Models/bin"
+RD /s /q "IronyModManager.Services/bin"
+RD /s /q "IronyModManager.Storage/bin"
