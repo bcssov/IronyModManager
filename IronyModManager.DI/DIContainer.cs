@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -20,7 +20,7 @@ namespace IronyModManager.DI
     /// <summary>
     /// Class DIContainer.
     /// </summary>
-    internal static class DIContainer
+    public static class DIContainer
     {
         #region Properties
 
@@ -39,6 +39,14 @@ namespace IronyModManager.DI
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Verifies this instance.
+        /// </summary>
+        public static void Verify()
+        {
+            Container.Verify();
+        }
 
         /// <summary>
         /// Initializes the specified container.

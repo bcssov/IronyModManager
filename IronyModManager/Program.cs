@@ -36,7 +36,10 @@ namespace IronyModManager
         /// <returns>AppBuilder.</returns>
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect(); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
+                .UsePlatformDetect().AfterSetup((s) =>
+                {
+                    DIContainer.Verify();
+                }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -52,7 +55,8 @@ namespace IronyModManager
             InitAppConfig();
             InitDI();
 
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            var app = BuildAvaloniaApp();
+            app.StartWithClassicDesktopLifetime(args);
         }
 
         /// <summary>
