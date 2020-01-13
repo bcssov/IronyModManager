@@ -35,9 +35,7 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterReactiveServices(Container container)
         {
-#if DEBUG
             Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
-#endif
         }
 
         #endregion Methods
