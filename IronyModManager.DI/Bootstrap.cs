@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
+using IronyModManager.DI.Assemblies;
 using IronyModManager.DI.Extensions;
 using SimpleInjector;
 

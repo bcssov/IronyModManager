@@ -16,8 +16,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using IronyModManager.DI.Readers;
 
-namespace IronyModManager.DI
+namespace IronyModManager.DI.Assemblies
 {
     /// <summary>
     /// Class AssemblyFinder.

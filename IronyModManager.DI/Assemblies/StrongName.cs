@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.DI
+namespace IronyModManager.DI.Assemblies
 {
     /// <summary>
     /// Class StrongName. This class cannot be inherited.

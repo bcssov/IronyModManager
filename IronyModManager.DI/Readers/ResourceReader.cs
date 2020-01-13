@@ -15,8 +15,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Permissions;
+using IronyModManager.DI.Assemblies;
 
-namespace IronyModManager.DI
+namespace IronyModManager.DI.Readers
 {
     /// <summary>
     /// Class ResourceReader.
@@ -45,16 +46,14 @@ namespace IronyModManager.DI
                 throw new ArgumentNullException("assembly");
             }
             var name = $"{ assembly.GetName().Name}.{resourceName.Replace(" ", "_").Replace("\\", ".").Replace("/", ".")}";
-            using (var stream = assembly.GetManifestResourceStream(name))
+            using var stream = assembly.GetManifestResourceStream(name);
+            if (stream == null)
             {
-                if (stream == null)
-                {
-                    throw new ArgumentNullException("resourceName");
-                }
-                var bytes = new byte[stream.Length];
-                stream.Read(bytes, 0, bytes.Length);
-                return bytes;
+                throw new ArgumentNullException("resourceName");
             }
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes, 0, bytes.Length);
+            return bytes;
         }
 
         /// <summary>
