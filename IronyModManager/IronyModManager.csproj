@@ -76,6 +76,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Plugins\Note.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
