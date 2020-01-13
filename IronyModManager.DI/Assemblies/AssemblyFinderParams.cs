@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinderParams.cs" company="Mario">
 //     Mario
@@ -40,6 +40,12 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         /// <value>The path.</value>
         public string Path { get; set; }
+
+        /// <summary>
+        /// Gets or sets the priority assemblies.
+        /// </summary>
+        /// <value>The priority assemblies.</value>
+        public IEnumerable<string> PriorityAssemblies { get; set; }
 
         #endregion Properties
     }
