@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E597BDB8-F0DC-4D21-8BA6-E7F72878F219}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		License = License
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Storage", "IronyModManager.Storage\IronyModManager.Storage.csproj", "{29672C40-6613-4EDF-A22D-42FFBBC2BD40}"
