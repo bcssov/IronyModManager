@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,14 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Logging.Serilog;
 using IronyModManager.DI;
+using IronyModManager.Log;
 
 namespace IronyModManager
 {
@@ -37,8 +36,7 @@ namespace IronyModManager
         /// <returns>AppBuilder.</returns>
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .LogToDebug(); //.UseReactiveUI(); // Doesn't follow proper DI conventions according to SimpleInjector.
+                .UsePlatformDetect(); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -75,12 +73,8 @@ namespace IronyModManager
         /// </summary>
         private static void InitAppConfig()
         {
-            // Do not catch exceptions and log them if debugger is attached
-            if (!Debugger.IsAttached)
-            {
-                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
-            }
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
         }
 
         /// <summary>
@@ -88,7 +82,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            var culture = new CultureInfo(Constants.Culture);
+            var culture = new CultureInfo(Constants.AppCulture);
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
@@ -112,7 +106,11 @@ namespace IronyModManager
         {
             if (e != null)
             {
-                // TODO: Add logger
+                var logger = DIResolver.Get<ILogger>();
+                logger.Error(e);
+
+                var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(Constants.UnhandlerErrorTitle, Constants.UnhandledErrorMessage, MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                messageBox.Show();
             }
         }
 
@@ -120,46 +118,12 @@ namespace IronyModManager
         /// Handles the UnobservedTaskException event of the TaskScheduler control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs" /> instance containing the event data.</param>
         private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             LogError(e.Exception);
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class Constants.
-        /// </summary>
-        private class Constants
-        {
-            #region Fields
-
-            /// <summary>
-            /// The culture
-            /// </summary>
-            public const string Culture = "en-US";
-
-            /// <summary>
-            /// The error message
-            /// </summary>
-            public const string ErrorMessage = "Unhandled error occurred";
-
-            /// <summary>
-            /// The error title
-            /// </summary>
-            public const string ErrorTitle = "Error";
-
-            /// <summary>
-            /// The plugins path and name
-            /// </summary>
-            public const string PluginsPathAndName = "Plugins";
-
-            #endregion Fields
-        }
-
-        #endregion Classes
     }
 }

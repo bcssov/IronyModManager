@@ -44,6 +44,7 @@ namespace IronyModManager.DI
             RxApp.MainThreadScheduler = Avalonia.Threading.AvaloniaScheduler.Instance;
 
             RegisterAvaloniaServices(container);
+            RegisterReactiveServices(container);
             RegisterViews(container);
             RegisterViewModels(container);
             RegisterImplementations(container);

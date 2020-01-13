@@ -15,6 +15,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using IronyModManager.DI;
+using IronyModManager.Log;
 using IronyModManager.ViewModels;
 
 namespace IronyModManager
@@ -54,16 +55,24 @@ namespace IronyModManager
                     var control = resolver.ResolveUserControl(data);
                     return control;
                 }
-                catch
+                catch (Exception e)
                 {
-                    // TODO: Log error
-                    return new TextBlock { Text = "Not Found: " + name };
+                    var message = $"Not Found: {name}";
+
+                    var logger = DIResolver.Get<ILogger>();
+                    logger.Error(e);
+
+                    return new TextBlock { Text = message };
                 }
             }
             else
             {
-                // TODO: Log mismatch
-                return new TextBlock { Text = "Not Supported: " + name };
+                var message = $"Not Supported: {name}";
+
+                var logger = DIResolver.Get<ILogger>();
+                logger.Info(message);
+
+                return new TextBlock { Text = message };
             }
         }
 

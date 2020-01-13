@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using Container = SimpleInjector.Container;
+using IronyModManager.Log;
 
 namespace IronyModManager.DI
 {
@@ -34,6 +35,7 @@ namespace IronyModManager.DI
         private void RegisterImplementations(Container container)
         {
             container.Register<IViewResolver, ViewResolver>();
+            container.Register<ILogger, Logger>();
         }
 
         #endregion Methods
