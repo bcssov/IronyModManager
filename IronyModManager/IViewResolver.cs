@@ -39,6 +39,13 @@ namespace IronyModManager
         string FormatViewModelName<T>();
 
         /// <summary>
+        /// Determines whether the specified name is control.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is control; otherwise, <c>false</c>.</returns>
+        bool IsControl(string name);
+
+        /// <summary>
         /// Resolves the user control.
         /// </summary>
         /// <param name="obj">The object.</param>

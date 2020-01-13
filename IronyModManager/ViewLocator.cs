@@ -26,15 +26,6 @@ namespace IronyModManager
     /// <seealso cref="Avalonia.Controls.Templates.IDataTemplate" />
     public class ViewLocator : IDataTemplate
     {
-        #region Fields
-
-        /// <summary>
-        /// The control match
-        /// </summary>
-        private const string ControlMatch = "Control";
-
-        #endregion Fields
-
         #region Properties
 
         /// <summary>
@@ -56,7 +47,7 @@ namespace IronyModManager
         {
             var resolver = DIResolver.Get<IViewResolver>();
             var name = resolver.FormatUserControlName(data);
-            if (name.Contains(ControlMatch))
+            if (resolver.IsControl(name))
             {
                 try
                 {

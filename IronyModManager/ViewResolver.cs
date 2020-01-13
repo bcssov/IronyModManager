@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -27,6 +27,15 @@ namespace IronyModManager
     /// <seealso cref="IronyModManager.IViewResolver" />
     public class ViewResolver : IViewResolver
     {
+        #region Fields
+
+        /// <summary>
+        /// The control pattern
+        /// </summary>
+        private const string ControlPattern = "Control";
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -47,6 +56,16 @@ namespace IronyModManager
         public string FormatViewModelName<T>()
         {
             return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.")}ViewModel";
+        }
+
+        /// <summary>
+        /// Determines whether the specified name is control.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is control; otherwise, <c>false</c>.</returns>
+        public bool IsControl(string name)
+        {
+            return name.Contains(ControlPattern);
         }
 
         /// <summary>
