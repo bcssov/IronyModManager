@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using IronyModManager.DI;
 using IronyModManager.Log;
+using System.Reflection;
 
 namespace IronyModManager
 {
@@ -97,7 +98,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitDI()
         {
-            Bootstrap.Init(Constants.PluginsPathAndName);
+            Bootstrap.Init(Constants.PluginsPathAndName, Assembly.GetExecutingAssembly().GetName().Name);
 
             Bootstrap.Finish();
         }

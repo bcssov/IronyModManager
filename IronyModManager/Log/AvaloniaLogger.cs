@@ -35,11 +35,7 @@ namespace IronyModManager.Log
         /// <returns><c>true</c> if the specified level is enabled; otherwise, <c>false</c>.</returns>
         public bool IsEnabled(LogEventLevel level)
         {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
+            return true; // Let nlog take care of this
         }
 
         /// <summary>

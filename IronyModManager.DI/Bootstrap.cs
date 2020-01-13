@@ -42,7 +42,8 @@ namespace IronyModManager.DI
             {
                 EmbededResourceKey = Constants.MainKey,
                 Path = appPath,
-                AssemblyPatternMatch = nameof(IronyModManager)
+                AssemblyPatternMatch = nameof(IronyModManager),
+                PriorityAssemblies = new List<string> { DIContainer.MainAssemblyName }
             };
             var pluginParams = new AssemblyFinderParams()
             {
@@ -60,10 +61,11 @@ namespace IronyModManager.DI
         /// Initializes the specified plugins path and name.
         /// </summary>
         /// <param name="pluginsPathAndName">Name of the plugins path and.</param>
-        public static void Init(string pluginsPathAndName)
+        /// <param name="mainAssemblyName">Name of the main assembly.</param>
+        public static void Init(string pluginsPathAndName, string mainAssemblyName)
         {
             var container = new Container();
-            DIContainer.Init(container, pluginsPathAndName);
+            DIContainer.Init(container, pluginsPathAndName, mainAssemblyName);
 
             ConfigureOptions(container);
             ConfigureExtensions(container);
