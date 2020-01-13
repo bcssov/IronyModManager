@@ -18,8 +18,8 @@ using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Logging.Serilog;
 using IronyModManager.DI;
+using IronyModManager.Log;
 
 namespace IronyModManager
 {
@@ -37,8 +37,7 @@ namespace IronyModManager
         /// <returns>AppBuilder.</returns>
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                .LogToDebug(); //.UseReactiveUI(); // Doesn't follow proper DI conventions according to SimpleInjector.
+                .UsePlatformDetect(); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -88,7 +87,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            var culture = new CultureInfo(Constants.Culture);
+            var culture = new CultureInfo(Constants.AppCulture);
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
@@ -112,7 +111,11 @@ namespace IronyModManager
         {
             if (e != null)
             {
-                // TODO: Add logger
+                var logger = DIResolver.Get<ILogger>();
+                logger.Error(e);
+
+                var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(Constants.UnhandlerErrorTitle, Constants.UnhandledErrorMessage, MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                messageBox.Show();
             }
         }
 
@@ -127,39 +130,5 @@ namespace IronyModManager
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class Constants.
-        /// </summary>
-        private class Constants
-        {
-            #region Fields
-
-            /// <summary>
-            /// The culture
-            /// </summary>
-            public const string Culture = "en-US";
-
-            /// <summary>
-            /// The error message
-            /// </summary>
-            public const string ErrorMessage = "Unhandled error occurred";
-
-            /// <summary>
-            /// The error title
-            /// </summary>
-            public const string ErrorTitle = "Error";
-
-            /// <summary>
-            /// The plugins path and name
-            /// </summary>
-            public const string PluginsPathAndName = "Plugins";
-
-            #endregion Fields
-        }
-
-        #endregion Classes
     }
 }
