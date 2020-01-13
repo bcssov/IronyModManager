@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Mario</Authors>
     <Company>Mario</Company>
-    <Description>Stellaris Mod Manager DI Component</Description>
+    <Description>Irony Mod Manager DI Component</Description>
     <Copyright>Mario</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
@@ -12,8 +12,8 @@
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <PackageTags>Stellaris Mod Manager DI Component</PackageTags>
-    <PackageReleaseNotes>Stellaris Mod Manager DI Component</PackageReleaseNotes>
+    <PackageTags>Irony Mod Manager DI Component</PackageTags>
+    <PackageReleaseNotes>Irony Mod Manager DI Component</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>

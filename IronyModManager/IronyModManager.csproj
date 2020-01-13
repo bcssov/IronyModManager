@@ -6,7 +6,7 @@
     <StartupObject>IronyModManager.Program</StartupObject>
     <Authors>Mario</Authors>
     <Company>Mario</Company>
-    <Description>Stellaris Mod Manager</Description>
+    <Description>Irony Mod Manager</Description>
     <Copyright>Mario</Copyright>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -16,8 +16,8 @@
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageTags>Stellaris Mod Manager</PackageTags>
-    <PackageReleaseNotes>Stellaris Mod Manager</PackageReleaseNotes>
+    <PackageTags>Irony Mod Manager</PackageTags>
+    <PackageReleaseNotes>Irony Mod Manager</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -35,6 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Views\SampleControlView.xaml" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.1" />
@@ -56,10 +60,6 @@
     <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <None Include="Assets\avalonia-logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
