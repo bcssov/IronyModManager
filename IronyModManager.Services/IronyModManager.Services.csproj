@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -14,7 +14,7 @@
     <PackageReleaseNotes>Irony Mod Manager Storage Component</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
