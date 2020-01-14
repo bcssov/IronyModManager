@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using Avalonia.Markup.Xaml.Styling;
 
 namespace IronyModManager
 {
@@ -49,5 +50,35 @@ namespace IronyModManager
         public const string UnhandlerErrorTitle = "Error";
 
         #endregion Fields
+
+        #region Classes
+
+        /// <summary>
+        /// Class Themes.
+        /// </summary>
+        public class Themes
+        {
+            #region Fields
+
+            /// <summary>
+            /// The dark theme
+            /// </summary>
+            public static readonly StyleInclude DarkTheme = new StyleInclude(new Uri("resm:Styles?assembly=Avalonia.ThemeManager"))
+            {
+                Source = new Uri("resm:Avalonia.Themes.Default.Accents.BaseDark.xaml?assembly=Avalonia.Themes.Default")
+            };
+
+            /// <summary>
+            /// The light theme
+            /// </summary>
+            public static readonly StyleInclude LightTheme = new StyleInclude(new Uri("resm:Styles?assembly=Avalonia.ThemeManager"))
+            {
+                Source = new Uri("resm:Avalonia.Themes.Default.Accents.BaseLight.xaml?assembly=Avalonia.Themes.Default")
+            };
+
+            #endregion Fields
+        }
+
+        #endregion Classes
     }
 }

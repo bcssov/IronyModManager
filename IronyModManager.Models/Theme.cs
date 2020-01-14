@@ -4,15 +4,16 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="Theme.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.ComponentModel;
 
 namespace IronyModManager.Models
 {
@@ -23,6 +24,15 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.ITheme" />
     public class Theme : ITheme
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
+
         #region Properties
 
         /// <summary>

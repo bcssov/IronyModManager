@@ -76,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Views\Controls\ThemeControlView.xaml.cs">
-      <DependentUpon>Controls\ThemeControlView.xaml</DependentUpon>
+      <DependentUpon>Views\Controls\ThemeControlView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

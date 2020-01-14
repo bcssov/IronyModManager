@@ -15,8 +15,10 @@ namespace IronyModManager.Models
 {
     /// <summary>
     /// Interface ITheme
+    /// Implements the <see cref="IronyModManager.Models.IModel" />
     /// </summary>
-    public interface ITheme
+    /// <seealso cref="IronyModManager.Models.IModel" />
+    public interface ITheme : IModel
     {
         #region Properties
 

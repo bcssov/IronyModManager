@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia.Collections;
+using DynamicData;
 
 namespace IronyModManager
 {
@@ -46,6 +47,17 @@ namespace IronyModManager
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> col)
         {
             return new ObservableCollection<T>(col);
+        }
+
+        /// <summary>
+        /// Converts to sourcelist.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="col">The col.</param>
+        /// <returns>SourceList&lt;T&gt;.</returns>
+        public static SourceList<T> ToSourceList<T>(this IEnumerable<T> col)
+        {
+            return new SourceList<T>(col.AsObservableChangeSet());
         }
 
         #endregion Methods

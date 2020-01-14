@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using DynamicData.Binding;
 using IronyModManager.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -41,23 +42,24 @@ namespace IronyModManager.ViewModels.Controls
         {
             var themes = themeService.Get();
 
-            var toggleEnabled = themes
-                .AsObservableChangeSet(p => p)
-                .ToCollection()
-                .Select(p => p.FirstOrDefault(s => s.IsSelected).Type == Models.Enums.Theme.Dark)
-                .Subscribe(p =>
+            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Enums.Theme.Dark;
+
+            var toggleEnabled = themes.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(p =>
+            {
+                if (p.IsSelected)
                 {
-                    ToggleEnabled = p;
-                });
+                    ToggleDarkThemeEnabled = p.Type == Models.Enums.Theme.Dark;
+                }
+            });
 
             ToggleTheme = ReactiveCommand.Create(() =>
-            {
-                foreach (var item in themes)
-                {
-                    item.IsSelected = !item.IsSelected;
-                }
-                themeService.Save(themes);
-            });
+             {
+                 foreach (var item in themes)
+                 {
+                     item.IsSelected = !item.IsSelected;
+                 }
+                 themeService.Save(themes);
+             });
         }
 
         #endregion Constructors
@@ -75,7 +77,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [toggle enabled]; otherwise, <c>false</c>.</value>
         [Reactive]
-        public bool ToggleEnabled { get; set; }
+        public bool ToggleDarkThemeEnabled { get; set; }
 
         /// <summary>
         /// Gets the toggle theme.

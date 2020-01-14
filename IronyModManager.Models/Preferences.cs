@@ -14,8 +14,11 @@
 
 using System.Collections.Generic;
 using System;
-using PropertyChanged;
+using System.ComponentModel;
 
+/// <summary>
+/// The Models namespace.
+/// </summary>
 namespace IronyModManager.Models
 {
     /// <summary>
@@ -23,9 +26,17 @@ namespace IronyModManager.Models
     /// Implements the <see cref="IronyModManager.Models.IPreferences" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.IPreferences" />
-    [AddINotifyPropertyChangedInterface]
     public class Preferences : IPreferences
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when a property value changes.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
+
         #region Properties
 
         /// <summary>
