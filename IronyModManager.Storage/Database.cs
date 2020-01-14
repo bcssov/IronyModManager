@@ -26,7 +26,7 @@ namespace IronyModManager.Storage
     /// </summary>
     /// <seealso cref="IronyModManager.Storage.IDatabase" />
     [AddINotifyPropertyChangedInterface]
-    internal class Database : IDatabase
+    public class Database : IDatabase
     {
         #region Properties
 

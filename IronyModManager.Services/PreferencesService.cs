@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="PreferencesService.cs" company="IronyModManager.Services">
 //     Mario
@@ -23,7 +23,7 @@ namespace IronyModManager.Services
     /// Implements the <see cref="IronyModManager.Services.IPreferencesService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.IPreferencesService" />
-    internal class PreferencesService : IPreferencesService
+    public class PreferencesService : IPreferencesService
     {
         #region Constructors
 
@@ -54,7 +54,7 @@ namespace IronyModManager.Services
         /// Gets this instance.
         /// </summary>
         /// <returns>IPreferences.</returns>
-        public IPreferences Get()
+        public virtual IPreferences Get()
         {
             return Storage.GetPreferences();
         }
@@ -63,7 +63,7 @@ namespace IronyModManager.Services
         /// Saves the specified preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
-        public void Save(IPreferences preferences)
+        public virtual void Save(IPreferences preferences)
         {
             Storage.SetPreferences(preferences);
         }

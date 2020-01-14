@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models
+// Assembly         : IronyModManager.Services
 // Author           : Mario
 // Created          : 01-11-2020
 //
@@ -32,8 +32,8 @@ namespace IronyModManager.Models
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<IPreferences, Preferences>().ReverseMap();
-            CreateMap<ITheme, Theme>().ReverseMap();
+            CreateMap<ITheme, IPreferences>()
+                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap();
         }
 
         #endregion Constructors

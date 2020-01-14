@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Views;
+using IronyModManager.Views.Controls;
 using Container = SimpleInjector.Container;
 
 namespace IronyModManager.DI
@@ -34,8 +35,8 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterViews(Container container)
         {
-            container.Register<MainWindow, MainWindow>();
-            container.Register<SampleControlView, SampleControlView>();
+            container.Register<MainWindow>();
+            container.Register<ThemeControlView>();
         }
 
         #endregion Methods

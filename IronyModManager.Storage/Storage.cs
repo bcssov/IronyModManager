@@ -23,7 +23,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="IronyModManager.Storage.IStorageProvider" />
     /// </summary>
     /// <seealso cref="IronyModManager.Storage.IStorageProvider" />
-    internal class Storage : IStorageProvider
+    public class Storage : IStorageProvider
     {
         #region Constructors
 

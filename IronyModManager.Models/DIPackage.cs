@@ -16,6 +16,7 @@ namespace IronyModManager.Models
         public void RegisterServices(Container container)
         {
             container.Register<IPreferences, Preferences>();
+            container.Register<ITheme, Theme>();
         }
 
         #endregion Methods

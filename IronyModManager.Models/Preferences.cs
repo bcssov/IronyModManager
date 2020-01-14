@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System;
-using IronyModManager.Models.Enums;
 using PropertyChanged;
 
 namespace IronyModManager.Models
@@ -25,7 +24,7 @@ namespace IronyModManager.Models
     /// </summary>
     /// <seealso cref="IronyModManager.Models.IPreferences" />
     [AddINotifyPropertyChangedInterface]
-    internal class Preferences : IPreferences
+    public class Preferences : IPreferences
     {
         #region Properties
 
@@ -33,7 +32,7 @@ namespace IronyModManager.Models
         /// Gets or sets the theme.
         /// </summary>
         /// <value>The theme.</value>
-        public virtual Theme Theme { get; set; }
+        public virtual Enums.Theme Theme { get; set; }
 
         #endregion Properties
     }

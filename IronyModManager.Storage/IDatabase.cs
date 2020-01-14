@@ -20,7 +20,7 @@ namespace IronyModManager.Storage
     /// <summary>
     /// Interface IDatabase
     /// </summary>
-    internal interface IDatabase
+    public interface IDatabase
     {
         #region Properties
 

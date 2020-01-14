@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,13 +13,14 @@
 // ***********************************************************************
 using System;
 using System.Globalization;
-using System.Threading;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using IronyModManager.DI;
 using IronyModManager.Log;
-using System.Reflection;
 
 namespace IronyModManager
 {
@@ -39,7 +40,12 @@ namespace IronyModManager
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect().AfterSetup((s) =>
                 {
-                    DIContainer.Verify();
+# if DEBUG
+                    if (!Design.IsDesignMode)
+                    {
+                        DIContainer.Verify();
+                    }
+#endif
                 }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
