@@ -18,13 +18,7 @@
   </Design.DataContext>
 
   <Panel>
-    <Grid>
-      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
-      <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Right" VerticalAlignment="Top"></TextBlock>
-      <ContentControl Content="{Binding Sample}"></ContentControl>
-    </Grid>
-    
+    <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
   </Panel>
-
 
 </Window>

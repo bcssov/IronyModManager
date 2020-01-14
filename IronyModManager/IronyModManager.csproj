@@ -31,10 +31,10 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Remove="Views\SampleControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Views\SampleControlView.xaml" />
+    <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -70,13 +70,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\SampleControlView.xaml">
+    <EmbeddedResource Include="Views\Controls\ThemeControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\SampleControlView.xaml.cs">
-      <DependentUpon>SampleControlView.xaml</DependentUpon>
+    <Compile Update="Views\Controls\ThemeControlView.xaml.cs">
+      <DependentUpon>Views\Controls\ThemeControlView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

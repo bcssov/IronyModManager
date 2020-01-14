@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Mario
@@ -32,8 +32,7 @@ namespace IronyModManager.Storage
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<IDatabase, Database>().As<Database>();
-            CreateMap<Database, IDatabase>().As<Database>();
+            CreateMap<IDatabase, Database>().ReverseMap();
         }
 
         #endregion Constructors

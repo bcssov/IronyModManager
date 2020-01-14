@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -22,7 +22,8 @@ namespace IronyModManager
 {
     /// <summary>
     /// Class App.
-    /// Implements the <see cref="Avalonia.Application" /></summary>
+    /// Implements the <see cref="Avalonia.Application" />
+    /// </summary>
     /// <seealso cref="Avalonia.Application" />
     public class App : Application
     {
@@ -45,7 +46,9 @@ namespace IronyModManager
             {
                 var resolver = DIResolver.Get<IViewResolver>();
                 var mainWindow = DIResolver.Get<MainWindow>();
-                mainWindow.DataContext = resolver.ResolveViewModel<MainWindow>();
+                var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
+                vm.MainWindow = mainWindow;
+                mainWindow.DataContext = vm;
                 desktop.MainWindow = mainWindow;
             }
 

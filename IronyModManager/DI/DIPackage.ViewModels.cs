@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.ViewModels;
+using IronyModManager.ViewModels.Controls;
 using Container = SimpleInjector.Container;
 
 namespace IronyModManager.DI
@@ -34,7 +35,8 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterViewModels(Container container)
         {
-            container.Register<MainWindowViewModel, MainWindowViewModel>();
+            container.Register<MainWindowViewModel>();
+            container.Register<ThemeControlViewModel>();
         }
 
         #endregion Methods

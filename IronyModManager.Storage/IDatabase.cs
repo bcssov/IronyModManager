@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -13,14 +13,17 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.ComponentModel;
 using IronyModManager.Models;
 
 namespace IronyModManager.Storage
 {
     /// <summary>
     /// Interface IDatabase
+    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
     /// </summary>
-    internal interface IDatabase
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    public interface IDatabase : INotifyPropertyChanged
     {
         #region Properties
 

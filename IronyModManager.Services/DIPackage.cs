@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -34,6 +34,7 @@ namespace IronyModManager.Services
         public void RegisterServices(Container container)
         {
             container.Register<IPreferencesService, PreferencesService>();
+            container.Register<IThemeService, ThemeService>();
         }
 
         #endregion Methods

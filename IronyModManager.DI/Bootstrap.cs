@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -106,6 +106,8 @@ namespace IronyModManager.DI
             var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
             var config = new MapperConfiguration(cfg =>
             {
+                cfg.ConstructServicesUsing((t) => DIResolver.Get(t));
+
                 foreach (var assemblyProfiles in profiles)
                 {
                     foreach (var assemblyProfile in assemblyProfiles)
@@ -113,6 +115,20 @@ namespace IronyModManager.DI
                         cfg.AddProfile(Activator.CreateInstance(assemblyProfile) as Profile);
                     }
                 }
+                cfg.ForAllMaps((t, m) =>
+                {
+                    Func<object, object> resolver = (x) =>
+                    {
+                        var type = x.GetType();
+                        var derivedType = t.GetDerivedTypeFor(type);
+                        if (derivedType.IsInterface)
+                        {
+                            return DIResolver.Get(derivedType);
+                        }
+                        return derivedType;
+                    };
+                    m.ConstructUsing((x) => resolver(x));
+                });
             });
 
             var container = DIContainer.Container;
