@@ -15,9 +15,10 @@
 using System.Collections.Generic;
 using System;
 using Avalonia.ReactiveUI;
-using ReactiveUI;
-using Container = SimpleInjector.Container;
 using IronyModManager.Log;
+using ReactiveUI;
+using Splat;
+using Container = SimpleInjector.Container;
 
 namespace IronyModManager.DI
 {
@@ -34,7 +35,9 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterAvaloniaServices(Container container)
         {
-            // Have to manually bind Avalonia services... it doesn't really work best with SimpleInjector...
+            // TODO: Not sure why also I need to use Splats registration since we've got a DI replacement? Investigate at a later date.
+            Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
+            Locator.CurrentMutable.RegisterConstant(new AutoDataTemplateBindingHook(), typeof(IPropertyBindingHook));
             container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();
             container.Register<IPropertyBindingHook, AutoDataTemplateBindingHook>();
             Avalonia.Logging.Logger.Sink = new AvaloniaLogger();

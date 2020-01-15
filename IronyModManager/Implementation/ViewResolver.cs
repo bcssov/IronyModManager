@@ -4,24 +4,38 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
-// <copyright file="IViewResolver.cs" company="Mario">
+// <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 
+using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
+using IronyModManager.DI;
 using IronyModManager.ViewModels;
 
 namespace IronyModManager
 {
     /// <summary>
-    /// Interface IViewResolver
+    /// Class ViewResolver.
+    /// Implements the <see cref="IronyModManager.IViewResolver" />
     /// </summary>
-    public interface IViewResolver
+    /// <seealso cref="IronyModManager.IViewResolver" />
+    public class ViewResolver : IViewResolver
     {
+        #region Fields
+
+        /// <summary>
+        /// The control pattern
+        /// </summary>
+        private const string ControlPattern = "Control";
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -29,35 +43,54 @@ namespace IronyModManager
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>System.String.</returns>
-        string FormatUserControlName(object obj);
+        public string FormatUserControlName(object obj)
+        {
+            return obj.GetType().FullName.Replace("ViewModel", "View");
+        }
 
         /// <summary>
         /// Formats the name of the view model.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>System.String.</returns>
-        string FormatViewModelName<T>();
+        public string FormatViewModelName<T>()
+        {
+            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.")}ViewModel";
+        }
 
         /// <summary>
         /// Determines whether the specified name is control.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified name is control; otherwise, <c>false</c>.</returns>
-        bool IsControl(string name);
+        public bool IsControl(string name)
+        {
+            return name.Contains(ControlPattern);
+        }
 
         /// <summary>
         /// Resolves the user control.
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>UserControl.</returns>
-        UserControl ResolveUserControl(object obj);
+        public UserControl ResolveUserControl(object obj)
+        {
+            var name = FormatUserControlName(obj);
+            var type = Type.GetType(name);
+            return (UserControl)DIResolver.Get(type);
+        }
 
         /// <summary>
         /// Resolves the view model.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>ViewModelBase.</returns>
-        ViewModelBase ResolveViewModel<T>() where T : Window;
+        public BaseViewModel ResolveViewModel<T>() where T : Window
+        {
+            var name = FormatViewModelName<T>();
+            var type = Type.GetType(name);
+            return (BaseViewModel)DIResolver.Get(type);
+        }
 
         #endregion Methods
     }

@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-14-2020
 // ***********************************************************************
 // <copyright file="ThemeControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,22 +12,22 @@
 // <summary></summary>
 // ***********************************************************************
 
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
     /// Class ThemeControlView.
-    /// Implements the <see cref="Avalonia.Controls.UserControl" />
+    /// Implements the <see cref="IronyModManager.Views.BaseControl" />
     /// </summary>
-    /// <seealso cref="Avalonia.Controls.UserControl" />
-    public class ThemeControlView : UserControl
+    /// <seealso cref="IronyModManager.Views.BaseControl" />
+    public class ThemeControlView : BaseControl<ThemeControlViewModel>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThemeControlView"/> class.
+        /// Initializes a new instance of the <see cref="ThemeControlView" /> class.
         /// </summary>
         public ThemeControlView()
         {

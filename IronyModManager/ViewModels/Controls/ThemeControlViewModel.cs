@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
@@ -27,11 +28,20 @@ namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
     /// Class ThemeControlViewModel.
-    /// Implements the <see cref="IronyModManager.ViewModels.ViewModelBase" />
+    /// Implements the <see cref="IronyModManager.ViewModels.BaseViewModel" />
     /// </summary>
-    /// <seealso cref="IronyModManager.ViewModels.ViewModelBase" />
-    public class ThemeControlViewModel : ViewModelBase
+    /// <seealso cref="IronyModManager.ViewModels.BaseViewModel" />
+    public class ThemeControlViewModel : BaseViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// The theme service
+        /// </summary>
+        private readonly IThemeService themeService;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -40,26 +50,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="themeService">The theme service.</param>
         public ThemeControlViewModel(IThemeService themeService)
         {
-            var themes = themeService.Get();
-
-            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Enums.Theme.Dark;
-
-            var toggleEnabled = themes.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(p =>
-            {
-                if (p.IsSelected)
-                {
-                    ToggleDarkThemeEnabled = p.Type == Models.Enums.Theme.Dark;
-                }
-            });
-
-            ToggleTheme = ReactiveCommand.Create(() =>
-             {
-                 foreach (var item in themes)
-                 {
-                     item.IsSelected = !item.IsSelected;
-                 }
-                 themeService.Save(themes);
-             });
+            this.themeService = themeService;
         }
 
         #endregion Constructors
@@ -83,8 +74,41 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the toggle theme.
         /// </summary>
         /// <value>The toggle theme.</value>
-        public ReactiveCommand<Unit, Unit> ToggleTheme { get; }
+        [Reactive]
+        public ReactiveCommand<Unit, Unit> ToggleTheme { get; private set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            var themes = themeService.Get();
+
+            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Enums.Theme.Dark;
+
+            var toggleEnabled = themes.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(p =>
+             {
+                 if (p.IsSelected)
+                 {
+                     ToggleDarkThemeEnabled = p.Type == Models.Enums.Theme.Dark;
+                 }
+             }).DisposeWith(disposables);
+
+            ToggleTheme = ReactiveCommand.Create(() =>
+            {
+                foreach (var item in themes)
+                {
+                    item.IsSelected = !item.IsSelected;
+                }
+                themeService.Save(themes);
+            }).DisposeWith(disposables);
+        }
+
+        #endregion Methods
     }
 }

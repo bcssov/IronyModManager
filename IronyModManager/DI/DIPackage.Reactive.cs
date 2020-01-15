@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Reactive.cs" company="Mario">
 //     Mario
@@ -14,6 +14,8 @@
 
 using System.Collections.Generic;
 using System;
+using ReactiveUI;
+using SimpleInjector.Diagnostics;
 using Splat;
 using Splat.NLog;
 using Container = SimpleInjector.Container;
@@ -36,6 +38,9 @@ namespace IronyModManager.DI
         private void RegisterReactiveServices(Container container)
         {
             Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
+            container.Register<ViewModelActivator>();
+            var viewModelActivatorRegistration = container.GetRegistration(typeof(ViewModelActivator)).Registration;
+            viewModelActivatorRegistration.SuppressDiagnosticWarning(DiagnosticType.DisposableTransientComponent, "Error in detection.");
         }
 
         #endregion Methods
