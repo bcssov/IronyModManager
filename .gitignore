@@ -351,3 +351,4 @@ MigrationBackup/
 *.snk
 
 !/IronyModManager/Log
+*.suppress

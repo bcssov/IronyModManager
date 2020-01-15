@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using Avalonia.Controls;
+using IronyModManager.DI;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
 
@@ -33,7 +34,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The theme setter
         /// </summary>
-        private static Func<Window, bool, bool> themeSetter = (window, isToggled) =>
+        private static readonly Func<Window, bool, bool> themeSetter = (window, isToggled) =>
         {
             if (window != null)
             {
@@ -59,10 +60,9 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
         /// </summary>
-        /// <param name="themeSelector">The theme selector.</param>
-        public MainWindowViewModel(ThemeControlViewModel themeSelector)
+        public MainWindowViewModel()
         {
-            ThemeSelector = themeSelector;
+            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
 
             var toggleEnabled = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
             {
