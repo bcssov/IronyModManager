@@ -13,17 +13,17 @@
 // ***********************************************************************
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using IronyModManager.ViewModels;
 
 namespace IronyModManager.Views
 {
     /// <summary>
     /// Class MainWindow.
-    /// Implements the <see cref="Avalonia.Controls.Window" />
+    /// Implements the <see cref="IronyModManager.Views.BaseWindow" />
     /// </summary>
-    /// <seealso cref="Avalonia.Controls.Window" />
-    public class MainWindow : Window
+    /// <seealso cref="IronyModManager.Views.BaseWindow" />
+    public class MainWindow : BaseWindow<MainWindowViewModel>
     {
         #region Constructors
 

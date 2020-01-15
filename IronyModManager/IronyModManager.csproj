@@ -75,11 +75,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Views\Controls\ThemeControlView.xaml.cs">
-      <DependentUpon>Views\Controls\ThemeControlView.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TransformOnBuild>true</TransformOnBuild>

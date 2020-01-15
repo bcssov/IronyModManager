@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -28,14 +28,18 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.IPreferences" />
     public class Preferences : IPreferences
     {
-        #region Events
-
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
+#pragma warning disable 67 // False detection
+
+        #region Events
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion Events
+
+#pragma warning restore 67
 
         #region Properties
 

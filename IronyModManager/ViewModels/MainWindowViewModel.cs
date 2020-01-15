@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -13,21 +13,23 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Reactive.Disposables;
 using Avalonia.Controls;
 using IronyModManager.DI;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace IronyModManager.ViewModels
 {
     /// <summary>
     /// Class MainWindowViewModel.
-    /// Implements the <see cref="IronyModManager.ViewModels.ViewModelBase" />
+    /// Implements the <see cref="IronyModManager.ViewModels.BaseViewModel" />
     /// Implements the <see cref="ReactiveUI.IActivatableViewModel" />
     /// </summary>
     /// <seealso cref="ReactiveUI.IActivatableViewModel" />
-    /// <seealso cref="IronyModManager.ViewModels.ViewModelBase" />
-    public class MainWindowViewModel : ViewModelBase
+    /// <seealso cref="IronyModManager.ViewModels.BaseViewModel" />
+    public class MainWindowViewModel : BaseViewModel
     {
         #region Fields
 
@@ -47,12 +49,6 @@ namespace IronyModManager.ViewModels
             return false;
         };
 
-        /// <summary>
-        /// Gets or sets the main window.
-        /// </summary>
-        /// <value>The main window.</value>
-        private Window mainWindow;
-
         #endregion Fields
 
         #region Constructors
@@ -63,11 +59,6 @@ namespace IronyModManager.ViewModels
         public MainWindowViewModel()
         {
             ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
-
-            var toggleEnabled = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
-            {
-                themeSetter(MainWindow, p);
-            });
         }
 
         #endregion Constructors
@@ -78,25 +69,33 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the main window.
         /// </summary>
         /// <value>The main window.</value>
-        public Window MainWindow
-        {
-            get
-            {
-                return mainWindow;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref mainWindow, value);
-                themeSetter(value, ThemeSelector.ToggleDarkThemeEnabled);
-            }
-        }
+        [Reactive] 
+        public Window MainWindow { get; set; }
 
         /// <summary>
         /// Gets or sets my property.
         /// </summary>
         /// <value>My property.</value>
-        public ThemeControlViewModel ThemeSelector { get; }
+        public ThemeControlViewModel ThemeSelector { get; private set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            themeSetter(MainWindow, ThemeSelector.ToggleDarkThemeEnabled);
+
+            var toggleEnabled = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
+            {
+                themeSetter(MainWindow, p);
+            }).DisposeWith(disposables);
+        }
+
+        #endregion Methods
     }
 }

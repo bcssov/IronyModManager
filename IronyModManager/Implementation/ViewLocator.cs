@@ -83,7 +83,7 @@ namespace IronyModManager
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool Match(object data)
         {
-            return data is ViewModelBase;
+            return data is BaseViewModel;
         }
 
         #endregion Methods
