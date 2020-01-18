@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,15 +12,15 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using IronyModManager.DI;
-using IronyModManager.Log;
+using IronyModManager.Shared;
 
 namespace IronyModManager
 {
@@ -93,7 +93,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            var culture = new CultureInfo(Constants.AppCulture);
+            var culture = new CultureInfo(Shared.Constants.DefaultAppCulture);
 
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
@@ -104,9 +104,13 @@ namespace IronyModManager
         /// </summary>
         private static void InitDI()
         {
-            Bootstrap.Init(Constants.PluginsPathAndName, Assembly.GetExecutingAssembly().GetName().Name);
-
-            Bootstrap.Finish();
+            Bootstrap.Setup(
+                new DIOptions()
+                {
+                    PluginPathAndName = Shared.Constants.PluginsPathAndName,
+                    ModuleTypes = new List<Type>() { typeof(IModule) },
+                    PluginTypes = new List<Type>() { typeof(IPlugin) }
+                });
         }
 
         /// <summary>

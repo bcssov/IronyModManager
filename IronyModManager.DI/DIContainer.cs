@@ -4,16 +4,16 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using SimpleInjector;
 using System;
 using System.Collections.Generic;
+using SimpleInjector;
 
 namespace IronyModManager.DI
 {
@@ -31,16 +31,22 @@ namespace IronyModManager.DI
         internal static Container Container { get; private set; }
 
         /// <summary>
-        /// Gets or sets the name of the main assembly.
+        /// Gets the module types.
         /// </summary>
-        /// <value>The name of the main assembly.</value>
-        internal static string MainAssemblyName { get; set; }
+        /// <value>The module types.</value>
+        internal static IEnumerable<Type> ModuleTypes { get; private set; }
 
         /// <summary>
         /// Gets the name of the plugin path and.
         /// </summary>
         /// <value>The name of the plugin path and.</value>
         internal static string PluginPathAndName { get; private set; }
+
+        /// <summary>
+        /// Gets the plugin types.
+        /// </summary>
+        /// <value>The plugin types.</value>
+        internal static IEnumerable<Type> PluginTypes { get; private set; }
 
         #endregion Properties
 
@@ -58,13 +64,13 @@ namespace IronyModManager.DI
         /// Initializes the specified container.
         /// </summary>
         /// <param name="container">The container.</param>
-        /// <param name="pluginPathAndName">Name of the plugin path and.</param>
-        /// <param name="mainAssemblyName">Name of the main assembly.</param>
-        internal static void Init(Container container, string pluginPathAndName, string mainAssemblyName)
+        /// <param name="opts">The opts.</param>
+        internal static void Init(Container container, DIOptions opts)
         {
             Container = container;
-            PluginPathAndName = pluginPathAndName;
-            MainAssemblyName = mainAssemblyName;
+            PluginPathAndName = opts.PluginPathAndName;
+            ModuleTypes = opts.ModuleTypes;
+            PluginTypes = opts.PluginTypes;
         }
 
         #endregion Methods

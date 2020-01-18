@@ -12,8 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System;
 using ReactiveUI;
 using SimpleInjector.Diagnostics;
 using Splat;

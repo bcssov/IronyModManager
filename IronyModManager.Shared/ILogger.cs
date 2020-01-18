@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager
+// Assembly         : IronyModManager.Services.Common
 // Author           : Mario
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="ILogger.cs" company="Mario">
 //     Mario
@@ -13,7 +13,10 @@
 // ***********************************************************************
 using System;
 
-namespace IronyModManager.Log
+/// <summary>
+/// The Shared namespace.
+/// </summary>
+namespace IronyModManager.Shared
 {
     /// <summary>
     /// Interface ILogger
@@ -26,7 +29,8 @@ namespace IronyModManager.Log
         /// Errors the specified ex.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        void Error(Exception ex, string message = "");
+        /// <param name="message">The message.</param>
+        void Error(Exception ex, string message = Constants.EmptyParam);
 
         /// <summary>
         /// Informations the specified message.

@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using AutoMapper;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
 {

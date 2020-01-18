@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -15,16 +15,17 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
+using IronyModManager.Common;
+using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.ViewModels;
 
 namespace IronyModManager
 {
     /// <summary>
     /// Class ViewResolver.
-    /// Implements the <see cref="IronyModManager.IViewResolver" />
+    /// Implements the <see cref="IronyModManager.Common.IViewResolver" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IViewResolver" />
+    /// <seealso cref="IronyModManager.Common.IViewResolver" />
     public class ViewResolver : IViewResolver
     {
         #region Fields

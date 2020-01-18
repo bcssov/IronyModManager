@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -14,15 +14,16 @@
 using System.Collections.Generic;
 using System;
 using AutoMapper;
-using IronyModManager.Models;
+using IronyModManager.Models.Common;
+using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Storage
 {
     /// <summary>
     /// Class Storage.
-    /// Implements the <see cref="IronyModManager.Storage.IStorageProvider" />
+    /// Implements the <see cref="IronyModManager.Storage.Common.IStorageProvider" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Storage.IStorageProvider" />
+    /// <seealso cref="IronyModManager.Storage.Common.IStorageProvider" />
     public class Storage : IStorageProvider
     {
         #region Constructors
@@ -31,6 +32,7 @@ namespace IronyModManager.Storage
         /// Initializes a new instance of the <see cref="Storage" /> class.
         /// </summary>
         /// <param name="database">The database.</param>
+        /// <param name="mapper">The mapper.</param>
         public Storage(IDatabase database, IMapper mapper)
         {
             Database = database;

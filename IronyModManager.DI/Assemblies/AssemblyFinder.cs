@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -16,7 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using IronyModManager.DI.Readers;
+using IronyModManager.Shared;
+using McMaster.NETCore.Plugins;
 
 namespace IronyModManager.DI.Assemblies
 {
@@ -28,52 +31,113 @@ namespace IronyModManager.DI.Assemblies
         #region Methods
 
         /// <summary>
-        /// Finds and vlidates assemblies.
+        /// Finds the specified finder parameters.
         /// </summary>
         /// <param name="finderParams">The finder parameters.</param>
         /// <returns>IEnumerable&lt;Assembly&gt;.</returns>
-        public static IEnumerable<Assembly> FindAndValidateAssemblies(AssemblyFinderParams finderParams)
+        public static IEnumerable<Assembly> Find(AssemblyFinderParams finderParams)
         {
-            var files = new DirectoryInfo(finderParams.Path).GetFiles().Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                 p.Extension.Equals(Constants.DllExtension, StringComparison.InvariantCultureIgnoreCase)).OrderBy(p => p.Name).ToList();
-
-            files = PrioritizeFiles(finderParams, files);
-
-            var assemblies = from file in files
-                             select Assembly.Load(AssemblyName.GetAssemblyName(file.FullName));
+            var assemblies = FindAndLoadAssemblies(finderParams);
 
             ValidateAssemblies(assemblies, finderParams);
+
+            var infos = new List<ModuleInfo>();
+            foreach (var item in assemblies)
+            {
+                infos.Add(GetModuleInfo(item));
+            }
+
+            var sorted = SortDependencies(infos);
+
+            return sorted.Select(p => p.Assembly);
+        }
+
+        /// <summary>
+        /// Finds the and load assemblies.
+        /// </summary>
+        /// <param name="finderParams">The finder parameters.</param>
+        /// <returns>List&lt;Assembly&gt;.</returns>
+        private static List<Assembly> FindAndLoadAssemblies(AssemblyFinderParams finderParams)
+        {
+            var files = new DirectoryInfo(finderParams.Path).GetFiles($"*{Constants.DllExtension}", finderParams.SearchOption)
+                .Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p.Name).ToList();
+
+            var assemblies = new List<Assembly>();
+
+            foreach (var item in files)
+            {
+                if (!AssemblyLoadContext.Default.Assemblies.Any(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase)))
+                {
+                    var loader = PluginLoader.CreateFromAssemblyFile(assemblyFile: item.FullName,
+                        sharedTypes: finderParams.SharedTypes.ToArray(),
+                        configure =>
+                        {
+                            configure.PreferSharedTypes = true;
+                        });
+                    var assembly = loader.LoadDefaultAssembly();
+                    assemblies.Add(assembly);
+                }
+                else
+                {
+                    var assembly = AssemblyLoadContext.Default.Assemblies.FirstOrDefault(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase));
+                    assemblies.Add(assembly);
+                }
+            }
 
             return assemblies;
         }
 
         /// <summary>
-        /// Prioritizes the files.
+        /// Gets the module information.
         /// </summary>
-        /// <param name="finderParams">The finder parameters.</param>
-        /// <param name="files">The files.</param>
-        /// <returns>List&lt;FileInfo&gt;.</returns>
-        private static List<FileInfo> PrioritizeFiles(AssemblyFinderParams finderParams, List<FileInfo> files)
+        /// <param name="assembly">The assembly.</param>
+        /// <returns>IronyModManager.DI.Assemblies.AssemblyFinder.ModuleInfo.</returns>
+        private static ModuleInfo GetModuleInfo(Assembly assembly)
         {
-            if (finderParams.PriorityAssemblies?.Count() > 0)
+            var addin = assembly.GetTypes().First(p => typeof(IAddin).IsAssignableFrom(p) && !p.IsAbstract);
+            var instance = Activator.CreateInstance(addin) as IAddin;
+            return new ModuleInfo()
             {
-                var orderedFiles = new List<FileInfo>();
+                Assembly = assembly,
+                Dependencies = instance.Dependencies,
+                Name = instance.Name
+            };
+        }
 
-                foreach (var assembly in finderParams.PriorityAssemblies)
+        /// <summary>
+        /// Sorts the dependencies.
+        /// </summary>
+        /// <param name="infos">The infos.</param>
+        /// <returns>List&lt;ModuleInfo&gt;.</returns>
+        private static List<ModuleInfo> SortDependencies(List<ModuleInfo> infos)
+        {
+            var sorted = new List<ModuleInfo>();
+            var processed = new HashSet<ModuleInfo>();
+
+            void process(ModuleInfo item)
+            {
+                if (!processed.Contains(item))
                 {
-                    foreach (var item in files)
+                    processed.Add(item);
+
+                    foreach (var dependency in item.Dependencies)
                     {
-                        if (Path.GetFileNameWithoutExtension(item.Name) == assembly)
+                        var dependentItem = infos.FirstOrDefault(p => p.Name.Equals(dependency));
+                        if (dependentItem != null)
                         {
-                            orderedFiles.Add(item);
+                            process(infos.FirstOrDefault(p => p.Name.Equals(dependency)));
                         }
                     }
+                    sorted.Add(item);
                 }
-                orderedFiles.AddRange(files.Where(p => !orderedFiles.Any(s => s == p)));
-
-                return orderedFiles;
             }
-            return files;
+
+            foreach (var item in infos)
+            {
+                process(item);
+            }
+
+            return sorted;
         }
 
         /// <summary>
@@ -100,5 +164,37 @@ namespace IronyModManager.DI.Assemblies
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ModuleInfo.
+        /// </summary>
+        private class ModuleInfo
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the assembly.
+            /// </summary>
+            /// <value>The assembly.</value>
+            public Assembly Assembly { get; set; }
+
+            /// <summary>
+            /// Gets or sets the dependencies.
+            /// </summary>
+            /// <value>The dependencies.</value>
+            public IEnumerable<string> Dependencies { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name.
+            /// </summary>
+            /// <value>The name.</value>
+            public string Name { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

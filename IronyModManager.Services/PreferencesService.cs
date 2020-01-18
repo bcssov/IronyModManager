@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="PreferencesService.cs" company="IronyModManager.Services">
 //     Mario
@@ -13,16 +13,17 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.Models;
-using IronyModManager.Storage;
+using IronyModManager.Models.Common;
+using IronyModManager.Services.Common;
+using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
     /// <summary>
     /// Class PreferencesService.
-    /// Implements the <see cref="IronyModManager.Services.IPreferencesService" />
+    /// Implements the <see cref="IronyModManager.Services.Common.IPreferencesService" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Services.IPreferencesService" />
+    /// <seealso cref="IronyModManager.Services.Common.IPreferencesService" />
     public class PreferencesService : IPreferencesService
     {
         #region Constructors

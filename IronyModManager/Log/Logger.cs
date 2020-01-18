@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -19,10 +19,10 @@ namespace IronyModManager.Log
 {
     /// <summary>
     /// Class Logger.
-    /// Implements the <see cref="IronyModManager.Log.ILogger" />
+    /// Implements the <see cref="IronyModManager.Shared.ILogger" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Log.ILogger" />
-    public class Logger : ILogger
+    /// <seealso cref="IronyModManager.Shared.ILogger" />
+    public class Logger : Shared.ILogger
     {
         #region Fields
 
@@ -40,7 +40,7 @@ namespace IronyModManager.Log
         /// </summary>
         /// <param name="ex">The ex.</param>
         /// <param name="message">The message.</param>
-        public void Error(Exception ex, string message = "")
+        public void Error(Exception ex, string message = Shared.Constants.EmptyParam)
         {
             if (ex != null)
             {

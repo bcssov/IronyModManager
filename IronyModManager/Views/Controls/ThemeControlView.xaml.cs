@@ -13,15 +13,16 @@
 // ***********************************************************************
 
 using Avalonia.Markup.Xaml;
+using IronyModManager.Common.Views;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
     /// Class ThemeControlView.
-    /// Implements the <see cref="IronyModManager.Views.BaseControl" />
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ThemeControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Views.BaseControl" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ThemeControlViewModel}" />
     public class ThemeControlView : BaseControl<ThemeControlViewModel>
     {
         #region Constructors

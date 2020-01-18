@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-10-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="DIResolver.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -31,10 +31,7 @@ namespace IronyModManager.DI
         /// <exception cref="NullReferenceException">Container is null.</exception>
         public static T Get<T>() where T : class
         {
-            if (DIContainer.Container == null)
-            {
-                throw new NullReferenceException("Container is null.");
-            }
+            Validate();
             return DIContainer.Container.GetInstance<T>();
         }
 
@@ -46,11 +43,20 @@ namespace IronyModManager.DI
         /// <exception cref="NullReferenceException">Container is null.</exception>
         public static object Get(Type type)
         {
+            Validate();
+            return DIContainer.Container.GetInstance(type);
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        /// <exception cref="NullReferenceException">container</exception>
+        private static void Validate()
+        {
             if (DIContainer.Container == null)
             {
-                throw new NullReferenceException("Container is null.");
+                throw new NullReferenceException("container");
             }
-            return DIContainer.Container.GetInstance(type);
         }
 
         #endregion Methods

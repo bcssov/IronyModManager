@@ -4,20 +4,19 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-10-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="ResolvingFactoriesExtensions.cs" company="SimpleInjector">
 //     Copyright (c) SimpleInjector. All rights reserved.
 // </copyright>
 // <summary>Source: https://github.com/simpleinjector/SimpleInjector/blob/master/src/SimpleInjector.CodeSamples/ResolvingFactoriesExtensions.cs#L14</summary>
 // ***********************************************************************
-using SimpleInjector;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using SimpleInjector;
 
 namespace IronyModManager.DI.Extensions
 {
@@ -39,11 +38,11 @@ namespace IronyModManager.DI.Extensions
                 if (e.UnregisteredServiceType.IsGenericType &&
                     e.UnregisteredServiceType.GetGenericTypeDefinition() == typeof(Func<>))
                 {
-                    Type serviceType = e.UnregisteredServiceType.GetGenericArguments()[0];
+                    var serviceType = e.UnregisteredServiceType.GetGenericArguments()[0];
 
-                    InstanceProducer registration = container.GetRegistration(serviceType, true);
+                    var registration = container.GetRegistration(serviceType, true);
 
-                    Type funcType = typeof(Func<>).MakeGenericType(serviceType);
+                    var funcType = typeof(Func<>).MakeGenericType(serviceType);
 
                     var factoryDelegate =
                         Expression.Lambda(funcType, registration.BuildExpression()).Compile();
@@ -64,12 +63,12 @@ namespace IronyModManager.DI.Extensions
                 if (e.UnregisteredServiceType.IsGenericType &&
                     e.UnregisteredServiceType.GetGenericTypeDefinition() == typeof(Lazy<>))
                 {
-                    Type serviceType = e.UnregisteredServiceType.GetGenericArguments()[0];
+                    var serviceType = e.UnregisteredServiceType.GetGenericArguments()[0];
 
-                    InstanceProducer registration = container.GetRegistration(serviceType, true);
+                    var registration = container.GetRegistration(serviceType, true);
 
-                    Type funcType = typeof(Func<>).MakeGenericType(serviceType);
-                    Type lazyType = typeof(Lazy<>).MakeGenericType(serviceType);
+                    var funcType = typeof(Func<>).MakeGenericType(serviceType);
+                    var lazyType = typeof(Lazy<>).MakeGenericType(serviceType);
 
                     var factoryDelegate = Expression.Lambda(funcType, registration.BuildExpression()).Compile();
 
@@ -107,7 +106,7 @@ namespace IronyModManager.DI.Extensions
 
                 Type[] genericArguments = e.UnregisteredServiceType.GetGenericArguments();
 
-                Type componentType = genericArguments.Last();
+                var componentType = genericArguments.Last();
 
                 if (componentType.IsAbstract)
                 {

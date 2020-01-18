@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
-// Created          : 01-11-2020
+// Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
-// <copyright file="IViewModel.cs" company="Mario">
+// <copyright file="IModule.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,12 +14,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.ViewModels
+namespace IronyModManager.Shared
 {
     /// <summary>
-    /// Interface IViewModel
+    /// Interface IModule
+    /// Implements the <see cref="IronyModManager.Shared.IAddin" />
     /// </summary>
-    public interface IViewModel
+    /// <seealso cref="IronyModManager.Shared.IAddin" />
+    public interface IModule : IAddin
     {
     }
 }

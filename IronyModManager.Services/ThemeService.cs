@@ -17,6 +17,8 @@ using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Models;
+using IronyModManager.Models.Common;
+using IronyModManager.Services.Common;
 
 namespace IronyModManager.Services
 {
@@ -66,8 +68,8 @@ namespace IronyModManager.Services
         {
             var preferences = PreferencesService.Get();
 
-            var lightTheme = InitTheme(Models.Enums.Theme.Light, preferences.Theme);
-            var darkTheme = InitTheme(Models.Enums.Theme.Dark, preferences.Theme);
+            var lightTheme = InitTheme(Models.Common.Enums.Theme.Light, preferences.Theme);
+            var darkTheme = InitTheme(Models.Common.Enums.Theme.Dark, preferences.Theme);
             var themes = new List<ITheme>() { lightTheme, darkTheme };
 
             return themes;
@@ -102,11 +104,11 @@ namespace IronyModManager.Services
         /// <param name="type">The type.</param>
         /// <param name="selectedType">Type of the selected.</param>
         /// <returns>ITheme.</returns>
-        private ITheme InitTheme(Models.Enums.Theme type, Models.Enums.Theme selectedType)
+        private ITheme InitTheme(Models.Common.Enums.Theme type, Models.Common.Enums.Theme selectedType)
         {
             var theme = DIResolver.Get<ITheme>();
             theme.Type = type;
-            theme.Name = type == Models.Enums.Theme.Light ? "Light" : "Dark";
+            theme.Name = type == Models.Common.Enums.Theme.Light ? "Light" : "Dark";
             theme.IsSelected = type == selectedType;
             return theme;
         }

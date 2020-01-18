@@ -14,6 +14,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using IronyModManager.Common;
 using IronyModManager.DI;
 using IronyModManager.ViewModels;
 using IronyModManager.Views;

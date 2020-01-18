@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="IViewResolver.cs" company="Mario">
 //     Mario
@@ -13,9 +13,9 @@
 // ***********************************************************************
 
 using Avalonia.Controls;
-using IronyModManager.ViewModels;
+using IronyModManager.Common.ViewModels;
 
-namespace IronyModManager
+namespace IronyModManager.Common
 {
     /// <summary>
     /// Interface IViewResolver

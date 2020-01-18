@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -14,8 +14,10 @@
 
 using System.Collections.Generic;
 using System;
-using Container = SimpleInjector.Container;
+using IronyModManager.Common;
 using IronyModManager.Log;
+using IronyModManager.Shared;
+using Container = SimpleInjector.Container;
 
 namespace IronyModManager.DI
 {

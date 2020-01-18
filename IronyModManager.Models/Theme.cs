@@ -14,14 +14,15 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
 {
     /// <summary>
     /// Class Theme.
-    /// Implements the <see cref="IronyModManager.Models.ITheme" />
+    /// Implements the <see cref="IronyModManager.Models.Common.ITheme" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Models.ITheme" />
+    /// <seealso cref="IronyModManager.Models.Common.ITheme" />
     public class Theme : ITheme
     {
         /// <summary>
@@ -55,7 +56,7 @@ namespace IronyModManager.Models
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public virtual Enums.Theme Type { get; set; }
+        public virtual Common.Enums.Theme Type { get; set; }
 
         #endregion Properties
     }

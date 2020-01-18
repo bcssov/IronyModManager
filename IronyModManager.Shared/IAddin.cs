@@ -1,35 +1,40 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
-// Created          : 01-11-2020
+// Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
-// <copyright file="Theme.cs" company="Mario">
+// <copyright file="IAddin.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Models.Enums
+namespace IronyModManager.Shared
 {
     /// <summary>
-    /// Enum Theme
+    /// Interface IAddin
     /// </summary>
-    public enum Theme
+    public interface IAddin
     {
-        /// <summary>
-        /// The light
-        /// </summary>
-        Light,
+        #region Properties
 
         /// <summary>
-        /// The dark
+        /// Gets the dependencies.
         /// </summary>
-        Dark
+        /// <value>The dependencies.</value>
+        IEnumerable<string> Dependencies { get; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        string Name { get; }
+
+        #endregion Properties
     }
 }

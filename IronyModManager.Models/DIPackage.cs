@@ -1,10 +1,29 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Models
+// Author           : Mario
+// Created          : 01-15-2020
+//
+// Last Modified By : Mario
+// Last Modified On : 01-17-2020
+// ***********************************************************************
+// <copyright file="DIPackage.cs" company="Mario">
+//     Mario
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System.Collections.Generic;
+using System;
+using IronyModManager.Models.Common;
 using SimpleInjector;
 using SimpleInjector.Packaging;
 
 namespace IronyModManager.Models
 {
+    /// <summary>
+    /// Class DIPackage.
+    /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
+    /// </summary>
+    /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public class DIPackage : IPackage
     {
         #region Methods

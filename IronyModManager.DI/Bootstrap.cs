@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -31,44 +31,18 @@ namespace IronyModManager.DI
         #region Methods
 
         /// <summary>
-        /// Finishes this instance.
-        /// </summary>
-        public static void Finish()
-        {
-            var appPath = AppDomain.CurrentDomain.BaseDirectory;
-            var pluginsPath = Path.Combine(appPath, DIContainer.PluginPathAndName);
-
-            var appParams = new AssemblyFinderParams()
-            {
-                EmbededResourceKey = Constants.MainKey,
-                Path = appPath,
-                AssemblyPatternMatch = nameof(IronyModManager),
-                PriorityAssemblies = new List<string> { DIContainer.MainAssemblyName }
-            };
-            var pluginParams = new AssemblyFinderParams()
-            {
-                EmbededResourceKey = Constants.PluginKey,
-                Path = pluginsPath,
-                AssemblyPatternMatch = $"{nameof(IronyModManager)}.{DIContainer.PluginPathAndName}"
-            };
-
-            RegisterDIAssemblies(appParams, pluginParams);
-
-            RegisterAutomapperProfiles(appParams, pluginParams);
-        }
-
-        /// <summary>
         /// Initializes the specified plugins path and name.
         /// </summary>
-        /// <param name="pluginsPathAndName">Name of the plugins path and.</param>
-        /// <param name="mainAssemblyName">Name of the main assembly.</param>
-        public static void Init(string pluginsPathAndName, string mainAssemblyName)
+        /// <param name="opts">The opts.</param>
+        public static void Setup(DIOptions opts)
         {
             var container = new Container();
-            DIContainer.Init(container, pluginsPathAndName, mainAssemblyName);
+            DIContainer.Init(container, opts);
 
             ConfigureOptions(container);
             ConfigureExtensions(container);
+
+            RegisterAssemblies();
         }
 
         /// <summary>
@@ -92,6 +66,37 @@ namespace IronyModManager.DI
         }
 
         /// <summary>
+        /// Registers the assemblies.
+        /// </summary>
+        private static void RegisterAssemblies()
+        {
+            var appPath = AppDomain.CurrentDomain.BaseDirectory;
+            var pluginsPath = Path.Combine(appPath, DIContainer.PluginPathAndName);
+
+            var appParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.MainKey,
+                Path = appPath,
+                AssemblyPatternMatch = nameof(IronyModManager),
+                SearchOption = SearchOption.TopDirectoryOnly,
+                SharedTypes = DIContainer.ModuleTypes
+            };
+            var pluginParams = new AssemblyFinderParams()
+            {
+                EmbededResourceKey = Constants.PluginKey,
+                Path = pluginsPath,
+                AssemblyPatternMatch = nameof(IronyModManager),
+                SearchOption = SearchOption.AllDirectories,
+                SharedTypes = DIContainer.PluginTypes
+            };
+
+            AssemblyManager.RegisterHandlers();
+
+            RegisterDIAssemblies(appParams, pluginParams);
+            RegisterAutomapperProfiles(appParams, pluginParams);
+        }
+
+        /// <summary>
         /// Registers the automapper profiles.
         /// </summary>
         /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
@@ -100,13 +105,13 @@ namespace IronyModManager.DI
             var assemblies = new List<Assembly>() { };
             foreach (var assemblyFinderParam in assemblyFinderParams)
             {
-                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
+                assemblies.AddRange(AssemblyFinder.Find(assemblyFinderParam));
             }
 
             var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.ConstructServicesUsing((t) => DIResolver.Get(t));
+                cfg.ConstructServicesUsing((s) => DIResolver.Get(s));
 
                 foreach (var assemblyProfiles in profiles)
                 {
@@ -145,7 +150,7 @@ namespace IronyModManager.DI
             var assemblies = new List<Assembly>() { };
             foreach (var assemblyFinderParam in assemblyFinderParams)
             {
-                assemblies.AddRange(AssemblyFinder.FindAndValidateAssemblies(assemblyFinderParam));
+                assemblies.AddRange(AssemblyFinder.Find(assemblyFinderParam));
             }
 
             DIContainer.Container.RegisterPackages(assemblies);

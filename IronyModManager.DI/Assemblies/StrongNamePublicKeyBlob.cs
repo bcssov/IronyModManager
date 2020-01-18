@@ -1,13 +1,13 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.DI
-// Author           : Mario
+// Author           : Microsoft
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
-// <copyright file="StrongNamePublicKeyBlob.cs" company="Mario">
-//     Mario
+// <copyright file="StrongNamePublicKeyBlob.cs" company="Microsoft">
+//     Microsoft
 // </copyright>
 // <summary>Src: https://github.com/microsoft/referencesource/blob/master/mscorlib/system/security/permissions/strongnamepublickeyblob.cs</summary>
 // ***********************************************************************
