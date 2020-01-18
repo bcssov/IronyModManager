@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Shared;
 
 namespace IronyModManager
@@ -93,10 +94,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            var culture = new CultureInfo(Shared.Constants.DefaultAppCulture);
-
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
+            CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);            
         }
 
         /// <summary>

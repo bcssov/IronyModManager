@@ -34,7 +34,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Services.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Shared", "IronyModManager.Shared\IronyModManager.Shared.csproj", "{FA0BAB22-5121-439E-AE3B-E0F4E1745BDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Common", "IronyModManager.Common\IronyModManager.Common.csproj", "{1BA4701D-6F58-4301-8BA3-C49B5E363697}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Common", "IronyModManager.Common\IronyModManager.Common.csproj", "{1BA4701D-6F58-4301-8BA3-C49B5E363697}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Localization", "IronyModManager.Localization\IronyModManager.Localization.csproj", "{9F445113-74BF-413E-95C6-1C35EECC4813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -82,6 +84,10 @@ Global
 		{1BA4701D-6F58-4301-8BA3-C49B5E363697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BA4701D-6F58-4301-8BA3-C49B5E363697}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BA4701D-6F58-4301-8BA3-C49B5E363697}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F445113-74BF-413E-95C6-1C35EECC4813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F445113-74BF-413E-95C6-1C35EECC4813}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F445113-74BF-413E-95C6-1C35EECC4813}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F445113-74BF-413E-95C6-1C35EECC4813}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

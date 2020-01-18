@@ -36,7 +36,6 @@
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ironymodmanager.suppress" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
@@ -67,6 +66,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
+    <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
     <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />

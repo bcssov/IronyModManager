@@ -105,6 +105,10 @@ namespace IronyModManager.DI.Assemblies
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
+                if (args == null)
+                {
+                    return null;
+                }
                 var assemblyName = new AssemblyName(args.Name);
                 var assembly = GetAssembly(assemblyName);
                 if (args?.RequestingAssembly != null)
