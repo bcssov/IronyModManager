@@ -47,7 +47,7 @@ namespace IronyModManager
             {
                 var resolver = DIResolver.Get<IViewResolver>();
                 var mainWindow = DIResolver.Get<MainWindow>();
-                var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
+                var vm = (IMainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
                 vm.MainWindow = mainWindow;
                 mainWindow.DataContext = vm;
                 desktop.MainWindow = mainWindow;

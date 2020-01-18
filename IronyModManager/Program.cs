@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,9 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -94,7 +92,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);            
+            CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
         }
 
         /// <summary>

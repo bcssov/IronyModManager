@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Common;
+using IronyModManager.Localization;
 using IronyModManager.Log;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
@@ -38,6 +39,7 @@ namespace IronyModManager.DI
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
+            container.Collection.Register(typeof(ILocalizationResourceProvider), typeof(ILocalizationResourceProvider).Assembly);
         }
 
         #endregion Methods

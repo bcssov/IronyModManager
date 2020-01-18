@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -26,9 +26,11 @@ namespace IronyModManager.ViewModels
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// Implements the <see cref="IronyModManager.ViewModels.IMainWindowViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    public class MainWindowViewModel : BaseViewModel
+    /// <seealso cref="IronyModManager.ViewModels.IMainWindowViewModel" />
+    public class MainWindowViewModel : BaseViewModel, IMainWindowViewModel
     {
         #region Fields
 
@@ -57,7 +59,7 @@ namespace IronyModManager.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
+            ThemeSelector = DIResolver.Get<IThemeControlViewModel>();
         }
 
         #endregion Constructors
@@ -75,7 +77,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets my property.
         /// </summary>
         /// <value>My property.</value>
-        public ThemeControlViewModel ThemeSelector { get; private set; }
+        public IThemeControlViewModel ThemeSelector { get; private set; }
 
         #endregion Properties
 

@@ -56,7 +56,7 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public string FormatViewModelName<T>()
         {
-            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.")}ViewModel";
+            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.I")}ViewModel";
         }
 
         /// <summary>
@@ -86,11 +86,11 @@ namespace IronyModManager
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>ViewModelBase.</returns>
-        public BaseViewModel ResolveViewModel<T>() where T : Window
+        public IViewModel ResolveViewModel<T>() where T : Window
         {
             var name = FormatViewModelName<T>();
             var type = Type.GetType(name);
-            return (BaseViewModel)DIResolver.Get(type);
+            return (IViewModel)DIResolver.Get(type);
         }
 
         #endregion Methods

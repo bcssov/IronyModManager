@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,6 +23,11 @@ namespace IronyModManager
     public class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The localizations path
+        /// </summary>
+        public const string LocalizationsPath = "Localization";
 
         /// <summary>
         /// The error message

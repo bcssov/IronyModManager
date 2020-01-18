@@ -22,6 +22,7 @@ using DynamicData;
 using DynamicData.Binding;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Localization;
 using IronyModManager.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -33,7 +34,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    public class ThemeControlViewModel : BaseViewModel
+    public class ThemeControlViewModel : BaseViewModel, IThemeControlViewModel
     {
         #region Fields
 
@@ -63,6 +64,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the text.
         /// </summary>
         /// <value>The text.</value>
+        [Localization("NightMode")]
         public string Text => "Night Mode";
 
         /// <summary>
