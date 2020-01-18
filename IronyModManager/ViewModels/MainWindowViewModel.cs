@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
@@ -24,11 +25,9 @@ namespace IronyModManager.ViewModels
 {
     /// <summary>
     /// Class MainWindowViewModel.
-    /// Implements the <see cref="IronyModManager.ViewModels.BaseViewModel" />
-    /// Implements the <see cref="ReactiveUI.IActivatableViewModel" />
+    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
-    /// <seealso cref="ReactiveUI.IActivatableViewModel" />
-    /// <seealso cref="IronyModManager.ViewModels.BaseViewModel" />
+    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     public class MainWindowViewModel : BaseViewModel
     {
         #region Fields
@@ -69,7 +68,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the main window.
         /// </summary>
         /// <value>The main window.</value>
-        [Reactive] 
+        [Reactive]
         public Window MainWindow { get; set; }
 
         /// <summary>

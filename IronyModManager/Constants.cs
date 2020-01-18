@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,21 +23,6 @@ namespace IronyModManager
     public class Constants
     {
         #region Fields
-
-        /// <summary>
-        /// The culture
-        /// </summary>
-        public const string AppCulture = "en-US";
-
-        /// <summary>
-        /// The empty parameter
-        /// </summary>
-        public const string EmptyParam = "";
-
-        /// <summary>
-        /// The plugins path and name
-        /// </summary>
-        public const string PluginsPathAndName = "Plugins";
 
         /// <summary>
         /// The error message

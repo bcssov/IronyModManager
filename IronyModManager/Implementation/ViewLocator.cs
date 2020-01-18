@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="ViewLocator.cs" company="Mario">
 //     Mario
@@ -14,9 +14,10 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using IronyModManager.Common;
+using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.Log;
-using IronyModManager.ViewModels;
+using IronyModManager.Shared;
 
 namespace IronyModManager
 {

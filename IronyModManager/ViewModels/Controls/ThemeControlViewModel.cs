@@ -20,6 +20,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using DynamicData;
 using DynamicData.Binding;
+using IronyModManager.Common;
+using IronyModManager.Common.ViewModels;
 using IronyModManager.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -28,9 +30,9 @@ namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
     /// Class ThemeControlViewModel.
-    /// Implements the <see cref="IronyModManager.ViewModels.BaseViewModel" />
+    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
-    /// <seealso cref="IronyModManager.ViewModels.BaseViewModel" />
+    /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     public class ThemeControlViewModel : BaseViewModel
     {
         #region Fields
@@ -89,13 +91,13 @@ namespace IronyModManager.ViewModels.Controls
         {
             var themes = themeService.Get();
 
-            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Enums.Theme.Dark;
+            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Common.Enums.Theme.Dark;
 
             var toggleEnabled = themes.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(p =>
              {
                  if (p.IsSelected)
                  {
-                     ToggleDarkThemeEnabled = p.Type == Models.Enums.Theme.Dark;
+                     ToggleDarkThemeEnabled = p.Type == Models.Common.Enums.Theme.Dark;
                  }
              }).DisposeWith(disposables);
 

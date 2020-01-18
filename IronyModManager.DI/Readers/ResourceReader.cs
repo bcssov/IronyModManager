@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 01-13-2020
 // ***********************************************************************
 // <copyright file="ResourceReader.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Permissions;
 using IronyModManager.DI.Assemblies;
 
 namespace IronyModManager.DI.Readers
@@ -80,7 +79,7 @@ namespace IronyModManager.DI.Readers
         /// <returns>StrongName.</returns>
         /// <exception cref="InvalidOperationException">publicKey</exception>
         /// <exception cref="ArgumentNullException">assembly</exception>
-        /// <exception cref="ArgumentException">strongName</exception>
+        /// <exception cref="ArgumentException">publicKey</exception>
         public static StrongName GetStrongName(byte[] publicKey, Assembly assembly)
         {
             if (publicKey == null || publicKey.Length == 0)

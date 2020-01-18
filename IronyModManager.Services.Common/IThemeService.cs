@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Services
+// Assembly         : IronyModManager.Services.Common
 // Author           : Mario
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="IThemeService.cs" company="Mario">
 //     Mario
@@ -12,7 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
-using IronyModManager.Models;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Services
 {

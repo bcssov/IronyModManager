@@ -4,9 +4,9 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
-// <copyright file="BaseControl.cs" company="Mario">
+// <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,27 +15,25 @@ using System.Collections.Generic;
 using System;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
-using IronyModManager.ViewModels;
+using IronyModManager.Common.ViewModels;
 using ReactiveUI;
 
-namespace IronyModManager.Views
+namespace IronyModManager.Common.Views
 {
     /// <summary>
-    /// Class BaseControl.
-    /// Implements the <see cref="Avalonia.Controls.UserControl" />
-    /// Implements the <see cref="Avalonia.ReactiveUI.ReactiveUserControl{TViewModel}" />
+    /// Class BaseWindow.
+    /// Implements the <see cref="Avalonia.ReactiveUI.ReactiveWindow{TViewModel}" />
     /// </summary>
     /// <typeparam name="TViewModel">The type of the t view model.</typeparam>
-    /// <seealso cref="Avalonia.ReactiveUI.ReactiveUserControl{TViewModel}" />
-    /// <seealso cref="Avalonia.Controls.UserControl" />
-    public abstract class BaseControl<TViewModel> : ReactiveUserControl<TViewModel> where TViewModel : BaseViewModel
+    /// <seealso cref="Avalonia.ReactiveUI.ReactiveWindow{TViewModel}" />
+    public abstract class BaseWindow<TViewModel> : ReactiveWindow<TViewModel> where TViewModel : BaseViewModel
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseControl{TViewModel}" /> class.
+        /// Initializes a new instance of the <see cref="BaseWindow{TViewModel}" /> class.
         /// </summary>
-        public BaseControl()
+        public BaseWindow()
         {
             if (!Design.IsDesignMode)
             {

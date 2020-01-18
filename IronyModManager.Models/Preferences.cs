@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using IronyModManager.Models.Common;
 
 /// <summary>
 /// The Models namespace.
@@ -47,7 +48,7 @@ namespace IronyModManager.Models
         /// Gets or sets the theme.
         /// </summary>
         /// <value>The theme.</value>
-        public virtual Enums.Theme Theme { get; set; }
+        public virtual Common.Enums.Theme Theme { get; set; }
 
         #endregion Properties
     }

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -15,18 +15,17 @@ using System.Collections.Generic;
 using System;
 using System.ComponentModel;
 using IronyModManager.DI;
-using IronyModManager.Models;
+using IronyModManager.Models.Common;
+using IronyModManager.Storage.Common;
 using Jot.Configuration.Attributes;
 
 namespace IronyModManager.Storage
 {
     /// <summary>
     /// Class Database.
-    /// Implements the <see cref="IronyModManager.Storage.IDatabase" />
-    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// Implements the <see cref="IronyModManager.Storage.Common.IDatabase" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Storage.IDatabase" />
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// <seealso cref="IronyModManager.Storage.Common.IDatabase" />
     public class Database : IDatabase
     {
         /// <summary>

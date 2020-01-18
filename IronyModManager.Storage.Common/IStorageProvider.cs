@@ -1,38 +1,40 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Services
+// Assembly         : IronyModManager.Storage.Common
 // Author           : Mario
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
-// <copyright file="IPreferencesService.cs" company="IronyModManager.Services">
+// <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using IronyModManager.Models;
+using System.Collections.Generic;
+using System;
+using IronyModManager.Models.Common;
 
-namespace IronyModManager.Services
+namespace IronyModManager.Storage.Common
 {
     /// <summary>
-    /// Interface IPreferencesService
+    /// Interface IStorageProvider
     /// </summary>
-    public interface IPreferencesService
+    public interface IStorageProvider
     {
         #region Methods
 
         /// <summary>
-        /// Gets this instance.
+        /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
-        IPreferences Get();
+        IPreferences GetPreferences();
 
         /// <summary>
-        /// Saves the specified preferences.
+        /// Sets the preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
-        void Save(IPreferences preferences);
+        void SetPreferences(IPreferences preferences);
 
         #endregion Methods
     }

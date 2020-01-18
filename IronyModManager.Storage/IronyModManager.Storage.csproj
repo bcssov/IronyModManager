@@ -14,9 +14,10 @@
     <RepositoryType>GIT</RepositoryType>
     <PackageTags>Irony Mod Manager Storage Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Storage Component</PackageReleaseNotes>
-    <NeutralLanguage>en-US</NeutralLanguage>
+    <NeutralLanguage></NeutralLanguage>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -43,6 +44,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Jot" Version="2.1.4" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.2.3" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
@@ -51,7 +54,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
-    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
+    <ProjectReference Include="..\IronyModManager.Storage.Common\IronyModManager.Storage.Common.csproj" />
   </ItemGroup>
 
 </Project>

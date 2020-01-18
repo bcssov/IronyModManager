@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager
+// Assembly         : IronyModManager.Common
 // Author           : Mario
 // Created          : 01-10-2020
 //
@@ -17,16 +17,16 @@ using System.Reactive.Disposables;
 using IronyModManager.DI;
 using ReactiveUI;
 
-namespace IronyModManager.ViewModels
+namespace IronyModManager.Common.ViewModels
 {
     /// <summary>
     /// Class BaseViewModel.
     /// Implements the <see cref="ReactiveUI.ReactiveObject" />
-    /// Implements the <see cref="IronyModManager.ViewModels.IViewModel" />
+    /// Implements the <see cref="IronyModManager.Common.ViewModels.IViewModel" />
     /// Implements the <see cref="ReactiveUI.IActivatableViewModel" />
     /// </summary>
     /// <seealso cref="ReactiveUI.ReactiveObject" />
-    /// <seealso cref="IronyModManager.ViewModels.IViewModel" />
+    /// <seealso cref="IronyModManager.Common.ViewModels.IViewModel" />
     /// <seealso cref="ReactiveUI.IActivatableViewModel" />
     public abstract class BaseViewModel : ReactiveObject, IViewModel, IActivatableViewModel
     {

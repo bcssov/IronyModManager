@@ -4,7 +4,7 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-17-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -18,7 +18,7 @@ using System.Linq;
 using Avalonia.Collections;
 using DynamicData;
 
-namespace IronyModManager
+namespace IronyModManager.Common
 {
     /// <summary>
     /// Class Extensions.

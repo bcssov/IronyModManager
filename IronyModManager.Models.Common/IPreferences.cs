@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models
+// Assembly         : IronyModManager.Models.Common
 // Author           : Mario
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-15-2020
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -15,12 +15,14 @@
 /// <summary>
 /// The Models namespace.
 /// </summary>
-namespace IronyModManager.Models
+namespace IronyModManager.Models.Common
 {
     /// <summary>
     /// Interface IPreferences
     /// Implements the <see cref="IronyModManager.Models.IModel" />
+    /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Models.Common.IModel" />
     /// <seealso cref="IronyModManager.Models.IModel" />
     public interface IPreferences : IModel
     {
