@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -20,8 +20,7 @@ namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class LocalizationManager.
-    /// Implements the <see cref="IronyModManager.Localization.ILocalizationManager" />
-    /// </summary>
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizationManager" /></summary>
     /// <seealso cref="IronyModManager.Localization.ILocalizationManager" />
     internal class LocalizationManager : ILocalizationManager
     {
@@ -106,7 +105,7 @@ namespace IronyModManager.Localization
             var resource = new JObject();
             foreach (var provider in ResourceProviders)
             {
-                var content = JObject.Parse(provider.ReadResource());
+                var content = JObject.Parse(provider.ReadResource(locale));
                 resource.Merge(content, new JsonMergeSettings()
                 {
                     MergeArrayHandling = MergeArrayHandling.Replace,
@@ -114,7 +113,7 @@ namespace IronyModManager.Localization
                     PropertyNameComparison = StringComparison.OrdinalIgnoreCase
                 });
             }
-            cache.TryAdd(CurrentLocale.CultureName, resource);
+            cache.TryAdd(locale, resource);
         }
 
         /// <summary>

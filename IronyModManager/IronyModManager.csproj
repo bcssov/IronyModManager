@@ -55,6 +55,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="ReactiveUI" Version="11.1.6" />
     <PackageReference Include="ReactiveUI.Fody" Version="11.1.6" />
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />

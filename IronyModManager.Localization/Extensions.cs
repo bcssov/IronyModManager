@@ -4,36 +4,37 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-19-2020
 // ***********************************************************************
-// <copyright file="DIPackage.cs" company="Mario">
+// <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
+using System.Collections.Generic;
 using System;
+using IronyModManager.Common.ViewModels;
+using IronyModManager.DI.Extensions;
 using SimpleInjector;
-using SimpleInjector.Packaging;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
-    /// Class DIPackage.
-    /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
+    /// Class Extensions.
     /// </summary>
-    /// <seealso cref="SimpleInjector.Packaging.IPackage" />
-    internal class DIPackage : IPackage
+    public static class Extensions
     {
         #region Methods
 
         /// <summary>
-        /// Registers the set of services in the specified <paramref name="container" />.
+        /// Registers the localization.
         /// </summary>
-        /// <param name="container">The container the set of services is registered into.</param>
-        public void RegisterServices(Container container)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="container">The container.</param>
+        public static void RegisterLocalization<T>(this Container container) where T : BaseViewModel
         {
-            container.Register<ILocalizationManager, LocalizationManager>();            
+            container.Register<T>();
+            container.InterceptWith<LocalizationInterceptor<T>>(x => x == typeof(T), false);
         }
 
         #endregion Methods

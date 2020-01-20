@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="BaseLocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -19,18 +19,18 @@ namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class BaseLocalizationResourceProvider.
-    /// Implements the <see cref="IronyModManager.Localization.ILocalizationResourceProvider" />
+    /// Implements the <see cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Localization.ILocalizationResourceProvider" />
-    public abstract class BaseLocalizationResourceProvider : ILocalizationResourceProvider
+    /// <seealso cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
+    public abstract class BaseLocalizationResourceProvider : IDefaultLocalizationResourceProvider
     {
         #region Properties
 
         /// <summary>
-        /// Gets the resource path.
+        /// Gets the root path.
         /// </summary>
-        /// <value>The resource path.</value>
-        public abstract string ResourcePath { get; }
+        /// <value>The root path.</value>
+        public abstract string RootPath { get; }
 
         #endregion Properties
 
@@ -39,10 +39,16 @@ namespace IronyModManager.Localization
         /// <summary>
         /// Reads the resource.
         /// </summary>
+        /// <param name="locale">The locale.</param>
         /// <returns>System.String.</returns>
-        public virtual string ReadResource()
+        public virtual string ReadResource(string locale)
         {
-            return File.ReadAllText(ResourcePath);
+            var path = Path.Combine(RootPath, $"{locale}.json");
+            if (File.Exists(path))
+            {
+                return File.ReadAllText(path);
+            }
+            return string.Empty;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="LocalizationAttribute.cs" company="Mario">
 //     Mario
@@ -22,7 +22,7 @@ namespace IronyModManager.Localization
     /// Implements the <see cref="System.Attribute" />
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class LocalizationAttribute : Attribute
     {
         #region Fields
@@ -50,10 +50,10 @@ namespace IronyModManager.Localization
         #region Properties
 
         /// <summary>
-        /// Gets the display name for a property, event, or public void method that takes no arguments stored in this attribute.
+        /// Gets the resource key.
         /// </summary>
-        /// <value>The display name.</value>
-        public string DisplayName
+        /// <value>The resource key.</value>
+        public virtual string ResourceKey
         {
             get
             {

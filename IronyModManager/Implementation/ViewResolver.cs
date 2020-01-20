@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -35,6 +35,11 @@ namespace IronyModManager
         /// </summary>
         private const string ControlPattern = "Control";
 
+        /// <summary>
+        /// The proxy namespace
+        /// </summary>
+        private const string ProxyNamespace = "Castle.Proxies";
+
         #endregion Fields
 
         #region Methods
@@ -46,7 +51,16 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public string FormatUserControlName(object obj)
         {
-            return obj.GetType().FullName.Replace("ViewModel", "View");
+            Type type;
+            if (obj.GetType().FullName.Contains(ProxyNamespace))
+            {
+                type = ((IViewModel)obj).ActualType;
+            }
+            else
+            {
+                type = obj.GetType();
+            }
+            return type.FullName.Replace("ViewModel", "View");
         }
 
         /// <summary>
@@ -56,7 +70,7 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public string FormatViewModelName<T>()
         {
-            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.I")}ViewModel";
+            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.")}ViewModel";
         }
 
         /// <summary>

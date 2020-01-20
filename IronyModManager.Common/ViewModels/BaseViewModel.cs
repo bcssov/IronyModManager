@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-19-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -33,7 +33,7 @@ namespace IronyModManager.Common.ViewModels
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseViewModel" /> class.
+        /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
         /// </summary>
         public BaseViewModel()
         {
@@ -54,9 +54,33 @@ namespace IronyModManager.Common.ViewModels
         /// <value>The activator.</value>
         public ViewModelActivator Activator { get; }
 
+        /// <summary>
+        /// Gets the actual type.
+        /// </summary>
+        /// <value>The actual type.</value>
+        public virtual Type ActualType => GetType();
+
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        public void OnPropertyChanged(string methodName)
+        {
+            IReactiveObjectExtensions.RaisePropertyChanged(this, methodName);
+        }
+
+        /// <summary>
+        /// Called when [property changing].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        public void OnPropertyChanging(string methodName)
+        {
+            IReactiveObjectExtensions.RaisePropertyChanging(this, methodName);
+        }
 
         /// <summary>
         /// Called when [activated].

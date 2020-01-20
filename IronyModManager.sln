@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Shared", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Common", "IronyModManager.Common\IronyModManager.Common.csproj", "{1BA4701D-6F58-4301-8BA3-C49B5E363697}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Localization", "IronyModManager.Localization\IronyModManager.Localization.csproj", "{9F445113-74BF-413E-95C6-1C35EECC4813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Localization", "IronyModManager.Localization\IronyModManager.Localization.csproj", "{9F445113-74BF-413E-95C6-1C35EECC4813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

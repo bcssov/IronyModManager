@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System;
+using IronyModManager.Localization;
 using IronyModManager.ViewModels;
 using IronyModManager.ViewModels.Controls;
 using Container = SimpleInjector.Container;
@@ -35,8 +36,8 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterViewModels(Container container)
         {
-            container.Register<IMainWindowViewModel, MainWindowViewModel>();
-            container.Register<IThemeControlViewModel, ThemeControlViewModel>();
+            container.RegisterLocalization<MainWindowViewModel>();
+            container.RegisterLocalization<ThemeControlViewModel>();
         }
 
         #endregion Methods

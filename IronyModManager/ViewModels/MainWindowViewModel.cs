@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-19-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -17,20 +17,18 @@ using System.Reactive.Disposables;
 using Avalonia.Controls;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace IronyModManager.ViewModels
 {
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    /// Implements the <see cref="IronyModManager.ViewModels.IMainWindowViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    /// <seealso cref="IronyModManager.ViewModels.IMainWindowViewModel" />
-    public class MainWindowViewModel : BaseViewModel, IMainWindowViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
         #region Fields
 
@@ -59,7 +57,7 @@ namespace IronyModManager.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            ThemeSelector = DIResolver.Get<IThemeControlViewModel>();
+            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
         }
 
         #endregion Constructors
@@ -70,14 +68,14 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the main window.
         /// </summary>
         /// <value>The main window.</value>
-        [Reactive]
-        public Window MainWindow { get; set; }
+        public virtual Window MainWindow { get; set; }
 
         /// <summary>
-        /// Gets or sets my property.
+        /// Gets the theme selector.
         /// </summary>
-        /// <value>My property.</value>
-        public IThemeControlViewModel ThemeSelector { get; private set; }
+        /// <value>The theme selector.</value>
+        [DoNotNotify]
+        public virtual ThemeControlViewModel ThemeSelector { get; protected set; }
 
         #endregion Properties
 

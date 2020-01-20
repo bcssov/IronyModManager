@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-19-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -25,7 +25,6 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization;
 using IronyModManager.Services;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -34,7 +33,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    public class ThemeControlViewModel : BaseViewModel, IThemeControlViewModel
+    public class ThemeControlViewModel : BaseViewModel
     {
         #region Fields
 
@@ -48,7 +47,7 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThemeControlViewModel" /> class.
+        /// Initializes a new instance of the <see cref="ThemeControlViewModel"/> class.
         /// </summary>
         /// <param name="themeService">The theme service.</param>
         public ThemeControlViewModel(IThemeService themeService)
@@ -65,21 +64,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The text.</value>
         [Localization("NightMode")]
-        public string Text => "Night Mode";
+        public virtual string Text => "NightMode";
 
         /// <summary>
-        /// Gets or sets a value indicating whether [toggle enabled].
+        /// Gets or sets a value indicating whether [toggle dark theme enabled].
         /// </summary>
-        /// <value><c>true</c> if [toggle enabled]; otherwise, <c>false</c>.</value>
-        [Reactive]
-        public bool ToggleDarkThemeEnabled { get; set; }
+        /// <value><c>true</c> if [toggle dark theme enabled]; otherwise, <c>false</c>.</value>
+        public virtual bool ToggleDarkThemeEnabled { get; set; }
 
         /// <summary>
         /// Gets the toggle theme.
         /// </summary>
         /// <value>The toggle theme.</value>
-        [Reactive]
-        public ReactiveCommand<Unit, Unit> ToggleTheme { get; private set; }
+        public virtual ReactiveCommand<Unit, Unit> ToggleTheme { get; protected set; }
 
         #endregion Properties
 

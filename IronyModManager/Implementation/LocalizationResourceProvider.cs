@@ -28,10 +28,10 @@ namespace IronyModManager
         #region Properties
 
         /// <summary>
-        /// Gets the resource path.
+        /// Gets the root path.
         /// </summary>
-        /// <value>The resource path.</value>
-        public override string ResourcePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.LocalizationsPath);
+        /// <value>The root path.</value>
+        public override string RootPath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Constants.LocalizationsPath);
 
         #endregion Properties
     }

@@ -39,7 +39,8 @@ namespace IronyModManager.DI
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
-            container.Collection.Register(typeof(ILocalizationResourceProvider), typeof(ILocalizationResourceProvider).Assembly);
+            container.Collection.Register<ILocalizationResourceProvider>(typeof(LocalizationResourceProvider));
+            container.Register<IDefaultLocalizationResourceProvider, LocalizationResourceProvider>();
         }
 
         #endregion Methods

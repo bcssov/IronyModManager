@@ -24,10 +24,10 @@ namespace IronyModManager.Localization
         #region Properties
 
         /// <summary>
-        /// Gets the resource path.
+        /// Gets the root path.
         /// </summary>
-        /// <value>The resource path.</value>
-        string ResourcePath { get; }
+        /// <value>The root path.</value>
+        string RootPath { get; }
 
         #endregion Properties
 
@@ -36,10 +36,10 @@ namespace IronyModManager.Localization
         /// <summary>
         /// Reads the resource.
         /// </summary>
+        /// <param name="locale">The locale.</param>
         /// <returns>System.String.</returns>
-        string ReadResource();
+        string ReadResource(string locale);
 
         #endregion Methods
-
     }
 }
