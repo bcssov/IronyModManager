@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
-using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 
@@ -24,7 +23,9 @@ namespace IronyModManager.Services
 {
     /// <summary>
     /// Class ThemeService.
+    /// Implements the <see cref="IronyModManager.Services.IThemeService" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Services.IThemeService" />
     public class ThemeService : IThemeService
     {
         #region Constructors
@@ -68,47 +69,39 @@ namespace IronyModManager.Services
         {
             var preferences = PreferencesService.Get();
 
-            var lightTheme = InitTheme(Models.Common.Enums.Theme.Light, preferences.Theme);
-            var darkTheme = InitTheme(Models.Common.Enums.Theme.Dark, preferences.Theme);
+            var lightTheme = InitModel(Models.Common.Enums.Theme.Light, preferences.Theme);
+            var darkTheme = InitModel(Models.Common.Enums.Theme.Dark, preferences.Theme);
             var themes = new List<ITheme>() { lightTheme, darkTheme };
 
             return themes;
         }
 
         /// <summary>
-        /// Saves the specified themes.
+        /// Saves the specified theme.
         /// </summary>
-        /// <param name="themes">The themes.</param>
-        /// <exception cref="InvalidOperationException">No selected themes</exception>
-        /// <exception cref="InvalidOperationException">Too many selected themes</exception>
-        /// <exception cref="InvalidOperationException">No selected themes</exception>
-        public void Save(IEnumerable<ITheme> themes)
+        /// <param name="theme">The theme.</param>
+        /// <exception cref="InvalidOperationException">Theme not selected.</exception>
+        public void Save(ITheme theme)
         {
-            if (!themes.Any(p => p.IsSelected))
+            if (!theme.IsSelected)
             {
-                throw new InvalidOperationException("No selected themes");
+                throw new InvalidOperationException("Theme not selected.");
             }
-            if (themes.Count(p => p.IsSelected) > 1)
-            {
-                throw new InvalidOperationException("Too many selected themes");
-            }
-            var selected = themes.FirstOrDefault(p => p.IsSelected);
-            var preference = Mapper.Map<IPreferences>(selected);
+            var preference = PreferencesService.Get();
 
-            PreferencesService.Save(preference);
+            PreferencesService.Save(Mapper.Map(theme, preference));
         }
 
         /// <summary>
-        /// Initializes the theme.
+        /// Initializes the model.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="selectedType">Type of the selected.</param>
         /// <returns>ITheme.</returns>
-        private ITheme InitTheme(Models.Common.Enums.Theme type, Models.Common.Enums.Theme selectedType)
+        protected virtual ITheme InitModel(Models.Common.Enums.Theme type, Models.Common.Enums.Theme selectedType)
         {
             var theme = DIResolver.Get<ITheme>();
             theme.Type = type;
-            theme.Name = type == Models.Common.Enums.Theme.Light ? "Light" : "Dark";
             theme.IsSelected = type == selectedType;
             return theme;
         }

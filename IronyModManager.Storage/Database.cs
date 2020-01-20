@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -28,18 +28,19 @@ namespace IronyModManager.Storage
     /// <seealso cref="IronyModManager.Storage.Common.IDatabase" />
     public class Database : IDatabase
     {
+        #region Events
+
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-#pragma warning disable 67 // False detection
-
-        #region Events
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion Events
+        /// <summary>
+        /// Occurs when a property value is changing.
+        /// </summary>
+        public event PropertyChangingEventHandler PropertyChanging;
 
-#pragma warning restore 67
+        #endregion Events
 
         #region Properties
 
@@ -51,5 +52,27 @@ namespace IronyModManager.Storage
         public virtual IPreferences Preferences { get; set; } = DIResolver.Get<IPreferences>();
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        public void OnPropertyChanged(string methodName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(methodName));
+        }
+
+        /// <summary>
+        /// Called when [property changing].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        public void OnPropertyChanging(string methodName)
+        {
+            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(methodName));
+        }
+
+        #endregion Methods
     }
 }

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -34,7 +34,10 @@ namespace IronyModManager.Models
         public MappingProfile()
         {
             CreateMap<ITheme, IPreferences>()
-                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap();
+                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllMembers(p => p.Ignore());            
+            CreateMap<ILanguage, IPreferences>()
+                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().ForAllMembers(p => p.Ignore());
+            
         }
 
         #endregion Constructors

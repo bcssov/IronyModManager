@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 
 using System.Collections.Generic;
 using System;
-using System.ComponentModel;
 using IronyModManager.Models.Common;
 
 /// <summary>
@@ -24,25 +23,20 @@ namespace IronyModManager.Models
 {
     /// <summary>
     /// Class Preferences.
-    /// Implements the <see cref="IronyModManager.Models.IPreferences" />
+    /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
+    /// Implements the <see cref="IronyModManager.Models.Common.IPreferences" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Models.IPreferences" />
-    public class Preferences : IPreferences
+    /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
+    /// <seealso cref="IronyModManager.Models.Common.IPreferences" />
+    public class Preferences : BaseModel, IPreferences
     {
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-#pragma warning disable 67 // False detection
-
-        #region Events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion Events
-
-#pragma warning restore 67
-
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the locale.
+        /// </summary>
+        /// <value>The locale.</value>
+        public string Locale { get; set; }
 
         /// <summary>
         /// Gets or sets the theme.

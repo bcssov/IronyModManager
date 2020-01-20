@@ -34,8 +34,9 @@ namespace IronyModManager.Models
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
-            container.Register<IPreferences, Preferences>();
-            container.Register<ITheme, Theme>();
+            container.RegisterModel<IPreferences, Preferences>();
+            container.RegisterModel<ITheme, Theme>();
+            container.RegisterModel<ILanguage, Language>();
         }
 
         #endregion Methods

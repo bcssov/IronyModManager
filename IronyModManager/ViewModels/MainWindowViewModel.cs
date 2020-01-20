@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -15,11 +15,12 @@ using System.Collections.Generic;
 using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.ViewModels.Controls;
+using IronyModManager.Services.Common;
+using System.Linq;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 
 namespace IronyModManager.ViewModels
 {
@@ -48,6 +49,11 @@ namespace IronyModManager.ViewModels
             return false;
         };
 
+        /// <summary>
+        /// The previous locale
+        /// </summary>
+        private string previousLocale;
+
         #endregion Fields
 
         #region Constructors
@@ -57,7 +63,8 @@ namespace IronyModManager.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
+            Main = DIResolver.Get<MainControlViewModel>();
+            previousLocale = DIResolver.Get<ILanguagesService>().GetSelected().Abrv;
         }
 
         #endregion Constructors
@@ -65,17 +72,16 @@ namespace IronyModManager.ViewModels
         #region Properties
 
         /// <summary>
+        /// Gets or sets the language selector.
+        /// </summary>
+        /// <value>The language selector.</value>
+        public virtual MainControlViewModel Main { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the main window.
         /// </summary>
         /// <value>The main window.</value>
-        [Reactive]
-        public Window MainWindow { get; set; }
-
-        /// <summary>
-        /// Gets or sets my property.
-        /// </summary>
-        /// <value>My property.</value>
-        public ThemeControlViewModel ThemeSelector { get; private set; }
+        public virtual Window MainWindow { get; set; }
 
         #endregion Properties
 
@@ -87,12 +93,28 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            themeSetter(MainWindow, ThemeSelector.ToggleDarkThemeEnabled);
+            themeSetter(MainWindow, Main.ThemeSelector.ToggleDarkThemeEnabled);
 
-            var toggleEnabled = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
+            var themeChanged = this.WhenAnyValue(p => p.Main.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
             {
                 themeSetter(MainWindow, p);
             }).DisposeWith(disposables);
+
+            var languageChanged = this.WhenAnyValue(p => p.Main.LanguageSelector.SelectedLanguage).Subscribe(p =>
+            {
+                if (Main?.ThemeSelector?.IsActivated == true && previousLocale != p.Abrv)
+                {
+                    var args = new LocaleChangedEventArgs()
+                    {
+                        Locale = p.Abrv,
+                        OldLocale = previousLocale
+                    };
+                    previousLocale = DIResolver.Get<ILanguagesService>().GetSelected().Abrv;
+                    MessageBus.Current.SendMessage(args);
+                };
+            }).DisposeWith(disposables);
+
+            base.OnActivated(disposables);
         }
 
         #endregion Methods

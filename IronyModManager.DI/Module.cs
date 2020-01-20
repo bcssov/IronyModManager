@@ -30,7 +30,7 @@ namespace IronyModManager.DI
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string>();
+        public IEnumerable<string> Dependencies => new List<string>() { typeof(Shared.Module).Namespace };
 
         /// <summary>
         /// Gets the name.

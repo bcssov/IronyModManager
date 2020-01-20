@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="ResolvingFactoriesExtensions.cs" company="SimpleInjector">
 //     Copyright (c) SimpleInjector. All rights reserved.
@@ -23,7 +23,7 @@ namespace IronyModManager.DI.Extensions
     /// <summary>
     /// Class ResolvingFactoriesExtensions.
     /// </summary>
-    public static class ResolvingFactoriesExtensions
+    internal static class ResolvingFactoriesExtensions
     {
         #region Methods
 

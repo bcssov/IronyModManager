@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-11-2020
+// Last Modified On : 01-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Avalonia.cs" company="Mario">
 //     Mario
@@ -24,7 +24,9 @@ namespace IronyModManager.DI
 {
     /// <summary>
     /// Class DIPackage.
+    /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
     /// </summary>
+    /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
         #region Methods

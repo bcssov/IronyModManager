@@ -30,10 +30,10 @@ namespace IronyModManager.Services
         IEnumerable<ITheme> Get();
 
         /// <summary>
-        /// Saves the specified themes.
+        /// Saves the specified theme.
         /// </summary>
-        /// <param name="themes">The themes.</param>
-        void Save(IEnumerable<ITheme> themes);
+        /// <param name="theme">The theme.</param>
+        void Save(ITheme theme);
 
         #endregion Methods
     }

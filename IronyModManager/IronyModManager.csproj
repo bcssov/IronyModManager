@@ -33,11 +33,14 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Views\Controls\LanguageControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
+    <AvaloniaResource Remove="Views\MainControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ironymodmanager.suppress" />
+    <None Remove="Views\Controls\LanguageControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
+    <None Remove="Views\MainControlView.xaml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -47,7 +50,6 @@
     <PackageReference Include="Avalonia" Version="0.9.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.1" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.1" />
-    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.0.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.1" />
@@ -57,7 +59,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="4.6.8" />
-    <PackageReference Include="ReactiveUI.Fody" Version="11.1.6" />
+    <PackageReference Include="ReactiveUI" Version="11.1.6" />
     <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
     <PackageReference Include="Splat.NLog" Version="9.3.4" />
@@ -67,6 +69,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
+    <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
     <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
@@ -83,6 +86,25 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\LanguageControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Localization\de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\hr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TransformOnBuild>true</TransformOnBuild>

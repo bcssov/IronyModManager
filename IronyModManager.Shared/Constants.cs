@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -34,9 +34,19 @@ namespace IronyModManager.Shared
         public const string EmptyParam = "";
 
         /// <summary>
+        /// The json extension
+        /// </summary>
+        public const string JsonExtension = ".json";
+
+        /// <summary>
         /// The plugins path and name
         /// </summary>
         public const string PluginsPathAndName = "Plugins";
+
+        /// <summary>
+        /// The proxy namespace
+        /// </summary>
+        public const string ProxyNamespace = "Castle.Proxies";
 
         #endregion Fields
     }

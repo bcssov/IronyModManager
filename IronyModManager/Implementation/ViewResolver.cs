@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -46,7 +46,16 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public string FormatUserControlName(object obj)
         {
-            return obj.GetType().FullName.Replace("ViewModel", "View");
+            Type type;
+            if (obj.GetType().FullName.Contains(Shared.Constants.ProxyNamespace))
+            {
+                type = ((IViewModel)obj).ActualType;
+            }
+            else
+            {
+                type = obj.GetType();
+            }
+            return type.FullName.Replace("ViewModel", "View");
         }
 
         /// <summary>
@@ -86,11 +95,11 @@ namespace IronyModManager
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>ViewModelBase.</returns>
-        public BaseViewModel ResolveViewModel<T>() where T : Window
+        public IViewModel ResolveViewModel<T>() where T : Window
         {
             var name = FormatViewModelName<T>();
             var type = Type.GetType(name);
-            return (BaseViewModel)DIResolver.Get(type);
+            return (IViewModel)DIResolver.Get(type);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -99,7 +99,7 @@ namespace IronyModManager.DI.Assemblies
             return new ModuleInfo()
             {
                 Assembly = assembly,
-                Dependencies = instance.Dependencies,
+                Dependencies = instance.Dependencies ?? new List<string>(),
                 Name = instance.Name
             };
         }

@@ -23,7 +23,22 @@ namespace IronyModManager.Models.Common
     /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
     /// </summary>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public interface IModel : INotifyPropertyChanged
+    public interface IModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
+        #region Methods
+
+        /// <summary>
+        /// Called when [property changed].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        void OnPropertyChanged(string methodName);
+
+        /// <summary>
+        /// Called when [property changing].
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        void OnPropertyChanging(string methodName);
+
+        #endregion Methods
     }
 }

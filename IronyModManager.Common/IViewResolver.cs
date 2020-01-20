@@ -57,7 +57,7 @@ namespace IronyModManager.Common
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>ViewModelBase.</returns>
-        BaseViewModel ResolveViewModel<T>() where T : Window;
+        IViewModel ResolveViewModel<T>() where T : Window;
 
         #endregion Methods
     }

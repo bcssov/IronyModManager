@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System;
 using AutoMapper;
 using IronyModManager.Storage.Common;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Storage
 {
@@ -34,6 +35,7 @@ namespace IronyModManager.Storage
         public MappingProfile()
         {
             CreateMap<IDatabase, Database>().ReverseMap();
+            CreateMap<IPreferences, IPreferences>().ReverseMap();
         }
 
         #endregion Constructors

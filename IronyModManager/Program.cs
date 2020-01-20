@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,13 +13,12 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Shared;
 
 namespace IronyModManager
@@ -93,10 +92,7 @@ namespace IronyModManager
         /// </summary>
         private static void InitCulture()
         {
-            var culture = new CultureInfo(Shared.Constants.DefaultAppCulture);
-
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
+            CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
         }
 
         /// <summary>
@@ -124,7 +120,18 @@ namespace IronyModManager
                 var logger = DIResolver.Get<ILogger>();
                 logger.Error(e);
 
-                var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(Constants.UnhandlerErrorTitle, Constants.UnhandledErrorMessage, MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
+                var title = Constants.UnhandledErrorTitle;
+                var message = Constants.UnhandledErrorMessage;
+                try
+                {
+                    var locManager = DIResolver.Get<ILocalizationManager>();
+                    title = locManager.GetResource(nameof(Constants.UnhandledErrorTitle));
+                    message = locManager.GetResource(nameof(Constants.UnhandledErrorMessage));
+                }
+                catch
+                {
+                }
+                var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(title, message, MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
                 messageBox.Show();
             }
         }

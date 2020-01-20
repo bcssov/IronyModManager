@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="BaseControl.cs" company="Mario">
 //     Mario
@@ -46,6 +46,16 @@ namespace IronyModManager.Common.Views
 
         #endregion Constructors
 
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is activated.
+        /// </summary>
+        /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
+        public bool IsActivated { get; protected set; }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
@@ -54,6 +64,7 @@ namespace IronyModManager.Common.Views
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(IDisposable disposables)
         {
+            IsActivated = true;
         }
 
         #endregion Methods

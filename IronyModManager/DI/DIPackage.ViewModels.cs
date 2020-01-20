@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System;
+using IronyModManager.Localization;
 using IronyModManager.ViewModels;
 using IronyModManager.ViewModels.Controls;
 using Container = SimpleInjector.Container;
@@ -35,8 +36,10 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterViewModels(Container container)
         {
-            container.Register<MainWindowViewModel>();
-            container.Register<ThemeControlViewModel>();
+            container.RegisterLocalization<MainWindowViewModel>();
+            container.RegisterLocalization<ThemeControlViewModel>();
+            container.RegisterLocalization<LanguageControlViewModel>();
+            container.RegisterLocalization<MainControlViewModel>();
         }
 
         #endregion Methods
