@@ -48,6 +48,11 @@ namespace IronyModManager.Localization
         /// </summary>
         private static readonly string actualTypeMethodName = $"{GetMethod}{nameof(IViewModel.ActualType)}";
 
+        /// <summary>
+        /// The locale changed
+        /// </summary>
+        private static readonly string LocaleChanged = nameof(IViewModel.OnLocaleChanged);
+
         #endregion Fields
 
         #region Methods
@@ -82,14 +87,28 @@ namespace IronyModManager.Localization
                 base.Intercept(invocation);
                 return;
             }
+            else if (invocation.Method.Name.StartsWith(LocaleChanged))
+            {
+                var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttribute)));
+                if (localizationProperties?.Count() > 0)
+                {
+                    foreach (var prop in localizationProperties)
+                    {
+                        ((IViewModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+                        ((IViewModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+                    }
+                }
+                invocation.Proceed();
+                return;
+            }
             else if (invocation.Method.Name.StartsWith(GetMethod))
             {
                 var methodName = invocation.Method.Name.Replace(GetMethod, string.Empty);
                 var prop = invocation.TargetType.GetProperty(methodName);
-                var attr = prop.GetCustomAttributes(typeof(LocalizationAttribute), true);
-                if (attr?.Count() > 0)
+                var attr = Attribute.GetCustomAttribute(prop, typeof(LocalizationAttribute), true);
+                if (attr != null)
                 {
-                    var locAttr = ((LocalizationAttribute)attr.First());
+                    var locAttr = ((LocalizationAttribute)attr);
                     invocation.ReturnValue = locAttr.ResourceKey;
                     return;
                 }

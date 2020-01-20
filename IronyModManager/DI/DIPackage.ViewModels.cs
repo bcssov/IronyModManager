@@ -39,6 +39,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<MainWindowViewModel>();
             container.RegisterLocalization<ThemeControlViewModel>();
             container.RegisterLocalization<LanguageControlViewModel>();
+            container.RegisterLocalization<MainControlViewModel>();
         }
 
         #endregion Methods

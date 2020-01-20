@@ -64,7 +64,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The text.</value>
         [Localization("NightMode")]
-        public virtual string Text => "NightMode";
+        public virtual string Text { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [toggle dark theme enabled].

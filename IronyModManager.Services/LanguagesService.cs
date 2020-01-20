@@ -88,6 +88,15 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the selected.
+        /// </summary>
+        /// <returns>ILanguage.</returns>
+        public virtual ILanguage GetSelected()
+        {
+            return Get().FirstOrDefault(p => p.IsSelected);
+        }
+
+        /// <summary>
         /// Saves this instance.
         /// </summary>
         /// <param name="language">The language.</param>

@@ -40,6 +40,13 @@ namespace IronyModManager.Common.ViewModels
         #region Methods
 
         /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        void OnLocaleChanged(string newLocale, string oldLocale);
+
+        /// <summary>
         /// Called when [property changed].
         /// </summary>
         /// <param name="methodName">Name of the method.</param>

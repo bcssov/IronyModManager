@@ -84,13 +84,13 @@ namespace IronyModManager.Models.Common
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSkipProperty(IInvocation invocation, PropertyInfo prop)
         {
-            var classAttr = invocation.TargetType.GetCustomAttributes(typeof(DoNotNotifyAttribute), true);
-            if (classAttr?.Count() > 0)
+            var classAttr = Attribute.GetCustomAttribute(invocation.TargetType, typeof(DoNotNotifyAttribute), true);
+            if (classAttr != null)
             {
                 return true;
             }
-            var attr = prop.GetCustomAttributes(typeof(DoNotNotifyAttribute), true);
-            if (attr?.Count() > 0)
+            var attr = Attribute.GetCustomAttribute(prop, typeof(DoNotNotifyAttribute), true);
+            if (attr != null)
             {
                 return true;
             }

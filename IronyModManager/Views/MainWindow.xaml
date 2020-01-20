@@ -3,7 +3,7 @@
         xmlns:vm="clr-namespace:IronyModManager.ViewModels;assembly=IronyModManager"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"        
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="IronyModManager.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Irony Mod Manager"
@@ -14,12 +14,10 @@
         ShowInTaskbar="True">
 
   <Design.DataContext>
-    <vm:MainWindowViewModel/>
+    <vm:MainWindowViewModel />
   </Design.DataContext>
 
   <Panel>
-    <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
-    <ContentControl Content="{Binding LanguageSelector}" HorizontalAlignment="Left" VerticalAlignment="Top"></ContentControl>
+    <ContentControl Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
   </Panel>
-
 </Window>

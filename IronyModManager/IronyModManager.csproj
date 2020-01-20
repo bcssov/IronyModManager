@@ -35,10 +35,12 @@
   <ItemGroup>
     <AvaloniaResource Remove="Views\Controls\LanguageControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
+    <AvaloniaResource Remove="Views\MainControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Views\Controls\LanguageControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
+    <None Remove="Views\MainControlView.xaml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -85,6 +87,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Controls\LanguageControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

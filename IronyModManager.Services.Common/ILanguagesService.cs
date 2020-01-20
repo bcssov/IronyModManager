@@ -33,6 +33,12 @@ namespace IronyModManager.Services.Common
         IEnumerable<ILanguage> Get();
 
         /// <summary>
+        /// Gets the selected.
+        /// </summary>
+        /// <returns>ILanguage.</returns>
+        ILanguage GetSelected();
+
+        /// <summary>
         /// Saves the specified language.
         /// </summary>
         /// <param name="language">The language.</param>

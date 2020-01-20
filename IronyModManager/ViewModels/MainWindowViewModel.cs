@@ -15,9 +15,11 @@ using System.Collections.Generic;
 using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.ViewModels.Controls;
+using IronyModManager.Services.Common;
+using System.Linq;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels
@@ -47,6 +49,11 @@ namespace IronyModManager.ViewModels
             return false;
         };
 
+        /// <summary>
+        /// The previous locale
+        /// </summary>
+        private string previousLocale;
+
         #endregion Fields
 
         #region Constructors
@@ -56,8 +63,8 @@ namespace IronyModManager.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
-            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
-            LanguageSelector = DIResolver.Get<LanguageControlViewModel>();
+            Main = DIResolver.Get<MainControlViewModel>();
+            previousLocale = DIResolver.Get<ILanguagesService>().GetSelected().Abrv;
         }
 
         #endregion Constructors
@@ -68,19 +75,13 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the language selector.
         /// </summary>
         /// <value>The language selector.</value>
-        public virtual LanguageControlViewModel LanguageSelector { get; protected set; }
+        public virtual MainControlViewModel Main { get; protected set; }
 
         /// <summary>
         /// Gets or sets the main window.
         /// </summary>
         /// <value>The main window.</value>
         public virtual Window MainWindow { get; set; }
-
-        /// <summary>
-        /// Gets the theme selector.
-        /// </summary>
-        /// <value>The theme selector.</value>
-        public virtual ThemeControlViewModel ThemeSelector { get; protected set; }
 
         #endregion Properties
 
@@ -92,15 +93,25 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            themeSetter(MainWindow, ThemeSelector.ToggleDarkThemeEnabled);
+            themeSetter(MainWindow, Main.ThemeSelector.ToggleDarkThemeEnabled);
 
-            var themeChanged = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
+            var themeChanged = this.WhenAnyValue(p => p.Main.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
             {
                 themeSetter(MainWindow, p);
             }).DisposeWith(disposables);
 
-            var languageChanged = this.WhenAnyValue(p => p.LanguageSelector.SelectedLanguage).Subscribe(p =>
+            var languageChanged = this.WhenAnyValue(p => p.Main.LanguageSelector.SelectedLanguage).Subscribe(p =>
             {
+                if (Main?.ThemeSelector?.IsActivated == true && previousLocale != p.Abrv)
+                {
+                    var args = new LocaleChangedEventArgs()
+                    {
+                        Locale = p.Abrv,
+                        OldLocale = previousLocale
+                    };
+                    previousLocale = DIResolver.Get<ILanguagesService>().GetSelected().Abrv;
+                    MessageBus.Current.SendMessage(args);
+                };
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

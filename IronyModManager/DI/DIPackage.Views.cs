@@ -38,6 +38,7 @@ namespace IronyModManager.DI
             container.Register<MainWindow>();
             container.Register<ThemeControlView>();
             container.Register<LanguageControlView>();
+            container.Register<MainControlView>();
         }
 
         #endregion Methods

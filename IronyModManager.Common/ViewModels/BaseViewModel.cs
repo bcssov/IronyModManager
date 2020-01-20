@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.Reactive.Disposables;
+using IronyModManager.Common.Events;
 using IronyModManager.DI;
 using ReactiveUI;
 
@@ -71,6 +72,15 @@ namespace IronyModManager.Common.ViewModels
         #region Methods
 
         /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public virtual void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+        }
+
+        /// <summary>
         /// Called when [property changed].
         /// </summary>
         /// <param name="methodName">Name of the method.</param>
@@ -95,6 +105,11 @@ namespace IronyModManager.Common.ViewModels
         protected virtual void OnActivated(CompositeDisposable disposables)
         {
             IsActivated = true;
+            MessageBus.Current.Listen<LocaleChangedEventArgs>()
+                .Subscribe(x =>
+                {
+                    OnLocaleChanged(x.Locale, x.OldLocale);
+                });
         }
 
         #endregion Methods
