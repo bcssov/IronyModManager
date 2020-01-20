@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -35,9 +35,9 @@ namespace IronyModManager
         public const string UnhandledErrorMessage = "Unhandled error occurred";
 
         /// <summary>
-        /// The error title
+        /// The unhandled error title
         /// </summary>
-        public const string UnhandlerErrorTitle = "Error";
+        public const string UnhandledErrorTitle = "Error";
 
         #endregion Fields
 

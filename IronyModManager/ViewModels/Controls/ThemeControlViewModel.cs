@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-19-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ThemeControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ThemeControlViewModel" /> class.
         /// </summary>
         /// <param name="themeService">The theme service.</param>
         public ThemeControlViewModel(IThemeService themeService)
@@ -106,7 +106,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     item.IsSelected = !item.IsSelected;
                 }
-                themeService.Save(themes);
+                themeService.Save(themes.FirstOrDefault(p => p.IsSelected));
             }).DisposeWith(disposables);
         }
 

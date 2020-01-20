@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="DIResolver.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -45,6 +45,18 @@ namespace IronyModManager.DI
         {
             Validate();
             return DIContainer.Container.GetInstance(type);
+        }
+
+        /// <summary>
+        /// Gets the type of the implementation.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Type.</returns>
+        public static Type GetImplementationType(Type type)
+        {
+            Validate();
+            var reg = DIContainer.Container.GetRegistration(type);
+            return reg.Registration.ImplementationType;
         }
 
         /// <summary>

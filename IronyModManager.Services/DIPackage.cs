@@ -36,6 +36,7 @@ namespace IronyModManager.Services
         {
             container.Register<IPreferencesService, PreferencesService>();
             container.Register<IThemeService, ThemeService>();
+            container.Register<ILanguagesService, LanguagesService>();
         }
 
         #endregion Methods

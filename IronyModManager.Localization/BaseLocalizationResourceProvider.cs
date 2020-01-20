@@ -19,10 +19,10 @@ namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class BaseLocalizationResourceProvider.
-    /// Implements the <see cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizationResourceProvider" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
-    public abstract class BaseLocalizationResourceProvider : IDefaultLocalizationResourceProvider
+    /// <seealso cref="IronyModManager.Localization.ILocalizationResourceProvider" />
+    public abstract class BaseLocalizationResourceProvider : ILocalizationResourceProvider
     {
         #region Properties
 
@@ -43,7 +43,7 @@ namespace IronyModManager.Localization
         /// <returns>System.String.</returns>
         public virtual string ReadResource(string locale)
         {
-            var path = Path.Combine(RootPath, $"{locale}.json");
+            var path = Path.Combine(RootPath, $"{locale}{Shared.Constants.JsonExtension}");
             if (File.Exists(path))
             {
                 return File.ReadAllText(path);

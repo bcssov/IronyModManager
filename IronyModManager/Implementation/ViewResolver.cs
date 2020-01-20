@@ -35,11 +35,6 @@ namespace IronyModManager
         /// </summary>
         private const string ControlPattern = "Control";
 
-        /// <summary>
-        /// The proxy namespace
-        /// </summary>
-        private const string ProxyNamespace = "Castle.Proxies";
-
         #endregion Fields
 
         #region Methods
@@ -52,7 +47,7 @@ namespace IronyModManager
         public string FormatUserControlName(object obj)
         {
             Type type;
-            if (obj.GetType().FullName.Contains(ProxyNamespace))
+            if (obj.GetType().FullName.Contains(Shared.Constants.ProxyNamespace))
             {
                 type = ((IViewModel)obj).ActualType;
             }

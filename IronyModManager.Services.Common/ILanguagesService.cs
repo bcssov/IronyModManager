@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Services.Common
+// Assembly         : IronyModManager.Services
 // Author           : Mario
-// Created          : 01-13-2020
+// Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
-// <copyright file="IThemeService.cs" company="Mario">
+// <copyright file="ILanguagesService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,26 +14,29 @@
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
-namespace IronyModManager.Services
+/// <summary>
+/// The Common namespace.
+/// </summary>
+namespace IronyModManager.Services.Common
 {
     /// <summary>
-    /// Interface IThemeService
+    /// Interface ILanguagesService
     /// </summary>
-    public interface IThemeService
+    public interface ILanguagesService
     {
         #region Methods
 
         /// <summary>
         /// Gets this instance.
         /// </summary>
-        /// <returns>IEnumerable&lt;ITheme&gt;.</returns>
-        IEnumerable<ITheme> Get();
+        /// <returns>IEnumerable&lt;ILanguage&gt;.</returns>
+        IEnumerable<ILanguage> Get();
 
         /// <summary>
-        /// Saves the specified theme.
+        /// Saves the specified language.
         /// </summary>
-        /// <param name="theme">The theme.</param>
-        void Save(ITheme theme);
+        /// <param name="language">The language.</param>
+        void Save(ILanguage language);
 
         #endregion Methods
     }

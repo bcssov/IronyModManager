@@ -1,3 +1,5 @@
 ﻿{
-    "NightMode": "Night Mode"
+    "NightMode": "Night Mode",
+    "UnhandledErrorMessage": "Unhandled error occurred",
+    "UnhandledErrorTitle": "Error"
 }

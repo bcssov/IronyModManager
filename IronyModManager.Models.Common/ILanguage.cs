@@ -1,26 +1,35 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models.Common
 // Author           : Mario
-// Created          : 01-13-2020
+// Created          : 01-20-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 01-20-2020
 // ***********************************************************************
-// <copyright file="ITheme.cs" company="Mario">
+// <copyright file="ILanguage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.Collections.Generic;
+
 namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// Interface ITheme
+    /// Interface ILanguage
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface ITheme : IModel
+    public interface ILanguage : IModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the abrv.
+        /// </summary>
+        /// <value>The abrv.</value>
+        string Abrv { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
@@ -29,10 +38,10 @@ namespace IronyModManager.Models.Common
         bool IsSelected { get; set; }
 
         /// <summary>
-        /// Gets or sets the type.
+        /// Gets or sets the name.
         /// </summary>
-        /// <value>The type.</value>
-        Enums.Theme Type { get; set; }
+        /// <value>The name.</value>
+        string Name { get; set; }
 
         #endregion Properties
     }
