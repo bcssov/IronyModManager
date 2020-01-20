@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Storage.Common;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -44,6 +45,8 @@ namespace IronyModManager.Storage
         public void RegisterServices(Container container)
         {
             container.Register<IDatabase, Database>();
+            container.InterceptWith<PropertyChangedInterceptor<IDatabase>>(x => x == typeof(IDatabase), true);
+
             var tracker = new Jot.Tracker();
             tracker.Configure<Database>().PersistOn(PropChanged);
             container.RegisterInitializer(d =>

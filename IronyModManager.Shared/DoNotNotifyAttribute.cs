@@ -21,7 +21,7 @@ namespace IronyModManager.Shared
     /// Implements the <see cref="System.Attribute" />
     /// </summary>
     /// <seealso cref="System.Attribute" />
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class DoNotNotifyAttribute : Attribute
     {
     }

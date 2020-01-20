@@ -14,18 +14,22 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Reflection;
+using Castle.DynamicProxy;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.Shared;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class LocalizationInterceptor.
     /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
+    /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
-    public class LocalizationInterceptor<T> : Castle.DynamicProxy.IInterceptor where T : IViewModel
+    public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : IViewModel
     {
         #region Fields
 
@@ -49,10 +53,22 @@ namespace IronyModManager.Localization
         #region Methods
 
         /// <summary>
+        /// Fires the event.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        /// <param name="prop">The property.</param>
+        public override void FireEvent(IInvocation invocation, PropertyInfo prop)
+        {
+            ((IViewModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+            invocation.Proceed();
+            ((IViewModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+        }
+
+        /// <summary>
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public void Intercept(Castle.DynamicProxy.IInvocation invocation)
+        public override void Intercept(IInvocation invocation)
         {
             if (invocation.Method.Name.Equals(actualTypeMethodName))
             {
@@ -63,24 +79,7 @@ namespace IronyModManager.Localization
             // Handle on change event... Decided to ditch Fody, it has a dubious MIT license (wasn't aware of it at first)
             else if (invocation.Method.Name.StartsWith(SetMethod))
             {
-                var methodName = invocation.Method.Name.Replace(SetMethod, string.Empty);
-                var prop = invocation.TargetType.GetProperty(methodName);
-                var newVal = invocation.Arguments?[0];
-                var oldVal = prop.GetValue(invocation.InvocationTarget, null);
-                if (newVal != oldVal)
-                {
-                    var attr = prop.GetCustomAttributes(typeof(DoNotNotifyAttribute), true);
-                    if (attr?.Count() > 0)
-                    {
-                        invocation.Proceed();
-                    }
-                    else
-                    {
-                        ((IViewModel)invocation.Proxy).OnPropertyChanging(methodName);
-                        invocation.Proceed();
-                        ((IViewModel)invocation.Proxy).OnPropertyChanged(methodName);
-                    }
-                }
+                base.Intercept(invocation);
                 return;
             }
             else if (invocation.Method.Name.StartsWith(GetMethod))
