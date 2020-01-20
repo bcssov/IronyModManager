@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -20,7 +20,8 @@ namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class LocalizationManager.
-    /// Implements the <see cref="IronyModManager.Localization.ILocalizationManager" /></summary>
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizationManager" />
+    /// </summary>
     /// <seealso cref="IronyModManager.Localization.ILocalizationManager" />
     internal class LocalizationManager : ILocalizationManager
     {
@@ -76,27 +77,6 @@ namespace IronyModManager.Localization
         }
 
         /// <summary>
-        /// Gets the cached resource.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        private static string GetCachedResource(string key)
-        {
-            if (cache.TryGetValue(CurrentLocale.CultureName, out var value))
-            {
-                if (value.TryGetValue(key, out var propValue))
-                {
-                    var content = propValue.Value<string>();
-                    if (!string.IsNullOrWhiteSpace(content))
-                    {
-                        return content;
-                    }
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
         /// Caches the localization.
         /// </summary>
         /// <param name="locale">The locale.</param>
@@ -114,6 +94,27 @@ namespace IronyModManager.Localization
                 });
             }
             cache.TryAdd(locale, resource);
+        }
+
+        /// <summary>
+        /// Gets the cached resource.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        private string GetCachedResource(string key)
+        {
+            if (cache.TryGetValue(CurrentLocale.CultureName, out var value))
+            {
+                if (value.TryGetValue(key, out var propValue))
+                {
+                    var content = propValue.Value<string>();
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        return content;
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>

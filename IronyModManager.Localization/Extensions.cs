@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.Common.ViewModels;
 using IronyModManager.DI.Extensions;
 using SimpleInjector;
 
@@ -31,7 +30,7 @@ namespace IronyModManager.Localization
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container">The container.</param>
-        public static void RegisterLocalization<T>(this Container container) where T : BaseViewModel
+        public static void RegisterLocalization<T>(this Container container) where T : class, ILocalizableModel
         {
             container.Register<T>();
             container.InterceptWith<LocalizationInterceptor<T>>(x => x == typeof(T), false);
