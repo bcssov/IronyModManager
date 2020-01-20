@@ -46,7 +46,7 @@ namespace IronyModManager.Storage
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
-            container.Register<IDatabase, Database>();
+            container.RegisterSingleton<IDatabase, Database>();
             container.InterceptWith<PropertyChangedInterceptor<IDatabase>>(x => x == typeof(IDatabase), true);
 
             var tracker = new Jot.Tracker(new JsonStore());
@@ -56,9 +56,8 @@ namespace IronyModManager.Storage
                 if (d.Instance is IDatabase)
                 {
                     tracker.Track(d.Instance);
-                    tracker.Persist(d.Instance);
                 }
-            }, ctx => ctx.Registration.Lifestyle == Lifestyle.Transient);
+            }, ctx => ctx.Registration.Lifestyle == Lifestyle.Singleton);
 
             container.Register<IStorageProvider, Storage>();
         }

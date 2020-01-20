@@ -92,13 +92,13 @@ namespace IronyModManager.ViewModels.Controls
 
             ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Common.Enums.Theme.Dark;
 
-            var toggleEnabled = themes.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(p =>
-             {
-                 if (p.IsSelected)
-                 {
-                     ToggleDarkThemeEnabled = p.Type == Models.Common.Enums.Theme.Dark;
-                 }
-             }).DisposeWith(disposables);
+            var toggleEnabled = themes.ToSourceList().Connect().WhenPropertyChanged(p => p.IsSelected).Subscribe(p =>
+            {
+                if (p.Sender.IsSelected)
+                {
+                    ToggleDarkThemeEnabled = p.Sender.Type == Models.Common.Enums.Theme.Dark;
+                }
+            }).DisposeWith(disposables);
 
             ToggleTheme = ReactiveCommand.Create(() =>
             {
@@ -108,6 +108,8 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 themeService.Save(themes.FirstOrDefault(p => p.IsSelected));
             }).DisposeWith(disposables);
+
+            base.OnActivated(disposables);
         }
 
         #endregion Methods

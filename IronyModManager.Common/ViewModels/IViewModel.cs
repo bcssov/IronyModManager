@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-19-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="IViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Common.ViewModels
         /// </summary>
         /// <value>The actual type.</value>
         Type ActualType { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is activated.
+        /// </summary>
+        /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
+        bool IsActivated { get; }
 
         #endregion Properties
 

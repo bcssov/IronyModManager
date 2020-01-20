@@ -33,9 +33,11 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Views\Controls\LanguageControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Views\Controls\LanguageControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
@@ -82,6 +84,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\LanguageControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Localization\de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\hr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Localization\en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

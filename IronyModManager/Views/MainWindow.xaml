@@ -19,6 +19,7 @@
 
   <Panel>
     <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
+    <ContentControl Content="{Binding LanguageSelector}" HorizontalAlignment="Left" VerticalAlignment="Top"></ContentControl>
   </Panel>
 
 </Window>

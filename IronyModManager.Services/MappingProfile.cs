@@ -34,9 +34,10 @@ namespace IronyModManager.Models
         public MappingProfile()
         {
             CreateMap<ITheme, IPreferences>()
-                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap();
+                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllMembers(p => p.Ignore());            
             CreateMap<ILanguage, IPreferences>()
-                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap();
+                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().ForAllMembers(p => p.Ignore());
+            
         }
 
         #endregion Constructors

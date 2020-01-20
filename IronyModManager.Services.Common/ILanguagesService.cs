@@ -38,6 +38,11 @@ namespace IronyModManager.Services.Common
         /// <param name="language">The language.</param>
         void Save(ILanguage language);
 
+        /// <summary>
+        /// Toggles the selected.
+        /// </summary>
+        void ToggleSelected();
+
         #endregion Methods
     }
 }

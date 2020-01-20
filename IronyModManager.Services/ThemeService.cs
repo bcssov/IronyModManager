@@ -87,9 +87,9 @@ namespace IronyModManager.Services
             {
                 throw new InvalidOperationException("Theme not selected.");
             }
-            var preference = Mapper.Map<IPreferences>(theme);
+            var preference = PreferencesService.Get();
 
-            PreferencesService.Save(preference);
+            PreferencesService.Save(Mapper.Map(theme, preference));
         }
 
         /// <summary>

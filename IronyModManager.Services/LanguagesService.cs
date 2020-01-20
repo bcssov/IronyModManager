@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Localization;
@@ -83,7 +84,7 @@ namespace IronyModManager.Services
                 languages.Add(InitModel(currentLocale, locale));
             }
 
-            return languages;
+            return languages.OrderBy(p => p.Name);
         }
 
         /// <summary>
@@ -93,15 +94,35 @@ namespace IronyModManager.Services
         /// <exception cref="InvalidOperationException">Language not selected.</exception>
         public virtual void Save(ILanguage language)
         {
-            if (language.IsSelected)
+            if (!language.IsSelected)
             {
                 throw new InvalidOperationException("Language not selected.");
             }
-            var preference = mapper.Map<IPreferences>(language);
+            var preference = preferencesService.Get();
 
-            preferencesService.Save(preference);
+            preferencesService.Save(mapper.Map(language, preference));
 
             CurrentLocale.SetCurrent(language.Abrv);
+        }
+
+        /// <summary>
+        /// Toggles the selected.
+        /// </summary>
+        public void ToggleSelected()
+        {
+            var languages = this.Get();
+            if (languages?.Count() > 0)
+            {
+                var selected = languages.FirstOrDefault(p => p.IsSelected);
+                if (selected != null)
+                {
+                    CurrentLocale.SetCurrent(selected.Abrv);
+                }
+                else
+                {
+                    CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
+                }
+            }
         }
 
         /// <summary>
@@ -116,7 +137,7 @@ namespace IronyModManager.Services
             var model = DIResolver.Get<ILanguage>();
             model.IsSelected = currentLocale.Equals(locale, StringComparison.OrdinalIgnoreCase);
             model.Abrv = locale;
-            model.Name = culture.NativeName;
+            model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";
             return model;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -26,6 +26,15 @@ namespace IronyModManager.Storage
     /// <seealso cref="IronyModManager.Storage.Common.IStorageProvider" />
     public class Storage : IStorageProvider
     {
+        #region Fields
+
+        /// <summary>
+        /// The database lock
+        /// </summary>
+        private static readonly object dbLock = new { };
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -65,8 +74,11 @@ namespace IronyModManager.Storage
         /// <returns>IPreferences.</returns>
         public virtual IPreferences GetPreferences()
         {
-            var result = Mapper.Map<IPreferences, IPreferences>(Database.Preferences);
-            return result;
+            lock (dbLock)
+            {
+                var result = Mapper.Map<IPreferences, IPreferences>(Database.Preferences);
+                return result;
+            }
         }
 
         /// <summary>
@@ -75,7 +87,10 @@ namespace IronyModManager.Storage
         /// <param name="preferences">The preferences.</param>
         public virtual void SetPreferences(IPreferences preferences)
         {
-            Database.Preferences = preferences;
+            lock (dbLock)
+            {
+                Database.Preferences = preferences;
+            }
         }
 
         #endregion Methods

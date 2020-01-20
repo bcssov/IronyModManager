@@ -17,7 +17,6 @@ using System.Reactive.Disposables;
 using Avalonia.Controls;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
 
@@ -58,11 +57,18 @@ namespace IronyModManager.ViewModels
         public MainWindowViewModel()
         {
             ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
+            LanguageSelector = DIResolver.Get<LanguageControlViewModel>();
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the language selector.
+        /// </summary>
+        /// <value>The language selector.</value>
+        public virtual LanguageControlViewModel LanguageSelector { get; protected set; }
 
         /// <summary>
         /// Gets or sets the main window.
@@ -74,7 +80,6 @@ namespace IronyModManager.ViewModels
         /// Gets the theme selector.
         /// </summary>
         /// <value>The theme selector.</value>
-        [DoNotNotify]
         public virtual ThemeControlViewModel ThemeSelector { get; protected set; }
 
         #endregion Properties
@@ -89,10 +94,16 @@ namespace IronyModManager.ViewModels
         {
             themeSetter(MainWindow, ThemeSelector.ToggleDarkThemeEnabled);
 
-            var toggleEnabled = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
+            var themeChanged = this.WhenAnyValue(p => p.ThemeSelector.ToggleDarkThemeEnabled).Subscribe(p =>
             {
                 themeSetter(MainWindow, p);
             }).DisposeWith(disposables);
+
+            var languageChanged = this.WhenAnyValue(p => p.LanguageSelector.SelectedLanguage).Subscribe(p =>
+            {
+            }).DisposeWith(disposables);
+
+            base.OnActivated(disposables);
         }
 
         #endregion Methods

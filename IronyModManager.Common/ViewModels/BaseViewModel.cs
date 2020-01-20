@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-19-2020
+// Last Modified On : 01-20-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -33,7 +33,7 @@ namespace IronyModManager.Common.ViewModels
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
+        /// Initializes a new instance of the <see cref="BaseViewModel" /> class.
         /// </summary>
         public BaseViewModel()
         {
@@ -59,6 +59,12 @@ namespace IronyModManager.Common.ViewModels
         /// </summary>
         /// <value>The actual type.</value>
         public virtual Type ActualType => GetType();
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is activated.
+        /// </summary>
+        /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
+        public bool IsActivated { get; protected set; }
 
         #endregion Properties
 
@@ -88,6 +94,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(CompositeDisposable disposables)
         {
+            IsActivated = true;
         }
 
         #endregion Methods

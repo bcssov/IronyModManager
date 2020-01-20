@@ -96,7 +96,7 @@ namespace IronyModManager.Storage
         public void SetData(string id, IDictionary<string, object> values)
         {
             string filePath = GetfilePath(id);
-            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = kvp.Value.GetType().Name.Replace("Proxy", string.Empty) });
+            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value.GetType()) });
             string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
@@ -124,6 +124,21 @@ namespace IronyModManager.Storage
                 appNamePart = $"{titleAttribute.Title}\\";
 
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
+        }
+
+        /// <summary>
+        /// Formats the name of the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>System.String.</returns>
+        private string FormatTypeName(Type type)
+        {
+            var name = type.Name.Replace("Proxy", string.Empty);
+            if (!name.StartsWith("I"))
+            {
+                return $"I{name}";
+            }
+            return name;
         }
 
         /// <summary>
