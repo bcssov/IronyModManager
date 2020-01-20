@@ -4,30 +4,27 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="IViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using IronyModManager.Localization;
 
 namespace IronyModManager.Common.ViewModels
 {
     /// <summary>
     /// Interface IViewModel
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
     /// </summary>
-    public interface IViewModel
+    /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
+    public interface IViewModel : ILocalizableModel
     {
         #region Properties
-
-        /// <summary>
-        /// Gets the actual type.
-        /// </summary>
-        /// <value>The actual type.</value>
-        Type ActualType { get; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is activated.
@@ -36,28 +33,5 @@ namespace IronyModManager.Common.ViewModels
         bool IsActivated { get; }
 
         #endregion Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        void OnLocaleChanged(string newLocale, string oldLocale);
-
-        /// <summary>
-        /// Called when [property changed].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanged(string methodName);
-
-        /// <summary>
-        /// Called when [property changing].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanging(string methodName);
-
-        #endregion Methods
     }
 }

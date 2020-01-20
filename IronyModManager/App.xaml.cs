@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -74,7 +74,6 @@ namespace IronyModManager
             var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
             vm.MainWindow = mainWindow;
             mainWindow.DataContext = vm;
-            desktop.MainWindow = null;
             desktop.MainWindow = mainWindow;
         }
     }

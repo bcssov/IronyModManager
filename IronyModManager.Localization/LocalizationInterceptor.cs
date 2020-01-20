@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="LocalizationInterceptor.cs" company="Mario">
 //     Mario
@@ -16,20 +16,19 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using IronyModManager.Common.ViewModels;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class LocalizationInterceptor.
-    /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
+    /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
-    public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : IViewModel
+    public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : ILocalizableModel
     {
         #region Fields
 
@@ -46,12 +45,12 @@ namespace IronyModManager.Localization
         /// <summary>
         /// The actual type
         /// </summary>
-        private static readonly string actualTypeMethodName = $"{GetMethod}{nameof(IViewModel.ActualType)}";
+        private static readonly string actualTypeMethodName = $"{GetMethod}{nameof(ILocalizableModel.ActualType)}";
 
         /// <summary>
         /// The locale changed
         /// </summary>
-        private static readonly string LocaleChanged = nameof(IViewModel.OnLocaleChanged);
+        private static readonly string LocaleChanged = nameof(ILocalizableModel.OnLocaleChanged);
 
         #endregion Fields
 
@@ -64,9 +63,9 @@ namespace IronyModManager.Localization
         /// <param name="prop">The property.</param>
         public override void FireEvent(IInvocation invocation, PropertyInfo prop)
         {
-            ((IViewModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+            ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
             invocation.Proceed();
-            ((IViewModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+            ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
         }
 
         /// <summary>
@@ -94,8 +93,8 @@ namespace IronyModManager.Localization
                 {
                     foreach (var prop in localizationProperties)
                     {
-                        ((IViewModel)invocation.Proxy).OnPropertyChanging(prop.Name);
-                        ((IViewModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+                        ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+                        ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
                     }
                 }
                 invocation.Proceed();

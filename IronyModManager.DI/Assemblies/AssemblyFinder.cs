@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -125,7 +125,7 @@ namespace IronyModManager.DI.Assemblies
                         var dependentItem = infos.FirstOrDefault(p => p.Name.Equals(dependency));
                         if (dependentItem != null)
                         {
-                            process(infos.FirstOrDefault(p => p.Name.Equals(dependency)));
+                            process(dependentItem);
                         }
                     }
                     sorted.Add(item);
