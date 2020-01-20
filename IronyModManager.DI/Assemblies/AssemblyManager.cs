@@ -111,7 +111,7 @@ namespace IronyModManager.DI.Assemblies
                 }
                 var assemblyName = new AssemblyName(args.Name);
                 var assembly = GetAssembly(assemblyName);
-                if (args?.RequestingAssembly != null)
+                if (args.RequestingAssembly != null)
                 {
                     var ctx = AssemblyLoadContext.GetLoadContext(args.RequestingAssembly);
                     if (ctx != null)

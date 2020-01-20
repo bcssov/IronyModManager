@@ -90,7 +90,7 @@ namespace IronyModManager.Localization
             else if (invocation.Method.Name.StartsWith(LocaleChanged))
             {
                 var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttribute)));
-                if (localizationProperties?.Count() > 0)
+                if (localizationProperties.Count() > 0)
                 {
                     foreach (var prop in localizationProperties)
                     {
