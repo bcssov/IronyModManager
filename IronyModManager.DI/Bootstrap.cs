@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
 using IronyModManager.DI.Assemblies;
 using IronyModManager.DI.Extensions;
+using IronyModManager.DI.Mappers;
 using SimpleInjector;
 
 namespace IronyModManager.DI
@@ -108,35 +108,9 @@ namespace IronyModManager.DI
                 assemblies.AddRange(AssemblyFinder.Find(assemblyFinderParam));
             }
 
-            var profiles = assemblies.Select(p => p.GetTypes().Where(x => typeof(Profile).IsAssignableFrom(x)));
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.ConstructServicesUsing((s) => DIResolver.Get(s));
-
-                foreach (var assemblyProfiles in profiles)
-                {
-                    foreach (var assemblyProfile in assemblyProfiles)
-                    {
-                        cfg.AddProfile(Activator.CreateInstance(assemblyProfile) as Profile);
-                    }
-                }
-                cfg.ForAllMaps((t, m) =>
-                {
-                    Func<object, object> resolver = (x) =>
-                    {
-                        var type = x.GetType();
-                        var derivedType = t.GetDerivedTypeFor(type);
-                        if (derivedType.IsInterface)
-                        {
-                            return DIResolver.Get(derivedType);
-                        }
-                        return derivedType;
-                    };
-                    m.ConstructUsing((x) => resolver(x));
-                });
-            });
-
+            var config = MapperFinder.Find(assemblies);
             var container = DIContainer.Container;
+
             container.RegisterInstance(config);
             container.Register(() => config.CreateMapper(container.GetInstance));
         }
