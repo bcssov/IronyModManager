@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-14-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -14,17 +14,17 @@
 
 using System.Collections.Generic;
 using System;
-using AutoMapper;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Models
 {
     /// <summary>
     /// Class MappingProfile.
-    /// Implements the <see cref="AutoMapper.Profile" />
+    /// Implements the <see cref="IronyModManager.Shared.BaseMappingProfile" />
     /// </summary>
-    /// <seealso cref="AutoMapper.Profile" />
-    public class MappingProfile : Profile
+    /// <seealso cref="IronyModManager.Shared.BaseMappingProfile" />
+    public class MappingProfile : BaseMappingProfile
     {
         #region Constructors
 
