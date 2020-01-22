@@ -1,5 +1,13 @@
 ﻿{
-    "NightMode": "Nacht-Modus",
-    "UnhandledErrorMessage": "Ein nicht behandelter Fehler ist aufgetreten",
-    "UnhandledErrorTitle": "Error"
+    "UnhandledErrorMessage": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",
+    "UnhandledErrorTitle": "Error",
+    "Theme": "Thema",
+    "Language": "Sprache",
+    "Theme_Light": "Licht",
+    "Theme_Dark": "Dunkel",
+    "Theme_MaterialDark": "Material Dunkel",
+    "Theme_MaterialDeepPurple": "Material Hellgrün",
+    "Theme_MaterialLightGreen": "Material Tiefpurpurn",
+    "Theme_Restart_Title": "Muss neu gestartet werden",
+    "Theme_Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
 }

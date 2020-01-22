@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -85,11 +85,13 @@ namespace IronyModManager.Storage
         /// Sets the preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
-        public virtual void SetPreferences(IPreferences preferences)
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool SetPreferences(IPreferences preferences)
         {
             lock (dbLock)
             {
                 Database.Preferences = preferences;
+                return true;
             }
         }
 

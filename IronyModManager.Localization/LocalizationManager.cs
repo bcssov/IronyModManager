@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using IronyModManager.Localization.ResourceProviders;
 using Newtonsoft.Json.Linq;
 
 namespace IronyModManager.Localization

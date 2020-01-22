@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-22-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -12,17 +12,15 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using DynamicData;
-using DynamicData.Binding;
-using IronyModManager.Common;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.Localization;
+using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services;
 using ReactiveUI;
 
@@ -42,6 +40,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IThemeService themeService;
 
+        /// <summary>
+        /// The previous theme
+        /// </summary>
+        private ITheme previousTheme;
+
         #endregion Fields
 
         #region Constructors
@@ -60,27 +63,39 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
-        /// Gets the text.
+        /// Gets or sets the selected theme.
         /// </summary>
-        /// <value>The text.</value>
-        [Localization("NightMode")]
-        public virtual string Text { get; }
+        /// <value>The selected theme.</value>
+        public virtual ITheme SelectedTheme { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [toggle dark theme enabled].
+        /// Gets or sets the themes.
         /// </summary>
-        /// <value><c>true</c> if [toggle dark theme enabled]; otherwise, <c>false</c>.</value>
-        public virtual bool ToggleDarkThemeEnabled { get; set; }
+        /// <value>The themes.</value>
+        public virtual IEnumerable<ITheme> Themes { get; protected set; }
 
         /// <summary>
-        /// Gets the toggle theme.
+        /// Gets the theme text.
         /// </summary>
-        /// <value>The toggle theme.</value>
-        public virtual ReactiveCommand<Unit, Unit> ToggleTheme { get; protected set; }
+        /// <value>The theme text.</value>
+        [Localization("Theme")]
+        public virtual string ThemeText { get; }
 
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            Bind();
+
+            base.OnLocaleChanged(newLocale, oldLocale);
+        }
 
         /// <summary>
         /// Called when [activated].
@@ -88,28 +103,38 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var themes = themeService.Get();
+            Bind();
 
-            ToggleDarkThemeEnabled = themes.FirstOrDefault(p => p.IsSelected).Type == Models.Common.Enums.Theme.Dark;
-
-            var toggleEnabled = themes.ToSourceList().Connect().WhenPropertyChanged(p => p.IsSelected).Subscribe(p =>
+            var changed = this.WhenAnyValue(p => p.SelectedTheme).Subscribe(p =>
             {
-                if (p.Sender.IsSelected)
+                if (Themes?.Count() > 0 && p != null)
                 {
-                    ToggleDarkThemeEnabled = p.Sender.Type == Models.Common.Enums.Theme.Dark;
+                    if (themeService.SetSelected(Themes, p))
+                    {
+                        if (previousTheme != p)
+                        {
+                            var args = new ThemeChangedEventArgs()
+                            {
+                                Theme = p
+                            };
+                            MessageBus.Current.SendMessage(args);
+                            previousTheme = p;
+                        }
+                    }
                 }
-            }).DisposeWith(disposables);
-
-            ToggleTheme = ReactiveCommand.Create(() =>
-            {
-                foreach (var item in themes)
-                {
-                    item.IsSelected = !item.IsSelected;
-                }
-                themeService.Save(themes.FirstOrDefault(p => p.IsSelected));
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Binds this instance.
+        /// </summary>
+        private void Bind()
+        {
+            Themes = themeService.Get();
+
+            previousTheme = SelectedTheme = Themes.FirstOrDefault(p => p.IsSelected);
         }
 
         #endregion Methods

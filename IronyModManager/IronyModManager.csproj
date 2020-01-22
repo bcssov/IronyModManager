@@ -50,6 +50,7 @@
     <PackageReference Include="Avalonia" Version="0.9.2" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.2" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.2" />
+    <PackageReference Include="Material.Avalonia" Version="0.1.0-preview5" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.0" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.1" />

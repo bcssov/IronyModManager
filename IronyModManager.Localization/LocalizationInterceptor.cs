@@ -11,11 +11,14 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using IronyModManager.Localization.Attributes;
+using IronyModManager.Localization.Attributes.Handlers;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Localization
@@ -52,7 +55,25 @@ namespace IronyModManager.Localization
         /// </summary>
         private static readonly string LocaleChanged = nameof(ILocalizableModel.OnLocaleChanged);
 
+        /// <summary>
+        /// The attribute handlers
+        /// </summary>
+        private readonly IEnumerable<ILocalizationAttributeHandler> attributeHandlers;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalizationInterceptor{T}" /> class.
+        /// </summary>
+        /// <param name="attributeHandlers">The attribute handlers.</param>
+        public LocalizationInterceptor(IEnumerable<ILocalizationAttributeHandler> attributeHandlers)
+        {
+            this.attributeHandlers = attributeHandlers;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -88,7 +109,7 @@ namespace IronyModManager.Localization
             }
             else if (invocation.Method.Name.StartsWith(LocaleChanged))
             {
-                var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttribute)));
+                var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase)));
                 if (localizationProperties.Count() > 0)
                 {
                     foreach (var prop in localizationProperties)
@@ -104,12 +125,23 @@ namespace IronyModManager.Localization
             {
                 var methodName = invocation.Method.Name.Replace(GetMethod, string.Empty);
                 var prop = invocation.TargetType.GetProperty(methodName);
-                var attr = Attribute.GetCustomAttribute(prop, typeof(LocalizationAttribute), true);
+                var attr = Attribute.GetCustomAttribute(prop, typeof(LocalizationAttributeBase), true);
                 if (attr != null)
                 {
-                    var locAttr = ((LocalizationAttribute)attr);
-                    invocation.ReturnValue = locAttr.ResourceKey;
-                    return;
+                    var locAttr = (LocalizationAttributeBase)attr;
+                    if (attributeHandlers.Any(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel)))
+                    {
+                        var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel));
+                        if (handler.HasData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel))
+                        {
+                            var data = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                            if (!string.IsNullOrWhiteSpace(data))
+                            {
+                                invocation.ReturnValue = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                                return;
+                            }
+                        }
+                    }
                 }
             }
             invocation.Proceed();

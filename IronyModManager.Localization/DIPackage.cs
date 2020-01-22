@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using IronyModManager.Localization.Attributes.Handlers;
 using SimpleInjector;
 using SimpleInjector.Packaging;
 
@@ -33,7 +34,8 @@ namespace IronyModManager.Localization
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
-            container.Register<ILocalizationManager, LocalizationManager>();            
+            container.Register<ILocalizationManager, LocalizationManager>();
+            container.Collection.Register(typeof(ILocalizationAttributeHandler), typeof(ILocalizationAttributeHandler).Assembly);
         }
 
         #endregion Methods

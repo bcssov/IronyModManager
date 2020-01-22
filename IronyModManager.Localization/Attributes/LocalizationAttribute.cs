@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="LocalizationAttribute.cs" company="Mario">
 //     Mario
@@ -15,15 +15,17 @@
 using System.Collections.Generic;
 using System;
 
-namespace IronyModManager.Localization
+namespace IronyModManager.Localization.Attributes
 {
     /// <summary>
     /// Class LocalizationAttribute.
-    /// Implements the <see cref="System.Attribute" />
+    /// Implements the <see cref="IronyModManager.Localization.LocalizationAttributeBase" />
+    /// Implements the <see cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
+    /// <seealso cref="IronyModManager.Localization.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class LocalizationAttribute : Attribute
+    public class LocalizationAttribute : LocalizationAttributeBase
     {
         #region Fields
 
@@ -57,8 +59,7 @@ namespace IronyModManager.Localization
         {
             get
             {
-                var localizationManager = DI.DIResolver.Get<ILocalizationManager>();
-                return localizationManager.GetResource(key);
+                return key;
             }
         }
 

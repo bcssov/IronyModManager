@@ -4,13 +4,15 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="ITheme.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Collections.Generic;
+
 namespace IronyModManager.Models.Common
 {
     /// <summary>
@@ -27,6 +29,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the style includes.
+        /// </summary>
+        /// <value>The style includes.</value>
+        IEnumerable<string> StyleIncludes { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

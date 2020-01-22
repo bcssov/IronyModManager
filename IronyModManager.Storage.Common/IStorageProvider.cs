@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-15-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -34,7 +34,8 @@ namespace IronyModManager.Storage.Common
         /// Sets the preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
-        void SetPreferences(IPreferences preferences);
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool SetPreferences(IPreferences preferences);
 
         #endregion Methods
     }

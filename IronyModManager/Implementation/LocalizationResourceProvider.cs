@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="LocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -15,17 +15,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IronyModManager.Localization;
+using IronyModManager.Localization.ResourceProviders;
 
 namespace IronyModManager
 {
     /// <summary>
     /// Class LocalizationResourceProvider.
-    /// Implements the <see cref="IronyModManager.Localization.BaseLocalizationResourceProvider" />
-    /// Implements the <see cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
+    /// Implements the <see cref="IronyModManager.Localization.ResourceProviders.BaseLocalizationResourceProvider" />
+    /// Implements the <see cref="IronyModManager.Localization.ResourceProviders.IDefaultLocalizationResourceProvider" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Localization.IDefaultLocalizationResourceProvider" />
-    /// <seealso cref="IronyModManager.Localization.BaseLocalizationResourceProvider" />
+    /// <seealso cref="IronyModManager.Localization.ResourceProviders.BaseLocalizationResourceProvider" />
+    /// <seealso cref="IronyModManager.Localization.ResourceProviders.IDefaultLocalizationResourceProvider" />
     public class LocalizationResourceProvider : BaseLocalizationResourceProvider, IDefaultLocalizationResourceProvider
     {
         #region Properties
