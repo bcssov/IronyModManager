@@ -11,14 +11,15 @@
   </UserControl.Resources>
   <Panel>
     <StackPanel Orientation="Horizontal">
-      <TextBlock Text="{Binding ThemeText}" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+      <TextBlock Text="{Binding ThemeText}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                 Margin="0,0,10,0"></TextBlock>
       <DropDown Items="{Binding Themes}" SelectedItem="{Binding SelectedTheme}"
-                MinHeight="25" MinWidth="60" HorizontalAlignment="Right" Margin="10,0,0,0">
+                MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="0,0,10,0">
         <DropDown.ItemTemplate>
           <DataTemplate>
             <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Type, 
                         Converter={StaticResource LocalizationConverter} 
-                        ConverterParameter=Theme}"></DropDownItem>
+                        ConverterParameter=Themes.}"></DropDownItem>
           </DataTemplate>
         </DropDown.ItemTemplate>
       </DropDown>

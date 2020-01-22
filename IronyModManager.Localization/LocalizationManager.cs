@@ -106,9 +106,10 @@ namespace IronyModManager.Localization
         {
             if (cache.TryGetValue(CurrentLocale.CultureName, out var value))
             {
-                if (value.TryGetValue(key, out var propValue))
+                var token = value.SelectToken(key);
+                if (token != null)
                 {
-                    var content = propValue.Value<string>();
+                    var content = token.Value<string>();
                     if (!string.IsNullOrWhiteSpace(content))
                     {
                         return content;

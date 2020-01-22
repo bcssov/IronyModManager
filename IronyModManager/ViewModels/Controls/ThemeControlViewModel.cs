@@ -78,7 +78,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the theme text.
         /// </summary>
         /// <value>The theme text.</value>
-        [Localization("Theme")]
+        [Localization("Themes.Name")]
         public virtual string ThemeText { get; }
 
         #endregion Properties

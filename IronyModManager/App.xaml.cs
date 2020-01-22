@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
@@ -76,7 +77,10 @@ namespace IronyModManager
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
-            InitThemes();
+            if (!Design.IsDesignMode)
+            {
+                InitThemes();
+            }            
         }
 
         /// <summary>
@@ -138,8 +142,8 @@ namespace IronyModManager
         private async Task OnThemeChanged()
         {
             var locManager = DIResolver.Get<ILocalizationManager>();
-            var title = locManager.GetResource("Theme_Restart_Title");
-            var message = locManager.GetResource("Theme_Restart_Message");
+            var title = locManager.GetResource("Themes.Restart_Title");
+            var message = locManager.GetResource("Themes.Restart_Message");
             var prompt = MessageBoxes.GetYesNoWindow(title, message, MessageBox.Avalonia.Enums.Icon.Info);
             var desktop = ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime);
             var mainWindow = desktop.MainWindow;

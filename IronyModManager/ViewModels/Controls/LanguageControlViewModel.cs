@@ -72,7 +72,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the language text.
         /// </summary>
         /// <value>The language text.</value>
-        [Localization("Language")]
+        [Localization("Languages.Name")]
         public virtual string LanguageText { get; }
 
         /// <summary>
