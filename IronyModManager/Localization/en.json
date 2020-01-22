@@ -1,5 +1,13 @@
 ﻿{
-    "NightMode": "Night Mode",
-    "UnhandledErrorMessage": "Unhandled error occurred",
-    "UnhandledErrorTitle": "Error"
+    "UnhandledErrorMessage": "Unhandled error occurred. App will close automatically.",
+    "UnhandledErrorTitle": "Error",
+    "Theme": "Theme",
+    "Language": "Language",
+    "Theme_Light": "Light",
+    "Theme_Dark": "Dark",
+    "Theme_MaterialDark": "Material Dark",
+    "Theme_MaterialLightGreen": "Material Light Green",
+    "Theme_MaterialDeepPurple": "Material Deep Purple",
+    "Theme_Restart_Title": "Needs restart",
+    "Theme_Restart_Message":  "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
 }

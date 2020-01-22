@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -13,11 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Localization;
+using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 
@@ -69,6 +69,28 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Applies the selected.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool ApplySelected()
+        {
+            var languages = this.Get();
+            if (languages?.Count() > 0)
+            {
+                var selected = languages.FirstOrDefault(p => p.IsSelected);
+                if (selected != null)
+                {
+                    CurrentLocale.SetCurrent(selected.Abrv);
+                }
+                else
+                {
+                    CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Gets this instance.
         /// </summary>
         /// <returns>IEnumerable&lt;ILanguage&gt;.</returns>
@@ -84,7 +106,7 @@ namespace IronyModManager.Services
                 languages.Add(InitModel(currentLocale, locale));
             }
 
-            return languages.OrderBy(p => p.Name);
+            return languages.OrderBy(p => p.Abrv);
         }
 
         /// <summary>
@@ -100,8 +122,9 @@ namespace IronyModManager.Services
         /// Saves this instance.
         /// </summary>
         /// <param name="language">The language.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">Language not selected.</exception>
-        public virtual void Save(ILanguage language)
+        public virtual bool Save(ILanguage language)
         {
             if (!language.IsSelected)
             {
@@ -112,26 +135,40 @@ namespace IronyModManager.Services
             preferencesService.Save(mapper.Map(language, preference));
 
             CurrentLocale.SetCurrent(language.Abrv);
+
+            return true;
         }
 
         /// <summary>
-        /// Toggles the selected.
+        /// Sets the selected.
         /// </summary>
-        public void ToggleSelected()
+        /// <param name="languages">The languages.</param>
+        /// <param name="selectedLanguage">The selected language.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">languages or selectedLanguage</exception>
+        public bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
-            var languages = this.Get();
-            if (languages?.Count() > 0)
+            if (languages == null || languages.Count() == 9 || selectedLanguage == null)
             {
-                var selected = languages.FirstOrDefault(p => p.IsSelected);
-                if (selected != null)
+                throw new ArgumentNullException("languages or selectedLanguage");
+            }
+
+            var currentLanguage = GetSelected();
+            if (currentLanguage.Abrv == selectedLanguage.Abrv)
+            {
+                return false;
+            }
+
+            foreach (var item in languages)
+            {
+                if (item.Abrv != selectedLanguage.Abrv)
                 {
-                    CurrentLocale.SetCurrent(selected.Abrv);
-                }
-                else
-                {
-                    CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
+                    item.IsSelected = false;
                 }
             }
+
+            selectedLanguage.IsSelected = true;
+            return Save(selectedLanguage);
         }
 
         /// <summary>
@@ -142,11 +179,9 @@ namespace IronyModManager.Services
         /// <returns>ILanguage.</returns>
         protected virtual ILanguage InitModel(string currentLocale, string locale)
         {
-            var culture = new CultureInfo(locale);
             var model = DIResolver.Get<ILanguage>();
             model.IsSelected = currentLocale.Equals(locale, StringComparison.OrdinalIgnoreCase);
             model.Abrv = locale;
-            model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";
             return model;
         }
 

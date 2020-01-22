@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="ILocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Localization
+namespace IronyModManager.Localization.ResourceProviders
 {
     /// <summary>
     /// Interface ILocalizationResourceProvider

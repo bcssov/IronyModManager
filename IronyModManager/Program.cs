@@ -61,8 +61,15 @@ namespace IronyModManager
             InitAppConfig();
             InitDI();
 
-            var app = BuildAvaloniaApp();
-            app.StartWithClassicDesktopLifetime(args);
+            try
+            {
+                var app = BuildAvaloniaApp();
+                app.StartWithClassicDesktopLifetime(args);
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
         }
 
         /// <summary>
@@ -131,8 +138,9 @@ namespace IronyModManager
                 catch
                 {
                 }
-                var messageBox = MessageBox.Avalonia.MessageBoxManager.GetMessageBoxStandardWindow(title, message, MessageBox.Avalonia.Enums.ButtonEnum.Ok, MessageBox.Avalonia.Enums.Icon.Error);
-                messageBox.Show();
+                var messageBox = MessageBoxes.GetFatalErrorWindow(title, message);
+                // We're deadlocking the thread, so kill the task after x amount of seconds.
+                messageBox.Show().Wait(TimeSpan.FromSeconds(10));
             }
         }
 
@@ -144,6 +152,7 @@ namespace IronyModManager
         private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             LogError(e.Exception);
+            e.SetObserved();
         }
 
         #endregion Methods

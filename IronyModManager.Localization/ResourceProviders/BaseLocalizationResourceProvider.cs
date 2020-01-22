@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="BaseLocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -15,12 +15,17 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 
-namespace IronyModManager.Localization
+/// <summary>
+/// The ResourceProviders namespace.
+/// </summary>
+namespace IronyModManager.Localization.ResourceProviders
 {
     /// <summary>
     /// Class BaseLocalizationResourceProvider.
     /// Implements the <see cref="IronyModManager.Localization.ILocalizationResourceProvider" />
+    /// Implements the <see cref="IronyModManager.Localization.ResourceProviders.ILocalizationResourceProvider" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Localization.ResourceProviders.ILocalizationResourceProvider" />
     /// <seealso cref="IronyModManager.Localization.ILocalizationResourceProvider" />
     public abstract class BaseLocalizationResourceProvider : ILocalizationResourceProvider
     {

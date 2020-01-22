@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-22-2020
 // ***********************************************************************
 // <copyright file="LanguageControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,7 +16,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using ReactiveUI;
@@ -36,6 +38,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The language service
         /// </summary>
         private readonly ILanguagesService languageService;
+
+        /// <summary>
+        /// The previous language
+        /// </summary>
+        private ILanguage PreviousLanguage;
 
         #endregion Fields
 
@@ -58,12 +65,21 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the languages.
         /// </summary>
         /// <value>The languages.</value>
+        [ForceLocalize]
         public virtual IEnumerable<ILanguage> Languages { get; protected set; }
+
+        /// <summary>
+        /// Gets the language text.
+        /// </summary>
+        /// <value>The language text.</value>
+        [Localization("Language")]
+        public virtual string LanguageText { get; }
 
         /// <summary>
         /// Gets or sets the selected language.
         /// </summary>
         /// <value>The selected language.</value>
+        [ForceLocalize]
         public virtual ILanguage SelectedLanguage { get; protected set; }
 
         #endregion Properties
@@ -78,22 +94,26 @@ namespace IronyModManager.ViewModels.Controls
         {
             Languages = languageService.Get();
 
-            SelectedLanguage = Languages.FirstOrDefault(p => p.IsSelected);
+            PreviousLanguage = SelectedLanguage = Languages.FirstOrDefault(p => p.IsSelected);
 
             var lanuageChanged = this.WhenAnyValue(p => p.SelectedLanguage).Subscribe(p =>
             {
-                if (Languages?.Count() > 0)
+                if (Languages?.Count() > 0 && p != null)
                 {
-                    foreach (var item in Languages)
+                    if (languageService.SetSelected(Languages, p))
                     {
-                        if (item != p)
+                        if (PreviousLanguage != p)
                         {
-                            item.IsSelected = false;
+                            var args = new LocaleChangedEventArgs()
+                            {
+                                Locale = p.Abrv,
+                                OldLocale = PreviousLanguage.Abrv
+                            };
+                            MessageBus.Current.SendMessage(args);
+                            PreviousLanguage = p;
                         }
                     }
                 }
-                p.IsSelected = true;
-                languageService.Save(p);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

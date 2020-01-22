@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-21-2020
 // ***********************************************************************
 // <copyright file="ILanguagesService.cs" company="Mario">
 //     Mario
@@ -27,6 +27,12 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
+        /// Applies the selected.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ApplySelected();
+
+        /// <summary>
         /// Gets this instance.
         /// </summary>
         /// <returns>IEnumerable&lt;ILanguage&gt;.</returns>
@@ -42,12 +48,16 @@ namespace IronyModManager.Services.Common
         /// Saves the specified language.
         /// </summary>
         /// <param name="language">The language.</param>
-        void Save(ILanguage language);
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool Save(ILanguage language);
 
         /// <summary>
-        /// Toggles the selected.
+        /// Sets the selected.
         /// </summary>
-        void ToggleSelected();
+        /// <param name="languages">The languages.</param>
+        /// <param name="selectedLanguage">The selected language.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage);
 
         #endregion Methods
     }

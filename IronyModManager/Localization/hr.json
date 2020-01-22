@@ -1,5 +1,13 @@
 ﻿{
-    "NightMode": "Noćni Mod",
-    "UnhandledErrorMessage": "Došlo je do greške.",
-    "UnhandledErrorTitle": "Greška"
+    "UnhandledErrorMessage": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
+    "UnhandledErrorTitle": "Greška",
+    "Theme": "Tema",
+    "Language": "Jezik",
+    "Theme_Light": "Svjetlo",
+    "Theme_Dark": "Tamno",
+    "Theme_MaterialDark": "Material Tamna",
+    "Theme_MaterialLightGreen": "Material Svjetlo Zelena",
+    "Theme_MaterialDeepPurple": "Material Ljubičasta",
+    "Theme_Restart_Title": "Potrebno je ponovno pokretanje",
+    "Theme_Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
 }

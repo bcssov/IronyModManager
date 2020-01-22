@@ -35,6 +35,12 @@ namespace IronyModManager.Models
         public virtual bool IsSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets the style includes.
+        /// </summary>
+        /// <value>The style includes.</value>
+        public IEnumerable<string> StyleIncludes { get; set; }
+
+        /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
