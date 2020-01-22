@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-22-2020
 // ***********************************************************************
 // <copyright file="ForceLocalizeAttributeHandler.cs" company="Mario">
 //     Mario
@@ -51,18 +51,6 @@ namespace IronyModManager.Localization.Attributes.Handlers
         }
 
         /// <summary>
-        /// Gets the fake locale value.
-        /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
-        /// <returns>System.Object.</returns>
-        public object GetFakeLocaleValue(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Determines whether the specified attribute has data.
         /// </summary>
         /// <param name="attr">The attribute.</param>
@@ -70,18 +58,6 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <param name="target">The target.</param>
         /// <returns><c>true</c> if the specified attribute has data; otherwise, <c>false</c>.</returns>
         public bool HasData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Uses the fake locale value.
-        /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool UseFakeLocaleValue(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
         {
             return true;
         }

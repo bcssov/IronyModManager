@@ -132,8 +132,8 @@ namespace IronyModManager
                 try
                 {
                     var locManager = DIResolver.Get<ILocalizationManager>();
-                    title = locManager.GetResource(nameof(Constants.UnhandledErrorTitle));
-                    message = locManager.GetResource(nameof(Constants.UnhandledErrorMessage));
+                    title = locManager.GetResource("FatalError.Title");
+                    message = locManager.GetResource("FatalError.Message");
                 }
                 catch
                 {

@@ -11,9 +11,10 @@
   </UserControl.Resources>
   <Panel>
     <StackPanel Orientation="Horizontal">
-      <TextBlock Text="{Binding LanguageText}" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+      <TextBlock Text="{Binding LanguageText}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                 Margin="10,0,0,0"></TextBlock>
       <DropDown Items="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" 
-                MinHeight="25" MinWidth="60" HorizontalAlignment="Right" Margin="10,0,0,0">
+                MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="10,0,0,0">
         <DropDown.ItemTemplate>
           <DataTemplate>
             <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Abrv,  

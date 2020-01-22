@@ -48,7 +48,7 @@ namespace IronyModManager.Converters
                 {
                     prefix = parameter.ToString();
                 }
-                var resKey = $"{prefix}_{value.ToString()}";
+                var resKey = $"{prefix}{value.ToString()}";
                 var translation = locManagr.GetResource(resKey);
                 return translation;
             }

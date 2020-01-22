@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-22-2020
 // ***********************************************************************
 // <copyright file="ValueLocalizationAttributeHandler.cs" company="Mario">
 //     Mario
@@ -50,7 +50,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         {
             var valAttr = (ValueLocalizationAttribute)attr;
             var value = prop.GetValue(null);
-            var resKey = $"{valAttr.ResourcePrefix()}_{value.ToString()}";
+            var resKey = $"{valAttr.ResourcePrefix()}{value.ToString()}";
             var translation = DIResolver.Get<ILocalizationManager>().GetResource(resKey);
             return translation;
         }
