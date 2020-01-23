@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -150,6 +150,7 @@ namespace IronyModManager.Services
             theme.Type = type;
             theme.IsSelected = type == selectedType;
             theme.StyleIncludes = InitStyles(type);
+            theme.Name = type.ToString();
             return theme;
         }
 

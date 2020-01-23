@@ -4,9 +4,9 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
-// <copyright file="LocalizationAttributeHandler.cs" company="Mario">
+// <copyright file="StaticLocalizationAttributeHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,11 +19,11 @@ using IronyModManager.DI;
 namespace IronyModManager.Localization.Attributes.Handlers
 {
     /// <summary>
-    /// Class LocalizationAttributeHandler.
+    /// Class StaticLocalizationAttributeHandler.
     /// Implements the <see cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
-    public class LocalizationAttributeHandler : ILocalizationAttributeHandler
+    public class StaticLocalizationAttributeHandler : ILocalizationAttributeHandler
     {
         #region Methods
 
@@ -36,7 +36,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <returns><c>true</c> if this instance can process the specified attribute; otherwise, <c>false</c>.</returns>
         public bool CanProcess(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
         {
-            return attr is LocalizationAttribute;
+            return attr is StaticLocalizationAttribute;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <returns>System.String.</returns>
         public string GetData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
         {
-            var locAttr = (LocalizationAttribute)attr;
+            var locAttr = (StaticLocalizationAttribute)attr;
             return DIResolver.Get<ILocalizationManager>().GetResource(locAttr.ResourceKey);
         }
 

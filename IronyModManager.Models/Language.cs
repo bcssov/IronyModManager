@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="Language.cs" company="Mario">
 //     Mario
@@ -19,8 +19,8 @@ namespace IronyModManager.Models
 {
     /// <summary>
     /// Class Language.
-    /// Implements the <see cref="IronyModManager.Models.Common.ILanguage" />
     /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
+    /// Implements the <see cref="IronyModManager.Models.Common.ILanguage" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
     /// <seealso cref="IronyModManager.Models.Common.ILanguage" />
@@ -39,6 +39,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         public bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name { get; set; }
 
         #endregion Properties
     }

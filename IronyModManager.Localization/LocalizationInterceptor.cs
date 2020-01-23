@@ -19,7 +19,7 @@ using System.Reflection;
 using Castle.DynamicProxy;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Localization.Attributes.Handlers;
-using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Localization
 {
@@ -27,8 +27,10 @@ namespace IronyModManager.Localization
     /// Class LocalizationInterceptor.
     /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
+    /// Implements the <see cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
     public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : ILocalizableModel

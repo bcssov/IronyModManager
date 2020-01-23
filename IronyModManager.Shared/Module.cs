@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-18-2020
 // ***********************************************************************
 // <copyright file="Module.cs" company="Mario">
 //     Mario
@@ -18,7 +18,8 @@ namespace IronyModManager.Shared
 {
     /// <summary>
     /// Class Module.
-    /// Implements the <see cref="IronyModManager.Shared.IModule" /></summary>
+    /// Implements the <see cref="IronyModManager.Shared.IModule" />
+    /// </summary>
     /// <seealso cref="IronyModManager.Shared.IModule" />
     public class Module : IModule
     {

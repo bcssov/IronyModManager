@@ -4,9 +4,9 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
-// <copyright file="ValueLocalizationAttributeHandler.cs" company="Mario">
+// <copyright file="DynamicLocalizationAttributeHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,11 +19,11 @@ using IronyModManager.DI;
 namespace IronyModManager.Localization.Attributes.Handlers
 {
     /// <summary>
-    /// Class ValueLocalizationAttributeHandler.
+    /// Class DynamicLocalizationAttributeHandler.
     /// Implements the <see cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
-    public class ValueLocalizationAttributeHandler : ILocalizationAttributeHandler
+    public class DynamicLocalizationAttributeHandler : ILocalizationAttributeHandler
     {
         #region Methods
 
@@ -36,7 +36,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <returns><c>true</c> if this instance can process the specified attribute; otherwise, <c>false</c>.</returns>
         public bool CanProcess(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
         {
-            return attr is ValueLocalizationAttribute;
+            return attr is DynamicLocalizationAttribute;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <returns>System.String.</returns>
         public string GetData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
         {
-            var valAttr = (ValueLocalizationAttribute)attr;
+            var valAttr = (DynamicLocalizationAttribute)attr;
             var value = prop.GetValue(null);
             var resKey = $"{valAttr.ResourcePrefix()}{value.ToString()}";
             var translation = DIResolver.Get<ILocalizationManager>().GetResource(resKey);
