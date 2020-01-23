@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 01-23-2020
 // ***********************************************************************
-// <copyright file="ForceLocalizeAttributeHandler.cs" company="Mario">
+// <copyright file="AutoRefreshLocalizationAttributeHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -21,7 +21,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
     /// Implements the <see cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.Handlers.ILocalizationAttributeHandler" />
-    public class ForceLocalizeAttributeHandler : ILocalizationAttributeHandler
+    public class AutoRefreshLocalizationAttributeHandler : ILocalizationAttributeHandler
     {
         #region Methods
 
@@ -32,7 +32,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <returns><c>true</c> if this instance can process the specified attribute; otherwise, <c>false</c>.</returns>
         public bool CanProcess(AttributeHandlersArgs args)
         {
-            return args.Attribute is ForceLocalizeAttribute;
+            return args.Attribute is AutoRefreshLocalizationAttribute;
         }
 
         /// <summary>

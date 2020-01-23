@@ -66,14 +66,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected theme.
         /// </summary>
         /// <value>The selected theme.</value>
-        [ForceLocalize]
+        [AutoRefreshLocalization]
         public virtual ITheme SelectedTheme { get; protected set; }
 
         /// <summary>
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
-        [ForceLocalize]
+        [AutoRefreshLocalization]
         public virtual IEnumerable<ITheme> Themes { get; protected set; }
 
         /// <summary>

@@ -4,9 +4,9 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
-// <copyright file="ForceLocalizeAttribute.cs" company="Mario">
+// <copyright file="AutoRefreshLocalizationAttribute.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,7 +22,7 @@ namespace IronyModManager.Localization.Attributes
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class ForceLocalizeAttribute : LocalizationAttributeBase
+    public class AutoRefreshLocalizationAttribute : LocalizationAttributeBase
     {
     }
 }

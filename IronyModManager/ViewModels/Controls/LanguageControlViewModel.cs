@@ -65,7 +65,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the languages.
         /// </summary>
         /// <value>The languages.</value>
-        [ForceLocalize]
+        [AutoRefreshLocalization]
         public virtual IEnumerable<ILanguage> Languages { get; protected set; }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected language.
         /// </summary>
         /// <value>The selected language.</value>
-        [ForceLocalize]
+        [AutoRefreshLocalization]
         public virtual ILanguage SelectedLanguage { get; protected set; }
 
         #endregion Properties
