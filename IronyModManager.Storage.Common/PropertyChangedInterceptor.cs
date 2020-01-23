@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedInterceptor.cs" company="Mario">
 //     Mario
@@ -36,7 +36,7 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <param name="prop">The property.</param>
-        public override void FireEvent(IInvocation invocation, PropertyInfo prop)
+        protected override void FireEvent(IInvocation invocation, PropertyInfo prop)
         {
             ((IDatabase)invocation.Proxy).OnPropertyChanging(prop.Name);
             invocation.Proceed();

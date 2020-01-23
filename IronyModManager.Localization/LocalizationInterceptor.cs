@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="LocalizationInterceptor.cs" company="Mario">
 //     Mario
@@ -48,12 +48,12 @@ namespace IronyModManager.Localization
         /// <summary>
         /// The actual type
         /// </summary>
-        private static readonly string actualTypeMethodName = $"{GetMethod}{nameof(ILocalizableModel.ActualType)}";
+        private static readonly string actualTypeMethodName = $"{GetMethod}{nameof(ILocalizableViewModel.ActualType)}";
 
         /// <summary>
         /// The locale changed
         /// </summary>
-        private static readonly string LocaleChanged = nameof(ILocalizableModel.OnLocaleChanged);
+        private static readonly string localeChanged = nameof(ILocalizableViewModel.OnLocaleChanged);
 
         /// <summary>
         /// The attribute handlers
@@ -78,11 +78,42 @@ namespace IronyModManager.Localization
         #region Methods
 
         /// <summary>
+        /// Intercepts the specified invocation.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        public override void Intercept(IInvocation invocation)
+        {
+            if (invocation.Method.Name.Equals(actualTypeMethodName) && invocation.InvocationTarget is ILocalizableViewModel)
+            {
+                // Needed for view\view model resolution... It's a bit hacky... If you've got a better solution I'm all ears.
+                invocation.ReturnValue = typeof(T);
+                return;
+            }
+            else if (invocation.Method.Name.StartsWith(localeChanged) && invocation.InvocationTarget is ILocalizableViewModel)
+            {
+                ProcessLocaleChanged(invocation);
+                return;
+            }
+            // Handle on change event... Decided to ditch Fody, it has a dubious MIT license (wasn't aware of it at first)
+            else if (invocation.Method.Name.StartsWith(SetMethod) && invocation.InvocationTarget is ILocalizableModel)
+            {
+                base.Intercept(invocation);
+                return;
+            }
+            else if (invocation.Method.Name.StartsWith(GetMethod) && invocation.InvocationTarget is ILocalizableModel)
+            {
+                ProcessValueRequested(invocation);
+                return;
+            }
+            invocation.Proceed();
+        }
+
+        /// <summary>
         /// Fires the event.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <param name="prop">The property.</param>
-        public override void FireEvent(IInvocation invocation, PropertyInfo prop)
+        protected override void FireEvent(IInvocation invocation, PropertyInfo prop)
         {
             ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
             invocation.Proceed();
@@ -90,56 +121,45 @@ namespace IronyModManager.Localization
         }
 
         /// <summary>
-        /// Intercepts the specified invocation.
+        /// Processes the locale changed.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        public override void Intercept(IInvocation invocation)
+        private void ProcessLocaleChanged(IInvocation invocation)
         {
-            if (invocation.Method.Name.Equals(actualTypeMethodName))
+            var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase)));
+            if (localizationProperties.Count() > 0)
             {
-                // Needed for view\view model resolution... It's a bit hacky... If you've got a better solution I'm all ears.
-                invocation.ReturnValue = typeof(T);
-                return;
-            }
-            // Handle on change event... Decided to ditch Fody, it has a dubious MIT license (wasn't aware of it at first)
-            else if (invocation.Method.Name.StartsWith(SetMethod))
-            {
-                base.Intercept(invocation);
-                return;
-            }
-            else if (invocation.Method.Name.StartsWith(LocaleChanged))
-            {
-                var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase)));
-                if (localizationProperties.Count() > 0)
+                foreach (var prop in localizationProperties)
                 {
-                    foreach (var prop in localizationProperties)
-                    {
-                        ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
-                        ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
-                    }
+                    ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+                    ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
                 }
-                invocation.Proceed();
-                return;
             }
-            else if (invocation.Method.Name.StartsWith(GetMethod))
+            invocation.Proceed();
+        }
+
+        /// <summary>
+        /// Processes the value requested.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        private void ProcessValueRequested(IInvocation invocation)
+        {
+            var methodName = invocation.Method.Name.Replace(GetMethod, string.Empty);
+            var prop = invocation.TargetType.GetProperty(methodName);
+            var attr = Attribute.GetCustomAttribute(prop, typeof(LocalizationAttributeBase), true);
+            if (attr != null)
             {
-                var methodName = invocation.Method.Name.Replace(GetMethod, string.Empty);
-                var prop = invocation.TargetType.GetProperty(methodName);
-                var attr = Attribute.GetCustomAttribute(prop, typeof(LocalizationAttributeBase), true);
-                if (attr != null)
+                var locAttr = (LocalizationAttributeBase)attr;
+                if (attributeHandlers.Any(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel)))
                 {
-                    var locAttr = (LocalizationAttributeBase)attr;
-                    if (attributeHandlers.Any(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel)))
+                    var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel));
+                    if (handler.HasData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel))
                     {
-                        var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel));
-                        if (handler.HasData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel))
+                        var data = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                        if (!string.IsNullOrWhiteSpace(data))
                         {
-                            var data = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
-                            if (!string.IsNullOrWhiteSpace(data))
-                            {
-                                invocation.ReturnValue = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
-                                return;
-                            }
+                            invocation.ReturnValue = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                            return;
                         }
                     }
                 }
