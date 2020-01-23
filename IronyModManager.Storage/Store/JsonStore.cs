@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -133,7 +133,7 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string FormatTypeName(Type type)
         {
-            var name = type.Name.Replace("Proxy", string.Empty);
+            var name = type.Name.Replace(Shared.Constants.ProxyIdentifier, string.Empty);
             if (!name.StartsWith("I"))
             {
                 return $"I{name}";

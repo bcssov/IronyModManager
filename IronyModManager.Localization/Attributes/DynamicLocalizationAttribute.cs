@@ -27,6 +27,11 @@ namespace IronyModManager.Localization.Attributes
         #region Fields
 
         /// <summary>
+        /// The dependent property
+        /// </summary>
+        private readonly string dependentProperty;
+
+        /// <summary>
         /// The resource prefix
         /// </summary>
         private readonly string resourcePrefix;
@@ -38,7 +43,8 @@ namespace IronyModManager.Localization.Attributes
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicLocalizationAttribute" /> class.
         /// </summary>
-        public DynamicLocalizationAttribute() : this(string.Empty)
+        /// <param name="dependentProperty">The dependent property.</param>
+        public DynamicLocalizationAttribute(string dependentProperty) : this(string.Empty, dependentProperty)
         {
         }
 
@@ -46,14 +52,25 @@ namespace IronyModManager.Localization.Attributes
         /// Initializes a new instance of the <see cref="DynamicLocalizationAttribute" /> class.
         /// </summary>
         /// <param name="resourcePrefix">The resource prefix.</param>
-        public DynamicLocalizationAttribute(string resourcePrefix)
+        /// <param name="dependentProperty">The dependent property.</param>
+        public DynamicLocalizationAttribute(string resourcePrefix, string dependentProperty)
         {
             this.resourcePrefix = resourcePrefix;
+            this.dependentProperty = dependentProperty;
         }
 
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets the dependent property.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public virtual string GetDependentProperty()
+        {
+            return dependentProperty;
+        }
 
         /// <summary>
         /// Resources the prefix.

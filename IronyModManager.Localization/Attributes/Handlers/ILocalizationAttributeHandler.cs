@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="ILocalizationAttributeHandler.cs" company="Mario">
 //     Mario
@@ -12,9 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
-using System.Reflection;
+using System.Collections.Generic;
 
 namespace IronyModManager.Localization.Attributes.Handlers
 {
@@ -28,29 +27,23 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <summary>
         /// Determines whether this instance can process the specified attribute.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can process the specified attribute; otherwise, <c>false</c>.</returns>
-        bool CanProcess(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target);
+        bool CanProcess(AttributeHandlersArgs args);
 
         /// <summary>
         /// Gets the data.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>System.String.</returns>
-        string GetData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target);
+        string GetData(AttributeHandlersArgs args);
 
         /// <summary>
         /// Determines whether the specified attribute has data.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if the specified attribute has data; otherwise, <c>false</c>.</returns>
-        bool HasData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target);
+        bool HasData(AttributeHandlersArgs args);
 
         #endregion Methods
     }

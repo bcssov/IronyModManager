@@ -36,7 +36,7 @@ namespace IronyModManager.Models
         /// Gets or sets the locale.
         /// </summary>
         /// <value>The locale.</value>
-        public string Locale { get; set; }
+        public virtual string Locale { get; set; }
 
         /// <summary>
         /// Gets or sets the theme.

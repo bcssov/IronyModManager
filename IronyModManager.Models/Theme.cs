@@ -11,8 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 
@@ -39,14 +39,14 @@ namespace IronyModManager.Models
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DynamicLocalization("Themes.")]
-        public string Name { get; set; }
+        [DynamicLocalization("Themes.", nameof(Type))]
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the style includes.
         /// </summary>
         /// <value>The style includes.</value>
-        public IEnumerable<string> StyleIncludes { get; set; }
+        public virtual IEnumerable<string> StyleIncludes { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

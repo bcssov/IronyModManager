@@ -25,13 +25,11 @@ namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class LocalizationInterceptor.
-    /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
-    /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// Implements the <see cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
+    /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
-    /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
     public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : ILocalizableModel
     {
@@ -62,6 +60,11 @@ namespace IronyModManager.Localization
         /// </summary>
         private readonly IEnumerable<ILocalizationAttributeHandler> attributeHandlers;
 
+        /// <summary>
+        /// The refresh handlers
+        /// </summary>
+        private readonly IEnumerable<ILocalizationRefreshHandler> refreshHandlers;
+
         #endregion Fields
 
         #region Constructors
@@ -70,9 +73,11 @@ namespace IronyModManager.Localization
         /// Initializes a new instance of the <see cref="LocalizationInterceptor{T}" /> class.
         /// </summary>
         /// <param name="attributeHandlers">The attribute handlers.</param>
-        public LocalizationInterceptor(IEnumerable<ILocalizationAttributeHandler> attributeHandlers)
+        /// <param name="refreshHandlers">The refresh handlers.</param>
+        public LocalizationInterceptor(IEnumerable<ILocalizationAttributeHandler> attributeHandlers, IEnumerable<ILocalizationRefreshHandler> refreshHandlers)
         {
             this.attributeHandlers = attributeHandlers;
+            this.refreshHandlers = refreshHandlers;
         }
 
         #endregion Constructors
@@ -89,25 +94,26 @@ namespace IronyModManager.Localization
             {
                 // Needed for view\view model resolution... It's a bit hacky... If you've got a better solution I'm all ears.
                 invocation.ReturnValue = typeof(T);
-                return;
             }
             else if (invocation.Method.Name.StartsWith(localeChanged) && invocation.InvocationTarget is ILocalizableViewModel)
             {
                 ProcessLocaleChanged(invocation);
-                return;
+                invocation.Proceed();
             }
             // Handle on change event... Decided to ditch Fody, it has a dubious MIT license (wasn't aware of it at first)
             else if (invocation.Method.Name.StartsWith(SetMethod) && invocation.InvocationTarget is ILocalizableModel)
             {
                 base.Intercept(invocation);
-                return;
             }
             else if (invocation.Method.Name.StartsWith(GetMethod) && invocation.InvocationTarget is ILocalizableModel)
             {
-                ProcessValueRequested(invocation);
-                return;
+                invocation.Proceed();
+                ProcessLocalizationAttributes(invocation);
             }
-            invocation.Proceed();
+            else
+            {
+                invocation.Proceed();
+            }
         }
 
         /// <summary>
@@ -117,9 +123,10 @@ namespace IronyModManager.Localization
         /// <param name="prop">The property.</param>
         protected override void FireEvent(IInvocation invocation, PropertyInfo prop)
         {
-            ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
+            var instance = ((ILocalizableModel)invocation.Proxy);
+            instance.OnPropertyChanging(prop.Name);
             invocation.Proceed();
-            ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+            instance.OnPropertyChanged(prop.Name);
         }
 
         /// <summary>
@@ -135,16 +142,21 @@ namespace IronyModManager.Localization
                 {
                     ((ILocalizableModel)invocation.Proxy).OnPropertyChanging(prop.Name);
                     ((ILocalizableModel)invocation.Proxy).OnPropertyChanged(prop.Name);
+                    var args = new LocalizationRefreshArgs(invocation, prop);
+                    var refreshHandler = refreshHandlers.FirstOrDefault(p => p.CanRefresh(args));
+                    if (refreshHandler != null)
+                    {
+                        refreshHandler.Refresh(args);
+                    }
                 }
             }
-            invocation.Proceed();
         }
 
         /// <summary>
-        /// Processes the value requested.
+        /// Processes the localization attributes.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
-        private void ProcessValueRequested(IInvocation invocation)
+        private void ProcessLocalizationAttributes(IInvocation invocation)
         {
             var methodName = invocation.Method.Name.Replace(GetMethod, string.Empty);
             var prop = invocation.TargetType.GetProperty(methodName);
@@ -152,21 +164,21 @@ namespace IronyModManager.Localization
             if (attr != null)
             {
                 var locAttr = (LocalizationAttributeBase)attr;
-                if (attributeHandlers.Any(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel)))
+                var args = new AttributeHandlersArgs(locAttr, invocation, prop, invocation.ReturnValue);
+                if (attributeHandlers.Any(p => p.CanProcess(args)))
                 {
-                    var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(locAttr, prop, invocation.InvocationTarget as ILocalizableModel));
-                    if (handler.HasData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel))
+                    var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(args));
+                    if (handler.HasData(args))
                     {
-                        var data = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                        var data = handler.GetData(args);
                         if (!string.IsNullOrWhiteSpace(data))
                         {
-                            invocation.ReturnValue = handler.GetData(locAttr, prop, invocation.InvocationTarget as ILocalizableModel);
+                            invocation.ReturnValue = data;
                             return;
                         }
                     }
                 }
             }
-            invocation.Proceed();
         }
 
         #endregion Methods

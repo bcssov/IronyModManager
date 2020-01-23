@@ -15,17 +15,17 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using Castle.DynamicProxy;
-using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Storage.Common
 {
     /// <summary>
     /// Class PropertyChangedInterceptor.
-    /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
+    /// Implements the <see cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
+    /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
     public class PropertyChangedInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : IDatabase
     {

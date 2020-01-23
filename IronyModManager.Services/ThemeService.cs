@@ -75,7 +75,7 @@ namespace IronyModManager.Services
             foreach (var item in themeVals)
             {
                 var theme = InitModel(item, preferences.Theme);
-                themes.Add(theme);
+                themes.Add(theme);           
             }
 
             return themes;
@@ -121,14 +121,14 @@ namespace IronyModManager.Services
                 throw new ArgumentNullException("themes or selectedTheme");
             }
             var currentlySelected = GetSelected();
-            if (GetSelected().Type == selectedTheme.Type)
+            if (currentlySelected.Type == selectedTheme.Type)
             {
                 return false;
             }
 
             foreach (var item in themes)
             {
-                if (item.Type != selectedTheme.Type)
+                if (item.Type != currentlySelected.Type)
                 {
                     item.IsSelected = false;
                 }

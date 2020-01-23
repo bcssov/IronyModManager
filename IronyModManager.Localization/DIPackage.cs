@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -36,6 +36,7 @@ namespace IronyModManager.Localization
         {
             container.Register<ILocalizationManager, LocalizationManager>();
             container.Collection.Register(typeof(ILocalizationAttributeHandler), typeof(ILocalizationAttributeHandler).Assembly);
+            container.Collection.Register(typeof(ILocalizationRefreshHandler), typeof(ILocalizationRefreshHandler).Assembly);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="InterceptorExtensions.cs" company="Mario">
 //     Mario
@@ -38,12 +38,6 @@ namespace IronyModManager.DI.Extensions
         /// </summary>
         private static readonly Func<Type, object, object[], IInterceptor, object> createClassProxyTarget =
             (type, obj, args, interceptor) => proxyGenerator.CreateClassProxyWithTarget(type, obj, args, interceptor);
-
-        /// <summary>
-        /// The create proxy interface
-        /// </summary>
-        private static readonly Func<Type, IInterceptor, object> createProxyInterface =
-            (type, interceptor) => proxyGenerator.CreateInterfaceProxyWithoutTarget(type, interceptor);
 
         /// <summary>
         /// The create proxy interface target
@@ -88,9 +82,19 @@ namespace IronyModManager.DI.Extensions
                         }
                         else
                         {
+                            // Going to use class proxy underneath
+                            var args = new List<object>();
+                            var registration = container.GetRegistration(e.RegisteredServiceType);
+                            var ctors = registration.Registration.ImplementationType.GetConstructors();
+                            foreach (var arg in ctors.First().GetParameters())
+                            {
+                                args.Add(container.GetInstance(arg.ParameterType));
+                            }
+
                             e.Expression = Expression.Convert(
-                                Expression.Invoke(Expression.Constant(createProxyInterface),
-                                    Expression.Constant(e.RegisteredServiceType, typeof(Type)),
+                                Expression.Invoke(Expression.Constant(createClassProxy),
+                                    Expression.Constant(registration.Registration.ImplementationType, typeof(Type)),
+                                    Expression.Constant(args.ToArray(), typeof(object[])),
                                     interceptorExpression),
                                 e.RegisteredServiceType);
                         }

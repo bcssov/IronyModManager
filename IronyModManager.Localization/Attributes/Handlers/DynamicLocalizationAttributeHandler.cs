@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.Reflection;
 using IronyModManager.DI;
 
 namespace IronyModManager.Localization.Attributes.Handlers
@@ -30,27 +29,24 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <summary>
         /// Determines whether this instance can process the specified attribute.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can process the specified attribute; otherwise, <c>false</c>.</returns>
-        public bool CanProcess(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
+        public bool CanProcess(AttributeHandlersArgs args)
         {
-            return attr is DynamicLocalizationAttribute;
+            return args.Attribute is DynamicLocalizationAttribute;
         }
 
         /// <summary>
         /// Gets the data.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>System.String.</returns>
-        public string GetData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
+        public string GetData(AttributeHandlersArgs args)
         {
-            var valAttr = (DynamicLocalizationAttribute)attr;
-            var value = prop.GetValue(null);
-            var resKey = $"{valAttr.ResourcePrefix()}{value.ToString()}";
+            var valAttr = (DynamicLocalizationAttribute)args.Attribute;
+            var dependentProp = args.Invocation.InvocationTarget.GetType().GetProperty(valAttr.GetDependentProperty());
+            var dependentPropValue = dependentProp.GetValue(args.Invocation.InvocationTarget, null);
+            var resKey = $"{valAttr.ResourcePrefix()}{dependentPropValue.ToString()}";
             var translation = DIResolver.Get<ILocalizationManager>().GetResource(resKey);
             return translation;
         }
@@ -58,14 +54,11 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <summary>
         /// Determines whether the specified attribute has data.
         /// </summary>
-        /// <param name="attr">The attribute.</param>
-        /// <param name="prop">The property.</param>
-        /// <param name="target">The target.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if the specified attribute has data; otherwise, <c>false</c>.</returns>
-        public bool HasData(LocalizationAttributeBase attr, PropertyInfo prop, ILocalizableModel target)
+        public bool HasData(AttributeHandlersArgs args)
         {
-            var value = prop.GetValue(null);
-            return value != null;
+            return args.Value != null;
         }
 
         #endregion Methods
