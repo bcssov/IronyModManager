@@ -2,13 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="40"
              MaxWidth="300" MaxHeight="40" MinWidth="100"
              x:Class="IronyModManager.Views.Controls.ThemeControlView">
-  <UserControl.Resources>
-    <converter:LocalizationConverter x:Key="LocalizationConverter" />
-  </UserControl.Resources>
   <Panel>
     <StackPanel Orientation="Horizontal">
       <TextBlock Text="{Binding ThemeText}" HorizontalAlignment="Left" VerticalAlignment="Center"
@@ -17,9 +13,7 @@
                 MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="0,0,10,0">
         <DropDown.ItemTemplate>
           <DataTemplate>
-            <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Type, 
-                        Converter={StaticResource LocalizationConverter} 
-                        ConverterParameter=Themes.}"></DropDownItem>
+            <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></DropDownItem>
           </DataTemplate>
         </DropDown.ItemTemplate>
       </DropDown>

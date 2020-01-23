@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="LanguageControlViewModel.cs" company="Mario">
 //     Mario
@@ -72,7 +72,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the language text.
         /// </summary>
         /// <value>The language text.</value>
-        [Localization("Languages.Name")]
+        [StaticLocalization("Languages.Name")]
         public virtual string LanguageText { get; }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedInterceptor.cs" company="Mario">
 //     Mario
@@ -15,17 +15,17 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using Castle.DynamicProxy;
-using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Storage.Common
 {
     /// <summary>
     /// Class PropertyChangedInterceptor.
-    /// Implements the <see cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
+    /// Implements the <see cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <seealso cref="IronyModManager.Models.Common.PropertyChangedInterceptorBase" />
+    /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
     public class PropertyChangedInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : IDatabase
     {
@@ -36,7 +36,7 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <param name="prop">The property.</param>
-        public override void FireEvent(IInvocation invocation, PropertyInfo prop)
+        protected override void FireEvent(IInvocation invocation, PropertyInfo prop)
         {
             ((IDatabase)invocation.Proxy).OnPropertyChanging(prop.Name);
             invocation.Proceed();

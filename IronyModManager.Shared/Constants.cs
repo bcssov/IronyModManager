@@ -44,6 +44,12 @@ namespace IronyModManager.Shared
         public const string PluginsPathAndName = "Plugins";
 
         /// <summary>
+        /// The proxy identifier
+        /// </summary>
+        public const string ProxyIdentifier = "Proxy";
+
+
+        /// <summary>
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";

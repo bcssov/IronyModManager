@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedInterceptorBase.cs" company="Mario">
 //     Mario
@@ -16,9 +16,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using IronyModManager.Shared;
 
-namespace IronyModManager.Models.Common
+namespace IronyModManager.Shared
 {
     /// <summary>
     /// Class PropertyChangedInterceptorBase.
@@ -39,13 +38,6 @@ namespace IronyModManager.Models.Common
         #region Methods
 
         /// <summary>
-        /// Fires the event.
-        /// </summary>
-        /// <param name="invocation">The invocation.</param>
-        /// <param name="prop">The property.</param>
-        public abstract void FireEvent(IInvocation invocation, PropertyInfo prop);
-
-        /// <summary>
         /// Intercepts the specified invocation.
         /// </summary>
         /// <param name="invocation">The invocation.</param>
@@ -62,6 +54,13 @@ namespace IronyModManager.Models.Common
             }
             invocation.Proceed();
         }
+
+        /// <summary>
+        /// Fires the event.
+        /// </summary>
+        /// <param name="invocation">The invocation.</param>
+        /// <param name="prop">The property.</param>
+        protected abstract void FireEvent(IInvocation invocation, PropertyInfo prop);
 
         /// <summary>
         /// Determines whether [has value changed] [the specified invocation].

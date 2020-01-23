@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -35,8 +36,8 @@ namespace IronyModManager.Models
         public void RegisterServices(Container container)
         {
             container.RegisterModel<IPreferences, Preferences>();
-            container.RegisterModel<ITheme, Theme>();
-            container.RegisterModel<ILanguage, Language>();
+            container.RegisterLocalization<ITheme, Theme>();
+            container.RegisterLocalization<ILanguage, Language>();
         }
 
         #endregion Methods

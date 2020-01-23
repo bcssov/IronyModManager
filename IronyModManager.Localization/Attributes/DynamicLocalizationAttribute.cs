@@ -4,9 +4,9 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
-// <copyright file="ValueLocalizationAttribute.cs" company="Mario">
+// <copyright file="DynamicLocalizationAttribute.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,14 +17,19 @@ using System.Collections.Generic;
 namespace IronyModManager.Localization.Attributes
 {
     /// <summary>
-    /// Class ValueLocalizationAttribute.
+    /// Class DynamicLocalizationAttribute.
     /// Implements the <see cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class ValueLocalizationAttribute : LocalizationAttributeBase
+    public class DynamicLocalizationAttribute : LocalizationAttributeBase
     {
         #region Fields
+
+        /// <summary>
+        /// The dependent property
+        /// </summary>
+        private readonly string dependentProperty;
 
         /// <summary>
         /// The resource prefix
@@ -36,24 +41,36 @@ namespace IronyModManager.Localization.Attributes
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValueLocalizationAttribute" /> class.
+        /// Initializes a new instance of the <see cref="DynamicLocalizationAttribute" /> class.
         /// </summary>
-        public ValueLocalizationAttribute() : this(string.Empty)
+        /// <param name="dependentProperty">The dependent property.</param>
+        public DynamicLocalizationAttribute(string dependentProperty) : this(string.Empty, dependentProperty)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ValueLocalizationAttribute" /> class.
+        /// Initializes a new instance of the <see cref="DynamicLocalizationAttribute" /> class.
         /// </summary>
         /// <param name="resourcePrefix">The resource prefix.</param>
-        public ValueLocalizationAttribute(string resourcePrefix)
+        /// <param name="dependentProperty">The dependent property.</param>
+        public DynamicLocalizationAttribute(string resourcePrefix, string dependentProperty)
         {
             this.resourcePrefix = resourcePrefix;
+            this.dependentProperty = dependentProperty;
         }
 
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets the dependent property.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public virtual string GetDependentProperty()
+        {
+            return dependentProperty;
+        }
 
         /// <summary>
         /// Resources the prefix.

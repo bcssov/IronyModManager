@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 01-21-2020
 // ***********************************************************************
-// <copyright file="LocalizationAttribute.cs" company="Mario">
+// <copyright file="StaticLocalizationAttribute.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -18,14 +18,12 @@ using System;
 namespace IronyModManager.Localization.Attributes
 {
     /// <summary>
-    /// Class LocalizationAttribute.
-    /// Implements the <see cref="IronyModManager.Localization.LocalizationAttributeBase" />
+    /// Class StaticLocalizationAttribute.
     /// Implements the <see cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
-    /// <seealso cref="IronyModManager.Localization.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class LocalizationAttribute : LocalizationAttributeBase
+    public class StaticLocalizationAttribute : LocalizationAttributeBase
     {
         #region Fields
 
@@ -39,10 +37,10 @@ namespace IronyModManager.Localization.Attributes
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LocalizationAttribute" /> class.
+        /// Initializes a new instance of the <see cref="StaticLocalizationAttribute"/> class.
         /// </summary>
         /// <param name="key">The key.</param>
-        public LocalizationAttribute(string key)
+        public StaticLocalizationAttribute(string key)
         {
             this.key = key;
         }

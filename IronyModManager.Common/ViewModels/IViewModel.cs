@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="IViewModel.cs" company="Mario">
 //     Mario
@@ -19,10 +19,9 @@ namespace IronyModManager.Common.ViewModels
 {
     /// <summary>
     /// Interface IViewModel
-    /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
-    /// </summary>
-    /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
-    public interface IViewModel : ILocalizableModel
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizableViewModel" /></summary>
+    /// <seealso cref="IronyModManager.Localization.ILocalizableViewModel" />
+    public interface IViewModel : ILocalizableViewModel
     {
         #region Properties
 

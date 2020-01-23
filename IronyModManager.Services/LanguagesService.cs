@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
@@ -179,9 +180,11 @@ namespace IronyModManager.Services
         /// <returns>ILanguage.</returns>
         protected virtual ILanguage InitModel(string currentLocale, string locale)
         {
+            var culture = new CultureInfo(locale);
             var model = DIResolver.Get<ILanguage>();
             model.IsSelected = currentLocale.Equals(locale, StringComparison.OrdinalIgnoreCase);
             model.Abrv = locale;
+            model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";
             return model;
         }
 

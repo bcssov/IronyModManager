@@ -30,8 +30,7 @@ namespace IronyModManager.Localization
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string>() { typeof(DI.Module).Namespace,
-            typeof(Models.Common.Module).Namespace, typeof(Shared.Module).Namespace };
+        public IEnumerable<string> Dependencies => new List<string>() { typeof(DI.Module).Name, typeof(Shared.Module).Name };
 
         /// <summary>
         /// Gets the name.

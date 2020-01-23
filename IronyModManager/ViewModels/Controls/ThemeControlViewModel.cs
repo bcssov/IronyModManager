@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -66,36 +66,26 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected theme.
         /// </summary>
         /// <value>The selected theme.</value>
+        [ForceLocalize]
         public virtual ITheme SelectedTheme { get; protected set; }
 
         /// <summary>
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
+        [ForceLocalize]
         public virtual IEnumerable<ITheme> Themes { get; protected set; }
 
         /// <summary>
         /// Gets the theme text.
         /// </summary>
         /// <value>The theme text.</value>
-        [Localization("Themes.Name")]
+        [StaticLocalization("Themes.Name")]
         public virtual string ThemeText { get; }
 
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        public override void OnLocaleChanged(string newLocale, string oldLocale)
-        {
-            Bind();
-
-            base.OnLocaleChanged(newLocale, oldLocale);
-        }
 
         /// <summary>
         /// Called when [activated].

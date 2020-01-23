@@ -4,23 +4,24 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="Theme.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
 {
     /// <summary>
     /// Class Theme.
-    /// Implements the <see cref="IronyModManager.Models.Common.ITheme" />
     /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
+    /// Implements the <see cref="IronyModManager.Models.Common.ITheme" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
     /// <seealso cref="IronyModManager.Models.Common.ITheme" />
@@ -35,10 +36,17 @@ namespace IronyModManager.Models
         public virtual bool IsSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        [DynamicLocalization("Themes.", nameof(Type))]
+        public virtual string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the style includes.
         /// </summary>
         /// <value>The style includes.</value>
-        public IEnumerable<string> StyleIncludes { get; set; }
+        public virtual IEnumerable<string> StyleIncludes { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

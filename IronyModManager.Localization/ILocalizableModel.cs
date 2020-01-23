@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-23-2020
 // ***********************************************************************
 // <copyright file="ILocalizableModel.cs" company="Mario">
 //     Mario
@@ -21,24 +21,7 @@ namespace IronyModManager.Localization
     /// </summary>
     public interface ILocalizableModel
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the actual type.
-        /// </summary>
-        /// <value>The actual type.</value>
-        Type ActualType { get; }
-
-        #endregion Properties
-
         #region Methods
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        void OnLocaleChanged(string newLocale, string oldLocale);
 
         /// <summary>
         /// Called when [property changed].
