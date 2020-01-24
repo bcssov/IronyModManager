@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 01-24-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -27,6 +27,7 @@ using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Services;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.ViewModels;
 using IronyModManager.Views;
 using ReactiveUI;
@@ -80,7 +81,7 @@ namespace IronyModManager
             if (!Design.IsDesignMode)
             {
                 InitThemes();
-            }            
+            }
         }
 
         /// <summary>
@@ -92,6 +93,7 @@ namespace IronyModManager
             {
                 InitCulture();
                 InitApp(desktop);
+                InitAppTitle(desktop);
             }
 
             base.OnFrameworkInitializationCompleted();
@@ -104,6 +106,31 @@ namespace IronyModManager
         {
             var langService = DIResolver.Get<ILanguagesService>();
             langService.ApplySelected();
+        }
+
+        /// <summary>
+        /// Initializes the application title.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void InitAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            SetAppTitle(desktop);
+            // Only mental cases use System namespace for an extension method...
+            ObservableExtensions.Subscribe(listener, x =>
+            {
+                SetAppTitle(desktop);
+            });
+        }
+
+        /// <summary>
+        /// Sets the application title.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var appTitle = DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title);
+            desktop.MainWindow.Title = appTitle;
         }
 
         /// <summary>
@@ -142,8 +169,8 @@ namespace IronyModManager
         private async Task OnThemeChanged()
         {
             var locManager = DIResolver.Get<ILocalizationManager>();
-            var title = locManager.GetResource("Themes.Restart_Title");
-            var message = locManager.GetResource("Themes.Restart_Message");
+            var title = locManager.GetResource(LocalizationResources.Themes.Restart_Title);
+            var message = locManager.GetResource(LocalizationResources.Themes.Restart_Message);
             var prompt = MessageBoxes.GetYesNoWindow(title, message, MessageBox.Avalonia.Enums.Icon.Info);
             var desktop = ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime);
             var mainWindow = desktop.MainWindow;

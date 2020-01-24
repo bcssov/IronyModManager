@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-24-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -57,8 +57,8 @@ namespace IronyModManager
         [STAThread]
         public static void Main(string[] args)
         {
-            InitCulture();
-            InitAppConfig();
+            InitDefaultCulture();
+            InitAppEvents();
             InitDI();
 
             try
@@ -86,18 +86,18 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Initializes the application configuration.
+        /// Initializes the application events.
         /// </summary>
-        private static void InitAppConfig()
+        private static void InitAppEvents()
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
         }
 
         /// <summary>
-        /// Initializes the culture.
+        /// Initializes the default culture.
         /// </summary>
-        private static void InitCulture()
+        private static void InitDefaultCulture()
         {
             CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
         }
@@ -132,8 +132,8 @@ namespace IronyModManager
                 try
                 {
                     var locManager = DIResolver.Get<ILocalizationManager>();
-                    title = locManager.GetResource("FatalError.Title");
-                    message = locManager.GetResource("FatalError.Message");
+                    title = locManager.GetResource(LocalizationResources.FatalError.Title);
+                    message = locManager.GetResource(LocalizationResources.FatalError.Message);
                 }
                 catch
                 {
