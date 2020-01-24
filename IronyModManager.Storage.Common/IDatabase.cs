@@ -35,6 +35,12 @@ namespace IronyModManager.Storage.Common
         /// <value>The preferences.</value>
         IPreferences Preferences { get; set; }
 
+        /// <summary>
+        /// Gets or sets the state of the window.
+        /// </summary>
+        /// <value>The state of the window.</value>
+        IWindowState WindowState { get; set; }
+
         #endregion Properties
 
         #region Methods

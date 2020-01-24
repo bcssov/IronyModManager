@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 01-24-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -82,6 +82,19 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the state of the window.
+        /// </summary>
+        /// <returns>IWindowState.</returns>
+        public virtual IWindowState GetWindowState()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<IWindowState, IWindowState>(Database.WindowState);
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Sets the preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
@@ -91,6 +104,20 @@ namespace IronyModManager.Storage
             lock (dbLock)
             {
                 Database.Preferences = preferences;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Sets the state of the window.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool SetWindowState(IWindowState state)
+        {
+            lock (dbLock)
+            {
+                Database.WindowState = state;
                 return true;
             }
         }

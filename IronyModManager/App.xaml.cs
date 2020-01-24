@@ -94,9 +94,24 @@ namespace IronyModManager
                 InitCulture();
                 InitApp(desktop);
                 InitAppTitle(desktop);
+                InitAppSizeDefaults(desktop);
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        /// <summary>
+        /// Initializes the application size defaults.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var stateService = DIResolver.Get<IWindowStateService>();
+            if (!stateService.IsDefined() && !stateService.IsMaximized())
+            {
+                desktop.MainWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
         }
 
         /// <summary>
