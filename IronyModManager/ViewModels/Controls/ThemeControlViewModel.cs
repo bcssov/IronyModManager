@@ -22,6 +22,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services;
+using IronyModManager.Shared;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -80,7 +81,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the theme text.
         /// </summary>
         /// <value>The theme text.</value>
-        [StaticLocalization("Themes.Name")]
+        [StaticLocalization(LocalizationResources.Themes.Name)]
         public virtual string ThemeText { get; }
 
         #endregion Properties

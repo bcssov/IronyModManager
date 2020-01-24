@@ -1,4 +1,7 @@
 ﻿{
+    "App": {
+        "Title": "Irony Mod Manager"
+    },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
         "Title": "Greška"

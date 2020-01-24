@@ -21,6 +21,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -72,7 +73,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets the language text.
         /// </summary>
         /// <value>The language text.</value>
-        [StaticLocalization("Languages.Name")]
+        [StaticLocalization(LocalizationResources.Languages.Name)]
         public virtual string LanguageText { get; }
 
         /// <summary>

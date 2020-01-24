@@ -1,4 +1,7 @@
 ﻿{
+    "App": {
+        "Title": "Irony Mod Manager"
+    },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
         "Title": "Error"

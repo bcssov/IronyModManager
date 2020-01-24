@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Models
 {
@@ -39,7 +40,7 @@ namespace IronyModManager.Models
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DynamicLocalization("Themes.", nameof(Type))]
+        [DynamicLocalization(LocalizationResources.Themes.Prefix, nameof(Type))]
         public virtual string Name { get; set; }
 
         /// <summary>

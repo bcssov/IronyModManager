@@ -1,4 +1,7 @@
 ﻿{
+    "App": {
+        "Title": "Irony Mod Manager"
+    },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",
         "Title": "Error"
