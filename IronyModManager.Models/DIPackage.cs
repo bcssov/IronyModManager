@@ -38,6 +38,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IPreferences, Preferences>();
             container.RegisterLocalization<ITheme, Theme>();
             container.RegisterLocalization<ILanguage, Language>();
+            container.RegisterModel<IWindowState, WindowState>();
         }
 
         #endregion Methods

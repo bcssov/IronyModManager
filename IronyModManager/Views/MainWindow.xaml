@@ -9,8 +9,8 @@
         Title="Irony Mod Manager"
         MinWidth="800"
         MinHeight="450"
-        SizeToContent="WidthAndHeight"
-        WindowStartupLocation="CenterScreen"
+        SizeToContent="Manual"
+        WindowStartupLocation="Manual"
         ShowInTaskbar="True">
 
   <Design.DataContext>

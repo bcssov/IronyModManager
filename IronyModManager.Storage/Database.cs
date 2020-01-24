@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-24-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -50,6 +50,13 @@ namespace IronyModManager.Storage
         /// <value>The preferences.</value>
         [Trackable]
         public virtual IPreferences Preferences { get; set; } = DIResolver.Get<IPreferences>();
+
+        /// <summary>
+        /// Gets or sets the state of the window.
+        /// </summary>
+        /// <value>The state of the window.</value>
+        [Trackable]
+        public IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
 
         #endregion Properties
 

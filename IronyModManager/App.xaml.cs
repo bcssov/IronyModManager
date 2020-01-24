@@ -94,9 +94,24 @@ namespace IronyModManager
                 InitCulture();
                 InitApp(desktop);
                 InitAppTitle(desktop);
+                InitAppSizeDefaults(desktop);
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        /// <summary>
+        /// Initializes the application size defaults.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var stateService = DIResolver.Get<IWindowStateService>();
+            if (!stateService.IsDefined() && !stateService.IsMaximized())
+            {
+                desktop.MainWindow.SizeToContent = SizeToContent.WidthAndHeight;
+                desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
         }
 
         /// <summary>
@@ -114,10 +129,9 @@ namespace IronyModManager
         /// <param name="desktop">The desktop.</param>
         protected virtual void InitAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
             SetAppTitle(desktop);
-            // Only mental cases use System namespace for an extension method...
-            ObservableExtensions.Subscribe(listener, x =>
+            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            listener.SubscribeObservable(x =>
             {
                 SetAppTitle(desktop);
             });
@@ -155,8 +169,7 @@ namespace IronyModManager
             themeSetter(this, currentTheme);
 
             var listener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
-            // Only mental cases use System namespace for an extension method...
-            ObservableExtensions.Subscribe(listener, x =>
+            listener.SubscribeObservable(x =>
             {
                 OnThemeChanged().ConfigureAwait(true);
             });

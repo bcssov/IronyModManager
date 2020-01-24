@@ -30,12 +30,13 @@ namespace IronyModManager.Storage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile" /> class.
+        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
         /// </summary>
         public MappingProfile()
         {
             CreateMap<IDatabase, Database>().ReverseMap();
             CreateMap<IPreferences, IPreferences>().ReverseMap();
+            CreateMap<IWindowState, IWindowState>().ReverseMap();
         }
 
         #endregion Constructors
