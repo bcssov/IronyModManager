@@ -114,10 +114,9 @@ namespace IronyModManager
         /// <param name="desktop">The desktop.</param>
         protected virtual void InitAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
             SetAppTitle(desktop);
-            // Only mental cases use System namespace for an extension method...
-            ObservableExtensions.Subscribe(listener, x =>
+            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            listener.SubscribeObservable(x =>
             {
                 SetAppTitle(desktop);
             });
@@ -155,8 +154,7 @@ namespace IronyModManager
             themeSetter(this, currentTheme);
 
             var listener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
-            // Only mental cases use System namespace for an extension method...
-            ObservableExtensions.Subscribe(listener, x =>
+            listener.SubscribeObservable(x =>
             {
                 OnThemeChanged().ConfigureAwait(true);
             });
