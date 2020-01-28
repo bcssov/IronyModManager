@@ -31,7 +31,7 @@ namespace IronyModManager
         /// <param name="title">The title.</param>
         /// <param name="message">The message.</param>
         /// <returns>MsBoxCustomWindow.</returns>
-        public static MessageBox.Avalonia.BaseWindows.MsBoxCustomWindow GetFatalErrorWindow(string title, string message)
+        public static MsgBox.BaseWindows.MsBoxCustomWindow GetFatalErrorWindow(string title, string message)
         {
             var messageBox = MsgBox.MessageBoxManager.GetMessageBoxCustomWindow(new MessageBoxCustomParams
             {
@@ -52,7 +52,7 @@ namespace IronyModManager
         /// <param name="message">The message.</param>
         /// <param name="icon">The icon.</param>
         /// <returns>MessageBox.Avalonia.BaseWindows.MsBoxStandardWindow.</returns>
-        public static MessageBox.Avalonia.BaseWindows.MsBoxStandardWindow GetYesNoWindow(string title, string message, MsgBox.Enums.Icon icon)
+        public static MsgBox.BaseWindows.MsBoxStandardWindow GetYesNoWindow(string title, string message, MsgBox.Enums.Icon icon)
         {
             var msgBox = MsgBox.MessageBoxManager.GetMessageBoxStandardWindow(title, message, MsgBox.Enums.ButtonEnum.YesNo, icon);
             return msgBox;
