@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Storage.Common;
 using SimpleInjector;
@@ -27,6 +28,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
     /// </summary>
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
+    [ExcludeFromCodeCoverage]
     public class DIPackage : IPackage
     {
         #region Fields

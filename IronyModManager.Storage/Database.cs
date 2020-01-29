@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Storage.Common;
@@ -66,6 +67,7 @@ namespace IronyModManager.Storage
         /// Called when [property changed].
         /// </summary>
         /// <param name="methodName">Name of the method.</param>
+        [ExcludeFromCodeCoverage]
         public void OnPropertyChanged(string methodName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(methodName));
@@ -75,6 +77,7 @@ namespace IronyModManager.Storage
         /// Called when [property changing].
         /// </summary>
         /// <param name="methodName">Name of the method.</param>
+        [ExcludeFromCodeCoverage]
         public void OnPropertyChanging(string methodName)
         {
             PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(methodName));

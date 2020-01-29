@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="StoreConverter.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
@@ -26,6 +27,8 @@ namespace IronyModManager.Storage.Store
     /// Implements the <see cref="Newtonsoft.Json.JsonConverter" />
     /// </summary>
     /// <seealso cref="Newtonsoft.Json.JsonConverter" />
+    // Modified version of Jot item, no need for us to test it
+    [ExcludeFromCodeCoverage]
     internal class StoreConverter : JsonConverter
     {
         #region Properties
