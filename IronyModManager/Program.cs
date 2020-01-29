@@ -110,6 +110,7 @@ namespace IronyModManager
             Bootstrap.Setup(
                 new DIOptions()
                 {
+                    Container = new SimpleInjector.Container(),
                     PluginPathAndName = Shared.Constants.PluginsPathAndName,
                     ModuleTypes = new List<Type>() { typeof(IModule) },
                     PluginTypes = new List<Type>() { typeof(IPlugin) }

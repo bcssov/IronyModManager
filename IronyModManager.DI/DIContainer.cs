@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -63,11 +63,10 @@ namespace IronyModManager.DI
         /// <summary>
         /// Initializes the specified container.
         /// </summary>
-        /// <param name="container">The container.</param>
         /// <param name="opts">The opts.</param>
-        internal static void Init(Container container, DIOptions opts)
+        internal static void Init(DIOptions opts)
         {
-            Container = container;
+            Container = opts.Container;
             PluginPathAndName = opts.PluginPathAndName;
             ModuleTypes = opts.ModuleTypes;
             PluginTypes = opts.PluginTypes;

@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="DIOptions.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using SimpleInjector;
 
 namespace IronyModManager.DI
 {
@@ -22,6 +23,12 @@ namespace IronyModManager.DI
     public class DIOptions
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the container.
+        /// </summary>
+        /// <value>The container.</value>
+        public Container Container { get; set; }
 
         /// <summary>
         /// Gets or sets the module types.
