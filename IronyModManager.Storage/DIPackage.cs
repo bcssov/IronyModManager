@@ -14,8 +14,8 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using IronyModManager.DI.Extensions;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -28,7 +28,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
     /// </summary>
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCoverage("Should not test external DI.")]
     public class DIPackage : IPackage
     {
         #region Fields

@@ -40,9 +40,10 @@ namespace IronyModManager.Storage.Tests
         {
             // I know totally redundant test, done just for a bit of practice
             SetupContainer();
+            var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
-            mapper.Setup(p => p.Map<IPreferences, IPreferences>(It.IsAny<IPreferences>())).Returns(GetDbMock().Preferences);
-            var storage = new Storage(GetDbMock(), mapper.Object);
+            mapper.Setup(p => p.Map<IPreferences, IPreferences>(It.IsAny<IPreferences>())).Returns(dbMock.Preferences);
+            var storage = new Storage(dbMock, mapper.Object);
             var pref = storage.GetPreferences();
             pref.Locale.Should().Be(GetDbMock().Preferences.Locale);
         }
@@ -56,9 +57,10 @@ namespace IronyModManager.Storage.Tests
         {
             // I know totally redundant test, done just for a bit of practice
             SetupContainer();
+            var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
-            mapper.Setup(p => p.Map<IWindowState, IWindowState>(It.IsAny<IWindowState>())).Returns(GetDbMock().WindowState);
-            var storage = new Storage(GetDbMock(), mapper.Object);
+            mapper.Setup(p => p.Map<IWindowState, IWindowState>(It.IsAny<IWindowState>())).Returns(dbMock.WindowState);
+            var storage = new Storage(dbMock, mapper.Object);
             var state = storage.GetWindowState();
             state.IsMaximized.Should().Be(GetDbMock().WindowState.IsMaximized);
         }
@@ -95,6 +97,40 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.SetWindowState(state);
             dbMock.WindowState.Should().Be(state);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_preferences_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_preferences_object()
+        {
+            SetupContainer();
+            var newPref = new Preferences()
+            {
+                Locale = "test2"
+            };                        
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetPreferences(newPref);
+            var pref = storage.GetPreferences();
+            pref.Locale.Should().Be(newPref.Locale);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_window_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_window_state_object()
+        {
+            SetupContainer();
+            var newState = new WindowState()
+            {
+                Height = 300
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetWindowState(newState);
+            var state = storage.GetWindowState();
+            state.Height.Should().Be(newState.Height);
         }
 
         /// <summary>

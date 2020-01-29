@@ -13,10 +13,10 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -27,8 +27,7 @@ namespace IronyModManager.Storage.Store
     /// Implements the <see cref="Newtonsoft.Json.JsonConverter" />
     /// </summary>
     /// <seealso cref="Newtonsoft.Json.JsonConverter" />
-    // Modified version of Jot item, no need for us to test it
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCoverage("Modified version of Jot item, no need for us to test it.")]
     internal class StoreConverter : JsonConverter
     {
         #region Properties

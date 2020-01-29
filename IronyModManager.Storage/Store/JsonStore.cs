@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,8 +28,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="Jot.Storage.IStore" />
     /// </summary>
     /// <seealso cref="Jot.Storage.IStore" />
-    // Modified version of Jot item, no need for us to test it
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCoverage("Modified version of Jot item, no need for us to test it.")]
     internal class JsonStore : IStore
     {
         #region Fields

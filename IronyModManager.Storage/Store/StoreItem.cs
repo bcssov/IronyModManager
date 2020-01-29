@@ -15,14 +15,14 @@ using System.Collections.Generic;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Storage.Store
 {
     /// <summary>
     /// Class StoreItem.
-    /// </summary>
-    // Modified version of Jot item, no need for us to test it
-    [ExcludeFromCodeCoverage]
+    /// </summary>    
+    [ExcludeFromCoverage("Modified version of Jot item, no need for us to test it.")]
     internal class StoreItem
     {
         #region Properties
