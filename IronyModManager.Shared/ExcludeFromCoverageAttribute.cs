@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace IronyModManager.Shared
 {
@@ -22,6 +23,7 @@ namespace IronyModManager.Shared
     /// Implements the <see cref="System.Attribute" />
     /// </summary>
     /// <seealso cref="System.Attribute" />
+    [ExcludeFromCodeCoverage]
     public class ExcludeFromCoverageAttribute : Attribute
     {
         #region Fields

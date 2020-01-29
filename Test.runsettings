@@ -15,6 +15,7 @@
           <CodeCoverage>
             <Attributes>
               <Exclude>
+                <Attribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute$</Attribute>
                 <Attribute>IronyModManager.Shared.ExcludeFromCoverageAttribute$</Attribute>
               </Exclude>
             </Attributes>

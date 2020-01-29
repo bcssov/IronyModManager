@@ -31,10 +31,10 @@ namespace IronyModManager.Storage.Tests
     public class PropertyChangedTests
     {
         /// <summary>
-        /// Defines the test method Should_trigger_changed_event.
+        /// Defines the test method Database_should_trigger_single_changed_event.
         /// </summary>
         [Fact]
-        public void Should_trigger_single_changed_event()
+        public void Database_should_trigger_single_changed_event()
         {
             SetupContainer();
             var events = new List<string>();
@@ -51,10 +51,10 @@ namespace IronyModManager.Storage.Tests
 
 
         /// <summary>
-        /// Defines the test method Should_trigger_single_changing_event.
+        /// Defines the test method Database_should_trigger_single_changing_event.
         /// </summary>
         [Fact]
-        public void Should_trigger_single_changing_event()
+        public void Database_should_trigger_single_changing_event()
         {
             SetupContainer();
             var events = new List<string>();
@@ -70,10 +70,10 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_trigger_double_changed_event.
+        /// Defines the test method Database_should_trigger_double_changed_event.
         /// </summary>
         [Fact]
-        public void Should_trigger_double_changed_event()
+        public void Database_should_trigger_double_changed_event()
         {
             SetupContainer();
             var events = new List<string>();
@@ -90,10 +90,10 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_trigger_double_changing_event.
+        /// Defines the test method Database_should_trigger_double_changing_event.
         /// </summary>
         [Fact]
-        public void Should_trigger_double_changing_event()
+        public void Database_should_trigger_double_changing_event()
         {
             SetupContainer();
             var events = new List<string>();
