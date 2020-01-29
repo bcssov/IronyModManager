@@ -131,6 +131,7 @@ namespace IronyModManager.Storage.Tests
             storage.SetWindowState(newState);
             var state = storage.GetWindowState();
             state.Height.Should().Be(newState.Height);
+
         }
 
         /// <summary>
