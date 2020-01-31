@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Description>IronyModManager.Model.Tests</Description>
+    <Description>IronyModManager.Services.Tests</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>avalonia-logo.png</PackageIcon>
     <PackageIconUrl />
-    <PackageTags>IronyModManager.Model.Tests</PackageTags>
+    <PackageTags>IronyModManager.Services.Tests</PackageTags>
+    <PackageReleaseNotes>IronyModManager.Services.Tests</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -15,25 +16,6 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="Moq" Version="4.13.1" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
-    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
-    <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
-    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
-    <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\IronyModManager\Assets\avalonia-logo.png">
@@ -47,9 +29,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="xunit.runner.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+    <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
   </ItemGroup>
 
 </Project>

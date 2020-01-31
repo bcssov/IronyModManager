@@ -4,7 +4,7 @@
 // Created          : 01-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 01-31-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedTests.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Models;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
+using IronyModManager.Tests.Common;
 using SimpleInjector;
 using Xunit;
 
@@ -36,7 +37,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Database_should_trigger_single_changed_event()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanged += (s, e) =>
@@ -56,7 +57,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Database_should_trigger_single_changing_event()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanging += (s, e) =>
@@ -75,7 +76,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Database_should_trigger_double_changed_event()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanged += (s, e) =>
@@ -95,7 +96,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Database_should_trigger_double_changing_event()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var db = DIResolver.Get<IDatabase>();
             db.PropertyChanging += (s, e) =>
@@ -107,22 +108,6 @@ namespace IronyModManager.Storage.Tests
             events.Count.Should().Be(2);
             events.First().Should().Be(nameof(db.Preferences));
             events.Last().Should().Be(nameof(db.WindowState));
-        }
-
-        /// <summary>
-        /// Setups the container.
-        /// </summary>
-        private void SetupContainer()
-        {
-            var container = new Container();
-            Bootstrap.Setup(
-                new DIOptions()
-                {
-                    Container = container,
-                    PluginPathAndName = Constants.PluginsPathAndName,
-                    ModuleTypes = new List<Type>() { typeof(IModule) },
-                    PluginTypes = new List<Type>() { typeof(IPlugin) }
-                });
         }
     }
 }

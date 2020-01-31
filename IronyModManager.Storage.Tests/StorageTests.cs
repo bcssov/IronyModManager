@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 01-31-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using FluentAssertions;
 using SimpleInjector;
 using IronyModManager.DI;
 using IronyModManager.Shared;
+using IronyModManager.Tests.Common;
 
 namespace IronyModManager.Storage.Tests
 {
@@ -39,7 +40,7 @@ namespace IronyModManager.Storage.Tests
         public void Should_return_same_preferences_object()
         {
             // I know totally redundant test, done just for a bit of practice
-            SetupContainer();
+            DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<IPreferences, IPreferences>(It.IsAny<IPreferences>())).Returns(dbMock.Preferences);
@@ -56,7 +57,7 @@ namespace IronyModManager.Storage.Tests
         public void Should_return_same_window_state_object()
         {
             // I know totally redundant test, done just for a bit of practice
-            SetupContainer();
+            DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<IWindowState, IWindowState>(It.IsAny<IWindowState>())).Returns(dbMock.WindowState);
@@ -71,7 +72,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Should_overwrite_preferences_object()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var newPref = new Preferences()
             {
@@ -88,7 +89,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Should_overwrite_window_state_object()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var state = new WindowState()
             {
@@ -105,7 +106,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Should_overwrite_and_return_same_preferences_object()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var newPref = new Preferences()
             {
                 Locale = "test2"
@@ -122,7 +123,7 @@ namespace IronyModManager.Storage.Tests
         [Fact]
         public void Should_overwrite_and_return_same_window_state_object()
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var newState = new WindowState()
             {
                 Height = 300
@@ -132,22 +133,6 @@ namespace IronyModManager.Storage.Tests
             var state = storage.GetWindowState();
             state.Height.Should().Be(newState.Height);
 
-        }
-
-        /// <summary>
-        /// Setups the container.
-        /// </summary>
-        private void SetupContainer()
-        {
-            var container = new Container();
-            Bootstrap.Setup(
-                new DIOptions()
-                {
-                    Container = container,
-                    PluginPathAndName = Constants.PluginsPathAndName,
-                    ModuleTypes = new List<Type>() { typeof(IModule) },
-                    PluginTypes = new List<Type>() { typeof(IPlugin) }
-                });
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 01-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 01-31-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedTests.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using IronyModManager.Tests.Common;
 using SimpleInjector;
 using Xunit;
 
@@ -176,22 +177,6 @@ namespace IronyModManager.Model.Tests
 
 
         /// <summary>
-        /// Setups the container.
-        /// </summary>
-        private void SetupContainer()
-        {
-            var container = new Container();
-            Bootstrap.Setup(
-                new DIOptions()
-                {
-                    Container = container,
-                    PluginPathAndName = Constants.PluginsPathAndName,
-                    ModuleTypes = new List<Type>() { typeof(IModule) },
-                    PluginTypes = new List<Type>() { typeof(IPlugin) }
-                });
-        }
-
-        /// <summary>
         /// Runs the generic single property test.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -200,7 +185,7 @@ namespace IronyModManager.Model.Tests
         /// <param name="checkChanged">if set to <c>true</c> [check changed].</param>
         private void RunGenericSinglePropTest<T>(string prop, object value, bool checkChanged) where T : class, IModel
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var model = DIResolver.Get<T>();
             if (checkChanged)
@@ -234,7 +219,7 @@ namespace IronyModManager.Model.Tests
         /// <param name="checkChanged">The check changed.</param>
         private void RunGenericDoublePropTest<T>(string prop, object value, string prop2, object value2, bool checkChanged) where T : class, IModel
         {
-            SetupContainer();
+            DISetup.SetupContainer();
             var events = new List<string>();
             var model = DIResolver.Get<T>();
             if (checkChanged)
