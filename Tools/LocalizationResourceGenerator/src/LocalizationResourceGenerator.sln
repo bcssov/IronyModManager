@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizationResourceGenerator", "LocalizationResourceGenerator\LocalizationResourceGenerator.csproj", "{752CC8AA-B36B-423B-8315-39CEC50C5E24}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{752CC8AA-B36B-423B-8315-39CEC50C5E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752CC8AA-B36B-423B-8315-39CEC50C5E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752CC8AA-B36B-423B-8315-39CEC50C5E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752CC8AA-B36B-423B-8315-39CEC50C5E24}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E12175B9-772C-4AAD-AFDA-144B9B8283D4}
+	EndGlobalSection
+EndGlobal
