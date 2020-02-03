@@ -350,6 +350,7 @@ MigrationBackup/
 .ionide/
 *.snk
 
+!publish/
 !/IronyModManager/Log
 *.suppress
 /TODO.txt
