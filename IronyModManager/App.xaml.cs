@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -184,7 +184,8 @@ namespace IronyModManager
             var locManager = DIResolver.Get<ILocalizationManager>();
             var title = locManager.GetResource(LocalizationResources.Themes.Restart_Title);
             var message = locManager.GetResource(LocalizationResources.Themes.Restart_Message);
-            var prompt = MessageBoxes.GetYesNoWindow(title, message, MessageBox.Avalonia.Enums.Icon.Info);
+            var header = locManager.GetResource(LocalizationResources.Themes.Restart_Header);
+            var prompt = MessageBoxes.GetYesNoWindow(title, header, message, MessageBox.Avalonia.Enums.Icon.Info);
             var desktop = ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime);
             var mainWindow = desktop.MainWindow;
             var result = await prompt.ShowDialog(mainWindow);

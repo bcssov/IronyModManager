@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="ResourceReader.cs" company="Mario">
 //     Mario
@@ -24,36 +24,6 @@ namespace IronyModManager.DI.Readers
     internal static class ResourceReader
     {
         #region Methods
-
-        /// <summary>
-        /// Gets the embedded resource.
-        /// </summary>
-        /// <param name="resourceName">Name of the resource.</param>
-        /// <param name="assembly">The assembly.</param>
-        /// <returns>System.Byte[].</returns>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        /// <exception cref="ArgumentNullException">assembly</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        public static byte[] GetEmbeddedResource(string resourceName, Assembly assembly)
-        {
-            if (string.IsNullOrWhiteSpace(resourceName))
-            {
-                throw new ArgumentNullException("resourceName");
-            }
-            if (assembly == null)
-            {
-                throw new ArgumentNullException("assembly");
-            }
-            var name = $"{ assembly.GetName().Name}.{resourceName.Replace(" ", "_").Replace("\\", ".").Replace("/", ".")}";
-            using var stream = assembly.GetManifestResourceStream(name);
-            if (stream == null)
-            {
-                throw new ArgumentNullException("resourceName");
-            }
-            var bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-            return bytes;
-        }
 
         /// <summary>
         /// Gets the public key.

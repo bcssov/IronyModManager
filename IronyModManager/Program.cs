@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -129,16 +129,18 @@ namespace IronyModManager
 
                 var title = Constants.UnhandledErrorTitle;
                 var message = Constants.UnhandledErrorMessage;
+                var header = Constants.UnhandledErrorHeader;
                 try
                 {
                     var locManager = DIResolver.Get<ILocalizationManager>();
                     title = locManager.GetResource(LocalizationResources.FatalError.Title);
                     message = locManager.GetResource(LocalizationResources.FatalError.Message);
+                    header = locManager.GetResource(LocalizationResources.FatalError.Header);
                 }
                 catch
                 {
                 }
-                var messageBox = MessageBoxes.GetFatalErrorWindow(title, message);
+                var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
                 // We're deadlocking the thread, so kill the task after x amount of seconds.
                 messageBox.Show().Wait(TimeSpan.FromSeconds(10));
             }

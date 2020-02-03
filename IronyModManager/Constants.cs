@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -29,6 +29,11 @@ namespace IronyModManager
         public const string LocalizationsPath = "Localization";
 
         /// <summary>
+        /// The unhandled error header
+        /// </summary>
+        public const string UnhandledErrorHeader = "Fatal Error";
+
+        /// <summary>
         /// The error message
         /// </summary>
         public const string UnhandledErrorMessage = "Unhandled error occurred. App will close automatically.";
@@ -39,5 +44,29 @@ namespace IronyModManager
         public const string UnhandledErrorTitle = "Error";
 
         #endregion Fields
+
+        #region Classes
+
+        /// <summary>
+        /// Class Resources.
+        /// </summary>
+        public class Resources
+        {
+            #region Fields
+
+            /// <summary>
+            /// The logo icon
+            /// </summary>
+            public const string LogoIco = "Assets\\avalonia-logo.ico";
+
+            /// <summary>
+            /// The logo PNG
+            /// </summary>
+            public const string LogoPng = "Assets\\avalonia-logo.png";
+
+            #endregion Fields
+        }
+
+        #endregion Classes
     }
 }

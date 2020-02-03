@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using IronyModManager.DI.Readers;
 using IronyModManager.Shared;
 using McMaster.NETCore.Plugins;
 
@@ -149,13 +148,13 @@ namespace IronyModManager.DI.Assemblies
         private static void ValidateAssemblies(IEnumerable<Assembly> assemblies, AssemblyFinderParams finderParams)
         {
             var thisAssembly = Assembly.GetExecutingAssembly();
-            var thisAssemblyKey = ResourceReader.GetEmbeddedResource(finderParams.EmbededResourceKey, thisAssembly);
-            var thisStrongName = ResourceReader.GetStrongName(thisAssemblyKey, thisAssembly);
+            var thisAssemblyKey = Shared.ResourceReader.GetEmbeddedResource(finderParams.EmbededResourceKey, thisAssembly);
+            var thisStrongName = Readers.ResourceReader.GetStrongName(thisAssemblyKey, thisAssembly);
 
             foreach (var assembly in assemblies)
             {
-                var key = ResourceReader.GetPublicKey(assembly);
-                var strongName = ResourceReader.GetStrongName(key, assembly);
+                var key = Readers.ResourceReader.GetPublicKey(assembly);
+                var strongName = Readers.ResourceReader.GetStrongName(key, assembly);
                 if (!strongName.PublicKey.Equals(thisStrongName.PublicKey))
                 {
                     throw new InvalidOperationException($"Assembly {assembly.FullName} does not belong to {finderParams.Path}, application execution has been stopped due to security reasons.");

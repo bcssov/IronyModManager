@@ -4,7 +4,8 @@
     },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",
-        "Title": "Error"
+        "Title": "Error",
+        "Header": "Schwerwiegender Fehler"
     },
     "Languages": {
         "Name": "Sprache"
@@ -17,6 +18,7 @@
         "MaterialDeepPurple": "Material Hellgrün",
         "MaterialLightGreen": "Material Tiefpurpurn",
         "Restart_Title": "Muss neu gestartet werden",
+        "Restart_Header": "App muss neu gestartet werden",
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
     }
 }
