@@ -4,7 +4,8 @@
     },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
-        "Title": "Greška"
+        "Title": "Greška",
+        "Header": "Fatalna pogreška"
     },
     "Languages": {
         "Name": "Jezik"
@@ -17,6 +18,7 @@
         "MaterialLightGreen": "Material Svjetlo Zelena",
         "MaterialDeepPurple": "Material Ljubičasta",
         "Restart_Title": "Potrebno je ponovno pokretanje",
+        "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
     }
 }

@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -13,6 +13,8 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.IO;
+using Avalonia.Media.Imaging;
 using MessageBox.Avalonia.DTO;
 using MsgBox = MessageBox.Avalonia;
 
@@ -23,24 +25,36 @@ namespace IronyModManager
     /// </summary>
     public static class MessageBoxes
     {
+        #region Fields
+
+        /// <summary>
+        /// The icon
+        /// </summary>
+        private static Bitmap icon;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
         /// Gets the fatal error window.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
-        /// <returns>MsBoxCustomWindow.</returns>
-        public static MsgBox.BaseWindows.MsBoxCustomWindow GetFatalErrorWindow(string title, string message)
+        /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;System.String&gt;.</returns>
+        public static MsgBox.BaseWindows.IMsBoxWindow<string> GetFatalErrorWindow(string title, string header, string message)
         {
             var messageBox = MsgBox.MessageBoxManager.GetMessageBoxCustomWindow(new MessageBoxCustomParams
             {
                 CanResize = false,
                 ShowInCenter = true,
                 ContentTitle = title,
-                ContentHeader = title,
+                ContentHeader = header,
                 ContentMessage = message,
-                Icon = MsgBox.Enums.Icon.Error
+                Icon = MsgBox.Enums.Icon.Error,
+                WindowIcon = GetIcon(),
+                WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
             });
             return messageBox;
         }
@@ -49,13 +63,43 @@ namespace IronyModManager
         /// Gets the yes no window.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <param name="icon">The icon.</param>
         /// <returns>MessageBox.Avalonia.BaseWindows.MsBoxStandardWindow.</returns>
-        public static MsgBox.BaseWindows.MsBoxStandardWindow GetYesNoWindow(string title, string message, MsgBox.Enums.Icon icon)
+        public static MsgBox.BaseWindows.IMsBoxWindow<MsgBox.Enums.ButtonResult> GetYesNoWindow(string title, string header, string message, MsgBox.Enums.Icon icon)
         {
-            var msgBox = MsgBox.MessageBoxManager.GetMessageBoxStandardWindow(title, message, MsgBox.Enums.ButtonEnum.YesNo, icon);
+            // Can this messagebox not break something in an update?
+            var msgBox = MsgBox.MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams()
+            {
+                CanResize = false,
+                ShowInCenter = true,
+                ContentTitle = title,
+                ContentHeader = header,
+                ContentMessage = message,
+                Icon = icon,
+                ButtonDefinitions = MsgBox.Enums.ButtonEnum.YesNo,
+                WindowIcon = GetIcon(),
+                WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
+            });
             return msgBox;
+        }
+
+        /// <summary>
+        /// Gets the icon.
+        /// </summary>
+        /// <returns>Bitmap.</returns>
+        private static Bitmap GetIcon()
+        {
+            if (icon == null)
+            {
+                using (var ms = new MemoryStream(Shared.ResourceReader.GetEmbeddedResource(Constants.Resources.LogoIco)))
+                {
+                    // TODO: Check in a future package if this is is finally implemented? Why have a property in a parameter if it does nothing?
+                    icon = new Bitmap(ms);
+                }
+            }
+            return icon;
         }
 
         #endregion Methods

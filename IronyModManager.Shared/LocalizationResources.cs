@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-03-2020
 // ***********************************************************************
 // <copyright file="LocalizationResources.cs" company="Mario">
 //     Mario
@@ -51,6 +51,11 @@ namespace IronyModManager.Shared
             #region Fields
 
             /// <summary>
+            /// The header
+            /// </summary>
+            public const string Header = Prefix + "Header";
+
+            /// <summary>
             /// The message
             /// </summary>
             public const string Message = Prefix + "Message";
@@ -58,7 +63,7 @@ namespace IronyModManager.Shared
             /// <summary>
             /// The prefix
             /// </summary>
-            public const string Prefix = nameof(Prefix) + ".";
+            public const string Prefix = nameof(FatalError) + ".";
 
             /// <summary>
             /// The title
@@ -129,6 +134,11 @@ namespace IronyModManager.Shared
             /// The prefix
             /// </summary>
             public const string Prefix = nameof(Themes) + ".";
+
+            /// <summary>
+            /// The restart header
+            /// </summary>
+            public const string Restart_Header = Prefix + "Restart_Header";
 
             /// <summary>
             /// The restart message
