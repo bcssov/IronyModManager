@@ -4,7 +4,7 @@
 // Created          : 02-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
@@ -25,8 +26,6 @@ namespace LocalizationResourceGenerator
     {
 #if DEBUG
 
-        #region Fields
-
         /// <summary>
         /// The resource path
         /// </summary>
@@ -37,17 +36,42 @@ namespace LocalizationResourceGenerator
         /// </summary>
         private const string LocalizationResourcePath = "..\\..\\..\\..\\..\\..\\..\\IronyModManager\\Localization\\en.json";
 
-        #endregion Fields
-
 #else
 
+        #region Fields
+
+        /// <summary>
+        /// The localization resource out path
+        /// </summary>
         private const string LocalizationResourceOutPath = "..\\..\\IronyModManager.Shared\\LocalizationResources.cs";
 
+        /// <summary>
+        /// The localization resource path
+        /// </summary>
         private const string LocalizationResourcePath = "..\\..\\IronyModManager\\Localization\\en.json";
+
+        #endregion Fields
 
 #endif
 
         #region Methods
+
+        /// <summary>
+        /// Formats the indentation.
+        /// </summary>
+        /// <param name="level">The level.</param>
+        /// <param name="content">The content.</param>
+        /// <returns>System.String.</returns>
+        private static string FormatIndentation(short level, string content)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < level * 4; i++)
+            {
+                sb.Append(" ");
+            }
+            sb.Append(content);
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Defines the entry point of the application.
@@ -67,18 +91,21 @@ namespace LocalizationResourceGenerator
             sb.AppendLine(FormatIndentation(indent, "public static class LocalizationResources"));
             sb.AppendLine(FormatIndentation(indent, "{"));
 
+            var exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            Directory.SetCurrentDirectory(exePath);
+
             var obj = JObject.Parse(File.ReadAllText(LocalizationResourcePath));
 
             static void ParseLocalization(StringBuilder sb, short indent, JProperty property)
             {
                 indent++;
                 sb.AppendLine(FormatIndentation(indent, $"public static class {property.Name}"));
-                sb.AppendLine(FormatIndentation(indent, "{"));                
+                sb.AppendLine(FormatIndentation(indent, "{"));
 
                 if (property.Value.Type == JTokenType.Object)
                 {
                     short propIndent = (short)(indent + 1);
-                    sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = nameof({property.Name}) + \".\";"));                    
+                    sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = nameof({property.Name}) + \".\";"));
                     foreach (var item in property.Value.Children<JProperty>())
                     {
                         ParseProperty(sb, propIndent, item);
@@ -96,21 +123,10 @@ namespace LocalizationResourceGenerator
             foreach (var o in obj.Children<JProperty>())
             {
                 ParseLocalization(sb, indent, o);
-            }            
+            }
             sb.AppendLine(FormatIndentation(indent, "}"));
             sb.AppendLine("}");
             File.WriteAllText(LocalizationResourceOutPath, sb.ToString());
-        }
-
-        private static string FormatIndentation(short level, string content)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < level * 4; i++)
-            {
-                sb.Append(" ");
-            }
-            sb.Append(content);
-            return sb.ToString();
         }
 
         #endregion Methods

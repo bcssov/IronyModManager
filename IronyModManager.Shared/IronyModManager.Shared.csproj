@@ -32,4 +32,8 @@
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(SolutionDir)Tools\LocalizationResourceGenerator\LocalizationResourceGenerator.exe" />
+  </Target>
+
 </Project>
