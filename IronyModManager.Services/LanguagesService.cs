@@ -131,11 +131,11 @@ namespace IronyModManager.Services
             }
             var preference = preferencesService.Get();
 
-            preferencesService.Save(mapper.Map(language, preference));
+            var result = preferencesService.Save(mapper.Map(language, preference));
 
             CurrentLocale.SetCurrent(language.Abrv);
 
-            return true;
+            return result;
         }
 
         /// <summary>

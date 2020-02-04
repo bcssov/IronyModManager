@@ -184,12 +184,13 @@ namespace IronyModManager.Services.Tests
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
             var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            languageService.Save(new Language()
+            var result = languageService.Save(new Language()
             {
                 Abrv = "de",
                 IsSelected = true,
                 Name = "German"
             });
+            result.Should().Be(true);
             CurrentLocale.CultureName.Should().Be("de");
         }
 

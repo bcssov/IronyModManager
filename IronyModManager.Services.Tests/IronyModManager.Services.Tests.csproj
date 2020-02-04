@@ -46,4 +46,10 @@
     <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
