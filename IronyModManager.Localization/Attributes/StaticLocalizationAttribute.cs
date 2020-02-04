@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="StaticLocalizationAttribute.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Localization.Attributes
 {
@@ -23,6 +24,7 @@ namespace IronyModManager.Localization.Attributes
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCoverage("Attributes don't need testing.")]
     public class StaticLocalizationAttribute : LocalizationAttributeBase
     {
         #region Fields
@@ -37,7 +39,7 @@ namespace IronyModManager.Localization.Attributes
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StaticLocalizationAttribute"/> class.
+        /// Initializes a new instance of the <see cref="StaticLocalizationAttribute" /> class.
         /// </summary>
         /// <param name="key">The key.</param>
         public StaticLocalizationAttribute(string key)

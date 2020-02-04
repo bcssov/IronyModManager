@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="CurrentLocale.cs" company="Mario">
 //     Mario
@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using System;
 using System.Globalization;
 using System.Threading;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
     /// Class CurrentLocale.
     /// </summary>
+    [ExcludeFromCoverage("Locale shouldn't be unit tested.")]
     public static class CurrentLocale
     {
         #region Properties

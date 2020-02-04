@@ -47,9 +47,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Program", "Program", "{7BF4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Model.Tests", "IronyModManager.Model.Tests\IronyModManager.Model.Tests.csproj", "{5818A566-2828-4C50-BBDB-35C769A04468}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Services.Tests", "IronyModManager.Services.Tests\IronyModManager.Services.Tests.csproj", "{F5E8A1D8-DC0A-4129-8A5F-5886F240D009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Services.Tests", "IronyModManager.Services.Tests\IronyModManager.Services.Tests.csproj", "{F5E8A1D8-DC0A-4129-8A5F-5886F240D009}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Tests.Common", "IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj", "{EB84B3E3-EFF9-4896-B138-DC899F9AB293}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Localization.Tests", "IronyModManager.Localization.Tests\IronyModManager.Localization.Tests.csproj", "{EFBEFDBD-AF02-4141-892D-6A4E52CA1272}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{EB84B3E3-EFF9-4896-B138-DC899F9AB293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB84B3E3-EFF9-4896-B138-DC899F9AB293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB84B3E3-EFF9-4896-B138-DC899F9AB293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,6 +143,7 @@ Global
 		{5818A566-2828-4C50-BBDB-35C769A04468} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 		{F5E8A1D8-DC0A-4129-8A5F-5886F240D009} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 		{EB84B3E3-EFF9-4896-B138-DC899F9AB293} = {6B452FE9-6822-4900-9570-3307376D1CCF}
+		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1256133-6A57-4335-B3F9-4028F01166F2}

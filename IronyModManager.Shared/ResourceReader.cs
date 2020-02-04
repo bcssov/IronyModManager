@@ -22,7 +22,7 @@ namespace IronyModManager.Shared
     /// <summary>
     /// Class ResourceReader.
     /// </summary>
-    [ExcludeFromCoverage("Excluding resource reader due to static nature of the code.")]
+    [ExcludeFromCoverage("Excluding resource reader, this logic is tested at runtime.")]
     public static class ResourceReader
     {
         #region Fields
@@ -80,6 +80,9 @@ namespace IronyModManager.Shared
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="assembly">The assembly.</param>
         /// <returns>System.Byte[].</returns>
+        /// <exception cref="System.ArgumentNullException">resourceName</exception>
+        /// <exception cref="System.ArgumentNullException">assembly</exception>
+        /// <exception cref="System.ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">assembly</exception>
         /// <exception cref="ArgumentNullException">resourceName</exception>

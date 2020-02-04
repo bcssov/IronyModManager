@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="BaseLocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using IronyModManager.Shared;
 
 /// <summary>
 /// The ResourceProviders namespace.
@@ -27,6 +28,7 @@ namespace IronyModManager.Localization.ResourceProviders
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.ResourceProviders.ILocalizationResourceProvider" />
     /// <seealso cref="IronyModManager.Localization.ILocalizationResourceProvider" />
+    [ExcludeFromCoverage("IO operations should not be tested.")]
     public abstract class BaseLocalizationResourceProvider : ILocalizationResourceProvider
     {
         #region Properties
