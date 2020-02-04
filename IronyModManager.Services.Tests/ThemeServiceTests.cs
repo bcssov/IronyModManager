@@ -200,24 +200,29 @@ namespace IronyModManager.Services.Tests
                 Type = Models.Common.Enums.Theme.Light
             });
 
-
+            Exception exception = null;
             try
             {
                 service.SetSelected(themes, null);
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));
+                exception = ex;
             }
 
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
+            exception = null;
             try
             {
                 service.SetSelected(null, new Theme());
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));                
+                exception = ex;
             }
+
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
+            exception = null;
 
             try
             {
@@ -225,8 +230,10 @@ namespace IronyModManager.Services.Tests
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));                
+                exception = ex;
             }
+
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
         }
 
         /// <summary>

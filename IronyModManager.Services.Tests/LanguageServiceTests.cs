@@ -274,15 +274,21 @@ namespace IronyModManager.Services.Tests
                 Abrv = "de",
                 IsSelected = false
             });
+
+            Exception exception = null;
+
             try
             {
                 languageService.SetSelected(languages, null);
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));
-                CurrentLocale.CultureName.Should().Be("en");
+                exception = ex;
             }
+
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
+            CurrentLocale.CultureName.Should().Be("en");
+            exception = null;
 
             try
             {
@@ -294,9 +300,11 @@ namespace IronyModManager.Services.Tests
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));
-                CurrentLocale.CultureName.Should().Be("en");
+                exception = ex;
             }
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
+            CurrentLocale.CultureName.Should().Be("en");
+            exception = null;
 
             try
             {
@@ -308,9 +316,10 @@ namespace IronyModManager.Services.Tests
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(ArgumentNullException));
-                CurrentLocale.CultureName.Should().Be("en");
+                exception = ex;                
             }
+            exception.GetType().Should().Be(typeof(ArgumentNullException));
+            CurrentLocale.CultureName.Should().Be("en");
         }
 
         /// <summary>

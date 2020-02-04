@@ -4,7 +4,7 @@
 // Created          : 01-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-31-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="PreferencesServiceTests.cs" company="Mario">
 //     Mario
@@ -23,7 +23,7 @@ using IronyModManager.Storage.Common;
 using Moq;
 using Xunit;
 
-namespace IronyModManager.Service.Tests
+namespace IronyModManager.Services.Tests
 {
     /// <summary>
     /// Class PreferencesServiceTests.
