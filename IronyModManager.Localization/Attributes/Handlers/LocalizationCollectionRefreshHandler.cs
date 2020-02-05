@@ -4,7 +4,7 @@
 // Created          : 01-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-05-2020
 // ***********************************************************************
 // <copyright file="LocalizationCollectionRefreshHandler.cs" company="Mario">
 //     Mario
@@ -55,10 +55,12 @@ namespace IronyModManager.Localization.Attributes.Handlers
                             if (prop.CanWrite)
                             {
                                 var oldVal = prop.GetValue(item, null);
-                                ((ILocalizableModel)args.Invocation.Proxy).OnPropertyChanging(prop.Name);
+                                item.OnPropertyChanging(prop.Name);
                                 prop.SetValue(item, null);
-                                ((ILocalizableModel)args.Invocation.Proxy).OnPropertyChanged(prop.Name);
+                                item.OnPropertyChanged(prop.Name);
+                                item.OnPropertyChanging(prop.Name);
                                 prop.SetValue(item, oldVal);
+                                item.OnPropertyChanged(prop.Name);
                             }
                         }
                     }
