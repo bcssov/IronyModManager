@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="LocalizationInterceptor.cs" company="Mario">
 //     Mario
@@ -166,9 +166,9 @@ namespace IronyModManager.Localization
             {
                 var locAttr = (LocalizationAttributeBase)attr;
                 var args = new AttributeHandlersArgs(locAttr, invocation, prop, invocation.ReturnValue);
-                if (attributeHandlers.Any(p => p.CanProcess(args)))
+                var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(args));
+                if (handler != null)
                 {
-                    var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(args));
                     if (handler.HasData(args))
                     {
                         var data = handler.GetData(args);
