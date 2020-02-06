@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -24,7 +24,7 @@ namespace IronyModManager.Localization
     /// Implements the <see cref="IronyModManager.Localization.ILocalizationManager" />
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.ILocalizationManager" />
-    internal class LocalizationManager : ILocalizationManager
+    public class LocalizationManager : ILocalizationManager
     {
         #region Fields
 
@@ -67,11 +67,11 @@ namespace IronyModManager.Localization
         /// <returns>System.String.</returns>
         public virtual string GetResource(string key)
         {
-            var resource = TryGetCachedResource(key);
+            var resource = TryGetCachedResource(CurrentLocale.CultureName, key);
             if (resource == null)
             {
                 CacheLocalization(CurrentLocale.CultureName);
-                resource = TryGetCachedResource(key);
+                resource = TryGetCachedResource(CurrentLocale.CultureName, key);
             }
 
             return resource;
@@ -81,18 +81,22 @@ namespace IronyModManager.Localization
         /// Caches the localization.
         /// </summary>
         /// <param name="locale">The locale.</param>
-        private void CacheLocalization(string locale)
+        protected virtual void CacheLocalization(string locale)
         {
             var resource = new JObject();
             foreach (var provider in ResourceProviders)
             {
-                var content = JObject.Parse(provider.ReadResource(locale));
-                resource.Merge(content, new JsonMergeSettings()
+                var content = provider.ReadResource(locale);
+                if (!string.IsNullOrWhiteSpace(content))
                 {
-                    MergeArrayHandling = MergeArrayHandling.Replace,
-                    MergeNullValueHandling = MergeNullValueHandling.Merge,
-                    PropertyNameComparison = StringComparison.OrdinalIgnoreCase
-                });
+                    var obj = JObject.Parse(content);
+                    resource.Merge(obj, new JsonMergeSettings()
+                    {
+                        MergeArrayHandling = MergeArrayHandling.Replace,
+                        MergeNullValueHandling = MergeNullValueHandling.Merge,
+                        PropertyNameComparison = StringComparison.OrdinalIgnoreCase
+                    });
+                }
             }
             cache.TryAdd(locale, resource);
         }
@@ -100,11 +104,12 @@ namespace IronyModManager.Localization
         /// <summary>
         /// Gets the cached resource.
         /// </summary>
+        /// <param name="locale">The locale.</param>
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        private string GetCachedResource(string key)
+        protected virtual string GetCachedResource(string locale, string key)
         {
-            if (cache.TryGetValue(CurrentLocale.CultureName, out var value))
+            if (cache.TryGetValue(locale, out var value))
             {
                 var token = value.SelectToken(key);
                 if (token != null)
@@ -122,15 +127,21 @@ namespace IronyModManager.Localization
         /// <summary>
         /// Tries the get cached resource.
         /// </summary>
+        /// <param name="locale">The locale.</param>
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        private string TryGetCachedResource(string key)
+        protected virtual string TryGetCachedResource(string locale, string key)
         {
-            var cached = GetCachedResource(key);
+            var cached = GetCachedResource(locale, key);
             if (cached == null && CurrentLocale.CurrentCulture.TwoLetterISOLanguageName != CurrentLocale.CultureName)
             {
-                // fallback to iso language
-                cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName);
+                // fallback to iso language         
+                cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName, key);
+                if (cached == null)
+                {
+                    CacheLocalization(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName);
+                    cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName, key);
+                }
             }
             return cached;
         }
