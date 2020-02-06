@@ -33,6 +33,11 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         private static readonly ConcurrentDictionary<string, Assembly> assemblyCache = new ConcurrentDictionary<string, Assembly>();
 
+        /// <summary>
+        /// The type cache
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, Type> typeCache = new ConcurrentDictionary<string, Type>();
+
         #endregion Fields
 
         #region Methods
@@ -44,6 +49,10 @@ namespace IronyModManager.DI.Assemblies
         /// <returns>Type.</returns>
         public static Type FindType(string name)
         {
+            if (typeCache.TryGetValue(name, out var value))
+            {
+                return value;
+            }
             var type = Type.GetType(name);
             if (type == null)
             {
@@ -52,7 +61,7 @@ namespace IronyModManager.DI.Assemblies
                     type = item.GetType(name);
                     if (type != null)
                     {
-                        return type;
+                        break;
                     }
                 }
                 foreach (var item in AssemblyLoadContext.All.SelectMany(s => s.Assemblies))
@@ -60,9 +69,13 @@ namespace IronyModManager.DI.Assemblies
                     type = item.GetType(name);
                     if (type != null)
                     {
-                        return type;
+                        break;
                     }
                 }
+            }
+            if (type != null)
+            {
+                typeCache.TryAdd(name, type);
             }
             return type;
         }
