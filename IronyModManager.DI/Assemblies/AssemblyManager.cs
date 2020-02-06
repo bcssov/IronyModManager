@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="AssemblyManager.cs" company="Mario">
 //     Mario
@@ -24,7 +24,7 @@ namespace IronyModManager.DI.Assemblies
     /// <summary>
     /// Class AssemblyManager.
     /// </summary>
-    internal static class AssemblyManager
+    public static class AssemblyManager
     {
         #region Fields
 
@@ -38,11 +38,41 @@ namespace IronyModManager.DI.Assemblies
         #region Methods
 
         /// <summary>
+        /// Finds the type.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>Type.</returns>
+        public static Type FindType(string name)
+        {
+            var type = Type.GetType(name);
+            if (type == null)
+            {
+                foreach (var item in AssemblyLoadContext.Default.Assemblies)
+                {
+                    type = item.GetType(name);
+                    if (type != null)
+                    {
+                        return type;
+                    }
+                }
+                foreach (var item in AssemblyLoadContext.All.SelectMany(s => s.Assemblies))
+                {
+                    type = item.GetType(name);
+                    if (type != null)
+                    {
+                        return type;
+                    }
+                }
+            }
+            return type;
+        }
+
+        /// <summary>
         /// Gets the assembly.
         /// </summary>
         /// <param name="assemblyName">Name of the assembly.</param>
         /// <returns>Assembly.</returns>
-        public static Assembly GetAssembly(AssemblyName assemblyName)
+        internal static Assembly GetAssembly(AssemblyName assemblyName)
         {
             assemblyCache.TryGetValue(assemblyName.FullName, out var assembly);
             if (assembly == null)
@@ -101,7 +131,7 @@ namespace IronyModManager.DI.Assemblies
         /// <summary>
         /// Registers the handlers.
         /// </summary>
-        public static void RegisterHandlers()
+        internal static void RegisterHandlers()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
