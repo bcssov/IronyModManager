@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-13-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Logging;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Log
 {
@@ -24,6 +25,7 @@ namespace IronyModManager.Log
     /// </summary>
     /// <seealso cref="IronyModManager.Log.Logger" />
     /// <seealso cref="Avalonia.Logging.ILogSink" />
+    [ExcludeFromCoverage("Exclude logger.")]
     public class AvaloniaLogger : Logger, ILogSink
     {
         #region Methods

@@ -25,6 +25,10 @@
                 <ModulePath>.*di.*</ModulePath>
                 <!-- Barely managed to get it working -->
                 <ModulePath>.*xunit.*</ModulePath>
+                <ModulePath>.*dynamicdata.*</ModulePath>
+                <ModulePath>.*splat.*</ModulePath>
+                <ModulePath>.*reactiveui.*</ModulePath>
+                <ModulePath>.*system.*</ModulePath>
                 <ModulePath>.*\.tests\..*</ModulePath>
               </Exclude>
             </ModulePaths>

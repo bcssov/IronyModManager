@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="ThemeChangedEventArgs.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Common.Events
 {
@@ -22,6 +23,7 @@ namespace IronyModManager.Common.Events
     /// Implements the <see cref="System.EventArgs" />
     /// </summary>
     /// <seealso cref="System.EventArgs" />
+    [ExcludeFromCoverage("Excluding external message bus.")]
     public class ThemeChangedEventArgs : EventArgs
     {
         #region Properties

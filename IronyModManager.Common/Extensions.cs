@@ -18,12 +18,14 @@ using System.Linq;
 using System.Threading;
 using Avalonia.Collections;
 using DynamicData;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Common
 {
     /// <summary>
     /// Class Extensions.
     /// </summary>
+    [ExcludeFromCoverage("Excluding extension methods.")] 
     public static class Extensions
     {
         #region Methods
