@@ -21,6 +21,7 @@ namespace IronyModManager.Shared
     /// Implements the <see cref="IronyModManager.Shared.IModule" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.IModule" />
+    [ExcludeFromCoverage("Module info should not be tested.")]
     public class Module : IModule
     {
         #region Properties

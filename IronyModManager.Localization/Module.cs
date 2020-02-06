@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="Module.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ namespace IronyModManager.Localization
     /// Implements the <see cref="IronyModManager.Shared.IModule" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.IModule" />
+    [ExcludeFromCoverage("Module info should not be tested.")]
     public class Module : IModule
     {
         #region Properties

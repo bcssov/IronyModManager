@@ -25,6 +25,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="IronyModManager.Shared.BaseMappingProfile" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.BaseMappingProfile" />
+    [ExcludeFromCoverage("Mapping profile shouldn't be tested.")]
     public class MappingProfile : BaseMappingProfile
     {
         #region Constructors
