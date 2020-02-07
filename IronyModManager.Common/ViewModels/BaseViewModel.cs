@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
+using IronyModManager.Shared;
 using ReactiveUI;
 
 namespace IronyModManager.Common.ViewModels
@@ -29,6 +30,7 @@ namespace IronyModManager.Common.ViewModels
     /// <seealso cref="ReactiveUI.ReactiveObject" />
     /// <seealso cref="IronyModManager.Common.ViewModels.IViewModel" />
     /// <seealso cref="ReactiveUI.IActivatableViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public abstract class BaseViewModel : ReactiveObject, IViewModel, IActivatableViewModel
     {
         #region Constructors
