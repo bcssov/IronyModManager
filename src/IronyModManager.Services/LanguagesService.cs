@@ -149,7 +149,7 @@ namespace IronyModManager.Services
         {
             if (languages == null || languages.Count() == 0 || selectedLanguage == null)
             {
-                throw new ArgumentNullException("languages or selectedLanguage");
+                throw new ArgumentNullException("languages or selectedLanguage.");
             }
 
             var currentLanguage = GetSelected();

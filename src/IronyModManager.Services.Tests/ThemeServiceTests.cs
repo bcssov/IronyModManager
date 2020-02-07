@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="ThemeServiceTests.cs" company="Mario">
 //     Mario
@@ -20,6 +20,8 @@ using FluentAssertions;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Storage;
+using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
@@ -35,17 +37,27 @@ namespace IronyModManager.Services.Tests
         /// Setups the mock case.
         /// </summary>
         /// <param name="preferencesService">The preferences service.</param>
-        private void SetupMockCase(Mock<IPreferencesService> preferencesService)
+        /// <param name="storageProvider">The storage provider.</param>
+        private void SetupMockCase(Mock<IPreferencesService> preferencesService, Mock<IStorageProvider> storageProvider)
         {
-            DISetup.SetupContainer();            
+            DISetup.SetupContainer();
             preferencesService.Setup(p => p.Get()).Returns(() =>
             {
                 return new Preferences()
                 {
-                    Theme = Models.Common.Enums.Theme.MaterialDeepPurple
+                    Theme = "MaterialDeepPurple"
                 };
             });
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns(true);
+            var themes = new List<IThemeType>
+            {
+                new ThemeType() { Name = "Dark", Styles = new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseDark.xaml" }, IsDefault = false },
+                new ThemeType() { Name = "MaterialDark", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.Dark.xaml" }, IsDefault = false },
+                new ThemeType() { Name = "MaterialLightGreen", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml" }, IsDefault = false },
+                new ThemeType() { Name = "MaterialDeepPurple", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml" }, IsDefault = false },
+                new ThemeType() { Name = "Light", Styles = new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" }, IsDefault = true }
+            };
+            storageProvider.Setup(p => p.GetThemes()).Returns(themes);
         }
 
         /// <summary>
@@ -53,11 +65,12 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_contain_all_themes()
-        {            
+        {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.Count().Should().Be(5);
             result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(5);
@@ -69,10 +82,11 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_contain_all_styles()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.SelectMany(s => s.StyleIncludes).Count().Should().Be(10);
         }
@@ -83,13 +97,14 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_contain_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
-            result.FirstOrDefault(p => p.IsSelected).Type.Should().Be(Models.Common.Enums.Theme.MaterialDeepPurple);
+            result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("MaterialDeepPurple");
         }
 
         /// <summary>
@@ -98,13 +113,14 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_return_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetSelected();
             result.Should().NotBeNull();
-            result.Type.Should().Be(Models.Common.Enums.Theme.MaterialDeepPurple);
+            result.Type.Should().Be("MaterialDeepPurple");
         }
 
         /// <summary>
@@ -113,14 +129,15 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_save_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Save(new Theme()
             {
                 IsSelected = true,
-                Type = Models.Common.Enums.Theme.MaterialDark
+                Type = "MaterialDark"
             });
             result.Should().Be(true);
         }
@@ -131,22 +148,23 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_throw_exception_when_saving_non_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             try
             {
                 service.Save(new Theme()
                 {
                     IsSelected = false,
-                    Type = Models.Common.Enums.Theme.MaterialDark
+                    Type = "MaterialDark"
                 });
             }
             catch (Exception ex)
             {
                 ex.GetType().Should().Be(typeof(InvalidOperationException));
-            }            
+            }
         }
 
         /// <summary>
@@ -155,25 +173,28 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_set_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
-            var themes = new List<ITheme>();
-            themes.Add(new Theme()
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var themes = new List<ITheme>
             {
-                IsSelected = true,
-                Type = Models.Common.Enums.Theme.Dark
-            });
-            themes.Add(new Theme()
-            {
-                IsSelected = false,
-                Type = Models.Common.Enums.Theme.Light
-            });
+                new Theme()
+                {
+                    IsSelected = true,
+                    Type = "Dark"
+                },
+                new Theme()
+                {
+                    IsSelected = false,
+                    Type = "Light"
+                }
+            };
             var result = service.SetSelected(themes, new Theme()
             {
                 IsSelected = true,
-                Type = Models.Common.Enums.Theme.Light
+                Type = "Light"
             });
             result.Should().Be(true);
         }
@@ -184,21 +205,24 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_throw_validation_errors_when_setting_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
-            var themes = new List<ITheme>();
-            themes.Add(new Theme()
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var themes = new List<ITheme>
             {
-                IsSelected = true,
-                Type = Models.Common.Enums.Theme.Dark
-            });
-            themes.Add(new Theme()
-            {
-                IsSelected = false,
-                Type = Models.Common.Enums.Theme.Light
-            });
+                new Theme()
+                {
+                    IsSelected = true,
+                    Type = "Dark"
+                },
+                new Theme()
+                {
+                    IsSelected = false,
+                    Type = "Light"
+                }
+            };
 
             Exception exception = null;
             try
@@ -242,25 +266,28 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_not_set_selected_theme()
         {
+            var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService);
+            SetupMockCase(preferencesService, storageProvider);
 
-            var service = new ThemeService(preferencesService.Object, new Mock<IMapper>().Object);
-            var themes = new List<ITheme>();
-            themes.Add(new Theme()
+            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var themes = new List<ITheme>
             {
-                IsSelected = true,
-                Type = Models.Common.Enums.Theme.MaterialDeepPurple
-            });
-            themes.Add(new Theme()
-            {
-                IsSelected = false,
-                Type = Models.Common.Enums.Theme.Light
-            });
+                new Theme()
+                {
+                    IsSelected = true,
+                    Type = "MaterialDeepPurple"
+                },
+                new Theme()
+                {
+                    IsSelected = false,
+                    Type = "Light"
+                }
+            };
             var result = service.SetSelected(themes, new Theme()
             {
                 IsSelected = true,
-                Type = Models.Common.Enums.Theme.MaterialDeepPurple
+                Type = "MaterialDeepPurple"
             });
             result.Should().Be(false);
         }

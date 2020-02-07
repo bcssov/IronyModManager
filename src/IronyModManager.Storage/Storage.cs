@@ -4,15 +4,17 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Storage.Common;
@@ -82,6 +84,18 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the themes.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
+        public IEnumerable<IThemeType> GetThemes()
+        {
+            lock (dbLock)
+            {
+                return Database.Themes;
+            }
+        }
+
+        /// <summary>
         /// Gets the state of the window.
         /// </summary>
         /// <returns>IWindowState.</returns>
@@ -91,6 +105,32 @@ namespace IronyModManager.Storage
             {
                 var result = Mapper.Map<IWindowState, IWindowState>(Database.WindowState);
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// Registers the theme.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="styles">The styles.</param>
+        /// <param name="isDefault">if set to <c>true</c> [is default].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
+        public bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
+        {
+            lock (dbLock)
+            {
+                if (isDefault && Database.Themes.Any(s => s.IsDefault))
+                {
+                    throw new InvalidOperationException("There is already a default theme registered.");
+                }
+                Database.Themes.Add(new ThemeType()
+                {
+                    IsDefault = isDefault,
+                    Name = name,
+                    Styles = styles
+                });
+                return true;
             }
         }
 

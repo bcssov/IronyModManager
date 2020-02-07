@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
@@ -33,10 +34,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ThemeService" /> class.
         /// </summary>
+        /// <param name="storageProvider">The storage provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="mapper">The mapper.</param>
-        public ThemeService(IPreferencesService preferencesService, IMapper mapper)
+        public ThemeService(IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper)
         {
+            StorageProvider = storageProvider;
             PreferencesService = preferencesService;
             Mapper = mapper;
         }
@@ -57,6 +60,12 @@ namespace IronyModManager.Services
         /// <value>The preferences service.</value>
         protected IPreferencesService PreferencesService { get; private set; }
 
+        /// <summary>
+        /// Gets the storage provider.
+        /// </summary>
+        /// <value>The storage provider.</value>
+        protected IStorageProvider StorageProvider { get; private set; }
+
         #endregion Properties
 
         #region Methods
@@ -69,14 +78,16 @@ namespace IronyModManager.Services
         {
             var preferences = PreferencesService.Get();
 
-            var themeVals = Enum.GetValues(typeof(Models.Common.Enums.Theme)).Cast<Models.Common.Enums.Theme>();
+            var registeredThemes = StorageProvider.GetThemes();
             var themes = new List<ITheme>();
 
-            foreach (var item in themeVals)
+            foreach (var item in registeredThemes)
             {
                 var theme = InitModel(item, preferences.Theme);
-                themes.Add(theme);           
+                themes.Add(theme);
             }
+
+            EnsureThemeIsSelected(themes, registeredThemes);
 
             return themes;
         }
@@ -113,12 +124,12 @@ namespace IronyModManager.Services
         /// <param name="themes">The themes.</param>
         /// <param name="selectedTheme">The selected theme.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">themes or selectedTheme</exception>
+        /// <exception cref="ArgumentNullException">themes or selectedTheme.</exception>
         public bool SetSelected(IEnumerable<ITheme> themes, ITheme selectedTheme)
         {
             if (themes == null || themes.Count() == 0 || selectedTheme == null)
             {
-                throw new ArgumentNullException("themes or selectedTheme");
+                throw new ArgumentNullException("themes or selectedTheme.");
             }
             var currentlySelected = GetSelected();
             if (currentlySelected.Type == selectedTheme.Type)
@@ -139,58 +150,32 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Initializes the model.
+        /// Ensures the theme is selected.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="selectedType">Type of the selected.</param>
-        /// <returns>ITheme.</returns>
-        protected virtual ITheme InitModel(Models.Common.Enums.Theme type, Models.Common.Enums.Theme selectedType)
+        /// <param name="themes">The themes.</param>
+        /// <param name="themeTypes">The theme types.</param>
+        protected virtual void EnsureThemeIsSelected(IEnumerable<ITheme> themes, IEnumerable<IThemeType> themeTypes)
         {
-            var theme = DIResolver.Get<ITheme>();
-            theme.Type = type;
-            theme.IsSelected = type == selectedType;
-            theme.StyleIncludes = InitStyles(type);
-            theme.Name = type.ToString();
-            return theme;
+            if (themes.Count() > 0 && !themes.Any(p => p.IsSelected))
+            {
+                themes.FirstOrDefault(p => p.Type == themeTypes.FirstOrDefault(s => s.IsDefault).Name).IsSelected = true;
+            }
         }
 
         /// <summary>
-        /// Initializes the styles.
+        /// Initializes the model.
         /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        protected virtual IEnumerable<string> InitStyles(Models.Common.Enums.Theme type)
+        /// <param name="themeItem">The theme item.</param>
+        /// <param name="selectedType">Type of the selected.</param>
+        /// <returns>ITheme.</returns>
+        protected virtual ITheme InitModel(IThemeType themeItem, string selectedType)
         {
-            var styles = new List<string>();
-            switch (type)
-            {
-                case Models.Common.Enums.Theme.Dark:
-                    styles.Add("avares://Avalonia.Themes.Default/DefaultTheme.xaml");
-                    styles.Add("avares://Avalonia.Themes.Default/Accents/BaseDark.xaml");
-
-                    break;
-
-                case Models.Common.Enums.Theme.MaterialDark:
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.Templates.xaml");
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.Dark.xaml");
-                    break;
-
-                case Models.Common.Enums.Theme.MaterialLightGreen:
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.Templates.xaml");
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml");
-                    break;
-
-                case Models.Common.Enums.Theme.MaterialDeepPurple:
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.Templates.xaml");
-                    styles.Add("avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml");
-                    break;
-
-                default:
-                    styles.Add("avares://Avalonia.Themes.Default/DefaultTheme.xaml");
-                    styles.Add("avares://Avalonia.Themes.Default/Accents/BaseLight.xaml");
-                    break;
-            }
-            return styles;
+            var theme = DIResolver.Get<ITheme>();
+            theme.Type = themeItem.Name;
+            theme.IsSelected = themeItem.Name == selectedType;
+            theme.StyleIncludes = themeItem.Styles;
+            theme.Name = themeItem.Name;
+            return theme;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The preferences.</value>
         IPreferences Preferences { get; set; }
+
+        /// <summary>
+        /// Gets or sets the themes.
+        /// </summary>
+        /// <value>The themes.</value>
+        IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.

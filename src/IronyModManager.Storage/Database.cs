@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -28,6 +28,18 @@ namespace IronyModManager.Storage
     /// <seealso cref="IronyModManager.Storage.Common.IDatabase" />
     public class Database : IDatabase
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Database" /> class.
+        /// </summary>
+        public Database()
+        {
+            Themes = new List<IThemeType>();
+        }
+
+        #endregion Constructors
+
         #region Events
 
         /// <summary>
@@ -50,6 +62,12 @@ namespace IronyModManager.Storage
         /// <value>The preferences.</value>
         [Trackable]
         public virtual IPreferences Preferences { get; set; } = DIResolver.Get<IPreferences>();
+
+        /// <summary>
+        /// Gets or sets the themes.
+        /// </summary>
+        /// <value>The themes.</value>
+        public IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.
