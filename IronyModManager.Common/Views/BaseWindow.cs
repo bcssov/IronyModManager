@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Shared;
 using ReactiveUI;
 
 namespace IronyModManager.Common.Views
@@ -26,6 +27,7 @@ namespace IronyModManager.Common.Views
     /// </summary>
     /// <typeparam name="TViewModel">The type of the t view model.</typeparam>
     /// <seealso cref="Avalonia.ReactiveUI.ReactiveWindow{TViewModel}" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public abstract class BaseWindow<TViewModel> : ReactiveWindow<TViewModel> where TViewModel : BaseViewModel
     {
         #region Constructors

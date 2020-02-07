@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -39,6 +39,7 @@ namespace IronyModManager
     /// Implements the <see cref="Avalonia.Application" />
     /// </summary>
     /// <seealso cref="Avalonia.Application" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class App : Application
     {
         #region Methods

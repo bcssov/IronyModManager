@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.ViewModels;
 
 namespace IronyModManager.Views
@@ -28,6 +29,7 @@ namespace IronyModManager.Views
     /// Implements the <see cref="IronyModManager.Common.Views.BaseWindow{IronyModManager.ViewModels.MainWindowViewModel}" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.Views.BaseWindow{IronyModManager.ViewModels.MainWindowViewModel}" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainWindow : BaseWindow<MainWindowViewModel>
     {
         #region Constructors

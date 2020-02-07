@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.ViewModels
@@ -25,6 +26,7 @@ namespace IronyModManager.ViewModels
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainControlViewModel : BaseViewModel
     {
         #region Constructors

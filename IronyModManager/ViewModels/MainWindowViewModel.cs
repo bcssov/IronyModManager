@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using System.Linq;
+using IronyModManager.Shared;
 
 namespace IronyModManager.ViewModels
 {
@@ -24,6 +25,7 @@ namespace IronyModManager.ViewModels
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainWindowViewModel : BaseViewModel
     {
         #region Constructors
