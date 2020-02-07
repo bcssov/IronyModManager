@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -46,6 +46,7 @@ namespace IronyModManager
                         DIContainer.Verify();
                     }
 #endif
+                    Bootstrap.PostStartup();
                 }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any

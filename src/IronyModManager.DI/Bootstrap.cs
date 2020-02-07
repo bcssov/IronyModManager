@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -19,6 +19,7 @@ using System.Reflection;
 using IronyModManager.DI.Assemblies;
 using IronyModManager.DI.Extensions;
 using IronyModManager.DI.Mappers;
+using IronyModManager.DI.PostStartup;
 using SimpleInjector;
 
 namespace IronyModManager.DI
@@ -29,6 +30,20 @@ namespace IronyModManager.DI
     public static class Bootstrap
     {
         #region Methods
+
+        /// <summary>
+        /// Posts the startup.
+        /// </summary>
+        public static void PostStartup()
+        {
+            var assemblyFinderParams = new AssemblyFinderParams[] { GetAppParams(), GetPluginParams() };
+            var assemblies = new List<Assembly>() { };
+            foreach (var assemblyFinderParam in assemblyFinderParams)
+            {
+                assemblies.AddRange(AssemblyFinder.Find(assemblyFinderParam));
+            }
+            PostStartupFinder.FindAndExecute(assemblies);
+        }
 
         /// <summary>
         /// Initializes the specified plugins path and name.
@@ -65,13 +80,12 @@ namespace IronyModManager.DI
         }
 
         /// <summary>
-        /// Registers the assemblies.
+        /// Gets the application parameters.
         /// </summary>
-        private static void RegisterAssemblies()
+        /// <returns>AssemblyFinderParams.</returns>
+        private static AssemblyFinderParams GetAppParams()
         {
             var appPath = AppDomain.CurrentDomain.BaseDirectory;
-            var pluginsPath = Path.Combine(appPath, DIContainer.PluginPathAndName);
-
             var appParams = new AssemblyFinderParams()
             {
                 EmbededResourceKey = Constants.MainKey,
@@ -80,6 +94,16 @@ namespace IronyModManager.DI
                 SearchOption = SearchOption.TopDirectoryOnly,
                 SharedTypes = DIContainer.ModuleTypes
             };
+            return appParams;
+        }
+
+        /// <summary>
+        /// Gets the plugin parameters.
+        /// </summary>
+        /// <returns>AssemblyFinderParams.</returns>
+        private static AssemblyFinderParams GetPluginParams()
+        {
+            var pluginsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DIContainer.PluginPathAndName);
             var pluginParams = new AssemblyFinderParams()
             {
                 EmbededResourceKey = Constants.PluginKey,
@@ -88,6 +112,16 @@ namespace IronyModManager.DI
                 SearchOption = SearchOption.AllDirectories,
                 SharedTypes = DIContainer.PluginTypes
             };
+            return pluginParams;
+        }
+
+        /// <summary>
+        /// Registers the assemblies.
+        /// </summary>
+        private static void RegisterAssemblies()
+        {
+            var appParams = GetAppParams();
+            var pluginParams = GetPluginParams();
 
             AssemblyManager.RegisterHandlers();
 
