@@ -351,7 +351,7 @@ MigrationBackup/
 *.snk
 
 !publish/
-!/IronyModManager/Log
+!/src/IronyModManager/Log
 *.suppress
 /TODO.txt
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.deps.json
