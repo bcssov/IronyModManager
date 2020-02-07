@@ -109,7 +109,7 @@ namespace IronyModManager.Model.Tests
         [Fact]
         public void Theme_should_trigger_single_changed_event()
         {
-            RunGenericSinglePropTest<ITheme>(nameof(Theme.Type), Models.Common.Enums.Theme.Dark, true);
+            RunGenericSinglePropTest<ITheme>(nameof(Theme.Type), "Dark", true);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace IronyModManager.Model.Tests
         [Fact]
         public void Theme_should_trigger_single_changing_event()
         {
-            RunGenericSinglePropTest<ITheme>(nameof(Theme.Type), Models.Common.Enums.Theme.Dark, true);
+            RunGenericSinglePropTest<ITheme>(nameof(Theme.Type), "Dark", true);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace IronyModManager.Model.Tests
         [Fact]
         public void Theme_should_trigger_double_changed_event()
         {
-            RunGenericDoublePropTest<ITheme>(nameof(Theme.Type), Models.Common.Enums.Theme.Dark, nameof(Theme.IsSelected), true, true);
+            RunGenericDoublePropTest<ITheme>(nameof(Theme.Type), "Dark", nameof(Theme.IsSelected), true, true);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace IronyModManager.Model.Tests
         [Fact]
         public void Theme_should_trigger_double_changing_event()
         {
-            RunGenericDoublePropTest<ITheme>(nameof(Theme.Type), Models.Common.Enums.Theme.Dark, nameof(Theme.IsSelected), true, false);
+            RunGenericDoublePropTest<ITheme>(nameof(Theme.Type), "Dark", nameof(Theme.IsSelected), true, false);
         }
 
         /// <summary>

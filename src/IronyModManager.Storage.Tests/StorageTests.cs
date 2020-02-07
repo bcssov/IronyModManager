@@ -25,6 +25,7 @@ using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using System.Linq;
+using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Storage.Tests
 {
@@ -78,8 +79,8 @@ namespace IronyModManager.Storage.Tests
             var mapper = new Mock<IMapper>();
             var storage = new Storage(dbMock, mapper.Object);
             var themes = storage.GetThemes();
-            themes.Count.Should().Be(1);
-            themes.ContainsKey("test").Should().BeTrue();
+            themes.Count().Should().Be(1);
+            themes.FirstOrDefault().Name.Should().Be("test");
         }
 
         /// <summary>
@@ -113,9 +114,9 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterTheme(newThemeKey, newThemeUris);
             dbMock.Themes.Count.Should().Be(2);
-            dbMock.Themes.ContainsKey(newThemeKey).Should().BeTrue();
-            dbMock.Themes[newThemeKey].First().Should().Be(newThemeUris.First());
-            dbMock.Themes[newThemeKey].Last().Should().Be(newThemeUris.Last());
+            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
+            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
+            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
         }
 
         /// <summary>
@@ -165,10 +166,10 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterTheme(newThemeKey, newThemeUris);
             var themes = storage.GetThemes();
-            themes.Count.Should().Be(2);
-            themes.ContainsKey(newThemeKey).Should().BeTrue();
-            themes[newThemeKey].First().Should().Be(newThemeUris.First());
-            themes[newThemeKey].Last().Should().Be(newThemeUris.Last());
+            themes.Count().Should().Be(2);
+            themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
+            themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
+            themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
         }
 
         /// <summary>
@@ -199,7 +200,12 @@ namespace IronyModManager.Storage.Tests
             {
                 Preferences = new Preferences() { Locale = "test" },
                 WindowState = new WindowState() { IsMaximized = true },
-                Themes = new Dictionary<string, IEnumerable<string>>() { { "test", new List<string> { "1", "2" } } }
+                Themes = new List<IThemeType>() { new ThemeType()
+                {
+                    Name = "test",
+                    IsDefault = true,
+                    Styles = new List<string> { "1", "2" }
+                } }
             };
         }
     }

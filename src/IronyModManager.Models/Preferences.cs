@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -42,7 +42,7 @@ namespace IronyModManager.Models
         /// Gets or sets the theme.
         /// </summary>
         /// <value>The theme.</value>
-        public virtual Common.Enums.Theme Theme { get; set; }
+        public virtual string Theme { get; set; }
 
         #endregion Properties
     }

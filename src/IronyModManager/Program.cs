@@ -46,7 +46,6 @@ namespace IronyModManager
                         DIContainer.Verify();
                     }
 #endif
-                    Bootstrap.PostStartup();
                 }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
@@ -66,7 +65,8 @@ namespace IronyModManager
             try
             {
                 var app = BuildAvaloniaApp();
-                app.StartWithClassicDesktopLifetime(args);
+                Bootstrap.PostStartup();
+                app.StartWithClassicDesktopLifetime(args);               
             }
             catch (Exception ex)
             {

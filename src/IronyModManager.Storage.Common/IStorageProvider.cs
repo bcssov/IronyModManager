@@ -33,8 +33,8 @@ namespace IronyModManager.Storage.Common
         /// <summary>
         /// Gets the themes.
         /// </summary>
-        /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
-        Dictionary<string, IEnumerable<string>> GetThemes();
+        /// <returns>IEnumerable&lt;IThemeType&gt;.</returns>
+        IEnumerable<IThemeType> GetThemes();
 
         /// <summary>
         /// Gets the state of the window.
@@ -45,10 +45,11 @@ namespace IronyModManager.Storage.Common
         /// <summary>
         /// Registers the theme.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="themeUris">The theme uris.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="styles">The styles.</param>
+        /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterTheme(string key, IEnumerable<string> themeUris);
+        bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false);
 
         /// <summary>
         /// Sets the preferences.

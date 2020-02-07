@@ -44,6 +44,7 @@
     <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
+    <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />
     <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
   </ItemGroup>
 

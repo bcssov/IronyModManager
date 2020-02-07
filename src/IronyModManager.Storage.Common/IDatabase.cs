@@ -39,7 +39,7 @@ namespace IronyModManager.Storage.Common
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
-        Dictionary<string, IEnumerable<string>> Themes { get; set; }
+        IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.

@@ -31,11 +31,11 @@ namespace IronyModManager.Storage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Database"/> class.
+        /// Initializes a new instance of the <see cref="Database" /> class.
         /// </summary>
         public Database()
         {
-            Themes = new Dictionary<string, IEnumerable<string>>();
+            Themes = new List<IThemeType>();
         }
 
         #endregion Constructors
@@ -67,7 +67,7 @@ namespace IronyModManager.Storage
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
-        public Dictionary<string, IEnumerable<string>> Themes { get; set; }
+        public IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.

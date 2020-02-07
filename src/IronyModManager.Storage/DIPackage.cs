@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -48,6 +48,7 @@ namespace IronyModManager.Storage
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
+            container.Register<IThemeType, ThemeType>();
             container.RegisterSingleton<IDatabase, Database>();
             container.InterceptWith<PropertyChangedInterceptor<IDatabase>>(x => x == typeof(IDatabase), true);
 

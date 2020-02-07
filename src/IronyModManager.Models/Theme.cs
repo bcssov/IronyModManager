@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Theme.cs" company="Mario">
 //     Mario
@@ -53,7 +53,7 @@ namespace IronyModManager.Models
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public virtual Common.Enums.Theme Type { get; set; }
+        public virtual string Type { get; set; }
 
         #endregion Properties
     }

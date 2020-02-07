@@ -11,8 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Storage.Common;
@@ -85,7 +87,7 @@ namespace IronyModManager.Storage
         /// Gets the themes.
         /// </summary>
         /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
-        public Dictionary<string, IEnumerable<string>> GetThemes()
+        public IEnumerable<IThemeType> GetThemes()
         {
             lock (dbLock)
             {
@@ -109,14 +111,25 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Registers the theme.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="themeUris">The theme uris.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="styles">The styles.</param>
+        /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool RegisterTheme(string key, IEnumerable<string> themeUris)
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
+        public bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
             {
-                Database.Themes.Add(key, themeUris);
+                if (isDefault && Database.Themes.Any(s => s.IsDefault))
+                {
+                    throw new InvalidOperationException("There is already a default theme registered.");
+                }
+                Database.Themes.Add(new ThemeType()
+                {
+                    IsDefault = isDefault,
+                    Name = name,
+                    Styles = styles
+                });
                 return true;
             }
         }
