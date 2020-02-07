@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -82,6 +82,18 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the themes.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
+        public Dictionary<string, IEnumerable<string>> GetThemes()
+        {
+            lock (dbLock)
+            {
+                return Database.Themes;
+            }
+        }
+
+        /// <summary>
         /// Gets the state of the window.
         /// </summary>
         /// <returns>IWindowState.</returns>
@@ -91,6 +103,21 @@ namespace IronyModManager.Storage
             {
                 var result = Mapper.Map<IWindowState, IWindowState>(Database.WindowState);
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// Registers the theme.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="themeUris">The theme uris.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool RegisterTheme(string key, IEnumerable<string> themeUris)
+        {
+            lock (dbLock)
+            {
+                Database.Themes.Add(key, themeUris);
+                return true;
             }
         }
 

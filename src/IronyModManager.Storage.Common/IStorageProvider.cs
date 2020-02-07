@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-07-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -31,10 +31,24 @@ namespace IronyModManager.Storage.Common
         IPreferences GetPreferences();
 
         /// <summary>
+        /// Gets the themes.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
+        Dictionary<string, IEnumerable<string>> GetThemes();
+
+        /// <summary>
         /// Gets the state of the window.
         /// </summary>
         /// <returns>IWindowState.</returns>
         IWindowState GetWindowState();
+
+        /// <summary>
+        /// Registers the theme.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="themeUris">The theme uris.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool RegisterTheme(string key, IEnumerable<string> themeUris);
 
         /// <summary>
         /// Sets the preferences.
