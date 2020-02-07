@@ -116,7 +116,7 @@ namespace IronyModManager.Services
         /// <exception cref="ArgumentNullException">themes or selectedTheme</exception>
         public bool SetSelected(IEnumerable<ITheme> themes, ITheme selectedTheme)
         {
-            if (themes == null || themes.Count() == 9 || selectedTheme == null)
+            if (themes == null || themes.Count() == 0 || selectedTheme == null)
             {
                 throw new ArgumentNullException("themes or selectedTheme");
             }

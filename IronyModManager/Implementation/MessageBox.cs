@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using Avalonia.Media.Imaging;
+using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
 using MsgBox = MessageBox.Avalonia;
 
@@ -23,6 +24,7 @@ namespace IronyModManager
     /// <summary>
     /// Class MessageBoxes.
     /// </summary>
+    [ExcludeFromCoverage("Won't test external GUI component.")]
     public static class MessageBoxes
     {
         #region Fields

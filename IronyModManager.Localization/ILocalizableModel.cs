@@ -4,22 +4,27 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-05-2020
 // ***********************************************************************
 // <copyright file="ILocalizableModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.ComponentModel;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
     /// Interface ILocalizableModel
+    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanging" />
+    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
     /// </summary>
-    public interface ILocalizableModel
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanging" />
+    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
+    public interface ILocalizableModel : INotifyPropertyChanging, INotifyPropertyChanged
     {
         #region Methods
 

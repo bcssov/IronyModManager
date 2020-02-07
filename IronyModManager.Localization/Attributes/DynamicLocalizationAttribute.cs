@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="DynamicLocalizationAttribute.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Localization.Attributes
 {
@@ -22,6 +23,7 @@ namespace IronyModManager.Localization.Attributes
     /// </summary>
     /// <seealso cref="IronyModManager.Localization.Attributes.LocalizationAttributeBase" />
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCoverage("Attributes don't need testing.")]
     public class DynamicLocalizationAttribute : LocalizationAttributeBase
     {
         #region Fields

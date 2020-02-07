@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ namespace IronyModManager.Storage
     /// Implements the <see cref="Jot.Storage.IStore" />
     /// </summary>
     /// <seealso cref="Jot.Storage.IStore" />
+    [ExcludeFromCoverage("Modified version of Jot item, no need for us to test it.")]
     internal class JsonStore : IStore
     {
         #region Fields

@@ -4,3 +4,4 @@ for /d %%i in (IronyModManager*) do (
 	RD /s /q "%%i\bin"
 	RD /s /q "%%i\obj"
 )
+RD /s /q "TestResults"

@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="AssemblyManager.cs" company="Mario">
 //     Mario
@@ -24,7 +24,7 @@ namespace IronyModManager.DI.Assemblies
     /// <summary>
     /// Class AssemblyManager.
     /// </summary>
-    internal static class AssemblyManager
+    public static class AssemblyManager
     {
         #region Fields
 
@@ -33,16 +33,59 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         private static readonly ConcurrentDictionary<string, Assembly> assemblyCache = new ConcurrentDictionary<string, Assembly>();
 
+        /// <summary>
+        /// The type cache
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, Type> typeCache = new ConcurrentDictionary<string, Type>();
+
         #endregion Fields
 
         #region Methods
+
+        /// <summary>
+        /// Finds the type.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>Type.</returns>
+        public static Type FindType(string name)
+        {
+            if (typeCache.TryGetValue(name, out var value))
+            {
+                return value;
+            }
+            var type = Type.GetType(name);
+            if (type == null)
+            {
+                foreach (var item in AssemblyLoadContext.Default.Assemblies)
+                {
+                    type = item.GetType(name);
+                    if (type != null)
+                    {
+                        break;
+                    }
+                }
+                foreach (var item in AssemblyLoadContext.All.SelectMany(s => s.Assemblies))
+                {
+                    type = item.GetType(name);
+                    if (type != null)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (type != null)
+            {
+                typeCache.TryAdd(name, type);
+            }
+            return type;
+        }
 
         /// <summary>
         /// Gets the assembly.
         /// </summary>
         /// <param name="assemblyName">Name of the assembly.</param>
         /// <returns>Assembly.</returns>
-        public static Assembly GetAssembly(AssemblyName assemblyName)
+        internal static Assembly GetAssembly(AssemblyName assemblyName)
         {
             assemblyCache.TryGetValue(assemblyName.FullName, out var assembly);
             if (assembly == null)
@@ -101,7 +144,7 @@ namespace IronyModManager.DI.Assemblies
         /// <summary>
         /// Registers the handlers.
         /// </summary>
-        public static void RegisterHandlers()
+        internal static void RegisterHandlers()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {

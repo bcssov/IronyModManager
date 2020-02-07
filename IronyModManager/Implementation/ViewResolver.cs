@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using Avalonia.Controls;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.DI.Assemblies;
 
 namespace IronyModManager
 {
@@ -65,7 +66,12 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public string FormatViewModelName<T>()
         {
-            return $"{typeof(T).FullName.Replace(".Views.", ".ViewModels.")}ViewModel";
+            var result = typeof(T).FullName.Replace("View", "ViewModel");
+            if (!result.EndsWith("ViewModel"))
+            {
+                return $"{result}ViewModel";
+            }
+            return result;
         }
 
         /// <summary>
@@ -86,7 +92,7 @@ namespace IronyModManager
         public UserControl ResolveUserControl(object obj)
         {
             var name = FormatUserControlName(obj);
-            var type = Type.GetType(name);
+            var type = AssemblyManager.FindType(name);
             return (UserControl)DIResolver.Get(type);
         }
 
@@ -98,7 +104,7 @@ namespace IronyModManager
         public IViewModel ResolveViewModel<T>() where T : Window
         {
             var name = FormatViewModelName<T>();
-            var type = Type.GetType(name);
+            var type = AssemblyManager.FindType(name);
             return (IViewModel)DIResolver.Get(type);
         }
 

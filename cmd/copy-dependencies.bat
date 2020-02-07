@@ -12,12 +12,20 @@ IF %errorlevel% gtr 0 exit /b %errorlevel%
 	
 if "%config%" == "Debug" (
 	for /d %%i in ("%solutiondir%IronyModManager.*") do (
-		if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.dll" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
-		if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.json" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
-		if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.pdb" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+        set "projPath=%%i"
+        setlocal enabledelayedexpansion	
+		if "!projPath:Tests=!"=="!projPath!" (
+			if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.dll" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+			if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.json" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+			if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.pdb" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+		)
 	)
 )	ELSE (
 	for /d %%i in ("%solutiondir%IronyModManager.*") do (
-		if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.dll" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+		set "projPath=%%i"
+        setlocal enabledelayedexpansion	
+		if "!projPath:Tests=!"=="!projPath!" (
+			if not "%%i" == "%solutiondir%IronyModManager" xcopy "%%i\%outdir%*.dll" "%solutiondir%IronyModManager\%outdir%" /Y /S /D
+		)
 	)
 )

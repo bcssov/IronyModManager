@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedInterceptor.cs" company="Mario">
 //     Mario
@@ -27,6 +27,7 @@ namespace IronyModManager.Storage.Common
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
+    [ExcludeFromCoverage("Logic is tested in models.")]
     public class PropertyChangedInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : IDatabase
     {
         #region Methods

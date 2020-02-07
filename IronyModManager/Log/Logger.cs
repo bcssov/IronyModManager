@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Shared;
 using NLog;
 
 namespace IronyModManager.Log
@@ -22,6 +23,7 @@ namespace IronyModManager.Log
     /// Implements the <see cref="IronyModManager.Shared.ILogger" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.ILogger" />
+    [ExcludeFromCoverage("Exclude logger.")]
     public class Logger : Shared.ILogger
     {
         #region Fields

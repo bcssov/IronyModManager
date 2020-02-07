@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="PropertyChangedInterceptorBase.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ namespace IronyModManager.Shared
     /// Implements the <see cref="Castle.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
+    [ExcludeFromCoverage("Logic is tested in models.")]
     public abstract class PropertyChangedInterceptorBase : IInterceptor
     {
         #region Fields
@@ -72,7 +73,7 @@ namespace IronyModManager.Shared
         {
             var newVal = invocation.Arguments?[0];
             var oldVal = prop.GetValue(invocation.InvocationTarget, null);
-            return newVal != oldVal;
+            return !Equals(newVal, oldVal);
         }
 
         /// <summary>

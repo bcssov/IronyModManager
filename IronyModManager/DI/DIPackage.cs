@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -14,6 +14,7 @@
 
 using System.Collections.Generic;
 using System;
+using IronyModManager.Shared;
 using ReactiveUI;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -27,6 +28,7 @@ namespace IronyModManager.DI
     /// Implements the <see cref="SimpleInjector.Packaging.IPackage" />
     /// </summary>
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
+    [ExcludeFromCoverage("Should not test external DI.")]
     public partial class DIPackage : IPackage
     {
         #region Methods

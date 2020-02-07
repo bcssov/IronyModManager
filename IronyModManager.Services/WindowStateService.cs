@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="WindowStateService.cs" company="Mario">
 //     Mario
@@ -88,11 +88,11 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Sets the specified state.
+        /// Saves the specified state.
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Set(IWindowState state)
+        public bool Save(IWindowState state)
         {
             return storage.SetWindowState(state);
         }

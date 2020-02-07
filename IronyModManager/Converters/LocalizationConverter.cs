@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="LocalizationConverter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
 using IronyModManager.Localization;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Converters
 {
@@ -42,14 +43,14 @@ namespace IronyModManager.Converters
         {
             if (value != null && !string.IsNullOrEmpty(value.ToString()))
             {
-                var locManagr = DIResolver.Get<ILocalizationManager>();
+                var locManager = DIResolver.Get<ILocalizationManager>();
                 string prefix = string.Empty;
                 if (parameter != null && !string.IsNullOrWhiteSpace(parameter.ToString()))
                 {
                     prefix = parameter.ToString();
                 }
                 var resKey = $"{prefix}{value.ToString()}";
-                var translation = locManagr.GetResource(resKey);
+                var translation = locManager.GetResource(resKey);
                 return translation;
             }
             return value;
@@ -63,6 +64,7 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        [ExcludeFromCoverage("Not being used.")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;

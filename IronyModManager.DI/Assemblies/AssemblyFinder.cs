@@ -58,32 +58,36 @@ namespace IronyModManager.DI.Assemblies
         /// <returns>List&lt;Assembly&gt;.</returns>
         private static List<Assembly> FindAndLoadAssemblies(AssemblyFinderParams finderParams)
         {
-            var files = new DirectoryInfo(finderParams.Path).GetFiles($"*{Constants.DllExtension}", finderParams.SearchOption)
+            if (Directory.Exists(finderParams.Path))
+            {
+                var files = new DirectoryInfo(finderParams.Path).GetFiles($"*{Constants.DllExtension}", finderParams.SearchOption)
                 .Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p.Name).ToList();
 
-            var assemblies = new List<Assembly>();
+                var assemblies = new List<Assembly>();
 
-            foreach (var item in files)
-            {
-                if (!AssemblyLoadContext.Default.Assemblies.Any(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase)))
+                foreach (var item in files)
                 {
-                    var loader = PluginLoader.CreateFromAssemblyFile(assemblyFile: item.FullName,
-                        sharedTypes: finderParams.SharedTypes.ToArray(),
-                        configure =>
-                        {
-                            configure.PreferSharedTypes = true;
-                        });
-                    var assembly = loader.LoadDefaultAssembly();
-                    assemblies.Add(assembly);
+                    if (!AssemblyLoadContext.Default.Assemblies.Any(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var loader = PluginLoader.CreateFromAssemblyFile(assemblyFile: item.FullName,
+                            sharedTypes: finderParams.SharedTypes.ToArray(),
+                            configure =>
+                            {
+                                configure.PreferSharedTypes = true;
+                            });
+                        var assembly = loader.LoadDefaultAssembly();
+                        assemblies.Add(assembly);
+                    }
+                    else
+                    {
+                        var assembly = AssemblyLoadContext.Default.Assemblies.FirstOrDefault(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase));
+                        assemblies.Add(assembly);
+                    }
                 }
-                else
-                {
-                    var assembly = AssemblyLoadContext.Default.Assemblies.FirstOrDefault(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase));
-                    assemblies.Add(assembly);
-                }
+
+                return assemblies;
             }
-
-            return assemblies;
+            return new List<Assembly>();
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-04-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -75,20 +75,18 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool ApplySelected()
         {
-            var languages = this.Get();
-            if (languages?.Count() > 0)
+            var language = GetSelected();
+            bool result = false;
+            if (language != null)
             {
-                var selected = languages.FirstOrDefault(p => p.IsSelected);
-                if (selected != null)
-                {
-                    CurrentLocale.SetCurrent(selected.Abrv);
-                }
-                else
-                {
-                    CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
-                }
+                CurrentLocale.SetCurrent(language.Abrv);
+                result = true;
             }
-            return true;
+            else
+            {
+                CurrentLocale.SetCurrent(Shared.Constants.DefaultAppCulture);
+            }
+            return result;
         }
 
         /// <summary>
@@ -133,11 +131,11 @@ namespace IronyModManager.Services
             }
             var preference = preferencesService.Get();
 
-            preferencesService.Save(mapper.Map(language, preference));
+            var result = preferencesService.Save(mapper.Map(language, preference));
 
             CurrentLocale.SetCurrent(language.Abrv);
 
-            return true;
+            return result;
         }
 
         /// <summary>
@@ -149,7 +147,7 @@ namespace IronyModManager.Services
         /// <exception cref="ArgumentNullException">languages or selectedLanguage</exception>
         public bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
-            if (languages == null || languages.Count() == 9 || selectedLanguage == null)
+            if (languages == null || languages.Count() == 0 || selectedLanguage == null)
             {
                 throw new ArgumentNullException("languages or selectedLanguage");
             }

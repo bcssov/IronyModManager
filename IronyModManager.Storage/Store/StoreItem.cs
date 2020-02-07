@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 01-29-2020
 // ***********************************************************************
 // <copyright file="StoreItem.cs" company="Mario">
 //     Mario
@@ -13,13 +13,16 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Storage.Store
 {
     /// <summary>
     /// Class StoreItem.
-    /// </summary>
+    /// </summary>    
+    [ExcludeFromCoverage("Modified version of Jot item, no need for us to test it.")]
     internal class StoreItem
     {
         #region Properties

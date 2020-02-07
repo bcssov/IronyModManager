@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -26,6 +26,7 @@ namespace IronyModManager
     /// <summary>
     /// Class Program.
     /// </summary>
+    [ExcludeFromCoverage("Program entry point.")]
     internal class Program
     {
         #region Methods
@@ -110,6 +111,7 @@ namespace IronyModManager
             Bootstrap.Setup(
                 new DIOptions()
                 {
+                    Container = new SimpleInjector.Container(),
                     PluginPathAndName = Shared.Constants.PluginsPathAndName,
                     ModuleTypes = new List<Type>() { typeof(IModule) },
                     PluginTypes = new List<Type>() { typeof(IPlugin) }

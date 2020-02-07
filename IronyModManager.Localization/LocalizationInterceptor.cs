@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-06-2020
 // ***********************************************************************
 // <copyright file="LocalizationInterceptor.cs" company="Mario">
 //     Mario
@@ -31,6 +31,7 @@ namespace IronyModManager.Localization
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IronyModManager.Shared.PropertyChangedInterceptorBase" />
     /// <seealso cref="Castle.DynamicProxy.IInterceptor" />
+    [ExcludeFromCoverage("Logic is tested via models.")]
     public class LocalizationInterceptor<T> : PropertyChangedInterceptorBase, IInterceptor where T : ILocalizableModel
     {
         #region Fields
@@ -165,9 +166,9 @@ namespace IronyModManager.Localization
             {
                 var locAttr = (LocalizationAttributeBase)attr;
                 var args = new AttributeHandlersArgs(locAttr, invocation, prop, invocation.ReturnValue);
-                if (attributeHandlers.Any(p => p.CanProcess(args)))
+                var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(args));
+                if (handler != null)
                 {
-                    var handler = attributeHandlers.FirstOrDefault(p => p.CanProcess(args));
                     if (handler.HasData(args))
                     {
                         var data = handler.GetData(args);

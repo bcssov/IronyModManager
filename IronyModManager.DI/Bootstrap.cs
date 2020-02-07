@@ -36,11 +36,10 @@ namespace IronyModManager.DI
         /// <param name="opts">The opts.</param>
         public static void Setup(DIOptions opts)
         {
-            var container = new Container();
-            DIContainer.Init(container, opts);
+            DIContainer.Init(opts);
 
-            ConfigureOptions(container);
-            ConfigureExtensions(container);
+            ConfigureOptions(opts.Container);
+            ConfigureExtensions(opts.Container);
 
             RegisterAssemblies();
         }
