@@ -1,0 +1,130 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <ApplicationIcon>Assets\avalonia-logo.ico</ApplicationIcon>
+    <StartupObject>IronyModManager.Program</StartupObject>
+    <Authors>Mario</Authors>
+    <Company>Mario</Company>
+    <Description>Irony Mod Manager</Description>
+    <Copyright>Mario</Copyright>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
+    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIconUrl />
+    <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <NeutralLanguage></NeutralLanguage>
+    <PackageTags>Irony Mod Manager</PackageTags>
+    <PackageReleaseNotes>Irony Mod Manager</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <AvaloniaResource Include="**\*.xaml">
+      <SubType>Designer</SubType>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Remove="Views\Controls\LanguageControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
+    <AvaloniaResource Remove="Views\MainControlView.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\avalonia-logo.ico" />
+    <None Remove="Views\Controls\LanguageControlView.xaml" />
+    <None Remove="Views\Controls\ThemeControlView.xaml" />
+    <None Remove="Views\MainControlView.xaml" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="0.9.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.2" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.2" />
+    <PackageReference Include="Material.Avalonia" Version="0.9.0" />
+    <PackageReference Include="MessageBox.Avalonia" Version="0.9.1.1-prev" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.1" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NLog" Version="4.6.8" />
+    <PackageReference Include="ReactiveUI" Version="11.1.23" />
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+    <PackageReference Include="Splat.NLog" Version="9.3.11" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.3.11" />
+    <PackageReference Include="StrongNamer" Version="0.2.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
+    <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
+    <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\avalonia-logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\avalonia-logo.ico" />
+    <EmbeddedResource Include="Views\Controls\ThemeControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\LanguageControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Localization\de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\hr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\en.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Update="nlog.Debug.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>nlog.config</DependentUpon>
+    </None>
+    <None Update="nlog.Release.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>nlog.config</DependentUpon>
+    </None>
+    <None Update="Plugins\Note.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
+  </Target>
+</Project>

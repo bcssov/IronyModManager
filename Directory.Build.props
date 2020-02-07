@@ -11,4 +11,7 @@
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
   </PropertyGroup>
+  <PropertyGroup Label="BasePath">
+    <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
+  </PropertyGroup>
 </Project>

@@ -29,12 +29,12 @@ namespace LocalizationResourceGenerator
         /// <summary>
         /// The resource path
         /// </summary>
-        private const string LocalizationResourceOutPath = "..\\..\\..\\..\\..\\..\\..\\IronyModManager.Shared\\LocalizationResources.cs";
+        private const string LocalizationResourceOutPath = "..\\..\\..\\..\\..\\..\\..\\src\\IronyModManager.Shared\\LocalizationResources.cs";
 
         /// <summary>
         /// The localization resource path
         /// </summary>
-        private const string LocalizationResourcePath = "..\\..\\..\\..\\..\\..\\..\\IronyModManager\\Localization\\en.json";
+        private const string LocalizationResourcePath = "..\\..\\..\\..\\..\\..\\..\\src\\IronyModManager\\Localization\\en.json";
 
 #else
 
@@ -43,12 +43,12 @@ namespace LocalizationResourceGenerator
         /// <summary>
         /// The localization resource out path
         /// </summary>
-        private const string LocalizationResourceOutPath = "..\\..\\IronyModManager.Shared\\LocalizationResources.cs";
+        private const string LocalizationResourceOutPath = "..\\..\\src\\IronyModManager.Shared\\LocalizationResources.cs";
 
         /// <summary>
         /// The localization resource path
         /// </summary>
-        private const string LocalizationResourcePath = "..\\..\\IronyModManager\\Localization\\en.json";
+        private const string LocalizationResourcePath = "..\\..\\src\\IronyModManager\\Localization\\en.json";
 
         #endregion Fields
 
