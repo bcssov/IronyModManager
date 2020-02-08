@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="AssemblyManager.cs" company="Mario">
 //     Mario
@@ -193,10 +193,8 @@ namespace IronyModManager.DI.Assemblies
             {
                 if (File.Exists(assemblyPath))
                 {
-                    using (var stream = File.OpenRead(assemblyPath))
-                    {
-                        return ctx.LoadFromStream(stream);
-                    }
+                    using var stream = File.OpenRead(assemblyPath);
+                    return ctx.LoadFromStream(stream);
                 }
             }
             catch { }

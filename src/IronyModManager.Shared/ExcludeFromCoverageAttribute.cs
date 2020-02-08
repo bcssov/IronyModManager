@@ -4,7 +4,7 @@
 // Created          : 01-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="ExcludeFromCoverageAttribute.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The reason
         /// </summary>
-        private string reason;
+        private readonly string reason;
 
         #endregion Fields
 

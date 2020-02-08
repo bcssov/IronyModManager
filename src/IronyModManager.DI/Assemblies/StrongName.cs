@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-12-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="StrongName.cs" company="Mario">
 //     Mario
@@ -40,17 +40,10 @@ namespace IronyModManager.DI.Assemblies
             {
                 throw new ArgumentNullException("name");
             }
-            if (blob == null)
-            {
-                throw new ArgumentNullException("blob");
-            }
-            if (version == null)
-            {
-                throw new ArgumentNullException("version");
-            }
-            PublicKey = blob;
+
+            PublicKey = blob ?? throw new ArgumentNullException("blob");
             Name = name;
-            Version = version;
+            Version = version ?? throw new ArgumentNullException("version");
         }
 
         #endregion Constructors

@@ -42,8 +42,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// <param name="args">The arguments.</param>
         public void Refresh(LocalizationRefreshArgs args)
         {
-            var val = args.Property.GetValue(args.Invocation.InvocationTarget, null) as ILocalizableModel;
-            if (val != null)
+            if (args.Property.GetValue(args.Invocation.InvocationTarget, null) is ILocalizableModel val)
             {
                 var props = val.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase))).ToList();
                 if (props.Count() > 0)

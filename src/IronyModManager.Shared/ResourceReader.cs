@@ -4,7 +4,7 @@
 // Created          : 02-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="ResourceReader.cs" company="Mario">
 //     Mario
@@ -30,7 +30,7 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The cache
         /// </summary>
-        private static ConcurrentDictionary<string, byte[]> cache = new ConcurrentDictionary<string, byte[]>();
+        private static readonly ConcurrentDictionary<string, byte[]> cache = new ConcurrentDictionary<string, byte[]>();
 
         #endregion Fields
 
@@ -83,6 +83,8 @@ namespace IronyModManager.Shared
         /// <exception cref="ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">assembly</exception>
         /// <exception cref="ArgumentNullException">resourceName</exception>
+        /// <exception cref="ArgumentNullException">resourceName</exception>
+        /// <exception cref="ArgumentNullException">assembly</exception>
         private static byte[] GetEmbeddedResourceInternal(string resourceName, Assembly assembly)
         {
             if (string.IsNullOrWhiteSpace(resourceName))

@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -95,11 +95,9 @@ namespace IronyModManager
         {
             if (icon == null)
             {
-                using (var ms = new MemoryStream(Shared.ResourceReader.GetEmbeddedResource(Constants.Resources.LogoIco)))
-                {
-                    // TODO: Check in a future package if this is is finally implemented? Why have a property in a parameter if it does nothing?
-                    icon = new Bitmap(ms);
-                }
+                using var ms = new MemoryStream(Shared.ResourceReader.GetEmbeddedResource(Constants.Resources.LogoIco));
+                // TODO: Check in a future package if this is is finally implemented? Why have a property in a parameter if it does nothing?
+                icon = new Bitmap(ms);
             }
             return icon;
         }

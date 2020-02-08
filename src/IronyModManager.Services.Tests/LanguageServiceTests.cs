@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="LanguageServiceTests.cs" company="Mario">
 //     Mario
@@ -232,17 +232,19 @@ namespace IronyModManager.Services.Tests
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
             var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var languages = new List<ILanguage>();
-            languages.Add(new Language()
+            var languages = new List<ILanguage>
             {
-                Abrv = "en",
-                IsSelected = true
-            });
-            languages.Add(new Language()
-            {
-                Abrv = "de",
-                IsSelected = false
-            });
+                new Language()
+                {
+                    Abrv = "en",
+                    IsSelected = true
+                },
+                new Language()
+                {
+                    Abrv = "de",
+                    IsSelected = false
+                }
+            };
             var result = languageService.SetSelected(languages, new Language()
             {
                 Abrv = "de",
@@ -263,17 +265,19 @@ namespace IronyModManager.Services.Tests
             SetupMockFailCase(resourceProvider, preferencesService);
 
             var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var languages = new List<ILanguage>();
-            languages.Add(new Language()
+            var languages = new List<ILanguage>
             {
-                Abrv = "en",
-                IsSelected = true
-            });
-            languages.Add(new Language()
-            {
-                Abrv = "de",
-                IsSelected = false
-            });
+                new Language()
+                {
+                    Abrv = "en",
+                    IsSelected = true
+                },
+                new Language()
+                {
+                    Abrv = "de",
+                    IsSelected = false
+                }
+            };
 
             Exception exception = null;
 
@@ -333,17 +337,19 @@ namespace IronyModManager.Services.Tests
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
             var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var languages = new List<ILanguage>();
-            languages.Add(new Language()
+            var languages = new List<ILanguage>
             {
-                Abrv = "en",
-                IsSelected = true
-            });
-            languages.Add(new Language()
-            {
-                Abrv = "de",
-                IsSelected = false
-            });
+                new Language()
+                {
+                    Abrv = "en",
+                    IsSelected = true
+                },
+                new Language()
+                {
+                    Abrv = "de",
+                    IsSelected = false
+                }
+            };
             var result = languageService.SetSelected(languages, new Language()
             {
                 Abrv = "en",

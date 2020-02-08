@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 02-09-2020
 // ***********************************************************************
 // <copyright file="StrongNamePublicKeyBlob.cs" company="Microsoft">
 //     Microsoft
@@ -120,7 +120,7 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         /// <param name="baData">The ba data.</param>
         /// <returns>System.Int32.</returns>
-        static private int GetByteArrayHashCode(byte[] baData)
+        private static int GetByteArrayHashCode(byte[] baData)
         {
             if (baData == null)
                 return 0;
