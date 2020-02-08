@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Storage.Common;
 
@@ -124,12 +125,11 @@ namespace IronyModManager.Storage
                 {
                     throw new InvalidOperationException("There is already a default theme registered.");
                 }
-                Database.Themes.Add(new ThemeType()
-                {
-                    IsDefault = isDefault,
-                    Name = name,
-                    Styles = styles
-                });
+                var themeType = DIResolver.Get<IThemeType>();
+                themeType.IsDefault = isDefault;
+                themeType.Name = name;
+                themeType.Styles = styles;
+                Database.Themes.Add(themeType);
                 return true;
             }
         }

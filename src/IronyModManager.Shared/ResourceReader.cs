@@ -80,15 +80,8 @@ namespace IronyModManager.Shared
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="assembly">The assembly.</param>
         /// <returns>System.Byte[].</returns>
-        /// <exception cref="System.ArgumentNullException">resourceName</exception>
-        /// <exception cref="System.ArgumentNullException">assembly</exception>
-        /// <exception cref="System.ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">assembly</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        /// <exception cref="ArgumentNullException">assembly</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">resourceName</exception>
         private static byte[] GetEmbeddedResourceInternal(string resourceName, Assembly assembly)
         {
