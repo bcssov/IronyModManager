@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="LocalizationResourceProvider.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager
         /// Gets the available locales.
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public IEnumerable<string> GetAvailableLocales()
+        public virtual IEnumerable<string> GetAvailableLocales()
         {
             return new DirectoryInfo(RootPath).GetFiles($"*{Shared.Constants.JsonExtension}", SearchOption.TopDirectoryOnly).Select(p => Path.GetFileNameWithoutExtension(p.Name));
         }

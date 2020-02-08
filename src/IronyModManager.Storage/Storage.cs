@@ -87,7 +87,7 @@ namespace IronyModManager.Storage
         /// Gets the themes.
         /// </summary>
         /// <returns>Dictionary&lt;System.String, IEnumerable&lt;System.String&gt;&gt;.</returns>
-        public IEnumerable<IThemeType> GetThemes()
+        public virtual IEnumerable<IThemeType> GetThemes()
         {
             lock (dbLock)
             {
@@ -116,7 +116,7 @@ namespace IronyModManager.Storage
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        public bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
+        public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
             {

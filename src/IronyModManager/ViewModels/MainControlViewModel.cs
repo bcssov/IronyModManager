@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Shared;
@@ -57,18 +56,5 @@ namespace IronyModManager.ViewModels
         public virtual ThemeControlViewModel ThemeSelector { get; protected set; }
 
         #endregion Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Called when [activated].
-        /// </summary>
-        /// <param name="disposables">The disposables.</param>
-        protected override void OnActivated(CompositeDisposable disposables)
-        {
-            base.OnActivated(disposables);
-        }
-
-        #endregion Methods
     }
 }

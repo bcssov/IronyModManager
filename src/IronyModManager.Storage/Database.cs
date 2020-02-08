@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -67,14 +67,14 @@ namespace IronyModManager.Storage
         /// Gets or sets the themes.
         /// </summary>
         /// <value>The themes.</value>
-        public IList<IThemeType> Themes { get; set; }
+        public virtual IList<IThemeType> Themes { get; set; }
 
         /// <summary>
         /// Gets or sets the state of the window.
         /// </summary>
         /// <value>The state of the window.</value>
         [Trackable]
-        public IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
+        public virtual IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
 
         #endregion Properties
 

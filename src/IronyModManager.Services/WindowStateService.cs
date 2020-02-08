@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="WindowStateService.cs" company="Mario">
 //     Mario
@@ -54,7 +54,7 @@ namespace IronyModManager.Services
         /// Gets this instance.
         /// </summary>
         /// <returns>IWindowState.</returns>
-        public IWindowState Get()
+        public virtual IWindowState Get()
         {
             return storage.GetWindowState();
         }
@@ -63,7 +63,7 @@ namespace IronyModManager.Services
         /// Determines whether this instance is defined.
         /// </summary>
         /// <returns><c>true</c> if this instance is defined; otherwise, <c>false</c>.</returns>
-        public bool IsDefined()
+        public virtual bool IsDefined()
         {
             var state = Get();
             if (state != null)
@@ -77,7 +77,7 @@ namespace IronyModManager.Services
         /// Determines whether this instance is maximized.
         /// </summary>
         /// <returns><c>true</c> if this instance is maximized; otherwise, <c>false</c>.</returns>
-        public bool IsMaximized()
+        public virtual bool IsMaximized()
         {
             var state = Get();
             if (state != null)
@@ -92,7 +92,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Save(IWindowState state)
+        public virtual bool Save(IWindowState state)
         {
             return storage.SetWindowState(state);
         }

@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -74,7 +74,7 @@ namespace IronyModManager.Services
         /// Gets this instance.
         /// </summary>
         /// <returns>IEnumerable&lt;ITheme&gt;.</returns>
-        public IEnumerable<ITheme> Get()
+        public virtual IEnumerable<ITheme> Get()
         {
             var preferences = PreferencesService.Get();
 
@@ -96,7 +96,7 @@ namespace IronyModManager.Services
         /// Gets the selected.
         /// </summary>
         /// <returns>ITheme.</returns>
-        public ITheme GetSelected()
+        public virtual ITheme GetSelected()
         {
             return Get().FirstOrDefault(p => p.IsSelected);
         }
@@ -107,7 +107,7 @@ namespace IronyModManager.Services
         /// <param name="theme">The theme.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">Theme not selected.</exception>
-        public bool Save(ITheme theme)
+        public virtual bool Save(ITheme theme)
         {
             if (!theme.IsSelected)
             {
@@ -125,7 +125,7 @@ namespace IronyModManager.Services
         /// <param name="selectedTheme">The selected theme.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">themes or selectedTheme.</exception>
-        public bool SetSelected(IEnumerable<ITheme> themes, ITheme selectedTheme)
+        public virtual bool SetSelected(IEnumerable<ITheme> themes, ITheme selectedTheme)
         {
             if (themes == null || themes.Count() == 0 || selectedTheme == null)
             {

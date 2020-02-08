@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -73,7 +73,7 @@ namespace IronyModManager.Services
         /// Applies the selected.
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool ApplySelected()
+        public virtual bool ApplySelected()
         {
             var language = GetSelected();
             bool result = false;
@@ -144,8 +144,8 @@ namespace IronyModManager.Services
         /// <param name="languages">The languages.</param>
         /// <param name="selectedLanguage">The selected language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">languages or selectedLanguage</exception>
-        public bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
+        /// <exception cref="ArgumentNullException">languages or selectedLanguage.</exception>
+        public virtual bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
             if (languages == null || languages.Count() == 0 || selectedLanguage == null)
             {

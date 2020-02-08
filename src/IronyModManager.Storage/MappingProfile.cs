@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Mario
@@ -31,10 +31,11 @@ namespace IronyModManager.Storage
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MappingProfile"/> class.
+        /// Initializes a new instance of the <see cref="MappingProfile" /> class.
         /// </summary>
         public MappingProfile()
         {
+            CreateMap<IThemeType, ThemeType>().ReverseMap();
             CreateMap<IDatabase, Database>().ReverseMap();
             CreateMap<IPreferences, IPreferences>().ReverseMap();
             CreateMap<IWindowState, IWindowState>().ReverseMap();

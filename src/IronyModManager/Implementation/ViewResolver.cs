@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -45,7 +45,7 @@ namespace IronyModManager
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>System.String.</returns>
-        public string FormatUserControlName(object obj)
+        public virtual string FormatUserControlName(object obj)
         {
             Type type;
             if (obj.GetType().FullName.Contains(Shared.Constants.ProxyNamespace))
@@ -64,7 +64,7 @@ namespace IronyModManager
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>System.String.</returns>
-        public string FormatViewModelName<T>()
+        public virtual string FormatViewModelName<T>()
         {
             var result = typeof(T).FullName.Replace("View", "ViewModel");
             if (!result.EndsWith("ViewModel"))
@@ -79,7 +79,7 @@ namespace IronyModManager
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the specified name is control; otherwise, <c>false</c>.</returns>
-        public bool IsControl(string name)
+        public virtual bool IsControl(string name)
         {
             return name.Contains(ControlPattern);
         }
@@ -89,7 +89,7 @@ namespace IronyModManager
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <returns>UserControl.</returns>
-        public UserControl ResolveUserControl(object obj)
+        public virtual UserControl ResolveUserControl(object obj)
         {
             var name = FormatUserControlName(obj);
             var type = AssemblyManager.FindType(name);
@@ -101,7 +101,7 @@ namespace IronyModManager
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns>ViewModelBase.</returns>
-        public IViewModel ResolveViewModel<T>() where T : Window
+        public virtual IViewModel ResolveViewModel<T>() where T : Window
         {
             var name = FormatViewModelName<T>();
             var type = AssemblyManager.FindType(name);

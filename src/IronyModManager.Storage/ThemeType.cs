@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="ThemeType.cs" company="Mario">
 //     Mario
@@ -30,19 +30,19 @@ namespace IronyModManager.Storage
         /// Gets or sets a value indicating whether this instance is default.
         /// </summary>
         /// <value><c>true</c> if this instance is default; otherwise, <c>false</c>.</value>
-        public bool IsDefault { get; set; }
+        public virtual bool IsDefault { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the styles.
         /// </summary>
         /// <value>The styles.</value>
-        public IEnumerable<string> Styles { get; set; }
+        public virtual IEnumerable<string> Styles { get; set; }
 
         #endregion Properties
     }

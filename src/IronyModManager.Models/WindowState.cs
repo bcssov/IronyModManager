@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 02-08-2020
 // ***********************************************************************
 // <copyright file="WindowState.cs" company="Mario">
 //     Mario
@@ -32,31 +32,31 @@ namespace IronyModManager.Models
         /// Gets or sets the height.
         /// </summary>
         /// <value>The height.</value>
-        public int? Height { get; set; }
+        public virtual int? Height { get; set; }
 
         /// <summary>
         /// Gets or sets the is maximized.
         /// </summary>
         /// <value>The is maximized.</value>
-        public bool? IsMaximized { get; set; }
+        public virtual bool? IsMaximized { get; set; }
 
         /// <summary>
         /// Gets or sets the location x.
         /// </summary>
         /// <value>The location x.</value>
-        public int? LocationX { get; set; }
+        public virtual int? LocationX { get; set; }
 
         /// <summary>
         /// Gets or sets the location y.
         /// </summary>
         /// <value>The location y.</value>
-        public int? LocationY { get; set; }
+        public virtual int? LocationY { get; set; }
 
         /// <summary>
         /// Gets or sets the width.
         /// </summary>
         /// <value>The width.</value>
-        public int? Width { get; set; }
+        public virtual int? Width { get; set; }
 
         #endregion Properties
     }
