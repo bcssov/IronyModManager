@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -84,6 +84,21 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_same_games_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_games_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetGames();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Name.Should().Be("test");
+        }
+
+        /// <summary>
         /// Defines the test method Should_overwrite_preferences_object.
         /// </summary>
         [Fact]
@@ -117,6 +132,22 @@ namespace IronyModManager.Storage.Tests
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_add_new_game.
+        /// </summary>
+        [Fact]
+        public void Should_add_new_game()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var key = "test2";            
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.RegisterGame(key);
+            dbMock.Games.Count.Should().Be(2);
+            dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();            
         }
 
         /// <summary>
@@ -173,6 +204,22 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_add_and_return_added_game.
+        /// </summary>
+        [Fact]
+        public void Should_add_and_return_added_game()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var key = "test2";            
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.RegisterGame(key);
+            var result = storage.GetGames();
+            result.Count().Should().Be(2);
+            result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();            
+        }
+
+        /// <summary>
         /// Defines the test method Should_overwrite_and_return_same_window_state_object.
         /// </summary>
         [Fact]
@@ -205,7 +252,14 @@ namespace IronyModManager.Storage.Tests
                     Name = "test",
                     IsDefault = true,
                     Styles = new List<string> { "1", "2" }
-                } }
+                } },
+                Games = new List<IGameType>()
+                {
+                    new GameType()
+                    {
+                        Name = "test"
+                    }
+                }
             };
         }
     }

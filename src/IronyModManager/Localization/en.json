@@ -5,7 +5,7 @@
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
         "Title": "Error",
-        "Header":  "Fatal Error"
+        "Header": "Fatal Error"
     },
     "Languages": {
         "Name": "Language"
@@ -18,7 +18,11 @@
         "MaterialLightGreen": "Material Light Green",
         "MaterialDeepPurple": "Material Deep Purple",
         "Restart_Title": "Needs restart",
-        "Restart_Header":  "App needs restart",
+        "Restart_Header": "App needs restart",
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
+    },
+    "Games": {
+        "Name": "Games",
+        "Stellaris": "Stellaris"
     }
 }

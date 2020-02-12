@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="LanguageServiceTests.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
@@ -90,7 +91,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             languageService.ApplySelected().Should().Be(true);
             CurrentLocale.CultureName.Should().Be("en");
         }
@@ -105,7 +106,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockFailCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             languageService.ApplySelected().Should().Be(false);
             CurrentLocale.CultureName.Should().Be("en");
         }
@@ -120,7 +121,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.Get();
             result.Count().Should().Be(2);
             result.Count(p => p.IsSelected).Should().Be(1);
@@ -137,7 +138,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockFailCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.Get();
             result.Count().Should().Be(2);
             result.Count(p => p.IsSelected).Should().Be(0);            
@@ -153,7 +154,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.GetSelected();            
             result.Abrv.Should().Be("en");
         }
@@ -168,7 +169,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockFailCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.GetSelected();
             result.Should().BeNull();
         }
@@ -183,7 +184,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var result = languageService.Save(new Language()
             {
                 Abrv = "de",
@@ -204,7 +205,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockFailCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             try
             {
                 languageService.Save(new Language()
@@ -231,7 +232,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var languages = new List<ILanguage>
             {
                 new Language()
@@ -264,7 +265,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockFailCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var languages = new List<ILanguage>
             {
                 new Language()
@@ -336,7 +337,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockSuccessCase(resourceProvider, preferencesService);
 
-            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var languageService = new LanguagesService(resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
             var languages = new List<ILanguage>
             {
                 new Language()

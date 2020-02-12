@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="ThemeRegistration.cs" company="Mario">
 //     Mario
@@ -35,11 +35,11 @@ namespace IronyModManager.Services
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterTheme("Light", new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" }, true);
-            storage.RegisterTheme("Dark", new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseDark.xaml" });
-            storage.RegisterTheme("MaterialDark", new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.Dark.xaml" });
-            storage.RegisterTheme("MaterialLightGreen", new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml" });
-            storage.RegisterTheme("MaterialDeepPurple", new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml" });
+            storage.RegisterTheme(Constants.Themes.Light.Name, new List<string> { Constants.Themes.Light.MainResource, Constants.Themes.Light.AccentResource }, true);
+            storage.RegisterTheme(Constants.Themes.Dark.Name, new List<string> { Constants.Themes.Dark.MainResource, Constants.Themes.Dark.AccentResource });
+            storage.RegisterTheme(Constants.Themes.MaterialDark.Name, new List<string> { Constants.Themes.MaterialDark.MainResource, Constants.Themes.MaterialDark.AccentResource });
+            storage.RegisterTheme(Constants.Themes.MaterialLightGreen.Name, new List<string> { Constants.Themes.MaterialLightGreen.MainResource, Constants.Themes.MaterialLightGreen.AccentResource });
+            storage.RegisterTheme(Constants.Themes.MaterialDeepPurple.Name, new List<string> { Constants.Themes.MaterialDeepPurple.MainResource, Constants.Themes.MaterialDeepPurple.AccentResource });
         }
 
         #endregion Methods

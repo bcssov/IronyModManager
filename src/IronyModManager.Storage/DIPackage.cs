@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -49,6 +49,7 @@ namespace IronyModManager.Storage
         public void RegisterServices(Container container)
         {
             container.Register<IThemeType, ThemeType>();
+            container.Register<IGameType, GameType>();
             container.RegisterSingleton<IDatabase, Database>();
             container.InterceptWith<PropertyChangedInterceptor<IDatabase>>(x => x == typeof(IDatabase), true);
 

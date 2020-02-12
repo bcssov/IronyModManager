@@ -1,48 +1,50 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models.Common
 // Author           : Mario
-// Created          : 01-11-2020
+// Created          : 02-12-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 02-12-2020
 // ***********************************************************************
-// <copyright file="IPreferences.cs" company="Mario">
+// <copyright file="IGame.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Collections.Generic;
+using System;
+using IronyModManager.Localization;
 
-/// <summary>
-/// The Models namespace.
-/// </summary>
 namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// Interface IPreferences
+    /// Interface IGame
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
+    /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IPreferences : IModel
+    /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
+    public interface IGame : IModel, ILocalizableModel
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets the game.
+        /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
-        /// <value>The game.</value>
-        string Game { get; set; }
+        /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
+        bool IsSelected { get; set; }
 
         /// <summary>
-        /// Gets or sets the locale.
+        /// Gets or sets the name.
         /// </summary>
-        /// <value>The locale.</value>
-        string Locale { get; set; }
+        /// <value>The name.</value>
+        string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the theme.
+        /// Gets or sets the type.
         /// </summary>
-        /// <value>The theme.</value>
-        string Theme { get; set; }
+        /// <value>The type.</value>
+        string Type { get; set; }
 
         #endregion Properties
     }

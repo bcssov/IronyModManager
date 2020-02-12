@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -16,27 +16,24 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
     /// <summary>
     /// Class LanguagesService.
     /// Implements the <see cref="IronyModManager.Services.Common.ILanguagesService" />
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.Common.ILanguagesService" />
-    public class LanguagesService : ILanguagesService
+    public class LanguagesService : BaseService, ILanguagesService
     {
         #region Fields
-
-        /// <summary>
-        /// The mapper
-        /// </summary>
-        private readonly IMapper mapper;
 
         /// <summary>
         /// The preferences service
@@ -57,12 +54,12 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="resourceProvider">The resource provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
+        /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public LanguagesService(IDefaultLocalizationResourceProvider resourceProvider, IPreferencesService preferencesService, IMapper mapper)
+        public LanguagesService(IDefaultLocalizationResourceProvider resourceProvider, IPreferencesService preferencesService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.resourceProvider = resourceProvider;
             this.preferencesService = preferencesService;
-            this.mapper = mapper;
         }
 
         #endregion Constructors
@@ -131,7 +128,7 @@ namespace IronyModManager.Services
             }
             var preference = preferencesService.Get();
 
-            var result = preferencesService.Save(mapper.Map(language, preference));
+            var result = preferencesService.Save(Mapper.Map(language, preference));
 
             CurrentLocale.SetCurrent(language.Abrv);
 
@@ -179,7 +176,7 @@ namespace IronyModManager.Services
         protected virtual ILanguage InitModel(string currentLocale, string locale)
         {
             var culture = new CultureInfo(locale);
-            var model = DIResolver.Get<ILanguage>();
+            var model = GetModelInstance<ILanguage>();
             model.IsSelected = currentLocale.Equals(locale, StringComparison.OrdinalIgnoreCase);
             model.Abrv = locale;
             model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";

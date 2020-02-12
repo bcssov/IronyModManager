@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="WindowStateServiceTests.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AutoMapper;
 using FluentAssertions;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
@@ -41,7 +42,7 @@ namespace IronyModManager.Services.Tests
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetWindowState()).Returns(state);
 
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.Should().Be(state);
         }
@@ -61,7 +62,7 @@ namespace IronyModManager.Services.Tests
             };
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetWindowState()).Returns(state);
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             service.IsDefined().Should().Be(true);
         }
 
@@ -79,7 +80,7 @@ namespace IronyModManager.Services.Tests
             };
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetWindowState()).Returns(state);
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             service.IsDefined().Should().Be(false);
         }
 
@@ -95,7 +96,7 @@ namespace IronyModManager.Services.Tests
             };
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetWindowState()).Returns(state);
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             service.IsMaximized().Should().Be(true);
         }
 
@@ -108,7 +109,7 @@ namespace IronyModManager.Services.Tests
             var state = new WindowState();            
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetWindowState()).Returns(state);
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             service.IsMaximized().Should().Be(false);
         }
 
@@ -120,7 +121,7 @@ namespace IronyModManager.Services.Tests
         {            
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.SetWindowState(It.IsAny<IWindowState>())).Returns(true);
-            var service = new WindowStateService(storage.Object);
+            var service = new WindowStateService(storage.Object, new Mock<IMapper>().Object);
             service.Save(new WindowState()).Should().Be(true);
         }
     }

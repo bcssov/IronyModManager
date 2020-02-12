@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Storage.Common
         #region Methods
 
         /// <summary>
+        /// Gets the games.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IGameType&gt;.</returns>
+        IEnumerable<IGameType> GetGames();
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -41,6 +47,13 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <returns>IWindowState.</returns>
         IWindowState GetWindowState();
+
+        /// <summary>
+        /// Registers the game.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool RegisterGame(string name);
 
         /// <summary>
         /// Registers the theme.

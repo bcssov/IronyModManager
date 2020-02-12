@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="WindowStateService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -22,28 +23,21 @@ namespace IronyModManager.Services
     /// <summary>
     /// Class WindowStateService.
     /// Implements the <see cref="IronyModManager.Services.Common.IWindowStateService" />
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IWindowStateService" />
-    public class WindowStateService : IWindowStateService
+    public class WindowStateService : BaseService, IWindowStateService
     {
-        #region Fields
-
-        /// <summary>
-        /// The storage
-        /// </summary>
-        private readonly IStorageProvider storage;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowStateService" /> class.
         /// </summary>
         /// <param name="storage">The storage.</param>
-        public WindowStateService(IStorageProvider storage)
+        /// <param name="mapper">The mapper.</param>
+        public WindowStateService(IStorageProvider storage, IMapper mapper) : base(storage, mapper)
         {
-            this.storage = storage;
         }
 
         #endregion Constructors
@@ -56,7 +50,7 @@ namespace IronyModManager.Services
         /// <returns>IWindowState.</returns>
         public virtual IWindowState Get()
         {
-            return storage.GetWindowState();
+            return StorageProvider.GetWindowState();
         }
 
         /// <summary>
@@ -94,7 +88,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool Save(IWindowState state)
         {
-            return storage.SetWindowState(state);
+            return StorageProvider.SetWindowState(state);
         }
 
         #endregion Methods

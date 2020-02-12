@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -72,6 +72,18 @@ namespace IronyModManager.Storage
         #region Methods
 
         /// <summary>
+        /// Gets the games.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IGameType&gt;.</returns>
+        public virtual IEnumerable<IGameType> GetGames()
+        {
+            lock (dbLock)
+            {
+                return Database.Games;
+            }
+        }
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -110,13 +122,34 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Registers the game.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public virtual bool RegisterGame(string name)
+        {
+            lock (dbLock)
+            {
+                if (Database.Games.Any(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidOperationException($"{name} game is already registered.");
+                }
+                var game = DIResolver.Get<IGameType>();
+                game.Name = name;
+                Database.Games.Add(game);
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Registers the theme.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
+        /// <returns>
+        ///   <c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
@@ -124,6 +157,10 @@ namespace IronyModManager.Storage
                 if (isDefault && Database.Themes.Any(s => s.IsDefault))
                 {
                     throw new InvalidOperationException("There is already a default theme registered.");
+                }
+                if (Database.Themes.Any(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    throw new InvalidOperationException($"{name} theme is already registered.");
                 }
                 var themeType = DIResolver.Get<IThemeType>();
                 themeType.IsDefault = isDefault;

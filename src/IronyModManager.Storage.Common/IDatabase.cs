@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Storage.Common
     public interface IDatabase : INotifyPropertyChanged, INotifyPropertyChanging
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the games.
+        /// </summary>
+        /// <value>The games.</value>
+        IList<IGameType> Games { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.
