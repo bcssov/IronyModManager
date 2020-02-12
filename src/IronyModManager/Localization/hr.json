@@ -22,6 +22,7 @@
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
     },
     "Games": {
+        "Name": "Igre",
         "Stellaris": "Stellaris"
     }
 }

@@ -36,7 +36,7 @@ namespace IronyModManager.Models
         /// Gets or sets the game.
         /// </summary>
         /// <value>The game.</value>
-        public string Game { get; set; }
+        public virtual string Game { get; set; }
 
         /// <summary>
         /// Gets or sets the locale.

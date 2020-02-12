@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 
@@ -33,15 +32,25 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainControlViewModel" /> class.
         /// </summary>
-        public MainControlViewModel()
+        /// <param name="themeControl">The theme control.</param>
+        /// <param name="languageControl">The language control.</param>
+        /// <param name="gameControl">The game control.</param>
+        public MainControlViewModel(ThemeControlViewModel themeControl, LanguageControlViewModel languageControl, GameControlViewModel gameControl)
         {
-            ThemeSelector = DIResolver.Get<ThemeControlViewModel>();
-            LanguageSelector = DIResolver.Get<LanguageControlViewModel>();
+            ThemeSelector = themeControl;
+            LanguageSelector = languageControl;
+            GameSelector = gameControl;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the game selector.
+        /// </summary>
+        /// <value>The game selector.</value>
+        public virtual GameControlViewModel GameSelector { get; protected set; }
 
         /// <summary>
         /// Gets or sets the language selector.

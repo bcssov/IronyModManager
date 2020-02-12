@@ -22,6 +22,7 @@
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
     },
     "Games": {
+        "Name": "Spiele",
         "Stellaris": "Stellaris"
     }
 }

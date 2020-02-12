@@ -22,6 +22,7 @@
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
     },
     "Games": {
+        "Name": "Games",
         "Stellaris": "Stellaris"
     }
 }

@@ -117,14 +117,15 @@ namespace IronyModManager.Services
             }
 
             var currentSelection = GetSelected();
-            if (currentSelection.Type == selectedGame.Type)
+            if (currentSelection?.Type == selectedGame.Type)
             {
                 return false;
             }
 
+            var type = currentSelection != null ? currentSelection.Type : selectedGame.Type;
             foreach (var item in games)
             {
-                if (item.Type != currentSelection.Type)
+                if (item.Type != type)
                 {
                     item.IsSelected = false;
                 }

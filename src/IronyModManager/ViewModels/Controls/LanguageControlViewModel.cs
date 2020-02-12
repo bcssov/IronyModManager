@@ -44,7 +44,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The previous language
         /// </summary>
-        private ILanguage PreviousLanguage;
+        private ILanguage previousLanguage;
 
         #endregion Fields
 
@@ -96,7 +96,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             Languages = languageService.Get();
 
-            PreviousLanguage = SelectedLanguage = Languages.FirstOrDefault(p => p.IsSelected);
+            previousLanguage = SelectedLanguage = Languages.FirstOrDefault(p => p.IsSelected);
 
             var lanuageChanged = this.WhenAnyValue(p => p.SelectedLanguage).Subscribe(p =>
             {
@@ -104,15 +104,15 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (languageService.SetSelected(Languages, p))
                     {
-                        if (PreviousLanguage != p)
+                        if (previousLanguage != p)
                         {
                             var args = new LocaleChangedEventArgs()
                             {
                                 Locale = p.Abrv,
-                                OldLocale = PreviousLanguage.Abrv
+                                OldLocale = previousLanguage.Abrv
                             };
                             MessageBus.Current.SendMessage(args);
-                            PreviousLanguage = p;
+                            previousLanguage = p;
                         }
                     }
                 }

@@ -41,6 +41,7 @@ namespace IronyModManager.Shared
         public static class Games
         {
             public const string Prefix = nameof(Games) + ".";
+            public const string Name = Prefix + "Name";
             public const string Stellaris = Prefix + "Stellaris";
         }
     }
