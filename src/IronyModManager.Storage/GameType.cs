@@ -30,7 +30,7 @@ namespace IronyModManager.Storage
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         #endregion Properties
     }

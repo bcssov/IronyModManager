@@ -4,7 +4,7 @@
 // Created          : 01-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="PreferencesServiceTests.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AutoMapper;
 using FluentAssertions;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
@@ -43,7 +44,7 @@ namespace IronyModManager.Services.Tests
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetPreferences()).Returns(pref);
 
-            var service = new PreferencesService(storage.Object);
+            var service = new PreferencesService(storage.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.Should().Be(pref);
         }
@@ -63,7 +64,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var pref = new Preferences();
-            var service = new PreferencesService(storage.Object);
+            var service = new PreferencesService(storage.Object, new Mock<IMapper>().Object);
             service.Save(pref);
             setPref.Should().Be(pref);
         }

@@ -75,7 +75,7 @@ namespace IronyModManager.Storage
         /// Gets the games.
         /// </summary>
         /// <returns>IEnumerable&lt;IGameType&gt;.</returns>
-        public IEnumerable<IGameType> GetGames()
+        public virtual IEnumerable<IGameType> GetGames()
         {
             lock (dbLock)
             {
@@ -127,7 +127,7 @@ namespace IronyModManager.Storage
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public bool RegisterGame(string name)
+        public virtual bool RegisterGame(string name)
         {
             lock (dbLock)
             {

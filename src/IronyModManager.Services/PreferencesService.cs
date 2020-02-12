@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="PreferencesService.cs" company="IronyModManager.Services">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -22,9 +23,11 @@ namespace IronyModManager.Services
     /// <summary>
     /// Class PreferencesService.
     /// Implements the <see cref="IronyModManager.Services.Common.IPreferencesService" />
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IPreferencesService" />
-    public class PreferencesService : IPreferencesService
+    public class PreferencesService : BaseService, IPreferencesService
     {
         #region Constructors
 
@@ -32,22 +35,12 @@ namespace IronyModManager.Services
         /// Initializes a new instance of the <see cref="PreferencesService" /> class.
         /// </summary>
         /// <param name="storage">The storage.</param>
-        public PreferencesService(IStorageProvider storage)
+        /// <param name="mapper">The mapper.</param>
+        public PreferencesService(IStorageProvider storage, IMapper mapper) : base(storage, mapper)
         {
-            Storage = storage;
         }
 
         #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the storage.
-        /// </summary>
-        /// <value>The storage.</value>
-        protected IStorageProvider Storage { get; private set; }
-
-        #endregion Properties
 
         #region Methods
 
@@ -57,7 +50,7 @@ namespace IronyModManager.Services
         /// <returns>IPreferences.</returns>
         public virtual IPreferences Get()
         {
-            return Storage.GetPreferences();
+            return StorageProvider.GetPreferences();
         }
 
         /// <summary>
@@ -67,7 +60,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool Save(IPreferences preferences)
         {
-            return Storage.SetPreferences(preferences);
+            return StorageProvider.SetPreferences(preferences);
         }
 
         #endregion Methods

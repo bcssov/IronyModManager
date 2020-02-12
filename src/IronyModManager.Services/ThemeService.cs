@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -25,9 +24,11 @@ namespace IronyModManager.Services
     /// <summary>
     /// Class ThemeService.
     /// Implements the <see cref="IronyModManager.Services.IThemeService" />
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.IThemeService" />
-    public class ThemeService : IThemeService
+    public class ThemeService : BaseService, IThemeService
     {
         #region Constructors
 
@@ -37,11 +38,9 @@ namespace IronyModManager.Services
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="mapper">The mapper.</param>
-        public ThemeService(IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper)
+        public ThemeService(IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
         {
-            StorageProvider = storageProvider;
-            PreferencesService = preferencesService;
-            Mapper = mapper;
+            PreferencesService = preferencesService; ;
         }
 
         #endregion Constructors
@@ -49,22 +48,10 @@ namespace IronyModManager.Services
         #region Properties
 
         /// <summary>
-        /// Gets the mapper.
-        /// </summary>
-        /// <value>The mapper.</value>
-        protected IMapper Mapper { get; private set; }
-
-        /// <summary>
         /// Gets the preferences service.
         /// </summary>
         /// <value>The preferences service.</value>
         protected IPreferencesService PreferencesService { get; private set; }
-
-        /// <summary>
-        /// Gets the storage provider.
-        /// </summary>
-        /// <value>The storage provider.</value>
-        protected IStorageProvider StorageProvider { get; private set; }
 
         #endregion Properties
 
@@ -170,7 +157,7 @@ namespace IronyModManager.Services
         /// <returns>ITheme.</returns>
         protected virtual ITheme InitModel(IThemeType themeItem, string selectedType)
         {
-            var theme = DIResolver.Get<ITheme>();
+            var theme = GetModelInstance<ITheme>();
             theme.Type = themeItem.Name;
             theme.IsSelected = themeItem.Name == selectedType;
             theme.StyleIncludes = themeItem.Styles;
