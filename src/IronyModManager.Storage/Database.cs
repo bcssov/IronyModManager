@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -36,6 +36,7 @@ namespace IronyModManager.Storage
         public Database()
         {
             Themes = new List<IThemeType>();
+            Games = new List<IGameType>();
         }
 
         #endregion Constructors
@@ -55,6 +56,12 @@ namespace IronyModManager.Storage
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the games.
+        /// </summary>
+        /// <value>The games.</value>
+        public IList<IGameType> Games { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.

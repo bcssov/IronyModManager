@@ -38,5 +38,10 @@ namespace IronyModManager.Shared
             public const string Restart_Header = Prefix + "Restart_Header";
             public const string Restart_Message = Prefix + "Restart_Message";
         }
+        public static class Games
+        {
+            public const string Prefix = nameof(Games) + ".";
+            public const string Stellaris = Prefix + "Stellaris";
+        }
     }
 }

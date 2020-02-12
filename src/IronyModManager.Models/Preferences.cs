@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-12-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -31,6 +31,12 @@ namespace IronyModManager.Models
     public class Preferences : BaseModel, IPreferences
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the game.
+        /// </summary>
+        /// <value>The game.</value>
+        public string Game { get; set; }
 
         /// <summary>
         /// Gets or sets the locale.
