@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using IronyModManager.DI;
@@ -56,7 +57,6 @@ namespace IronyModManager.Parser
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public virtual IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var file = args.File.Trim(Constants.Scripts.PathTrimParameters);
             var result = new List<IDefinition>();
             IDefinition definition = null;
             var sb = new StringBuilder();
@@ -78,8 +78,7 @@ namespace IronyModManager.Parser
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
-                        OnReadObjectLine(line);
-                        sb.AppendLine(line);
+                        OnReadObjectLine(line, sb, args);
                     }
                     else if (line.Trim().Contains(Constants.Scripts.VariableSeparator))
                     {
@@ -87,16 +86,12 @@ namespace IronyModManager.Parser
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition.Id = id;
                         definition.Code = line;
-                        definition.File = file;
-                        var type = GetOperationKey(file, Constants.Scripts.PathTrimParameters);
-                        definition.Type = type;
-                        result.Add(FinalizeVariableDefinition(definition, line));
+                        result.Add(FinalizeVariableDefinition(definition, line, args));
                     }
                 }
                 else
                 {
-                    OnReadObjectLine(line);
-                    sb.AppendLine(line);
+                    OnReadObjectLine(line, sb, args);
                     if (line.Contains(Constants.Scripts.OpeningBracket))
                     {
                         openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
@@ -110,10 +105,7 @@ namespace IronyModManager.Parser
                         openBrackets = null;
                         closeBrackets = 0;
                         definition.Code = sb.ToString();
-                        definition.File = file;
-                        var type = GetOperationKey(file, Constants.Scripts.PathTrimParameters);
-                        definition.Type = type;
-                        result.Add(FinalizeObjectDefinition(definition, line));
+                        result.Add(FinalizeObjectDefinition(definition, line, args));
                     }
                 }
             }
@@ -135,9 +127,11 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="line">The line.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeObjectDefinition(IDefinition definition, string line)
+        protected virtual IDefinition FinalizeObjectDefinition(IDefinition definition, string line, ParserArgs args)
         {
+            MapDefinitionFromArgs(args, definition);
             return definition;
         }
 
@@ -146,10 +140,24 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="line">The line.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeVariableDefinition(IDefinition definition, string line)
+        protected virtual IDefinition FinalizeVariableDefinition(IDefinition definition, string line, ParserArgs args)
         {
+            MapDefinitionFromArgs(args, definition);
             return definition;
+        }
+
+        /// <summary>
+        /// Formats the type.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string FormatType(string file)
+        {
+            var lines = file.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries);
+            var formatted = string.Join(Path.PathSeparator, lines.Take(lines.Length - 1));
+            return formatted;
         }
 
         /// <summary>
@@ -197,11 +205,29 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Maps the definition from arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="definition">The definition.</param>
+        protected virtual void MapDefinitionFromArgs(ParserArgs args, IDefinition definition)
+        {
+            definition.ContentSHA = args.ContentSHA;
+            definition.Dependencies = args.Dependencies;
+            definition.ModName = args.ModName;
+            definition.File = args.File;
+            var type = FormatType(args.File);
+            definition.Type = type;
+        }
+
+        /// <summary>
         /// Called when [read object line].
         /// </summary>
         /// <param name="line">The line.</param>
-        protected virtual void OnReadObjectLine(string line)
+        /// <param name="sb">The sb.</param>
+        /// <param name="args">The arguments.</param>
+        protected virtual void OnReadObjectLine(string line, StringBuilder sb, ParserArgs args)
         {
+            sb.AppendLine(line);
         }
 
         /// <summary>

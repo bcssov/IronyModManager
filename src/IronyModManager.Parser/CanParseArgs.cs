@@ -24,16 +24,16 @@ namespace IronyModManager.Parser
         #region Properties
 
         /// <summary>
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>The file.</value>
+        public string File { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the game.
         /// </summary>
         /// <value>The type of the game.</value>
         public string GameType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        public string Type { get; set; }
 
         #endregion Properties
     }

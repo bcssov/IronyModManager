@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace IronyModManager.Parser
 {
@@ -53,7 +54,7 @@ namespace IronyModManager.Parser
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.Type.Equals(ParserType, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(ParserType, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -71,28 +72,32 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="line">The line.</param>
+        /// <param name="args">The arguments.</param>
         /// <returns>IDefinition.</returns>
-        protected override IDefinition FinalizeObjectDefinition(IDefinition definition, string line)
+        protected override IDefinition FinalizeObjectDefinition(IDefinition definition, string line, ParserArgs args)
         {
+            var result = base.FinalizeObjectDefinition(definition, line, args);
             if (!string.IsNullOrWhiteSpace(eventId))
             {
-                definition.Id = eventId;
+                result.Id = eventId;
                 eventId = string.Empty;
             }
-            return base.FinalizeObjectDefinition(definition, line);
+            return result;
         }
 
         /// <summary>
         /// Called when [read object line].
         /// </summary>
         /// <param name="line">The line.</param>
-        protected override void OnReadObjectLine(string line)
+        /// <param name="sb">The sb.</param>
+        /// <param name="args">The arguments.</param>
+        protected override void OnReadObjectLine(string line, StringBuilder sb, ParserArgs args)
         {
             if (ClearWhitespace(line).Contains(Constants.Scripts.EventId))
             {
                 eventId = GetOperationValue(line, Constants.Scripts.SeparatorOperators);
             }
-            base.OnReadObjectLine(line);
+            base.OnReadObjectLine(line, sb, args);
         }
 
         #endregion Methods

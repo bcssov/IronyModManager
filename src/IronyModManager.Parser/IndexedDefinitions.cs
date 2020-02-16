@@ -32,9 +32,9 @@ namespace IronyModManager.Parser
         private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> filesMap;
 
         /// <summary>
-        /// The ids map
+        /// The type and ids map
         /// </summary>
-        private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> idsMap;
+        private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> typeAndIdsMap;
 
         /// <summary>
         /// The type map
@@ -56,13 +56,22 @@ namespace IronyModManager.Parser
         public IndexedDefinitions()
         {
             filesMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
-            idsMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
+            typeAndIdsMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
             typeMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
         }
 
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets all.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetAll()
+        {
+            return definitions;
+        }
 
         /// <summary>
         /// Gets the by file.
@@ -72,16 +81,6 @@ namespace IronyModManager.Parser
         public IEnumerable<IDefinition> GetByFile(string file)
         {
             return GetByKey(filesMap, file);
-        }
-
-        /// <summary>
-        /// Gets the by identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetById(string id)
-        {
-            return GetByKey(idsMap, id);
         }
 
         /// <summary>
@@ -95,6 +94,17 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Gets the by identifier.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetByTypeAndId(string type, string id)
+        {
+            return GetByKey(typeAndIdsMap, ConstructKey(type, id));
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -104,9 +114,19 @@ namespace IronyModManager.Parser
             foreach (var item in definitions)
             {
                 Map(filesMap, item.File, item);
-                Map(idsMap, item.Id, item);
                 Map(typeMap, item.Type, item);
+                Map(typeAndIdsMap, ConstructKey(item.Type, item.Id), item);
             }
+        }
+
+        /// <summary>
+        /// Constructs the key.
+        /// </summary>
+        /// <param name="keys">The keys.</param>
+        /// <returns>System.String.</returns>
+        private string ConstructKey(params string[] keys)
+        {
+            return string.Join("-", keys);
         }
 
         /// <summary>

@@ -24,6 +24,12 @@ namespace IronyModManager.Parser
         #region Methods
 
         /// <summary>
+        /// Gets all.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetAll();
+
+        /// <summary>
         /// Gets the by file.
         /// </summary>
         /// <param name="file">The file.</param>
@@ -31,18 +37,19 @@ namespace IronyModManager.Parser
         IEnumerable<IDefinition> GetByFile(string file);
 
         /// <summary>
-        /// Gets the by identifier.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> GetById(string id);
-
-        /// <summary>
         /// Gets the type of the by.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetByType(string type);
+
+        /// <summary>
+        /// Gets the by type and identifier.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByTypeAndId(string type, string id);
 
         /// <summary>
         /// Initializes the map.

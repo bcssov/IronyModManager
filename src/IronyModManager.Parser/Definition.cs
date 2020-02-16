@@ -32,6 +32,18 @@ namespace IronyModManager.Parser
         public string Code { get; set; }
 
         /// <summary>
+        /// Gets or sets the content sha.
+        /// </summary>
+        /// <value>The content sha.</value>
+        public string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dependencies.
+        /// </summary>
+        /// <value>The dependencies.</value>
+        public IEnumerable<string> Dependencies { get; set; }
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
@@ -42,6 +54,12 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <value>The identifier.</value>
         public string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the mod.
+        /// </summary>
+        /// <value>The name of the mod.</value>
+        public string ModName { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
