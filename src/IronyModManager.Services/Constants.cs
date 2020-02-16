@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-16-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -22,21 +22,6 @@ namespace IronyModManager.Services
     public static class Constants
     {
         #region Classes
-
-        /// <summary>
-        /// Class Games.
-        /// </summary>
-        public static class Games
-        {
-            #region Fields
-
-            /// <summary>
-            /// The stellaris
-            /// </summary>
-            public const string Stellaris = "Stellaris";
-
-            #endregion Fields
-        }
 
         /// <summary>
         /// Class Themes.
@@ -131,7 +116,6 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml";
-
 
                 /// <summary>
                 /// The main resource

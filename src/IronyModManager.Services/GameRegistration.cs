@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-16-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.Services
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterGame(Constants.Games.Stellaris);
+            storage.RegisterGame(Shared.Constants.GamesTypes.Stellaris);
         }
 
         #endregion Methods
