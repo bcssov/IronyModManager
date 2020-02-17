@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -32,6 +32,11 @@ namespace IronyModManager.Parser
         /// The generic parser flag
         /// </summary>
         public const string GenericParserFlag = "*";
+
+        /// <summary>
+        /// The stellaris on actions flag
+        /// </summary>
+        public const string StellarisOnActionsFlag = "common\\on_actions";
 
         #endregion Fields
 

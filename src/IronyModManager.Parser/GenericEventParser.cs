@@ -18,12 +18,12 @@ namespace IronyModManager.Parser
 {
     /// <summary>
     /// Class GenericEventParser.
-    /// Implements the <see cref="IronyModManager.Parser.GenericScriptParser" />
+    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.IDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.GenericScriptParser" />
+    /// <seealso cref="IronyModManager.Parser.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
-    public class GenericEventParser : GenericScriptParser, IDefaultParser
+    public class GenericEventParser : BaseParser, IDefaultParser
     {
         #region Fields
 

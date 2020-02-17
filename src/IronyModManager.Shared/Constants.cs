@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -63,11 +63,6 @@ namespace IronyModManager.Shared
         public static class GamesTypes
         {
             #region Fields
-
-            /// <summary>
-            /// The generic
-            /// </summary>
-            public const string Generic = "Generic";
 
             /// <summary>
             /// The stellaris

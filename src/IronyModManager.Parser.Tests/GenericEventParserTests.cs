@@ -27,14 +27,20 @@ namespace IronyModManager.Parser.Tests
     /// </summary>
     public class GenericEventParserTests
     {
+        /// <summary>
+        /// Defines the test method Has_valid_parser_type.
+        /// </summary>
         [Fact]
         public void Has_valid_parser_type()
         {
             new GenericEventParser().ParserType.Should().Be(Constants.GenericEventFlag);
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_should_be_false_then_true.
+        /// </summary>
         [Fact]
-        public void CanParse_should_be_false()
+        public void CanParse_should_be_false_then_true()
         {
             var args = new CanParseArgs()
             {
@@ -46,6 +52,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method Parse_should_yield_results.
+        /// </summary>
         [Fact]
         public void Parse_should_yield_results()
         {
