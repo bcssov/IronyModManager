@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-17-2020
 // ***********************************************************************
 // <copyright file="GenericEventParser.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace IronyModManager.Parser
 {
@@ -70,13 +69,11 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Finalizes the object definition.
         /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <param name="line">The line.</param>
         /// <param name="args">The arguments.</param>
         /// <returns>IDefinition.</returns>
-        protected override IDefinition FinalizeObjectDefinition(IDefinition definition, string line, ParserArgs args)
+        protected override IDefinition FinalizeObjectDefinition(ParsingArgs args)
         {
-            var result = base.FinalizeObjectDefinition(definition, line, args);
+            var result = base.FinalizeObjectDefinition(args);
             if (!string.IsNullOrWhiteSpace(eventId))
             {
                 result.Id = eventId;
@@ -88,16 +85,14 @@ namespace IronyModManager.Parser
         /// <summary>
         /// Called when [read object line].
         /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="sb">The sb.</param>
         /// <param name="args">The arguments.</param>
-        protected override void OnReadObjectLine(string line, StringBuilder sb, ParserArgs args)
+        protected override void OnReadObjectLine(ParsingArgs args)
         {
-            if (ClearWhitespace(line).Contains(Constants.Scripts.EventId))
+            if (ClearWhitespace(args.Line).Contains(Constants.Scripts.EventId) && args.OpeningBracket - args.ClosingBracket == 1)
             {
-                eventId = GetOperationValue(line, Constants.Scripts.SeparatorOperators);
+                eventId = GetOperationValue(args.Line, Constants.Scripts.SeparatorOperators);
             }
-            base.OnReadObjectLine(line, sb, args);
+            base.OnReadObjectLine(args);
         }
 
         #endregion Methods

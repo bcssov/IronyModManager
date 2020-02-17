@@ -55,7 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Localizatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Tests", "src\IronyModManager.Tests\IronyModManager.Tests.csproj", "{CF957907-0AE3-428D-A958-E85FEBF5809B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Parser", "src\IronyModManager.Parser\IronyModManager.Parser.csproj", "{45F12518-A54B-4A00-B8E5-E9B6F87F236C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Parser", "src\IronyModManager.Parser\IronyModManager.Parser.csproj", "{45F12518-A54B-4A00-B8E5-E9B6F87F236C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Parser.Tests", "src\IronyModManager.Parser.Tests\IronyModManager.Parser.Tests.csproj", "{6410E579-AE1D-4A87-9A5A-57D881613CB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,6 +137,10 @@ Global
 		{45F12518-A54B-4A00-B8E5-E9B6F87F236C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45F12518-A54B-4A00-B8E5-E9B6F87F236C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45F12518-A54B-4A00-B8E5-E9B6F87F236C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6410E579-AE1D-4A87-9A5A-57D881613CB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6410E579-AE1D-4A87-9A5A-57D881613CB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6410E579-AE1D-4A87-9A5A-57D881613CB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6410E579-AE1D-4A87-9A5A-57D881613CB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,6 +164,7 @@ Global
 		{EFBEFDBD-AF02-4141-892D-6A4E52CA1272} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 		{CF957907-0AE3-428D-A958-E85FEBF5809B} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 		{45F12518-A54B-4A00-B8E5-E9B6F87F236C} = {7BF4F92B-82C0-42D2-8D3B-13783E67E6C4}
+		{6410E579-AE1D-4A87-9A5A-57D881613CB4} = {6B452FE9-6822-4900-9570-3307376D1CCF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D1256133-6A57-4335-B3F9-4028F01166F2}

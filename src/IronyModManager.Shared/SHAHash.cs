@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-17-2020
 // ***********************************************************************
 // <copyright file="SHAHash.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ namespace IronyModManager.Shared
     /// <summary>
     /// Class SHAHash.
     /// </summary>
+    [ExcludeFromCoverage("Hash calculation is excluded.")]
     public static class SHAHash
     {
         #region Methods
