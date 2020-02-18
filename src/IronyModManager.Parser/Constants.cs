@@ -24,11 +24,6 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
-        /// The stellaris on actions flag
-        /// </summary>
-        public const string StellarisOnActionsFlag = "common\\on_actions";
-
-        /// <summary>
         /// The text extensions
         /// </summary>
         public static readonly string[] TextExtensions = new string[] { ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
@@ -88,6 +83,31 @@ namespace IronyModManager.Parser
             /// The separator operators
             /// </summary>
             public static readonly string[] SeparatorOperators = new string[] { VariableSeparator };
+
+            #endregion Fields
+        }
+
+        /// <summary>
+        /// Class Stellaris.
+        /// </summary>
+        public static class Stellaris
+        {
+            #region Fields
+
+            /// <summary>
+            /// The flags
+            /// </summary>
+            public const string Flags = "flags";
+
+            /// <summary>
+            /// The on actions flag
+            /// </summary>
+            public const string OnActions = "common\\on_actions";
+
+            /// <summary>
+            /// The common root files
+            /// </summary>
+            public static readonly string[] CommonRootFiles = new string[] { "common\\message_types.txt", "common\\alerts.txt" };
 
             #endregion Fields
         }
