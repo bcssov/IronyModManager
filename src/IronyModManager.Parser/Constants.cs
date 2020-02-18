@@ -25,6 +25,21 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// The GFX extension
+        /// </summary>
+        public const string GfxExtension = ".gfx";
+
+        /// <summary>
+        /// The GUI extension
+        /// </summary>
+        public const string GuiExtension = ".gui";
+
+        /// <summary>
+        /// The localization extension
+        /// </summary>
+        public const string LocalizationExtension = ".yml";
+
+        /// <summary>
         /// The text extensions
         /// </summary>
         public static readonly string[] TextExtensions = new string[] { ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
@@ -46,14 +61,29 @@ namespace IronyModManager.Parser
             public const char ClosingBracket = '}';
 
             /// <summary>
-            /// The definition separator
+            /// The definition separator identifier
             /// </summary>
-            public const string DefinitionSeparator = VariableSeparator + "{";
+            public const string DefinitionSeparatorId = VariableSeparatorId + "{";
 
             /// <summary>
-            /// The namespace
+            /// The graphics type name identifier
             /// </summary>
-            public const string Namespace = "namespace=";
+            public const string GraphicsTypeNameId = "name=";
+
+            /// <summary>
+            /// The GUI types
+            /// </summary>
+            public const string GuiTypes = "guiTypes";
+
+            /// <summary>
+            /// The GUI types identifier
+            /// </summary>
+            public const string GuiTypesId = GuiTypes + VariableSeparatorId;
+
+            /// <summary>
+            /// The namespace identifier
+            /// </summary>
+            public const string NamespaceId = "namespace=";
 
             /// <summary>
             /// The opening bracket
@@ -61,14 +91,24 @@ namespace IronyModManager.Parser
             public const char OpeningBracket = '{';
 
             /// <summary>
-            /// The script comment
+            /// The script comment identifier
             /// </summary>
-            public const string ScriptComment = "#";
+            public const string ScriptCommentId = "#";
 
             /// <summary>
-            /// The variable separator
+            /// The sprite type identifier
             /// </summary>
-            public const string VariableSeparator = "=";
+            public const string SpriteTypeId = "spriteType=";
+
+            /// <summary>
+            /// The sprite types
+            /// </summary>
+            public const string SpriteTypes = "spriteTypes =";
+
+            /// <summary>
+            /// The variable separator identifier
+            /// </summary>
+            public const string VariableSeparatorId = "=";
 
             /// <summary>
             /// The generic key flags
@@ -83,7 +123,7 @@ namespace IronyModManager.Parser
             /// <summary>
             /// The separator operators
             /// </summary>
-            public static readonly string[] SeparatorOperators = new string[] { VariableSeparator };
+            public static readonly string[] SeparatorOperators = new string[] { VariableSeparatorId };
 
             #endregion Fields
         }
@@ -124,6 +164,11 @@ namespace IronyModManager.Parser
             /// The on actions flag
             /// </summary>
             public static readonly string OnActions = MergePath("common", "on_actions");
+
+            /// <summary>
+            /// The shader extensions
+            /// </summary>
+            public static readonly string[] ShaderExtensions = new string[] { ".shader", "fxh" };
 
             /// <summary>
             /// The species names

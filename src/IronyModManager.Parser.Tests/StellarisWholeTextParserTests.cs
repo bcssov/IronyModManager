@@ -24,9 +24,9 @@ using Xunit;
 namespace IronyModManager.Parser.Tests
 {
     /// <summary>
-    /// Class StellarisFilenameParserTests.
+    /// Class StellarisWholeTextParserTests.
     /// </summary>
-    public class StellarisFilenameParserTests
+    public class StellarisWholeTextParserTests
     {
         /// <summary>
         /// Defines the test method CanParse_common_root_should_be_true.
@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\alerts.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();            
             args.File = "common\\message_types.txt";
             parser.CanParse(args).Should().BeTrue();
@@ -56,7 +56,7 @@ namespace IronyModManager.Parser.Tests
                 File = "map\\galaxy\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();            
         }
 
@@ -71,7 +71,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\on_actions\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -86,7 +86,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\component_templates\\weapon_components.csv",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();            
+            var parser = new WholeTextParser();            
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -101,7 +101,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\diplo_phrases\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -116,7 +116,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\species_names\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -131,7 +131,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\start_screen_messages\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -146,7 +146,21 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\terraform\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanParse_shader_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\test.shader",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser();            
+            parser.CanParse(args).Should().BeTrue();
+            args.File = "common\\test.fxh";
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -161,7 +175,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\ship_designs\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeFalse();
         }
 
@@ -188,7 +202,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new FilenameParser();
+            var parser = new WholeTextParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

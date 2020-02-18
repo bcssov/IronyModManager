@@ -107,7 +107,7 @@ namespace IronyModManager.Parser.Tests
                 File = "flags\\test.png",
                 ModName = "fake"
             };
-            var parser = new BinaryParser();
+            var parser = new GenericBinaryParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="FilenameParser.cs" company="Mario">
+// <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,7 +22,7 @@ namespace IronyModManager.Parser.Stellaris
     /// Implements the <see cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
-    public class FilenameParser : BaseStellarisParser
+    public class WholeTextParser : BaseStellarisParser
     {
         #region Methods
 
@@ -104,6 +104,16 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
+        /// Determines whether the specified arguments is shader.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if the specified arguments is shader; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsShader(CanParseArgs args)
+        {
+            return Constants.Stellaris.ShaderExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
         /// Determines whether [is species names] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -133,7 +143,8 @@ namespace IronyModManager.Parser.Stellaris
             return IsCommonRoot(args) || IsMapGalaxy(args) ||
                 IsOnActions(args) || IsWeaponComponents(args) ||
                 IsDipoPhrase(args) || IsSpeciesNames(args) ||
-                IsStartScreenMessage(args) || IsTerraform(args);
+                IsStartScreenMessage(args) || IsTerraform(args) ||
+                IsShader(args);
         }
 
         /// <summary>

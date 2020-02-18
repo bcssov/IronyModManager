@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="BinaryParserTests.cs" company="Mario">
+// <copyright file="GenericBinaryParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,7 +24,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class BinaryParserTests.
     /// </summary>
-    public class BinaryParserTests
+    public class GenericBinaryParserTests
     {
         /// <summary>
         /// Defines the test method CanParse_should_be_false_then_true.
@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new BinaryParser();
+            var parser = new GenericBinaryParser();
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\gfx\\test.png";            
             parser.CanParse(args).Should().BeTrue();
@@ -58,7 +58,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gfx\\test.png",            
                 ModName = "fake"
             };
-            var parser = new BinaryParser();
+            var parser = new GenericBinaryParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

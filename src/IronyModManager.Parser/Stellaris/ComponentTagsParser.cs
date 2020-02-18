@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Stellaris
             var col = new List<IDefinition>();
             foreach (var line in args.Lines)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptComment) || line.Trim().Length == 0)
+                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId) || line.Trim().Length == 0)
                 {
                     continue;
                 }

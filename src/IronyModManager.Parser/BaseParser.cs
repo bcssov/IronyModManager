@@ -43,14 +43,14 @@ namespace IronyModManager.Parser
             int closeBrackets = 0;
             foreach (var line in args.Lines)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptComment))
+                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
                 if (!openBrackets.HasValue)
                 {
                     var cleaned = ClearWhitespace(line);
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator) || cleaned.EndsWith(Constants.Scripts.VariableSeparator, StringComparison.OrdinalIgnoreCase))
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId, StringComparison.OrdinalIgnoreCase))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -70,13 +70,13 @@ namespace IronyModManager.Parser
                             result.Add(FinalizeObjectDefinition(parsingArgs));
                         }
                     }
-                    else if (line.Trim().Contains(Constants.Scripts.VariableSeparator))
+                    else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
                     {
                         definition = GetDefinitionInstance();
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition.Id = id;
                         definition.Code = line;
-                        if (cleaned.Contains(Constants.Scripts.Namespace))
+                        if (cleaned.Contains(Constants.Scripts.NamespaceId))
                         {
                             definition.ValueType = ValueType.Namespace;
                         }
@@ -110,6 +110,30 @@ namespace IronyModManager.Parser
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Cleans the parsed text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string CleanParsedText(string text)
+        {
+            var sb = new StringBuilder();
+            foreach (var item in text)
+            {
+                if (!char.IsWhiteSpace(item) &&
+                    !item.Equals(Constants.Scripts.OpeningBracket) &&
+                    !item.Equals(Constants.Scripts.ClosingBracket))
+                {
+                    sb.Append(item);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -196,7 +220,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected virtual string GetOperationKey(string line, params string[] keys)
         {
-            return line.Split(keys, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).First().Trim());
         }
 
         /// <summary>
@@ -207,7 +231,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected virtual string GetOperationKey(string line, params char[] keys)
         {
-            return line.Split(keys, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).First().Trim());
         }
 
         /// <summary>
@@ -218,7 +242,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected virtual string GetOperationValue(string line, params string[] keys)
         {
-            return line.Split(keys, StringSplitOptions.RemoveEmptyEntries)[1].Trim();
+            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).Last().Trim().Replace("\"", string.Empty));
         }
 
         /// <summary>
@@ -229,7 +253,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected virtual string GetOperationValue(string line, params char[] keys)
         {
-            return line.Split(keys, StringSplitOptions.RemoveEmptyEntries)[1].Trim();
+            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).Last().Trim().Replace("\"", string.Empty));
         }
 
         /// <summary>

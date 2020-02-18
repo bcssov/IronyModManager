@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="BinaryParser.cs" company="Mario">
+// <copyright file="GenericBinaryParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,7 +24,7 @@ namespace IronyModManager.Parser
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.IGenericParser" />
-    public class BinaryParser : BaseParser, IGenericParser
+    public class GenericBinaryParser : BaseParser, IGenericParser
     {
         #region Methods
 
