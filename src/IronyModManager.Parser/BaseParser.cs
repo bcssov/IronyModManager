@@ -50,7 +50,7 @@ namespace IronyModManager.Parser
                 if (!openBrackets.HasValue)
                 {
                     var cleaned = ClearWhitespace(line);
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId, StringComparison.OrdinalIgnoreCase))
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -76,7 +76,7 @@ namespace IronyModManager.Parser
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition.Id = id;
                         definition.Code = line;
-                        if (cleaned.Contains(Constants.Scripts.NamespaceId))
+                        if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
                             definition.ValueType = ValueType.Namespace;
                         }

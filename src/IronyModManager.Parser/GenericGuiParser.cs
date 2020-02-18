@@ -58,7 +58,7 @@ namespace IronyModManager.Parser
                     continue;
                 }
                 var cleaned = ClearWhitespace(line);               
-                if (cleaned.StartsWith(Constants.Scripts.GuiTypesId))
+                if (cleaned.StartsWith(Constants.Scripts.GuiTypesId, StringComparison.OrdinalIgnoreCase))
                 {
                     openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                     closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -68,7 +68,7 @@ namespace IronyModManager.Parser
                         sb.Clear();
                         definition = GetDefinitionInstance();
                         definition.ValueType = ValueType.Object;
-                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId))
+                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
                         {
                             var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
                             definition.Id = id;
@@ -100,7 +100,7 @@ namespace IronyModManager.Parser
                             definition = GetDefinitionInstance();
                             definition.ValueType = ValueType.Object;
                         }
-                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId))
+                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
                         {
                             var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
                             definition.Id = id;

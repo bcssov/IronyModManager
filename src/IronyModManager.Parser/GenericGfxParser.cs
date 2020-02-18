@@ -36,7 +36,7 @@ namespace IronyModManager.Parser
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Constants.GfxExtension);
+            return args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace IronyModManager.Parser
                         sb.Clear();
                         sb.AppendLine($"{Constants.Scripts.SpriteTypes} {Constants.Scripts.OpeningBracket}");
                         definition = GetDefinitionInstance();
-                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId))
+                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
                         {
                             var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
                             definition.Id = id;
@@ -87,7 +87,7 @@ namespace IronyModManager.Parser
                 }
                 else
                 {
-                    if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId))
+                    if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
                     {
                         var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
                         definition.Id = id;

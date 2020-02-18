@@ -51,7 +51,7 @@ namespace IronyModManager.Parser
                 var cleaned = ClearWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId, StringComparison.OrdinalIgnoreCase))
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);

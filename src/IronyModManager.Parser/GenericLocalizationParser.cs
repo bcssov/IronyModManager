@@ -82,7 +82,7 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         protected virtual string GetLanguageId(string line)
         {
-            var lang = Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s));
+            var lang = Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s, StringComparison.OrdinalIgnoreCase));
             return lang;
         }
 
