@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -28,6 +28,24 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetAll();
+
+        /// <summary>
+        /// Gets all file keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllFileKeys();
+
+        /// <summary>
+        /// Gets all type and identifier keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllTypeAndIdKeys();
+
+        /// <summary>
+        /// Gets all type keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetAllTypeKeys();
 
         /// <summary>
         /// Gets the by file.

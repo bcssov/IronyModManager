@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Parser
 {
@@ -71,6 +72,33 @@ namespace IronyModManager.Parser
         public IEnumerable<IDefinition> GetAll()
         {
             return definitions;
+        }
+
+        /// <summary>
+        /// Gets all file keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetAllFileKeys()
+        {
+            return filesMap.Select(s => s.Key);
+        }
+
+        /// <summary>
+        /// Gets all type and identifier keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetAllTypeAndIdKeys()
+        {
+            return typeAndIdsMap.Select(s => s.Key);
+        }
+
+        /// <summary>
+        /// Gets all type keys.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetAllTypeKeys()
+        {
+            return typeMap.Select(s => s.Key);
         }
 
         /// <summary>
