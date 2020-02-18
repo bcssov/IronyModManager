@@ -36,7 +36,7 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// The stellaris root
         /// </summary>
-        private string stellarisRoot = @"D:\Games\Stellaris\";
+        private readonly string stellarisRoot = @"D:\Games\Stellaris\";
 
         #endregion Fields
 
@@ -94,7 +94,7 @@ namespace IronyModManager.Parser.Tests
                         undefined.Add(relativePath);
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
                     undefined.Add(relativePath);
                 }

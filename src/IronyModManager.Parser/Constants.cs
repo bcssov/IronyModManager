@@ -95,14 +95,29 @@ namespace IronyModManager.Parser
             #region Fields
 
             /// <summary>
+            /// The component tags
+            /// </summary>
+            public const string ComponentTags = "common\\component_tags";
+
+            /// <summary>
             /// The flags
             /// </summary>
             public const string Flags = "flags";
 
             /// <summary>
+            /// The map galaxy
+            /// </summary>
+            public const string MapGalaxy = "map\\galaxy";
+
+            /// <summary>
             /// The on actions flag
             /// </summary>
             public const string OnActions = "common\\on_actions";
+
+            /// <summary>
+            /// The weapon components
+            /// </summary>
+            public const string WeaponComponents = "common\\component_templates\\weapon_components.csv";
 
             /// <summary>
             /// The common root files
