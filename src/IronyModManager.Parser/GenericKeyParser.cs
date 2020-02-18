@@ -51,7 +51,7 @@ namespace IronyModManager.Parser
                 var cleaned = ClearWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator))
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator) || cleaned.EndsWith(Constants.Scripts.VariableSeparator, StringComparison.OrdinalIgnoreCase))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -59,7 +59,7 @@ namespace IronyModManager.Parser
                         {
                             return true;
                         }
-                        if (openBrackets == closeBrackets)
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
                             openBrackets = null;
                             closeBrackets = 0;
@@ -74,7 +74,7 @@ namespace IronyModManager.Parser
                     {
                         return true;
                     }
-                    if (openBrackets == closeBrackets)
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         openBrackets = null;
                         closeBrackets = 0;

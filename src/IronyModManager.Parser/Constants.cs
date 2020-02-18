@@ -28,6 +28,11 @@ namespace IronyModManager.Parser
         /// </summary>
         public const string StellarisOnActionsFlag = "common\\on_actions";
 
+        /// <summary>
+        /// The text extensions
+        /// </summary>
+        public static readonly string[] TextExtensions = new string[] { ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
+
         #endregion Fields
 
         #region Classes

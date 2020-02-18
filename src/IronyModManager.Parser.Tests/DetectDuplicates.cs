@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
@@ -35,9 +34,9 @@ namespace IronyModManager.Parser.Tests
         private readonly ITestOutputHelper writer;
 
         /// <summary>
-        /// The extensions
+        /// The stellaris root
         /// </summary>
-        private List<string> extensions = new List<string>() { ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
+        private string stellarisRoot = @"D:\Games\Stellaris\";
 
         #endregion Fields
 
@@ -66,22 +65,17 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             // backkup path
-            var root = @"D:\Games\Stellaris\";
             var parser = new DefaultParser();
-            var files = Directory.EnumerateFiles(root, "*", SearchOption.AllDirectories).Where(s => IsValidExtension(s));
+            var files = Directory.EnumerateFiles(stellarisRoot, "*", SearchOption.AllDirectories).Where(s => IsValidExtension(s));
             var result = new List<IDefinition>();
             var undefined = new List<string>();
             foreach (var item in files)
             {
-                var relativePath = item.Replace(root, string.Empty);
+                var relativePath = item.Replace(stellarisRoot, string.Empty);
                 if (!relativePath.Contains("\\") || relativePath.Contains("readme", StringComparison.OrdinalIgnoreCase) || relativePath.Contains("example", StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
-                //if (!relativePath.Contains("trade_conversions", StringComparison.OrdinalIgnoreCase))
-                //{
-                //    continue;
-                //}
                 var content = File.ReadAllLines(item);
                 var args = new ParserArgs()
                 {
@@ -151,8 +145,7 @@ namespace IronyModManager.Parser.Tests
         //[Fact(Timeout = 300000)]
         public void StellarisExtensions()
         {
-            var root = @"D:\Games\Stellaris\";
-            var exts = Directory.GetFiles(root, "*", SearchOption.AllDirectories).Where(s => s.Replace(root, string.Empty).Contains("\\")).GroupBy(s => Path.GetExtension(s)).Select(s => s.First());
+            var exts = Directory.GetFiles(stellarisRoot, "*", SearchOption.AllDirectories).Where(s => s.Replace(stellarisRoot, string.Empty).Contains("\\")).GroupBy(s => Path.GetExtension(s)).Select(s => s.First());
             var allowedExtensions = new List<string>();
             foreach (var item in exts)
             {
@@ -172,7 +165,7 @@ namespace IronyModManager.Parser.Tests
         /// <returns><c>true</c> if [is valid extension] [the specified file]; otherwise, <c>false</c>.</returns>
         private bool IsValidExtension(string file)
         {
-            return extensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods
