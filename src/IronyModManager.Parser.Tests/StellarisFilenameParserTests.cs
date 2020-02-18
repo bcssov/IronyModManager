@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Parser.Tests
+// Author           : Mario
+// Created          : 02-18-2020
+//
+// Last Modified By : Mario
+// Last Modified On : 02-18-2020
+// ***********************************************************************
+// <copyright file="StellarisFilenameParserTests.cs" company="Mario">
+//     Mario
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +23,14 @@ using Xunit;
 
 namespace IronyModManager.Parser.Tests
 {
+    /// <summary>
+    /// Class StellarisFilenameParserTests.
+    /// </summary>
     public class StellarisFilenameParserTests
     {
+        /// <summary>
+        /// Defines the test method CanParse_common_root_should_be_true.
+        /// </summary>
         [Fact]
         public void CanParse_common_root_should_be_true()
         {
@@ -26,6 +45,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_map_galaxy_should_be_true.
+        /// </summary>
         [Fact]
         public void CanParse_map_galaxy_should_be_true()
         {
@@ -38,6 +60,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();            
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_on_actions_should_be_true.
+        /// </summary>
         [Fact]
         public void CanParse_on_actions_should_be_true()
         {
@@ -50,6 +75,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_weapon_components_should_be_true.
+        /// </summary>
         [Fact]
         public void CanParse_weapon_components_should_be_true()
         {
@@ -62,6 +90,69 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_diplo_phrase_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_diplo_phrase_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\diplo_phrases\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_species_names_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_species_names_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\species_names\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_start_screen_messages_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_start_screen_messages_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\start_screen_messages\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_terraform_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_terraform_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\terraform\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_should_be_false.
+        /// </summary>
         [Fact]
         public void CanParse_should_be_false()
         {
@@ -74,6 +165,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeFalse();
         }
 
+        /// <summary>
+        /// Defines the test method Parse_should_yield_results.
+        /// </summary>
         [Fact]
         public void Parse_should_yield_results()
         {

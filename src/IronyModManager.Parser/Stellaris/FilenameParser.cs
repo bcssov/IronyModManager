@@ -37,6 +37,16 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
+        /// Determines whether [is start screen message] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is start screen message] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsStartScreenMessage(CanParseArgs args)
+        {
+            return args.File.StartsWith(Constants.Stellaris.StartScreenMessages, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -64,13 +74,23 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
+        /// Determines whether [is dipo phrase] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is dipo phrase] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsDipoPhrase(CanParseArgs args)
+        {
+            return args.File.StartsWith(Constants.Stellaris.DiploPhrases, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Determines whether [is map galaxy] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if [is map galaxy] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsMapGalaxy(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.MapGalaxy);
+            return args.File.StartsWith(Constants.Stellaris.MapGalaxy, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -84,13 +104,36 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
+        /// Determines whether [is species names] [the specified arguments].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if [is species names] [the specified arguments]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsSpeciesNames(CanParseArgs args)
+        {
+            return args.File.StartsWith(Constants.Stellaris.SpeciesNames, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether the specified arguments is terraform.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if the specified arguments is terraform; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsTerraform(CanParseArgs args)
+        {
+            return args.File.StartsWith(Constants.Stellaris.Terraform, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// Determines whether [is valid type] [the specified arguments].
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsValidType(CanParseArgs args)
         {
-            return IsCommonRoot(args) || IsMapGalaxy(args) || IsOnActions(args) || IsWeaponComponents(args);
+            return IsCommonRoot(args) || IsMapGalaxy(args) ||
+                IsOnActions(args) || IsWeaponComponents(args) ||
+                IsDipoPhrase(args) || IsSpeciesNames(args) ||
+                IsStartScreenMessage(args) || IsTerraform(args);
         }
 
         /// <summary>

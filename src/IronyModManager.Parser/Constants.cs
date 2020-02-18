@@ -11,8 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace IronyModManager.Parser
 {
@@ -95,36 +96,70 @@ namespace IronyModManager.Parser
             #region Fields
 
             /// <summary>
-            /// The component tags
-            /// </summary>
-            public const string ComponentTags = "common\\component_tags";
-
-            /// <summary>
             /// The flags
             /// </summary>
             public const string Flags = "flags";
 
             /// <summary>
+            /// The common root files
+            /// </summary>
+            public static readonly string[] CommonRootFiles = new string[] { MergePath("common", "message_types.txt"), MergePath("common", "alerts.txt") };
+
+            /// <summary>
+            /// The component tags
+            /// </summary>
+            public static readonly string ComponentTags = MergePath("common", "component_tags");
+
+            /// <summary>
+            /// The diplo phrases
+            /// </summary>
+            public static readonly string DiploPhrases = MergePath("common", "diplo_phrases");
+
+            /// <summary>
             /// The map galaxy
             /// </summary>
-            public const string MapGalaxy = "map\\galaxy";
+            public static readonly string MapGalaxy = MergePath("map", "galaxy");
 
             /// <summary>
             /// The on actions flag
             /// </summary>
-            public const string OnActions = "common\\on_actions";
+            public static readonly string OnActions = MergePath("common", "on_actions");
+
+            /// <summary>
+            /// The species names
+            /// </summary>
+            public static readonly string SpeciesNames = MergePath("common", "species_names");
+
+            /// <summary>
+            /// The start screen messages
+            /// </summary>
+            public static readonly string StartScreenMessages = MergePath("common", "start_screen_messages");
+
+            /// <summary>
+            /// The terraform
+            /// </summary>
+            public static readonly string Terraform = MergePath("common", "terraform");
 
             /// <summary>
             /// The weapon components
             /// </summary>
-            public const string WeaponComponents = "common\\component_templates\\weapon_components.csv";
-
-            /// <summary>
-            /// The common root files
-            /// </summary>
-            public static readonly string[] CommonRootFiles = new string[] { "common\\message_types.txt", "common\\alerts.txt" };
+            public static readonly string WeaponComponents = MergePath("common", "component_templates", "weapon_components.csv");
 
             #endregion Fields
+
+            #region Methods
+
+            /// <summary>
+            /// Merges the path.
+            /// </summary>
+            /// <param name="paths">The paths.</param>
+            /// <returns>System.String.</returns>
+            private static string MergePath(params string[] paths)
+            {
+                return string.Join(Path.DirectorySeparatorChar, paths);
+            }
+
+            #endregion Methods
         }
 
         #endregion Classes
