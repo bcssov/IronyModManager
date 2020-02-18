@@ -152,7 +152,6 @@ namespace IronyModManager.Parser.Tests
                         break;
                     case 2:
                         result[i].Id.Should().Be("dmm_mod.1");
-                        var t = sb2.ToString();
                         result[i].Code.Should().Be(sb2.ToString());
                         result[i].ValueType.Should().Be(ValueType.Object);
                         break;

@@ -36,6 +36,12 @@ namespace IronyModManager.Parser
         public string GameType { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
+        public bool IsBinary { get; set; }
+
+        /// <summary>
         /// Gets or sets the lines.
         /// </summary>
         /// <value>The lines.</value>

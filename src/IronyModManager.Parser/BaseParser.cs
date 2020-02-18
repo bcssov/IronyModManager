@@ -50,7 +50,7 @@ namespace IronyModManager.Parser
                 if (!openBrackets.HasValue)
                 {
                     var cleaned = ClearWhitespace(line);
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator))
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator) || cleaned.EndsWith(Constants.Scripts.VariableSeparator, StringComparison.OrdinalIgnoreCase))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -62,7 +62,7 @@ namespace IronyModManager.Parser
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
                         OnReadObjectLine(parsingArgs);
                         // incase some wise ass opened and closed an object definition in the same line
-                        if (openBrackets == closeBrackets)
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
                             openBrackets = null;
                             closeBrackets = 0;
@@ -100,7 +100,7 @@ namespace IronyModManager.Parser
                     {
                         closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
                     }
-                    if (openBrackets == closeBrackets)
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         openBrackets = null;
                         closeBrackets = 0;

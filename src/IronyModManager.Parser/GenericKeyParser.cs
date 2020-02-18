@@ -109,7 +109,7 @@ namespace IronyModManager.Parser
             var cleaned = ClearWhitespace(args.Line);
             if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.GenericKeyFlags.Any(s => cleaned.Contains(s, StringComparison.OrdinalIgnoreCase)))
             {
-                key = GetOperationValue(args.Line, Constants.Scripts.SeparatorOperators);
+                key = GetOperationValue(args.Line, Constants.Scripts.SeparatorOperators).Replace("\"", string.Empty);
             }
             base.OnReadObjectLine(args);
         }
