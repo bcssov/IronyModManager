@@ -19,7 +19,6 @@ using FluentAssertions;
 using IronyModManager.Tests.Common;
 using Xunit;
 
-
 namespace IronyModManager.Parser.Tests
 {
     /// <summary>

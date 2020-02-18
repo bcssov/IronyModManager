@@ -49,6 +49,26 @@ namespace IronyModManager.Parser
         #region Classes
 
         /// <summary>
+        /// Class Localization.
+        /// </summary>
+        public static class Localization
+        {
+            #region Fields
+
+            /// <summary>
+            /// The yml separator
+            /// </summary>
+            public const char YmlSeparator = ':';
+
+            /// <summary>
+            /// The locales
+            /// </summary>
+            public static readonly string[] Locales = new string[] { "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish" };
+
+            #endregion Fields
+        }
+
+        /// <summary>
         /// Class Scripts.
         /// </summary>
         public static class Scripts
@@ -168,7 +188,7 @@ namespace IronyModManager.Parser
             /// <summary>
             /// The shader extensions
             /// </summary>
-            public static readonly string[] ShaderExtensions = new string[] { ".shader", "fxh" };
+            public static readonly string[] ShaderExtensions = new string[] { ".shader", ".fxh" };
 
             /// <summary>
             /// The species names
