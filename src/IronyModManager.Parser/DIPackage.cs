@@ -37,8 +37,9 @@ namespace IronyModManager.Parser
         {
             container.Register<IDefinition, Definition>();
             container.Register<IIndexedDefinitions, IndexedDefinitions>();
-            container.Collection.Register(typeof(IDefaultParser), typeof(IDefaultParser).Assembly);
-            container.Collection.Register(typeof(IParser), typeof(IParser).Assembly);
+            container.Register<IDefaultParser, DefaultParser>();
+            container.Collection.Register(typeof(IGenericParser), typeof(IGenericParser).Assembly);
+            container.Collection.Register(typeof(IGameParser), typeof(IGameParser).Assembly);
         }
 
         #endregion Methods

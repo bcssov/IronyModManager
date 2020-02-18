@@ -1,36 +1,49 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-16-2020
+// Created          : 02-18-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="IDefaultParser.cs" company="Mario">
+// <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
-    /// Interface IDefaultParser
+    /// Enum ValueType
     /// </summary>
-    public interface IDefaultParser
+    public enum ValueType
     {
-        #region Methods
+        /// <summary>
+        /// The whole text file
+        /// </summary>
+        WholeTextFile,
 
         /// <summary>
-        /// Parses the specified arguments.
+        /// The variable
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> Parse(ParserArgs args);
+        Variable,
 
-        #endregion Methods
+        /// <summary>
+        /// The namespace
+        /// </summary>
+        Namespace,
+
+        /// <summary>
+        /// The object
+        /// </summary>
+        Object,
+
+        /// <summary>
+        /// The binary
+        /// </summary>
+        Binary
     }
 }

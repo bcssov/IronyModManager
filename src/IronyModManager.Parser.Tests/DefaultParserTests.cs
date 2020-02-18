@@ -4,9 +4,9 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="GenericScriptParserTests.cs" company="Mario">
+// <copyright file="DefaultParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,33 +24,8 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class GenericScriptParserTests.
     /// </summary>
-    public class GenericScriptParserTests
+    public class DefaultParserTests
     {
-        /// <summary>
-        /// Defines the test method Has_valid_parser_type.
-        /// </summary>
-        [Fact]
-        public void Has_valid_parser_type()
-        {
-            new GenericScriptParser().ParserType.Should().Be(Constants.GenericParserFlag);
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_should_be_false.
-        /// </summary>
-        [Fact]
-        public void CanParse_should_be_false()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\gamerules\\test.txt",             
-            };
-            var parser = new GenericScriptParser();
-            parser.CanParse(args).Should().BeFalse();
-            args.File = "events\\test.txt";
-            parser.CanParse(args).Should().BeFalse();
-        }
-
         /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
@@ -122,7 +97,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericScriptParser();
+            var parser = new DefaultParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(4);
@@ -136,16 +111,20 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
                         result[i].Code.Should().Be(sb2.ToString());
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 2:
                         result[i].Id.Should().Be("asl_mode_options_3");
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;

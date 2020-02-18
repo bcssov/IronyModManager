@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="CanParseArgs.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <value>The type of the game.</value>
         public string GameType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lines.
+        /// </summary>
+        /// <value>The lines.</value>
+        public IEnumerable<string> Lines { get; set; }
 
         #endregion Properties
     }

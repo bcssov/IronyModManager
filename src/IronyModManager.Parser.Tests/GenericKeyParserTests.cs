@@ -4,9 +4,9 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="GenericEventParserTests.cs" company="Mario">
+// <copyright file="GenericKeyParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -25,30 +25,48 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class GenericEventParserTests.
     /// </summary>
-    public class GenericEventParserTests
+    public class GenericKeyParserTests
     {
-        /// <summary>
-        /// Defines the test method Has_valid_parser_type.
-        /// </summary>
-        [Fact]
-        public void Has_valid_parser_type()
-        {
-            new GenericEventParser().ParserType.Should().Be(Constants.GenericEventFlag);
-        }
-
         /// <summary>
         /// Defines the test method CanParse_should_be_false_then_true.
         /// </summary>
         [Fact]
         public void CanParse_should_be_false_then_true()
         {
+            var sb = new StringBuilder();
+            sb.AppendLine(@"@test = 1");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"namespace = dmm_mod");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"country_event = {");
+            sb.AppendLine(@"    id = dmm_mod.1");
+            sb.AppendLine(@"    hide_window = yes");
+            sb.AppendLine(@"    is_triggered_only = yes");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"    trigger = {");
+            sb.AppendLine(@"        has_global_flag = dmm_mod_1");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"    after = {");
+            sb.AppendLine(@"        remove_global_flag = dmm_mod_1_opened");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"    immediate = {");
+            sb.AppendLine(@"        country_event = {");
+            sb.AppendLine(@"            id = asl_options.1");
+            sb.AppendLine(@"        }");
+            sb.AppendLine(@"    }");
+            sb.AppendLine(@"}");
+
             var args = new CanParseArgs()
             {
                 File = "common\\gamerules\\test.txt",
+                Lines = new List<string> { "test", "test2 = {}" }
             };
-            var parser = new GenericEventParser();
+            var parser = new GenericKeyParser();
             parser.CanParse(args).Should().BeFalse();
             args.File = "events\\test.txt";
+            args.Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -112,7 +130,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericEventParser();
+            var parser = new GenericKeyParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -126,15 +144,18 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("namespace");
+                        result[i].ValueType.Should().Be(ValueType.Namespace);
                         break;
                     case 2:
                         result[i].Id.Should().Be("dmm_mod.1");
                         var t = sb2.ToString();
                         result[i].Code.Should().Be(sb2.ToString());
-                        break;                    
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
                     default:
                         break;
                 }

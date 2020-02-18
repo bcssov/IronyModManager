@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="OnActionsParser.cs" company="Mario">
 //     Mario
@@ -20,28 +20,12 @@ namespace IronyModManager.Parser.Stellaris
     /// <summary>
     /// Class OnActionsParser.
     /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IParser" />
+    /// Implements the <see cref="IronyModManager.Parser.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IParser" />
-    public class OnActionsParser : BaseParser, IParser
+    /// <seealso cref="IronyModManager.Parser.IGameParser" />
+    public class OnActionsParser : BaseParser, IGameParser
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the type of the game.
-        /// </summary>
-        /// <value>The type of the game.</value>
-        public string GameType => Shared.Constants.GamesTypes.Stellaris;
-
-        /// <summary>
-        /// Gets the type of the parser.
-        /// </summary>
-        /// <value>The type of the parser.</value>
-        public override string ParserType => Constants.StellarisOnActionsFlag;
-
-        #endregion Properties
-
         #region Methods
 
         /// <summary>
@@ -49,9 +33,9 @@ namespace IronyModManager.Parser.Stellaris
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public override bool CanParse(CanParseArgs args)
+        public bool CanParse(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.StellarisOnActionsFlag, StringComparison.OrdinalIgnoreCase) && args.GameType.Equals(GameType, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Constants.StellarisOnActionsFlag, StringComparison.OrdinalIgnoreCase) && args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -67,6 +51,7 @@ namespace IronyModManager.Parser.Stellaris
             MapDefinitionFromArgs(parsingArgs);
             def.Code = string.Join(Environment.NewLine, args.Lines);
             def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
+            def.ValueType = ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
 

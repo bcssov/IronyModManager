@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -22,16 +22,6 @@ namespace IronyModManager.Parser
     public static class Constants
     {
         #region Fields
-
-        /// <summary>
-        /// The generic event flag
-        /// </summary>
-        public const string GenericEventFlag = "events";
-
-        /// <summary>
-        /// The generic parser flag
-        /// </summary>
-        public const string GenericParserFlag = "*";
 
         /// <summary>
         /// The stellaris on actions flag
@@ -60,9 +50,9 @@ namespace IronyModManager.Parser
             public const string DefinitionSeparator = VariableSeparator + "{";
 
             /// <summary>
-            /// The event identifier
+            /// The namespace
             /// </summary>
-            public const string EventId = "id" + VariableSeparator;
+            public const string Namespace = "namespace=";
 
             /// <summary>
             /// The opening bracket
@@ -78,6 +68,11 @@ namespace IronyModManager.Parser
             /// The variable separator
             /// </summary>
             public const string VariableSeparator = "=";
+
+            /// <summary>
+            /// The generic key flags
+            /// </summary>
+            public static readonly string[] GenericKeyFlags = new string[] { "id=", "name=", "key=" };
 
             /// <summary>
             /// The path trim parameters

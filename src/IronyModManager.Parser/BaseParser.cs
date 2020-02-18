@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -27,24 +27,7 @@ namespace IronyModManager.Parser
     /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
     public abstract class BaseParser : IDefaultParser
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the type of the parser.
-        /// </summary>
-        /// <value>The type of the parser.</value>
-        public abstract string ParserType { get; }
-
-        #endregion Properties
-
         #region Methods
-
-        /// <summary>
-        /// Determines whether this instance can parse the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public abstract bool CanParse(CanParseArgs args);
 
         /// <summary>
         /// Parses the specified arguments.
@@ -66,7 +49,8 @@ namespace IronyModManager.Parser
                 }
                 if (!openBrackets.HasValue)
                 {
-                    if (ClearWhitespace(line).Contains(Constants.Scripts.DefinitionSeparator))
+                    var cleaned = ClearWhitespace(line);
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparator))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -74,6 +58,7 @@ namespace IronyModManager.Parser
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
+                        definition.ValueType = ValueType.Object;
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
                         OnReadObjectLine(parsingArgs);
                         // incase some wise ass opened and closed an object definition in the same line
@@ -91,6 +76,14 @@ namespace IronyModManager.Parser
                         var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
                         definition.Id = id;
                         definition.Code = line;
+                        if (cleaned.Contains(Constants.Scripts.Namespace))
+                        {
+                            definition.ValueType = ValueType.Namespace;
+                        }
+                        else
+                        {
+                            definition.ValueType = ValueType.Variable;
+                        }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
                         result.Add(FinalizeVariableDefinition(parsingArgs));
                     }

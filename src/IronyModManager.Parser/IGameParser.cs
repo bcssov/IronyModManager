@@ -6,31 +6,22 @@
 // Last Modified By : Mario
 // Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="IDefaultParser.cs" company="Mario">
+// <copyright file="IGameParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
-    /// Interface IDefaultParser
+    /// Interface IGameParser
+    /// Implements the <see cref="IronyModManager.Parser.IGenericParser" />
     /// </summary>
-    public interface IDefaultParser
+    /// <seealso cref="IronyModManager.Parser.IGenericParser" />
+    public interface IGameParser : IGenericParser
     {
-        #region Methods
-
-        /// <summary>
-        /// Parses the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> Parse(ParserArgs args);
-
-        #endregion Methods
     }
 }

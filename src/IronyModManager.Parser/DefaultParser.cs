@@ -4,33 +4,25 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
-// <copyright file="IParser.cs" company="Mario">
+// <copyright file="DefaultParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
-    /// Interface IParser
-    /// Implements the <see cref="IronyModManager.Parser.IDefaultParser" />
+    /// Class DefaultParser.
+    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
-    public interface IParser : IDefaultParser
+    /// <seealso cref="IronyModManager.Parser.BaseParser" />
+    public class DefaultParser : BaseParser
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the type of the game.
-        /// </summary>
-        /// <value>The type of the game.</value>
-        string GameType { get; }
-
-        #endregion Properties
     }
 }

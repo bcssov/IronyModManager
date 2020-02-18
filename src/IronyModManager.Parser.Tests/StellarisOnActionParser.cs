@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-18-2020
 // ***********************************************************************
 // <copyright file="StellarisOnActionParser.cs" company="Mario">
 //     Mario
@@ -43,25 +43,8 @@ namespace IronyModManager.Parser.Tests
             var parser = new OnActionsParser();
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\on_actions\\test.txt";
+            args.Lines = new List<string> { "test", "test2 = {}" };
             parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method Has_valid_game_type.
-        /// </summary>
-        [Fact]
-        public void Has_valid_game_type()
-        {
-            new OnActionsParser().GameType.Should().Be(Shared.Constants.GamesTypes.Stellaris);
-        }
-
-        /// <summary>
-        /// Defines the test method Has_valid_parser_type.
-        /// </summary>
-        [Fact]
-        public void Has_valid_parser_type()
-        {
-            new OnActionsParser().ParserType.Should().Be(Constants.StellarisOnActionsFlag);
         }
 
         /// <summary>
@@ -101,6 +84,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("fake.txt");
+                        result[i].ValueType.Should().Be(ValueType.WholeTextFile);
                         break;
 
                     default:
