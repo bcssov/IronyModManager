@@ -1,17 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Tests
-// Author           : Mario
-// Created          : 02-18-2020
-//
-// Last Modified By : Mario
-// Last Modified On : 02-18-2020
-// ***********************************************************************
-// <copyright file="StellarisCommonRootParserTests.cs" company="Mario">
-//     Mario
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,35 +7,73 @@ using IronyModManager.Parser.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
 
+
 namespace IronyModManager.Parser.Tests
 {
-    /// <summary>
-    /// Class StellarisCommonRootParserTests.
-    /// </summary>
-    public class StellarisCommonRootParserTests
+    public class StellarisFilenameParserTests
     {
-        /// <summary>
-        /// Defines the test method CanParse_should_be_false_then_true.
-        /// </summary>
         [Fact]
-        public void CanParse_should_be_false_then_true()
+        public void CanParse_common_root_should_be_true()
         {
             var args = new CanParseArgs()
             {
-                File = "common\\test\\alerts.txt",
+                File = "common\\alerts.txt",
                 GameType = "Stellaris"
             };
-            var parser = new CommonRootParser();
-            parser.CanParse(args).Should().BeFalse();
-            args.File = "common\\alerts.txt";
-            parser.CanParse(args).Should().BeTrue();
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();            
             args.File = "common\\message_types.txt";
             parser.CanParse(args).Should().BeTrue();
         }
 
-        /// <summary>
-        /// Defines the test method Parse_should_yield_results.
-        /// </summary>
+        [Fact]
+        public void CanParse_map_galaxy_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "map\\galaxy\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();            
+        }
+
+        [Fact]
+        public void CanParse_on_actions_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\on_actions\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanParse_weapon_components_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\component_templates\\weapon_components.csv",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();            
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanParse_should_be_false()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\ship_designs\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new FilenameParser();
+            parser.CanParse(args).Should().BeFalse();
+        }
+
         [Fact]
         public void Parse_should_yield_results()
         {
@@ -69,7 +94,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new CommonRootParser();
+            var parser = new FilenameParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
