@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.1" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.2" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
