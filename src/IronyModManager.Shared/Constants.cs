@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 02-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -48,12 +48,30 @@ namespace IronyModManager.Shared
         /// </summary>
         public const string ProxyIdentifier = "Proxy";
 
-
         /// <summary>
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";
 
         #endregion Fields
+
+        #region Classes
+
+        /// <summary>
+        /// Class GamesTypes.
+        /// </summary>
+        public static class GamesTypes
+        {
+            #region Fields
+
+            /// <summary>
+            /// The stellaris
+            /// </summary>
+            public const string Stellaris = "Stellaris";
+
+            #endregion Fields
+        }
+
+        #endregion Classes
     }
 }

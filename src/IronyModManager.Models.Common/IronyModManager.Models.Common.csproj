@@ -11,6 +11,7 @@
     <PackageReleaseNotes>Irony Mod Manager Models Common Component</PackageReleaseNotes>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Configurations>Debug;Release;Detect</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
