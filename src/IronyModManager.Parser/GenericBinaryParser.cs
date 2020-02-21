@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="GenericBinaryParser.cs" company="Mario">
 //     Mario
@@ -47,11 +47,12 @@ namespace IronyModManager.Parser
         {
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
-            var parsingArgs = ConstructArgs(args, def, null, null, 0, null);
+            var parsingArgs = ConstructArgs(args, def);
             MapDefinitionFromArgs(parsingArgs);
             def.Code = string.Empty;
             def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
             def.ValueType = ValueType.Binary;
+            def.Type = FormatType(args.File, Constants.BinaryType);
             return new List<IDefinition> { def };
         }
 

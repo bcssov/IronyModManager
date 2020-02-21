@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="GenericLocalizationParser.cs" company="Mario">
 //     Mario
@@ -60,13 +60,14 @@ namespace IronyModManager.Parser
                 }
                 if (!string.IsNullOrWhiteSpace(selectedLanguage) && !string.IsNullOrWhiteSpace(line))
                 {
-                    if (char.IsWhiteSpace(line[0]))
+                    if (string.IsNullOrWhiteSpace(lang))
                     {
                         var def = GetDefinitionInstance();
-                        var parsingArgs = ConstructArgs(args, def, null, null, 0, null);
+                        var parsingArgs = ConstructArgs(args, def);
                         MapDefinitionFromArgs(parsingArgs);
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
-                        def.Id = GetOperationKey(line, Constants.Localization.YmlSeparator);
+                        def.Type = FormatType(args.File, $"{selectedLanguage}-{Constants.YmlType}");
+                        def.Id = GetKey(line, Constants.Localization.YmlSeparator.ToString());
                         def.ValueType = ValueType.Variable;
                         result.Add(def);
                     }

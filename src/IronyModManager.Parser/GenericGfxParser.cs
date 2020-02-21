@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="GenericGfxParser.cs" company="Mario">
 //     Mario
@@ -27,6 +27,21 @@ namespace IronyModManager.Parser
     /// <seealso cref="IronyModManager.Parser.IGenericParser" />
     public class GenericGfxParser : BaseParser, IGenericParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The ids
+        /// </summary>
+        private static readonly string[] ids = new string[]
+        {
+            Constants.Scripts.ObjectTypesId,
+            Constants.Scripts.SpriteTypesId,
+            Constants.Scripts.BitmapFontsId,
+            Constants.Scripts.PositionTypeId
+        };
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -51,64 +66,84 @@ namespace IronyModManager.Parser
             var sb = new StringBuilder();
             int? openBrackets = null;
             int closeBrackets = 0;
+            bool isSpriteTypes = false;
             foreach (var line in args.Lines)
             {
                 if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
-                var cleaned = ClearWhitespace(line);
-                if (!openBrackets.HasValue)
+                var cleaned = CleanWhitespace(line);
+                if (ids.Any(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
-                    if (cleaned.Contains(Constants.Scripts.SpriteTypeId, StringComparison.OrdinalIgnoreCase))
+                    isSpriteTypes = cleaned.StartsWith(Constants.Scripts.SpriteTypesId, StringComparison.OrdinalIgnoreCase);
+                    openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
+                    closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
+                    // incase some wise ass opened and closed an object definition in the same line
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
-                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                         sb.Clear();
-                        sb.AppendLine($"{Constants.Scripts.SpriteTypes} {Constants.Scripts.OpeningBracket}");
                         definition = GetDefinitionInstance();
-                        if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
+                        definition.ValueType = ValueType.Object;
+                        var id = GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        if (!string.IsNullOrWhiteSpace(id))
                         {
-                            var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
                             definition.Id = id;
                         }
-                        definition.ValueType = ValueType.Object;
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
                         OnReadObjectLine(parsingArgs);
-                        // incase some wise ass opened and closed an object definition in the same line
-                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                        {
-                            openBrackets = null;
-                            closeBrackets = 0;
-                            definition.Code = sb.ToString();
-                            result.Add(FinalizeObjectDefinition(parsingArgs));
-                        }
+                        definition.Code = sb.ToString();
+                        result.Add(FinalizeObjectDefinition(parsingArgs));
+                        definition = null;
+                        openBrackets = null;
+                        closeBrackets = 0;
                     }
                 }
                 else
                 {
-                    if (cleaned.Contains(Constants.Scripts.GraphicsTypeNameId, StringComparison.OrdinalIgnoreCase))
-                    {
-                        var id = GetOperationValue(line, Constants.Scripts.GraphicsTypeNameId);
-                        definition.Id = id;
-                    }
-                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
-                    OnReadObjectLine(parsingArgs);
+                    int currentOpenBrackets = 0;
+                    int currentCloseBrackets = 0;
+                    var previousCloseBrackets = closeBrackets;
                     if (line.Contains(Constants.Scripts.OpeningBracket))
                     {
-                        openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
+                        currentOpenBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
+                        openBrackets += currentOpenBrackets;
                     }
                     if (line.Contains(Constants.Scripts.ClosingBracket))
                     {
-                        closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
+                        currentCloseBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
+                        closeBrackets += currentCloseBrackets;
+                    }
+                    if (openBrackets - closeBrackets == 2 || openBrackets - previousCloseBrackets == 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
+                    {
+                        if (definition == null)
+                        {
+                            sb.Clear();
+                            sb.AppendLine($"{(isSpriteTypes ? Constants.Scripts.SpriteTypes : Constants.Scripts.ObjectTypes)} {Constants.Scripts.VariableSeparatorId} {Constants.Scripts.OpeningBracket}");
+                            definition = GetDefinitionInstance();
+                            definition.ValueType = ValueType.Object;
+                            var initialKey = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                            definition.Id = initialKey;
+                        }
+                        var id = GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        if (!string.IsNullOrWhiteSpace(id))
+                        {
+                            definition.Id = id;
+                        }
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
+                        OnReadObjectLine(parsingArgs);
+                        if (openBrackets - closeBrackets == 1)
+                        {
+                            sb.AppendLine(Constants.Scripts.ClosingBracket.ToString());
+                            definition.Code = sb.ToString();
+                            result.Add(FinalizeObjectDefinition(parsingArgs));
+                            definition = null;
+                        }
                     }
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         openBrackets = null;
                         closeBrackets = 0;
-                        sb.AppendLine(Constants.Scripts.ClosingBracket.ToString());
-                        definition.Code = sb.ToString();
-                        result.Add(FinalizeObjectDefinition(parsingArgs));
                     }
                 }
             }

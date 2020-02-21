@@ -57,7 +57,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "gui\\gui.gui",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -85,7 +85,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui");
+                result[i].Type.Should().Be("gui\\gui");
             }
         }
 
@@ -100,7 +100,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "gui\\gui.gui",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -124,7 +124,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui");
+                result[i].Type.Should().Be("gui\\gui");
             }
         }
 
@@ -139,6 +139,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"		name = ""test""");
             sb.AppendLine(@"		x = 1");
             sb.AppendLine(@"	}		");
+            sb.AppendLine(@"	");
             sb.AppendLine(@"	containerWindowType = {");
             sb.AppendLine(@"		name = ""test2"" ");
             sb.AppendLine(@"	}			");
@@ -164,7 +165,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "gui\\gui.gui",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -192,7 +193,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("gui");
+                result[i].Type.Should().Be("gui\\gui");
             }
         }
     }

@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-19-2020
 // ***********************************************************************
-// <copyright file="StellarisFilenameParserTests.cs" company="Mario">
+// <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -150,6 +150,9 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_shader_should_be_true.
+        /// </summary>
         [Fact]
         public void CanParse_shader_should_be_true()
         {
@@ -159,6 +162,41 @@ namespace IronyModManager.Parser.Tests
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser();            
+            parser.CanParse(args).Should().BeTrue();
+            args.File = "common\\test.fxh";
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_text_sound_file_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_text_sound_file_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "sound\\t.asset",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser();
+            parser.CanParse(args).Should().BeTrue();
+            args.File = "common\\test.fxh";
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+
+        /// <summary>
+        /// Defines the test method CanParse_name_list_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_name_list_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\name_lists\\t.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser();
             parser.CanParse(args).Should().BeTrue();
             args.File = "common\\test.fxh";
             parser.CanParse(args).Should().BeTrue();
@@ -197,7 +235,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "common\\alerts.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -223,7 +261,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("common");
+                result[i].Type.Should().Be("common\\txt");
             }
         }
     }

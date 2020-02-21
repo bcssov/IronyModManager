@@ -11,6 +11,7 @@
     <PackageTags>Irony Mod Manager Services Common Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Services Common Component</PackageReleaseNotes>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Configurations>Debug;Release;Detect</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

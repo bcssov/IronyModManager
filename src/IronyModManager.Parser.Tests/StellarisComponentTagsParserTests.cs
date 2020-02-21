@@ -62,7 +62,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "common\\component_tags\\fake.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -93,7 +93,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("common\\component_tags");
+                result[i].Type.Should().Be("common\\component_tags\\txt");
             }
         }
     }

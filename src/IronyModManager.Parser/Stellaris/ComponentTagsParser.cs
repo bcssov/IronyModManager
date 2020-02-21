@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-20-2020
 // ***********************************************************************
 // <copyright file="ComponentTagsParser.cs" company="Mario">
 //     Mario
@@ -51,7 +51,7 @@ namespace IronyModManager.Parser.Stellaris
                     continue;
                 }
                 var def = GetDefinitionInstance();
-                var parsingArgs = ConstructArgs(args, def, null, null, 0, null);
+                var parsingArgs = ConstructArgs(args, def);
                 MapDefinitionFromArgs(parsingArgs);
                 def.Code = line;
                 def.Id = line;

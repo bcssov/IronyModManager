@@ -61,7 +61,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "flags\\fake.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
@@ -87,7 +87,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("flags");
+                result[i].Type.Should().Be("flags\\txt");
             }
         }
 
@@ -102,7 +102,7 @@ namespace IronyModManager.Parser.Tests
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
-                Dependencies = new List<string> { "1" },
+                ModDependencies = new List<string> { "1" },
                 File = "flags\\test.png",
                 ModName = "fake"
             };
@@ -127,7 +127,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("flags");
+                result[i].Type.Should().Be("flags\\binary");
             }
         }
     }

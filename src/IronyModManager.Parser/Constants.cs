@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -25,6 +25,16 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// The binary type
+        /// </summary>
+        public const string BinaryType = "binary";
+
+        /// <summary>
+        /// The FXH extension
+        /// </summary>
+        public const string FxhExtension = ".fxh";
+
+        /// <summary>
         /// The GFX extension
         /// </summary>
         public const string GfxExtension = ".gfx";
@@ -38,6 +48,21 @@ namespace IronyModManager.Parser
         /// The localization extension
         /// </summary>
         public const string LocalizationExtension = ".yml";
+
+        /// <summary>
+        /// The shader extensions
+        /// </summary>
+        public const string ShaderExtension = ".shader";
+
+        /// <summary>
+        /// The text type
+        /// </summary>
+        public const string TxtType = "txt";
+
+        /// <summary>
+        /// The yml type
+        /// </summary>
+        public const string YmlType = "yml";
 
         /// <summary>
         /// The text extensions
@@ -63,7 +88,7 @@ namespace IronyModManager.Parser
             /// <summary>
             /// The locales
             /// </summary>
-            public static readonly string[] Locales = new string[] { "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish" };
+            public static readonly string[] Locales = new string[] { "l_default", "l_english", "l_braz_por", "l_french", "l_german", "l_polish", "l_russian", "l_simp_chinese", "l_spanish", "l_chinese", "l_traditional_chinese" };
 
             #endregion Fields
         }
@@ -76,6 +101,11 @@ namespace IronyModManager.Parser
             #region Fields
 
             /// <summary>
+            /// The bitmap fonts identifier
+            /// </summary>
+            public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
+
+            /// <summary>
             /// The closing bracket
             /// </summary>
             public const char ClosingBracket = '}';
@@ -86,9 +116,9 @@ namespace IronyModManager.Parser
             public const string DefinitionSeparatorId = VariableSeparatorId + "{";
 
             /// <summary>
-            /// The graphics type name identifier
+            /// The graphics type name
             /// </summary>
-            public const string GraphicsTypeNameId = "name=";
+            public const string GraphicsTypeName = "name";
 
             /// <summary>
             /// The GUI types
@@ -103,7 +133,17 @@ namespace IronyModManager.Parser
             /// <summary>
             /// The namespace identifier
             /// </summary>
-            public const string NamespaceId = "namespace=";
+            public const string NamespaceId = "namespace" + VariableSeparatorId;
+
+            /// <summary>
+            /// The object types
+            /// </summary>
+            public const string ObjectTypes = "objectTypes";
+
+            /// <summary>
+            /// The object types identifier
+            /// </summary>
+            public const string ObjectTypesId = "objectTypes" + VariableSeparatorId;
 
             /// <summary>
             /// The opening bracket
@@ -111,19 +151,24 @@ namespace IronyModManager.Parser
             public const char OpeningBracket = '{';
 
             /// <summary>
+            /// The position type identifier
+            /// </summary>
+            public const string PositionTypeId = "positionType" + VariableSeparatorId;
+
+            /// <summary>
             /// The script comment identifier
             /// </summary>
             public const string ScriptCommentId = "#";
 
             /// <summary>
-            /// The sprite type identifier
-            /// </summary>
-            public const string SpriteTypeId = "spriteType=";
-
-            /// <summary>
             /// The sprite types
             /// </summary>
-            public const string SpriteTypes = "spriteTypes =";
+            public const string SpriteTypes = "spriteTypes";
+
+            /// <summary>
+            /// The sprite types identifier
+            /// </summary>
+            public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
 
             /// <summary>
             /// The variable separator identifier
@@ -131,9 +176,9 @@ namespace IronyModManager.Parser
             public const string VariableSeparatorId = "=";
 
             /// <summary>
-            /// The generic key flags
+            /// The generic key ids
             /// </summary>
-            public static readonly string[] GenericKeyFlags = new string[] { "id=", "name=", "key=" };
+            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=" };
 
             /// <summary>
             /// The path trim parameters
@@ -141,9 +186,9 @@ namespace IronyModManager.Parser
             public static readonly char[] PathTrimParameters = new char[] { '\\', '/' };
 
             /// <summary>
-            /// The separator operators
+            /// The stellaris key ids
             /// </summary>
-            public static readonly string[] SeparatorOperators = new string[] { VariableSeparatorId };
+            public static readonly string[] StellarisKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=" };
 
             #endregion Fields
         }
@@ -161,9 +206,14 @@ namespace IronyModManager.Parser
             public const string Flags = "flags";
 
             /// <summary>
+            /// The sound
+            /// </summary>
+            public const string Sound = "sound";
+
+            /// <summary>
             /// The common root files
             /// </summary>
-            public static readonly string[] CommonRootFiles = new string[] { MergePath("common", "message_types.txt"), MergePath("common", "alerts.txt") };
+            public static readonly string Alerts = MergePath("common", "alerts.txt");
 
             /// <summary>
             /// The component tags
@@ -181,14 +231,34 @@ namespace IronyModManager.Parser
             public static readonly string MapGalaxy = MergePath("map", "galaxy");
 
             /// <summary>
+            /// The message types
+            /// </summary>
+            public static readonly string MessageTypes = MergePath("common", "message_types.txt");
+
+            /// <summary>
+            /// The name lists
+            /// </summary>
+            public static readonly string NameLists = MergePath("common", "name_lists");
+
+            /// <summary>
             /// The on actions flag
             /// </summary>
             public static readonly string OnActions = MergePath("common", "on_actions");
 
             /// <summary>
-            /// The shader extensions
+            /// The portraits
             /// </summary>
-            public static readonly string[] ShaderExtensions = new string[] { ".shader", ".fxh" };
+            public static readonly string Portraits = MergePath("gfx", "portraits", "portraits");
+
+            /// <summary>
+            /// The random names
+            /// </summary>
+            public static readonly string RandomNames = MergePath("common", "random_names");
+
+            /// <summary>
+            /// The solar system initializers
+            /// </summary>
+            public static readonly string SolarSystemInitializers = MergePath("common", "solar_system_initializers");
 
             /// <summary>
             /// The species names
@@ -209,6 +279,11 @@ namespace IronyModManager.Parser
             /// The weapon components
             /// </summary>
             public static readonly string WeaponComponents = MergePath("common", "component_templates", "weapon_components.csv");
+
+            /// <summary>
+            /// The world GFX
+            /// </summary>
+            public static readonly string WorldGfx = MergePath("gfx", "worldgfx");
 
             #endregion Fields
 

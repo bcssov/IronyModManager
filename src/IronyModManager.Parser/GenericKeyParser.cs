@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-20-2020
 // ***********************************************************************
 // <copyright file="GenericKeyParser.cs" company="Mario">
 //     Mario
@@ -48,14 +48,14 @@ namespace IronyModManager.Parser
             int closeBrackets = 0;
             foreach (var line in args.Lines)
             {
-                var cleaned = ClearWhitespace(line);
+                var cleaned = CleanWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
                     if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyFlags.Any(s => cleaned.Contains(s, StringComparison.OrdinalIgnoreCase)))
+                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
                         {
                             return true;
                         }
@@ -70,7 +70,7 @@ namespace IronyModManager.Parser
                 {
                     openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
                     closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
-                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyFlags.Any(s => cleaned.Contains(s, StringComparison.OrdinalIgnoreCase)))
+                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
                     {
                         return true;
                     }
@@ -106,10 +106,25 @@ namespace IronyModManager.Parser
         /// <param name="args">The arguments.</param>
         protected override void OnReadObjectLine(ParsingArgs args)
         {
-            var cleaned = ClearWhitespace(args.Line);
-            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.GenericKeyFlags.Any(s => cleaned.Contains(s, StringComparison.OrdinalIgnoreCase)))
+            var cleaned = CleanWhitespace(args.Line);
+            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(cleaned, s))))
             {
-                key = GetOperationValue(args.Line, Constants.Scripts.SeparatorOperators);
+                string sep = string.Empty;
+                var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket.ToString());
+                int idLoc = -1;
+                foreach (var item in Constants.Scripts.GenericKeyIds)
+                {
+                    idLoc = cleaned.IndexOf(item);
+                    if (idLoc > -1)
+                    {
+                        sep = item;
+                        break;
+                    }
+                }
+                if (idLoc < bracketLocation || bracketLocation == -1 || args.Inline)
+                {
+                    key = GetValue(cleaned, sep);
+                }
             }
             base.OnReadObjectLine(args);
         }

@@ -16,8 +16,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.Tests.Common;
+using IronyModManager.Shared;
 using Xunit;
 using Xunit.Abstractions;
+using IronyModManager.DI;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -58,14 +62,16 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method Detect.
         /// </summary>
-        [Fact(Skip = "Test is for debuging", Timeout = 300000)]
-        //[Fact(Timeout = 300000)]
+#if !DETECT
+        [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
+#else
+        [Fact(Timeout = 300000)]
+#endif
         public void StellarisDetect()
         {
             DISetup.SetupContainer();
 
-            // backkup path
-            var parser = new DefaultParser();
+            var parser = DIResolver.Get<IParserManager>();
             var files = Directory.EnumerateFiles(stellarisRoot, "*", SearchOption.AllDirectories).Where(s => IsValidExtension(s));
             var result = new List<IDefinition>();
             var undefined = new List<string>();
@@ -76,11 +82,41 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                var content = File.ReadAllLines(item);
-                var args = new ParserArgs()
+                var content = File.ReadAllText(item);
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    continue;
+                }
+                //if (relativePath.Contains(@"utl_icons"))
+                //{
+                //    Debugger.Break();
+                //}
+                //else
+                //{
+                //    continue;
+                //}
+                var lines = content.Contains("\r\n") ? content.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : content.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+                bool notEmpty = false;
+                foreach (var line in lines)
+                {
+                    if (!line.StartsWith("#") && !string.IsNullOrWhiteSpace(line))
+                    {
+                        notEmpty = true;
+                        break;
+                    }
+                }
+                if (!notEmpty)
+                {
+                    continue;
+                }
+                var args = new ParserManagerArgs()
                 {
                     File = relativePath,
-                    Lines = content
+                    Lines = lines,
+                    ContentSHA = content.CalculateSHA(),
+                    GameType = "Stellaris",
+                    ModDependencies = new List<string>(),
+                    ModName = "None"
                 };
                 try
                 {
@@ -94,7 +130,7 @@ namespace IronyModManager.Parser.Tests
                         undefined.Add(relativePath);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
                     undefined.Add(relativePath);
                 }
@@ -102,25 +138,15 @@ namespace IronyModManager.Parser.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
-            var variables = new List<string>();
-            var namespaces = new List<string>();
             var objects = new List<string>();
             foreach (var item in typesKeys)
             {
                 var types = indexed.GetByType(item);
-                // find only variables
+
                 var grouped = types.GroupBy(p => p.ValueType);
                 if (grouped.Count() == 0)
                 {
                     undefined.Add(item);
-                }
-                if (grouped.Count(s => s.Key == ValueType.Variable) == 1 && grouped.Count() == 1)
-                {
-                    variables.Add(item);
-                }
-                if (grouped.Count(s => s.Key == ValueType.Namespace) == 1 && grouped.Count() == 1)
-                {
-                    namespaces.Add(item);
                 }
                 if (grouped.Count(s => s.Key == ValueType.Object) > 0)
                 {
@@ -128,21 +154,29 @@ namespace IronyModManager.Parser.Tests
                     var idGroup = objTypes.GroupBy(s => s.Id);
                     if (idGroup.Count() != objTypes.Count())
                     {
-                        objects.Add(item);
+                        var f = idGroup.Where(p => p.Count() > 1).SelectMany(s => s).ToList();
+                        foreach (var fl in f)
+                        {
+                            if (!objects.Contains(fl.File))
+                            {
+                                objects.Add($"{fl.File}: {fl.Id}");
+                            }
+                        }
                     }
                 }
             }
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Undefined{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, undefined.OrderBy(s => s))}");
-            writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Variables{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, variables.OrderBy(s => s))}");
-            writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Namepsaces{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, namespaces.OrderBy(s => s))}");
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
         }
 
         /// <summary>
         /// Defines the test method StellarisExtensions.
         /// </summary>
-        [Fact(Skip = "Test is for debuging", Timeout = 300000)]
-        //[Fact(Timeout = 300000)]
+#if !DETECT
+        [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
+#else
+        [Fact(Timeout = 300000)]
+#endif
         public void StellarisExtensions()
         {
             var exts = Directory.GetFiles(stellarisRoot, "*", SearchOption.AllDirectories).Where(s => s.Replace(stellarisRoot, string.Empty).Contains("\\")).GroupBy(s => Path.GetExtension(s)).Select(s => s.First());

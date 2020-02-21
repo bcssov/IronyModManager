@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 02-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -40,6 +40,7 @@ namespace IronyModManager.Parser
             container.Register<IDefaultParser, DefaultParser>();
             container.Collection.Register(typeof(IGenericParser), typeof(IGenericParser).Assembly);
             container.Collection.Register(typeof(IGameParser), typeof(IGameParser).Assembly);
+            container.Register<IParserManager, ParserManager>();
         }
 
         #endregion Methods

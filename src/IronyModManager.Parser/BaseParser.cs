@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using IronyModManager.DI;
 
 namespace IronyModManager.Parser
@@ -27,6 +28,28 @@ namespace IronyModManager.Parser
     /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
     public abstract class BaseParser : IDefaultParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The cleaner conversion map
+        /// </summary>
+        protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
+        {
+            { $" {Constants.Scripts.VariableSeparatorId}", Constants.Scripts.VariableSeparatorId.ToString() },
+            { $"{Constants.Scripts.VariableSeparatorId} ", Constants.Scripts.VariableSeparatorId.ToString() },
+            { $" {Constants.Scripts.OpeningBracket}", Constants.Scripts.OpeningBracket.ToString() },
+            { $"{Constants.Scripts.OpeningBracket} ", Constants.Scripts.OpeningBracket.ToString() },
+            { $" {Constants.Scripts.ClosingBracket}", Constants.Scripts.ClosingBracket.ToString() },
+            { $"{Constants.Scripts.ClosingBracket} ", Constants.Scripts.ClosingBracket.ToString() },
+        };
+
+        /// <summary>
+        /// The quotes regex
+        /// </summary>
+        protected static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -49,20 +72,21 @@ namespace IronyModManager.Parser
                 }
                 if (!openBrackets.HasValue)
                 {
-                    var cleaned = ClearWhitespace(line);
+                    var cleaned = CleanWhitespace(line);
                     if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                         sb.Clear();
-                        var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
+                        var id = GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
                         definition.ValueType = ValueType.Object;
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
+                        bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline);
                         OnReadObjectLine(parsingArgs);
                         // incase some wise ass opened and closed an object definition in the same line
-                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                        if (inline)
                         {
                             openBrackets = null;
                             closeBrackets = 0;
@@ -73,7 +97,7 @@ namespace IronyModManager.Parser
                     else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
                     {
                         definition = GetDefinitionInstance();
-                        var id = GetOperationKey(line, Constants.Scripts.SeparatorOperators);
+                        var id = GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition.Id = id;
                         definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
@@ -84,14 +108,12 @@ namespace IronyModManager.Parser
                         {
                             definition.ValueType = ValueType.Variable;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
                         result.Add(FinalizeVariableDefinition(parsingArgs));
                     }
                 }
                 else
                 {
-                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line);
-                    OnReadObjectLine(parsingArgs);
                     if (line.Contains(Constants.Scripts.OpeningBracket))
                     {
                         openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
@@ -100,6 +122,8 @@ namespace IronyModManager.Parser
                     {
                         closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
                     }
+                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
+                    OnReadObjectLine(parsingArgs);
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         openBrackets = null;
@@ -137,13 +161,18 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
-        /// Clears the whitespace.
+        /// Cleans the whitespace.
         /// </summary>
         /// <param name="line">The line.</param>
         /// <returns>System.String.</returns>
-        protected virtual string ClearWhitespace(string line)
+        protected virtual string CleanWhitespace(string line)
         {
-            return line.Trim().Replace(" ", string.Empty).Replace("\t", string.Empty);
+            var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            foreach (var item in cleanerConversionMap)
+            {
+                cleaned = cleaned.Replace(item.Key, item.Value);
+            }
+            return cleaned;
         }
 
         /// <summary>
@@ -155,8 +184,9 @@ namespace IronyModManager.Parser
         /// <param name="openBrackets">The open brackets.</param>
         /// <param name="closeBrackets">The close brackets.</param>
         /// <param name="line">The line.</param>
+        /// <param name="inline">if set to <c>true</c> [inline].</param>
         /// <returns>ParsingArgs.</returns>
-        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb, int? openBrackets, int closeBrackets, string line)
+        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb, int? openBrackets, int closeBrackets, string line, bool inline)
         {
             return new ParsingArgs()
             {
@@ -165,7 +195,23 @@ namespace IronyModManager.Parser
                 Definition = definition,
                 Line = line,
                 OpeningBracket = openBrackets,
-                StringBuilder = sb
+                StringBuilder = sb,
+                Inline = inline
+            };
+        }
+
+        /// <summary>
+        /// Constructs the arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns>ParsingArgs.</returns>
+        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition)
+        {
+            return new ParsingArgs()
+            {
+                Args = args,
+                Definition = definition,
             };
         }
 
@@ -195,12 +241,18 @@ namespace IronyModManager.Parser
         /// Formats the type.
         /// </summary>
         /// <param name="file">The file.</param>
+        /// <param name="typeOverride">The type override.</param>
         /// <returns>System.String.</returns>
-        protected virtual string FormatType(string file)
+        protected virtual string FormatType(string file, string typeOverride = Shared.Constants.EmptyParam)
         {
             var lines = file.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries);
             var formatted = string.Join(Path.DirectorySeparatorChar, lines.Take(lines.Length - 1));
-            return formatted;
+            var type = lines.Last().Split(".").Last();
+            if (!Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
+            {
+                type = Constants.TxtType;
+            }
+            return $"{formatted}{Path.DirectorySeparatorChar}{(string.IsNullOrWhiteSpace(typeOverride) ? type : typeOverride)}";
         }
 
         /// <summary>
@@ -213,47 +265,81 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
-        /// Gets the operation key.
+        /// Gets the key.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <param name="keys">The keys.</param>
+        /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetOperationKey(string line, params string[] keys)
+        protected virtual string GetKey(string line, char key)
         {
-            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).First().Trim());
+            return GetKey(line, key.ToString());
         }
 
         /// <summary>
-        /// Gets the operation key.
+        /// Gets the key.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <param name="keys">The keys.</param>
+        /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetOperationKey(string line, params char[] keys)
+        protected virtual string GetKey(string line, string key)
         {
-            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).First().Trim());
+            var cleaned = CleanWhitespace(line);
+            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
+            {
+                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
+                if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
+                {
+                    var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
+                    if (parsed.Count() > 0)
+                    {
+                        return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         /// <summary>
-        /// Gets the operation value.
+        /// Gets the value.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <param name="keys">The keys.</param>
+        /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetOperationValue(string line, params string[] keys)
+        protected virtual string GetValue(string line, char key)
         {
-            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).Last().Trim().Replace("\"", string.Empty));
+            return GetValue(line, key.ToString());
         }
 
         /// <summary>
-        /// Gets the operation value.
+        /// Gets the value.
         /// </summary>
         /// <param name="line">The line.</param>
-        /// <param name="keys">The keys.</param>
+        /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetOperationValue(string line, params char[] keys)
+        protected virtual string GetValue(string line, string key)
         {
-            return CleanParsedText(ClearWhitespace(line).Split(keys, StringSplitOptions.RemoveEmptyEntries).Last().Trim().Replace("\"", string.Empty));
+            var cleaned = CleanWhitespace(line);
+            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
+            {
+                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
+                if (prev == 0 || (char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Constants.Scripts.OpeningBracket || cleaned[prev - 1] == Constants.Scripts.ClosingBracket))
+                {
+                    var part = cleaned.Substring(cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase));
+                    var parsed = part.Split(key, StringSplitOptions.RemoveEmptyEntries);
+                    if (parsed.Count() > 0)
+                    {
+                        if (parsed.First().StartsWith("\""))
+                        {
+                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
+                        }
+                        else
+                        {
+                            return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
+                        }
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -263,7 +349,7 @@ namespace IronyModManager.Parser
         protected virtual void MapDefinitionFromArgs(ParsingArgs args)
         {
             args.Definition.ContentSHA = args.Args.ContentSHA;
-            args.Definition.Dependencies = args.Args.Dependencies;
+            args.Definition.Dependencies = args.Args.ModDependencies;
             args.Definition.ModName = args.Args.ModName;
             args.Definition.File = args.Args.File;
             var type = FormatType(args.Args.File);
@@ -307,6 +393,12 @@ namespace IronyModManager.Parser
             /// </summary>
             /// <value>The definition.</value>
             public IDefinition Definition { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="ParsingArgs" /> is inline.
+            /// </summary>
+            /// <value><c>true</c> if inline; otherwise, <c>false</c>.</value>
+            public bool Inline { get; set; }
 
             /// <summary>
             /// Gets or sets the line.

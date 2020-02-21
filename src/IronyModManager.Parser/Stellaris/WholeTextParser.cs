@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-21-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -24,6 +24,38 @@ namespace IronyModManager.Parser.Stellaris
     /// <seealso cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
     public class WholeTextParser : BaseStellarisParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The ends with check
+        /// </summary>
+        protected static readonly string[] endsWithCheck = new string[]
+        {
+            Constants.ShaderExtension, Constants.FxhExtension
+        };
+
+        /// <summary>
+        /// The equals checks
+        /// </summary>
+        protected static readonly string[] equalsChecks = new string[]
+        {
+            Constants.Stellaris.Alerts,
+            Constants.Stellaris.MessageTypes,
+            Constants.Stellaris.WeaponComponents
+        };
+
+        /// <summary>
+        /// The starts with checks
+        /// </summary>
+        protected static readonly string[] startsWithChecks = new string[]
+        {
+            Constants.Stellaris.StartScreenMessages, Constants.Stellaris.DiploPhrases,
+            Constants.Stellaris.MapGalaxy, Constants.Stellaris.NameLists, Constants.Stellaris.OnActions,
+            Constants.Stellaris.SpeciesNames, Constants.Stellaris.Terraform, Constants.Stellaris.Portraits
+        };
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -37,16 +69,6 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
-        /// Determines whether [is start screen message] [the specified arguments].
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is start screen message] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        public virtual bool IsStartScreenMessage(CanParseArgs args)
-        {
-            return args.File.StartsWith(Constants.Stellaris.StartScreenMessages, StringComparison.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
         /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -55,7 +77,7 @@ namespace IronyModManager.Parser.Stellaris
         {
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
-            var parsingArgs = ConstructArgs(args, def, null, null, 0, null);
+            var parsingArgs = ConstructArgs(args, def);
             MapDefinitionFromArgs(parsingArgs);
             def.Code = string.Join(Environment.NewLine, args.Lines);
             def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
@@ -64,73 +86,43 @@ namespace IronyModManager.Parser.Stellaris
         }
 
         /// <summary>
-        /// Determines whether [is common root] [the specified arguments].
+        /// Determines whether this instance [can parse ends with] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is common root] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsCommonRoot(CanParseArgs args)
+        /// <returns><c>true</c> if this instance [can parse ends with] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseEndsWith(CanParseArgs args)
         {
-            return Constants.Stellaris.CommonRootFiles.Any(s => args.File.Equals(s, StringComparison.OrdinalIgnoreCase));
+            return endsWithCheck.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// Determines whether [is dipo phrase] [the specified arguments].
+        /// Determines whether this instance [can parse equals] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is dipo phrase] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsDipoPhrase(CanParseArgs args)
+        /// <returns><c>true</c> if this instance [can parse equals] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseEquals(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.DiploPhrases, StringComparison.OrdinalIgnoreCase);
+            return equalsChecks.Any(s => args.File.Equals(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// Determines whether [is map galaxy] [the specified arguments].
+        /// Determines whether this instance [can parse sound file] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is map galaxy] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsMapGalaxy(CanParseArgs args)
+        /// <returns><c>true</c> if this instance [can parse sound file] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseSoundFile(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.MapGalaxy, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
-        /// Determines whether [is on actions] [the specified arguments].
+        /// Determines whether this instance [can parse starts with] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is on actions] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsOnActions(CanParseArgs args)
+        /// <returns><c>true</c> if this instance [can parse starts with] the specified arguments; otherwise, <c>false</c>.</returns>
+        protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.OnActions, StringComparison.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Determines whether the specified arguments is shader.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if the specified arguments is shader; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsShader(CanParseArgs args)
-        {
-            return Constants.Stellaris.ShaderExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
-        /// Determines whether [is species names] [the specified arguments].
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is species names] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsSpeciesNames(CanParseArgs args)
-        {
-            return args.File.StartsWith(Constants.Stellaris.SpeciesNames, StringComparison.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Determines whether the specified arguments is terraform.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if the specified arguments is terraform; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsTerraform(CanParseArgs args)
-        {
-            return args.File.StartsWith(Constants.Stellaris.Terraform, StringComparison.OrdinalIgnoreCase);
+            return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -140,21 +132,8 @@ namespace IronyModManager.Parser.Stellaris
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsValidType(CanParseArgs args)
         {
-            return IsCommonRoot(args) || IsMapGalaxy(args) ||
-                IsOnActions(args) || IsWeaponComponents(args) ||
-                IsDipoPhrase(args) || IsSpeciesNames(args) ||
-                IsStartScreenMessage(args) || IsTerraform(args) ||
-                IsShader(args);
-        }
-
-        /// <summary>
-        /// Determines whether [is weapon components] [the specified arguments].
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if [is weapon components] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsWeaponComponents(CanParseArgs args)
-        {
-            return args.File.Equals(Constants.Stellaris.WeaponComponents, StringComparison.OrdinalIgnoreCase);
+            return CanParseStartsWith(args) || CanParseEquals(args) ||
+                CanParseEndsWith(args) || CanParseSoundFile(args);
         }
 
         #endregion Methods
