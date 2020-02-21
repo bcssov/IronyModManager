@@ -221,6 +221,11 @@ namespace IronyModManager.Parser
             public static readonly string ComponentTags = MergePath("common", "component_tags");
 
             /// <summary>
+            /// The defines
+            /// </summary>
+            public static readonly string Defines = MergePath("common", "defines");
+
+            /// <summary>
             /// The diplo phrases
             /// </summary>
             public static readonly string DiploPhrases = MergePath("common", "diplo_phrases");
