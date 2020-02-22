@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new Games.Stellaris.FlagsParser();
+            var parser = new Games.Stellaris.FlagsParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "flags\\test.png";
             parser.CanParse(args).Should().BeTrue();
@@ -66,7 +66,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Games.Stellaris.FlagsParser();
+            var parser = new Games.Stellaris.FlagsParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -106,7 +106,7 @@ namespace IronyModManager.Parser.Tests
                 File = "flags\\test.png",
                 ModName = "fake"
             };
-            var parser = new Games.Stellaris.FlagsParser();
+            var parser = new Games.Stellaris.FlagsParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

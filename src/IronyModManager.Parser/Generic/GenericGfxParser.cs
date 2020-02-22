@@ -43,6 +43,18 @@ namespace IronyModManager.Parser.Generic
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericGfxParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public GenericGfxParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -74,7 +86,7 @@ namespace IronyModManager.Parser.Generic
                 {
                     continue;
                 }
-                var cleaned = CleanWhitespace(line);
+                var cleaned = textParser.CleanWhitespace(line);
                 if (ids.Any(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
                     isSpriteTypes = cleaned.StartsWith(Constants.Scripts.SpriteTypesId, StringComparison.OrdinalIgnoreCase);
@@ -86,7 +98,7 @@ namespace IronyModManager.Parser.Generic
                         sb.Clear();
                         definition = GetDefinitionInstance();
                         definition.ValueType = ValueType.Object;
-                        var id = GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        var id = textParser.GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
@@ -123,10 +135,10 @@ namespace IronyModManager.Parser.Generic
                             sb.AppendLine($"{(isSpriteTypes ? Constants.Scripts.SpriteTypes : Constants.Scripts.ObjectTypes)} {Constants.Scripts.VariableSeparatorId} {Constants.Scripts.OpeningBracket}");
                             definition = GetDefinitionInstance();
                             definition.ValueType = ValueType.Object;
-                            var initialKey = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                            var initialKey = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                             definition.Id = initialKey;
                         }
-                        var id = GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        var id = textParser.GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;

@@ -38,7 +38,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new GenericBinaryParser();
+            var parser = new GenericBinaryParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\gfx\\test.png";            
             parser.CanParse(args).Should().BeTrue();
@@ -59,7 +59,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gfx\\test.png",            
                 ModName = "fake"
             };
-            var parser = new GenericBinaryParser();
+            var parser = new GenericBinaryParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

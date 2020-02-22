@@ -24,5 +24,16 @@ namespace IronyModManager.Parser.Default
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     public class DefaultParser : BaseParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public DefaultParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
     }
 }

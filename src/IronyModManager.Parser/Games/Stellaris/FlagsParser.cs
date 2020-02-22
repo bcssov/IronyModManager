@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -24,6 +24,18 @@ namespace IronyModManager.Parser.Games.Stellaris
     /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     public class FlagsParser : BaseStellarisParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlagsParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public FlagsParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>

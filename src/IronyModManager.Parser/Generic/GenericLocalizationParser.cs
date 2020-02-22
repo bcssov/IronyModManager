@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="GenericLocalizationParser.cs" company="Mario">
 //     Mario
@@ -27,6 +27,18 @@ namespace IronyModManager.Parser.Generic
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public class GenericLocalizationParser : BaseParser, IGenericParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericLocalizationParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public GenericLocalizationParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -68,7 +80,7 @@ namespace IronyModManager.Parser.Generic
                         MapDefinitionFromArgs(parsingArgs);
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
                         def.Type = FormatType(args.File, $"{selectedLanguage}-{Constants.YmlType}");
-                        def.Id = GetKey(line, Constants.Localization.YmlSeparator.ToString());
+                        def.Id = textParser.GetKey(line, Constants.Localization.YmlSeparator.ToString());
                         def.ValueType = ValueType.Variable;
                         result.Add(def);
                     }

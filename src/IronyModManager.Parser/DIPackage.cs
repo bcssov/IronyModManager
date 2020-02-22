@@ -17,6 +17,7 @@ using IronyModManager.Parser.Default;
 using IronyModManager.Parser.Games;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Indexer;
+using IronyModManager.Parser.Mod;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -45,6 +46,9 @@ namespace IronyModManager.Parser
             container.Collection.Register(typeof(IGenericParser), typeof(IGenericParser).Assembly);
             container.Collection.Register(typeof(IGameParser), typeof(IGameParser).Assembly);
             container.Register<IParserManager, ParserManager>();
+            container.Register<IModObject, ModObject>();
+            container.Register<IModParser, ModParser>();
+            container.Register<ITextParser, TextParser>();
         }
 
         #endregion Methods
