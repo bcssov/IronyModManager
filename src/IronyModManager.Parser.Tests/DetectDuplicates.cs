@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="DetectDuplicates.cs" company="Mario">
 //     Mario
@@ -15,13 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using IronyModManager.Tests.Common;
+using IronyModManager.DI;
+using IronyModManager.Parser.Indexer;
 using IronyModManager.Shared;
+using IronyModManager.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
-using IronyModManager.DI;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -33,14 +32,14 @@ namespace IronyModManager.Parser.Tests
         #region Fields
 
         /// <summary>
-        /// The writer
-        /// </summary>
-        private readonly ITestOutputHelper writer;
-
-        /// <summary>
         /// The stellaris root
         /// </summary>
         private readonly string stellarisRoot = @"D:\Games\Stellaris\";
+
+        /// <summary>
+        /// The writer
+        /// </summary>
+        private readonly ITestOutputHelper writer;
 
         #endregion Fields
 
@@ -57,12 +56,12 @@ namespace IronyModManager.Parser.Tests
 
         #endregion Constructors
 
-        #region Methods
-
         /// <summary>
         /// Defines the test method Detect.
         /// </summary>
+       #region Methods
 #if !DETECT
+
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
         [Fact(Timeout = 300000)]
@@ -173,6 +172,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method StellarisExtensions.
         /// </summary>
 #if !DETECT
+
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
         [Fact(Timeout = 300000)]

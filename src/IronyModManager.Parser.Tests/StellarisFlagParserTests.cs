@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="StellarisFlagParserTests.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new Stellaris.FlagsParser();
+            var parser = new Games.Stellaris.FlagsParser();
             parser.CanParse(args).Should().BeFalse();
             args.File = "flags\\test.png";
             parser.CanParse(args).Should().BeTrue();
@@ -66,7 +66,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Stellaris.FlagsParser();
+            var parser = new Games.Stellaris.FlagsParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -106,7 +106,7 @@ namespace IronyModManager.Parser.Tests
                 File = "flags\\test.png",
                 ModName = "fake"
             };
-            var parser = new GenericBinaryParser();
+            var parser = new Games.Stellaris.FlagsParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

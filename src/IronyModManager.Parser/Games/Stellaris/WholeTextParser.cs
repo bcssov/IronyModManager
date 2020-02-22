@@ -15,13 +15,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IronyModManager.Parser.Stellaris
+namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
-    /// Class FilenameParser.
-    /// Implements the <see cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
+    /// Class WholeTextParser.
+    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
+    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     public class WholeTextParser : BaseStellarisParser
     {
         #region Fields

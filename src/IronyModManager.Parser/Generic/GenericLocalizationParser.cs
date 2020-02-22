@@ -14,16 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Default;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class GenericLocalizationParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public class GenericLocalizationParser : BaseParser, IGenericParser
     {
         #region Methods
