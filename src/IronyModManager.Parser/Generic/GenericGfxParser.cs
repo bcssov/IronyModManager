@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
-// <copyright file="GenericGuiParser.cs" company="Mario">
+// <copyright file="GenericGfxParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,18 +15,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IronyModManager.Parser.Default;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericGuiParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGenericParser" />
+    /// Class GenericGfxParser.
+    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IGenericParser" />
-    public class GenericGuiParser : BaseParser, IGenericParser
+    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
+    public class GenericGfxParser : BaseParser, IGenericParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The ids
+        /// </summary>
+        private static readonly string[] ids = new string[]
+        {
+            Constants.Scripts.ObjectTypesId,
+            Constants.Scripts.SpriteTypesId,
+            Constants.Scripts.BitmapFontsId,
+            Constants.Scripts.PositionTypeId
+        };
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -36,7 +52,7 @@ namespace IronyModManager.Parser
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase);
+            return args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -51,6 +67,7 @@ namespace IronyModManager.Parser
             var sb = new StringBuilder();
             int? openBrackets = null;
             int closeBrackets = 0;
+            bool isSpriteTypes = false;
             foreach (var line in args.Lines)
             {
                 if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
@@ -58,8 +75,9 @@ namespace IronyModManager.Parser
                     continue;
                 }
                 var cleaned = CleanWhitespace(line);
-                if (cleaned.StartsWith(Constants.Scripts.GuiTypesId, StringComparison.OrdinalIgnoreCase))
+                if (ids.Any(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
+                    isSpriteTypes = cleaned.StartsWith(Constants.Scripts.SpriteTypesId, StringComparison.OrdinalIgnoreCase);
                     openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                     closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                     // incase some wise ass opened and closed an object definition in the same line
@@ -102,7 +120,7 @@ namespace IronyModManager.Parser
                         if (definition == null)
                         {
                             sb.Clear();
-                            sb.AppendLine($"{Constants.Scripts.GuiTypes} {Constants.Scripts.VariableSeparatorId} {Constants.Scripts.OpeningBracket}");
+                            sb.AppendLine($"{(isSpriteTypes ? Constants.Scripts.SpriteTypes : Constants.Scripts.ObjectTypes)} {Constants.Scripts.VariableSeparatorId} {Constants.Scripts.OpeningBracket}");
                             definition = GetDefinitionInstance();
                             definition.ValueType = ValueType.Object;
                             var initialKey = GetKey(line, Constants.Scripts.VariableSeparatorId);

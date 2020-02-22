@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,10 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Games;
+using IronyModManager.Parser.Generic;
+using IronyModManager.Parser.Indexer;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;

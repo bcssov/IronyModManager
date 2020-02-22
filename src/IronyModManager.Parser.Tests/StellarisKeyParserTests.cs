@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="StellarisKeyParserTests.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using IronyModManager.Parser.Stellaris;
+using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
 namespace IronyModManager.Parser.Tests

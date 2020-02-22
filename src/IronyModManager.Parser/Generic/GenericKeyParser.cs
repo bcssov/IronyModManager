@@ -4,26 +4,27 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="GenericKeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
 using System.Linq;
+using IronyModManager.Parser.Default;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericEventParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGenericParser" />
+    /// Class GenericKeyParser.
+    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public class GenericKeyParser : BaseParser, IGenericParser
     {
         #region Fields

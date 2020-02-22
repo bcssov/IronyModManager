@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -19,13 +19,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using IronyModManager.DI;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Default
 {
     /// <summary>
     /// Class BaseParser.
-    /// Implements the <see cref="IronyModManager.Parser.IDefaultParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Default.IDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
+    /// <seealso cref="IronyModManager.Parser.Default.IDefaultParser" />
     public abstract class BaseParser : IDefaultParser
     {
         #region Fields

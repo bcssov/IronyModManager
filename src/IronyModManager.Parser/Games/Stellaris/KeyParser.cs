@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -15,16 +15,14 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-namespace IronyModManager.Parser.Stellaris
+namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
-    /// Class RandomNamesParser.
-    /// Implements the <see cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGameParser" />
+    /// Class KeyParser.
+    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Stellaris.BaseStellarisParser" />
-    /// <seealso cref="IronyModManager.Parser.IGameParser" />
-    public class KeyParser : BaseStellarisParser, IGameParser
+    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
+    public class KeyParser : BaseStellarisParser
     {
         #region Fields
 

@@ -1,16 +1,35 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : IronyModManager.Parser.Tests
+// Author           : Mario
+// Created          : 02-20-2020
+//
+// Last Modified By : Mario
+// Last Modified On : 02-22-2020
+// ***********************************************************************
+// <copyright file="StellarisSolarSystemInitializersTests.cs" company="Mario">
+//     Mario
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using IronyModManager.Parser.Stellaris;
+using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
 {
+    /// <summary>
+    /// Class StellarisSolarSystemInitializersTests.
+    /// </summary>
     public class StellarisSolarSystemInitializersTests
     {
+        /// <summary>
+        /// Defines the test method CanParse_should_be_false_then_true.
+        /// </summary>
         [Fact]
         public void CanParse_should_be_false_then_true()
         {

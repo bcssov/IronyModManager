@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="GenericBinaryParser.cs" company="Mario">
 //     Mario
@@ -14,16 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Default;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class BinaryParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGenericParser" />
+    /// Class GenericBinaryParser.
+    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public class GenericBinaryParser : BaseParser, IGenericParser
     {
         #region Methods

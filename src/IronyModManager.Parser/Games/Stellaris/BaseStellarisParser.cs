@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="BaseStellarisParser.cs" company="Mario">
 //     Mario
@@ -13,16 +13,17 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Default;
 
-namespace IronyModManager.Parser.Stellaris
+namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
     /// Class BaseStellarisParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.IGameParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Games.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.IGameParser" />
+    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Games.IGameParser" />
     public abstract class BaseStellarisParser : BaseParser, IGameParser
     {
         #region Methods

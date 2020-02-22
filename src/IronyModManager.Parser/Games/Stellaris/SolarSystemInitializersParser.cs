@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
-// <copyright file="IGenericParser.cs" company="Mario">
+// <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,14 +14,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
-    /// Interface IGenericParser
-    /// Implements the <see cref="IronyModManager.Parser.IDefaultParser" />
+    /// Class SolarSystemInitializersParser.
+    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IDefaultParser" />
-    public interface IGenericParser : IDefaultParser
+    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
+    public class SolarSystemInitializersParser : BaseStellarisParser
     {
         #region Methods
 
@@ -30,7 +30,10 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        bool CanParse(CanParseArgs args);
+        public override bool CanParse(CanParseArgs args)
+        {
+            return IsStellaris(args) && args.File.StartsWith(Constants.Stellaris.SolarSystemInitializers, StringComparison.OrdinalIgnoreCase);
+        }
 
         #endregion Methods
     }

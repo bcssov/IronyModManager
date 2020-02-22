@@ -4,25 +4,25 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
-// <copyright file="DefaultParser.cs" company="Mario">
+// <copyright file="IGameParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Linq;
 using System.Collections.Generic;
+using System;
+using IronyModManager.Parser.Generic;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Games
 {
     /// <summary>
-    /// Class DefaultParser.
-    /// Implements the <see cref="IronyModManager.Parser.BaseParser" />
+    /// Interface IGameParser
+    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.BaseParser" />
-    public class DefaultParser : BaseParser
+    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
+    public interface IGameParser : IGenericParser
     {
     }
 }

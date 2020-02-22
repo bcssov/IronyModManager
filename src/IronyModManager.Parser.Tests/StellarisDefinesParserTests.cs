@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinesParserTests.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new Stellaris.DefinesParser();
+            var parser = new Games.Stellaris.DefinesParser();
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\defines\\t.txt";
             parser.CanParse(args).Should().BeTrue();
@@ -87,7 +87,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Stellaris.DefinesParser();
+            var parser = new Games.Stellaris.DefinesParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -150,7 +150,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Stellaris.DefinesParser();
+            var parser = new Games.Stellaris.DefinesParser();
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

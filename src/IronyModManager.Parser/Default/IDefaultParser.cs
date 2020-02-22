@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="IDefaultParser.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Default
 {
     /// <summary>
     /// Interface IDefaultParser

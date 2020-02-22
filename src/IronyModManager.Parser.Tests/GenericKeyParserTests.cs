@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="GenericKeyParserTests.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
 
