@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="GenericGfxParserTests.cs" company="Mario">
 //     Mario
@@ -38,7 +38,7 @@ namespace IronyModManager.Parser.Tests
             };
             var parser = new GenericGfxParser();
             parser.CanParse(args).Should().BeFalse();
-            args.File = "gfx\\gfx.gfx";            
+            args.File = "gfx\\gfx.gfx";
             parser.CanParse(args).Should().BeTrue();
 
         }
@@ -105,7 +105,7 @@ namespace IronyModManager.Parser.Tests
                 result[i].File.Should().Be("gfx\\gfx.gfx");
                 switch (i)
                 {
-                    
+
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
                         result[i].Code.Should().Be(sb2.ToString());
@@ -114,6 +114,61 @@ namespace IronyModManager.Parser.Tests
                     case 1:
                         result[i].Id.Should().Be("GFX_text_military_size_2");
                         result[i].Code.Should().Be(sb3.ToString());
+                        result[i].ValueType.Should().Be(ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("gfx\\gfx");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_ending_edge_case_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_ending_edge_case_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"spriteTypes = {");
+            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"		name = ""GFX_text_military_size_1""");
+            sb.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" } }");            
+
+            var sb2 = new StringBuilder();
+            sb2.AppendLine(@"spriteTypes = {");
+            sb2.AppendLine(@"	spriteType = {");
+            sb2.AppendLine(@"		name = ""GFX_text_military_size_1""");
+            sb2.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" }");
+            sb2.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "gfx\\gfx.gfx",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new GenericGfxParser();
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("gfx\\gfx.gfx");
+                switch (i)
+                {
+
+                    case 0:
+                        result[i].Id.Should().Be("GFX_text_military_size_1");
+                        result[i].Code.Should().Be(sb2.ToString());
                         result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:

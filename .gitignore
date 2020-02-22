@@ -360,3 +360,4 @@ MigrationBackup/
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.runtimeconfig.dev.json
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.runtimeconfig.json
 /Tools/LocalizationResourceGenerator/Newtonsoft.Json.dll
+/archive_detects

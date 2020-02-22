@@ -113,9 +113,14 @@ namespace IronyModManager.Parser
                         {
                             definition.Id = id;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
+                        var trimEnding = line.TrimEnd();
+                        if (trimEnding.EndsWith(Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                        {
+                            trimEnding = trimEnding[0..^1].TrimEnd();
+                        }
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false);
                         OnReadObjectLine(parsingArgs);
-                        if (openBrackets - closeBrackets == 1)
+                        if (openBrackets - closeBrackets <= 1)
                         {
                             sb.AppendLine(Constants.Scripts.ClosingBracket.ToString());
                             definition.Code = sb.ToString();

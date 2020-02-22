@@ -64,19 +64,19 @@ namespace IronyModManager.Parser.Tests
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NCamera={");
             sb2.AppendLine(@"FOV=35 # Field-of-View");
-            sb2.AppendLine(@"}");
+            sb2.Append(@"}");
 
 
             var sb3 = new StringBuilder();
             sb3.AppendLine(@"NCamera={");
             sb3.AppendLine(@"ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR={-1.0 -0.6 0.3}");
-            sb3.AppendLine(@"}");
+            sb3.Append(@"}");
 
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics={");
             sb4.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM=10.0");
-            sb4.AppendLine(@"}");
+            sb4.Append(@"}");
 
 
             var args = new ParserArgs()
@@ -120,6 +120,57 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");                
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_ending_edge_case_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NGraphics = {");
+            sb.AppendLine(@"		CAMERA_DISTANCE_TO_ZOOM				= 10.0 }");            
+
+            
+            var sb2 = new StringBuilder();
+            sb2.AppendLine(@"NGraphics={");
+            sb2.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM=10.0");
+            sb2.Append(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Stellaris.DefinesParser();
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
+                        result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
+                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
             }
         }
     }
