@@ -26,6 +26,18 @@ namespace IronyModManager.Parser.Games.Stellaris
     /// <seealso cref="IronyModManager.Parser.Games.IGameParser" />
     public abstract class BaseStellarisParser : BaseParser, IGameParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseStellarisParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public BaseStellarisParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>

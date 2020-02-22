@@ -33,6 +33,18 @@ namespace IronyModManager.Parser.Games.Stellaris
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KeyParser" /> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public KeyParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -67,8 +79,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <param name="args">The arguments.</param>
         protected override void OnReadObjectLine(ParsingArgs args)
         {
-            var cleaned = CleanWhitespace(args.Line);
-            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.StellarisKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(cleaned, s))))
+            var cleaned = textParser.CleanWhitespace(args.Line);
+            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.StellarisKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
             {
                 string sep = string.Empty;
                 var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket);
@@ -84,7 +96,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                 }
                 if (idLoc < bracketLocation || bracketLocation == -1 || args.Inline)
                 {
-                    key = GetValue(cleaned, sep);
+                    key = textParser.GetValue(cleaned, sep);
                 }
             }
             base.OnReadObjectLine(args);

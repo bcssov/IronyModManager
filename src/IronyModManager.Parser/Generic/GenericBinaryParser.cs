@@ -27,6 +27,18 @@ namespace IronyModManager.Parser.Generic
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public class GenericBinaryParser : BaseParser, IGenericParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenericBinaryParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public GenericBinaryParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>

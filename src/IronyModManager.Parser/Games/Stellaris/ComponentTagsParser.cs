@@ -24,6 +24,18 @@ namespace IronyModManager.Parser.Games.Stellaris
     /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     public class ComponentTagsParser : BaseStellarisParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComponentTagsParser"/> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public ComponentTagsParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>

@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using IronyModManager.DI;
 
 namespace IronyModManager.Parser.Default
@@ -31,24 +30,24 @@ namespace IronyModManager.Parser.Default
         #region Fields
 
         /// <summary>
-        /// The cleaner conversion map
+        /// The text parser
         /// </summary>
-        protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
-        {
-            { $" {Constants.Scripts.VariableSeparatorId}", Constants.Scripts.VariableSeparatorId.ToString() },
-            { $"{Constants.Scripts.VariableSeparatorId} ", Constants.Scripts.VariableSeparatorId.ToString() },
-            { $" {Constants.Scripts.OpeningBracket}", Constants.Scripts.OpeningBracket.ToString() },
-            { $"{Constants.Scripts.OpeningBracket} ", Constants.Scripts.OpeningBracket.ToString() },
-            { $" {Constants.Scripts.ClosingBracket}", Constants.Scripts.ClosingBracket.ToString() },
-            { $"{Constants.Scripts.ClosingBracket} ", Constants.Scripts.ClosingBracket.ToString() },
-        };
-
-        /// <summary>
-        /// The quotes regex
-        /// </summary>
-        protected static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected readonly ITextParser textParser;
 
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseParser" /> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public BaseParser(ITextParser textParser)
+        {
+            this.textParser = textParser;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -72,13 +71,13 @@ namespace IronyModManager.Parser.Default
                 }
                 if (!openBrackets.HasValue)
                 {
-                    var cleaned = CleanWhitespace(line);
+                    var cleaned = textParser.CleanWhitespace(line);
                     if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                         sb.Clear();
-                        var id = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
                         definition.ValueType = ValueType.Object;
@@ -97,7 +96,7 @@ namespace IronyModManager.Parser.Default
                     else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
                     {
                         definition = GetDefinitionInstance();
-                        var id = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition.Id = id;
                         definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
@@ -134,45 +133,6 @@ namespace IronyModManager.Parser.Default
                 }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Cleans the parsed text.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string CleanParsedText(string text)
-        {
-            var sb = new StringBuilder();
-            foreach (var item in text)
-            {
-                if (!char.IsWhiteSpace(item) &&
-                    !item.Equals(Constants.Scripts.OpeningBracket) &&
-                    !item.Equals(Constants.Scripts.ClosingBracket))
-                {
-                    sb.Append(item);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Cleans the whitespace.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string CleanWhitespace(string line)
-        {
-            var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
-            foreach (var item in cleanerConversionMap)
-            {
-                cleaned = cleaned.Replace(item.Key, item.Value);
-            }
-            return cleaned;
         }
 
         /// <summary>
@@ -262,84 +222,6 @@ namespace IronyModManager.Parser.Default
         protected IDefinition GetDefinitionInstance()
         {
             return DIResolver.Get<IDefinition>();
-        }
-
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetKey(string line, char key)
-        {
-            return GetKey(line, key.ToString());
-        }
-
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetKey(string line, string key)
-        {
-            var cleaned = CleanWhitespace(line);
-            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
-            {
-                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-                if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
-                {
-                    var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
-                    {
-                        return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
-                    }
-                }
-            }
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetValue(string line, char key)
-        {
-            return GetValue(line, key.ToString());
-        }
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetValue(string line, string key)
-        {
-            var cleaned = CleanWhitespace(line);
-            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
-            {
-                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-                if (prev == 0 || (char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Constants.Scripts.OpeningBracket || cleaned[prev - 1] == Constants.Scripts.ClosingBracket))
-                {
-                    var part = cleaned.Substring(cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase));
-                    var parsed = part.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
-                    {
-                        if (parsed.First().StartsWith("\""))
-                        {
-                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
-                        }
-                        else
-                        {
-                            return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
-                        }
-                    }
-                }
-            }
-            return string.Empty;
         }
 
         /// <summary>

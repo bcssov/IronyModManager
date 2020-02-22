@@ -24,6 +24,18 @@ namespace IronyModManager.Parser.Games.Stellaris
     /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     public class DefinesParser : BaseStellarisParser
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefinesParser" /> class.
+        /// </summary>
+        /// <param name="textParser">The text parser.</param>
+        public DefinesParser(ITextParser textParser) : base(textParser)
+        {
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -55,16 +67,16 @@ namespace IronyModManager.Parser.Games.Stellaris
                 }
                 if (!openBrackets.HasValue)
                 {
-                    var cleaned = CleanWhitespace(line);
+                    var cleaned = textParser.CleanWhitespace(line);
                     if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
-                        type = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        type = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                         var content = cleaned.Replace($"{type}{Constants.Scripts.DefinitionSeparatorId}", string.Empty).Replace($"{type}{Constants.Scripts.VariableSeparatorId}", string.Empty).Trim();
                         if (!string.IsNullOrWhiteSpace(content))
                         {
-                            var key = GetKey(content, Constants.Scripts.VariableSeparatorId);
+                            var key = textParser.GetKey(content, Constants.Scripts.VariableSeparatorId);
                             var def = GetDefinitionInstance();
                             var parsingArgs = ConstructArgs(args, def);
                             MapDefinitionFromArgs(parsingArgs);
@@ -91,14 +103,14 @@ namespace IronyModManager.Parser.Games.Stellaris
                     {
                         closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
                     }
-                    var cleaned = CleanWhitespace(line);
+                    var cleaned = textParser.CleanWhitespace(line);
                     if (cleaned.EndsWith(Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         cleaned = cleaned.Substring(0, cleaned.Length - 1);
                     }
                     if (!string.IsNullOrWhiteSpace(cleaned))
                     {
-                        var key = GetKey(cleaned, Constants.Scripts.VariableSeparatorId);
+                        var key = textParser.GetKey(cleaned, Constants.Scripts.VariableSeparatorId);
                         var def = GetDefinitionInstance();
                         var parsingArgs = ConstructArgs(args, def);
                         MapDefinitionFromArgs(parsingArgs);

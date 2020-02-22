@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\alerts.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();            
             args.File = "common\\message_types.txt";
             parser.CanParse(args).Should().BeTrue();
@@ -56,7 +56,7 @@ namespace IronyModManager.Parser.Tests
                 File = "map\\galaxy\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();            
         }
 
@@ -71,7 +71,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\on_actions\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -86,7 +86,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\component_templates\\weapon_components.csv",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();            
+            var parser = new WholeTextParser(new TextParser());            
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -101,7 +101,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\diplo_phrases\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -116,7 +116,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\species_names\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -131,7 +131,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\start_screen_messages\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -146,7 +146,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\terraform\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -161,9 +161,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\test.shader",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();            
-            parser.CanParse(args).Should().BeTrue();
-            args.File = "common\\test.fxh";
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -175,12 +173,10 @@ namespace IronyModManager.Parser.Tests
         {
             var args = new CanParseArgs()
             {
-                File = "sound\\t.asset",
+                File = "sound\\test.fxh",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
-            parser.CanParse(args).Should().BeTrue();
-            args.File = "common\\test.fxh";
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -196,7 +192,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\name_lists\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
             args.File = "common\\test.fxh";
             parser.CanParse(args).Should().BeTrue();
@@ -213,7 +209,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\ship_designs\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
         }
 
@@ -240,7 +236,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new WholeTextParser();
+            var parser = new WholeTextParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
