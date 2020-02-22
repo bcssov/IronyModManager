@@ -100,11 +100,11 @@ namespace IronyModManager.Parser.Stellaris
                     }
                     if (!string.IsNullOrWhiteSpace(cleaned))
                     {
-                        var key = GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        var key = GetKey(cleaned, Constants.Scripts.VariableSeparatorId);
                         var def = GetDefinitionInstance();
                         var parsingArgs = ConstructArgs(args, def);
                         MapDefinitionFromArgs(parsingArgs);
-                        def.Code = $"{type}{Constants.Scripts.DefinitionSeparatorId}{Environment.NewLine}{CleanWhitespace(line)}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
+                        def.Code = $"{type}{Constants.Scripts.DefinitionSeparatorId}{Environment.NewLine}{cleaned}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
                         def.Type = FormatType(args.File, $"{type}-{Constants.TxtType}");
                         def.Id = key;
                         def.ValueType = ValueType.Variable;

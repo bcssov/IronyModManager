@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2020
+// Last Modified On : 02-22-2020
 // ***********************************************************************
 // <copyright file="ComponentTagsParser.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Stellaris
             var col = new List<IDefinition>();
             foreach (var line in args.Lines)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId) || line.Trim().Length == 0)
+                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId) || string.IsNullOrWhiteSpace(line))
                 {
                     continue;
                 }
