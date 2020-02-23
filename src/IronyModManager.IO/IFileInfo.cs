@@ -6,39 +6,40 @@
 // Last Modified By : Mario
 // Last Modified On : 02-23-2020
 // ***********************************************************************
-// <copyright file="Module.cs" company="Mario">
+// <copyright file="IFileInfo.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
-using IronyModManager.Shared;
 
 namespace IronyModManager.IO
 {
     /// <summary>
-    /// Class Module.
-    /// Implements the <see cref="IronyModManager.Shared.IModule" />
+    /// Interface IFileInfo
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.IModule" />
-    [ExcludeFromCoverage("Module info should not be tested.")]
-    public class Module : IModule
+    public interface IFileInfo
     {
         #region Properties
 
         /// <summary>
-        /// Gets the dependencies.
+        /// Gets or sets the content.
         /// </summary>
-        /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string> { typeof(Shared.Module).Name, typeof(DI.Module).Name };
+        /// <value>The content.</value>
+        IEnumerable<string> Content { get; set; }
 
         /// <summary>
-        /// Gets the name.
+        /// Gets or sets the name of the file.
         /// </summary>
-        /// <value>The name.</value>
-        public string Name => typeof(Module).Namespace;
+        /// <value>The name of the file.</value>
+        string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
+        bool IsBinary { get; set; }
 
         #endregion Properties
     }

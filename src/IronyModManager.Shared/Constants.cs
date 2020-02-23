@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -52,6 +52,11 @@ namespace IronyModManager.Shared
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";
+
+        /// <summary>
+        /// The text extensions
+        /// </summary>
+        public static readonly string[] TextExtensions = new string[] { ".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
 
         #endregion Fields
 

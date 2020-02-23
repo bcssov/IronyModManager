@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -59,7 +59,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WholeTextParser"/> class.
+        /// Initializes a new instance of the <see cref="WholeTextParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public WholeTextParser(ITextParser textParser) : base(textParser)
@@ -124,7 +124,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance [can parse sound file] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseSoundFile(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.File.StartsWith(Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

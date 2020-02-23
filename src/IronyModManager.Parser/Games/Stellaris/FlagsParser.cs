@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -27,7 +27,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlagsParser"/> class.
+        /// Initializes a new instance of the <see cref="FlagsParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public FlagsParser(ITextParser textParser) : base(textParser)
@@ -60,7 +60,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             MapDefinitionFromArgs(parsingArgs);
             def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
             def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? ValueType.Binary : ValueType.WholeTextFile;
+            def.ValueType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? ValueType.Binary : ValueType.WholeTextFile;
             def.Type = FormatType(args.File, def.ValueType == ValueType.Binary ? Constants.BinaryType : Constants.TxtType);
             return new List<IDefinition> { def };
         }

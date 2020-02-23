@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -38,11 +38,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.2" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
+    <PackageReference Include="SharpCompress" Version="0.24.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
 
