@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -27,7 +27,13 @@ namespace IronyModManager.Storage.Common
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user directory.
+        /// </summary>
+        /// <value>The user directory.</value>
+        string UserDirectory { get; set; }
 
         #endregion Properties
     }

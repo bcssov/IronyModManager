@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -45,6 +45,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The type.</value>
         string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user directory.
+        /// </summary>
+        /// <value>The user directory.</value>
+        string UserDirectory { get; set; }
 
         #endregion Properties
     }

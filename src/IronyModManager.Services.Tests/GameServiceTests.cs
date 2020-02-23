@@ -53,11 +53,13 @@ namespace IronyModManager.Services.Tests
             {
                 new GameType()
                 {
-                    Name = "game 1"
+                    Name = "game 1",
+                    UserDirectory = "user1"
                 },
                 new GameType()
                 {
-                    Name = "game 2"
+                    Name = "game 2",
+                    UserDirectory = "user2"
                 }
             };
             storageProvider.Setup(p => p.GetGames()).Returns(games);
@@ -93,6 +95,7 @@ namespace IronyModManager.Services.Tests
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
+            result.FirstOrDefault(p => p.IsSelected).UserDirectory.Should().Be("user1");
         }
 
         /// <summary>
@@ -109,6 +112,7 @@ namespace IronyModManager.Services.Tests
             var result = service.GetSelected();
             result.Should().NotBeNull();
             result.Type.Should().Be("game 1");
+            result.UserDirectory.Should().Be("user1");
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -145,9 +145,10 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";            
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key);
+            storage.RegisterGame(key, "user_directory");
             dbMock.Games.Count.Should().Be(2);
-            dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();            
+            dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
+            dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
         }
 
         /// <summary>
@@ -213,10 +214,11 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";            
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key);
+            storage.RegisterGame(key, "user_directory");
             var result = storage.GetGames();
             result.Count().Should().Be(2);
-            result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();            
+            result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
+            result.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
         }
 
         /// <summary>
