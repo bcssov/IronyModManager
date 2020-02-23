@@ -79,7 +79,7 @@ namespace IronyModManager.Parser.Generic
             var sb = new StringBuilder();
             int? openBrackets = null;
             int closeBrackets = 0;
-            bool isSpriteTypes = false;
+            string typeId = string.Empty;
             foreach (var line in args.Lines)
             {
                 if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
@@ -87,9 +87,10 @@ namespace IronyModManager.Parser.Generic
                     continue;
                 }
                 var cleaned = textParser.CleanWhitespace(line);
-                if (ids.Any(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase)))
+                var localTypeId = ids.FirstOrDefault(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+                if (!string.IsNullOrWhiteSpace(localTypeId))
                 {
-                    isSpriteTypes = cleaned.StartsWith(Constants.Scripts.SpriteTypesId, StringComparison.OrdinalIgnoreCase);
+                    typeId = localTypeId;
                     openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                     closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
                     // incase some wise ass opened and closed an object definition in the same line
@@ -132,7 +133,7 @@ namespace IronyModManager.Parser.Generic
                         if (definition == null)
                         {
                             sb.Clear();
-                            sb.AppendLine($"{(isSpriteTypes ? Constants.Scripts.SpriteTypes : Constants.Scripts.ObjectTypes)} {Constants.Scripts.VariableSeparatorId} {Constants.Scripts.OpeningBracket}");
+                            sb.AppendLine(textParser.PrettifyLine($"{typeId}{Constants.Scripts.OpeningBracket}"));
                             definition = GetDefinitionInstance();
                             definition.ValueType = ValueType.Object;
                             var initialKey = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);

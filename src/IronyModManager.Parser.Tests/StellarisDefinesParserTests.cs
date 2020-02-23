@@ -62,20 +62,20 @@ namespace IronyModManager.Parser.Tests
 
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine(@"NCamera={");
-            sb2.AppendLine(@"FOV=35 # Field-of-View");
+            sb2.AppendLine(@"NCamera = {");
+            sb2.AppendLine(@"FOV = 35 # Field-of-View");
             sb2.Append(@"}");
 
 
             var sb3 = new StringBuilder();
-            sb3.AppendLine(@"NCamera={");
-            sb3.AppendLine(@"ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR={-1.0 -0.6 0.3}");
+            sb3.AppendLine(@"NCamera = {");
+            sb3.AppendLine(@"ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR = { -1.0 -0.6 0.3 }");
             sb3.Append(@"}");
 
 
             var sb4 = new StringBuilder();
-            sb4.AppendLine(@"NGraphics={");
-            sb4.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM=10.0");
+            sb4.AppendLine(@"NGraphics = {");
+            sb4.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM = 10.0");
             sb4.Append(@"}");
 
 
@@ -137,8 +137,8 @@ namespace IronyModManager.Parser.Tests
 
             
             var sb2 = new StringBuilder();
-            sb2.AppendLine(@"NGraphics={");
-            sb2.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM=10.0");
+            sb2.AppendLine(@"NGraphics = {");
+            sb2.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM = 10.0");
             sb2.Append(@"}");
 
 

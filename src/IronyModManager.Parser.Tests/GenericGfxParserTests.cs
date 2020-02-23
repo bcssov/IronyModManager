@@ -53,16 +53,16 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"spriteTypes = {");
+            sb.AppendLine(@"bitmapfonts = {");
             sb.AppendLine(@"");
             sb.AppendLine(@"	### ship size icons ###");
             sb.AppendLine(@"");
-            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"	bitmapfont = {");
             sb.AppendLine(@"		name = ""GFX_text_military_size_1""");
             sb.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds""");
             sb.AppendLine(@"	}");
             sb.AppendLine(@"	");
-            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"	bitmapfont = {");
             sb.AppendLine(@"		name = ""GFX_text_military_size_2""");
             sb.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_2.dds""");
             sb.AppendLine(@"	}");
@@ -70,8 +70,8 @@ namespace IronyModManager.Parser.Tests
 
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine(@"spriteTypes = {");
-            sb2.AppendLine(@"	spriteType = {");
+            sb2.AppendLine(@"bitmapfonts = {");
+            sb2.AppendLine(@"	bitmapfont = {");
             sb2.AppendLine(@"		name = ""GFX_text_military_size_1""");
             sb2.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds""");
             sb2.AppendLine(@"	}");
@@ -79,8 +79,8 @@ namespace IronyModManager.Parser.Tests
 
 
             var sb3 = new System.Text.StringBuilder();
-            sb3.AppendLine(@"spriteTypes = {");
-            sb3.AppendLine(@"	spriteType = {");
+            sb3.AppendLine(@"bitmapfonts = {");
+            sb3.AppendLine(@"	bitmapfont = {");
             sb3.AppendLine(@"		name = ""GFX_text_military_size_2""");
             sb3.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_2.dds""");
             sb3.AppendLine(@"	}");
@@ -134,14 +134,14 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"spriteTypes = {");
-            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"bitmapfonts = {");
+            sb.AppendLine(@"	bitmapfont = {");
             sb.AppendLine(@"		name = ""GFX_text_military_size_1""");
             sb.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" } }");            
 
             var sb2 = new StringBuilder();
-            sb2.AppendLine(@"spriteTypes = {");
-            sb2.AppendLine(@"	spriteType = {");
+            sb2.AppendLine(@"bitmapfonts = {");
+            sb2.AppendLine(@"	bitmapfont = {");
             sb2.AppendLine(@"		name = ""GFX_text_military_size_1""");
             sb2.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" }");
             sb2.AppendLine(@"}");

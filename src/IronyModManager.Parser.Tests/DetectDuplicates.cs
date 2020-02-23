@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
@@ -90,7 +91,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"utl_icons"))
+                //if (relativePath.Contains(@"fonts.gfx"))
                 //{
                 //    Debugger.Break();
                 //}

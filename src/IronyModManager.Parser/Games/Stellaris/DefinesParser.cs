@@ -73,14 +73,15 @@ namespace IronyModManager.Parser.Games.Stellaris
                         type = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        var content = cleaned.Replace($"{type}{Constants.Scripts.DefinitionSeparatorId}", string.Empty).Replace($"{type}{Constants.Scripts.VariableSeparatorId}", string.Empty).Trim();
+                        var content = textParser.PrettifyLine(cleaned.Replace($"{type}{Constants.Scripts.DefinitionSeparatorId}", string.Empty).Replace($"{type}{Constants.Scripts.VariableSeparatorId}", string.Empty).Trim());
                         if (!string.IsNullOrWhiteSpace(content))
                         {
                             var key = textParser.GetKey(content, Constants.Scripts.VariableSeparatorId);
                             var def = GetDefinitionInstance();
                             var parsingArgs = ConstructArgs(args, def);
                             MapDefinitionFromArgs(parsingArgs);
-                            def.Code = $"{type}{Constants.Scripts.DefinitionSeparatorId}{Environment.NewLine}{content.Trim()}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
+                            var definesType = textParser.PrettifyLine($"{type}{Constants.Scripts.DefinitionSeparatorId}");
+                            def.Code = $"{definesType}{Environment.NewLine}{content}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
                             def.Type = FormatType(args.File, $"{type}-{Constants.TxtType}");
                             def.Id = key;
                             def.ValueType = ValueType.Variable;
@@ -110,11 +111,12 @@ namespace IronyModManager.Parser.Games.Stellaris
                     }
                     if (!string.IsNullOrWhiteSpace(cleaned))
                     {
+                        var definesType = textParser.PrettifyLine($"{type}{Constants.Scripts.DefinitionSeparatorId}");
                         var key = textParser.GetKey(cleaned, Constants.Scripts.VariableSeparatorId);
                         var def = GetDefinitionInstance();
                         var parsingArgs = ConstructArgs(args, def);
                         MapDefinitionFromArgs(parsingArgs);
-                        def.Code = $"{type}{Constants.Scripts.DefinitionSeparatorId}{Environment.NewLine}{cleaned}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
+                        def.Code = $"{definesType}{Environment.NewLine}{textParser.PrettifyLine(cleaned)}{Environment.NewLine}{Constants.Scripts.ClosingBracket}";
                         def.Type = FormatType(args.File, $"{type}-{Constants.TxtType}");
                         def.Id = key;
                         def.ValueType = ValueType.Variable;
