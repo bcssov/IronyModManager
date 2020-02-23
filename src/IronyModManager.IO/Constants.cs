@@ -11,8 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace IronyModManager.IO
 {
@@ -27,6 +28,11 @@ namespace IronyModManager.IO
         /// The zip extension
         /// </summary>
         public const string ZipExtension = ".zip";
+
+        /// <summary>
+        /// The mod directory
+        /// </summary>
+        public static readonly string ModDirectory = Path.DirectorySeparatorChar + "mod";
 
         #endregion Fields
     }

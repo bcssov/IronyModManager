@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
@@ -84,6 +85,22 @@ namespace IronyModManager.IO.Tests
 
             var reader = DIResolver.Get<IReader>();
             var result = reader.Read(ArchiveTestPath);
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().NotBe(0);
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Mod_file_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), $"Documents{Path.DirectorySeparatorChar}Paradox Interactive{Path.DirectorySeparatorChar}Stellaris{Path.DirectorySeparatorChar}mod");
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.Read(path);
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().NotBe(0);
         }
