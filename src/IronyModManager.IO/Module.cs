@@ -1,7 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 02-16-2020
+// Created          : 02-23-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 02-23-2020
@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.IO
 {
     /// <summary>
     /// Class Module.
@@ -32,7 +32,7 @@ namespace IronyModManager.Parser
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string> { typeof(Shared.Module).Name, typeof(DI.Module).Name };
+        public IEnumerable<string> Dependencies => new List<string> { typeof(Shared.Module).Name };
 
         /// <summary>
         /// Gets the name.
