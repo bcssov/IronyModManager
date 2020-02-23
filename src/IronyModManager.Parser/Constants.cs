@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -63,7 +63,6 @@ namespace IronyModManager.Parser
         /// The yml type
         /// </summary>
         public const string YmlType = "yml";
-        
 
         #endregion Fields
 

@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="ITextParser.cs" company="Mario">
 //     Mario
@@ -68,6 +68,13 @@ namespace IronyModManager.Parser
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
         string GetValue(string line, string key);
+
+        /// <summary>
+        /// Prettifies the line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        string PrettifyLine(string line);
 
         #endregion Methods
     }

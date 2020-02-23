@@ -22,7 +22,7 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug;Release;Detect</Configurations>
+    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="**\*.xaml.cs">

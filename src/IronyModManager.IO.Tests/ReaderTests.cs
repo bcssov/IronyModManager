@@ -55,7 +55,7 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Defines the test method Disk_read_test.
         /// </summary>
-#if DETECT
+#if FUNCTIONAL_TEST
         [Fact]
 #else
         [Fact(Skip = "This is for functional testing only")]
@@ -73,7 +73,7 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Defines the test method Disk_read_test.
         /// </summary>
-#if DETECT
+#if FUNCTIONAL_TEST
         [Fact]
 #else
         [Fact(Skip = "This is for functional testing only")]

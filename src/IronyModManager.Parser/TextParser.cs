@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="TextParser.cs" company="Mario">
 //     Mario
@@ -47,6 +47,16 @@ namespace IronyModManager.Parser
         /// The quotes regex
         /// </summary>
         protected static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// The reverse cleaner conversion map
+        /// </summary>
+        protected static readonly Dictionary<string, string> reverseCleanerConversionMap = new Dictionary<string, string>()
+        {
+            { Constants.Scripts.VariableSeparatorId.ToString(), $" {Constants.Scripts.VariableSeparatorId} " },
+            { Constants.Scripts.OpeningBracket.ToString(), $" {Constants.Scripts.OpeningBracket} " },
+            { Constants.Scripts.ClosingBracket.ToString(), $" {Constants.Scripts.ClosingBracket} " },
+        };
 
         #endregion Fields
 
@@ -174,6 +184,22 @@ namespace IronyModManager.Parser
                 }
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Prettifies the line.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        public string PrettifyLine(string line)
+        {
+            var cleaned = CleanWhitespace(line);
+            foreach (var item in reverseCleanerConversionMap)
+            {
+                cleaned = cleaned.Replace(item.Key, item.Value);
+            }
+            cleaned = string.Join(' ', cleaned.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            return cleaned;
         }
 
         #endregion Methods
