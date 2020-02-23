@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 02-23-2020
 // ***********************************************************************
-// <copyright file="DiskFileReader.cs" company="Mario">
+// <copyright file="ModFileReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -21,12 +21,12 @@ using IronyModManager.Shared;
 namespace IronyModManager.IO
 {
     /// <summary>
-    /// Class DiskFileReader.
+    /// Class ModFileReader.
     /// Implements the <see cref="IronyModManager.IO.IFileReader" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.IFileReader" />
     [ExcludeFromCoverage("Shloud be covered by Unit tests from source project.")]
-    public class DiskFileReader : IFileReader
+    public class ModFileReader : IFileReader
     {
         #region Methods
 
@@ -37,7 +37,7 @@ namespace IronyModManager.IO
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public bool CanRead(string path)
         {
-            return Directory.Exists(path) && !path.EndsWith(Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+            return Directory.Exists(path) && path.EndsWith(Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -47,32 +47,17 @@ namespace IronyModManager.IO
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
         public IReadOnlyCollection<IFileInfo> Read(string path)
         {
-            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(path, "*.mod", SearchOption.TopDirectoryOnly);
             if (files?.Count() > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
                 {
                     var relativePath = file.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
-                    if (!relativePath.Contains(Path.DirectorySeparatorChar))
-                    {
-                        continue;
-                    }
                     var info = DIResolver.Get<IFileInfo>();
-                    using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
-                    if (Shared.Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        using var streamReader = new StreamReader(stream, true);
-                        var text = streamReader.ReadToEnd();
-                        streamReader.Close();
-                        info.IsBinary = false;
-                        info.Content = text.SplitOnNewLine();
-                    }
-                    else
-                    {
-                        info.IsBinary = true;
-                    }
+                    info.IsBinary = false;
+                    info.Content = File.ReadAllLines(file);
                     result.Add(info);
                 }
                 return result;
