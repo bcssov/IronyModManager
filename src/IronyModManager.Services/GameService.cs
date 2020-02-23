@@ -146,6 +146,7 @@ namespace IronyModManager.Services
             game.Type = gameType.Name;
             game.Name = gameType.Name;
             game.IsSelected = selectedGame == gameType.Name;
+            game.UserDirectory = gameType.UserDirectory;
             return game;
         }
 

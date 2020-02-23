@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -125,9 +125,10 @@ namespace IronyModManager.Storage
         /// Registers the game.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="userDirectory">The user directory.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterGame(string name)
+        public virtual bool RegisterGame(string name, string userDirectory)
         {
             lock (dbLock)
             {
@@ -137,6 +138,7 @@ namespace IronyModManager.Storage
                 }
                 var game = DIResolver.Get<IGameType>();
                 game.Name = name;
+                game.UserDirectory = userDirectory;
                 Database.Games.Add(game);
                 return true;
             }
@@ -148,8 +150,10 @@ namespace IronyModManager.Storage
         /// <param name="name">The name.</param>
         /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
-        /// <returns>
-        ///   <c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
