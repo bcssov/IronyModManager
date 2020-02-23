@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="DetectDuplicates.cs" company="Mario">
 //     Mario
@@ -56,14 +56,18 @@ namespace IronyModManager.Parser.Tests
 
         #endregion Constructors
 
+        #region Methods
+
         /// <summary>
         /// Defines the test method Detect.
         /// </summary>
-       #region Methods
+
 #if !DETECT
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
+
+
         [Fact(Timeout = 300000)]
 #endif
         public void StellarisDetect()
@@ -175,6 +179,7 @@ namespace IronyModManager.Parser.Tests
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
+
         [Fact(Timeout = 300000)]
 #endif
         public void StellarisExtensions()
@@ -199,7 +204,7 @@ namespace IronyModManager.Parser.Tests
         /// <returns><c>true</c> if [is valid extension] [the specified file]; otherwise, <c>false</c>.</returns>
         private bool IsValidExtension(string file)
         {
-            return Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return Shared.Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

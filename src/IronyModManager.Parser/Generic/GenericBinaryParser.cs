@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="GenericBinaryParser.cs" company="Mario">
 //     Mario
@@ -30,7 +30,7 @@ namespace IronyModManager.Parser.Generic
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericBinaryParser"/> class.
+        /// Initializes a new instance of the <see cref="GenericBinaryParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public GenericBinaryParser(ITextParser textParser) : base(textParser)
@@ -48,7 +48,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanParse(CanParseArgs args)
         {
-            return !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

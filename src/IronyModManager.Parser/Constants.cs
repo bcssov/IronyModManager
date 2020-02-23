@@ -63,11 +63,7 @@ namespace IronyModManager.Parser
         /// The yml type
         /// </summary>
         public const string YmlType = "yml";
-
-        /// <summary>
-        /// The text extensions
-        /// </summary>
-        public static readonly string[] TextExtensions = new string[] { ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh" };
+        
 
         #endregion Fields
 

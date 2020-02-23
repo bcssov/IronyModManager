@@ -1,7 +1,7 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.IO.Tests
 // Author           : Mario
-// Created          : 02-16-2020
+// Created          : 02-23-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 02-23-2020
@@ -16,14 +16,13 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Localization.Tests
 {
     /// <summary>
     /// Class Module.
     /// Implements the <see cref="IronyModManager.Shared.IModule" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.IModule" />
-    [ExcludeFromCoverage("Module info should not be tested.")]
     public class Module : IModule
     {
         #region Properties
@@ -32,12 +31,13 @@ namespace IronyModManager.Parser
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string> { typeof(Shared.Module).Name, typeof(DI.Module).Name };
+        public IEnumerable<string> Dependencies => new List<string>() { };
 
         /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
+        /// s
         public string Name => typeof(Module).Namespace;
 
         #endregion Properties

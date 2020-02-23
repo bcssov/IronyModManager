@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -40,19 +39,14 @@ namespace IronyModManager.Shared
             return BitConverter.ToString(checksum).Replace("-", String.Empty);
         }
 
-        //Source: https://stackoverflow.com/questions/14449973/how-to-tell-if-a-file-is-text-readable-in-c-sharp
         /// <summary>
-        /// Determines whether [is text file] [the specified stream].
-        /// Source: https://stackoverflow.com/questions/14449973/how-to-tell-if-a-file-is-text-readable-in-c-sharp
+        /// Splits the on new line.
         /// </summary>
-        /// <param name="stream">The stream.</param>
-        /// <returns><c>true</c> if [is text file] [the specified stream]; otherwise, <c>false</c>.</returns>
-        public static bool IsTextFile(this Stream stream)
+        /// <param name="value">The value.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public static IEnumerable<string> SplitOnNewLine(this string value)
         {
-            using var reader = new StreamReader(stream, Encoding.UTF8);
-            var bytesRead = reader.ReadToEnd();
-            reader.Close();
-            return bytesRead.All(c => c == (char)10 || c == (char)13 || c == (char)11 || !char.IsControl(c));
+            return value.Contains("\r\n") ? value.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : value.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         }
 
         #endregion Methods
