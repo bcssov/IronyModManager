@@ -11,7 +11,7 @@
     <PackageTags>Irony Mod Manager Services Common Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Services Common Component</PackageReleaseNotes>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug;Release;Detect</Configurations>
+    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

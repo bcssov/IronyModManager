@@ -63,7 +63,7 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Detect.
         /// </summary>
 
-#if !DETECT
+#if !FUNCTIONAL_TEST
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
@@ -176,7 +176,7 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method StellarisExtensions.
         /// </summary>
-#if !DETECT
+#if !FUNCTIONAL_TEST
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else

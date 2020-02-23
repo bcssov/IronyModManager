@@ -10,7 +10,7 @@
     <PackageIconUrl />
     <PackageTags>IronyModManager.Parser.Tests</PackageTags>
     <PackageReleaseNotes>IronyModManager.Parser.Tests</PackageReleaseNotes>
-    <Configurations>Debug;Release;Detect</Configurations>    
+    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -18,10 +18,10 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Detect|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FUNCTIONAL_TESTING|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DefineConstants>TRACE;DETECT</DefineConstants>
+    <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

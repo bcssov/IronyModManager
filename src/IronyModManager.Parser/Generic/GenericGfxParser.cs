@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-23-2020
 // ***********************************************************************
 // <copyright file="GenericGfxParser.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Generic
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericGfxParser"/> class.
+        /// Initializes a new instance of the <see cref="GenericGfxParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public GenericGfxParser(ITextParser textParser) : base(textParser)
@@ -77,6 +77,7 @@ namespace IronyModManager.Parser.Generic
             var result = new List<IDefinition>();
             IDefinition definition = null;
             var sb = new StringBuilder();
+            var sbLangs = new StringBuilder();
             int? openBrackets = null;
             int closeBrackets = 0;
             string typeId = string.Empty;
@@ -97,9 +98,21 @@ namespace IronyModManager.Parser.Generic
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
                         sb.Clear();
+                        sbLangs.Clear();
                         definition = GetDefinitionInstance();
                         definition.ValueType = ValueType.Object;
                         var id = textParser.GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        foreach (var item in Constants.Localization.Locales)
+                        {
+                            if (line.Contains(item, StringComparison.OrdinalIgnoreCase))
+                            {
+                                sbLangs.Append($"{item}-");
+                            }
+                        }
+                        if (sbLangs.Length > 0)
+                        {
+                            id = $"{sbLangs.ToString()}{id}";
+                        }
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
@@ -133,6 +146,7 @@ namespace IronyModManager.Parser.Generic
                         if (definition == null)
                         {
                             sb.Clear();
+                            sbLangs.Clear();
                             sb.AppendLine(textParser.PrettifyLine($"{typeId}{Constants.Scripts.OpeningBracket}"));
                             definition = GetDefinitionInstance();
                             definition.ValueType = ValueType.Object;
@@ -140,6 +154,13 @@ namespace IronyModManager.Parser.Generic
                             definition.Id = initialKey;
                         }
                         var id = textParser.GetValue(line, $"{Constants.Scripts.GraphicsTypeName}{Constants.Scripts.VariableSeparatorId}");
+                        foreach (var item in Constants.Localization.Locales)
+                        {
+                            if (line.Contains(item, StringComparison.OrdinalIgnoreCase))
+                            {
+                                sbLangs.Append($"{item}-");
+                            }
+                        }
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
@@ -153,6 +174,7 @@ namespace IronyModManager.Parser.Generic
                         OnReadObjectLine(parsingArgs);
                         if (openBrackets - closeBrackets <= 1)
                         {
+                            definition.Id = definition.Id.Insert(0, sbLangs.ToString());
                             sb.AppendLine(Constants.Scripts.ClosingBracket.ToString());
                             definition.Code = sb.ToString();
                             result.Add(FinalizeObjectDefinition(parsingArgs));
