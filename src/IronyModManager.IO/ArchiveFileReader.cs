@@ -81,7 +81,7 @@ namespace IronyModManager.IO
                     result.Add(info);
                 }
             }
-            return result?.Count != 0 ? result : null;
+            return result.Count != 0 ? result : null;
         }
 
         #endregion Methods

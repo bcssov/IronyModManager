@@ -58,7 +58,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             var col = new List<IDefinition>();
             foreach (var line in args.Lines)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId) || string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }

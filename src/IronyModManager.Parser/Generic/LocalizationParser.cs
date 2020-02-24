@@ -62,7 +62,7 @@ namespace IronyModManager.Parser.Generic
             string selectedLanguage = string.Empty;
             foreach (var line in args.Lines)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
+                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
@@ -71,7 +71,7 @@ namespace IronyModManager.Parser.Generic
                 {
                     selectedLanguage = lang;
                 }
-                if (!string.IsNullOrWhiteSpace(selectedLanguage) && !string.IsNullOrWhiteSpace(line))
+                if (!string.IsNullOrWhiteSpace(selectedLanguage))
                 {
                     if (string.IsNullOrWhiteSpace(lang))
                     {
