@@ -82,7 +82,7 @@ namespace LocalizationResourceGenerator
             var sb = new StringBuilder();
             sb.AppendLine("// This file was automatically generated");
             sb.AppendLine("// Do not modify.");
-            sb.AppendLine("// Use theLocalizationResourceGenerator instead.");
+            sb.AppendLine("// Use the LocalizationResourceGenerator instead.");
             sb.AppendLine("using System;");
             sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine("");
