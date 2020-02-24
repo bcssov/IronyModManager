@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -67,14 +67,29 @@ namespace IronyModManager.Shared
         /// </summary>
         public static class GamesTypes
         {
-            #region Fields
+            #region Classes
 
             /// <summary>
-            /// The stellaris
+            /// Class Stellaris.
             /// </summary>
-            public const string Stellaris = "Stellaris";
+            public static class Stellaris
+            {
+                #region Fields
 
-            #endregion Fields
+                /// <summary>
+                /// The name
+                /// </summary>
+                public const string Name = "Stellaris";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 281990;
+
+                #endregion Fields
+            }
+
+            #endregion Classes
         }
 
         #endregion Classes

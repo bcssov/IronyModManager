@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -36,7 +37,20 @@ namespace IronyModManager.Shared
         {
             using var hash = new SHA256Managed();
             var checksum = hash.ComputeHash(Encoding.UTF8.GetBytes(value));
-            return BitConverter.ToString(checksum).Replace("-", String.Empty);
+            return BitConverter.ToString(checksum).Replace("-", string.Empty);
+        }
+
+        /// <summary>
+        /// Calculates the sha.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>System.String.</returns>
+        public static string CalculateSHA(this Stream stream)
+        {
+            using var bufferedStream = new BufferedStream(stream, 1024 * 32);
+            using var hash = new SHA256Managed();
+            byte[] checksum = hash.ComputeHash(bufferedStream);
+            return BitConverter.ToString(checksum).Replace("-", string.Empty);
         }
 
         /// <summary>

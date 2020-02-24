@@ -73,10 +73,12 @@ namespace IronyModManager.IO
                         streamReader.Close();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine();
+                        info.ContentSHA = text.CalculateSHA();
                     }
                     else
                     {
                         info.IsBinary = true;
+                        info.ContentSHA = memoryStream.CalculateSHA();
                     }
                     result.Add(info);
                 }

@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="BaseStellarisParser.cs" company="Mario">
 //     Mario
@@ -29,7 +29,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseStellarisParser"/> class.
+        /// Initializes a new instance of the <see cref="BaseStellarisParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public BaseStellarisParser(ITextParser textParser) : base(textParser)
@@ -54,7 +54,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if the specified arguments is stellaris; otherwise, <c>false</c>.</returns>
         protected virtual bool IsStellaris(CanParseArgs args)
         {
-            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris, StringComparison.OrdinalIgnoreCase);
+            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

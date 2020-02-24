@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="ThemeRegistration.cs" company="Mario">
 //     Mario
@@ -17,7 +17,7 @@ using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
-namespace IronyModManager.Services
+namespace IronyModManager.Services.Registrations
 {
     /// <summary>
     /// Class ThemeRegistration.

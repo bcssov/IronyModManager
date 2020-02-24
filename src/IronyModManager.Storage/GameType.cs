@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -33,10 +33,22 @@ namespace IronyModManager.Storage
         public virtual string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the steam application identifier.
+        /// </summary>
+        /// <value>The steam application identifier.</value>
+        public virtual int SteamAppId { get; set; }
+
+        /// <summary>
         /// Gets or sets the user directory.
         /// </summary>
         /// <value>The user directory.</value>
         public virtual string UserDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the workshop directory.
+        /// </summary>
+        /// <value>The workshop directory.</value>
+        public virtual string WorkshopDirectory { get; set; }
 
         #endregion Properties
     }

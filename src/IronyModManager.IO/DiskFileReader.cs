@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -68,10 +68,13 @@ namespace IronyModManager.IO
                         streamReader.Close();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine();
+                        info.ContentSHA = text.CalculateSHA();
                     }
                     else
                     {
                         info.IsBinary = true;
+                        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read);
+                        info.ContentSHA = fs.CalculateSHA();
                     }
                     result.Add(info);
                 }
