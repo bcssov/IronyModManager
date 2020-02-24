@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
-// <copyright file="GenericGfxParser.cs" company="Mario">
+// <copyright file="GfxParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -20,13 +20,13 @@ using IronyModManager.Parser.Default;
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericGfxParser.
+    /// Class GfxParser.
     /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
-    public class GenericGfxParser : BaseParser, IGenericParser
+    public class GfxParser : BaseParser, IGenericParser
     {
         #region Fields
 
@@ -46,10 +46,10 @@ namespace IronyModManager.Parser.Generic
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericGfxParser" /> class.
+        /// Initializes a new instance of the <see cref="GfxParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public GenericGfxParser(ITextParser textParser) : base(textParser)
+        public GfxParser(ITextParser textParser) : base(textParser)
         {
         }
 

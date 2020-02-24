@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new  GenericLocalizationParser(new TextParser());
+            var parser = new  LocalizationParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "loc\\loc.yml";
             parser.CanParse(args).Should().BeTrue();
@@ -79,7 +79,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericLocalizationParser(new TextParser());
+            var parser = new LocalizationParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -147,7 +147,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericLocalizationParser(new TextParser());
+            var parser = new LocalizationParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);

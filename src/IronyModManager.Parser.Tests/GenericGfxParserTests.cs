@@ -37,7 +37,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\gamerules\\test.txt",
             };
-            var parser = new GenericGfxParser(new TextParser());
+            var parser = new GfxParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "gfx\\gfx.gfx";
             parser.CanParse(args).Should().BeTrue();
@@ -95,7 +95,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericGfxParser(new TextParser());
+            var parser = new GfxParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(2);
@@ -155,7 +155,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericGfxParser(new TextParser());
+            var parser = new GfxParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -234,7 +234,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GenericGfxParser(new TextParser());
+            var parser = new GfxParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(2);

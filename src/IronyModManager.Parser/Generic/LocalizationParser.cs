@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
-// <copyright file="GenericLocalizationParser.cs" company="Mario">
+// <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,21 +19,21 @@ using IronyModManager.Parser.Default;
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericLocalizationParser.
+    /// Class LocalizationParser.
     /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
-    public class GenericLocalizationParser : BaseParser, IGenericParser
+    public class LocalizationParser : BaseParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericLocalizationParser"/> class.
+        /// Initializes a new instance of the <see cref="LocalizationParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public GenericLocalizationParser(ITextParser textParser) : base(textParser)
+        public LocalizationParser(ITextParser textParser) : base(textParser)
         {
         }
 
