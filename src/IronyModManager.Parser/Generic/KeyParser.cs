@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 02-22-2020
 // ***********************************************************************
-// <copyright file="GenericKeyParser.cs" company="Mario">
+// <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,13 +19,13 @@ using IronyModManager.Parser.Default;
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericKeyParser.
+    /// Class KeyParser.
     /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
-    public class GenericKeyParser : BaseParser, IGenericParser
+    public class KeyParser : BaseParser, IGenericParser
     {
         #region Fields
 
@@ -39,10 +39,10 @@ namespace IronyModManager.Parser.Generic
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericKeyParser"/> class.
+        /// Initializes a new instance of the <see cref="KeyParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public GenericKeyParser(ITextParser textParser) : base(textParser)
+        public KeyParser(ITextParser textParser) : base(textParser)
         {
         }
 

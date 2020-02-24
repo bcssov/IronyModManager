@@ -1,6 +1,6 @@
 // This file was automatically generated
 // Do not modify.
-// Use theLocalizationResourceGenerator instead.
+// Use the LocalizationResourceGenerator instead.
 using System;
 using System.Collections.Generic;
 

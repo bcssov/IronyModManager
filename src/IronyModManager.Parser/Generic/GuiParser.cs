@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
-// <copyright file="GenericGuiParser.cs" company="Mario">
+// <copyright file="GuiParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -20,21 +20,21 @@ using IronyModManager.Parser.Default;
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericGuiParser.
+    /// Class GuiParser.
     /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
-    public class GenericGuiParser : BaseParser, IGenericParser
+    public class GuiParser : BaseParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericGuiParser"/> class.
+        /// Initializes a new instance of the <see cref="GuiParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public GenericGuiParser(ITextParser textParser) : base(textParser)
+        public GuiParser(ITextParser textParser) : base(textParser)
         {
         }
 

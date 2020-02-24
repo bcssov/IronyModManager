@@ -103,7 +103,7 @@ namespace IronyModManager.Parser.Tests
                 bool notEmpty = false;
                 foreach (var line in lines)
                 {
-                    if (!line.StartsWith("#") && !string.IsNullOrWhiteSpace(line))
+                    if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith("#"))
                     {
                         notEmpty = true;
                         break;

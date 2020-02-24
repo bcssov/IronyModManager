@@ -4,7 +4,7 @@
 // Created          : 02-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="ResourceReader.cs" company="Mario">
 //     Mario
@@ -82,9 +82,7 @@ namespace IronyModManager.Shared
         /// <returns>System.Byte[].</returns>
         /// <exception cref="ArgumentNullException">resourceName</exception>
         /// <exception cref="ArgumentNullException">assembly</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        /// <exception cref="ArgumentNullException">resourceName</exception>
-        /// <exception cref="ArgumentNullException">assembly</exception>
+        /// <exception cref="ArgumentNullException">resource not found</exception>
         private static byte[] GetEmbeddedResourceInternal(string resourceName, Assembly assembly)
         {
             if (string.IsNullOrWhiteSpace(resourceName))
@@ -99,7 +97,7 @@ namespace IronyModManager.Shared
             using var stream = assembly.GetManifestResourceStream(name);
             if (stream == null)
             {
-                throw new ArgumentNullException("resourceName");
+                throw new ArgumentNullException("resource not found");
             }
             var bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);

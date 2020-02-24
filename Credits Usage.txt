@@ -1,0 +1,3 @@
+TOKEN: create a personal token here: https://github.com/settings/tokens/new
+INSTALLATION: dotnet tool install -g dotnet-delice
+USAGE (Run from powershell): dotnet delice IronyModManager --check-github --check-license-content --refresh-spdx --github-token <token> >> Credits.txt

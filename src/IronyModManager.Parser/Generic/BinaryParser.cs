@@ -4,9 +4,9 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
-// <copyright file="GenericBinaryParser.cs" company="Mario">
+// <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,21 +19,21 @@ using IronyModManager.Parser.Default;
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GenericBinaryParser.
+    /// Class BinaryParser.
     /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
-    public class GenericBinaryParser : BaseParser, IGenericParser
+    public class BinaryParser : BaseParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenericBinaryParser" /> class.
+        /// Initializes a new instance of the <see cref="BinaryParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public GenericBinaryParser(ITextParser textParser) : base(textParser)
+        public BinaryParser(ITextParser textParser) : base(textParser)
         {
         }
 

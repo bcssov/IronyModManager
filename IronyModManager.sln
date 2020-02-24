@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E597BDB8-F0DC-4D21-8BA6-E7F72878F219}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Credits.txt = Credits.txt
 		Directory.Build.props = Directory.Build.props
 		License = License
 		Test.runsettings = Test.runsettings
