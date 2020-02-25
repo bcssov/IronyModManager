@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="Module.cs" company="Mario">
 //     Mario
@@ -31,7 +31,8 @@ namespace IronyModManager.Services.Common
         /// Gets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
-        public IEnumerable<string> Dependencies => new List<string> { typeof(Models.Common.Module).Name, typeof(Shared.Module).Name };
+        public IEnumerable<string> Dependencies => new List<string> { typeof(Models.Common.Module).Name, typeof(Shared.Module).Name,
+            typeof(IO.Common.Module).Name, typeof(Parser.Common.Module).Name };
 
         /// <summary>
         /// Gets the name.

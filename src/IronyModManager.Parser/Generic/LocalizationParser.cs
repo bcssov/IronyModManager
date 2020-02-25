@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -14,17 +14,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class LocalizationParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class LocalizationParser : BaseParser, IGenericParser
     {
         #region Constructors
@@ -48,7 +50,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Constants.LocalizationExtension, StringComparison.OrdinalIgnoreCase);
+            return args.File.EndsWith(Common.Constants.LocalizationExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace IronyModManager.Parser.Generic
             string selectedLanguage = string.Empty;
             foreach (var line in args.Lines)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
+                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
@@ -79,9 +81,9 @@ namespace IronyModManager.Parser.Generic
                         var parsingArgs = ConstructArgs(args, def);
                         MapDefinitionFromArgs(parsingArgs);
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
-                        def.Type = FormatType(args.File, $"{selectedLanguage}-{Constants.YmlType}");
-                        def.Id = textParser.GetKey(line, Constants.Localization.YmlSeparator.ToString());
-                        def.ValueType = ValueType.Variable;
+                        def.Type = FormatType(args.File, $"{selectedLanguage}-{Common.Constants.YmlType}");
+                        def.Id = textParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                        def.ValueType = Common.ValueType.Variable;
                         result.Add(def);
                     }
                 }
@@ -96,7 +98,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected virtual string GetLanguageId(string line)
         {
-            var lang = Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+            var lang = Common.Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s, StringComparison.OrdinalIgnoreCase));
             return lang;
         }
 

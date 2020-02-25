@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -93,17 +94,17 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_NAME");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_DESC");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");                        
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     default:
                         break;
@@ -161,17 +162,17 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_NAME");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_DESC");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     default:
                         break;

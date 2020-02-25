@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ComponentTagsParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -27,7 +30,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentTagsParser"/> class.
+        /// Initializes a new instance of the <see cref="ComponentTagsParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public ComponentTagsParser(ITextParser textParser) : base(textParser)
@@ -45,7 +48,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && args.File.StartsWith(Constants.Stellaris.ComponentTags, StringComparison.OrdinalIgnoreCase);
+            return IsStellaris(args) && args.File.StartsWith(Common.Constants.Stellaris.ComponentTags, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             var col = new List<IDefinition>();
             foreach (var line in args.Lines)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
+                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
@@ -67,7 +70,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                 MapDefinitionFromArgs(parsingArgs);
                 def.Code = line;
                 def.Id = line;
-                def.ValueType = ValueType.Variable;
+                def.ValueType = Common.ValueType.Variable;
                 col.Add(def);
             }
             return col;

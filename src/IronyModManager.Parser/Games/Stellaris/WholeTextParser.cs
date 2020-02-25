@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -31,7 +34,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         protected static readonly string[] endsWithCheck = new string[]
         {
-            Constants.ShaderExtension, Constants.FxhExtension
+            Common.Constants.ShaderExtension, Common.Constants.FxhExtension
         };
 
         /// <summary>
@@ -39,9 +42,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         protected static readonly string[] equalsChecks = new string[]
         {
-            Constants.Stellaris.Alerts,
-            Constants.Stellaris.MessageTypes,
-            Constants.Stellaris.WeaponComponents
+            Common.Constants.Stellaris.Alerts,
+            Common.Constants.Stellaris.MessageTypes,
+            Common.Constants.Stellaris.WeaponComponents
         };
 
         /// <summary>
@@ -49,9 +52,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         protected static readonly string[] startsWithChecks = new string[]
         {
-            Constants.Stellaris.StartScreenMessages, Constants.Stellaris.DiploPhrases,
-            Constants.Stellaris.MapGalaxy, Constants.Stellaris.NameLists, Constants.Stellaris.OnActions,
-            Constants.Stellaris.SpeciesNames, Constants.Stellaris.Terraform, Constants.Stellaris.Portraits
+            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.DiploPhrases,
+            Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists, Common.Constants.Stellaris.OnActions,
+            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.Portraits
         };
 
         #endregion Fields
@@ -92,8 +95,8 @@ namespace IronyModManager.Parser.Games.Stellaris
             var parsingArgs = ConstructArgs(args, def);
             MapDefinitionFromArgs(parsingArgs);
             def.Code = string.Join(Environment.NewLine, args.Lines);
-            def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = ValueType.WholeTextFile;
+            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
+            def.ValueType = Common.ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
 
@@ -124,7 +127,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance [can parse sound file] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseSoundFile(CanParseArgs args)
         {
-            return args.File.StartsWith(Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.File.StartsWith(Common.Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

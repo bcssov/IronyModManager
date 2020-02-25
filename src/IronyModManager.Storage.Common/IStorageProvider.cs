@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -52,9 +52,11 @@ namespace IronyModManager.Storage.Common
         /// Registers the game.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <param name="appId">The application identifier.</param>
         /// <param name="userDirectory">The user directory.</param>
+        /// <param name="workshopDirectory">The workshop directory.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterGame(string name, string userDirectory);
+        bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory);
 
         /// <summary>
         /// Registers the theme.

@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -145,10 +145,12 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";            
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, "user_directory");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1");
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
+            dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
         }
 
         /// <summary>
@@ -214,11 +216,13 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";            
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, "user_directory");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1");
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             result.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
+            result.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
+            result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
         }
 
         /// <summary>

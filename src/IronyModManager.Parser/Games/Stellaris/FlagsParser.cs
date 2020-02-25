@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -45,7 +48,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && args.File.StartsWith(Constants.Stellaris.Flags, StringComparison.OrdinalIgnoreCase);
+            return IsStellaris(args) && args.File.StartsWith(Common.Constants.Stellaris.Flags, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -59,9 +62,9 @@ namespace IronyModManager.Parser.Games.Stellaris
             var parsingArgs = ConstructArgs(args, def);
             MapDefinitionFromArgs(parsingArgs);
             def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
-            def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? ValueType.Binary : ValueType.WholeTextFile;
-            def.Type = FormatType(args.File, def.ValueType == ValueType.Binary ? Constants.BinaryType : Constants.TxtType);
+            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
+            def.ValueType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
+            def.Type = FormatType(args.File, def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType);
             return new List<IDefinition> { def };
         }
 

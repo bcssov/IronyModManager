@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="TextParser.cs" company="Mario">
 //     Mario
@@ -16,15 +16,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
     /// Class TextParser.
-    /// Implements the <see cref="IronyModManager.Parser.ITextParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ITextParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.ITextParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.ITextParser" />
     [ExcludeFromCoverage("Text parser is tested in parser implementations.")]
     public class TextParser : ITextParser
     {
@@ -35,12 +36,12 @@ namespace IronyModManager.Parser
         /// </summary>
         protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
         {
-            { $" {Constants.Scripts.VariableSeparatorId}", Constants.Scripts.VariableSeparatorId.ToString() },
-            { $"{Constants.Scripts.VariableSeparatorId} ", Constants.Scripts.VariableSeparatorId.ToString() },
-            { $" {Constants.Scripts.OpeningBracket}", Constants.Scripts.OpeningBracket.ToString() },
-            { $"{Constants.Scripts.OpeningBracket} ", Constants.Scripts.OpeningBracket.ToString() },
-            { $" {Constants.Scripts.ClosingBracket}", Constants.Scripts.ClosingBracket.ToString() },
-            { $"{Constants.Scripts.ClosingBracket} ", Constants.Scripts.ClosingBracket.ToString() },
+            { $" {Common.Constants.Scripts.VariableSeparatorId}", Common.Constants.Scripts.VariableSeparatorId.ToString() },
+            { $"{Common.Constants.Scripts.VariableSeparatorId} ", Common.Constants.Scripts.VariableSeparatorId.ToString() },
+            { $" {Common.Constants.Scripts.OpeningBracket}", Common.Constants.Scripts.OpeningBracket.ToString() },
+            { $"{Common.Constants.Scripts.OpeningBracket} ", Common.Constants.Scripts.OpeningBracket.ToString() },
+            { $" {Common.Constants.Scripts.ClosingBracket}", Common.Constants.Scripts.ClosingBracket.ToString() },
+            { $"{Common.Constants.Scripts.ClosingBracket} ", Common.Constants.Scripts.ClosingBracket.ToString() },
         };
 
         /// <summary>
@@ -53,9 +54,9 @@ namespace IronyModManager.Parser
         /// </summary>
         protected static readonly Dictionary<string, string> reverseCleanerConversionMap = new Dictionary<string, string>()
         {
-            { Constants.Scripts.VariableSeparatorId.ToString(), $" {Constants.Scripts.VariableSeparatorId} " },
-            { Constants.Scripts.OpeningBracket.ToString(), $" {Constants.Scripts.OpeningBracket} " },
-            { Constants.Scripts.ClosingBracket.ToString(), $" {Constants.Scripts.ClosingBracket} " },
+            { Common.Constants.Scripts.VariableSeparatorId.ToString(), $" {Common.Constants.Scripts.VariableSeparatorId} " },
+            { Common.Constants.Scripts.OpeningBracket.ToString(), $" {Common.Constants.Scripts.OpeningBracket} " },
+            { Common.Constants.Scripts.ClosingBracket.ToString(), $" {Common.Constants.Scripts.ClosingBracket} " },
         };
 
         #endregion Fields
@@ -73,8 +74,8 @@ namespace IronyModManager.Parser
             foreach (var item in text)
             {
                 if (!char.IsWhiteSpace(item) &&
-                    !item.Equals(Constants.Scripts.OpeningBracket) &&
-                    !item.Equals(Constants.Scripts.ClosingBracket))
+                    !item.Equals(Common.Constants.Scripts.OpeningBracket) &&
+                    !item.Equals(Common.Constants.Scripts.ClosingBracket))
                 {
                     sb.Append(item);
                 }
@@ -166,7 +167,7 @@ namespace IronyModManager.Parser
             if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
             {
                 var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-                if (prev == 0 || (char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Constants.Scripts.OpeningBracket || cleaned[prev - 1] == Constants.Scripts.ClosingBracket))
+                if (prev == 0 || (char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Common.Constants.Scripts.OpeningBracket || cleaned[prev - 1] == Common.Constants.Scripts.ClosingBracket))
                 {
                     var part = cleaned.Substring(cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase));
                     var parsed = part.Split(key, StringSplitOptions.RemoveEmptyEntries);

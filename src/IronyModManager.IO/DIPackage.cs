@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -35,7 +36,7 @@ namespace IronyModManager.IO
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
-            container.Collection.Register(typeof(IFileReader), typeof(IFileReader).Assembly);
+            container.Collection.Register(typeof(IFileReader), typeof(DIPackage).Assembly);
             container.Register<IFileInfo, FileInfo>();
             container.Register<IReader, Reader>();
         }

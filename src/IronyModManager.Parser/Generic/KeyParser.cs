@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -14,17 +14,19 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class KeyParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class KeyParser : BaseParser, IGenericParser
     {
         #region Fields
@@ -64,11 +66,11 @@ namespace IronyModManager.Parser.Generic
                 var cleaned = textParser.CleanWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
+                    if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Common.Constants.Scripts.VariableSeparatorId))
                     {
-                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
+                        openBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
+                        closeBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
+                        if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
                         {
                             return true;
                         }
@@ -81,9 +83,9 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
-                    closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
-                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
+                    openBrackets += line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
+                    closeBrackets += line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
+                    if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
                     {
                         return true;
                     }
@@ -120,12 +122,12 @@ namespace IronyModManager.Parser.Generic
         protected override void OnReadObjectLine(ParsingArgs args)
         {
             var cleaned = textParser.CleanWhitespace(args.Line);
-            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
+            if (args.OpeningBracket - args.ClosingBracket <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
             {
                 string sep = string.Empty;
-                var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket.ToString());
+                var bracketLocation = cleaned.IndexOf(Common.Constants.Scripts.OpeningBracket.ToString());
                 int idLoc = -1;
-                foreach (var item in Constants.Scripts.GenericKeyIds)
+                foreach (var item in Common.Constants.Scripts.GenericKeyIds)
                 {
                     idLoc = cleaned.IndexOf(item);
                     if (idLoc > -1)

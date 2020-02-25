@@ -17,6 +17,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.Parser.Common;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Indexer;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
@@ -152,9 +155,9 @@ namespace IronyModManager.Parser.Tests
                 {
                     undefined.Add(item);
                 }
-                if (grouped.Count(s => s.Key == ValueType.Object) > 0)
+                if (grouped.Count(s => s.Key == Common.ValueType.Object) > 0)
                 {
-                    var objTypes = grouped.Where(s => s.Key == ValueType.Object).SelectMany(p => p);
+                    var objTypes = grouped.Where(s => s.Key == Common.ValueType.Object).SelectMany(p => p);
                     var idGroup = objTypes.GroupBy(s => s.Id);
                     if (idGroup.Count() != objTypes.Count())
                     {

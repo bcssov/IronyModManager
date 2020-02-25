@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-24-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -41,6 +41,12 @@ namespace IronyModManager.Models.Common
         string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets the steam application identifier.
+        /// </summary>
+        /// <value>The steam application identifier.</value>
+        int SteamAppId { get; set; }
+
+        /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
@@ -51,6 +57,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The user directory.</value>
         string UserDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the workshop directory.
+        /// </summary>
+        /// <value>The workshop directory.</value>
+        string WorkshopDirectory { get; set; }
 
         #endregion Properties
     }

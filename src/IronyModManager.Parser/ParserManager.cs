@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -14,17 +14,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Parser.Default;
-using IronyModManager.Parser.Games;
-using IronyModManager.Parser.Generic;
+using IronyModManager.Parser.Common;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
     /// Class ParserManager.
-    /// Implements the <see cref="IronyModManager.Parser.IParserManager" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.IParserManager" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IParserManager" />
+    /// <seealso cref="IronyModManager.Parser.Common.IParserManager" />
     public class ParserManager : IParserManager
     {
         #region Fields

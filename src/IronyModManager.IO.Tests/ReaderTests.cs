@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.Tests.Common;
 using Xunit;
 

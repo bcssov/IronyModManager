@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -14,6 +14,9 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -54,7 +57,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && (args.File.StartsWith(Constants.Stellaris.RandomNames, StringComparison.OrdinalIgnoreCase) || args.File.StartsWith(Constants.Stellaris.WorldGfx, StringComparison.OrdinalIgnoreCase));
+            return IsStellaris(args) && (args.File.StartsWith(Common.Constants.Stellaris.RandomNames, StringComparison.OrdinalIgnoreCase) || args.File.StartsWith(Common.Constants.Stellaris.WorldGfx, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -80,12 +83,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         protected override void OnReadObjectLine(ParsingArgs args)
         {
             var cleaned = textParser.CleanWhitespace(args.Line);
-            if (args.OpeningBracket - args.ClosingBracket <= 1 && Constants.Scripts.StellarisKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
+            if (args.OpeningBracket - args.ClosingBracket <= 1 && Common.Constants.Scripts.StellarisKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
             {
                 string sep = string.Empty;
-                var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket);
+                var bracketLocation = cleaned.IndexOf(Common.Constants.Scripts.OpeningBracket);
                 int idLoc = -1;
-                foreach (var item in Constants.Scripts.StellarisKeyIds)
+                foreach (var item in Common.Constants.Scripts.StellarisKeyIds)
                 {
                     idLoc = cleaned.IndexOf(item);
                     if (idLoc > -1)

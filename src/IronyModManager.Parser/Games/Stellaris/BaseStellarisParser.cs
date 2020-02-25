@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="BaseStellarisParser.cs" company="Mario">
 //     Mario
@@ -13,23 +13,24 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
     /// Class BaseStellarisParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Games.IGameParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Games.IGameParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     public abstract class BaseStellarisParser : BaseParser, IGameParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseStellarisParser"/> class.
+        /// Initializes a new instance of the <see cref="BaseStellarisParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public BaseStellarisParser(ITextParser textParser) : base(textParser)
@@ -54,7 +55,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if the specified arguments is stellaris; otherwise, <c>false</c>.</returns>
         protected virtual bool IsStellaris(CanParseArgs args)
         {
-            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris, StringComparison.OrdinalIgnoreCase);
+            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris.Name, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

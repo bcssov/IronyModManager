@@ -21,6 +21,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FUNCTIONAL_TESTING|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,7 +54,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IronyModManager.IO.Common\IronyModManager.IO.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
     <ProjectReference Include="..\IronyModManager.Models\IronyModManager.Models.csproj" />
+    <ProjectReference Include="..\IronyModManager.Parser.Common\IronyModManager.Parser.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Services\IronyModManager.Services.csproj" />
     <ProjectReference Include="..\IronyModManager.Storage\IronyModManager.Storage.csproj" />

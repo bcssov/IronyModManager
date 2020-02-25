@@ -54,12 +54,16 @@ namespace IronyModManager.Services.Tests
                 new GameType()
                 {
                     Name = "game 1",
-                    UserDirectory = "user1"
+                    UserDirectory = "user1",
+                    SteamAppId = 1,
+                    WorkshopDirectory = "workshop1"
                 },
                 new GameType()
                 {
                     Name = "game 2",
-                    UserDirectory = "user2"
+                    UserDirectory = "user2",
+                    SteamAppId = 2,
+                    WorkshopDirectory = "workshop2"
                 }
             };
             storageProvider.Setup(p => p.GetGames()).Returns(games);
@@ -96,6 +100,8 @@ namespace IronyModManager.Services.Tests
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
             result.FirstOrDefault(p => p.IsSelected).UserDirectory.Should().Be("user1");
+            result.FirstOrDefault(p => p.IsSelected).SteamAppId.Should().Be(1);
+            result.FirstOrDefault(p => p.IsSelected).WorkshopDirectory.Should().Be("workshop1");
         }
 
         /// <summary>
@@ -113,6 +119,8 @@ namespace IronyModManager.Services.Tests
             result.Should().NotBeNull();
             result.Type.Should().Be("game 1");
             result.UserDirectory.Should().Be("user1");
+            result.SteamAppId.Should().Be(1);
+            result.WorkshopDirectory.Should().Be("workshop1");
         }
 
         /// <summary>

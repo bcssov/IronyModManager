@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -101,19 +102,19 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("FOV");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         result[i].Type.Should().Be("common\\defines\\NCamera-txt");
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         result[i].Type.Should().Be("common\\defines\\NCamera-txt");
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
                         break;
                     default:
@@ -164,7 +165,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
                         break;
                     default:

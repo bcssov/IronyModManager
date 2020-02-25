@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -110,12 +111,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("GFX_text_military_size_2");
                         result[i].Code.Should().Be(sb3.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
                         break;
@@ -170,7 +171,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
                         break;
@@ -250,13 +251,13 @@ namespace IronyModManager.Parser.Tests
                         // determined by the order in the constant locales array
                         result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:                        
                         // determined by the order in the constant locales array
                         result[i].Id.Should().Be("l_russian-large_title_font");
                         result[i].Code.Should().Be(sb3.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
                         break;

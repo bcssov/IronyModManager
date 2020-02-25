@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
@@ -13,6 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -26,7 +28,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SolarSystemInitializersParser"/> class.
+        /// Initializes a new instance of the <see cref="SolarSystemInitializersParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
         public SolarSystemInitializersParser(ITextParser textParser) : base(textParser)
@@ -44,7 +46,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && args.File.StartsWith(Constants.Stellaris.SolarSystemInitializers, StringComparison.OrdinalIgnoreCase);
+            return IsStellaris(args) && args.File.StartsWith(Common.Constants.Stellaris.SolarSystemInitializers, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -16,15 +16,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO
 {
     /// <summary>
     /// Class DiskFileReader.
-    /// Implements the <see cref="IronyModManager.IO.IFileReader" />
+    /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.IFileReader" />
+    /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
     [ExcludeFromCoverage("Shloud be covered by Unit tests from source project.")]
     public class DiskFileReader : IFileReader
     {
@@ -37,7 +38,7 @@ namespace IronyModManager.IO
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public bool CanRead(string path)
         {
-            return Directory.Exists(path) && !path.EndsWith(Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+            return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -68,10 +69,13 @@ namespace IronyModManager.IO
                         streamReader.Close();
                         info.IsBinary = false;
                         info.Content = text.SplitOnNewLine();
+                        info.ContentSHA = text.CalculateSHA();
                     }
                     else
                     {
                         info.IsBinary = true;
+                        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read);
+                        info.ContentSHA = fs.CalculateSHA();
                     }
                     result.Add(info);
                 }
