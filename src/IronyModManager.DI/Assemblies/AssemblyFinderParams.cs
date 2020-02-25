@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinderParams.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
+using System;
 using System.IO;
 
 namespace IronyModManager.DI.Assemblies
@@ -48,12 +48,6 @@ namespace IronyModManager.DI.Assemblies
         /// </summary>
         /// <value>The search option.</value>
         public SearchOption SearchOption { get; set; }
-
-        /// <summary>
-        /// Gets or sets the shared types.
-        /// </summary>
-        /// <value>The shared types.</value>
-        public IEnumerable<Type> SharedTypes { get; set; }
 
         #endregion Properties
     }

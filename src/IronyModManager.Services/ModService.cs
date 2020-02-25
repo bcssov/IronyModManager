@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -119,12 +120,14 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var definitions = new List<IDefinition>();
-            foreach (var mod in mods)
+            var definitions = new ConcurrentBag<IDefinition>();
+
+            mods.AsParallel().ForAll((m) =>
             {
-                if (Path.IsPathFullyQualified(mod.FileName))
+                IEnumerable<IDefinition> result = null;
+                if (Path.IsPathFullyQualified(m.FileName))
                 {
-                    definitions.AddRange(ParseModFiles(game, reader.Read(mod.FileName), mod));
+                    result = ParseModFiles(game, reader.Read(m.FileName), m);
                 }
                 else
                 {
@@ -132,18 +135,26 @@ namespace IronyModManager.Services
                     // Technically we don't need this since newer pdx mod launchers use absolute paths.
                     // IronyModManager will always require that a user runs the PDX mod launcher first when new mods are installed.
                     // This program will not be a replacement for mod installation only for mod management.
-                    var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
-                    var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
+                    var userDirectoryMod = Path.Combine(game.UserDirectory, m.FileName);
+                    var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, m.FileName);
                     if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
                     {
-                        definitions.AddRange(ParseModFiles(game, reader.Read(userDirectoryMod), mod));
+                        result = ParseModFiles(game, reader.Read(userDirectoryMod), m);
                     }
                     else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
                     {
-                        definitions.AddRange(ParseModFiles(game, reader.Read(workshopDirectoryMod), mod));
+                        result = ParseModFiles(game, reader.Read(workshopDirectoryMod), m);
                     }
                 }
-            }
+                if (result?.Count() > 0)
+                {
+                    foreach (var item in result)
+                    {
+                        definitions.Add(item);
+                    }
+                }
+            });
+
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
             return indexed;
