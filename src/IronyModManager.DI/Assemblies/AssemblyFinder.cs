@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -18,7 +18,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using IronyModManager.Shared;
-using McMaster.NETCore.Plugins;
 
 namespace IronyModManager.DI.Assemblies
 {
@@ -65,17 +64,19 @@ namespace IronyModManager.DI.Assemblies
 
                 var assemblies = new List<Assembly>();
 
+                var assemblyNames = new List<AssemblyName>();
+                foreach (var item in files)
+                {
+                    assemblyNames.Add(new AssemblyName(Path.GetFileNameWithoutExtension(item.Name)));
+                }
+
                 foreach (var item in files)
                 {
                     if (!AssemblyLoadContext.Default.Assemblies.Any(p => p.GetName().Name.Equals(Path.GetFileNameWithoutExtension(item.Name), StringComparison.OrdinalIgnoreCase)))
                     {
-                        var loader = PluginLoader.CreateFromAssemblyFile(assemblyFile: item.FullName,
-                            sharedTypes: finderParams.SharedTypes.ToArray(),
-                            configure =>
-                            {
-                                configure.PreferSharedTypes = true;
-                            });
-                        var assembly = loader.LoadDefaultAssembly();
+                        var context = new SharedLoadContext(item.FullName);
+                        context.AddSharedAssembly(assemblyNames.ToArray());
+                        var assembly = context.LoadMainAssembly();
                         assemblies.Add(assembly);
                     }
                     else
