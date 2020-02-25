@@ -50,7 +50,7 @@ namespace IronyModManager.IO
         public IReadOnlyCollection<IFileInfo> Read(string path)
         {
             using var fileStream = File.OpenRead(path);
-            var reader = ReaderFactory.Open(fileStream);
+            using var reader = ReaderFactory.Open(fileStream);
             var result = new List<IFileInfo>();
             while (reader.MoveToNextEntry())
             {
