@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -18,13 +18,13 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
-using IronyModManager.IO;
+using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser;
-using IronyModManager.Parser.Indexer;
-using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Common;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
-using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -162,8 +162,8 @@ namespace IronyModManager.Services
             foreach (var fileInfo in fileInfos)
             {
                 definitions.AddRange(parserManager.Parse(new ParserManagerArgs()
-                {                    
-                    ContentSHA =  fileInfo.ContentSHA,
+                {
+                    ContentSHA = fileInfo.ContentSHA,
                     File = fileInfo.FileName,
                     GameType = game.Type,
                     Lines = fileInfo.Content,

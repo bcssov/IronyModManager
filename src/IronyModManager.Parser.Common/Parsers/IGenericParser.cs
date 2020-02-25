@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="IGenericParser.cs" company="Mario">
 //     Mario
@@ -13,15 +13,15 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Common.Args;
 
-namespace IronyModManager.Parser.Generic
+namespace IronyModManager.Parser.Common.Parsers
 {
     /// <summary>
     /// Interface IGenericParser
-    /// Implements the <see cref="IronyModManager.Parser.Default.IDefaultParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.IDefaultParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
     public interface IGenericParser : IDefaultParser
     {
         #region Methods

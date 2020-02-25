@@ -26,6 +26,12 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+
   <ItemGroup>
     <None Include="..\IronyModManager\Assets\avalonia-logo.png">
       <Pack>True</Pack>

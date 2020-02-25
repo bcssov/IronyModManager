@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Indexer;
 using Xunit;
 

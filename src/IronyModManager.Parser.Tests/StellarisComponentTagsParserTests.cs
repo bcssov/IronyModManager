@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -81,12 +82,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("weapon_type_kinetic");
                         result[i].Id.Should().Be("weapon_type_kinetic");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be("weapon_type_explosive");
                         result[i].Id.Should().Be("weapon_type_explosive");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
 
                     default:

@@ -1,35 +1,34 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Mod
 // Author           : Mario
-// Created          : 02-16-2020
+// Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
-// <copyright file="IDefaultParser.cs" company="Mario">
+// <copyright file="IModParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser.Default
+namespace IronyModManager.Parser.Common.Mod
 {
     /// <summary>
-    /// Interface IDefaultParser
+    /// Interface IModParser
     /// </summary>
-    public interface IDefaultParser
+    public interface IModParser
     {
         #region Methods
 
         /// <summary>
-        /// Parses the specified arguments.
+        /// Parses the specified lines.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        IEnumerable<IDefinition> Parse(ParserArgs args);
+        /// <param name="lines">The lines.</param>
+        /// <returns>IModObject.</returns>
+        IModObject Parse(IEnumerable<string> lines);
 
         #endregion Methods
     }

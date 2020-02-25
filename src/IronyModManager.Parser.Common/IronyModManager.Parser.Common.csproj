@@ -5,13 +5,13 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Description>Irony Mod Manager Parser Component</Description>
+    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
+    <Description>Irony Mod Manager Parser Common Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>avalonia-logo.png</PackageIcon>
     <PackageIconUrl />
-    <PackageTags>Irony Mod Manager Parser Component</PackageTags>
-    <PackageReleaseNotes>Irony Mod Manager Parser Component</PackageReleaseNotes>
-    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
+    <PackageTags>Irony Mod Manager Parser Common Component</PackageTags>
+    <PackageReleaseNotes>Irony Mod Manager Parser Common Component</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -43,13 +43,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.2" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
-    <ProjectReference Include="..\IronyModManager.Parser.Common\IronyModManager.Parser.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
 

@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ITextParser.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Common.Parsers
 {
     /// <summary>
     /// Interface ITextParser

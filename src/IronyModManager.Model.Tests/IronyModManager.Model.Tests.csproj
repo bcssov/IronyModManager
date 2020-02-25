@@ -20,8 +20,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FUNCTIONAL_TESTING|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
+    <DefineConstants>TRACE;FUNCTIONAL_TEST</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />

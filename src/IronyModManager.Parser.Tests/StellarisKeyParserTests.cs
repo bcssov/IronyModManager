@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -117,16 +118,16 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
-                        result[i].ValueType.Should().Be(ValueType.Variable);
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("namespace");
-                        result[i].ValueType.Should().Be(ValueType.Namespace);
+                        result[i].ValueType.Should().Be(Common.ValueType.Namespace);
                         break;
                     case 2:
                         result[i].Id.Should().Be("dmm_mod.1");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
                         break;

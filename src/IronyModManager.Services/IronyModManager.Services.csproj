@@ -56,9 +56,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
-    <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
+    <ProjectReference Include="..\IronyModManager.IO.Common\IronyModManager.IO.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
-    <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
+    <ProjectReference Include="..\IronyModManager.Parser.Common\IronyModManager.Parser.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
     <ProjectReference Include="..\IronyModManager.Storage.Common\IronyModManager.Storage.Common.csproj" />

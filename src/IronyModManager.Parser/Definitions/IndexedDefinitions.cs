@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -15,14 +15,15 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Parser.Indexer
 {
     /// <summary>
     /// Class IndexedDefinitions.
-    /// Implements the <see cref="IronyModManager.Parser.IIndexedDefinitions" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IIndexedDefinitions" />
+    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields

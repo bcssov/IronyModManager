@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -17,14 +17,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using IronyModManager.DI;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
 
-namespace IronyModManager.Parser.Default
+namespace IronyModManager.Parser.Common.Parsers
 {
     /// <summary>
     /// Class BaseParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.IDefaultParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.IDefaultParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
     public abstract class BaseParser : IDefaultParser
     {
         #region Fields

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -13,14 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
     /// Class Definition.
-    /// Implements the <see cref="IronyModManager.Parser.IDefinition" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.IDefinition" />
+    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
     public class Definition : IDefinition
     {
         #region Properties
@@ -71,7 +72,7 @@ namespace IronyModManager.Parser
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
-        public ValueType ValueType { get; set; }
+        public Common.ValueType ValueType { get; set; }
 
         #endregion Properties
     }

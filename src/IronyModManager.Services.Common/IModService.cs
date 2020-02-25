@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -14,8 +14,8 @@
 
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Indexer;
-using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Mod;
 
 namespace IronyModManager.Services.Common
 {

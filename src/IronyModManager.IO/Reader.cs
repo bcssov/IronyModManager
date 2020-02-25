@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -14,14 +14,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.IO.Common;
 
 namespace IronyModManager.IO
 {
     /// <summary>
     /// Class Reader.
-    /// Implements the <see cref="IronyModManager.IO.IReader" />
+    /// Implements the <see cref="IronyModManager.IO.Common.IReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.IReader" />
+    /// <seealso cref="IronyModManager.IO.Common.IReader" />
     public class Reader : IReader
     {
         #region Fields
@@ -36,7 +37,7 @@ namespace IronyModManager.IO
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Reader"/> class.
+        /// Initializes a new instance of the <see cref="Reader" /> class.
         /// </summary>
         /// <param name="readers">The readers.</param>
         public Reader(IEnumerable<IFileReader> readers)

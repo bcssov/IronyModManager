@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="FileInfo.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.IO.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO
@@ -20,7 +21,9 @@ namespace IronyModManager.IO
     /// <summary>
     /// Class FileInfo.
     /// Implements the <see cref="IronyModManager.IO.IFileInfo" />
+    /// Implements the <see cref="IronyModManager.IO.Common.IFileInfo" />
     /// </summary>
+    /// <seealso cref="IronyModManager.IO.Common.IFileInfo" />
     /// <seealso cref="IronyModManager.IO.IFileInfo" />
     [ExcludeFromCoverage("Simple model.")]
     public class FileInfo : IFileInfo

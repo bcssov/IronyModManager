@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.IO
+// Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 
-namespace IronyModManager.IO
+namespace IronyModManager.IO.Common
 {
     /// <summary>
     /// Class Constants.

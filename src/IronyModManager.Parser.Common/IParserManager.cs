@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common
 // Author           : Mario
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="IParserManager.cs" company="Mario">
 //     Mario
@@ -13,8 +13,10 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Common
 {
     /// <summary>
     /// Interface IParserManager
@@ -24,10 +26,10 @@ namespace IronyModManager.Parser
         #region Methods
 
         /// <summary>
-        /// Parses the specified stream.
+        /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns>IIndexedDefinitions.</returns>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> Parse(ParserManagerArgs args);
 
         #endregion Methods

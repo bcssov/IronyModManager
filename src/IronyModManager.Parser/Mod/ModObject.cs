@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -13,14 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Common.Mod;
 
 namespace IronyModManager.Parser.Mod
 {
     /// <summary>
     /// Class ModObject.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.IModObject" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.IModObject" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.IModObject" />
+    /// <seealso cref="IronyModManager.Parser.Common.Mod.IModObject" />
     public class ModObject : IModObject
     {
         #region Properties

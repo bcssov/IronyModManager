@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -250,7 +251,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("alerts.txt");
-                        result[i].ValueType.Should().Be(ValueType.WholeTextFile);
+                        result[i].ValueType.Should().Be(Common.ValueType.WholeTextFile);
                         break;
 
                     default:

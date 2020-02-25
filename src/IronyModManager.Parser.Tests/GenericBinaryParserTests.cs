@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -73,7 +74,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().BeNullOrEmpty();
                         result[i].Id.Should().Be("test.png");
-                        result[i].ValueType.Should().Be(ValueType.Binary);
+                        result[i].ValueType.Should().Be(Common.ValueType.Binary);
                         break;
 
                     default:

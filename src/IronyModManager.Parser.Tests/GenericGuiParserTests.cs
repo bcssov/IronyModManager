@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
@@ -99,12 +100,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
                         result[i].Code.Should().Be(sb3.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -155,7 +156,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -197,7 +198,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -264,12 +265,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
                         result[i].Code.Should().Be(sb3.ToString());
-                        result[i].ValueType.Should().Be(ValueType.Object);
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");

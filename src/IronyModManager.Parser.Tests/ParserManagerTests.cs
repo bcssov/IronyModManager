@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using IronyModManager.Parser.Default;
-using IronyModManager.Parser.Games;
-using IronyModManager.Parser.Generic;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests

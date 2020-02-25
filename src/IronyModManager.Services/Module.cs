@@ -32,7 +32,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <value>The dependencies.</value>
         public IEnumerable<string> Dependencies => new List<string> { typeof(Storage.Common.Module).Name, typeof(Common.Module).Name, typeof(DI.Module).Name,
-                typeof(Localization.Module).Name, typeof(Shared.Module).Name, typeof(IO.Module).Name, typeof(Parser.Module).Name};
+                typeof(Localization.Module).Name, typeof(Shared.Module).Name, typeof(IO.Common.Module).Name, typeof(Parser.Common.Module).Name};
 
         /// <summary>
         /// Gets the name.

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Args
 // Author           : Mario
-// Created          : 02-19-2020
+// Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
-// <copyright file="ParserManagerArgs.cs" company="Mario">
+// <copyright file="CanParseArgs.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,20 +14,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Common.Args
 {
     /// <summary>
-    /// Class ParserManagerArgs.
+    /// Class CanParseArgs.
     /// </summary>
-    public class ParserManagerArgs
+    public class CanParseArgs
     {
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the content sha.
-        /// </summary>
-        /// <value>The content sha.</value>
-        public string ContentSHA { get; set; }
 
         /// <summary>
         /// Gets or sets the file.
@@ -46,18 +40,6 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <value>The lines.</value>
         public IEnumerable<string> Lines { get; set; }
-
-        /// <summary>
-        /// Gets or sets the mod dependencies.
-        /// </summary>
-        /// <value>The mod dependencies.</value>
-        public IEnumerable<string> ModDependencies { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name of the mod.
-        /// </summary>
-        /// <value>The name of the mod.</value>
-        public string ModName { get; set; }
 
         #endregion Properties
     }

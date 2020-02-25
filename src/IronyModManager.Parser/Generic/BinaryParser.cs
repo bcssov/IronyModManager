@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -14,17 +14,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Parser.Default;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class BinaryParser.
-    /// Implements the <see cref="IronyModManager.Parser.Default.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Default.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class BinaryParser : BaseParser, IGenericParser
     {
         #region Constructors
@@ -63,9 +65,9 @@ namespace IronyModManager.Parser.Generic
             var parsingArgs = ConstructArgs(args, def);
             MapDefinitionFromArgs(parsingArgs);
             def.Code = string.Empty;
-            def.Id = args.File.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = ValueType.Binary;
-            def.Type = FormatType(args.File, Constants.BinaryType);
+            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
+            def.ValueType = Common.ValueType.Binary;
+            def.Type = FormatType(args.File, Common.Constants.BinaryType);
             return new List<IDefinition> { def };
         }
 

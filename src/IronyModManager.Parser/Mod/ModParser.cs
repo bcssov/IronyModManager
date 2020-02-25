@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -15,14 +15,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Mod
 {
     /// <summary>
     /// Class ModParser.
-    /// Implements the <see cref="IronyModManager.Parser.Mod.IModParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.IModParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Mod.IModParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Mod.IModParser" />
     public class ModParser : IModParser
     {
         #region Fields
@@ -60,36 +62,35 @@ namespace IronyModManager.Parser.Mod
             List<string> arrayProps = null;
             foreach (var line in lines)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(Constants.Scripts.ScriptCommentId))
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(Common.Constants.Scripts.ScriptCommentId))
                 {
                     continue;
                 }
                 var cleaned = textParser.CleanWhitespace(line);
-                if (cleaned.Contains(Constants.Scripts.VariableSeparatorId))
+                if (cleaned.Contains(Common.Constants.Scripts.VariableSeparatorId))
                 {
-
-                    var key = textParser.GetKey(cleaned, Constants.Scripts.VariableSeparatorId);
+                    var key = textParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
                     switch (key)
                     {
                         case "path":
                         case "archive":
-                            obj.FileName = textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}");
+                            obj.FileName = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "picture":
-                            obj.Picture = textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}");
+                            obj.Picture = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "name":
-                            obj.Name = textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}");
+                            obj.Name = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "version":
-                            obj.Version = textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}");
+                            obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "supported_version":
-                            obj.SupportedVersion = textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}");
+                            obj.SupportedVersion = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "tags":
@@ -97,7 +98,7 @@ namespace IronyModManager.Parser.Mod
                             break;
 
                         case "remote_file_id":
-                            if (int.TryParse(textParser.GetValue(cleaned, $"{key}{Constants.Scripts.VariableSeparatorId}"), out int value))
+                            if (int.TryParse(textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}"), out int value))
                             {
                                 obj.RemoteId = value;
                             }
@@ -115,7 +116,7 @@ namespace IronyModManager.Parser.Mod
                 {
                     if (arrayProps != null)
                     {
-                        if (cleaned.Contains(Constants.Scripts.ClosingBracket))
+                        if (cleaned.Contains(Common.Constants.Scripts.ClosingBracket))
                         {
                             arrayProps = null;
                         }

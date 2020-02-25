@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.IO.Common
 // Author           : Mario
-// Created          : 02-22-2020
+// Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
-// <copyright file="IModParser.cs" company="Mario">
+// <copyright file="IReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,21 +14,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser.Mod
+namespace IronyModManager.IO.Common
 {
     /// <summary>
-    /// Interface IModParser
+    /// Interface IReader
     /// </summary>
-    public interface IModParser
+    public interface IReader
     {
         #region Methods
 
         /// <summary>
-        /// Parses the specified lines.
+        /// Reads the specified path.
         /// </summary>
-        /// <param name="lines">The lines.</param>
-        /// <returns>IModObject.</returns>
-        IModObject Parse(IEnumerable<string> lines);
+        /// <param name="path">The path.</param>
+        /// <returns>IEnumerable&lt;IFileInfo&gt;.</returns>
+        IEnumerable<IFileInfo> Read(string path);
 
         #endregion Methods
     }

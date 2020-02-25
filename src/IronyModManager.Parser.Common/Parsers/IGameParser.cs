@@ -1,26 +1,27 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Common.Parsers
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="IGameParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
-using IronyModManager.Parser.Generic;
+using System.Collections.Generic;
 
-namespace IronyModManager.Parser.Games
+namespace IronyModManager.Parser.Common.Parsers
 {
     /// <summary>
     /// Interface IGameParser
     /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
     public interface IGameParser : IGenericParser
     {
