@@ -4,15 +4,15 @@
 // Created          : 01-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="DISetup.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
 using IronyModManager.DI;
 using IronyModManager.Shared;
 using SimpleInjector;
@@ -46,9 +46,7 @@ namespace IronyModManager.Tests.Common
                 new DIOptions()
                 {
                     Container = Container,
-                    PluginPathAndName = Constants.PluginsPathAndName,
-                    ModuleTypes = new List<Type>() { typeof(IModule) },
-                    PluginTypes = new List<Type>() { typeof(IPlugin) }
+                    PluginPathAndName = Constants.PluginsPathAndName
                 });
         }
 

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-25-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -66,7 +66,7 @@ namespace IronyModManager
             {
                 var app = BuildAvaloniaApp();
                 Bootstrap.PostStartup();
-                app.StartWithClassicDesktopLifetime(args);               
+                app.StartWithClassicDesktopLifetime(args);
             }
             catch (Exception ex)
             {
@@ -113,9 +113,7 @@ namespace IronyModManager
                 new DIOptions()
                 {
                     Container = new SimpleInjector.Container(),
-                    PluginPathAndName = Shared.Constants.PluginsPathAndName,
-                    ModuleTypes = new List<Type>() { typeof(IModule) },
-                    PluginTypes = new List<Type>() { typeof(IPlugin) }
+                    PluginPathAndName = Shared.Constants.PluginsPathAndName
                 });
         }
 
