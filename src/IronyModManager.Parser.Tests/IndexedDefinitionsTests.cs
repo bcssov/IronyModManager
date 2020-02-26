@@ -17,7 +17,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Parser.Indexer;
+using IronyModManager.Parser.Definitions;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests

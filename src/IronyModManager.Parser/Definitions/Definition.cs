@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Definitions
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 02-26-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.Parser.Common.Definitions;
 
-namespace IronyModManager.Parser
+namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class Definition.

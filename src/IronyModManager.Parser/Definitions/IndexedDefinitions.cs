@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser
+// Assembly         : IronyModManager.Parser.Definitions
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 02-26-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Parser.Common.Definitions;
 
-namespace IronyModManager.Parser.Indexer
+namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class IndexedDefinitions.

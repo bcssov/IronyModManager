@@ -19,6 +19,7 @@ using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Definitions;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests

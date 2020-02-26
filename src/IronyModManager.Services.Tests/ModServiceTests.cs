@@ -25,6 +25,7 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;

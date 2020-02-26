@@ -20,7 +20,7 @@ using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Parser.Indexer;
+using IronyModManager.Parser.Definitions;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
