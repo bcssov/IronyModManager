@@ -15,6 +15,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using CodexMicroORM.Core.Collections;
 using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Parser.Definitions
@@ -29,24 +30,24 @@ namespace IronyModManager.Parser.Definitions
         #region Fields
 
         /// <summary>
-        /// The files map
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> filesMap;
-
-        /// <summary>
-        /// The type and ids map
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> typeAndIdsMap;
-
-        /// <summary>
-        /// The type map
-        /// </summary>
-        private readonly ConcurrentDictionary<string, ConcurrentBag<IDefinition>> typeMap;
-
-        /// <summary>
         /// The definitions
         /// </summary>
-        private IEnumerable<IDefinition> definitions;
+        private readonly ConcurrentIndexedList<IDefinition> definitions;
+
+        /// <summary>
+        /// The file keys
+        /// </summary>
+        private readonly ConcurrentDictionary<string, string> fileKeys;
+
+        /// <summary>
+        /// The type and identifier keys
+        /// </summary>
+        private readonly ConcurrentDictionary<string, string> typeAndIdKeys;
+
+        /// <summary>
+        /// The type keys
+        /// </summary>
+        private readonly ConcurrentDictionary<string, string> typeKeys;
 
         #endregion Fields
 
@@ -57,9 +58,10 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         public IndexedDefinitions()
         {
-            filesMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
-            typeAndIdsMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
-            typeMap = new ConcurrentDictionary<string, ConcurrentBag<IDefinition>>();
+            definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.File), nameof(IDefinition.Type), nameof(IDefinition.TypeAndId));
+            fileKeys = new ConcurrentDictionary<string, string>();
+            typeAndIdKeys = new ConcurrentDictionary<string, string>();
+            typeKeys = new ConcurrentDictionary<string, string>();
         }
 
         #endregion Constructors
@@ -81,7 +83,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllFileKeys()
         {
-            return filesMap.Select(s => s.Key);
+            return fileKeys.Select(s => s.Key); ;
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeAndIdKeys()
         {
-            return typeAndIdsMap.Select(s => s.Key);
+            return typeAndIdKeys.Select(s => s.Key);
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeKeys()
         {
-            return typeMap.Select(s => s.Key);
+            return typeKeys.Select(s => s.Key); ;
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> GetByFile(string file)
         {
-            return GetByKey(filesMap, file);
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.File), file);
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> GetByType(string type)
         {
-            return GetByKey(typeMap, type);
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.Type), type);
         }
 
         /// <summary>
@@ -130,7 +132,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> GetByTypeAndId(string type, string id)
         {
-            return GetByKey(typeAndIdsMap, ConstructKey(type, id));
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), ConstructKey(type, id));
         }
 
         /// <summary>
@@ -139,12 +141,12 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="definitions">The definitions.</param>
         public void InitMap(IEnumerable<IDefinition> definitions)
         {
-            this.definitions = definitions;
             foreach (var item in definitions)
             {
-                Map(filesMap, item.File, item);
-                Map(typeMap, item.Type, item);
-                Map(typeAndIdsMap, ConstructKey(item.Type, item.Id), item);
+                MapKeys(fileKeys, item.File);
+                MapKeys(typeKeys, item.Type);
+                MapKeys(typeAndIdKeys, ConstructKey(item.Type, item.Id));
+                this.definitions.Add(item);
             }
         }
 
@@ -159,36 +161,15 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Gets the by key.
+        /// Maps the keys.
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="key">The key.</param>
-        /// <returns>ConcurrentBag&lt;IDefinition&gt;.</returns>
-        private ConcurrentBag<IDefinition> GetByKey(ConcurrentDictionary<string, ConcurrentBag<IDefinition>> map, string key)
+        private void MapKeys(ConcurrentDictionary<string, string> map, string key)
         {
-            if (map.TryGetValue(key, out var value))
+            if (!map.ContainsKey(key))
             {
-                return value;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Maps the specified map.
-        /// </summary>
-        /// <param name="map">The map.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="definition">The definition.</param>
-        private void Map(ConcurrentDictionary<string, ConcurrentBag<IDefinition>> map, string key, IDefinition definition)
-        {
-            if (map.ContainsKey(key))
-            {
-                map[key].Add(definition);
-            }
-            else
-            {
-                var col = new ConcurrentBag<IDefinition>() { definition };
-                map.TryAdd(key, col);
+                map.TryAdd(key, key);
             }
         }
 
