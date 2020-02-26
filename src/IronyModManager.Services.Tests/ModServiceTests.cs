@@ -176,8 +176,9 @@ namespace IronyModManager.Services.Tests
                 }
             });
             result.GetAll().Count().Should().Be(2);
-            result.GetAll().First().Id.Should().Be("fake1.txt");
-            result.GetAll().Last().Id.Should().Be("fake2.txt");
+            var ordered = result.GetAll().OrderBy(p => p.Id);
+            ordered.First().Id.Should().Be("fake1.txt");
+            ordered.Last().Id.Should().Be("fake2.txt");
         }
 
         /// <summary>
@@ -205,8 +206,9 @@ namespace IronyModManager.Services.Tests
                 }
             });
             result.GetAll().Count().Should().Be(2);
-            result.GetAll().First().Id.Should().Be("fake1.txt");
-            result.GetAll().Last().Id.Should().Be("fake2.txt");
+            var ordered = result.GetAll().OrderBy(p => p.Id);
+            ordered.First().Id.Should().Be("fake1.txt");
+            ordered.Last().Id.Should().Be("fake2.txt");
         }
 
         /// <summary>
@@ -234,8 +236,9 @@ namespace IronyModManager.Services.Tests
                 }
             });
             result.GetAll().Count().Should().Be(2);
-            result.GetAll().First().Id.Should().Be("fake1.txt");
-            result.GetAll().Last().Id.Should().Be("fake2.txt");
+            var ordered = result.GetAll().OrderBy(p => p.Id);
+            ordered.First().Id.Should().Be("fake1.txt");
+            ordered.Last().Id.Should().Be("fake2.txt");
         }
 
 #if FUNCTIONAL_TEST
