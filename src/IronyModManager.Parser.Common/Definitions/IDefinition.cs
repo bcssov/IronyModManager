@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 02-26-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -13,13 +13,16 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using CodexMicroORM.Core.Collections;
 
 namespace IronyModManager.Parser.Common.Definitions
 {
     /// <summary>
     /// Interface IDefinition
+    /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
     /// </summary>
-    public interface IDefinition
+    /// <seealso cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
+    public interface IDefinition : ICEFIndexedListItem
     {
         #region Properties
 
@@ -64,6 +67,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The type.</value>
         string Type { get; set; }
+
+        /// <summary>
+        /// Gets the type and identifier.
+        /// </summary>
+        /// <value>The type and identifier.</value>
+        string TypeAndId { get; }
 
         /// <summary>
         /// Gets or sets the type of the value.

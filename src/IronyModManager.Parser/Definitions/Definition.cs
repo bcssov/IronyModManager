@@ -69,11 +69,58 @@ namespace IronyModManager.Parser.Definitions
         public string Type { get; set; }
 
         /// <summary>
+        /// Gets the type and identifier.
+        /// </summary>
+        /// <value>The type and identifier.</value>
+        public string TypeAndId => $"{Type}-{Id}";
+
+        /// <summary>
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
         public Common.ValueType ValueType { get; set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <param name="propName">Name of the property.</param>
+        /// <param name="unwrap">if set to <c>true</c> [unwrap].</param>
+        /// <returns>System.Object.</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public object GetValue(string propName, bool unwrap)
+        {
+            switch (propName)
+            {
+                case nameof(Code):
+                    return Code;
+
+                case nameof(ContentSHA):
+                    return ContentSHA;
+
+                case nameof(Dependencies):
+                    return Dependencies;
+
+                case nameof(File):
+                    return File;
+
+                case nameof(Type):
+                    return Type;
+
+                case nameof(TypeAndId):
+                    return TypeAndId;
+
+                case nameof(ValueType):
+                    return ValueType;
+
+                default:
+                    return Id;
+            }
+        }
+
+        #endregion Methods
     }
 }
