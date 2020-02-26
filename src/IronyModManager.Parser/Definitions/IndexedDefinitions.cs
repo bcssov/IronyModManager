@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CodexMicroORM.Core.Collections;
@@ -37,17 +36,17 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// The file keys
         /// </summary>
-        private readonly ConcurrentDictionary<string, string> fileKeys;
+        private readonly HashSet<string> fileKeys;
 
         /// <summary>
         /// The type and identifier keys
         /// </summary>
-        private readonly ConcurrentDictionary<string, string> typeAndIdKeys;
+        private readonly HashSet<string> typeAndIdKeys;
 
         /// <summary>
         /// The type keys
         /// </summary>
-        private readonly ConcurrentDictionary<string, string> typeKeys;
+        private readonly HashSet<string> typeKeys;
 
         #endregion Fields
 
@@ -59,9 +58,9 @@ namespace IronyModManager.Parser.Definitions
         public IndexedDefinitions()
         {
             definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.File), nameof(IDefinition.Type), nameof(IDefinition.TypeAndId));
-            fileKeys = new ConcurrentDictionary<string, string>();
-            typeAndIdKeys = new ConcurrentDictionary<string, string>();
-            typeKeys = new ConcurrentDictionary<string, string>();
+            fileKeys = new HashSet<string>();
+            typeAndIdKeys = new HashSet<string>();
+            typeKeys = new HashSet<string>();
         }
 
         #endregion Constructors
@@ -83,7 +82,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllFileKeys()
         {
-            return fileKeys.Select(s => s.Key); ;
+            return fileKeys;
         }
 
         /// <summary>
@@ -92,7 +91,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeAndIdKeys()
         {
-            return typeAndIdKeys.Select(s => s.Key);
+            return typeAndIdKeys;
         }
 
         /// <summary>
@@ -101,7 +100,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeKeys()
         {
-            return typeKeys.Select(s => s.Key); ;
+            return typeKeys;
         }
 
         /// <summary>
@@ -165,11 +164,11 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="map">The map.</param>
         /// <param name="key">The key.</param>
-        private void MapKeys(ConcurrentDictionary<string, string> map, string key)
+        private void MapKeys(HashSet<string> map, string key)
         {
-            if (!map.ContainsKey(key))
+            if (!map.Contains(key))
             {
-                map.TryAdd(key, key);
+                map.Add(key);
             }
         }
 
