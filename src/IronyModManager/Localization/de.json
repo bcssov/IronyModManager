@@ -24,5 +24,14 @@
     "Games": {
         "Name": "Spiele",
         "Stellaris": "Stellaris"
+    },
+    "Installed_Mods": {
+        "Name": "Installierte Mods",
+        "Filter": "Filter Mods",
+        "Clear": "X",
+        "Selected": "Ausgewählt",
+        "Mod_Name": "Mod Name",
+        "Sort_A_Z": "↓",
+        "Sort_Z_A": "↑"
     }
 }

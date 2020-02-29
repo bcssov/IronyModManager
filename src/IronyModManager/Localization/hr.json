@@ -24,5 +24,14 @@
     "Games": {
         "Name": "Igre",
         "Stellaris": "Stellaris"
+    },
+    "Installed_Mods": {
+        "Name": "Instalirani modovi",
+        "Filter": "Filtriraj modove",
+        "Clear": "X",
+        "Selected": "Odabrano",
+        "Mod_Name": "Ime moda",
+        "Sort_A_Z": "↓",
+        "Sort_Z_A": "↑"
     }
 }
