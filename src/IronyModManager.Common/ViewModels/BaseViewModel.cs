@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 02-29-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Reactive.Disposables;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -112,6 +113,19 @@ namespace IronyModManager.Common.ViewModels
                 {
                     OnLocaleChanged(x.Locale, x.OldLocale);
                 });
+            MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
+                .Subscribe(t =>
+                {
+                    OnSelectedGameChanged(t.Game);
+                });
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void OnSelectedGameChanged(IGame game)
+        {
         }
 
         #endregion Methods
