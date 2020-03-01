@@ -17,14 +17,18 @@
          ConverterParameter=x/2.5}">
     <Grid IsSharedSizeScope="True">
       <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="50,*">
-          <TextBlock Text="{Binding ModSelected}" Grid.Column="0"></TextBlock>
-          <ContentControl Content="{Binding SortOrder}" Grid.Column="1"></ContentControl>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="60,*">
+          <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+            <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
+          </Border>
+          <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+            <ContentControl Content="{Binding SortOrder}"></ContentControl>
+          </Border>
         </Grid>
         <ListBox Items="{Binding Mods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="50,*">
+              <Grid ColumnDefinitions="60,*">
                 <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
                 <TextBlock Text="{Binding Name}" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
               </Grid>

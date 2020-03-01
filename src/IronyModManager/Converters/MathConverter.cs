@@ -44,6 +44,7 @@ namespace IronyModManager.Converters
                 if (double.TryParse(value.ToString(), out var x))
                 {
                     var parser = new ExpressionParser();
+                    parser.Culture = CurrentLocale.CurrentCulture;
                     parser.Values.Add("x", x);
                     var result = parser.Parse(parameter.ToString().Replace(".", CurrentLocale.CurrentCulture.NumberFormat.NumberDecimalSeparator));
                     return result;

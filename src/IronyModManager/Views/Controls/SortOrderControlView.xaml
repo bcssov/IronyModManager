@@ -3,13 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="30"
-             MaxWidth="100" MinWidth="30"
+             MinWidth="30"
              x:Class="IronyModManager.Views.Controls.SortOrderControlView">
   <Panel>
     <Button Command="{Binding SortCommand}" Background="Transparent" BorderThickness="0" Margin="0,-5,0,0">
       <StackPanel Orientation="Horizontal">
-        <TextBlock Text="{Binding Text}"></TextBlock>
-        <TextBlock Text="{Binding SortOrderText}" Margin="5,0,0,0"></TextBlock>
+        <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
+        <TextBlock Text="{Binding SortOrderText}" Margin="5,0,0,0" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
       </StackPanel>
     </Button>
   </Panel>

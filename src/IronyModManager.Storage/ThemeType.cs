@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="ThemeType.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Storage
     public class ThemeType : IThemeType
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the brushes.
+        /// </summary>
+        /// <value>The brushes.</value>
+        public virtual IDictionary<string, string> Brushes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is default.
