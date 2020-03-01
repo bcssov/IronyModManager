@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-29-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -41,6 +41,9 @@ namespace IronyModManager.DI
             container.RegisterLocalization<LanguageControlViewModel>();
             container.RegisterLocalization<MainControlViewModel>();
             container.RegisterLocalization<GameControlViewModel>();
+            container.RegisterLocalization<InstalledModsControlViewModel>();
+            container.RegisterLocalization<SortOrderControlViewModel>();
+            container.RegisterLocalization<ModHolderControlViewModel>();
         }
 
         #endregion Methods

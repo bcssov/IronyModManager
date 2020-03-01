@@ -90,19 +90,19 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <returns>IEnumerable&lt;IModObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">game</exception>
-        public virtual IEnumerable<IModObject> GetInstalledMods(IGame game)
+        public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
             if (game == null)
             {
                 throw new ArgumentNullException("game");
             }
-            var result = new List<IModObject>();
+            var result = new List<IMod>();
             var installedMods = reader.Read(Path.Combine(game.UserDirectory, ModDirectory));
             if (installedMods?.Count() > 0)
             {
                 foreach (var installedMod in installedMods)
                 {
-                    result.Add(modParser.Parse(installedMod.Content));
+                    result.Add(Mapper.Map<IMod>(modParser.Parse(installedMod.Content)));
                 }
             }
             return result;
@@ -114,7 +114,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IModObject> mods)
+        public virtual IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods)
         {
             if (game == null || mods == null || mods.Count() == 0)
             {

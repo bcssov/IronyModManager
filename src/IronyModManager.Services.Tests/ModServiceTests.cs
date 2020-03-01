@@ -20,6 +20,7 @@ using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO.Common;
 using IronyModManager.Models;
+using IronyModManager.Models.Common;
 using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
@@ -97,10 +98,18 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, mapper.Object);
             var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2" });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
@@ -141,10 +150,10 @@ namespace IronyModManager.Services.Tests
             var reader = new Mock<IReader>();
 
             var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
-            var result = service.GetModObjects(null, new List<IModObject>());
+            var result = service.GetModObjects(null, new List<IMod>());
             result.Should().BeNull();
 
-            result = service.GetModObjects(new Game(), new List<IModObject>());
+            result = service.GetModObjects(new Game(), new List<IMod>());
             result.Should().BeNull();
 
             result = service.GetModObjects(new Game(), null);
@@ -167,9 +176,9 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
-            var result = service.GetModObjects(new Game(), new List<IModObject>()
+            var result = service.GetModObjects(new Game(), new List<IMod>()
             {
-                new ModObject()
+                new Mod()
                 {
                     FileName = Assembly.GetExecutingAssembly().Location,
                     Name = "fake"
@@ -197,9 +206,9 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
-            var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IModObject>()
+            var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
             {
-                new ModObject()
+                new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
@@ -227,9 +236,9 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
-            var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IModObject>()
+            var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
             {
-                new ModObject()
+                new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"

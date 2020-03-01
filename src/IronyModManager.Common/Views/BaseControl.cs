@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="BaseControl.cs" company="Mario">
 //     Mario
@@ -41,6 +41,8 @@ namespace IronyModManager.Common.Views
             {
                 this.WhenActivated(disposables =>
                 {
+                    Disposables = disposables;
+                    IsActivated = true;
                     OnActivated(disposables);
                 });
             }
@@ -56,6 +58,12 @@ namespace IronyModManager.Common.Views
         /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
         public bool IsActivated { get; protected set; }
 
+        /// <summary>
+        /// Gets the disposables.
+        /// </summary>
+        /// <value>The disposables.</value>
+        protected IDisposable Disposables { get; private set; }
+
         #endregion Properties
 
         #region Methods
@@ -66,7 +74,6 @@ namespace IronyModManager.Common.Views
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(IDisposable disposables)
         {
-            IsActivated = true;
         }
 
         #endregion Methods

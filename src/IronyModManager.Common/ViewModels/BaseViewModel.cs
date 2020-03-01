@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-29-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -44,6 +44,8 @@ namespace IronyModManager.Common.ViewModels
             Activator = DIResolver.Get<ViewModelActivator>();
             this.WhenActivated((CompositeDisposable disposables) =>
             {
+                IsActivated = true;
+                Disposables = disposables;
                 OnActivated(disposables);
             });
         }
@@ -69,6 +71,12 @@ namespace IronyModManager.Common.ViewModels
         /// </summary>
         /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
         public bool IsActivated { get; protected set; }
+
+        /// <summary>
+        /// Gets the disposables.
+        /// </summary>
+        /// <value>The disposables.</value>
+        protected CompositeDisposable Disposables { get; private set; }
 
         #endregion Properties
 
@@ -107,7 +115,6 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(CompositeDisposable disposables)
         {
-            IsActivated = true;
             MessageBus.Current.Listen<LocaleChangedEventArgs>()
                 .Subscribe(x =>
                 {

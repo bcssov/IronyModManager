@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-29-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -35,11 +35,16 @@ namespace IronyModManager.ViewModels
         /// <param name="themeControl">The theme control.</param>
         /// <param name="languageControl">The language control.</param>
         /// <param name="gameControl">The game control.</param>
-        public MainControlViewModel(ThemeControlViewModel themeControl, LanguageControlViewModel languageControl, GameControlViewModel gameControl)
+        /// <param name="modControl">The mod control.</param>
+        public MainControlViewModel(ThemeControlViewModel themeControl,
+            LanguageControlViewModel languageControl,
+            GameControlViewModel gameControl,
+            ModHolderControlViewModel modControl)
         {
             ThemeSelector = themeControl;
             LanguageSelector = languageControl;
             GameSelector = gameControl;
+            ModHolder = modControl;
         }
 
         #endregion Constructors
@@ -57,6 +62,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The language selector.</value>
         public virtual LanguageControlViewModel LanguageSelector { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod holder.
+        /// </summary>
+        /// <value>The mod holder.</value>
+        public virtual ModHolderControlViewModel ModHolder { get; protected set; }
 
         /// <summary>
         /// Gets the theme selector.
