@@ -31,6 +31,9 @@
         "Clear": "X",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
+        "Supported_Version": "Podržana verzija"
+    },
+    "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"
     }

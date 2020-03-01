@@ -8,8 +8,8 @@
   <Panel>
     <Button Command="{Binding SortCommand}" Background="Transparent" BorderThickness="0" Margin="0,-5,0,0">
       <StackPanel Orientation="Horizontal">
-        <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
-        <TextBlock Text="{Binding SortOrderText}" Margin="5,0,0,0" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
+        <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}" TextWrapping="Wrap"></TextBlock>
+        <TextBlock Text="{Binding SortOrderText}" Margin="5,0,0,0" Foreground="{DynamicResource IronyForegroundBrush}" TextWrapping="Wrap"></TextBlock>
       </StackPanel>
     </Button>
   </Panel>

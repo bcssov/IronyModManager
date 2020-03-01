@@ -31,6 +31,9 @@
         "Clear": "X",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
+        "Supported_Version": "Unterstützte Version"
+    },
+    "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"
     }

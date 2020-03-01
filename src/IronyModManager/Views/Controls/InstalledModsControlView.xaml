@@ -14,23 +14,27 @@
          ConverterParameter=x-50}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x/2.5}">
+         ConverterParameter=x/2.2}">
     <Grid IsSharedSizeScope="True">
       <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="60,*">
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="60,*,120">
           <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center" Foreground="{DynamicResource IronyForegroundBrush}"></TextBlock>
           </Border>
           <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
-            <ContentControl Content="{Binding SortOrder}"></ContentControl>
+            <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
+          </Border>
+          <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+            <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
         <ListBox Items="{Binding Mods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="60,*">
+              <Grid ColumnDefinitions="60,*,120">
                 <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
                 <TextBlock Text="{Binding Name}" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
+                <TextBlock Text="{Binding SupportedVersion}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>

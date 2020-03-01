@@ -52,6 +52,11 @@ namespace IronyModManager.Shared
             public const string Clear = Prefix + "Clear";
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
+            public const string Supported_Version = Prefix + "Supported_Version";
+        }
+        public static class Sorting
+        {
+            public const string Prefix = nameof(Sorting) + ".";
             public const string Sort_A_Z = Prefix + "Sort_A_Z";
             public const string Sort_Z_A = Prefix + "Sort_Z_A";
         }

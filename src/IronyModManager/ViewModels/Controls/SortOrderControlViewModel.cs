@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-29-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="SortOrderControlViewModel.cs" company="Mario">
 //     Mario
@@ -85,6 +85,16 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
+        /// Sets the sort order.
+        /// </summary>
+        /// <param name="order">The order.</param>
+        public void SetSortOrder(SortOrder order)
+        {
+            SortOrder = order;
+            MapSortOrder(order);
+        }
+
+        /// <summary>
         /// Initializes this instance.
         /// </summary>
         protected virtual void Init()
@@ -113,11 +123,11 @@ namespace IronyModManager.ViewModels.Controls
             switch (order)
             {
                 case SortOrder.Asc:
-                    text = localizationManager.GetResource(LocalizationResources.Installed_Mods.Sort_A_Z);
+                    text = localizationManager.GetResource(LocalizationResources.Sorting.Sort_A_Z);
                     break;
 
                 case SortOrder.Desc:
-                    text = localizationManager.GetResource(LocalizationResources.Installed_Mods.Sort_Z_A);
+                    text = localizationManager.GetResource(LocalizationResources.Sorting.Sort_Z_A);
                     break;
 
                 default:
