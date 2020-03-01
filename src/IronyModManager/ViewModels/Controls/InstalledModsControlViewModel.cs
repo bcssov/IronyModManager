@@ -112,6 +112,18 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            SortOrder.Text = ModName;
+
+            base.OnLocaleChanged(newLocale, oldLocale);
+        }
+
+        /// <summary>
         /// Binds the specified game.
         /// </summary>
         /// <param name="game">The game.</param>
