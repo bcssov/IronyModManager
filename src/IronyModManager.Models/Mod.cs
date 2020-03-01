@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-29-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -63,6 +63,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The remote identifier.</value>
         public virtual int RemoteId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the source.
+        /// </summary>
+        /// <value>The source.</value>
+        public virtual ModSource Source { get; set; }
 
         /// <summary>
         /// Gets or sets the supported version.

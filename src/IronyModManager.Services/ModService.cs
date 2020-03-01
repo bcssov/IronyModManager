@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -45,6 +45,16 @@ namespace IronyModManager.Services
         /// The mod directory
         /// </summary>
         private const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The paradox mod identifier
+        /// </summary>
+        private const string Paradox_mod_id = "pdx_";
+
+        /// <summary>
+        /// The steam mod identifier
+        /// </summary>
+        private const string Steam_mod_id = "ugc_";
 
         /// <summary>
         /// The parser manager
@@ -102,6 +112,12 @@ namespace IronyModManager.Services
             {
                 foreach (var installedMod in installedMods)
                 {
+                    var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    mod.Source = GetModSource(installedMod);
+                    if (mod.Source == ModSource.Paradox)
+                    {
+                        mod.RemoteId = GetPdxModId(installedMod.FileName);
+                    }
                     result.Add(Mapper.Map<IMod>(modParser.Parse(installedMod.Content)));
                 }
             }
@@ -158,6 +174,36 @@ namespace IronyModManager.Services
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
             return indexed;
+        }
+
+        /// <summary>
+        /// Gets the mod source.
+        /// </summary>
+        /// <param name="fileInfo">The file information.</param>
+        /// <returns>ModSource.</returns>
+        protected virtual ModSource GetModSource(IFileInfo fileInfo)
+        {
+            if (fileInfo.FileName.Contains(Paradox_mod_id))
+            {
+                return ModSource.Paradox;
+            }
+            else if (fileInfo.FileName.Contains(Steam_mod_id))
+            {
+                return ModSource.Steam;
+            }
+            return ModSource.Local;
+        }
+
+        /// <summary>
+        /// Gets the PDX mod identifier.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetPdxModId(string filename)
+        {
+            var name = Path.GetFileNameWithoutExtension(filename);
+            int.TryParse(name.Replace(Paradox_mod_id, string.Empty), out var id);
+            return id;
         }
 
         /// <summary>
