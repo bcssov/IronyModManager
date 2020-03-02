@@ -40,6 +40,21 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The mod name key
+        /// </summary>
+        private const string ModNameKey = "modName";
+
+        /// <summary>
+        /// The mod selected key
+        /// </summary>
+        private const string ModSelectedKey = "modSelected";
+
+        /// <summary>
+        /// The mod version key
+        /// </summary>
+        private const string ModVersionKey = "modVersion";
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -48,6 +63,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModService modService;
+
+        /// <summary>
+        /// The sort orders
+        /// </summary>
+        private readonly Dictionary<string, SortOrderControlViewModel> sortOrders;
 
         /// <summary>
         /// The URL action
@@ -68,24 +88,27 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="gameService">The game service.</param>
         /// <param name="modService">The mod service.</param>
+        /// <param name="modSelectedSortOrder">The mod selected sort order.</param>
         /// <param name="modNameSortOrder">The mod name sort order.</param>
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
         /// <param name="urlAction">The URL action.</param>
         public InstalledModsControlViewModel(IGameService gameService,
-            IModService modService, SortOrderControlViewModel modNameSortOrder,
-            SortOrderControlViewModel modVersionSortOrder, IUrlAction urlAction)
+            IModService modService, SortOrderControlViewModel modSelectedSortOrder,
+            SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
+            IUrlAction urlAction)
         {
             this.modService = modService;
             this.gameService = gameService;
             this.urlAction = urlAction;
-
             ModNameSortOrder = modNameSortOrder;
             ModVersionSortOrder = modVersionSortOrder;
+            ModSelectedSortOrder = modSelectedSortOrder;
+            sortOrders = new Dictionary<string, SortOrderControlViewModel>();
+
             // Set default order and sort order text
-            ModNameSortOrder.SortOrder = Implementation.SortOrder.Asc;
-            ModNameSortOrder.Text = ModName;
-            ModVersionSortOrder.SortOrder = Implementation.SortOrder.None;
-            ModVersionSortOrder.Text = ModVersion;
+            InitDefaultSortOrder(ModNameKey, modNameSortOrder, Implementation.SortOrder.Asc, ModName);
+            InitDefaultSortOrder(ModVersionKey, modVersionSortOrder, Implementation.SortOrder.None, ModVersion);
+            InitDefaultSortOrder(ModSelectedKey, modSelectedSortOrder, Implementation.SortOrder.None, ModSelected);
         }
 
         #endregion Constructors
@@ -136,6 +159,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod selected.</value>
         [StaticLocalization(LocalizationResources.Installed_Mods.Selected)]
         public virtual string ModSelected { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod selected sort order.
+        /// </summary>
+        /// <value>The mod selected sort order.</value>
+        public virtual SortOrderControlViewModel ModSelectedSortOrder { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mod version.
@@ -196,6 +225,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             ModVersionSortOrder.Text = ModVersion;
             ModNameSortOrder.Text = ModName;
+            ModSelectedSortOrder.Text = ModSelected;
 
             base.OnLocaleChanged(newLocale, oldLocale);
         }
@@ -224,6 +254,20 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Initializes the default sort order.
+        /// </summary>
+        /// <param name="dictKey">The dictionary key.</param>
+        /// <param name="vm">The vm.</param>
+        /// <param name="order">The order.</param>
+        /// <param name="text">The text.</param>
+        protected virtual void InitDefaultSortOrder(string dictKey, SortOrderControlViewModel vm, Implementation.SortOrder order, string text)
+        {
+            vm.SortOrder = order;
+            vm.Text = text;
+            sortOrders.Add(dictKey, vm);
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -231,42 +275,42 @@ namespace IronyModManager.ViewModels.Controls
         {
             Bind();
 
-            ModNameSortOrder.SortCommand.Subscribe(s =>
+            Func<Func<IMod, object>, string, bool> sortFunc = (sortProp, dictKey) =>
             {
-                switch (ModNameSortOrder.SortOrder)
+                var sortOrder = sortOrders[dictKey];
+                switch (sortOrder.SortOrder)
                 {
                     case Implementation.SortOrder.Asc:
-                        Mods = Mods.OrderBy(s => s.Name).ToObservableCollection();
-                        ModVersionSortOrder.SetSortOrder(Implementation.SortOrder.None);
+                        Mods = Mods.OrderBy(sortProp).ToObservableCollection();
                         break;
 
                     case Implementation.SortOrder.Desc:
-                        Mods = Mods.OrderByDescending(s => s.Name).ToObservableCollection();
-                        ModVersionSortOrder.SetSortOrder(Implementation.SortOrder.None);
+                        Mods = Mods.OrderByDescending(sortProp).ToObservableCollection();
                         break;
 
                     default:
                         break;
                 }
+                foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
+                {
+                    sort.Value.SetSortOrder(Implementation.SortOrder.None);
+                }
+                return true;
+            };
+
+            ModNameSortOrder.SortCommand.Subscribe(s =>
+            {
+                sortFunc(x => x.Name, ModNameKey);
             }).DisposeWith(disposables);
 
             ModVersionSortOrder.SortCommand.Subscribe(s =>
             {
-                switch (ModVersionSortOrder.SortOrder)
-                {
-                    case Implementation.SortOrder.Asc:
-                        Mods = Mods.OrderBy(s => s.SupportedVersion).ToObservableCollection();
-                        ModNameSortOrder.SetSortOrder(Implementation.SortOrder.None);
-                        break;
+                sortFunc(x => x.ActualSupportedVersion, ModVersionKey);
+            }).DisposeWith(disposables);
 
-                    case Implementation.SortOrder.Desc:
-                        Mods = Mods.OrderByDescending(s => s.SupportedVersion).ToObservableCollection();
-                        ModNameSortOrder.SetSortOrder(Implementation.SortOrder.None);
-                        break;
-
-                    default:
-                        break;
-                }
+            ModSelectedSortOrder.SortCommand.Subscribe(s =>
+            {
+                sortFunc(x => x.IsSelected, ModSelectedKey);
             }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
