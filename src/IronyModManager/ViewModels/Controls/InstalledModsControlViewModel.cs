@@ -91,11 +91,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modSelectedSortOrder">The mod selected sort order.</param>
         /// <param name="modNameSortOrder">The mod name sort order.</param>
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
+        /// <param name="filterMods">The filter mods.</param>
         /// <param name="urlAction">The URL action.</param>
         public InstalledModsControlViewModel(IGameService gameService,
             IModService modService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
-            IUrlAction urlAction)
+            SearchModsControlViewModel filterMods, IUrlAction urlAction)
         {
             this.modService = modService;
             this.gameService = gameService;
@@ -103,12 +104,14 @@ namespace IronyModManager.ViewModels.Controls
             ModNameSortOrder = modNameSortOrder;
             ModVersionSortOrder = modVersionSortOrder;
             ModSelectedSortOrder = modSelectedSortOrder;
-            sortOrders = new Dictionary<string, SortOrderControlViewModel>();
+            FilterMods = filterMods;
 
             // Set default order and sort order text
+            sortOrders = new Dictionary<string, SortOrderControlViewModel>();
             InitDefaultSortOrder(ModNameKey, modNameSortOrder, Implementation.SortOrder.Asc, ModName);
             InitDefaultSortOrder(ModVersionKey, modVersionSortOrder, Implementation.SortOrder.None, ModVersion);
             InitDefaultSortOrder(ModSelectedKey, modSelectedSortOrder, Implementation.SortOrder.None, ModSelected);
+            FilterMods.WatermarkText = FilterModsWatermark;
         }
 
         #endregion Constructors
@@ -127,6 +130,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The copy URL command.</value>
         public virtual ReactiveCommand<Unit, Unit> CopyUrlCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the filtered mods.
+        /// </summary>
+        /// <value>The filtered mods.</value>
+        public virtual IEnumerable<IMod> FilteredMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the filter mods.
+        /// </summary>
+        /// <value>The filter mods.</value>
+        public SearchModsControlViewModel FilterMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the filter mods watermark.
+        /// </summary>
+        /// <value>The filter mods watermark.</value>
+        [StaticLocalization(LocalizationResources.Installed_Mods.Filter)]
+        public virtual string FilterModsWatermark { get; protected set; }
 
         /// <summary>
         /// Gets or sets the hovered mod.
@@ -198,6 +220,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The selected mods.</value>
         public virtual IEnumerable<IMod> SelectedMods { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title.</value>
+        [StaticLocalization(LocalizationResources.Installed_Mods.Name)]
+        public virtual string Title { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -226,6 +255,7 @@ namespace IronyModManager.ViewModels.Controls
             ModVersionSortOrder.Text = ModVersion;
             ModNameSortOrder.Text = ModName;
             ModSelectedSortOrder.Text = ModSelected;
+            FilterMods.WatermarkText = FilterModsWatermark;
 
             base.OnLocaleChanged(newLocale, oldLocale);
         }
@@ -242,7 +272,8 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (game != null)
             {
-                Mods = modService.GetInstalledMods(game).ToObservableCollection();
+                FilterMods.Text = string.Empty;
+                Mods = FilteredMods = modService.GetInstalledMods(game).ToObservableCollection();
                 SelectedMods = Mods.Where(p => p.IsSelected);
 
                 modsChanged?.Dispose();
@@ -281,11 +312,11 @@ namespace IronyModManager.ViewModels.Controls
                 switch (sortOrder.SortOrder)
                 {
                     case Implementation.SortOrder.Asc:
-                        Mods = Mods.OrderBy(sortProp).ToObservableCollection();
+                        FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
                         break;
 
                     case Implementation.SortOrder.Desc:
-                        Mods = Mods.OrderByDescending(sortProp).ToObservableCollection();
+                        FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
                         break;
 
                     default:
@@ -329,6 +360,11 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     urlAction.CopyAsync(url);
                 }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
+            {
+                FilteredMods = Mods.Where(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase));
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

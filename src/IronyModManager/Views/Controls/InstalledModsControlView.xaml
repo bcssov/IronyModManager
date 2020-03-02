@@ -17,7 +17,9 @@
          ConverterParameter=x/2.2}">
     <Grid IsSharedSizeScope="True">
       <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="70,*,120">
+        <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
+        <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0"></ContentControl>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="70,*,120" Margin="0,10,0,0">
           <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
           </Border>
@@ -28,7 +30,7 @@
             <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
-        <ListBox Items="{Binding Mods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
+        <ListBox Items="{Binding FilteredMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="70,*,120">

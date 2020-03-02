@@ -28,7 +28,6 @@
     "Installed_Mods": {
         "Name": "Installierte Mods",
         "Filter": "Filter Mods",
-        "Clear": "X",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version"
@@ -40,5 +39,8 @@
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X"
     }
 }

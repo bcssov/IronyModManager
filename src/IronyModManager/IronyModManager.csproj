@@ -38,6 +38,7 @@
     <AvaloniaResource Remove="Views\Controls\InstalledModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\LanguageControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ModHolderControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\SearchModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\SortOrderControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
     <AvaloniaResource Remove="Views\MainControlView.xaml" />
@@ -48,6 +49,7 @@
     <None Remove="Views\Controls\InstalledModsControlView.xaml" />
     <None Remove="Views\Controls\LanguageControlView.xaml" />
     <None Remove="Views\Controls\ModHolderControlView.xaml" />
+    <None Remove="Views\Controls\SearchModsControlView.xaml" />
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Remove="Views\MainControlView.xaml" />
@@ -125,6 +127,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Controls\ModHolderControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\SearchModsControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
