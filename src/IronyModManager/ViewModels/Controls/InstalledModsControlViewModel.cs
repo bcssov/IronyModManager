@@ -129,10 +129,10 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CopyUrlCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the hovered item.
+        /// Gets or sets the hovered mod.
         /// </summary>
-        /// <value>The hovered item.</value>
-        public virtual IMod HoveredItem { get; set; }
+        /// <value>The hovered mod.</value>
+        public virtual IMod HoveredMod { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -208,9 +208,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>System.String.</returns>
         public virtual string GetHoveredModUrl()
         {
-            if (HoveredItem != null)
+            if (HoveredMod != null)
             {
-                var url = modService.BuildModUrl(HoveredItem);
+                var url = modService.BuildModUrl(HoveredMod);
                 return url;
             }
             return string.Empty;

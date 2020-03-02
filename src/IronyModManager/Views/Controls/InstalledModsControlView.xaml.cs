@@ -64,7 +64,7 @@ namespace IronyModManager.Views.Controls
                         var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                         if (grid != null)
                         {
-                            vm.HoveredItem = hoveredItem.Content as IMod;
+                            vm.HoveredMod = hoveredItem.Content as IMod;
                             if (!string.IsNullOrEmpty(vm.GetHoveredModUrl()))
                             {
                                 var menuItems = new List<MenuItem>()
