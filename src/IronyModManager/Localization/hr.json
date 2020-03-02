@@ -24,5 +24,23 @@
     "Games": {
         "Name": "Igre",
         "Stellaris": "Stellaris"
+    },
+    "Installed_Mods": {
+        "Name": "Instalirani modovi",
+        "Filter": "Filtriraj modove",
+        "Selected": "Odabrano",
+        "Mod_Name": "Ime moda",
+        "Supported_Version": "Podržana verzija"
+    },
+    "Mod_Url": {
+        "Open": "Otvori adresu moda",
+        "Copy": "Kopiraj adresu moda"
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X"
     }
 }

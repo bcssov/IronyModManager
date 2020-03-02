@@ -24,5 +24,23 @@
     "Games": {
         "Name": "Spiele",
         "Stellaris": "Stellaris"
+    },
+    "Installed_Mods": {
+        "Name": "Installierte Mods",
+        "Filter": "Filter Mods",
+        "Selected": "Ausgewählt",
+        "Mod_Name": "Mod Name",
+        "Supported_Version": "Unterstützte Version"
+    },
+    "Mod_Url": {
+        "Open": "Öffnen Sie die Mod-URL",
+        "Copy": "Kopieren Sie die Mod-URL"
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X"
     }
 }

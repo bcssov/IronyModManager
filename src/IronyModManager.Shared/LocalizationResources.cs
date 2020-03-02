@@ -44,5 +44,31 @@ namespace IronyModManager.Shared
             public const string Name = Prefix + "Name";
             public const string Stellaris = Prefix + "Stellaris";
         }
+        public static class Installed_Mods
+        {
+            public const string Prefix = nameof(Installed_Mods) + ".";
+            public const string Name = Prefix + "Name";
+            public const string Filter = Prefix + "Filter";
+            public const string Selected = Prefix + "Selected";
+            public const string Mod_Name = Prefix + "Mod_Name";
+            public const string Supported_Version = Prefix + "Supported_Version";
+        }
+        public static class Mod_Url
+        {
+            public const string Prefix = nameof(Mod_Url) + ".";
+            public const string Open = Prefix + "Open";
+            public const string Copy = Prefix + "Copy";
+        }
+        public static class Sorting
+        {
+            public const string Prefix = nameof(Sorting) + ".";
+            public const string Sort_A_Z = Prefix + "Sort_A_Z";
+            public const string Sort_Z_A = Prefix + "Sort_Z_A";
+        }
+        public static class Filter
+        {
+            public const string Prefix = nameof(Filter) + ".";
+            public const string Clear = Prefix + "Clear";
+        }
     }
 }

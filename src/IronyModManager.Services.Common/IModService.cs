@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -15,7 +15,6 @@
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Parser.Common.Mod;
 
 namespace IronyModManager.Services.Common
 {
@@ -27,11 +26,18 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
+        /// Builds the mod URL.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        string BuildModUrl(IMod mod);
+
+        /// <summary>
         /// Gets the installed mods.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>IEnumerable&lt;IModObject&gt;.</returns>
-        IEnumerable<IModObject> GetInstalledMods(IGame game);
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        IEnumerable<IMod> GetInstalledMods(IGame game);
 
         /// <summary>
         /// Gets the mod objects.
@@ -39,7 +45,7 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IModObject> mods);
+        IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
 
         #endregion Methods
     }

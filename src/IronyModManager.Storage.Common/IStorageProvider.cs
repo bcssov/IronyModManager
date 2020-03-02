@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -63,9 +63,10 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="styles">The styles.</param>
+        /// <param name="brushes">The brushes.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false);
+        bool RegisterTheme(string name, IEnumerable<string> styles, IDictionary<string, string> brushes, bool isDefault = false);
 
         /// <summary>
         /// Sets the preferences.

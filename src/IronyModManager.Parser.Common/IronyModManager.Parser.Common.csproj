@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
+    <Configurations>Debug;Release;Functional_Test</Configurations>
     <Description>Irony Mod Manager Parser Common Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>avalonia-logo.png</PackageIcon>
@@ -19,7 +19,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FUNCTIONAL_TESTING|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>

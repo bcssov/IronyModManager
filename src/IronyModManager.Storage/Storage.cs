@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -153,15 +153,12 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="styles">The styles.</param>
+        /// <param name="brushes">The brushes.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
+        public virtual bool RegisterTheme(string name, IEnumerable<string> styles, IDictionary<string, string> brushes, bool isDefault = false)
         {
             lock (dbLock)
             {
@@ -176,7 +173,8 @@ namespace IronyModManager.Storage
                 var themeType = DIResolver.Get<IThemeType>();
                 themeType.IsDefault = isDefault;
                 themeType.Name = name;
-                themeType.Styles = styles;
+                themeType.Styles = styles ?? new List<string>();
+                themeType.Brushes = brushes ?? new Dictionary<string, string>();
                 Database.Themes.Add(themeType);
                 return true;
             }

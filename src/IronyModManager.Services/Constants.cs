@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -21,6 +21,35 @@ namespace IronyModManager.Services
     /// </summary>
     public static class Constants
     {
+        #region Fields
+
+        /// <summary>
+        /// The mod directory
+        /// </summary>
+        public const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The paradox mod identifier
+        /// </summary>
+        public const string Paradox_mod_id = "pdx_";
+
+        /// <summary>
+        /// The paradox URL
+        /// </summary>
+        public const string Paradox_Url = "https://mods.paradoxplaza.com/mods/{0}/Any";
+
+        /// <summary>
+        /// The steam mod identifier
+        /// </summary>
+        public const string Steam_mod_id = "ugc_";
+
+        /// <summary>
+        /// The steam URL
+        /// </summary>
+        public const string Steam_Url = "https://steamcommunity.com/sharedfiles/filedetails/?id={0}";
+
+        #endregion Fields
+
         #region Classes
 
         /// <summary>
@@ -28,6 +57,15 @@ namespace IronyModManager.Services
         /// </summary>
         public static class Themes
         {
+            #region Fields
+
+            /// <summary>
+            /// The irony foreground brush
+            /// </summary>
+            public const string IronyForegroundBrush = "IronyForegroundBrush";
+
+            #endregion Fields
+
             #region Classes
 
             /// <summary>
@@ -41,6 +79,11 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Avalonia.Themes.Default/Accents/BaseDark.xaml";
+
+                /// <summary>
+                /// The irony foreground brush
+                /// </summary>
+                public const string IronyForegroundBrush = "#FFDEDEDE";
 
                 /// <summary>
                 /// The main resource
@@ -68,6 +111,11 @@ namespace IronyModManager.Services
                 public const string AccentResource = "avares://Avalonia.Themes.Default/Accents/BaseLight.xaml";
 
                 /// <summary>
+                /// The irony foreground brush
+                /// </summary>
+                public const string IronyForegroundBrush = "#FF000000";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Avalonia.Themes.Default/DefaultTheme.xaml";
@@ -91,6 +139,11 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.Dark.xaml";
+
+                /// <summary>
+                /// The irony foreground brush
+                /// </summary>
+                public const string IronyForegroundBrush = "#D7CCC8";
 
                 /// <summary>
                 /// The main resource
@@ -118,6 +171,11 @@ namespace IronyModManager.Services
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml";
 
                 /// <summary>
+                /// The irony foreground brush
+                /// </summary>
+                public const string IronyForegroundBrush = "#FF000000";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
@@ -141,6 +199,11 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml";
+
+                /// <summary>
+                /// The irony foreground brush
+                /// </summary>
+                public const string IronyForegroundBrush = "#FF000000";
 
                 /// <summary>
                 /// The main resource

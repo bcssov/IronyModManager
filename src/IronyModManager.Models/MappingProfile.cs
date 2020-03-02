@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 02-29-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Models
@@ -39,6 +40,9 @@ namespace IronyModManager.Models
             CreateMap<ILanguage, Language>().ReverseMap();
             CreateMap<IWindowState, WindowState>().ReverseMap();
             CreateMap<IGame, Game>().ReverseMap();
+            CreateMap<IMod, Mod>().ReverseMap();
+            CreateMap<IModObject, IMod>().ReverseMap();
+            CreateMap<IModObject, Mod>().ReverseMap();
         }
 
         #endregion Constructors

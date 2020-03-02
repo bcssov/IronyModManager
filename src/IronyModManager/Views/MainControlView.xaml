@@ -6,8 +6,15 @@
              MinWidth="800" MinHeight="450"
              x:Class="IronyModManager.Views.MainControlView">
   <Panel>
-    <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
-    <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
-    <ContentControl Content="{Binding LanguageSelector}" HorizontalAlignment="Left" VerticalAlignment="Top"></ContentControl>
+    <StackPanel Orientation="Vertical">
+      <Panel>
+        <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
+        <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
+        <ContentControl Content="{Binding LanguageSelector}" HorizontalAlignment="Left" VerticalAlignment="Top"></ContentControl>
+      </Panel>
+      <Panel>
+        <ContentControl Content="{Binding ModHolder}" HorizontalAlignment="Stretch"></ContentControl>
+      </Panel>
+    </StackPanel>
   </Panel>
 </UserControl>

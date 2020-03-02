@@ -11,7 +11,7 @@
     <PackageIconUrl />
     <PackageTags>Irony Mod Manager Parser Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Parser Component</PackageReleaseNotes>
-    <Configurations>Debug;Release;FUNCTIONAL_TESTING</Configurations>
+    <Configurations>Debug;Release;Functional_Test</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,7 +19,7 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FUNCTIONAL_TESTING|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>

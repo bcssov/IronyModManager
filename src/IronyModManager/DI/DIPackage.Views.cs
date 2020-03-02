@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-02-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -40,6 +40,10 @@ namespace IronyModManager.DI
             container.Register<LanguageControlView>();
             container.Register<MainControlView>();
             container.Register<GameControlView>();
+            container.Register<InstalledModsControlView>();
+            container.Register<SortOrderControlView>();
+            container.Register<ModHolderControlView>();
+            container.Register<SearchModsControlView>();
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="IThemeType.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Storage.Common
     public interface IThemeType
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the brushes.
+        /// </summary>
+        /// <value>The brushes.</value>
+        IDictionary<string, string> Brushes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is default.

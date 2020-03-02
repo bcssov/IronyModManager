@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-02-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -40,11 +40,6 @@ namespace IronyModManager.Services
     public class ModService : BaseService, IModService
     {
         #region Fields
-
-        /// <summary>
-        /// The mod directory
-        /// </summary>
-        private const string ModDirectory = "mod";
 
         /// <summary>
         /// The parser manager
@@ -85,24 +80,50 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Builds the mod URL.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        public string BuildModUrl(IMod mod)
+        {
+            switch (mod.Source)
+            {
+                case ModSource.Steam:
+                    return string.Format(Constants.Steam_Url, mod.RemoteId);
+
+                case ModSource.Paradox:
+                    return string.Format(Constants.Paradox_Url, mod.RemoteId);
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets the installed mods.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>IEnumerable&lt;IModObject&gt;.</returns>
         /// <exception cref="ArgumentNullException">game</exception>
-        public virtual IEnumerable<IModObject> GetInstalledMods(IGame game)
+        public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
             if (game == null)
             {
                 throw new ArgumentNullException("game");
             }
-            var result = new List<IModObject>();
-            var installedMods = reader.Read(Path.Combine(game.UserDirectory, ModDirectory));
+            var result = new List<IMod>();
+            var installedMods = reader.Read(Path.Combine(game.UserDirectory, Constants.ModDirectory));
             if (installedMods?.Count() > 0)
             {
                 foreach (var installedMod in installedMods)
                 {
-                    result.Add(modParser.Parse(installedMod.Content));
+                    var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    mod.Source = GetModSource(installedMod);
+                    if (mod.Source == ModSource.Paradox)
+                    {
+                        mod.RemoteId = GetPdxModId(installedMod.FileName);
+                    }
+                    result.Add(mod);
                 }
             }
             return result;
@@ -114,7 +135,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IModObject> mods)
+        public virtual IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods)
         {
             if (game == null || mods == null || mods.Count() == 0)
             {
@@ -158,6 +179,36 @@ namespace IronyModManager.Services
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
             return indexed;
+        }
+
+        /// <summary>
+        /// Gets the mod source.
+        /// </summary>
+        /// <param name="fileInfo">The file information.</param>
+        /// <returns>ModSource.</returns>
+        protected virtual ModSource GetModSource(IFileInfo fileInfo)
+        {
+            if (fileInfo.FileName.Contains(Constants.Paradox_mod_id))
+            {
+                return ModSource.Paradox;
+            }
+            else if (fileInfo.FileName.Contains(Constants.Steam_mod_id))
+            {
+                return ModSource.Steam;
+            }
+            return ModSource.Local;
+        }
+
+        /// <summary>
+        /// Gets the PDX mod identifier.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetPdxModId(string filename)
+        {
+            var name = Path.GetFileNameWithoutExtension(filename);
+            int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
+            return id;
         }
 
         /// <summary>
