@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-02-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,14 +15,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.MenuActions;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -47,6 +50,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModService modService;
 
         /// <summary>
+        /// The URL action
+        /// </summary>
+        private readonly IUrlAction urlAction;
+
+        /// <summary>
         /// The mods changed
         /// </summary>
         private IDisposable modsChanged;
@@ -62,10 +70,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modService">The mod service.</param>
         /// <param name="modNameSortOrder">The mod name sort order.</param>
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
-        public InstalledModsControlViewModel(IGameService gameService, IModService modService, SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder)
+        /// <param name="urlAction">The URL action.</param>
+        public InstalledModsControlViewModel(IGameService gameService,
+            IModService modService, SortOrderControlViewModel modNameSortOrder,
+            SortOrderControlViewModel modVersionSortOrder, IUrlAction urlAction)
         {
             this.modService = modService;
             this.gameService = gameService;
+            this.urlAction = urlAction;
+
             ModNameSortOrder = modNameSortOrder;
             ModVersionSortOrder = modVersionSortOrder;
             // Set default order and sort order text
@@ -78,6 +91,25 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the copy URL.
+        /// </summary>
+        /// <value>The copy URL.</value>
+        [StaticLocalization(LocalizationResources.Mod_Url.Copy)]
+        public virtual string CopyUrl { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the copy URL command.
+        /// </summary>
+        /// <value>The copy URL command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CopyUrlCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the hovered item.
+        /// </summary>
+        /// <value>The hovered item.</value>
+        public virtual IMod HoveredItem { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -119,6 +151,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual SortOrderControlViewModel ModVersionSortOrder { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the open URL.
+        /// </summary>
+        /// <value>The open URL.</value>
+        [StaticLocalization(LocalizationResources.Mod_Url.Open)]
+        public virtual string OpenUrl { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open URL command.
+        /// </summary>
+        /// <value>The open URL command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mods.
         /// </summary>
         /// <value>The selected mods.</value>
@@ -127,6 +172,20 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the selected mod URL.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public virtual string GetHoveredModUrl()
+        {
+            if (HoveredItem != null)
+            {
+                var url = modService.BuildModUrl(HoveredItem);
+                return url;
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Called when [locale changed].
@@ -207,6 +266,24 @@ namespace IronyModManager.ViewModels.Controls
 
                     default:
                         break;
+                }
+            }).DisposeWith(disposables);
+
+            OpenUrlCommand = ReactiveCommand.Create(() =>
+            {
+                var url = GetHoveredModUrl();
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    urlAction.OpenAsync(url);
+                }
+            }).DisposeWith(disposables);
+
+            CopyUrlCommand = ReactiveCommand.Create(() =>
+            {
+                var url = GetHoveredModUrl();
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    urlAction.CopyAsync(url);
                 }
             }).DisposeWith(disposables);
 

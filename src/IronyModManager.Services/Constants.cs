@@ -21,6 +21,35 @@ namespace IronyModManager.Services
     /// </summary>
     public static class Constants
     {
+        #region Fields
+
+        /// <summary>
+        /// The mod directory
+        /// </summary>
+        public const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The paradox mod identifier
+        /// </summary>
+        public const string Paradox_mod_id = "pdx_";
+
+        /// <summary>
+        /// The paradox URL
+        /// </summary>
+        public const string Paradox_Url = "https://mods.paradoxplaza.com/mods/{0}/Any";
+
+        /// <summary>
+        /// The steam mod identifier
+        /// </summary>
+        public const string Steam_mod_id = "ugc_";
+
+        /// <summary>
+        /// The steam URL
+        /// </summary>
+        public const string Steam_Url = "https://steamcommunity.com/sharedfiles/filedetails/?id={0}";
+
+        #endregion Fields
+
         #region Classes
 
         /// <summary>

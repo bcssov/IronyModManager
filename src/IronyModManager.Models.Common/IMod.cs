@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-02-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Models.Common
     public interface IMod : IModObject, ILocalizableModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the actual supported version.
+        /// </summary>
+        /// <value>The actual supported version.</value>
+        string ActualSupportedVersion { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

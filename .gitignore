@@ -353,7 +353,6 @@ MigrationBackup/
 !publish/
 !/src/IronyModManager/Log
 *.suppress
-/TODO.txt
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.deps.json
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.dll
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.exe
@@ -361,3 +360,4 @@ MigrationBackup/
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.runtimeconfig.json
 /Tools/LocalizationResourceGenerator/Newtonsoft.Json.dll
 /archive_detects
+/Notes

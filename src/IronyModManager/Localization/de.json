@@ -33,6 +33,10 @@
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version"
     },
+    "Mod_Url": {
+        "Open": "Öffnen Sie die Mod-URL",
+        "Copy": "Kopieren Sie die Mod-URL"
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

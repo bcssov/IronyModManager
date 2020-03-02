@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-01-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -249,6 +249,67 @@ namespace IronyModManager.Services.Tests
             ordered.First().Id.Should().Be("fake1.txt");
             ordered.Last().Id.Should().Be("fake2.txt");
         }
+
+        /// <summary>
+        /// Defines the test method Should_return_steam_url.
+        /// </summary>
+        [Fact]
+        public void Should_return_steam_url()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+
+            var url = service.BuildModUrl(new Mod()
+            {
+                RemoteId = 1,
+                Source = ModSource.Steam
+            });
+            url.Should().Be("https://steamcommunity.com/sharedfiles/filedetails/?id=1");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_paradox_url.
+        /// </summary>
+        [Fact]
+        public void Should_return_paradox_url()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+
+            var url = service.BuildModUrl(new Mod()
+            {
+                RemoteId = 1,
+                Source = ModSource.Paradox
+            });
+            url.Should().Be("https://mods.paradoxplaza.com/mods/1/Any");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_empty_url.
+        /// </summary>
+        [Fact]
+        public void Should_return_empty_url()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+
+            var url = service.BuildModUrl(new Mod()
+            {
+                RemoteId = 1,
+                Source = ModSource.Local
+            });
+            url.Should().BeNullOrEmpty();
+        }
+
 
 #if FUNCTIONAL_TEST
         [Fact(Timeout = 3000000)]

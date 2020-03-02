@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-02-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -40,21 +40,6 @@ namespace IronyModManager.Services
     public class ModService : BaseService, IModService
     {
         #region Fields
-
-        /// <summary>
-        /// The mod directory
-        /// </summary>
-        private const string ModDirectory = "mod";
-
-        /// <summary>
-        /// The paradox mod identifier
-        /// </summary>
-        private const string Paradox_mod_id = "pdx_";
-
-        /// <summary>
-        /// The steam mod identifier
-        /// </summary>
-        private const string Steam_mod_id = "ugc_";
 
         /// <summary>
         /// The parser manager
@@ -95,6 +80,26 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Builds the mod URL.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        public string BuildModUrl(IMod mod)
+        {
+            switch (mod.Source)
+            {
+                case ModSource.Steam:
+                    return string.Format(Constants.Steam_Url, mod.RemoteId);
+
+                case ModSource.Paradox:
+                    return string.Format(Constants.Paradox_Url, mod.RemoteId);
+
+                default:
+                    return string.Empty;
+            }
+        }
+
+        /// <summary>
         /// Gets the installed mods.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -107,7 +112,7 @@ namespace IronyModManager.Services
                 throw new ArgumentNullException("game");
             }
             var result = new List<IMod>();
-            var installedMods = reader.Read(Path.Combine(game.UserDirectory, ModDirectory));
+            var installedMods = reader.Read(Path.Combine(game.UserDirectory, Constants.ModDirectory));
             if (installedMods?.Count() > 0)
             {
                 foreach (var installedMod in installedMods)
@@ -118,7 +123,7 @@ namespace IronyModManager.Services
                     {
                         mod.RemoteId = GetPdxModId(installedMod.FileName);
                     }
-                    result.Add(Mapper.Map<IMod>(modParser.Parse(installedMod.Content)));
+                    result.Add(mod);
                 }
             }
             return result;
@@ -183,11 +188,11 @@ namespace IronyModManager.Services
         /// <returns>ModSource.</returns>
         protected virtual ModSource GetModSource(IFileInfo fileInfo)
         {
-            if (fileInfo.FileName.Contains(Paradox_mod_id))
+            if (fileInfo.FileName.Contains(Constants.Paradox_mod_id))
             {
                 return ModSource.Paradox;
             }
-            else if (fileInfo.FileName.Contains(Steam_mod_id))
+            else if (fileInfo.FileName.Contains(Constants.Steam_mod_id))
             {
                 return ModSource.Steam;
             }
@@ -202,7 +207,7 @@ namespace IronyModManager.Services
         protected virtual int GetPdxModId(string filename)
         {
             var name = Path.GetFileNameWithoutExtension(filename);
-            int.TryParse(name.Replace(Paradox_mod_id, string.Empty), out var id);
+            int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
             return id;
         }
 
