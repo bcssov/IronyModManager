@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -65,9 +65,9 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModService modService;
 
         /// <summary>
-        /// The sort orders
+        /// The preferences service
         /// </summary>
-        private readonly Dictionary<string, SortOrderControlViewModel> sortOrders;
+        private readonly IPreferencesService preferencesService;
 
         /// <summary>
         /// The URL action
@@ -79,6 +79,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable modsChanged;
 
+        /// <summary>
+        /// The sort orders
+        /// </summary>
+        private Dictionary<string, SortOrderControlViewModel> sortOrders;
+
         #endregion Fields
 
         #region Constructors
@@ -88,30 +93,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="gameService">The game service.</param>
         /// <param name="modService">The mod service.</param>
+        /// <param name="preferencesService">The preferences service.</param>
         /// <param name="modSelectedSortOrder">The mod selected sort order.</param>
         /// <param name="modNameSortOrder">The mod name sort order.</param>
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
         /// <param name="filterMods">The filter mods.</param>
         /// <param name="urlAction">The URL action.</param>
         public InstalledModsControlViewModel(IGameService gameService,
-            IModService modService, SortOrderControlViewModel modSelectedSortOrder,
+            IModService modService, IPreferencesService preferencesService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
             SearchModsControlViewModel filterMods, IUrlAction urlAction)
         {
             this.modService = modService;
             this.gameService = gameService;
+            this.preferencesService = preferencesService;
             this.urlAction = urlAction;
             ModNameSortOrder = modNameSortOrder;
             ModVersionSortOrder = modVersionSortOrder;
             ModSelectedSortOrder = modSelectedSortOrder;
             FilterMods = filterMods;
-
-            // Set default order and sort order text
-            sortOrders = new Dictionary<string, SortOrderControlViewModel>();
-            InitDefaultSortOrder(ModNameKey, modNameSortOrder, Implementation.SortOrder.Asc, ModName);
-            InitDefaultSortOrder(ModVersionKey, modVersionSortOrder, Implementation.SortOrder.None, ModVersion);
-            InitDefaultSortOrder(ModSelectedKey, modSelectedSortOrder, Implementation.SortOrder.None, ModSelected);
-            FilterMods.WatermarkText = FilterModsWatermark;
         }
 
         #endregion Constructors
@@ -272,9 +272,9 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (game != null)
             {
-                FilterMods.Text = string.Empty;
-                Mods = FilteredMods = modService.GetInstalledMods(game).ToObservableCollection();
+                Mods = modService.GetInstalledMods(game).ToObservableCollection();
                 SelectedMods = Mods.Where(p => p.IsSelected);
+                FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text, StringComparison.InvariantCultureIgnoreCase));
 
                 modsChanged?.Dispose();
                 modsChanged = Mods.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(s =>
@@ -289,13 +289,43 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="dictKey">The dictionary key.</param>
         /// <param name="vm">The vm.</param>
-        /// <param name="order">The order.</param>
+        /// <param name="defaultOrder">The default order.</param>
         /// <param name="text">The text.</param>
-        protected virtual void InitDefaultSortOrder(string dictKey, SortOrderControlViewModel vm, Implementation.SortOrder order, string text)
+        /// <param name="preferences">The preferences.</param>
+        protected virtual void InitDefaultSortOrder(string dictKey, SortOrderControlViewModel vm, Implementation.SortOrder defaultOrder, string text, IPreferences preferences)
         {
-            vm.SortOrder = order;
+            if (!string.IsNullOrWhiteSpace(preferences.InstalledModsSortColumn) && Enum.IsDefined(typeof(Implementation.SortOrder), preferences.InstalledModsSortMode))
+            {
+                if (dictKey.Equals(preferences.InstalledModsSortColumn))
+                {
+                    var sort = (Implementation.SortOrder)preferences.InstalledModsSortMode;
+                    vm.SortOrder = sort;
+                }
+                else
+                {
+                    vm.SortOrder = Implementation.SortOrder.None;
+                }
+            }
+            else
+            {
+                vm.SortOrder = defaultOrder;
+            }
             vm.Text = text;
             sortOrders.Add(dictKey, vm);
+        }
+
+        /// <summary>
+        /// Initializes the sorters and filters.
+        /// </summary>
+        /// <param name="preferences">The preferences.</param>
+        protected virtual void InitSortersAndFilters(IPreferences preferences)
+        {
+            sortOrders = new Dictionary<string, SortOrderControlViewModel>();
+            InitDefaultSortOrder(ModNameKey, ModNameSortOrder, Implementation.SortOrder.Asc, ModName, preferences);
+            InitDefaultSortOrder(ModVersionKey, ModVersionSortOrder, Implementation.SortOrder.None, ModVersion, preferences);
+            InitDefaultSortOrder(ModSelectedKey, ModSelectedSortOrder, Implementation.SortOrder.None, ModSelected, preferences);
+            FilterMods.Text = preferences?.InstalledModsSearchTerm;
+            FilterMods.WatermarkText = FilterModsWatermark;
         }
 
         /// <summary>
@@ -304,6 +334,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            // Set default order and sort order text
+            var preferences = preferencesService.Get();
+            InitSortersAndFilters(preferences);
+
             Bind();
 
             Func<Func<IMod, object>, string, bool> sortFunc = (sortProp, dictKey) =>
@@ -326,6 +360,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     sort.Value.SetSortOrder(Implementation.SortOrder.None);
                 }
+                SavePreferences();
                 return true;
             };
 
@@ -365,7 +400,27 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
             {
                 FilteredMods = Mods.Where(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase));
+                SavePreferences();
             }).DisposeWith(disposables);
+
+            var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
+            switch (sortModel.Key)
+            {
+                case ModNameKey:
+                    sortFunc(x => x.Name, sortModel.Key);
+                    break;
+
+                case ModSelectedKey:
+                    sortFunc(x => x.IsSelected, sortModel.Key);
+                    break;
+
+                case ModVersionKey:
+                    sortFunc(x => x.ActualSupportedVersion, sortModel.Key);
+                    break;
+
+                default:
+                    break;
+            }
 
             base.OnActivated(disposables);
         }
@@ -379,6 +434,19 @@ namespace IronyModManager.ViewModels.Controls
             Bind(game);
 
             base.OnSelectedGameChanged(game);
+        }
+
+        /// <summary>
+        /// Saves the preferences.
+        /// </summary>
+        protected virtual void SavePreferences()
+        {
+            var preferences = preferencesService.Get();
+            preferences.InstalledModsSearchTerm = FilterMods.Text;
+            var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
+            preferences.InstalledModsSortColumn = sortModel.Key;
+            preferences.InstalledModsSortMode = (int)sortModel.Value.SortOrder;
+            preferencesService.Save(preferences);
         }
 
         #endregion Methods

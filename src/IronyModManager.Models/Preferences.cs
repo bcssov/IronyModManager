@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -37,6 +37,24 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The game.</value>
         public virtual string Game { get; set; }
+
+        /// <summary>
+        /// Gets or sets the installed mods search term.
+        /// </summary>
+        /// <value>The installed mods search term.</value>
+        public string InstalledModsSearchTerm { get; set; }
+
+        /// <summary>
+        /// Gets or sets the installed mods sort column.
+        /// </summary>
+        /// <value>The installed mods sort column.</value>
+        public string InstalledModsSortColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the installed mods sort mode.
+        /// </summary>
+        /// <value>The installed mods sort mode.</value>
+        public int InstalledModsSortMode { get; set; }
 
         /// <summary>
         /// Gets or sets the locale.
