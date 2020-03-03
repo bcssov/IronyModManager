@@ -371,7 +371,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     sort.Value.SetSortOrder(Implementation.SortOrder.None);
                 }
-                SavePreferences();
+                SaveState();
                 return true;
             };
 
@@ -412,7 +412,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 FilteredMods = Mods.Where(p => p.Name.Contains(s ?? string.Empty, StringComparison.InvariantCultureIgnoreCase)).ToObservableCollection();
                 ApplyDefaultSort(sortFunc);
-                SavePreferences();
+                SaveState();
             }).DisposeWith(disposables);
 
             ApplyDefaultSort(sortFunc);
@@ -432,9 +432,9 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Saves the preferences.
+        /// Saves the state.
         /// </summary>
-        protected virtual void SavePreferences()
+        protected virtual void SaveState()
         {
             var preferences = appStateService.Get();
             preferences.InstalledModsSearchTerm = FilterMods.Text;
