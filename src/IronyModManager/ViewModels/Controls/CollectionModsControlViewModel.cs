@@ -18,7 +18,9 @@ using System.Reactive.Disposables;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -51,6 +53,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The selected mods.</value>
         public virtual IEnumerable<IMod> SelectedMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Name)]
+        public virtual string Title { get; protected set; }
 
         #endregion Properties
 

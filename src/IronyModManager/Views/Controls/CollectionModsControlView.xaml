@@ -15,6 +15,10 @@
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.2}">
-
+    <Grid IsSharedSizeScope="True">
+      <DockPanel LastChildFill="True">
+        <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
+      </DockPanel>
+    </Grid>
   </Panel>
 </UserControl>
