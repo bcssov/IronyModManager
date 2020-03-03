@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -70,6 +70,18 @@ namespace IronyModManager.Storage
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the state of the application.
+        /// </summary>
+        /// <returns>IAppState.</returns>
+        public IAppState GetAppState()
+        {
+            lock (dbLock)
+            {
+                return Database.AppState;
+            }
+        }
 
         /// <summary>
         /// Gets the games.
@@ -158,6 +170,8 @@ namespace IronyModManager.Storage
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, IDictionary<string, string> brushes, bool isDefault = false)
         {
             lock (dbLock)
@@ -176,6 +190,20 @@ namespace IronyModManager.Storage
                 themeType.Styles = styles ?? new List<string>();
                 themeType.Brushes = brushes ?? new Dictionary<string, string>();
                 Database.Themes.Add(themeType);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Sets the state of the application.
+        /// </summary>
+        /// <param name="appState">State of the application.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetAppState(IAppState appState)
+        {
+            lock (dbLock)
+            {
+                Database.AppState = appState;
                 return true;
             }
         }

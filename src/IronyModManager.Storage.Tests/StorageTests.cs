@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -49,6 +49,21 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, mapper.Object);
             var pref = storage.GetPreferences();
             pref.Locale.Should().Be(GetDbMock().Preferences.Locale);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_same_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IAppState, IAppState>(It.IsAny<IAppState>())).Returns(dbMock.AppState);
+            var storage = new Storage(dbMock, mapper.Object);
+            var state = storage.GetAppState();
+            state.CollectionModsSearchTerm.Should().Be(GetDbMock().AppState.CollectionModsSearchTerm);
         }
 
 
@@ -113,6 +128,23 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.SetPreferences(newPref);
             dbMock.Preferences.Should().Be(newPref);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var state = new AppState()
+            {
+                CollectionModsSearchTerm = "test2"
+            };
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.SetAppState(state);
+            dbMock.AppState.Should().Be(state);
         }
 
 
@@ -187,6 +219,23 @@ namespace IronyModManager.Storage.Tests
             storage.SetPreferences(newPref);
             var pref = storage.GetPreferences();
             pref.Locale.Should().Be(newPref.Locale);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var newState = new AppState()
+            {
+                CollectionModsSearchTerm = "test2"
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetAppState(newState);
+            var state = storage.GetAppState();
+            state.CollectionModsSearchTerm.Should().Be(newState.CollectionModsSearchTerm);
         }
 
         /// <summary>
@@ -269,6 +318,10 @@ namespace IronyModManager.Storage.Tests
                     {
                         Name = "test"
                     }
+                },
+                AppState = new AppState()
+                {
+                    CollectionModsSearchTerm = "test"
                 }
             };
         }

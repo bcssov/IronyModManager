@@ -39,24 +39,6 @@ namespace IronyModManager.Models
         public virtual string Game { get; set; }
 
         /// <summary>
-        /// Gets or sets the installed mods search term.
-        /// </summary>
-        /// <value>The installed mods search term.</value>
-        public string InstalledModsSearchTerm { get; set; }
-
-        /// <summary>
-        /// Gets or sets the installed mods sort column.
-        /// </summary>
-        /// <value>The installed mods sort column.</value>
-        public string InstalledModsSortColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets the installed mods sort mode.
-        /// </summary>
-        /// <value>The installed mods sort mode.</value>
-        public int InstalledModsSortMode { get; set; }
-
-        /// <summary>
         /// Gets or sets the locale.
         /// </summary>
         /// <value>The locale.</value>

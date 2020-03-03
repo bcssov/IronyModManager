@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Storage.Common
     public interface IDatabase : INotifyPropertyChanged, INotifyPropertyChanging
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the state of the application.
+        /// </summary>
+        /// <value>The state of the application.</value>
+        IAppState AppState { get; set; }
 
         /// <summary>
         /// Gets or sets the games.

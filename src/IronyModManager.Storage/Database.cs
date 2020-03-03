@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -58,10 +58,17 @@ namespace IronyModManager.Storage
         #region Properties
 
         /// <summary>
+        /// Gets or sets the state of the application.
+        /// </summary>
+        /// <value>The state of the application.</value>
+        [Trackable]
+        public virtual IAppState AppState { get; set; } = DIResolver.Get<IAppState>();
+
+        /// <summary>
         /// Gets or sets the games.
         /// </summary>
         /// <value>The games.</value>
-        public IList<IGameType> Games { get; set; }
+        public virtual IList<IGameType> Games { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.

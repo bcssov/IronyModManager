@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -23,6 +23,12 @@ namespace IronyModManager.Storage.Common
     public interface IStorageProvider
     {
         #region Methods
+
+        /// <summary>
+        /// Gets the state of the application.
+        /// </summary>
+        /// <returns>IAppState.</returns>
+        IAppState GetAppState();
 
         /// <summary>
         /// Gets the games.
@@ -67,6 +73,13 @@ namespace IronyModManager.Storage.Common
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool RegisterTheme(string name, IEnumerable<string> styles, IDictionary<string, string> brushes, bool isDefault = false);
+
+        /// <summary>
+        /// Sets the state of the application.
+        /// </summary>
+        /// <param name="appState">State of the application.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool SetAppState(IAppState appState);
 
         /// <summary>
         /// Sets the preferences.
