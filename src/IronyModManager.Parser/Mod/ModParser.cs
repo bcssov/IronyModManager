@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -90,7 +90,11 @@ namespace IronyModManager.Parser.Mod
                             break;
 
                         case "supported_version":
-                            obj.SupportedVersion = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
+                            // version tag has priority
+                            if (string.IsNullOrWhiteSpace(obj.Version))
+                            {
+                                obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
+                            }
                             break;
 
                         case "tags":

@@ -40,7 +40,7 @@
                 </Grid.ContextMenu>
                 <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
                 <TextBlock Text="{Binding Name}" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
-                <TextBlock Text="{Binding ActualSupportedVersion}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Version}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>

@@ -266,7 +266,7 @@ namespace IronyModManager.ViewModels.Controls
                     break;
 
                 case ModVersionKey:
-                    sortFunc(x => x.ActualSupportedVersion, sortModel.Key);
+                    sortFunc(x => x.Version, sortModel.Key);
                     break;
 
                 default:
@@ -382,7 +382,7 @@ namespace IronyModManager.ViewModels.Controls
 
             ModVersionSortOrder.SortCommand.Subscribe(s =>
             {
-                sortFunc(x => x.ActualSupportedVersion, ModVersionKey);
+                sortFunc(x => x.Version, ModVersionKey);
             }).DisposeWith(disposables);
 
             ModSelectedSortOrder.SortCommand.Subscribe(s =>

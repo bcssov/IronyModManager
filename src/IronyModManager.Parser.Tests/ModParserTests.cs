@@ -57,8 +57,7 @@ namespace IronyModManager.Parser.Tests
             result.FileName.Should().Be("path");
             result.Name.Should().Be("AI Species Limit");
             result.Picture.Should().Be("thumbnail.png");
-            result.RemoteId.Should().Be(1830063425);
-            result.SupportedVersion.Should().Be("2.5.*");
+            result.RemoteId.Should().Be(1830063425);            
             result.Tags.Count().Should().Be(2);
             result.Tags.First().Should().Be("Gameplay");
             result.Tags.Last().Should().Be("Fixes");

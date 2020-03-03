@@ -118,6 +118,7 @@ namespace IronyModManager.Services
                 foreach (var installedMod in installedMods)
                 {
                     var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
                     mod.Source = GetModSource(installedMod);
                     if (mod.Source == ModSource.Paradox)
                     {
