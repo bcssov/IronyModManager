@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -60,9 +60,9 @@ namespace IronyModManager.Services
             #region Fields
 
             /// <summary>
-            /// The irony foreground brush
+            /// The irony foreground brush key
             /// </summary>
-            public const string IronyForegroundBrush = "IronyForegroundBrush";
+            public const string IronyForegroundBrushKey = "IronyForegroundBrush";
 
             #endregion Fields
 

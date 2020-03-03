@@ -36,15 +36,15 @@ namespace IronyModManager.Services.Registrations
         {
             var storage = DIResolver.Get<IStorageProvider>();
             storage.RegisterTheme(Constants.Themes.Light.Name, new List<string> { Constants.Themes.Light.MainResource, Constants.Themes.Light.AccentResource },
-                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrush, Constants.Themes.Light.IronyForegroundBrush } }, true);
+                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrushKey, Constants.Themes.Light.IronyForegroundBrush } }, true);
             storage.RegisterTheme(Constants.Themes.Dark.Name, new List<string> { Constants.Themes.Dark.MainResource, Constants.Themes.Dark.AccentResource },
-                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrush, Constants.Themes.Dark.IronyForegroundBrush } });
+                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrushKey, Constants.Themes.Dark.IronyForegroundBrush } });
             storage.RegisterTheme(Constants.Themes.MaterialDark.Name, new List<string> { Constants.Themes.MaterialDark.MainResource, Constants.Themes.MaterialDark.AccentResource },
-                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrush, Constants.Themes.MaterialDark.IronyForegroundBrush } });
+                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrushKey, Constants.Themes.MaterialDark.IronyForegroundBrush } });
             storage.RegisterTheme(Constants.Themes.MaterialLightGreen.Name, new List<string> { Constants.Themes.MaterialLightGreen.MainResource, Constants.Themes.MaterialLightGreen.AccentResource },
-                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrush, Constants.Themes.MaterialLightGreen.IronyForegroundBrush } });
+                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrushKey, Constants.Themes.MaterialLightGreen.IronyForegroundBrush } });
             storage.RegisterTheme(Constants.Themes.MaterialDeepPurple.Name, new List<string> { Constants.Themes.MaterialDeepPurple.MainResource, Constants.Themes.MaterialDeepPurple.AccentResource },
-                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrush, Constants.Themes.MaterialDeepPurple.IronyForegroundBrush } });
+                new Dictionary<string, string>() { { Constants.Themes.IronyForegroundBrushKey, Constants.Themes.MaterialDeepPurple.IronyForegroundBrush } });
         }
 
         #endregion Methods
