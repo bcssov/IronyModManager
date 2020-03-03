@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
-using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.MenuActions;
@@ -73,11 +72,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The URL action
         /// </summary>
         private readonly IUrlAction urlAction;
-
-        /// <summary>
-        /// The mods changed
-        /// </summary>
-        private IDisposable modsChanged;
 
         /// <summary>
         /// The sort orders
@@ -215,12 +209,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the selected mods.
-        /// </summary>
-        /// <value>The selected mods.</value>
-        public virtual IEnumerable<IMod> SelectedMods { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
@@ -273,14 +261,7 @@ namespace IronyModManager.ViewModels.Controls
             if (game != null)
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
-                SelectedMods = Mods.Where(p => p.IsSelected);
                 FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text, StringComparison.InvariantCultureIgnoreCase));
-
-                modsChanged?.Dispose();
-                modsChanged = Mods.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(s =>
-                {
-                    SelectedMods = Mods.Where(p => p.IsSelected);
-                }).DisposeWith(Disposables);
             }
         }
 

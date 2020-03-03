@@ -44,6 +44,7 @@ namespace IronyModManager.DI
             container.Register<SortOrderControlView>();
             container.Register<ModHolderControlView>();
             container.Register<SearchModsControlView>();
+            container.Register<CollectionModsControlView>();
         }
 
         #endregion Methods

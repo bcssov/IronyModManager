@@ -32,6 +32,9 @@
         "Mod_Name": "Mod Name",
         "Supported_Version": "Supported Version"
     },
+    "Collection_Mods": {
+        "Name": "Collection Mods"
+    },
     "Mod_Url": {
         "Open": "Open Mod Url",
         "Copy": "Copy Mod Url"

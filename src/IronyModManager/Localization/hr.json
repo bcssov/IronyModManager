@@ -32,6 +32,9 @@
         "Mod_Name": "Ime moda",
         "Supported_Version": "Podržana verzija"
     },
+    "Collection_Mods": {
+        "Name": "Kolekcija modova"
+    },
     "Mod_Url": {
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda"

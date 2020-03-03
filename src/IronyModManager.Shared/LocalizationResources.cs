@@ -53,6 +53,11 @@ namespace IronyModManager.Shared
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Supported_Version = Prefix + "Supported_Version";
         }
+        public static class Collection_Mods
+        {
+            public const string Prefix = nameof(Collection_Mods) + ".";
+            public const string Name = Prefix + "Name";
+        }
         public static class Mod_Url
         {
             public const string Prefix = nameof(Mod_Url) + ".";

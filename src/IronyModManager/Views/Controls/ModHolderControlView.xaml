@@ -6,5 +6,6 @@
              x:Class="IronyModManager.Views.Controls.ModHolderControlView">
   <Panel>
     <ContentControl Content="{Binding InstalledMods}" HorizontalAlignment="Left" Margin="0,10,0,0"></ContentControl>
+    <ContentControl Content="{Binding CollectionMods}" HorizontalAlignment="Right" MaxWidth="0,10,0,0"></ContentControl>
   </Panel>
 </UserControl>
