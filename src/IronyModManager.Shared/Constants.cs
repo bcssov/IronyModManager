@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -42,11 +42,6 @@ namespace IronyModManager.Shared
         /// The plugins path and name
         /// </summary>
         public const string PluginsPathAndName = "Plugins";
-
-        /// <summary>
-        /// The proxy identifier
-        /// </summary>
-        public const string ProxyIdentifier = "Proxy";
 
         /// <summary>
         /// The proxy namespace

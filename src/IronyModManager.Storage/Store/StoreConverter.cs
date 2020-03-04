@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="StoreConverter.cs" company="Mario">
 //     Mario
@@ -12,9 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.DI;
+using IronyModManager.DI.Assemblies;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
@@ -67,20 +69,30 @@ namespace IronyModManager.Storage.Store
         {
             reader.Read();
             var typeName = reader.ReadAsString();
-            var type = Type.GetType($"{typeof(IModel).Namespace}.{typeName}, {typeof(IModel).Assembly.FullName}");
+            object instance;
+            if (typeName.StartsWith(nameof(IEnumerable)))
+            {
+                var splitType = typeName.Split(Constants.EnumerableOpenTag, StringSplitOptions.RemoveEmptyEntries)[1].Replace(Constants.EnumerableCloseTag, string.Empty).Trim();
+                var type = AssemblyManager.FindType(splitType);
+                var resolvedType = DIResolver.GetImplementationType(type);
+                instance = Activator.CreateInstance(typeof(List<>).MakeGenericType(resolvedType));
+            }
+            else
+            {
+                var type = AssemblyManager.FindType(typeName);                
+                instance = DIResolver.Get(type);
+            }
 
             reader.Read();
             var propName = reader.ReadAsString();
 
-            var actualType = DIResolver.GetImplementationType(type);
-
             reader.Read();
             reader.Read();
-            var res = serializer.Deserialize(reader, actualType);
+            serializer.Populate(reader, instance);
 
             reader.Read();
 
-            return new StoreItem() { Name = propName, Value = res, Type = typeName };
+            return new StoreItem() { Name = propName, Value = instance, Type = typeName };
         }
 
         /// <summary>
