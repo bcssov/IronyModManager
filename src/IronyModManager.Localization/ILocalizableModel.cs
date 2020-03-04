@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-05-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="ILocalizableModel.cs" company="Mario">
 //     Mario
@@ -13,33 +13,16 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.ComponentModel;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Localization
 {
     /// <summary>
     /// Interface ILocalizableModel
-    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanging" />
-    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// Implements the <see cref="IronyModManager.Shared.IPropertyChangedModel" />
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanging" />
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public interface ILocalizableModel : INotifyPropertyChanging, INotifyPropertyChanged
+    /// <seealso cref="IronyModManager.Shared.IPropertyChangedModel" />
+    public interface ILocalizableModel : IPropertyChangedModel
     {
-        #region Methods
-
-        /// <summary>
-        /// Called when [property changed].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanged(string methodName);
-
-        /// <summary>
-        /// Called when [property changing].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanging(string methodName);
-
-        #endregion Methods
     }
 }

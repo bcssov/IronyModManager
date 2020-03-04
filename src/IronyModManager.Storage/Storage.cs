@@ -95,6 +95,14 @@ namespace IronyModManager.Storage
             }
         }
 
+        public IEnumerable<IModCollection> GetModCollections()
+        {
+            lock (dbLock)
+            {
+                return Database.ModCollection;
+            }
+        }
+
         /// <summary>
         /// Gets the preferences.
         /// </summary>
@@ -204,6 +212,15 @@ namespace IronyModManager.Storage
             lock (dbLock)
             {
                 Database.AppState = appState;
+                return true;
+            }
+        }
+
+        public bool SetModCollections(IEnumerable<IModCollection> modCollections)
+        {
+            lock (dbLock)
+            {
+                Database.ModCollection = modCollections;
                 return true;
             }
         }

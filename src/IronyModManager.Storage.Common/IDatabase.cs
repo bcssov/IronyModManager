@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -13,19 +13,17 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.ComponentModel;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Storage.Common
 {
     /// <summary>
     /// Interface IDatabase
-    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanged" />
-    /// Implements the <see cref="System.ComponentModel.INotifyPropertyChanging" />
+    /// Implements the <see cref="IronyModManager.Shared.IPropertyChangedModel" />
     /// </summary>
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanging" />
-    /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
-    public interface IDatabase : INotifyPropertyChanged, INotifyPropertyChanging
+    /// <seealso cref="IronyModManager.Shared.IPropertyChangedModel" />
+    public interface IDatabase : IPropertyChangedModel
     {
         #region Properties
 
@@ -40,6 +38,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The games.</value>
         IList<IGameType> Games { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod collection.
+        /// </summary>
+        /// <value>The mod collection.</value>
+        IEnumerable<IModCollection> ModCollection { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.
@@ -60,21 +64,5 @@ namespace IronyModManager.Storage.Common
         IWindowState WindowState { get; set; }
 
         #endregion Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Called when [property changed].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanged(string methodName);
-
-        /// <summary>
-        /// Called when [property changing].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        void OnPropertyChanging(string methodName);
-
-        #endregion Methods
     }
 }

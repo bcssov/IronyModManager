@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -44,6 +44,7 @@ namespace IronyModManager.Models
             container.RegisterLocalization<IGame, Game>();
             container.RegisterLocalization<IMod, Mod>();
             container.RegisterModel<IAppState, AppState>();
+            container.RegisterModel<IModCollection, ModCollection>();
         }
 
         #endregion Methods

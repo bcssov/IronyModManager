@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -99,6 +99,21 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_same_mod_collection_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_mod_collection_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetModCollections();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Name.Should().Be("fake");
+        }
+
+        /// <summary>
         /// Defines the test method Should_return_same_games_object.
         /// </summary>
         [Fact]
@@ -177,7 +192,7 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var key = "test2";            
+            var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterGame(key, 1, "user_directory", "workshop1");
             dbMock.Games.Count.Should().Be(2);
@@ -202,6 +217,27 @@ namespace IronyModManager.Storage.Tests
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.SetWindowState(state);
             dbMock.WindowState.Should().Be(state);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_modcollection_objects.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_modcollection_objects()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var col = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    Name = "fake2"
+                }
+            };
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.SetModCollections(col);
+            dbMock.ModCollection.Count().Should().Be(1);
+            dbMock.ModCollection.First().Name.Should().Be(col.First().Name);
         }
 
         /// <summary>
@@ -239,6 +275,27 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_mod_collection_objects.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_mod_collection_objects()
+        {
+            DISetup.SetupContainer();
+            var col = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    Name = "fake2"
+                }
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetModCollections(col);
+            var result = storage.GetModCollections();
+            result.Count().Should().Be(1);
+            result.First().Name.Should().Be(col.First().Name);
+        }
+
+        /// <summary>
         /// Defines the test method Should_add_and_return_added_theme.
         /// </summary>
         [Fact]
@@ -267,7 +324,7 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var key = "test2";            
+            var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterGame(key, 1, "user_directory", "workshop1");
             var result = storage.GetGames();
@@ -322,6 +379,13 @@ namespace IronyModManager.Storage.Tests
                 AppState = new AppState()
                 {
                     CollectionModsSearchTerm = "test"
+                },
+                ModCollection = new List<IModCollection>()
+                {
+                    new ModCollection()
+                    {
+                        Name = "fake"
+                    }
                 }
             };
         }

@@ -153,6 +153,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(preferencesService, storageProvider);
 
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            Exception exception = null;
             try
             {
                 service.Save(new Game()
@@ -163,8 +164,9 @@ namespace IronyModManager.Services.Tests
             }
             catch (Exception ex)
             {
-                ex.GetType().Should().Be(typeof(InvalidOperationException));
+                exception = ex;                
             }
+            exception.GetType().Should().Be(typeof(InvalidOperationException));
         }
 
         /// <summary>
