@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -13,7 +13,10 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Definitions
 {
@@ -24,6 +27,15 @@ namespace IronyModManager.Parser.Definitions
     /// <seealso cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
     public class Definition : IDefinition
     {
+        #region Fields
+
+        /// <summary>
+        /// The definition sha
+        /// </summary>
+        private string definitionSHA;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -37,6 +49,26 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The content sha.</value>
         public string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets the definition sha.
+        /// </summary>
+        /// <value>The definition sha.</value>
+        public string DefinitionSHA
+        {
+            get
+            {
+                if (ValueType == Common.ValueType.Binary)
+                {
+                    return ContentSHA;
+                }
+                if (string.IsNullOrWhiteSpace(definitionSHA))
+                {
+                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(Code).CalculateSHA();
+                }
+                return definitionSHA;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the dependencies.
@@ -115,6 +147,9 @@ namespace IronyModManager.Parser.Definitions
 
                 case nameof(ValueType):
                     return ValueType;
+
+                case nameof(DefinitionSHA):
+                    return DefinitionSHA;
 
                 default:
                     return Id;
