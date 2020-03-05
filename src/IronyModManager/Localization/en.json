@@ -33,7 +33,12 @@
         "Supported_Version": "Supported Version"
     },
     "Collection_Mods": {
-        "Name": "Collection Mods"
+        "Name": "Collection Mods",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "OK",
+        "Cancel": "Cancel",
+        "Watermark":  "Enter new collection name"
     },
     "Mod_Url": {
         "Open": "Open Mod Url",

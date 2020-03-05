@@ -57,6 +57,11 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Collection_Mods) + ".";
             public const string Name = Prefix + "Name";
+            public const string Remove = Prefix + "Remove";
+            public const string Create = Prefix + "Create";
+            public const string OK = Prefix + "OK";
+            public const string Cancel = Prefix + "Cancel";
+            public const string Watermark = Prefix + "Watermark";
         }
         public static class Mod_Url
         {

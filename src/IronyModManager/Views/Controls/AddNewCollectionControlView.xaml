@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="IronyModManager.Views.Controls.AddNewCollectionControlView">
+  <DockPanel LastChildFill="True" HorizontalAlignment="Stretch"
+   VerticalAlignment="Top" DockPanel.Dock="Right" Margin="0,10">
+    <TextBox Watermark="{Binding NewCollectionWatermark}"
+             Text="{Binding NewCollectionName}" DockPanel.Dock="Top"></TextBox>
+    <Panel>
+      <Button Content="{Binding Create}" Command="{Binding CreateCommand}" HorizontalAlignment="Left"></Button>
+      <Button Content="{Binding Cancel}" Command="{Binding CancelCommand}" HorizontalAlignment="Right"></Button>
+    </Panel>
+  </DockPanel>
+</UserControl>

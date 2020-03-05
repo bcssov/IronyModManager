@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-05-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -14,13 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -29,24 +33,108 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class CollectionModsControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The application state service
+        /// </summary>
+        private readonly IAppStateService appStateService;
+
+        /// <summary>
+        /// The mod collection service
+        /// </summary>
+        private readonly IModCollectionService modCollectionService;
 
         /// <summary>
         /// The mods changed
         /// </summary>
         private IDisposable modsChanged;
 
+        /// <summary>
+        /// The skip mod collection save
+        /// </summary>
+        private bool skipModCollectionSave = false;
+
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
+        /// </summary>
+        /// <param name="modCollectionService">The mod collection service.</param>
+        /// <param name="appStateService">The application state service.</param>
+        /// <param name="addNewCollection">The add new collection.</param>
+        public CollectionModsControlViewModel(IModCollectionService modCollectionService,
+            IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection)
+        {
+            this.modCollectionService = modCollectionService;
+            this.appStateService = appStateService;
+            this.AddNewCollection = addNewCollection;
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the add new collection.
+        /// </summary>
+        /// <value>The add new collection.</value>
+        public virtual AddNewCollectionControlViewModel AddNewCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the create.
+        /// </summary>
+        /// <value>The create.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Create)]
+        public virtual string Create { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the create command.
+        /// </summary>
+        /// <value>The create command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CreateCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [entering new collection].
+        /// </summary>
+        /// <value><c>true</c> if [entering new collection]; otherwise, <c>false</c>.</value>
+        public virtual bool EnteringNewCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod collections.
+        /// </summary>
+        /// <value>The mod collections.</value>
+        public virtual IEnumerable<string> ModCollections { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
         /// </summary>
         /// <value>The mods.</value>
         public virtual IEnumerable<IMod> Mods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the remove.
+        /// </summary>
+        /// <value>The remove.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Remove)]
+        public virtual string Remove { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the remove command.
+        /// </summary>
+        /// <value>The remove command.</value>
+        public virtual ReactiveCommand<Unit, Unit> RemoveCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the selected mod collection.
+        /// </summary>
+        /// <value>The selected mod collection.</value>
+        public virtual string SelectedModCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected mods.
@@ -83,8 +171,85 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            base.OnActivated(disposables);
             SubscribeToMods();
+
+            var state = appStateService.Get();
+
+            ModCollections = modCollectionService.GetNames();
+            if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedCollection) && ModCollections.Any(s => s.Equals(state.CollectionModsSelectedCollection)))
+            {
+                SelectedModCollection = state.CollectionModsSelectedCollection;
+            }
+
+            CreateCommand = ReactiveCommand.Create(() =>
+            {
+                EnteringNewCollection = true;
+            }).DisposeWith(disposables);
+
+            RemoveCommand = ReactiveCommand.Create(() =>
+            {
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
+            {
+                SaveState();
+                skipModCollectionSave = true;
+                foreach (var item in Mods)
+                {
+                    item.IsSelected = false;
+                }
+                var existingCollection = modCollectionService.Get(SelectedModCollection ?? string.Empty);
+                if (existingCollection != null)
+                {
+                    foreach (var item in existingCollection.Mods)
+                    {
+                        var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
+                        if (mod != null)
+                        {
+                            mod.IsSelected = true;
+                        }
+                    }
+                }
+                skipModCollectionSave = false;
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Subscribe(activated =>
+            {
+                if (activated)
+                {
+                    Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => string.Empty)).Subscribe(saved =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(saved))
+                        {
+                            skipModCollectionSave = true;
+                            foreach (var mod in Mods)
+                            {
+                                mod.IsSelected = false;
+                            }
+                            ModCollections = modCollectionService.GetNames();
+                            SelectedModCollection = saved;
+                            SaveState();
+                            skipModCollectionSave = EnteringNewCollection = false;
+                        }
+                        else
+                        {
+                            EnteringNewCollection = false;
+                        }
+                    }).DisposeWith(disposables);
+                }
+            }).DisposeWith(disposables);
+
+            base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Saves the state.
+        /// </summary>
+        protected virtual void SaveState()
+        {
+            var state = appStateService.Get();
+            state.CollectionModsSelectedCollection = SelectedModCollection;
+            appStateService.Save(state);
         }
 
         /// <summary>
@@ -99,6 +264,13 @@ namespace IronyModManager.ViewModels.Controls
                 modsChanged = Mods.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(s =>
                 {
                     SelectedMods = Mods.Where(p => p.IsSelected);
+                    if (!skipModCollectionSave && !string.IsNullOrWhiteSpace(SelectedModCollection))
+                    {
+                        var collection = modCollectionService.Create();
+                        collection.Name = SelectedModCollection;
+                        collection.Mods = SelectedMods.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
+                        modCollectionService.Save(collection);
+                    }
                 }).DisposeWith(Disposables);
             }
         }

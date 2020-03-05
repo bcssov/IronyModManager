@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-05-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -346,8 +346,8 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             // Set default order and sort order text
-            var preferences = appStateService.Get();
-            InitSortersAndFilters(preferences);
+            var state = appStateService.Get();
+            InitSortersAndFilters(state);
 
             Bind();
 
@@ -436,12 +436,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SaveState()
         {
-            var preferences = appStateService.Get();
-            preferences.InstalledModsSearchTerm = FilterMods.Text;
+            var state = appStateService.Get();
+            state.InstalledModsSearchTerm = FilterMods.Text;
             var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
-            preferences.InstalledModsSortColumn = sortModel.Key;
-            preferences.InstalledModsSortMode = (int)sortModel.Value.SortOrder;
-            appStateService.Save(preferences);
+            state.InstalledModsSortColumn = sortModel.Key;
+            state.InstalledModsSortMode = (int)sortModel.Value.SortOrder;
+            appStateService.Save(state);
         }
 
         #endregion Methods

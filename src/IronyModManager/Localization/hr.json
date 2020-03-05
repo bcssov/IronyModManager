@@ -33,7 +33,12 @@
         "Supported_Version": "Podržana verzija"
     },
     "Collection_Mods": {
-        "Name": "Kolekcija modova"
+        "Name": "Kolekcija modova",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "U redu",
+        "Cancel": "Otkaži",
+        "Watermark": "Unesi ime nove kolekcije"
     },
     "Mod_Url": {
         "Open": "Otvori adresu moda",

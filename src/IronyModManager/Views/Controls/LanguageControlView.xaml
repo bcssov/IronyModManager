@@ -9,14 +9,14 @@
     <StackPanel Orientation="Horizontal">
       <TextBlock Text="{Binding LanguageText}" HorizontalAlignment="Left" VerticalAlignment="Center"
                  Margin="10,0,0,0"></TextBlock>
-      <DropDown Items="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}"
+      <ComboBox Items="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}"
                 MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="10,0,0,0">
-        <DropDown.ItemTemplate>
+        <ComboBox.ItemTemplate>
           <DataTemplate>
-            <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></DropDownItem>
+            <ComboBoxItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></ComboBoxItem>
           </DataTemplate>
-        </DropDown.ItemTemplate>
-      </DropDown>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
     </StackPanel>
   </Panel>
 </UserControl>

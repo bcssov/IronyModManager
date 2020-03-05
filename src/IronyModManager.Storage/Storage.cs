@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-05-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -79,7 +79,8 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                return Database.AppState;
+                var result = Mapper.Map<IAppState, IAppState>(Database.AppState);
+                return result;
             }
         }
 
@@ -91,15 +92,21 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                return Database.Games;
+                var result = Mapper.Map<List<IGameType>>(Database.Games);
+                return result;
             }
         }
 
+        /// <summary>
+        /// Gets the mod collections.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
         public IEnumerable<IModCollection> GetModCollections()
         {
             lock (dbLock)
             {
-                return Database.ModCollection;
+                var result = Mapper.Map<List<IModCollection>>(Database.ModCollection);
+                return result;
             }
         }
 
@@ -124,7 +131,8 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                return Database.Themes;
+                var result = Mapper.Map<List<IThemeType>>(Database.Themes);
+                return result;
             }
         }
 
@@ -178,8 +186,6 @@ namespace IronyModManager.Storage
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, IDictionary<string, string> brushes, bool isDefault = false)
         {
             lock (dbLock)
@@ -211,16 +217,21 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                Database.AppState = appState;
+                Database.AppState = Mapper.Map<IAppState>(appState);
                 return true;
             }
         }
 
+        /// <summary>
+        /// Sets the mod collections.
+        /// </summary>
+        /// <param name="modCollections">The mod collections.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public bool SetModCollections(IEnumerable<IModCollection> modCollections)
         {
             lock (dbLock)
             {
-                Database.ModCollection = modCollections;
+                Database.ModCollection = Mapper.Map<List<IModCollection>>(modCollections);
                 return true;
             }
         }
@@ -234,7 +245,7 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                Database.Preferences = preferences;
+                Database.Preferences = Mapper.Map<IPreferences>(preferences);
                 return true;
             }
         }
@@ -248,7 +259,7 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                Database.WindowState = state;
+                Database.WindowState = Mapper.Map<IWindowState>(state);
                 return true;
             }
         }
