@@ -34,6 +34,9 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Remove="Controls\NotificationManager.xaml" />
+    <AvaloniaResource Remove="Controls\Theme.xaml" />
+    <AvaloniaResource Include="Controls\Theme.xaml" />
     <AvaloniaResource Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\CollectionModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\GameControlView.xaml" />
@@ -44,9 +47,11 @@
     <AvaloniaResource Remove="Views\Controls\SortOrderControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
     <AvaloniaResource Remove="Views\MainControlView.xaml" />
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <None Remove="Assets\avalonia-logo.ico" />
+    <None Remove="Controls\NotificationManager.xaml" />
+    <None Remove="Controls\Theme.xaml" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <None Remove="Views\Controls\CollectionModsControlView.xaml" />
     <None Remove="Views\Controls\GameControlView.xaml" />
@@ -60,7 +65,7 @@
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>
+    </None>    
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.3" />
@@ -198,4 +203,14 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
   </Target>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Theme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\NotificationManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

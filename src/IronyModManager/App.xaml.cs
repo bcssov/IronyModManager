@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using Avalonia.Media;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Services;
@@ -63,7 +64,6 @@ namespace IronyModManager
         {
             if (app != null && theme != null)
             {
-                app.Styles.Clear();
                 foreach (var item in theme.StyleIncludes)
                 {
                     var style = compileTheme(item);
@@ -190,19 +190,16 @@ namespace IronyModManager
         /// <returns>Task.</returns>
         private async Task OnThemeChanged()
         {
+            var notificationAction = DIResolver.Get<INotificationAction>();
             var locManager = DIResolver.Get<ILocalizationManager>();
             var title = locManager.GetResource(LocalizationResources.Themes.Restart_Title);
             var message = locManager.GetResource(LocalizationResources.Themes.Restart_Message);
             var header = locManager.GetResource(LocalizationResources.Themes.Restart_Header);
-            var prompt = MessageBoxes.GetYesNoWindow(title, header, message, MessageBox.Avalonia.Enums.Icon.Info);
-            var desktop = ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime);
-            var mainWindow = desktop.MainWindow;
-            var result = await prompt.ShowDialog(mainWindow);
-            if (result == MessageBox.Avalonia.Enums.ButtonResult.Yes)
+            if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
                 var path = Process.GetCurrentProcess().MainModule.FileName;
                 Process.Start(path);
-                desktop.Shutdown();
+                ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime).Shutdown();
             }
         }
     }

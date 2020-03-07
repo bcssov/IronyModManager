@@ -5,4 +5,7 @@
   <Application.DataTemplates>
     <local:ViewLocator/>
   </Application.DataTemplates>
+  <Application.Styles>
+    <StyleInclude Source="avares://IronyModManager/Controls/Theme.xaml"/>
+  </Application.Styles>
 </Application>

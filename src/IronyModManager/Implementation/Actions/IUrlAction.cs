@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 
-namespace IronyModManager.Implementation.MenuActions
+namespace IronyModManager.Implementation.Actions
 {
     /// <summary>
     /// Interface IUrlActions

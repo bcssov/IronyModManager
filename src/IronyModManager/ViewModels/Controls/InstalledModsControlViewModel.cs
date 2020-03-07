@@ -19,7 +19,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.Implementation.MenuActions;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;

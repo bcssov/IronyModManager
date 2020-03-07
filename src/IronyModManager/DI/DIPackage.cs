@@ -50,6 +50,7 @@ namespace IronyModManager.DI
             RegisterViews(container);
             RegisterViewModels(container);
             RegisterImplementations(container);
+            RegisterControls(container);
         }
 
         #endregion Methods
