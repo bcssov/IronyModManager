@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 03-07-2020
 // ***********************************************************************
-// <copyright file="INotificationManager.cs" company="Mario">
+// <copyright file="INotificationFactory.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,7 +22,16 @@ namespace IronyModManager.Controls
     /// Implements the <see cref="Avalonia.Controls.Notifications.IManagedNotificationManager" />
     /// </summary>
     /// <seealso cref="Avalonia.Controls.Notifications.IManagedNotificationManager" />
-    public interface INotificationManager : IManagedNotificationManager
+    public interface INotificationFactory
     {
+        #region Methods
+
+        /// <summary>
+        /// Gets the manager.
+        /// </summary>
+        /// <returns>IManagedNotificationManager.</returns>
+        public IManagedNotificationManager GetManager();
+
+        #endregion Methods
     }
 }

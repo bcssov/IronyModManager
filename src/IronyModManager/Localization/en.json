@@ -38,7 +38,21 @@
         "Create": "+",
         "OK": "OK",
         "Cancel": "Cancel",
-        "Watermark":  "Enter new collection name"
+        "Watermark": "Enter new collection name"
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Collection created",
+            "Message": "{CollectionName} has been created."
+        },
+        "CollectionDeleted": {
+            "Title": "Collection deleted",
+            "Message": "{CollectionName} has been deleted."
+        },
+        "CollectionExists": {
+            "Title": "Collection exists",
+            "Message": "{CollectionName} already exists."
+        }
     },
     "Mod_Url": {
         "Open": "Open Mod Url",

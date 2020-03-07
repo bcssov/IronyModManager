@@ -40,6 +40,20 @@
         "Cancel": "Otkaži",
         "Watermark": "Unesi ime nove kolekcije"
     },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Kolekcija kreirana",
+            "Message": "{CollectionName} je kreirana."
+        },
+        "CollectionDeleted": {
+            "Title": "Kolekcija obrisana",
+            "Message": "{CollectionName} je obrisana."
+        },
+        "CollectionExists": {
+            "Title": "Kolekcija postoji",
+            "Message": "{CollectionName} več postoji."
+        }
+    },
     "Mod_Url": {
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda"

@@ -4,22 +4,26 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-05-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -34,9 +38,19 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod collection service
         /// </summary>
         private readonly IModCollectionService modCollectionService;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
 
         #endregion Fields
 
@@ -46,9 +60,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="AddNewCollectionControlViewModel" /> class.
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
-        public AddNewCollectionControlViewModel(IModCollectionService modCollectionService)
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        public AddNewCollectionControlViewModel(IModCollectionService modCollectionService,
+            INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.modCollectionService = modCollectionService;
+            this.notificationAction = notificationAction;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -110,15 +129,30 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!string.IsNullOrWhiteSpace(NewCollectionName))
                 {
-                    var collection = modCollectionService.Create();
-                    collection.Name = NewCollectionName;
-                    if (modCollectionService.Save(collection))
+                    var collections = modCollectionService.GetNames();
+                    if (!collections.Contains(NewCollectionName))
                     {
-                        NewCollectionName = string.Empty;
-                        return collection.Name;
+                        var collection = modCollectionService.Create();
+                        collection.Name = NewCollectionName;
+                        if (modCollectionService.Save(collection))
+                        {
+                            NewCollectionName = string.Empty;
+                            return collection.Name;
+                        }
+                    }
+                    else
+                    {
+                        var notification = new
+                        {
+                            CollectionName = NewCollectionName
+                        };
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
+                        var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                        notificationAction.ShowNotification(title, message, NotificationType.Warning);
+                        return string.Empty;
                     }
                 }
-                return string.Empty;
+                return null;
             }, createEnabled).DisposeWith(disposables);
 
             CancelCommand = ReactiveCommand.Create(() =>

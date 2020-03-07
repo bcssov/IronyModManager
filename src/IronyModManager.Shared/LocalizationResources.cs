@@ -63,6 +63,28 @@ namespace IronyModManager.Shared
             public const string Cancel = Prefix + "Cancel";
             public const string Watermark = Prefix + "Watermark";
         }
+        public static class Notifications
+        {
+            public const string Prefix = nameof(Notifications) + ".";
+            public static class CollectionCreated
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionCreated) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionDeleted
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionDeleted) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionExists
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionExists) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+        }
         public static class Mod_Url
         {
             public const string Prefix = nameof(Mod_Url) + ".";

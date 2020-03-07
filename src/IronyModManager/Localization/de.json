@@ -40,6 +40,20 @@
         "Cancel": "Stornieren",
         "Watermark": "Geben Sie den neuen Sammlungsnamen ein"
     },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Sammlung erstellt",
+            "Message": "{CollectionName} wurde erschaffen."
+        },
+        "CollectionDeleted": {
+            "Title": "Sammlung gelöscht",
+            "Message": "{CollectionName} wurde gelöscht."
+        },
+        "CollectionExists": {
+            "Title": "Sammlung existiert",
+            "Message": "{CollectionName} ist bereits vorhanden."
+        }
+    },
     "Mod_Url": {
         "Open": "Öffnen Sie die Mod-URL",
         "Copy": "Kopieren Sie die Mod-URL"

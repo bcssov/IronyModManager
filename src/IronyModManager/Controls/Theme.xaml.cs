@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
+using IronyModManager.Shared;
+
 namespace IronyModManager.Controls
 {
     /// <summary>
@@ -19,6 +21,7 @@ namespace IronyModManager.Controls
     /// Implements the <see cref="Avalonia.Styling.Styles" />
     /// </summary>
     /// <seealso cref="Avalonia.Styling.Styles" />
+    [ExcludeFromCoverage("UI Elements should be tested in functional testing.")] 
     public class Theme : Avalonia.Styling.Styles
     {
     }

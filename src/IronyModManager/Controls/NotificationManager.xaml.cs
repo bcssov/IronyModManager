@@ -22,6 +22,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -30,13 +31,12 @@ namespace IronyModManager.Controls
     /// Implements the <see cref="Avalonia.Controls.Primitives.TemplatedControl" />
     /// Implements the <see cref="Avalonia.Controls.Notifications.IManagedNotificationManager" />
     /// Implements the <see cref="Avalonia.Rendering.ICustomSimpleHitTest" />
-    /// Implements the <see cref="IronyModManager.Controls.INotificationManager" />
     /// </summary>
     /// <seealso cref="Avalonia.Controls.Primitives.TemplatedControl" />
     /// <seealso cref="Avalonia.Controls.Notifications.IManagedNotificationManager" />
     /// <seealso cref="Avalonia.Rendering.ICustomSimpleHitTest" />
-    /// <seealso cref="IronyModManager.Controls.INotificationManager" />
-    public class NotificationManager : TemplatedControl, IManagedNotificationManager, ICustomSimpleHitTest, INotificationManager
+    [ExcludeFromCoverage("UI Elements should be tested in functional testing.")]
+    public class NotificationManager : TemplatedControl, IManagedNotificationManager, ICustomSimpleHitTest
     {
         #region Fields
 

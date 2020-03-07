@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-05-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,11 +20,14 @@ using System.Reactive.Linq;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -44,9 +47,19 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppStateService appStateService;
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod collection service
         /// </summary>
         private readonly IModCollectionService modCollectionService;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
 
         /// <summary>
         /// The mods changed
@@ -68,12 +81,17 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="appStateService">The application state service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="notificationAction">The notification action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
-            IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection)
+            IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection,
+            ILocalizationManager localizationManager, INotificationAction notificationAction)
         {
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
-            this.AddNewCollection = addNewCollection;
+            AddNewCollection = addNewCollection;
+            this.localizationManager = localizationManager;
+            this.notificationAction = notificationAction;
         }
 
         #endregion Constructors
@@ -230,8 +248,15 @@ namespace IronyModManager.ViewModels.Controls
                             SelectedModCollection = saved;
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            var notification = new
+                            {
+                                CollectionName = saved
+                            };
+                            var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                            var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                         }
-                        else
+                        else if (saved == null)
                         {
                             EnteringNewCollection = false;
                         }

@@ -33,9 +33,9 @@ namespace IronyModManager.Implementation.Actions
         #region Fields
 
         /// <summary>
-        /// The notification manager
+        /// The notification factory
         /// </summary>
-        private readonly Controls.INotificationManager notificationManager;
+        private readonly Controls.INotificationFactory notificationFactory;
 
         #endregion Fields
 
@@ -44,10 +44,10 @@ namespace IronyModManager.Implementation.Actions
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationAction" /> class.
         /// </summary>
-        /// <param name="notificationManager">The notification manager.</param>
-        public NotificationAction(Controls.INotificationManager notificationManager)
+        /// <param name="notificationFactory">The notification factory.</param>
+        public NotificationAction(Controls.INotificationFactory notificationFactory)
         {
-            this.notificationManager = notificationManager;
+            this.notificationFactory = notificationFactory;
         }
 
         #endregion Constructors
@@ -83,7 +83,7 @@ namespace IronyModManager.Implementation.Actions
                     break;
             }
             var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout));
-            notificationManager.Show(model);
+            notificationFactory.GetManager().Show(model);
         }
 
         /// <summary>

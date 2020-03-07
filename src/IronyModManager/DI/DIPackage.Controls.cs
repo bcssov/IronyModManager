@@ -34,18 +34,16 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterControls(Container container)
         {
-            INotificationManager notificationManager = null;
+            var notificationFactory = new NotificationFactory();
             container.RegisterInitializer(d =>
             {
-                if (d.Instance is MainWindow)
+                var notificationManager = new NotificationManager(d.Instance as MainWindow)
                 {
-                    notificationManager = new NotificationManager(d.Instance as MainWindow)
-                    {
-                        Position = Avalonia.Controls.Notifications.NotificationPosition.BottomRight
-                    };
-                }
-            }, ctx => ctx.Registration.Lifestyle == Lifestyle.Transient);
-            container.Register(() => notificationManager);
+                    Position = Avalonia.Controls.Notifications.NotificationPosition.BottomRight
+                };
+                notificationFactory.SetManager(notificationManager);
+            }, ctx => ctx.Registration.ImplementationType == typeof(MainWindow));
+            container.RegisterInstance<INotificationFactory>(notificationFactory);
         }
 
         #endregion Methods
