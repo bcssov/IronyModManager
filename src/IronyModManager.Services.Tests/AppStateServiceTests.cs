@@ -39,7 +39,7 @@ namespace IronyModManager.Services.Tests
         {
             var state = new AppState()
             {
-                CollectionModsSelectedCollection = "test"
+                CollectionModsSearchTerm = "test"                
             };
             var storage = new Mock<IStorageProvider>();
             storage.Setup(s => s.GetAppState()).Returns(state);

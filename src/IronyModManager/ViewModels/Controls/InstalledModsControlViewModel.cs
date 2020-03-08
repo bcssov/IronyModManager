@@ -252,22 +252,21 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Applies the default sort.
         /// </summary>
-        /// <param name="sortFunc">The sort function.</param>
-        protected virtual void ApplyDefaultSort(Func<Func<IMod, object>, string, bool> sortFunc)
+        protected virtual void ApplyDefaultSort()
         {
             var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
             switch (sortModel.Key)
             {
                 case ModNameKey:
-                    sortFunc(x => x.Name, sortModel.Key);
+                    SortFunction(x => x.Name, sortModel.Key);
                     break;
 
                 case ModSelectedKey:
-                    sortFunc(x => x.IsSelected, sortModel.Key);
+                    SortFunction(x => x.IsSelected, sortModel.Key);
                     break;
 
                 case ModVersionKey:
-                    sortFunc(x => x.Version, sortModel.Key);
+                    SortFunction(x => x.Version, sortModel.Key);
                     break;
 
                 default:
@@ -289,6 +288,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
                 FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text ?? string.Empty, StringComparison.InvariantCultureIgnoreCase));
+
+                var state = appStateService.Get();
+                InitSortersAndFilters(state);
+
+                ApplyDefaultSort();
             }
             else
             {
@@ -352,30 +356,6 @@ namespace IronyModManager.ViewModels.Controls
 
             Bind();
 
-            Func<Func<IMod, object>, string, bool> sortFunc = (sortProp, dictKey) =>
-            {
-                var sortOrder = sortOrders[dictKey];
-                switch (sortOrder.SortOrder)
-                {
-                    case Implementation.SortOrder.Asc:
-                        FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
-                        break;
-
-                    case Implementation.SortOrder.Desc:
-                        FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
-                        break;
-
-                    default:
-                        break;
-                }
-                foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
-                {
-                    sort.Value.SetSortOrder(Implementation.SortOrder.None);
-                }
-                SaveState();
-                return true;
-            };
-
             this.WhenAnyValue(v => v.ModNameSortOrder.IsActivated, v => v.ModVersionSortOrder.IsActivated, v => v.ModSelectedSortOrder.IsActivated).Where(s => s.Item1 && s.Item2 && s.Item3)
             .Subscribe(s =>
              {
@@ -384,7 +364,7 @@ namespace IronyModManager.ViewModels.Controls
                      ModVersionSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModVersionKey, x => x.Version)),
                      ModSelectedSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModSelectedKey, x => x.IsSelected))).Subscribe(s =>
                  {
-                     sortFunc(s.Value, s.Key);
+                     SortFunction(s.Value, s.Key);
                  }).DisposeWith(disposables);
              }).DisposeWith(disposables);
 
@@ -409,11 +389,9 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
             {
                 FilteredMods = Mods.Where(p => p.Name.Contains(s ?? string.Empty, StringComparison.InvariantCultureIgnoreCase)).ToObservableCollection();
-                ApplyDefaultSort(sortFunc);
+                ApplyDefaultSort();
                 SaveState();
             }).DisposeWith(disposables);
-
-            ApplyDefaultSort(sortFunc);
 
             base.OnActivated(disposables);
         }
@@ -440,6 +418,34 @@ namespace IronyModManager.ViewModels.Controls
             state.InstalledModsSortColumn = sortModel.Key;
             state.InstalledModsSortMode = (int)sortModel.Value.SortOrder;
             appStateService.Save(state);
+        }
+
+        /// <summary>
+        /// Sorts the function.
+        /// </summary>
+        /// <param name="sortProp">The sort property.</param>
+        /// <param name="dictKey">The dictionary key.</param>
+        protected virtual void SortFunction(Func<IMod, object> sortProp, string dictKey)
+        {
+            var sortOrder = sortOrders[dictKey];
+            switch (sortOrder.SortOrder)
+            {
+                case Implementation.SortOrder.Asc:
+                    FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
+                    break;
+
+                case Implementation.SortOrder.Desc:
+                    FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
+                    break;
+
+                default:
+                    break;
+            }
+            foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
+            {
+                sort.Value.SetSortOrder(Implementation.SortOrder.None);
+            }
+            SaveState();
         }
 
         #endregion Methods

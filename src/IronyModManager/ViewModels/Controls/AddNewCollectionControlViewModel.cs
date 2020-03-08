@@ -11,8 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -112,11 +112,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!string.IsNullOrWhiteSpace(NewCollectionName))
                 {
-                    var collections = modCollectionService.GetNames();
-                    if (!collections.Contains(NewCollectionName))
+                    var collections = modCollectionService.GetAll();
+                    if (collections != null && !collections.Any(s => s.Name.Equals(NewCollectionName)))
                     {
                         var collection = modCollectionService.Create();
                         collection.Name = NewCollectionName;
+                        collection.IsSelected = true;
                         if (modCollectionService.Save(collection))
                         {
                             NewCollectionName = string.Empty;

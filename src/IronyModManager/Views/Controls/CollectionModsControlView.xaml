@@ -32,7 +32,7 @@
                     ConverterParameter=(x/4.4)}">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
-                  <ComboBoxItem Content="{Binding}"></ComboBoxItem>
+                  <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>

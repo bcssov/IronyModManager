@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -37,6 +37,11 @@ namespace IronyModManager.Services
         /// </summary>
         private static readonly object serviceLock = new { };
 
+        /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
+
         #endregion Fields
 
         #region Constructors
@@ -44,10 +49,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ModCollectionService(IGameService gameService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
+            this.gameService = gameService;
         }
 
         #endregion Constructors
@@ -60,7 +67,14 @@ namespace IronyModManager.Services
         /// <returns>IModCollection.</returns>
         public virtual IModCollection Create()
         {
-            return GetModelInstance<IModCollection>();
+            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = GetModelInstance<IModCollection>();
+            instance.Game = game.Type;
+            return instance;
         }
 
         /// <summary>
@@ -70,6 +84,11 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public virtual bool Delete(string name)
         {
+            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                return false;
+            }
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
@@ -93,27 +112,37 @@ namespace IronyModManager.Services
         /// <returns>IModCollection.</returns>
         public virtual IModCollection Get(string name)
         {
+            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
             var collections = StorageProvider.GetModCollections();
             if (collections?.Count() > 0)
             {
-                var collection = collections.FirstOrDefault(c => c.Name.Equals(name));
+                var collection = collections.FirstOrDefault(c => c.Name.Equals(name) && c.Game.Equals(game.Type));
                 return collection;
             }
             return null;
         }
 
         /// <summary>
-        /// Gets the names.
+        /// Gets all.
         /// </summary>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public virtual IEnumerable<string> GetNames()
+        /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
+        public virtual IEnumerable<IModCollection> GetAll()
         {
-            var collections = StorageProvider.GetModCollections();
+            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                return new List<IModCollection>();
+            }
+            var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
             if (collections?.Count() > 0)
             {
-                return collections.Select(n => n.Name);
+                return collections;
             }
-            return new List<string>();
+            return new List<IModCollection>();
         }
 
         /// <summary>
@@ -124,19 +153,31 @@ namespace IronyModManager.Services
         /// <exception cref="ArgumentNullException">collection</exception>
         public virtual bool Save(IModCollection collection)
         {
-            if (collection == null)
+            if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
             {
                 throw new ArgumentNullException("collection");
+            }
+            var game = gameService.GetSelected();
+            if (game == null)
+            {
+                return false;
             }
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
                 if (collections?.Count() > 0)
                 {
-                    var existing = collections.FirstOrDefault(p => p.Name.Equals(collection.Name));
+                    var existing = collections.FirstOrDefault(p => p.Name.Equals(collection.Name) && p.Game.Equals(game.Type));
                     if (existing != null)
                     {
                         collections.Remove(existing);
+                    }
+                    if (collection.IsSelected)
+                    {
+                        foreach (var item in collections.Where(p => p.Game.Equals(game.Type) && p.IsSelected))
+                        {
+                            item.IsSelected = false;
+                        }
                     }
                 }
                 collections.Add(collection);

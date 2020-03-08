@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -47,8 +47,8 @@ namespace IronyModManager.Services.Common
         /// <summary>
         /// Gets the names.
         /// </summary>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        IEnumerable<string> GetNames();
+        /// <returns>IDictionary&lt;System.String, System.Boolean&gt;.</returns>
+        IEnumerable<IModCollection> GetAll();
 
         /// <summary>
         /// Saves the specified collection.

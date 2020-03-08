@@ -127,7 +127,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the mod collections.
         /// </summary>
         /// <value>The mod collections.</value>
-        public virtual IEnumerable<string> ModCollections { get; protected set; }
+        public virtual IEnumerable<IModCollection> ModCollections { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
@@ -152,7 +152,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected mod collection.
         /// </summary>
         /// <value>The selected mod collection.</value>
-        public virtual string SelectedModCollection { get; protected set; }
+        public virtual IModCollection SelectedModCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected mods.
@@ -184,6 +184,19 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Loads the mod collections.
+        /// </summary>
+        protected virtual void LoadModCollections()
+        {
+            ModCollections = modCollectionService.GetAll();
+            var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
+            if (selected != null)
+            {
+                SelectedModCollection = selected;
+            }
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -193,11 +206,7 @@ namespace IronyModManager.ViewModels.Controls
 
             var state = appStateService.Get();
 
-            ModCollections = modCollectionService.GetNames();
-            if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedCollection) && ModCollections.Any(s => s.Equals(state.CollectionModsSelectedCollection)))
-            {
-                SelectedModCollection = state.CollectionModsSelectedCollection;
-            }
+            LoadModCollections();
 
             CreateCommand = ReactiveCommand.Create(() =>
             {
@@ -210,13 +219,13 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
-                SaveState();
                 skipModCollectionSave = true;
+                SaveState();
                 foreach (var item in Mods)
                 {
                     item.IsSelected = false;
                 }
-                var existingCollection = modCollectionService.Get(SelectedModCollection ?? string.Empty);
+                var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
                 if (existingCollection != null)
                 {
                     foreach (var item in existingCollection.Mods)
@@ -247,19 +256,18 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 mod.IsSelected = false;
                             }
-                            ModCollections = modCollectionService.GetNames();
-                            SelectedModCollection = result.Result;
+                            LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
-                            var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                            var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
-                            notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                            var successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                            var successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             break;
 
                         case Implementation.CommandState.Exists:
-                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
-                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
-                            notificationAction.ShowNotification(result.Result, message, NotificationType.Warning);
+                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
+                            var existsMssage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                            notificationAction.ShowNotification(existsTitle, existsMssage, NotificationType.Warning);
                             break;
 
                         case Implementation.CommandState.NotExecuted:
@@ -276,12 +284,33 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            base.OnSelectedGameChanged(game);
+            LoadModCollections();
+        }
+
+        /// <summary>
+        /// Saves the selected collection.
+        /// </summary>
+        protected virtual void SaveSelectedCollection()
+        {
+            var collection = modCollectionService.Create();
+            collection.Name = SelectedModCollection.Name;
+            collection.Mods = SelectedMods.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
+            collection.IsSelected = true;
+            modCollectionService.Save(collection);
+        }
+
+        /// <summary>
         /// Saves the state.
         /// </summary>
         protected virtual void SaveState()
         {
             var state = appStateService.Get();
-            state.CollectionModsSelectedCollection = SelectedModCollection;
             appStateService.Save(state);
         }
 
@@ -297,12 +326,9 @@ namespace IronyModManager.ViewModels.Controls
                 modsChanged = Mods.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(s =>
                 {
                     SelectedMods = Mods.Where(p => p.IsSelected);
-                    if (!skipModCollectionSave && !string.IsNullOrWhiteSpace(SelectedModCollection))
+                    if (!skipModCollectionSave && !string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                     {
-                        var collection = modCollectionService.Create();
-                        collection.Name = SelectedModCollection;
-                        collection.Mods = SelectedMods.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
-                        modCollectionService.Save(collection);
+                        SaveSelectedCollection();
                     }
                 }).DisposeWith(Disposables);
             }
