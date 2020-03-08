@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Controls.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -39,7 +39,8 @@ namespace IronyModManager.DI
             {
                 var notificationManager = new NotificationManager(d.Instance as MainWindow)
                 {
-                    Position = Avalonia.Controls.Notifications.NotificationPosition.BottomRight
+                    Position = Avalonia.Controls.Notifications.NotificationPosition.BottomRight,
+                    MaxItems = 3
                 };
                 notificationFactory.SetManager(notificationManager);
             }, ctx => ctx.Registration.ImplementationType == typeof(MainWindow));

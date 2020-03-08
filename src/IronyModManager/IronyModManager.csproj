@@ -36,7 +36,9 @@
   <ItemGroup>
     <AvaloniaResource Remove="Controls\NotificationManager.xaml" />
     <AvaloniaResource Remove="Controls\Theme.xaml" />
+    <AvaloniaResource Remove="Controls\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Theme.xaml" />
+    <AvaloniaResource Include="Controls\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\CollectionModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\GameControlView.xaml" />
@@ -52,6 +54,7 @@
     <None Remove="Assets\avalonia-logo.ico" />
     <None Remove="Controls\NotificationManager.xaml" />
     <None Remove="Controls\Theme.xaml" />
+    <None Remove="Controls\ThemeOverride.xaml" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <None Remove="Views\Controls\CollectionModsControlView.xaml" />
     <None Remove="Views\Controls\GameControlView.xaml" />
@@ -211,6 +214,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\NotificationManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ThemeOverride.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

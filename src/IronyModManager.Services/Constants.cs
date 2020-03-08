@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -63,6 +63,11 @@ namespace IronyModManager.Services
             /// The irony foreground brush key
             /// </summary>
             public const string IronyForegroundBrushKey = "IronyForegroundBrush";
+
+            /// <summary>
+            /// The override theme
+            /// </summary>
+            public const string OverrideTheme = "avares://IronyModManager/Controls/ThemeOverride.xaml";
 
             #endregion Fields
 

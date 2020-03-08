@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -235,30 +235,41 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (activated)
                 {
-                    Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => string.Empty)).Subscribe(saved =>
+                    Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new Implementation.CommandResult<string>(string.Empty, Implementation.CommandState.NotExecuted))).Subscribe(result =>
                     {
-                        if (!string.IsNullOrWhiteSpace(saved))
+                        var notification = new
                         {
-                            skipModCollectionSave = true;
-                            foreach (var mod in Mods)
-                            {
-                                mod.IsSelected = false;
-                            }
-                            ModCollections = modCollectionService.GetNames();
-                            SelectedModCollection = saved;
-                            SaveState();
-                            skipModCollectionSave = EnteringNewCollection = false;
-                            var notification = new
-                            {
-                                CollectionName = saved
-                            };
-                            var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                            var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
-                            notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
-                        }
-                        else if (saved == null)
+                            CollectionName = result.Result
+                        };
+                        switch (result.State)
                         {
-                            EnteringNewCollection = false;
+                            case Implementation.CommandState.Success:
+                                skipModCollectionSave = true;
+                                foreach (var mod in Mods)
+                                {
+                                    mod.IsSelected = false;
+                                }
+                                ModCollections = modCollectionService.GetNames();
+                                SelectedModCollection = result.Result;
+                                SaveState();
+                                skipModCollectionSave = EnteringNewCollection = false;
+                                var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                                var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                                notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                                break;
+
+                            case Implementation.CommandState.Exists:
+                                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
+                                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                                notificationAction.ShowNotification(result.Result, message, NotificationType.Warning);
+                                break;
+
+                            case Implementation.CommandState.NotExecuted:
+                                EnteringNewCollection = false;
+                                break;
+
+                            default:
+                                break;
                         }
                     }).DisposeWith(disposables);
                 }
