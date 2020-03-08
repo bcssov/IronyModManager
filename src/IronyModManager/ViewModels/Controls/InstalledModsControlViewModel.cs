@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-05-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
@@ -375,20 +376,17 @@ namespace IronyModManager.ViewModels.Controls
                 return true;
             };
 
-            ModNameSortOrder.SortCommand.Subscribe(s =>
-            {
-                sortFunc(x => x.Name, ModNameKey);
-            }).DisposeWith(disposables);
-
-            ModVersionSortOrder.SortCommand.Subscribe(s =>
-            {
-                sortFunc(x => x.Version, ModVersionKey);
-            }).DisposeWith(disposables);
-
-            ModSelectedSortOrder.SortCommand.Subscribe(s =>
-            {
-                sortFunc(x => x.IsSelected, ModSelectedKey);
-            }).DisposeWith(disposables);
+            this.WhenAnyValue(v => v.ModNameSortOrder.IsActivated, v => v.ModVersionSortOrder.IsActivated, v => v.ModSelectedSortOrder.IsActivated).Where(s => s.Item1 && s.Item2 && s.Item3)
+            .Subscribe(s =>
+             {
+                 var t = KeyValuePair.Create<string, Func<IMod, object>>(ModNameKey, x => x.Name);
+                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModNameKey, x => x.Name)),
+                     ModVersionSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModVersionKey, x => x.Version)),
+                     ModSelectedSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModSelectedKey, x => x.IsSelected))).Subscribe(s =>
+                 {
+                     sortFunc(s.Value, s.Key);
+                 }).DisposeWith(disposables);
+             }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
             {

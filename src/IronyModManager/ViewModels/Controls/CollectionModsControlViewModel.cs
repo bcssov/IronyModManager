@@ -231,48 +231,45 @@ namespace IronyModManager.ViewModels.Controls
                 skipModCollectionSave = false;
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Subscribe(activated =>
+            this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(activated =>
             {
-                if (activated)
+                Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new Implementation.CommandResult<string>(string.Empty, Implementation.CommandState.NotExecuted))).Subscribe(result =>
                 {
-                    Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new Implementation.CommandResult<string>(string.Empty, Implementation.CommandState.NotExecuted))).Subscribe(result =>
+                    var notification = new
                     {
-                        var notification = new
-                        {
-                            CollectionName = result.Result
-                        };
-                        switch (result.State)
-                        {
-                            case Implementation.CommandState.Success:
-                                skipModCollectionSave = true;
-                                foreach (var mod in Mods)
-                                {
-                                    mod.IsSelected = false;
-                                }
-                                ModCollections = modCollectionService.GetNames();
-                                SelectedModCollection = result.Result;
-                                SaveState();
-                                skipModCollectionSave = EnteringNewCollection = false;
-                                var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                                var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
-                                notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
-                                break;
+                        CollectionName = result.Result
+                    };
+                    switch (result.State)
+                    {
+                        case Implementation.CommandState.Success:
+                            skipModCollectionSave = true;
+                            foreach (var mod in Mods)
+                            {
+                                mod.IsSelected = false;
+                            }
+                            ModCollections = modCollectionService.GetNames();
+                            SelectedModCollection = result.Result;
+                            SaveState();
+                            skipModCollectionSave = EnteringNewCollection = false;
+                            var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                            var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                            break;
 
-                            case Implementation.CommandState.Exists:
-                                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
-                                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
-                                notificationAction.ShowNotification(result.Result, message, NotificationType.Warning);
-                                break;
+                        case Implementation.CommandState.Exists:
+                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
+                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                            notificationAction.ShowNotification(result.Result, message, NotificationType.Warning);
+                            break;
 
-                            case Implementation.CommandState.NotExecuted:
-                                EnteringNewCollection = false;
-                                break;
+                        case Implementation.CommandState.NotExecuted:
+                            EnteringNewCollection = false;
+                            break;
 
-                            default:
-                                break;
-                        }
-                    }).DisposeWith(disposables);
-                }
+                        default:
+                            break;
+                    }
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

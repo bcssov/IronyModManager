@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-29-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
@@ -97,19 +98,16 @@ namespace IronyModManager.ViewModels.Controls
 
             previousGame = SelectedGame = Games.FirstOrDefault(s => s.IsSelected);
 
-            var changed = this.WhenAnyValue(s => s.SelectedGame).Subscribe(s =>
+            var changed = this.WhenAnyValue(s => s.SelectedGame).Where(s => s != null && Games?.Count() > 0).Subscribe(s =>
             {
-                if (Games?.Count() > 0 && s != null)
+                if (gameService.SetSelected(Games, s) && previousGame != s)
                 {
-                    if (gameService.SetSelected(Games, s) && previousGame != s)
+                    var args = new SelectedGameChangedEventArgs()
                     {
-                        var args = new SelectedGameChangedEventArgs()
-                        {
-                            Game = s
-                        };
-                        MessageBus.Current.SendMessage(args);
-                        previousGame = s;
-                    }
+                        Game = s
+                    };
+                    MessageBus.Current.SendMessage(args);
+                    previousGame = s;
                 }
             }).DisposeWith(disposables);
 

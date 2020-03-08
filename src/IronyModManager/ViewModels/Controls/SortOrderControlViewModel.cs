@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="SortOrderControlViewModel.cs" company="Mario">
 //     Mario
@@ -49,7 +49,6 @@ namespace IronyModManager.ViewModels.Controls
         public SortOrderControlViewModel(ILocalizationManager localizationManager)
         {
             this.localizationManager = localizationManager;
-            Init();
         }
 
         #endregion Constructors
@@ -95,25 +94,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        protected virtual void Init()
-        {
-            SortCommand = ReactiveCommand.Create(() =>
-            {
-                if (SortOrder == SortOrder.Asc)
-                {
-                    SortOrder = SortOrder.Desc;
-                }
-                else
-                {
-                    SortOrder = SortOrder.Asc;
-                }
-                MapSortOrder(SortOrder);
-            });
-        }
-
-        /// <summary>
         /// Maps the sort order.
         /// </summary>
         /// <param name="order">The order.</param>
@@ -144,7 +124,18 @@ namespace IronyModManager.ViewModels.Controls
         {
             MapSortOrder(SortOrder);
 
-            SortCommand.DisposeWith(disposables);
+            SortCommand = ReactiveCommand.Create(() =>
+            {
+                if (SortOrder == SortOrder.Asc)
+                {
+                    SortOrder = SortOrder.Desc;
+                }
+                else
+                {
+                    SortOrder = SortOrder.Asc;
+                }
+                MapSortOrder(SortOrder);
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
