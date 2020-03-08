@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
@@ -215,6 +216,10 @@ namespace IronyModManager.ViewModels.Controls
 
             RemoveCommand = ReactiveCommand.Create(() =>
             {
+                if (SelectedModCollection != null)
+                {
+                    RemoveCollectionAsync(SelectedModCollection.Name).ConfigureAwait(true);
+                }
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
@@ -291,6 +296,28 @@ namespace IronyModManager.ViewModels.Controls
         {
             base.OnSelectedGameChanged(game);
             LoadModCollections();
+        }
+
+        /// <summary>
+        /// remove collection as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        protected async Task RemoveCollectionAsync(string collectionName)
+        {
+            var noti = new { CollectionName = collectionName };
+            var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Title);
+            var header = localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Header);
+            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
+            if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
+            {
+                if (modCollectionService.Delete(collectionName))
+                {
+                    var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
+                    var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
+                    notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                    LoadModCollections();
+                }
+            }
         }
 
         /// <summary>

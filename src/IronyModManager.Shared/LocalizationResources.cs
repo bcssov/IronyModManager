@@ -62,6 +62,9 @@ namespace IronyModManager.Shared
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
             public const string Watermark = Prefix + "Watermark";
+            public const string Delete_Title = Prefix + "Delete_Title";
+            public const string Delete_Header = Prefix + "Delete_Header";
+            public const string Delete_Message = Prefix + "Delete_Message";
         }
         public static class Notifications
         {

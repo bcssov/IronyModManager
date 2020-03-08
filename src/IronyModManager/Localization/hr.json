@@ -38,7 +38,10 @@
         "Create": "+",
         "OK": "U redu",
         "Cancel": "Otkaži",
-        "Watermark": "Unesi ime nove kolekcije"
+        "Watermark": "Unesi ime nove kolekcije",
+        "Delete_Title": "Obrisati kolekciju?",
+        "Delete_Header": "Potvrdi birsanje kolekcije",
+        "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?"
     },
     "Notifications": {
         "CollectionCreated": {

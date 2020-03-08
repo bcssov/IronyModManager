@@ -38,12 +38,15 @@
         "Create": "+",
         "OK": "In Ordnung",
         "Cancel": "Stornieren",
-        "Watermark": "Geben Sie den neuen Sammlungsnamen ein"
+        "Watermark": "Geben Sie den neuen Sammlungsnamen ein",
+        "Delete_Title": "Sammlung löschen?",
+        "Delete_Header": "Bestätigen Sie das Löschen der Sammlung",
+        "Delete_Message": "Möchten Sie die {CollectionName}-Sammlung wirklich löschen?"
     },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Sammlung erstellt",
-            "Message": "{CollectionName} wurde erschaffen."
+            "Message": "{CollectionName} wurde erstellt."
         },
         "CollectionDeleted": {
             "Title": "Sammlung gelöscht",
@@ -51,7 +54,7 @@
         },
         "CollectionExists": {
             "Title": "Sammlung existiert",
-            "Message": "{CollectionName} ist bereits vorhanden."
+            "Message": "{CollectionName} existiert bereits."
         }
     },
     "Mod_Url": {

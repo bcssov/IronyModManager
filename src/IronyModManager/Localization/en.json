@@ -38,7 +38,10 @@
         "Create": "+",
         "OK": "OK",
         "Cancel": "Cancel",
-        "Watermark": "Enter new collection name"
+        "Watermark": "Enter new collection name",
+        "Delete_Title": "Delete Collection?",
+        "Delete_Header": "Confirm collection deletion",
+        "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?"
     },
     "Notifications": {
         "CollectionCreated": {
