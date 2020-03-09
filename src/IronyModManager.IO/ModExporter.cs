@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -35,34 +36,36 @@ namespace IronyModManager.IO
         #region Methods
 
         /// <summary>
-        /// Exports the specified export path.
+        /// Exports the asynchronous.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="exportPath">The export path.</param>
         /// <param name="mod">The mod.</param>
         /// <param name="modDirectory">The mod directory.</param>
-        public void Export<T>(string exportPath, T mod, string modDirectory) where T : IModel
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExportAsync<T>(string exportPath, T mod, string modDirectory) where T : IModel
         {
             // TODO: Add logic for this, at the moment there is no conflict detector
             if (Directory.Exists(modDirectory))
             {
             }
-            var content = JsonConvert.SerializeObject(mod);
+            var content = JsonConvert.SerializeObject(mod, Formatting.Indented);
             using var zip = ArchiveFactory.Create(SharpCompress.Common.ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
             zip.SaveTo(exportPath, new SharpCompress.Writers.WriterOptions(SharpCompress.Common.CompressionType.Deflate));
             zip.Dispose();
+            return Task.FromResult(true);
         }
 
         /// <summary>
-        /// Imports the specified file.
+        /// Imports the asynt.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="file">The file.</param>
         /// <param name="mod">The mod.</param>
-        /// <returns>T.</returns>
-        public bool Import<T>(string file, T mod) where T : IModel
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportAsync<T>(string file, T mod) where T : IModel
         {
             using var fileStream = File.OpenRead(file);
             using var reader = ReaderFactory.Open(fileStream);
@@ -90,7 +93,7 @@ namespace IronyModManager.IO
                     }
                 }
             }
-            return result;
+            return Task.FromResult(result);
         }
 
         #endregion Methods

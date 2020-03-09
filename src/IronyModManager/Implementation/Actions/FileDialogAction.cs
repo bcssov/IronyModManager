@@ -34,15 +34,20 @@ namespace IronyModManager.Implementation.Actions
         /// open dialog as an asynchronous operation.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="initialFileName">Initial name of the file.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        public async Task<string> OpenDialogAsync(string title, params string[] extensions)
+        public async Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
             var dialog = new OpenFileDialog();
             dialog.Title = title;
             dialog.Filters = GetFilters(extensions);
             dialog.Directory = GetInitialDirectory();
             dialog.AllowMultiple = false;
+            if (!string.IsNullOrWhiteSpace(initialFileName))
+            {
+                dialog.InitialFileName = initialFileName;
+            }
             var result = await dialog.ShowAsync(GetMainWindow());
             return result.FirstOrDefault();
         }
@@ -51,14 +56,19 @@ namespace IronyModManager.Implementation.Actions
         /// save dialog as an asynchronous operation.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="initialFileName">Initial name of the file.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        public async Task<string> SaveDialogAsync(string title, params string[] extensions)
+        public async Task<string> SaveDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
             var dialog = new SaveFileDialog();
             dialog.Title = title;
             dialog.Filters = GetFilters(extensions);
             dialog.Directory = GetInitialDirectory();
+            if (!string.IsNullOrWhiteSpace(initialFileName))
+            {
+                dialog.InitialFileName = initialFileName;
+            }
             var result = await dialog.ShowAsync(GetMainWindow());
             return result;
         }

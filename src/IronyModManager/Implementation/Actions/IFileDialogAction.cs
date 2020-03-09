@@ -28,17 +28,19 @@ namespace IronyModManager.Implementation.Actions
         /// Opens the dialog asynchronous.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="initialFileName">Initial name of the file.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        Task<string> OpenDialogAsync(string title, params string[] extensions);
+        Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions);
 
         /// <summary>
         /// Saves the dialog asynchronous.
         /// </summary>
         /// <param name="title">The title.</param>
+        /// <param name="initialFileName">Initial name of the file.</param>
         /// <param name="extensions">The extensions.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        Task<string> SaveDialogAsync(string title, params string[] extensions);
+        Task<string> SaveDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions);
 
         #endregion Methods
     }

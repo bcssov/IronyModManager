@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Services.Common
@@ -38,11 +39,12 @@ namespace IronyModManager.Services.Common
         bool Delete(string name);
 
         /// <summary>
-        /// Exports the specified file.
+        /// Exports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
-        void Export(string file, IModCollection modCollection);
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportAsync(string file, IModCollection modCollection);
 
         /// <summary>
         /// Gets the specified name.
@@ -58,11 +60,11 @@ namespace IronyModManager.Services.Common
         IEnumerable<IModCollection> GetAll();
 
         /// <summary>
-        /// Imports the specified file.
+        /// Imports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns>IModCollection.</returns>
-        IModCollection Import(string file);
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        Task<IModCollection> ImportAsync(string file);
 
         /// <summary>
         /// Saves the specified collection.

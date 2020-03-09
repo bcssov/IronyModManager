@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
@@ -115,13 +116,14 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Exports the specified file.
+        /// Exports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
-        public void Export(string file, IModCollection modCollection)
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExportAsync(string file, IModCollection modCollection)
         {
-            modExporter.Export(file, modCollection, string.Empty);
+            return modExporter.ExportAsync(file, modCollection, string.Empty);
         }
 
         /// <summary>
@@ -165,14 +167,14 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Imports the specified file.
+        /// import as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
-        /// <returns>IModCollection.</returns>
-        public IModCollection Import(string file)
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public async Task<IModCollection> ImportAsync(string file)
         {
             var instance = GetModelInstance<IModCollection>();
-            var result = modExporter.Import(file, instance);
+            var result = await modExporter.ImportAsync(file, instance);
             if (result)
             {
                 return instance;

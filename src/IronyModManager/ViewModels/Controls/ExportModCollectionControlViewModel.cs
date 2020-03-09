@@ -63,6 +63,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool CanExport { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the collection.
+        /// </summary>
+        /// <value>The name of the collection.</value>
+        public virtual string CollectionName { get; set; }
+
+        /// <summary>
         /// Gets or sets the export.
         /// </summary>
         /// <value>The export.</value>
@@ -120,7 +126,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 var task = Task.Run(async () =>
                 {
-                    var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, Shared.Constants.ZipExtensionWithoutDot);
+                    var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
                     if (!string.IsNullOrWhiteSpace(result))
                     {
                         return result;
@@ -140,7 +146,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 var task = Task.Run(async () =>
                 {
-                    var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, Shared.Constants.ZipExtensionWithoutDot);
+                    var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.ZipExtensionWithoutDot);
                     if (!string.IsNullOrWhiteSpace(result))
                     {
                         return result;

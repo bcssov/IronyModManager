@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.IO.Common
@@ -25,22 +26,23 @@ namespace IronyModManager.IO.Common
         #region Methods
 
         /// <summary>
-        /// Exports the specified mod directory.
+        /// Exports the asynchronous.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="exportPath">The export path.</param>
         /// <param name="mod">The mod.</param>
         /// <param name="modDirectory">The mod directory.</param>
-        void Export<T>(string exportPath, T mod, string modDirectory) where T : IModel;
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportAsync<T>(string exportPath, T mod, string modDirectory) where T : IModel;
 
         /// <summary>
-        /// Imports the specified file.
+        /// Imports the asynchronous.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="file">The file.</param>
         /// <param name="mod">The mod.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Import<T>(string file, T mod) where T : IModel;
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ImportAsync<T>(string file, T mod) where T : IModel;
 
         #endregion Methods
     }

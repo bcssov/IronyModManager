@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO.Common;
@@ -456,14 +457,14 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_export_mod.
         /// </summary>
         [Fact]
-        public void Should_export_mod()
+        public async Task Should_export_mod()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModExporter>();
             var isValid = false;
-            modExport.Setup(p => p.Export(It.IsAny<string>(), It.IsAny<IModCollection>(), It.IsAny<string>())).Callback((string file, IModCollection collection, string modDirectory) =>
+            modExport.Setup(p => p.ExportAsync(It.IsAny<string>(), It.IsAny<IModCollection>(), It.IsAny<string>())).Callback((string file, IModCollection collection, string modDirectory) =>
             {
                 if (file.Equals("file") && collection.Name.Equals("fake"))
                 {
@@ -473,7 +474,7 @@ namespace IronyModManager.Services.Tests
 
 
             var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            service.Export("file", new ModCollection()
+            await service.ExportAsync("file", new ModCollection()
             {
                 Name = "fake"
             });
@@ -484,20 +485,22 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_import_mod.
         /// </summary>
         [Fact]
-        public void Should_import_mod()
+        public async Task Should_import_mod()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
-            var modExport = new Mock<IModExporter>();            
-            modExport.Setup(p => p.Import(It.IsAny<string>(), It.IsAny<IModCollection>())).Callback((string file, IModCollection collection) =>
+            var modExport = new Mock<IModExporter>();
+            DISetup.SetupContainer();
+            modExport.Setup(p => p.ImportAsync(It.IsAny<string>(), It.IsAny<IModCollection>())).Returns((string file, IModCollection collection) => 
             {
                 collection.Name = "fake";
+                return Task.FromResult(true);
             });
 
 
             var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = service.Import("file");
+            var result = await service.ImportAsync("file");
             result.Name.Should().Be("fake");
         }
     }

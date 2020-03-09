@@ -195,6 +195,37 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// export collection as an asynchronous operation.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        protected virtual async Task ExportCollectionAsync(string path)
+        {
+            var collection = modCollectionService.Get(SelectedModCollection.Name);
+            await modCollectionService.ExportAsync(path, collection);
+            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
+            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
+            notificationAction.ShowNotification(title, message, NotificationType.Success);
+        }
+
+        /// <summary>
+        /// import collection as an asynchronous operation.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        protected virtual async Task ImportCollectionAsync(string path)
+        {
+            var collection = await modCollectionService.ImportAsync(path);
+            if (collection != null)
+            {
+                collection.IsSelected = true;
+                modCollectionService.Save(collection);
+                LoadModCollections();
+                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
+                notificationAction.ShowNotification(title, message, NotificationType.Success);
+            }
+        }
+
+        /// <summary>
         /// Loads the mod collections.
         /// </summary>
         protected virtual void LoadModCollections()
@@ -236,6 +267,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 skipModCollectionSave = true;
                 ExportCollection.CanExport = SelectedModCollection != null;
+                ExportCollection.CollectionName = SelectedModCollection?.Name;
                 SaveState();
                 foreach (var item in Mods)
                 {
@@ -304,24 +336,11 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         if (s.Key)
                         {
-                            var collection = modCollectionService.Get(SelectedModCollection.Name);
-                            modCollectionService.Export(s.Value.Result, collection);
-                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
-                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
-                            notificationAction.ShowNotification(title, message, NotificationType.Success);
+                            ExportCollectionAsync(s.Value.Result).ConfigureAwait(true);
                         }
                         else
                         {
-                            var collection = modCollectionService.Import(s.Value.Result);
-                            if (collection != null)
-                            {
-                                collection.IsSelected = true;
-                                modCollectionService.Save(collection);
-                                LoadModCollections();
-                                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
-                                notificationAction.ShowNotification(title, message, NotificationType.Success);
-                            }
+                            ImportCollectionAsync(s.Value.Result).ConfigureAwait(true);
                         }
                     }
                 }).DisposeWith(disposables);
