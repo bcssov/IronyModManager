@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -82,15 +83,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="appStateService">The application state service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
+        /// <param name="exportCollection">The export collection.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection,
-            ILocalizationManager localizationManager, INotificationAction notificationAction)
+            ExportModCollectionControlViewModel exportCollection, ILocalizationManager localizationManager,
+            INotificationAction notificationAction)
         {
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
             AddNewCollection = addNewCollection;
+            ExportCollection = exportCollection;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
         }
@@ -123,6 +127,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [entering new collection]; otherwise, <c>false</c>.</value>
         public virtual bool EnteringNewCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection.
+        /// </summary>
+        /// <value>The export collection.</value>
+        public virtual ExportModCollectionControlViewModel ExportCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mod collections.
@@ -225,6 +235,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
                 skipModCollectionSave = true;
+                ExportCollection.CanExport = SelectedModCollection != null;
                 SaveState();
                 foreach (var item in Mods)
                 {
@@ -247,7 +258,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(activated =>
             {
-                Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new Implementation.CommandResult<string>(string.Empty, Implementation.CommandState.NotExecuted))).Subscribe(result =>
+                Observable.Merge(AddNewCollection.CreateCommand, AddNewCollection.CancelCommand.Select(_ => new CommandResult<string>(string.Empty, CommandState.NotExecuted))).Subscribe(result =>
                 {
                     var notification = new
                     {
@@ -255,7 +266,7 @@ namespace IronyModManager.ViewModels.Controls
                     };
                     switch (result.State)
                     {
-                        case Implementation.CommandState.Success:
+                        case CommandState.Success:
                             skipModCollectionSave = true;
                             foreach (var mod in Mods)
                             {
@@ -269,18 +280,49 @@ namespace IronyModManager.ViewModels.Controls
                             notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             break;
 
-                        case Implementation.CommandState.Exists:
+                        case CommandState.Exists:
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
                             var existsMssage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
                             notificationAction.ShowNotification(existsTitle, existsMssage, NotificationType.Warning);
                             break;
 
-                        case Implementation.CommandState.NotExecuted:
+                        case CommandState.NotExecuted:
                             EnteringNewCollection = false;
                             break;
 
                         default:
                             break;
+                    }
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
+            {
+                Observable.Merge(ExportCollection.ExportCommand.Select(p => KeyValuePair.Create(true, p)), ExportCollection.ImportCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                {
+                    if (s.Value.State == CommandState.Success)
+                    {
+                        if (s.Key)
+                        {
+                            var collection = modCollectionService.Get(SelectedModCollection.Name);
+                            modCollectionService.Export(s.Value.Result, collection);
+                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
+                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
+                            notificationAction.ShowNotification(title, message, NotificationType.Success);
+                        }
+                        else
+                        {
+                            var collection = modCollectionService.Import(s.Value.Result);
+                            if (collection != null)
+                            {
+                                collection.IsSelected = true;
+                                modCollectionService.Save(collection);
+                                LoadModCollections();
+                                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
+                                notificationAction.ShowNotification(title, message, NotificationType.Success);
+                            }
+                        }
                     }
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);

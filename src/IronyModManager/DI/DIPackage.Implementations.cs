@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -44,6 +44,7 @@ namespace IronyModManager.DI
             container.Register<IDefaultLocalizationResourceProvider, LocalizationResourceProvider>();
             container.Register<IUrlAction, UrlAction>();
             container.Register<INotificationAction, NotificationAction>();
+            container.Register<IFileDialogAction, FileDialogAction>();
         }
 
         #endregion Methods

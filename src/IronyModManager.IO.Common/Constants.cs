@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -25,9 +25,9 @@ namespace IronyModManager.IO.Common
         #region Fields
 
         /// <summary>
-        /// The zip extension
+        /// The exported mod content identifier
         /// </summary>
-        public const string ZipExtension = ".zip";
+        public const string ExportedModContentId = "exported.json";
 
         /// <summary>
         /// The mod directory

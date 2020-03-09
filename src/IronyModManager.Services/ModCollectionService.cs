@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -42,6 +43,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IGameService gameService;
 
+        /// <summary>
+        /// The mod exporter
+        /// </summary>
+        private readonly IModExporter modExporter;
+
         #endregion Fields
 
         #region Constructors
@@ -50,11 +56,14 @@ namespace IronyModManager.Services
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
         /// <param name="gameService">The game service.</param>
+        /// <param name="modExporter">The mod exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IGameService gameService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ModCollectionService(IGameService gameService, IModExporter modExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.gameService = gameService;
+            this.modExporter = modExporter;
         }
 
         #endregion Constructors
@@ -106,6 +115,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Exports the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        public void Export(string file, IModCollection modCollection)
+        {
+            modExporter.Export(file, modCollection, string.Empty);
+        }
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -143,6 +162,22 @@ namespace IronyModManager.Services
                 return collections;
             }
             return new List<IModCollection>();
+        }
+
+        /// <summary>
+        /// Imports the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>IModCollection.</returns>
+        public IModCollection Import(string file)
+        {
+            var instance = GetModelInstance<IModCollection>();
+            var result = modExporter.Import(file, instance);
+            if (result)
+            {
+                return instance;
+            }
+            return null;
         }
 
         /// <summary>

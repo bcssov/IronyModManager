@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using AutoMapper;
 using FluentAssertions;
+using IronyModManager.IO.Common;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -85,9 +86,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Create();
             result.Name.Should().BeNullOrEmpty();
             result.Mods.Should().NotBeNull();
@@ -105,9 +107,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeTrue();
             service.GetAll().Count().Should().Be(1);
@@ -122,9 +125,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test3");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(2);
@@ -139,10 +143,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -157,10 +162,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -175,6 +181,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
@@ -182,7 +189,7 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items"
             });
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -197,9 +204,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test");
             result.Should().NotBeNull();
             result.Name.Should().Be("test");
@@ -215,9 +223,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test3");
             result.Should().BeNull();
         }
@@ -231,10 +240,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -248,10 +258,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -265,6 +276,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
@@ -272,7 +284,7 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items"
             });
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -286,8 +298,9 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             Exception exception = null;
             try
             {
@@ -309,8 +322,9 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             Exception exception = null;
             try
             {
@@ -332,9 +346,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Save(new ModCollection()
             {
                 Name = "fake",
@@ -353,9 +368,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Save(new ModCollection()
             {
                 Name = "test",
@@ -374,9 +390,10 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(2);
         }
 
@@ -389,10 +406,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
         }
 
@@ -405,10 +423,11 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
         }
 
@@ -421,6 +440,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
             {
@@ -428,8 +448,57 @@ namespace IronyModManager.Services.Tests
             });
 
 
-            var service = new ModCollectionService(gameService.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_mod.
+        /// </summary>
+        [Fact]
+        public void Should_export_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();
+            var isValid = false;
+            modExport.Setup(p => p.Export(It.IsAny<string>(), It.IsAny<IModCollection>(), It.IsAny<string>())).Callback((string file, IModCollection collection, string modDirectory) =>
+            {
+                if (file.Equals("file") && collection.Name.Equals("fake"))
+                {
+                    isValid = true;
+                }
+            });
+
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            service.Export("file", new ModCollection()
+            {
+                Name = "fake"
+            });
+            isValid.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_import_mod.
+        /// </summary>
+        [Fact]
+        public void Should_import_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModExporter>();            
+            modExport.Setup(p => p.Import(It.IsAny<string>(), It.IsAny<IModCollection>())).Callback((string file, IModCollection collection) =>
+            {
+                collection.Name = "fake";
+            });
+
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = service.Import("file");
+            result.Name.Should().Be("fake");
         }
     }
 }

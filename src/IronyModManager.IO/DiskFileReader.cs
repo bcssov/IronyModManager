@@ -26,7 +26,7 @@ namespace IronyModManager.IO
     /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
-    [ExcludeFromCoverage("Shloud be covered by Unit tests from source project.")]
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class DiskFileReader : IFileReader
     {
         #region Methods

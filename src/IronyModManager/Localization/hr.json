@@ -41,7 +41,11 @@
         "Watermark": "Unesi ime nove kolekcije",
         "Delete_Title": "Obrisati kolekciju?",
         "Delete_Header": "Potvrdi birsanje kolekcije",
-        "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?"
+        "Delete_Message": "Da li si siguran da želiš obrisati {CollectionName} kolekciju?",
+        "Export": "Izvoz",
+        "Import": "Uvoz",
+        "Export_Dialog_Title": "Izvoz kolekcije",
+        "Import_Dialog_Title": "Uvezi kolekciju"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -55,6 +59,14 @@
         "CollectionExists": {
             "Title": "Kolekcija postoji",
             "Message": "{CollectionName} več postoji."
+        },
+        "CollectionExported": {
+            "Title": "Kolekcija izvezena",
+            "Message": "{CollectionName} je izvezena."
+        },
+        "CollectionImported": {
+            "Title": "Collection uvezena",
+            "Message": "{CollectionName} je uvezena."
         }
     },
     "Mod_Url": {

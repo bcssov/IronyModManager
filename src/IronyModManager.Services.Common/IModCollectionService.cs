@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -38,6 +38,13 @@ namespace IronyModManager.Services.Common
         bool Delete(string name);
 
         /// <summary>
+        /// Exports the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        void Export(string file, IModCollection modCollection);
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -49,6 +56,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IDictionary&lt;System.String, System.Boolean&gt;.</returns>
         IEnumerable<IModCollection> GetAll();
+
+        /// <summary>
+        /// Imports the specified file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>IModCollection.</returns>
+        IModCollection Import(string file);
 
         /// <summary>
         /// Saves the specified collection.

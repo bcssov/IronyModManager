@@ -65,6 +65,10 @@ namespace IronyModManager.Shared
             public const string Delete_Title = Prefix + "Delete_Title";
             public const string Delete_Header = Prefix + "Delete_Header";
             public const string Delete_Message = Prefix + "Delete_Message";
+            public const string Export = Prefix + "Export";
+            public const string Import = Prefix + "Import";
+            public const string Export_Dialog_Title = Prefix + "Export_Dialog_Title";
+            public const string Import_Dialog_Title = Prefix + "Import_Dialog_Title";
         }
         public static class Notifications
         {
@@ -84,6 +88,18 @@ namespace IronyModManager.Shared
             public static class CollectionExists
             {
                 public const string Prefix = "Notifications." + nameof(CollectionExists) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionExported
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionExported) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionImported
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionImported) + ".";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

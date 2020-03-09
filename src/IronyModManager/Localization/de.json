@@ -41,7 +41,11 @@
         "Watermark": "Geben Sie den neuen Sammlungsnamen ein",
         "Delete_Title": "Sammlung löschen?",
         "Delete_Header": "Bestätigen Sie das Löschen der Sammlung",
-        "Delete_Message": "Möchten Sie die {CollectionName}-Sammlung wirklich löschen?"
+        "Delete_Message": "Möchten Sie die {CollectionName}-Sammlung wirklich löschen?",
+        "Export": "Export",
+        "Import": "Importieren",
+        "Export_Dialog_Title": "Sammlung exportieren",
+        "Import_Dialog_Title": "Sammlung importieren"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -55,6 +59,14 @@
         "CollectionExists": {
             "Title": "Sammlung existiert",
             "Message": "{CollectionName} existiert bereits."
+        },
+        "CollectionExported": {
+            "Title": "Sammlung exportiert",
+            "Message": "{CollectionName} wurde exportiert."
+        },
+        "CollectionImported": {
+            "Title": "Sammlung importiert",
+            "Message": "{CollectionName} wurde importiert."
         }
     },
     "Mod_Url": {

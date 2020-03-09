@@ -20,24 +20,32 @@
         <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
         <Panel IsVisible="{Binding !EnteringNewCollection}" HorizontalAlignment="Stretch"
                VerticalAlignment="Top" DockPanel.Dock="Right">
-          <DockPanel LastChildFill="True" HorizontalAlignment="Right"
-                     VerticalAlignment="Top" DockPanel.Dock="Right">
-            <Button Content="{Binding Remove}" MaxHeight="30"
-                    Margin="10" Command="{Binding RemoveCommand}"></Button>
-            <!-- For the love of God I can't force this piece of shit to set its width properly -->
-            <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
-                      Margin="10" MaxHeight="30" MinWidth="80"
-                      Width="{Binding $parent[Window].Width, 
+          <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                ColumnDefinitions="*" RowDefinitions="40,*" UseLayoutRounding="True">
+            <Panel Grid.Column="0" Grid.Row="0" Margin="0,0,0,-20">
+              <ContentControl Content="{Binding ExportCollection}"></ContentControl>
+            </Panel>
+            <Panel Grid.Column="0" Grid.Row="1">
+              <DockPanel LastChildFill="True" HorizontalAlignment="Right"
+                    VerticalAlignment="Top" DockPanel.Dock="Right">
+                <Button Content="{Binding Remove}" MaxHeight="30"
+                Margin="5" Command="{Binding RemoveCommand}"></Button>
+                <!-- For the love of God I can't force this piece of shit to set its width properly -->
+                <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
+                          Margin="10" MaxHeight="30" MinWidth="80"
+                          Width="{Binding $parent[Window].Width, 
                     Converter={StaticResource MathConverter} 
                     ConverterParameter=(x/4.4)}">
-              <ComboBox.ItemTemplate>
-                <DataTemplate>
-                  <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
-                </DataTemplate>
-              </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Content="{Binding Create}" MaxHeight="30" Margin="10" Command="{Binding CreateCommand}"></Button>
-          </DockPanel>
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Content="{Binding Create}" MaxHeight="30" Margin="5" Command="{Binding CreateCommand}"></Button>
+              </DockPanel>
+            </Panel>
+          </Grid>
         </Panel>
         <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch"
                VerticalAlignment="Top" DockPanel.Dock="Right">

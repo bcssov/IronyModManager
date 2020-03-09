@@ -41,7 +41,11 @@
         "Watermark": "Enter new collection name",
         "Delete_Title": "Delete Collection?",
         "Delete_Header": "Confirm collection deletion",
-        "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?"
+        "Delete_Message": "Are you sure you want to delete the {CollectionName} collection?",
+        "Export": "Export",
+        "Import": "Import",
+        "Export_Dialog_Title": "Export Collection",
+        "Import_Dialog_Title": "Import Collection"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -55,6 +59,14 @@
         "CollectionExists": {
             "Title": "Collection exists",
             "Message": "{CollectionName} already exists."
+        },
+        "CollectionExported": {
+            "Title": "Collection exported",
+            "Message": "{CollectionName} has been exported."
+        },
+        "CollectionImported": {
+            "Title": "Collection imported",
+            "Message": "{CollectionName} has been imported."
         }
     },
     "Mod_Url": {
