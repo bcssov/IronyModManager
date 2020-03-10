@@ -149,6 +149,21 @@ namespace IronyModManager.Common.ViewModels
         {
         }
 
+        /// <summary>
+        /// Triggers the overlay.
+        /// </summary>
+        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+        /// <param name="message">The message.</param>
+        protected virtual void TriggerOverlay(bool isVisible, string message = Shared.Constants.EmptyParam)
+        {
+            var args = new OverlayEventArgs()
+            {
+                IsVisible = isVisible,
+                Message = message
+            };
+            MessageBus.Current.SendMessage(args);
+        }
+
         #endregion Methods
     }
 }

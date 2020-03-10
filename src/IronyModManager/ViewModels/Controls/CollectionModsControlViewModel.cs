@@ -20,7 +20,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using IronyModManager.Common;
-using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
@@ -425,21 +424,6 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }).DisposeWith(Disposables);
             }
-        }
-
-        /// <summary>
-        /// Triggers the overlay.
-        /// </summary>
-        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
-        /// <param name="message">The message.</param>
-        protected virtual void TriggerOverlay(bool isVisible, string message = Shared.Constants.EmptyParam)
-        {
-            var args = new OverlayEventArgs()
-            {
-                IsVisible = isVisible,
-                Message = message
-            };
-            MessageBus.Current.SendMessage(args);
         }
 
         #endregion Methods
