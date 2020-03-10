@@ -47,7 +47,8 @@
         "Export_Dialog_Title": "Izvoz kolekcije",
         "Import_Dialog_Title": "Uvezi kolekciju",
         "Overlay_Exporting_Message": "Molim pričekajte dok izvozimo kolekciju...",
-        "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju..."
+        "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju...",
+        "Filter": "Traži modove"
     },
     "Notifications": {
         "CollectionCreated": {

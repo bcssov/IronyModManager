@@ -84,17 +84,20 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="appStateService">The application state service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
+        /// <param name="searchMods">The search mods.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection,
-            ExportModCollectionControlViewModel exportCollection, ILocalizationManager localizationManager,
+            ExportModCollectionControlViewModel exportCollection, SearchModsControlViewModel searchMods,
+            ILocalizationManager localizationManager,
             INotificationAction notificationAction)
         {
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
             AddNewCollection = addNewCollection;
             ExportCollection = exportCollection;
+            SearchMods = searchMods;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
         }
@@ -160,6 +163,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> RemoveCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the search mods.
+        /// </summary>
+        /// <value>The search mods.</value>
+        public virtual SearchModsControlViewModel SearchMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the search mods watermark.
+        /// </summary>
+        /// <value>The search mods watermark.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Filter)]
+        public virtual string SearchModsWatermark { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mod collection.
         /// </summary>
         /// <value>The selected mod collection.</value>
@@ -181,6 +197,17 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            SearchMods.WatermarkText = SearchModsWatermark;
+            base.OnLocaleChanged(newLocale, oldLocale);
+        }
 
         /// <summary>
         /// Sets the mods.
@@ -250,7 +277,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             SubscribeToMods();
 
-            var state = appStateService.Get();
+            SearchMods.WatermarkText = SearchModsWatermark;
 
             LoadModCollections();
 

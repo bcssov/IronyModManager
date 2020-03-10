@@ -47,27 +47,28 @@
         "Export_Dialog_Title": "Export Collection",
         "Import_Dialog_Title": "Import Collection",
         "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
-        "Overlay_Importing_Message": "Please wait while importing a mod collection..."
+        "Overlay_Importing_Message": "Please wait while importing a mod collection...",
+        "Filter": "Search Mods"
     },
     "Notifications": {
         "CollectionCreated": {
-            "Title": "Collection created",
+            "Title": "Collection Created",
             "Message": "{CollectionName} has been created."
         },
         "CollectionDeleted": {
-            "Title": "Collection deleted",
+            "Title": "Collection Deleted",
             "Message": "{CollectionName} has been deleted."
         },
         "CollectionExists": {
-            "Title": "Collection exists",
+            "Title": "Collection Exists",
             "Message": "{CollectionName} already exists."
         },
         "CollectionExported": {
-            "Title": "Collection exported",
+            "Title": "Collection Exported",
             "Message": "{CollectionName} has been exported."
         },
         "CollectionImported": {
-            "Title": "Collection imported",
+            "Title": "Collection Imported",
             "Message": "{CollectionName} has been imported."
         }
     },
