@@ -69,6 +69,8 @@ namespace IronyModManager.Shared
             public const string Import = Prefix + "Import";
             public const string Export_Dialog_Title = Prefix + "Export_Dialog_Title";
             public const string Import_Dialog_Title = Prefix + "Import_Dialog_Title";
+            public const string Overlay_Exporting_Message = Prefix + "Overlay_Exporting_Message";
+            public const string Overlay_Importing_Message = Prefix + "Overlay_Importing_Message";
         }
         public static class Notifications
         {

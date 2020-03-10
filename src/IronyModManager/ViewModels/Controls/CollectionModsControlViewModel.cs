@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 03-10-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using IronyModManager.Common;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
@@ -200,11 +201,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="path">The path.</param>
         protected virtual async Task ExportCollectionAsync(string path)
         {
+            TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             await modCollectionService.ExportAsync(path, collection);
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
+            TriggerOverlay(false);
         }
 
         /// <summary>
@@ -213,6 +216,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="path">The path.</param>
         protected virtual async Task ImportCollectionAsync(string path)
         {
+            TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
             var collection = await modCollectionService.ImportAsync(path);
             if (collection != null)
             {
@@ -223,6 +227,7 @@ namespace IronyModManager.ViewModels.Controls
                 var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
                 notificationAction.ShowNotification(title, message, NotificationType.Success);
             }
+            TriggerOverlay(false);
         }
 
         /// <summary>
@@ -420,6 +425,21 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }).DisposeWith(Disposables);
             }
+        }
+
+        /// <summary>
+        /// Triggers the overlay.
+        /// </summary>
+        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+        /// <param name="message">The message.</param>
+        protected virtual void TriggerOverlay(bool isVisible, string message = Shared.Constants.EmptyParam)
+        {
+            var args = new OverlayEventArgs()
+            {
+                IsVisible = isVisible,
+                Message = message
+            };
+            MessageBus.Current.SendMessage(args);
         }
 
         #endregion Methods

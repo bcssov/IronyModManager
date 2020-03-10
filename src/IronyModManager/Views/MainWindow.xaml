@@ -18,6 +18,15 @@
   </Design.DataContext>
 
   <Panel>
-    <ContentControl Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
+    <Grid>
+      <Grid ZIndex="1000" IsVisible="{Binding OverlayVisible}">
+        <Grid.Background>
+          <SolidColorBrush Color="Black" Opacity="0.75"></SolidColorBrush>
+        </Grid.Background>
+        <TextBlock FontSize="24" Text="{Binding OverlayMessage}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+      </Grid>
+      <ContentControl Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
+    </Grid>
   </Panel>
 </Window>

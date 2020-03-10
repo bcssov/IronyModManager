@@ -45,7 +45,9 @@
         "Export": "Export",
         "Import": "Import",
         "Export_Dialog_Title": "Export Collection",
-        "Import_Dialog_Title": "Import Collection"
+        "Import_Dialog_Title": "Import Collection",
+        "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
+        "Overlay_Importing_Message": "Please wait while importing a mod collection..."
     },
     "Notifications": {
         "CollectionCreated": {

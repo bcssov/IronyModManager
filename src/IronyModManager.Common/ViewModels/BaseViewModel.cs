@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-05-2020
+// Last Modified On : 03-10-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -133,12 +133,12 @@ namespace IronyModManager.Common.ViewModels
                 .Subscribe(x =>
                 {
                     OnLocaleChanged(x.Locale, x.OldLocale);
-                });
+                }).DisposeWith(disposables);
             MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
                 .Subscribe(t =>
                 {
                     OnSelectedGameChanged(t.Game);
-                });
+                }).DisposeWith(disposables);
         }
 
         /// <summary>
