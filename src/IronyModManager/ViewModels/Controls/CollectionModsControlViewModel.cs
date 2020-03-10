@@ -277,7 +277,9 @@ namespace IronyModManager.ViewModels.Controls
         {
             SubscribeToMods();
 
+            var state = appStateService.Get();
             SearchMods.WatermarkText = SearchModsWatermark;
+            SearchMods.Text = state?.CollectionModsSearchTerm;
 
             LoadModCollections();
 
@@ -377,6 +379,11 @@ namespace IronyModManager.ViewModels.Controls
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
+            {
+                SaveState();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -430,6 +437,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveState()
         {
             var state = appStateService.Get();
+            state.CollectionModsSearchTerm = SearchMods.Text;
             appStateService.Save(state);
         }
 
