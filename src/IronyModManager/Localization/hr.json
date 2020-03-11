@@ -48,7 +48,10 @@
         "Import_Dialog_Title": "Uvezi kolekciju",
         "Overlay_Exporting_Message": "Molim pričekajte dok izvozimo kolekciju...",
         "Overlay_Importing_Message": "Molim pričekajte dok uvozimo kolekciju...",
-        "Filter": "Traži modove"
+        "Filter": "Traži modove",
+        "Selected": "Odabrano",
+        "Mod_Name": "Ime moda",
+        "Order": "Redoslijed"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -81,6 +84,8 @@
         "Sort_Z_A": "↓"
     },
     "Filter": {
-        "Clear": "X"
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
     }
 }

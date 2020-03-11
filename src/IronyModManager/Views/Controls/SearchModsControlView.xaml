@@ -6,7 +6,15 @@
              MinWidth="30"
              x:Class="IronyModManager.Views.Controls.SearchModsControlView">
   <Panel>
-    <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"></TextBox>
-    <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" HorizontalAlignment="Right"></Button>
+    <Grid ColumnDefinitions="7*,*,*,*" IsVisible="{Binding ShowArrows}">
+      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch" Grid.Column="0"></TextBox>
+      <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="1"></Button>
+      <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="2"></Button>
+      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="3"></Button>
+    </Grid>
+    <Grid ColumnDefinitions="8*,*" IsVisible="{Binding !ShowArrows}">
+      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch" Grid.Column="0"></TextBox>
+      <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="1"></Button>
+    </Grid>
   </Panel>
 </UserControl>

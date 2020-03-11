@@ -48,7 +48,10 @@
         "Import_Dialog_Title": "Sammlung importieren",
         "Overlay_Exporting_Message": "Bitte warten Sie beim Exportieren einer Mod-Sammlung...",
         "Overlay_Importing_Message": "Bitte warten Sie beim Importieren einer Mod-Sammlung...",
-        "Filter": "Suchmods"
+        "Filter": "Suchmods",
+        "Selected": "Ausgewählt",
+        "Mod_Name": "Mod Name",
+        "Order": "Bestellen"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -81,6 +84,8 @@
         "Sort_Z_A": "↓"
     },
     "Filter": {
-        "Clear": "X"
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
     }
 }

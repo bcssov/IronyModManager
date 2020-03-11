@@ -4,7 +4,7 @@
 // Created          : 03-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-11-2020
 // ***********************************************************************
 // <copyright file="CommandResult.cs" company="Mario">
 //     Mario
@@ -20,12 +20,12 @@ namespace IronyModManager.Implementation
     /// Class CommandResult.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class CommandResult<T> where T : class
+    public class CommandResult<T>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandResult{T}"/> class.
+        /// Initializes a new instance of the <see cref="CommandResult{T}" /> class.
         /// </summary>
         /// <param name="result">The result.</param>
         /// <param name="state">The state.</param>

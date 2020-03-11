@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2020
+// Last Modified On : 03-11-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The mod name key
+        /// </summary>
+        private const string ModNameKey = "modName";
+
+        /// <summary>
         /// The application state service
         /// </summary>
         private readonly IAppStateService appStateService;
@@ -64,9 +69,9 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
-        /// The mods changed
+        /// The mods selected changed
         /// </summary>
-        private IDisposable modsChanged;
+        private IDisposable modsSelectedChanged;
 
         /// <summary>
         /// The skip mod collection save
@@ -85,12 +90,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
         /// <param name="searchMods">The search mods.</param>
+        /// <param name="modNameSort">The mod name sort.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, AddNewCollectionControlViewModel addNewCollection,
             ExportModCollectionControlViewModel exportCollection, SearchModsControlViewModel searchMods,
-            ILocalizationManager localizationManager,
+            SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction)
         {
             this.modCollectionService = modCollectionService;
@@ -98,8 +104,10 @@ namespace IronyModManager.ViewModels.Controls
             AddNewCollection = addNewCollection;
             ExportCollection = exportCollection;
             SearchMods = searchMods;
+            ModNameSortOrder = modNameSort;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
+            SearchMods.ShowArrows = true;
         }
 
         #endregion Constructors
@@ -144,10 +152,37 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IEnumerable<IModCollection> ModCollections { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the name of the mod.
+        /// </summary>
+        /// <value>The name of the mod.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Mod_Name)]
+        public virtual string ModName { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod name sort order.
+        /// </summary>
+        /// <value>The mod name sort order.</value>
+        public virtual SortOrderControlViewModel ModNameSortOrder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod order.
+        /// </summary>
+        /// <value>The mod order.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Order)]
+        public virtual string ModOrder { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the mods.
         /// </summary>
         /// <value>The mods.</value>
         public virtual IEnumerable<IMod> Mods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod selected.
+        /// </summary>
+        /// <value>The mod selected.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Selected)]
+        public virtual string ModSelected { get; protected set; }
 
         /// <summary>
         /// Gets or sets the remove.
@@ -176,6 +211,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string SearchModsWatermark { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the selected mod.
+        /// </summary>
+        /// <value>The selected mod.</value>
+        public virtual IMod SelectedMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mod collection.
         /// </summary>
         /// <value>The selected mod collection.</value>
@@ -185,7 +226,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected mods.
         /// </summary>
         /// <value>The selected mods.</value>
-        public virtual IEnumerable<IMod> SelectedMods { get; protected set; }
+        public virtual IList<IMod> SelectedMods { get; protected set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -206,6 +247,7 @@ namespace IronyModManager.ViewModels.Controls
         public override void OnLocaleChanged(string newLocale, string oldLocale)
         {
             SearchMods.WatermarkText = SearchModsWatermark;
+            ModNameSortOrder.Text = ModName;
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
@@ -216,9 +258,32 @@ namespace IronyModManager.ViewModels.Controls
         public void SetMods(IEnumerable<IMod> mods)
         {
             Mods = mods;
-            SelectedMods = mods != null ? mods.Where(p => p.IsSelected) : null;
 
+            SelectedMods = mods != null ? mods.Where(p => p.IsSelected).ToObservableCollection() : new List<IMod>().ToObservableCollection();
             SubscribeToMods();
+
+            var state = appStateService.Get();
+            InitSortersAndFilters(state);
+        }
+
+        /// <summary>
+        /// Applies the sort.
+        /// </summary>
+        protected virtual void ApplySort()
+        {
+            switch (ModNameSortOrder.SortOrder)
+            {
+                case SortOrder.Asc:
+                    SelectedMods = SelectedMods.OrderBy(x => x.Name).ToObservableCollection();
+                    break;
+
+                case SortOrder.Desc:
+                    SelectedMods = SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         /// <summary>
@@ -257,6 +322,30 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Initializes the sorters and filters.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        protected virtual void InitSortersAndFilters(IAppState state)
+        {
+            SearchMods.WatermarkText = SearchModsWatermark;
+            SearchMods.Text = state?.CollectionModsSearchTerm;
+            ModNameSortOrder.Text = ModName;
+            if (!string.IsNullOrWhiteSpace(state.CollectionModsSortColumn) && Enum.IsDefined(typeof(SortOrder), state.CollectionModsSortMode))
+            {
+                var sort = (SortOrder)state.CollectionModsSortMode;
+                ModNameSortOrder.SortOrder = sort;
+            }
+            else
+            {
+                ModNameSortOrder.SortOrder = SortOrder.Asc;
+            }
+            if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedMod) && SelectedMods != null)
+            {
+                SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod));
+            }
+        }
+
+        /// <summary>
         /// Loads the mod collections.
         /// </summary>
         protected virtual void LoadModCollections()
@@ -275,13 +364,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            SelectedMods = Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new List<IMod>().ToObservableCollection();
             SubscribeToMods();
 
             var state = appStateService.Get();
-            SearchMods.WatermarkText = SearchModsWatermark;
-            SearchMods.Text = state?.CollectionModsSearchTerm;
-
+            InitSortersAndFilters(state);
             LoadModCollections();
+            ApplySort();
 
             CreateCommand = ReactiveCommand.Create(() =>
             {
@@ -379,9 +468,53 @@ namespace IronyModManager.ViewModels.Controls
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
+            this.WhenAnyValue(s => s.SearchMods.IsActivated).Where(p => p).Subscribe(s =>
             {
-                SaveState();
+                this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
+                {
+                    if (!string.IsNullOrWhiteSpace(s))
+                    {
+                        SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase));
+                    }
+                    SaveState();
+                }).DisposeWith(disposables);
+
+                Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
+                {
+                    var index = -1;
+                    if (SelectedMod != null)
+                    {
+                        index = SelectedMods.IndexOf(SelectedMod);
+                    }
+                    if (!s.Result)
+                    {
+                        var mod = SelectedMods.Skip(index + 1).FirstOrDefault(s => s.Name.Contains(SearchMods.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (mod != null && mod != SelectedMod)
+                        {
+                            SelectedMod = mod;
+                        }
+                    }
+                    else
+                    {
+                        var reverseIndex = SelectedMods.Count - index;
+                        var mod = SelectedMods.Reverse().Skip(reverseIndex).FirstOrDefault(s => s.Name.Contains(SearchMods.Text, StringComparison.InvariantCultureIgnoreCase));
+                        if (mod != null && mod != SelectedMod)
+                        {
+                            SelectedMod = mod;
+                        }
+                    }
+                    SaveState();
+                }).DisposeWith(disposables);
+
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(s => s.ModNameSortOrder.IsActivated).Where(p => p == true).Subscribe(s =>
+            {
+                this.WhenAnyValue(s => s.ModNameSortOrder.SortCommand).Subscribe(s =>
+                {
+                    ApplySort();
+                    SaveState();
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -437,7 +570,10 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveState()
         {
             var state = appStateService.Get();
+            state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
             state.CollectionModsSearchTerm = SearchMods.Text;
+            state.CollectionModsSortColumn = ModNameKey;
+            state.CollectionModsSortMode = (int)ModNameSortOrder.SortOrder;
             appStateService.Save(state);
         }
 
@@ -446,14 +582,30 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SubscribeToMods()
         {
-            modsChanged?.Dispose();
-            modsChanged = null;
+            modsSelectedChanged?.Dispose();
+            modsSelectedChanged = null;
             if (Mods != null && Disposables != null)
             {
-                modsChanged = Mods.ToSourceList().Connect().WhenAnyPropertyChanged().Subscribe(s =>
+                modsSelectedChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
-                    SelectedMods = Mods.Where(p => p.IsSelected);
-                    if (!skipModCollectionSave && !string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                    var needsSave = false;
+                    if (s.Value)
+                    {
+                        if (!SelectedMods.Contains(s.Sender))
+                        {
+                            SelectedMods.Add(s.Sender);
+                            needsSave = true;
+                        }
+                    }
+                    else
+                    {
+                        if (SelectedMods.Contains(s.Sender))
+                        {
+                            SelectedMods.Remove(s.Sender);
+                            needsSave = true;
+                        }
+                    }
+                    if (!skipModCollectionSave && !string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
                     {
                         SaveSelectedCollection();
                     }

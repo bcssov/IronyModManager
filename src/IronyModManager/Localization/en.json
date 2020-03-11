@@ -48,7 +48,10 @@
         "Import_Dialog_Title": "Import Collection",
         "Overlay_Exporting_Message": "Please wait while exporting a mod collection...",
         "Overlay_Importing_Message": "Please wait while importing a mod collection...",
-        "Filter": "Search Mods"
+        "Filter": "Search Mods",
+        "Selected": "Selected",
+        "Mod_Name": "Mod Name",
+        "Order": "Order"
     },
     "Notifications": {
         "CollectionCreated": {
@@ -81,6 +84,8 @@
         "Sort_Z_A": "↓"
     },
     "Filter": {
-        "Clear": "X"
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
     }
 }

@@ -72,6 +72,9 @@ namespace IronyModManager.Shared
             public const string Overlay_Exporting_Message = Prefix + "Overlay_Exporting_Message";
             public const string Overlay_Importing_Message = Prefix + "Overlay_Importing_Message";
             public const string Filter = Prefix + "Filter";
+            public const string Selected = Prefix + "Selected";
+            public const string Mod_Name = Prefix + "Mod_Name";
+            public const string Order = Prefix + "Order";
         }
         public static class Notifications
         {
@@ -123,6 +126,8 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Filter) + ".";
             public const string Clear = Prefix + "Clear";
+            public const string UpArrow = Prefix + "UpArrow";
+            public const string DownArrow = Prefix + "DownArrow";
         }
     }
 }
