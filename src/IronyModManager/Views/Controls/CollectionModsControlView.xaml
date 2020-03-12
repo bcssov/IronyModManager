@@ -66,7 +66,7 @@
                         Command="{Binding CreateCommand}" Margin="0,0,10,0" Width="30"></Button>
               </DockPanel>
             </Panel>
-            <Grid ColumnDefinitions="20,70,70,*,*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid ColumnDefinitions="20,80,50,*,70" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
               <CheckBox Grid.Column="0" IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}"></CheckBox>
               <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center"></TextBlock>
@@ -85,16 +85,17 @@
                      x:Name="modList" Grid.Row="3" Grid.ColumnSpan="2"
                       Height="{Binding $parent[Window].Height, 
                        Converter={StaticResource MathConverter} 
-                       ConverterParameter=x-230}">
+                       ConverterParameter=x-230}" SelectedItem="{Binding SelectedMod}">
               <ListBox.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="70,70,*,*">
+                  <Grid ColumnDefinitions="100,50,*,70">
                     <Grid.ContextMenu>
                       <ContextMenu>
                       </ContextMenu>
                     </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
-                    <TextBlock x:Name="order" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
+                    <NumericUpDown x:Name="order" Value="{Binding Order}"
+                                            Grid.Column="1" MaxHeight="40"></NumericUpDown>
                     <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
                   </Grid>
                 </DataTemplate>

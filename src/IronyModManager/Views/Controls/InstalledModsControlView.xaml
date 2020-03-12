@@ -19,7 +19,7 @@
       <DockPanel LastChildFill="True">
         <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
         <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0" MaxHeight="30"></ContentControl>
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="20,70,*,120" Margin="0,10,0,0">
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="20,80,*,120" Margin="0,10,0,0">
           <CheckBox Grid.Column="0" IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}"></CheckBox>
           <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
@@ -34,7 +34,7 @@
         <ListBox Items="{Binding FilteredMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="70,*,120">
+              <Grid ColumnDefinitions="100,*,120">
                 <Grid.ContextMenu>
                   <ContextMenu>
                   </ContextMenu>
