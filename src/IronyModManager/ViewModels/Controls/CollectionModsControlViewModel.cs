@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2020
+// Last Modified On : 03-12-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -69,9 +69,9 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
-        /// The mods selected changed
+        /// The mods changed
         /// </summary>
-        private IDisposable modsSelectedChanged;
+        private IDisposable modsChanged;
 
         /// <summary>
         /// The skip mod collection save
@@ -115,10 +115,23 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the actions.
+        /// </summary>
+        /// <value>The actions.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Actions)]
+        public virtual string Actions { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the add new collection.
         /// </summary>
         /// <value>The add new collection.</value>
         public virtual AddNewCollectionControlViewModel AddNewCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [all mods enabled].
+        /// </summary>
+        /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
+        public virtual bool AllModsEnabled { get; protected set; }
 
         /// <summary>
         /// Gets or sets the create.
@@ -132,6 +145,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The create command.</value>
         public virtual ReactiveCommand<Unit, Unit> CreateCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the enable all command.
+        /// </summary>
+        /// <value>The enable all command.</value>
+        public virtual ReactiveCommand<Unit, Unit> EnableAllCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [entering new collection].
@@ -505,16 +524,27 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     SaveState();
                 }).DisposeWith(disposables);
-
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(s => s.ModNameSortOrder.IsActivated).Where(p => p == true).Subscribe(s =>
             {
-                this.WhenAnyValue(s => s.ModNameSortOrder.SortCommand).Subscribe(s =>
+                ModNameSortOrder.SortCommand.Subscribe(s =>
                 {
                     ApplySort();
                     SaveState();
                 }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            EnableAllCommand = ReactiveCommand.Create(() =>
+            {
+                if (Mods?.Count() > 0)
+                {
+                    bool enabled = (Mods?.All(p => p.IsSelected)).GetValueOrDefault();
+                    foreach (var item in Mods)
+                    {
+                        item.IsSelected = !enabled;
+                    }
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -582,18 +612,22 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SubscribeToMods()
         {
-            modsSelectedChanged?.Dispose();
-            modsSelectedChanged = null;
+            modsChanged?.Dispose();
+            modsChanged = null;
             if (Mods != null && Disposables != null)
             {
-                modsSelectedChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+                AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+
+                modsChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
+                    AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                     var needsSave = false;
                     if (s.Value)
                     {
                         if (!SelectedMods.Contains(s.Sender))
                         {
                             SelectedMods.Add(s.Sender);
+                            ModNameSortOrder.SetSortOrder(SortOrder.None);
                             needsSave = true;
                         }
                     }

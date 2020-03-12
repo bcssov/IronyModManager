@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
@@ -114,6 +115,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether [all mods enabled].
+        /// </summary>
+        /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
+        public virtual bool AllModsEnabled { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
@@ -125,6 +132,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The copy URL command.</value>
         public virtual ReactiveCommand<Unit, Unit> CopyUrlCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the enable all command.
+        /// </summary>
+        /// <value>The enable all command.</value>
+        public virtual ReactiveCommand<Unit, Unit> EnableAllCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the filtered mods.
@@ -288,6 +301,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
                 FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text ?? string.Empty, StringComparison.InvariantCultureIgnoreCase));
+                AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
 
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
@@ -390,6 +404,23 @@ namespace IronyModManager.ViewModels.Controls
                 FilteredMods = Mods.Where(p => p.Name.Contains(s ?? string.Empty, StringComparison.InvariantCultureIgnoreCase)).ToObservableCollection();
                 ApplyDefaultSort();
                 SaveState();
+            }).DisposeWith(disposables);
+
+            EnableAllCommand = ReactiveCommand.Create(() =>
+            {
+                if (Mods?.Count() > 0)
+                {
+                    bool enabled = (Mods?.All(p => p.IsSelected)).GetValueOrDefault();
+                    foreach (var item in Mods)
+                    {
+                        item.IsSelected = !enabled;
+                    }
+                }
+            }).DisposeWith(disposables);
+
+            Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+            {
+                AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

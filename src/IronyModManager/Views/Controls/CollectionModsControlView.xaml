@@ -31,7 +31,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
               <RowDefinition Height="40"></RowDefinition>
-              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="50"></RowDefinition>
+              <RowDefinition Height="30"></RowDefinition>
               <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Panel Grid.Column="1" Grid.Row="0" Margin="0,0,0,-10"
@@ -65,17 +66,40 @@
                         Command="{Binding CreateCommand}" Margin="0,0,10,0" Width="30"></Button>
               </DockPanel>
             </Panel>
-            <Grid ColumnDefinitions="70,70,*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-              <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+            <Grid ColumnDefinitions="20,70,70,*,*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+              <CheckBox Grid.Column="0" IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}"></CheckBox>
+              <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center"></TextBlock>
               </Border>
-              <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+              <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center"></TextBlock>
               </Border>
-              <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+              <Border BorderThickness="1" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
               </Border>
+              <Border BorderThickness="1" Grid.Column="4" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+                <TextBlock Text="{Binding Actions}" HorizontalAlignment="Center"></TextBlock>
+              </Border>
             </Grid>
+            <ListBox Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     x:Name="modList" Grid.Row="3" Grid.ColumnSpan="2"
+                      Height="{Binding $parent[Window].Height, 
+                       Converter={StaticResource MathConverter} 
+                       ConverterParameter=x-230}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="70,70,*,*">
+                    <Grid.ContextMenu>
+                      <ContextMenu>
+                      </ContextMenu>
+                    </Grid.ContextMenu>
+                    <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
+                    <TextBlock x:Name="order" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
+                    <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
           </Grid>
         </Panel>
         <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
