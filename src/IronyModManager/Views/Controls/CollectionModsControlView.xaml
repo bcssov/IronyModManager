@@ -5,7 +5,8 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              MinWidth="200"
              x:Class="IronyModManager.Views.Controls.CollectionModsControlView"
-             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager">
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls.Themes;assembly=IronyModManager">
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
   </UserControl.Resources>
@@ -66,7 +67,7 @@
                         Command="{Binding CreateCommand}" Margin="0,0,10,0" Width="30"></Button>
               </DockPanel>
             </Panel>
-            <Grid ColumnDefinitions="1*,2*,2*,7*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid ColumnDefinitions="1*,2*,2*,5*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
               <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <CheckBox IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}" HorizontalAlignment="Center"></CheckBox>
               </Border>
@@ -87,14 +88,14 @@
                        ConverterParameter=x-230}" SelectedItem="{Binding SelectedMod}">
               <ListBox.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="1*,2*,2*,7*">
+                  <Grid ColumnDefinitions="1*,2*,2*,5*">
                     <Grid.ContextMenu>
                       <ContextMenu>
                       </ContextMenu>
                     </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
-                    <NumericUpDown x:Name="order" Value="{Binding Order}"
-                                            Grid.Column="2" MaxHeight="40"></NumericUpDown>
+                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
+                                            Grid.Column="2" MaxHeight="40"></controls:MinMaxNumericUpDown>
                     <TextBlock Text="{Binding Name}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
                   </Grid>
                 </DataTemplate>

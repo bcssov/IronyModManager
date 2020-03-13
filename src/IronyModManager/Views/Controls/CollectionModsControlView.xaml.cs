@@ -62,20 +62,20 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// focus order textbox as an asynchronous operation.
         /// </summary>
-        protected virtual async Task FocusOrderTextboxAsync()
+        /// <param name="mod">The mod.</param>
+        protected virtual async Task FocusOrderTextboxAsync(IMod mod)
         {
             await Task.Delay(100);
-            var vm = DataContext as CollectionModsControlViewModel;
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
-            if (vm.SelectedMod != null)
+            if (mod != null)
             {
                 foreach (var item in listboxItems)
                 {
                     var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                     if (grid != null)
                     {
-                        var mod = item.Content as IMod;
-                        if (mod == vm.SelectedMod)
+                        var contentMod = item.Content as IMod;
+                        if (mod == contentMod)
                         {
                             grid.Focus();
                         }
@@ -145,7 +145,7 @@ namespace IronyModManager.Views.Controls
             {
                 ViewModel.ModReordered += (args) =>
                 {
-                    FocusOrderTextboxAsync().ConfigureAwait(true);
+                    FocusOrderTextboxAsync(args).ConfigureAwait(true);
                 };
                 modList.LayoutUpdated += (sender, args) =>
                 {
