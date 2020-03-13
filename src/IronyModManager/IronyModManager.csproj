@@ -35,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\NotificationManager.xaml" />
     <AvaloniaResource Remove="Controls\Themes\NumericUpDown.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Theme.xaml" />
@@ -42,7 +45,7 @@
     <AvaloniaResource Remove="Controls\Themes\Light\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
-    <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />    
+    <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
     <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -50,7 +53,10 @@
     <AvaloniaResource Include="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
-    <AvaloniaResource Include="Controls\Themes\NumericUpDown.xaml" />    
+    <AvaloniaResource Include="Controls\Themes\NumericUpDown.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\CollectionModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\GameControlView.xaml" />
@@ -61,10 +67,13 @@
     <AvaloniaResource Remove="Views\Controls\SortOrderControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ThemeControlView.xaml" />
     <AvaloniaResource Remove="Views\MainControlView.xaml" />
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <None Remove="Assets\avalonia-logo.ico" />
     <None Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
+    <None Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
+    <None Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
+    <None Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <None Remove="Controls\Themes\NotificationManager.xaml" />
     <None Remove="Controls\Themes\NumericUpDown.xaml" />
     <None Remove="Controls\Themes\Theme.xaml" />
@@ -87,7 +96,7 @@
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
-    </None>    
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.4" />
@@ -128,7 +137,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\avalonia-logo.ico" />
+    <EmbeddedResource Include="Controls\Themes\MaterialDark\ListBoxItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\MaterialDark\ButtonSpinner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml">

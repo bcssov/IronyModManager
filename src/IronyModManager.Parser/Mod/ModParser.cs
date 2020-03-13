@@ -86,15 +86,15 @@ namespace IronyModManager.Parser.Mod
                             break;
 
                         case "version":
-                            obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "supported_version":
-                            // version tag has priority
+                            // supported version tag has priority
                             if (string.IsNullOrWhiteSpace(obj.Version))
                             {
                                 obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            }
+                            }                            
+                            break;
+
+                        case "supported_version":
+                            obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
                             break;
 
                         case "tags":

@@ -6,4 +6,15 @@
   </Style>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDark.ButtonSpinner.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDark.ListBoxItem.xaml?assembly=IronyModManager"/>
+  <Style Selector="ListBoxItem.MoveBottom">
+    <Setter Property="BorderThickness" Value="0,0,0,2"/>
+    <Setter Property="BorderBrush" Value="White"/>
+    <Setter Property="Margin" Value="0,0,0,-2"/>
+  </Style>
+  <Style Selector="ListBoxItem.MoveTop">
+    <Setter Property="BorderThickness" Value="0,2,0,0"/>
+    <Setter Property="BorderBrush" Value="White"/>
+    <Setter Property="Margin" Value="0,-2,0,0"/>
+  </Style>
 </Styles>

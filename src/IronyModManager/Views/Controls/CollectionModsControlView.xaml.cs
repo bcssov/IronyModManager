@@ -19,6 +19,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
+using IronyModManager.Controls.Themes;
 using IronyModManager.Models.Common;
 using IronyModManager.ViewModels.Controls;
 
@@ -41,7 +42,7 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The mod list
         /// </summary>
-        private ListBox modList;
+        private DragDropListBox modList;
 
         #endregion Fields
 
@@ -90,50 +91,63 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(IDisposable disposables)
         {
-            modList = this.FindControl<ListBox>("modList");
-            SetContextMenus();
-            SetOrderParameters();
+            modList = this.FindControl<DragDropListBox>("modList");
+            if (modList != null)
+            {
+                SetContextMenus();
+                SetOrderParameters();
+                HandleItemDragged();
+            }
             base.OnActivated(disposables);
         }
 
         /// <summary>
-        /// Sets the context menus.
+        /// Handles the item dragged.
+        /// </summary>
+        protected virtual void HandleItemDragged()
+        {
+            modList.ItemDragged += (source, destination) =>
+            {
+                var sourceMod = source as IMod;
+                var destinationMod = destination as IMod;
+                sourceMod.Order = destinationMod.Order;
+            };
+        }
+
+        /// <summary>
+        /// Sets the pointer events.
         /// </summary>
         protected virtual void SetContextMenus()
         {
-            if (modList != null)
+            modList.PointerMoved += (sender, args) =>
             {
-                modList.PointerMoved += (sender, args) =>
+                var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
+                if (hoveredItem != null)
                 {
-                    var vm = DataContext as CollectionModsControlViewModel;
-                    var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                    if (hoveredItem != null)
+                    var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                    if (grid != null)
                     {
-                        var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                        if (grid != null)
+                        ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                        if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                         {
-                            vm.HoveredMod = hoveredItem.Content as IMod;
-                            if (!string.IsNullOrEmpty(vm.GetHoveredModUrl()))
+                            var menuItems = new List<MenuItem>()
                             {
-                                var menuItems = new List<MenuItem>()
+                                new MenuItem()
                                 {
-                                    new MenuItem()
-                                    {
-                                        Header = vm.OpenUrl,
-                                        Command = vm.OpenUrlCommand
-                                    },
-                                    new MenuItem()
-                                    {
-                                        Header = vm.CopyUrl,
-                                        Command = vm.CopyUrlCommand
-                                    }
-                                };
-                                grid.ContextMenu.Items = menuItems;
-                            }
+                                    Header = ViewModel.OpenUrl,
+                                    Command = ViewModel.OpenUrlCommand
+                                },
+                                new MenuItem()
+                                {
+                                    Header = ViewModel.CopyUrl,
+                                    Command = ViewModel.CopyUrlCommand
+                                }
+                            };
+                            grid.ContextMenu.Items = menuItems;
                         }
                     }
-                };
-            }
+                }
+            };
         }
 
         /// <summary>
@@ -141,33 +155,29 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetOrderParameters()
         {
-            if (modList != null)
+            ViewModel.ModReordered += (args) =>
             {
-                ViewModel.ModReordered += (args) =>
+                FocusOrderTextboxAsync(args).ConfigureAwait(true);
+            };
+            modList.LayoutUpdated += (sender, args) =>
+            {
+                var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
+                var items = modList.Items as IEnumerable<IMod>;
+                foreach (var item in listboxItems)
                 {
-                    FocusOrderTextboxAsync(args).ConfigureAwait(true);
-                };
-                modList.LayoutUpdated += (sender, args) =>
-                {
-                    var vm = DataContext as CollectionModsControlViewModel;
-                    var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
-                    var items = modList.Items as IEnumerable<IMod>;
-                    foreach (var item in listboxItems)
+                    var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                    if (grid != null)
                     {
-                        var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                        if (grid != null)
+                        var orderCtrl = grid.GetLogicalChildren().OfType<MinMaxNumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
+                        if (orderCtrl != null)
                         {
-                            var orderCtrl = grid.GetLogicalChildren().OfType<NumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
-                            if (orderCtrl != null)
-                            {
-                                var mod = item.Content as IMod;
-                                orderCtrl.Minimum = 1;
-                                orderCtrl.Maximum = items.Count();
-                            }
+                            var mod = item.Content as IMod;
+                            orderCtrl.Minimum = 1;
+                            orderCtrl.Maximum = items.Count();
                         }
                     }
-                };
-            }
+                }
+            };
         }
 
         /// <summary>

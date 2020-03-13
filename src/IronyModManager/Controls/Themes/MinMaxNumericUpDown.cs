@@ -315,12 +315,12 @@ namespace IronyModManager.Controls.Themes
             {
                 if (Value < Maximum)
                 {
-                    validDirections = validDirections | ValidSpinDirections.Increase;
+                    validDirections |= ValidSpinDirections.Increase;
                 }
 
                 if (Value > Minimum)
                 {
-                    validDirections = validDirections | ValidSpinDirections.Decrease;
+                    validDirections |= ValidSpinDirections.Decrease;
                 }
             }
 
