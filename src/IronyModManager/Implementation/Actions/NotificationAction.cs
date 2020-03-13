@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -63,25 +63,13 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="timeout">The timeout.</param>
         public void ShowNotification(string title, string message, NotificationType notificationType, int timeout = 5)
         {
-            Avalonia.Controls.Notifications.NotificationType type;
-            switch (notificationType)
+            var type = notificationType switch
             {
-                case NotificationType.Success:
-                    type = Avalonia.Controls.Notifications.NotificationType.Success;
-                    break;
-
-                case NotificationType.Warning:
-                    type = Avalonia.Controls.Notifications.NotificationType.Warning;
-                    break;
-
-                case NotificationType.Error:
-                    type = Avalonia.Controls.Notifications.NotificationType.Error;
-                    break;
-
-                default:
-                    type = Avalonia.Controls.Notifications.NotificationType.Information;
-                    break;
-            }
+                NotificationType.Success => Avalonia.Controls.Notifications.NotificationType.Success,
+                NotificationType.Warning => Avalonia.Controls.Notifications.NotificationType.Warning,
+                NotificationType.Error => Avalonia.Controls.Notifications.NotificationType.Error,
+                _ => Avalonia.Controls.Notifications.NotificationType.Information,
+            };
             var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout));
             notificationFactory.GetManager().Show(model);
         }
@@ -96,29 +84,14 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> ShowPromptAsync(string title, string header, string message, NotificationType notificationType)
         {
-            MessageBox.Avalonia.Enums.Icon icon;
-            switch (notificationType)
+            var icon = notificationType switch
             {
-                case NotificationType.Info:
-                    icon = MessageBox.Avalonia.Enums.Icon.Info;
-                    break;
-
-                case NotificationType.Success:
-                    icon = MessageBox.Avalonia.Enums.Icon.Success;
-                    break;
-
-                case NotificationType.Warning:
-                    icon = MessageBox.Avalonia.Enums.Icon.Warning;
-                    break;
-
-                case NotificationType.Error:
-                    icon = MessageBox.Avalonia.Enums.Icon.Error;
-                    break;
-
-                default:
-                    icon = MessageBox.Avalonia.Enums.Icon.None;
-                    break;
-            }
+                NotificationType.Info => MessageBox.Avalonia.Enums.Icon.Info,
+                NotificationType.Success => MessageBox.Avalonia.Enums.Icon.Success,
+                NotificationType.Warning => MessageBox.Avalonia.Enums.Icon.Warning,
+                NotificationType.Error => MessageBox.Avalonia.Enums.Icon.Error,
+                _ => MessageBox.Avalonia.Enums.Icon.None,
+            };
             var mainWindow = GetMainWindow();
             var prompt = MessageBoxes.GetYesNoWindow(title, header, message, icon);
             var result = await prompt.ShowDialog(mainWindow);

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="MathConverter.cs" company="Mario">
 //     Mario
@@ -43,8 +43,10 @@ namespace IronyModManager.Converters
             {
                 if (double.TryParse(value.ToString(), out var x))
                 {
-                    var parser = new ExpressionParser();
-                    parser.Culture = CurrentLocale.CurrentCulture;
+                    var parser = new ExpressionParser
+                    {
+                        Culture = CurrentLocale.CurrentCulture
+                    };
                     parser.Values.Add("x", x);
                     var result = parser.Parse(parameter.ToString().Replace(".", CurrentLocale.CurrentCulture.NumberFormat.NumberDecimalSeparator));
                     return result;

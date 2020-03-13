@@ -136,15 +136,14 @@ namespace IronyModManager.Storage
         private string FormatTypeName(object instance)
         {            
             Type type;
-            var proxy = instance as IProxyTargetAccessor;
-            if (proxy != null)
+            if (instance is IProxyTargetAccessor proxy)
             {
                 type = proxy.DynProxyGetTarget().GetType();
             }
             else
             {
                 type = instance.GetType();
-            }            
+            }
             if (typeof(IPropertyChangedModel).IsAssignableFrom(type))
             {
                 var name = type.FullName;

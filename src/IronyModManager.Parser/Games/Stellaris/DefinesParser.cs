@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -110,7 +110,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                     var cleaned = textParser.CleanWhitespace(line);
                     if (cleaned.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
-                        cleaned = cleaned.Substring(0, cleaned.Length - 1);
+                        cleaned = cleaned[0..^1];
                     }
                     if (!string.IsNullOrWhiteSpace(cleaned))
                     {

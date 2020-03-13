@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -125,35 +125,18 @@ namespace IronyModManager.Parser.Definitions
         /// <exception cref="NotImplementedException"></exception>
         public object GetValue(string propName, bool unwrap)
         {
-            switch (propName)
+            return propName switch
             {
-                case nameof(Code):
-                    return Code;
-
-                case nameof(ContentSHA):
-                    return ContentSHA;
-
-                case nameof(Dependencies):
-                    return Dependencies;
-
-                case nameof(File):
-                    return File;
-
-                case nameof(Type):
-                    return Type;
-
-                case nameof(TypeAndId):
-                    return TypeAndId;
-
-                case nameof(ValueType):
-                    return ValueType;
-
-                case nameof(DefinitionSHA):
-                    return DefinitionSHA;
-
-                default:
-                    return Id;
-            }
+                nameof(Code) => Code,
+                nameof(ContentSHA) => ContentSHA,
+                nameof(Dependencies) => Dependencies,
+                nameof(File) => File,
+                nameof(Type) => Type,
+                nameof(TypeAndId) => TypeAndId,
+                nameof(ValueType) => ValueType,
+                nameof(DefinitionSHA) => DefinitionSHA,
+                _ => Id,
+            };
         }
 
         #endregion Methods

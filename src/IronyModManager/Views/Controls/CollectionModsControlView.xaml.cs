@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -72,7 +72,6 @@ namespace IronyModManager.Views.Controls
             await Task.Delay(500);
             var vm = DataContext as CollectionModsControlViewModel;
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
-            var items = modList.Items as IEnumerable<IMod>;
             if (vm.SelectedMod != null)
             {
                 foreach (var item in listboxItems)
@@ -83,8 +82,8 @@ namespace IronyModManager.Views.Controls
                         var mod = item.Content as IMod;
                         if (mod == vm.SelectedMod)
                         {
-                            grid.Focus();                         
-                        }                        
+                            grid.Focus();
+                        }
                     }
                 }
             }

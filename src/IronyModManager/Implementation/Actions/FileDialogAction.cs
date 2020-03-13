@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -39,11 +39,13 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public async Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
-            var dialog = new OpenFileDialog();
-            dialog.Title = title;
-            dialog.Filters = GetFilters(extensions);
-            dialog.Directory = GetInitialDirectory();
-            dialog.AllowMultiple = false;
+            var dialog = new OpenFileDialog
+            {
+                Title = title,
+                Filters = GetFilters(extensions),
+                Directory = GetInitialDirectory(),
+                AllowMultiple = false
+            };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
                 dialog.InitialFileName = initialFileName;
@@ -61,10 +63,12 @@ namespace IronyModManager.Implementation.Actions
         /// <returns>Task&lt;System.String&gt;.</returns>
         public async Task<string> SaveDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions)
         {
-            var dialog = new SaveFileDialog();
-            dialog.Title = title;
-            dialog.Filters = GetFilters(extensions);
-            dialog.Directory = GetInitialDirectory();
+            var dialog = new SaveFileDialog
+            {
+                Title = title,
+                Filters = GetFilters(extensions),
+                Directory = GetInitialDirectory()
+            };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
                 dialog.InitialFileName = initialFileName;
