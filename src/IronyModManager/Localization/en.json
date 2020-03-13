@@ -51,8 +51,7 @@
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
-        "Order": "Order",
-        "Actions": "Actions"
+        "Order": "Order"
     },
     "Notifications": {
         "CollectionCreated": {

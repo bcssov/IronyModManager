@@ -51,8 +51,7 @@
         "Filter": "Suchmods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Order": "Bestellen",
-        "Actions": "Aktionen"
+        "Order": "Bestellen"
     },
     "Notifications": {
         "CollectionCreated": {

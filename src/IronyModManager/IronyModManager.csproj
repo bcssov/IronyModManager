@@ -34,12 +34,23 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Remove="Controls\NotificationManager.xaml" />
-    <AvaloniaResource Remove="Controls\Theme.xaml" />
-    <AvaloniaResource Remove="Controls\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\NotificationManager.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\NumericUpDown.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\Theme.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\Light\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />    
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
-    <AvaloniaResource Include="Controls\Theme.xaml" />
-    <AvaloniaResource Include="Controls\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
+    <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\Light\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
+    <AvaloniaResource Include="Controls\Themes\NumericUpDown.xaml" />    
     <AvaloniaResource Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\CollectionModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\GameControlView.xaml" />
@@ -53,9 +64,15 @@
   </ItemGroup>  
   <ItemGroup>
     <None Remove="Assets\avalonia-logo.ico" />
-    <None Remove="Controls\NotificationManager.xaml" />
-    <None Remove="Controls\Theme.xaml" />
-    <None Remove="Controls\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
+    <None Remove="Controls\Themes\NotificationManager.xaml" />
+    <None Remove="Controls\Themes\NumericUpDown.xaml" />
+    <None Remove="Controls\Themes\Theme.xaml" />
+    <None Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\Light\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <None Remove="Views\Controls\CollectionModsControlView.xaml" />
     <None Remove="Views\Controls\ExportModCollectionControlView.xaml" />
@@ -111,6 +128,21 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\avalonia-logo.ico" />
+    <EmbeddedResource Include="Controls\Themes\MaterialDark\ButtonSpinner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialDark\ThemeOverride.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\Dark\ThemeOverride.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\Controls\ThemeControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -210,22 +242,27 @@
     <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
   </Target>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Theme.xaml">
+    <EmbeddedResource Include="Controls\Themes\Theme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\NotificationManager.xaml">
+    <EmbeddedResource Include="Controls\Themes\NotificationManager.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\ThemeOverride.xaml">
+    <EmbeddedResource Include="Controls\Themes\Light\ThemeOverride.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Controls\ExportModCollectionControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Themes\NumericUpDown.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

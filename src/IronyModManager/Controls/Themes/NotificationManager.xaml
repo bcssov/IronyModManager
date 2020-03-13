@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
+        xmlns:controls="clr-namespace:IronyModManager.Controls.Themes;assembly=IronyModManager">
   <Style Selector="controls|NotificationManager">
     <Setter Property="Margin" Value="0 0 8 8"/>
     <Setter Property="Template">
@@ -21,7 +21,7 @@
       </ControlTemplate>
     </Setter>
   </Style>
-  
+
   <Style Selector="controls|NotificationManager:topleft /template/ ReversibleStackPanel#PART_Items">
     <Setter Property="VerticalAlignment" Value="Top"/>
     <Setter Property="HorizontalAlignment" Value="Left"/>

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -408,10 +408,10 @@ namespace IronyModManager.ViewModels.Controls
 
             EnableAllCommand = ReactiveCommand.Create(() =>
             {
-                if (Mods?.Count() > 0)
+                if (FilteredMods?.Count() > 0)
                 {
                     bool enabled = (Mods?.All(p => p.IsSelected)).GetValueOrDefault();
-                    foreach (var item in Mods)
+                    foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
                     }

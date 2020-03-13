@@ -51,8 +51,7 @@
         "Filter": "Traži modove",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
-        "Order": "Redoslijed",
-        "Actions": "Akcije"
+        "Order": "Redoslijed"
     },
     "Notifications": {
         "CollectionCreated": {

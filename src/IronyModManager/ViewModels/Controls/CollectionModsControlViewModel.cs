@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -143,13 +143,6 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the actions.
-        /// </summary>
-        /// <value>The actions.</value>
-        [StaticLocalization(LocalizationResources.Collection_Mods.Actions)]
-        public virtual string Actions { get; protected set; }
 
         /// <summary>
         /// Gets or sets the add new collection.
@@ -369,16 +362,16 @@ namespace IronyModManager.ViewModels.Controls
             switch (ModNameSortOrder.SortOrder)
             {
                 case SortOrder.Asc:
-                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name).ToObservableCollection());
+                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name).ToObservableCollection());                    
                     break;
 
                 case SortOrder.Desc:
-                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection());
+                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection());                    
                     break;
 
                 default:
                     break;
-            }
+            }            
         }
 
         /// <summary>
@@ -509,6 +502,7 @@ namespace IronyModManager.ViewModels.Controls
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
                 ApplySort();
+                SaveSelectedCollection();
                 skipModCollectionSave = false;
             }).DisposeWith(disposables);
 
@@ -617,19 +611,23 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     ApplySort();
                     SaveState();
+                    SaveSelectedCollection();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             EnableAllCommand = ReactiveCommand.Create(() =>
             {
-                if (Mods?.Count() > 0)
+                skipModCollectionSave = true;
+                if (SelectedMods?.Count() > 0)
                 {
-                    bool enabled = (SelectedMods?.All(p => p.IsSelected)).GetValueOrDefault();
                     foreach (var item in SelectedMods)
                     {
-                        item.IsSelected = !enabled;
+                        item.IsSelected = false;
                     }
+                    SelectedMods.Clear();
+                    SaveSelectedCollection();
                 }
+                skipModCollectionSave = false;
             }).DisposeWith(disposables);
 
             OpenUrlCommand = ReactiveCommand.Create(() =>

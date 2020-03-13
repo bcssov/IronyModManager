@@ -75,7 +75,6 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Order = Prefix + "Order";
-            public const string Actions = Prefix + "Actions";
         }
         public static class Notifications
         {

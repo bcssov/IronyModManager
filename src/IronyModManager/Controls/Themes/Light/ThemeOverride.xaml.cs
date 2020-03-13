@@ -1,28 +1,27 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 03-07-2020
+// Created          : 03-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
-// <copyright file="Theme.xaml.cs" company="Mario">
+// <copyright file="ThemeOverrideLight.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using IronyModManager.Shared;
 
-namespace IronyModManager.Controls
+namespace IronyModManager.Controls.Themes.Light
 {
     /// <summary>
-    /// Class Theme.
+    /// Class ThemeOverride.
     /// Implements the <see cref="Avalonia.Styling.Styles" />
     /// </summary>
     /// <seealso cref="Avalonia.Styling.Styles" />
-    [ExcludeFromCoverage("UI Elements should be tested in functional testing.")] 
-    public class Theme : Avalonia.Styling.Styles
+    [ExcludeFromCoverage("UI Elements should be tested in functional testing.")]
+    public class ThemeOverride : Avalonia.Styling.Styles
     {
     }
 }

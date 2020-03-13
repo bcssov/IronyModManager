@@ -4,16 +4,17 @@
 // Created          : 03-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="ThemeOverride.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
 using IronyModManager.Shared;
 
-namespace IronyModManager.Controls
+namespace IronyModManager.Controls.Themes.Dark
 {
     /// <summary>
     /// Class ThemeOverride.

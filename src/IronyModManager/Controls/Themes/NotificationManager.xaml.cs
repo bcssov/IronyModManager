@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="NotificationManager.xaml.cs" company="Mario">
 //     Mario
@@ -24,7 +24,7 @@ using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Controls
+namespace IronyModManager.Controls.Themes
 {
     /// <summary>
     /// Class NotificationManager.

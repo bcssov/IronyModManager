@@ -1,0 +1,9 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="IronyModManager.Controls.Themes.MaterialDark.ThemeOverride">
+  <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
+    <Setter Property="MinHeight" Value="50" />
+  </Style>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDark.ButtonSpinner.xaml?assembly=IronyModManager"/>
+</Styles>

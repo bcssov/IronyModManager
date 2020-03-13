@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Controls.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Controls;
+using IronyModManager.Controls.Themes;
 using IronyModManager.Views;
 using SimpleInjector;
 

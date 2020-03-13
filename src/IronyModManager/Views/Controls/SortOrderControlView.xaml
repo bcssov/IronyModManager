@@ -7,10 +7,13 @@
              x:Class="IronyModManager.Views.Controls.SortOrderControlView">
   <Panel>
     <Button Command="{Binding SortCommand}" Background="Transparent" BorderThickness="0" Margin="0,-5,0,0">
-      <StackPanel Orientation="Horizontal">
-        <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}" TextWrapping="Wrap"></TextBlock>
-        <TextBlock Text="{Binding SortOrderText}" Margin="5,0,0,0" Foreground="{DynamicResource IronyForegroundBrush}" TextWrapping="Wrap"></TextBlock>
-      </StackPanel>
+      <DockPanel LastChildFill="False">
+        <TextBlock Text="{Binding SortOrderText}"
+                   Foreground="{DynamicResource IronyThemeSortArrow}" TextWrapping="Wrap" 
+                   DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="UltraBold"></TextBlock>
+        <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}" Margin="5,0,0,0"
+                   TextWrapping="Wrap" DockPanel.Dock="Right" VerticalAlignment="Center"></TextBlock>
+      </DockPanel>
     </Button>
   </Panel>
 </UserControl>
