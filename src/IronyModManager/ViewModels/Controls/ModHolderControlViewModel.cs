@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-03-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,11 +13,10 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -31,29 +30,28 @@ namespace IronyModManager.ViewModels.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class ModHolderControlViewModel : BaseViewModel
     {
-        #region Fields
-
-        /// <summary>
-        /// The selected mods
-        /// </summary>
-        private IEnumerable<IMod> selectedMods;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
-        public ModHolderControlViewModel(InstalledModsControlViewModel installedModsControlViewModel)
+        /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
+        public ModHolderControlViewModel(InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel)
         {
             InstalledMods = installedModsControlViewModel;
+            CollectionMods = collectionModsControlViewModel;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the collection mods.
+        /// </summary>
+        /// <value>The collection mods.</value>
+        public virtual CollectionModsControlViewModel CollectionMods { get; protected set; }
 
         /// <summary>
         /// Gets or sets the installed mods.
@@ -71,17 +69,11 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            this.WhenAnyValue(s => s.InstalledMods.SelectedMods).Subscribe(s =>
+            this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
-                if (s != null)
-                {
-                    selectedMods = s;
-                }
-                else
-                {
-                    selectedMods = null;
-                }
-            }).DisposeWith(disposables);
+                CollectionMods.SetMods(v);
+            });
+
             base.OnActivated(disposables);
         }
 

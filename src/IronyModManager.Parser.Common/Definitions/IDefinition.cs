@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The content sha.</value>
         string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets the definition sha.
+        /// </summary>
+        /// <value>The definition sha.</value>
+        string DefinitionSHA { get; }
 
         /// <summary>
         /// Gets or sets the dependencies.

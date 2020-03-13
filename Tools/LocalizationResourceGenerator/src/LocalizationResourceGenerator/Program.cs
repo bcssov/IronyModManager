@@ -4,7 +4,7 @@
 // Created          : 02-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -96,8 +97,9 @@ namespace LocalizationResourceGenerator
 
             var obj = JObject.Parse(File.ReadAllText(LocalizationResourcePath));
 
-            static void ParseLocalization(StringBuilder sb, short indent, JProperty property)
+            static void ParseLocalization(StringBuilder sb, short indent, JProperty property, List<string> additionalPrefix)
             {
+                var origIndent = indent;
                 indent++;
                 sb.AppendLine(FormatIndentation(indent, $"public static class {property.Name}"));
                 sb.AppendLine(FormatIndentation(indent, "{"));
@@ -105,10 +107,32 @@ namespace LocalizationResourceGenerator
                 if (property.Value.Type == JTokenType.Object)
                 {
                     short propIndent = (short)(indent + 1);
-                    sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = nameof({property.Name}) + \".\";"));
+                    if (additionalPrefix?.Count > 0)
+                    {                        
+                        sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = \"{string.Join(".", additionalPrefix)}.\" + nameof({property.Name}) + \".\";"));
+                    }
+                    else
+                    {
+                        sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = nameof({property.Name}) + \".\";"));
+                    }
+                    if (additionalPrefix == null)
+                    {
+                        additionalPrefix = new List<string>();
+                    }
+                    if (origIndent == 1)
+                    {
+                        additionalPrefix.Add(property.Name);
+                    }                    
                     foreach (var item in property.Value.Children<JProperty>())
                     {
-                        ParseProperty(sb, propIndent, item);
+                        if (item.Value.Type == JTokenType.Object)
+                        {
+                            ParseLocalization(sb, indent, item, additionalPrefix);
+                        }
+                        else
+                        {
+                            ParseProperty(sb, propIndent, item);
+                        }
                     }
                 }
 
@@ -122,7 +146,7 @@ namespace LocalizationResourceGenerator
 
             foreach (var o in obj.Children<JProperty>())
             {
-                ParseLocalization(sb, indent, o);
+                ParseLocalization(sb, indent, o, null);
             }
             sb.AppendLine(FormatIndentation(indent, "}"));
             sb.AppendLine("}");

@@ -53,6 +53,63 @@ namespace IronyModManager.Shared
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Supported_Version = Prefix + "Supported_Version";
         }
+        public static class Collection_Mods
+        {
+            public const string Prefix = nameof(Collection_Mods) + ".";
+            public const string Name = Prefix + "Name";
+            public const string Remove = Prefix + "Remove";
+            public const string Create = Prefix + "Create";
+            public const string OK = Prefix + "OK";
+            public const string Cancel = Prefix + "Cancel";
+            public const string Watermark = Prefix + "Watermark";
+            public const string Delete_Title = Prefix + "Delete_Title";
+            public const string Delete_Header = Prefix + "Delete_Header";
+            public const string Delete_Message = Prefix + "Delete_Message";
+            public const string Export = Prefix + "Export";
+            public const string Import = Prefix + "Import";
+            public const string Export_Dialog_Title = Prefix + "Export_Dialog_Title";
+            public const string Import_Dialog_Title = Prefix + "Import_Dialog_Title";
+            public const string Overlay_Exporting_Message = Prefix + "Overlay_Exporting_Message";
+            public const string Overlay_Importing_Message = Prefix + "Overlay_Importing_Message";
+            public const string Filter = Prefix + "Filter";
+            public const string Selected = Prefix + "Selected";
+            public const string Mod_Name = Prefix + "Mod_Name";
+            public const string Order = Prefix + "Order";
+        }
+        public static class Notifications
+        {
+            public const string Prefix = nameof(Notifications) + ".";
+            public static class CollectionCreated
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionCreated) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionDeleted
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionDeleted) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionExists
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionExists) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionExported
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionExported) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionImported
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionImported) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+        }
         public static class Mod_Url
         {
             public const string Prefix = nameof(Mod_Url) + ".";
@@ -69,6 +126,8 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Filter) + ".";
             public const string Clear = Prefix + "Clear";
+            public const string UpArrow = Prefix + "UpArrow";
+            public const string DownArrow = Prefix + "DownArrow";
         }
     }
 }

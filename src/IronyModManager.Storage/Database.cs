@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
@@ -13,9 +13,9 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.ComponentModel;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Jot.Configuration.Attributes;
 
@@ -24,9 +24,11 @@ namespace IronyModManager.Storage
     /// <summary>
     /// Class Database.
     /// Implements the <see cref="IronyModManager.Storage.Common.IDatabase" />
+    /// Implements the <see cref="IronyModManager.Shared.PropertyChangedModelBase" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.PropertyChangedModelBase" />
     /// <seealso cref="IronyModManager.Storage.Common.IDatabase" />
-    public class Database : IDatabase
+    public class Database : PropertyChangedModelBase, IDatabase
     {
         #region Constructors
 
@@ -37,31 +39,32 @@ namespace IronyModManager.Storage
         {
             Themes = new List<IThemeType>();
             Games = new List<IGameType>();
+            ModCollection = new List<IModCollection>();
         }
 
         #endregion Constructors
 
-        #region Events
-
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Occurs when a property value is changing.
-        /// </summary>
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        #endregion Events
-
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the state of the application.
+        /// </summary>
+        /// <value>The state of the application.</value>
+        [Trackable]
+        public virtual IAppState AppState { get; set; } = DIResolver.Get<IAppState>();
 
         /// <summary>
         /// Gets or sets the games.
         /// </summary>
         /// <value>The games.</value>
-        public IList<IGameType> Games { get; set; }
+        public virtual IList<IGameType> Games { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod collection.
+        /// </summary>
+        /// <value>The mod collection.</value>
+        [Trackable]
+        public virtual IEnumerable<IModCollection> ModCollection { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.
@@ -84,27 +87,5 @@ namespace IronyModManager.Storage
         public virtual IWindowState WindowState { get; set; } = DIResolver.Get<IWindowState>();
 
         #endregion Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Called when [property changed].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        public void OnPropertyChanged(string methodName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(methodName));
-        }
-
-        /// <summary>
-        /// Called when [property changing].
-        /// </summary>
-        /// <param name="methodName">Name of the method.</param>
-        public void OnPropertyChanging(string methodName)
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(methodName));
-        }
-
-        #endregion Methods
     }
 }

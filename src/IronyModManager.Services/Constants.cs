@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -60,9 +60,14 @@ namespace IronyModManager.Services
             #region Fields
 
             /// <summary>
-            /// The irony foreground brush
+            /// The irony foreground brush key
             /// </summary>
-            public const string IronyForegroundBrush = "IronyForegroundBrush";
+            public const string IronyForegroundBrushKey = "IronyForegroundBrush";
+
+            /// <summary>
+            /// The irony theme sort arrow key
+            /// </summary>
+            public const string IronyThemeSortArrowKey = "IronyThemeSortArrow";
 
             #endregion Fields
 
@@ -86,6 +91,11 @@ namespace IronyModManager.Services
                 public const string IronyForegroundBrush = "#FFDEDEDE";
 
                 /// <summary>
+                /// The irony theme sort arrow
+                /// </summary>
+                public const string IronyThemeSortArrow = "#FFFF00";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Avalonia.Themes.Default/DefaultTheme.xaml";
@@ -94,6 +104,11 @@ namespace IronyModManager.Services
                 /// The name
                 /// </summary>
                 public const string Name = "Dark";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/Dark/ThemeOverride.xaml";
 
                 #endregion Fields
             }
@@ -116,6 +131,11 @@ namespace IronyModManager.Services
                 public const string IronyForegroundBrush = "#FF000000";
 
                 /// <summary>
+                /// The irony theme sort arrow
+                /// </summary>
+                public const string IronyThemeSortArrow = "#FF0000";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Avalonia.Themes.Default/DefaultTheme.xaml";
@@ -124,6 +144,11 @@ namespace IronyModManager.Services
                 /// The name
                 /// </summary>
                 public const string Name = "Light";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/Light/ThemeOverride.xaml";
 
                 #endregion Fields
             }
@@ -146,6 +171,11 @@ namespace IronyModManager.Services
                 public const string IronyForegroundBrush = "#D7CCC8";
 
                 /// <summary>
+                /// The irony theme sort arrow
+                /// </summary>
+                public const string IronyThemeSortArrow = "#FFFF00";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
@@ -154,6 +184,11 @@ namespace IronyModManager.Services
                 /// The name
                 /// </summary>
                 public const string Name = "MaterialDark";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.xaml";
 
                 #endregion Fields
             }
@@ -176,6 +211,11 @@ namespace IronyModManager.Services
                 public const string IronyForegroundBrush = "#FF000000";
 
                 /// <summary>
+                /// The irony theme sort arrow
+                /// </summary>
+                public const string IronyThemeSortArrow = "#FF0000";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
@@ -184,6 +224,11 @@ namespace IronyModManager.Services
                 /// The name
                 /// </summary>
                 public const string Name = "MaterialDeepPurple";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialDeepPurple/ThemeOverride.xaml";
 
                 #endregion Fields
             }
@@ -206,6 +251,11 @@ namespace IronyModManager.Services
                 public const string IronyForegroundBrush = "#FF000000";
 
                 /// <summary>
+                /// The irony theme sort arrow
+                /// </summary>
+                public const string IronyThemeSortArrow = "#FF0000";
+
+                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
@@ -214,6 +264,11 @@ namespace IronyModManager.Services
                 /// The name
                 /// </summary>
                 public const string Name = "MaterialLightGreen";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialLightGreen/ThemeOverride.xaml";
 
                 #endregion Fields
             }

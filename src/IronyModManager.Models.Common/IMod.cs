@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-12-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -30,16 +30,22 @@ namespace IronyModManager.Models.Common
         #region Properties
 
         /// <summary>
-        /// Gets the actual supported version.
+        /// Gets or sets the descriptor file.
         /// </summary>
-        /// <value>The actual supported version.</value>
-        string ActualSupportedVersion { get; }
+        /// <value>The descriptor file.</value>
+        string DescriptorFile { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        int Order { get; set; }
 
         /// <summary>
         /// Gets or sets the source.

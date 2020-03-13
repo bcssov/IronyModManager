@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-05-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -72,6 +72,19 @@ namespace IronyModManager.Storage
         #region Methods
 
         /// <summary>
+        /// Gets the state of the application.
+        /// </summary>
+        /// <returns>IAppState.</returns>
+        public IAppState GetAppState()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<IAppState, IAppState>(Database.AppState);
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Gets the games.
         /// </summary>
         /// <returns>IEnumerable&lt;IGameType&gt;.</returns>
@@ -79,7 +92,21 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                return Database.Games;
+                var result = Mapper.Map<List<IGameType>>(Database.Games);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the mod collections.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
+        public IEnumerable<IModCollection> GetModCollections()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<List<IModCollection>>(Database.ModCollection);
+                return result;
             }
         }
 
@@ -104,7 +131,8 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                return Database.Themes;
+                var result = Mapper.Map<List<IThemeType>>(Database.Themes);
+                return result;
             }
         }
 
@@ -181,6 +209,34 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Sets the state of the application.
+        /// </summary>
+        /// <param name="appState">State of the application.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetAppState(IAppState appState)
+        {
+            lock (dbLock)
+            {
+                Database.AppState = Mapper.Map<IAppState>(appState);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Sets the mod collections.
+        /// </summary>
+        /// <param name="modCollections">The mod collections.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetModCollections(IEnumerable<IModCollection> modCollections)
+        {
+            lock (dbLock)
+            {
+                Database.ModCollection = Mapper.Map<List<IModCollection>>(modCollections);
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Sets the preferences.
         /// </summary>
         /// <param name="preferences">The preferences.</param>
@@ -189,7 +245,7 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                Database.Preferences = preferences;
+                Database.Preferences = Mapper.Map<IPreferences>(preferences);
                 return true;
             }
         }
@@ -203,7 +259,7 @@ namespace IronyModManager.Storage
         {
             lock (dbLock)
             {
-                Database.WindowState = state;
+                Database.WindowState = Mapper.Map<IWindowState>(state);
                 return true;
             }
         }

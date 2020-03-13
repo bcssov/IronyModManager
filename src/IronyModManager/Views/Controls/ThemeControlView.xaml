@@ -9,14 +9,14 @@
     <StackPanel Orientation="Horizontal">
       <TextBlock Text="{Binding ThemeText}" HorizontalAlignment="Left" VerticalAlignment="Center"
                  Margin="0,0,10,0"></TextBlock>
-      <DropDown Items="{Binding Themes}" SelectedItem="{Binding SelectedTheme}"
+      <ComboBox Items="{Binding Themes}" SelectedItem="{Binding SelectedTheme}"
                 MinHeight="25" MinWidth="80" HorizontalAlignment="Right" Margin="0,0,10,0">
-        <DropDown.ItemTemplate>
+        <ComboBox.ItemTemplate>
           <DataTemplate>
-            <DropDownItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></DropDownItem>
+            <ComboBoxItem IsSelected="{Binding IsSelected}" Content="{Binding Name}"></ComboBoxItem>
           </DataTemplate>
-        </DropDown.ItemTemplate>
-      </DropDown>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
     </StackPanel>
   </Panel>
 </UserControl>

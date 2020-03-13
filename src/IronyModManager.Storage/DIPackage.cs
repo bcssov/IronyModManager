@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.ComponentModel;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
-using SimpleInjector;
 using SimpleInjector.Packaging;
 using Container = SimpleInjector.Container;
 
@@ -57,11 +56,8 @@ namespace IronyModManager.Storage
             tracker.Configure<Database>().PersistOn(PropChanged);
             container.RegisterInitializer(d =>
             {
-                if (d.Instance is IDatabase)
-                {
-                    tracker.Track(d.Instance);
-                }
-            }, ctx => ctx.Registration.Lifestyle == Lifestyle.Singleton);
+                tracker.Track(d.Instance);
+            }, ctx => ctx.Registration.ImplementationType == typeof(Database));
 
             container.Register<IStorageProvider, Storage>();
         }

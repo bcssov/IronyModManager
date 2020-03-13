@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -97,21 +97,18 @@ namespace IronyModManager.ViewModels.Controls
         {
             Bind();
 
-            var changed = this.WhenAnyValue(p => p.SelectedTheme).Subscribe(p =>
+            var changed = this.WhenAnyValue(p => p.SelectedTheme).Where(p => p != null && Themes?.Count() > 0).Subscribe(p =>
             {
-                if (Themes?.Count() > 0 && p != null)
+                if (themeService.SetSelected(Themes, p))
                 {
-                    if (themeService.SetSelected(Themes, p))
+                    if (previousTheme != p)
                     {
-                        if (previousTheme != p)
+                        var args = new ThemeChangedEventArgs()
                         {
-                            var args = new ThemeChangedEventArgs()
-                            {
-                                Theme = p
-                            };
-                            MessageBus.Current.SendMessage(args);
-                            previousTheme = p;
-                        }
+                            Theme = p
+                        };
+                        MessageBus.Current.SendMessage(args);
+                        previousTheme = p;
                     }
                 }
             }).DisposeWith(disposables);

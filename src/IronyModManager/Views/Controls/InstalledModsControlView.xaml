@@ -14,33 +14,36 @@
          ConverterParameter=x-50}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x/2.2}">
+         ConverterParameter=x/2.05}">
     <Grid IsSharedSizeScope="True">
       <DockPanel LastChildFill="True">
         <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
-        <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0"></ContentControl>
-        <Grid DockPanel.Dock="Top" ColumnDefinitions="70,*,120" Margin="0,10,0,0">
-          <Border BorderThickness="1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+        <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0" MaxHeight="30"></ContentControl>
+        <Grid DockPanel.Dock="Top" ColumnDefinitions="1*,2*,5*,3*" Margin="0,10,0,0">
+          <Border BorderThickness="1,1,0,1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+            <CheckBox IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}" HorizontalAlignment="Center"></CheckBox>
+          </Border>
+          <Border BorderThickness="0,1,1,1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
           </Border>
-          <Border BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+          <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
           </Border>
-          <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+          <Border BorderThickness="1" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
         <ListBox Items="{Binding FilteredMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="70,*,120">
+              <Grid ColumnDefinitions="1*,2*,5*,3*">
                 <Grid.ContextMenu>
                   <ContextMenu>
                   </ContextMenu>
                 </Grid.ContextMenu>
-                <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0"></CheckBox>
-                <TextBlock Text="{Binding Name}" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
-                <TextBlock Text="{Binding ActualSupportedVersion}" Grid.Column="2" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
+                <TextBlock Text="{Binding Version}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>

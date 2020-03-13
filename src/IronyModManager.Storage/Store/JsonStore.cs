@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -12,10 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Castle.DynamicProxy;
+using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Store;
 using Jot.Storage;
@@ -78,9 +81,7 @@ namespace IronyModManager.Storage
                     var fileContents = File.ReadAllText(filePath);
                     storeItems = JsonConvert.DeserializeObject<List<StoreItem>>(fileContents, new StoreConverter());
                 }
-                catch
-                {
-                }
+                catch { }
             }
 
             if (storeItems == null)
@@ -97,7 +98,7 @@ namespace IronyModManager.Storage
         public void SetData(string id, IDictionary<string, object> values)
         {
             string filePath = GetfilePath(id);
-            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value.GetType()) });
+            var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
             string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
@@ -130,16 +131,32 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Formats the name of the type.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="instance">The instance.</param>
         /// <returns>System.String.</returns>
-        private string FormatTypeName(Type type)
-        {
-            var name = type.Name.Replace(Shared.Constants.ProxyIdentifier, string.Empty);
-            if (!name.StartsWith("I"))
+        private string FormatTypeName(object instance)
+        {            
+            Type type;
+            if (instance is IProxyTargetAccessor proxy)
             {
-                return $"I{name}";
+                type = proxy.DynProxyGetTarget().GetType();
             }
-            return name;
+            else
+            {
+                type = instance.GetType();
+            }
+            if (typeof(IPropertyChangedModel).IsAssignableFrom(type))
+            {
+                var name = type.FullName;
+                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                return string.Join(Store.Constants.Dot, names);
+            }
+            else if (typeof(IEnumerable<IPropertyChangedModel>).IsAssignableFrom(type))
+            {
+                var name = type.GetGenericArguments().SingleOrDefault().FullName;
+                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
+            }
+            return type.FullName;
         }
 
         /// <summary>
@@ -149,7 +166,7 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetfilePath(string id)
         {
-            return Path.Combine(RootPath, $"{id}{Constants.JsonExtension}");
+            return Path.Combine(RootPath, $"{id}{Shared.Constants.JsonExtension}");
         }
 
         #endregion Methods

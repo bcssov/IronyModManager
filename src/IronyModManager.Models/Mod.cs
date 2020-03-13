@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-12-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -29,16 +29,16 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
-        /// Gets the actual supported version.
-        /// </summary>
-        /// <value>The actual supported version.</value>
-        public string ActualSupportedVersion => !string.IsNullOrWhiteSpace(SupportedVersion) ? SupportedVersion : Version;
-
-        /// <summary>
         /// Gets or sets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
         public virtual IEnumerable<string> Dependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets the descriptor file.
+        /// </summary>
+        /// <value>The descriptor file.</value>
+        public virtual string DescriptorFile { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the file.
@@ -57,6 +57,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        public virtual int Order { get; set; }
 
         /// <summary>
         /// Gets or sets the picture.

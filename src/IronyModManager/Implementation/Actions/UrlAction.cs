@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-07-2020
 // ***********************************************************************
 // <copyright file="UrlAction.cs" company="Mario">
 //     Mario
@@ -18,14 +18,16 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
+using IronyModManager.Shared;
 
-namespace IronyModManager.Implementation.MenuActions
+namespace IronyModManager.Implementation.Actions
 {
     /// <summary>
     /// Class UrlActions.
-    /// Implements the <see cref="IronyModManager.Implementation.MenuActions.IUrlAction" />
+    /// Implements the <see cref="IronyModManager.Implementation.Actions.IUrlAction" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Implementation.MenuActions.IUrlAction" />
+    /// <seealso cref="IronyModManager.Implementation.Actions.IUrlAction" />
+    [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class UrlAction : IUrlAction
     {
         #region Methods

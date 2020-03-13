@@ -53,7 +53,7 @@
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.0" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 

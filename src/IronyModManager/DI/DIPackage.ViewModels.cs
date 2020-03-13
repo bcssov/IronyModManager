@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -45,6 +45,9 @@ namespace IronyModManager.DI
             container.RegisterLocalization<SortOrderControlViewModel>();
             container.RegisterLocalization<ModHolderControlViewModel>();
             container.RegisterLocalization<SearchModsControlViewModel>();
+            container.RegisterLocalization<CollectionModsControlViewModel>();
+            container.RegisterLocalization<AddNewCollectionControlViewModel>();
+            container.RegisterLocalization<ExportModCollectionControlViewModel>();
         }
 
         #endregion Methods

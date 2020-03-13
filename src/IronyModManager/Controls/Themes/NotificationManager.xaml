@@ -1,0 +1,46 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:IronyModManager.Controls.Themes;assembly=IronyModManager">
+  <Style Selector="controls|NotificationManager">
+    <Setter Property="Margin" Value="0 0 8 8"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ReversibleStackPanel Name="PART_Items">
+          <ReversibleStackPanel.DataTemplates>
+            <DataTemplate DataType="INotification">
+              <StackPanel Spacing="8" Margin="12">
+                <TextBlock Text="{Binding Title}" FontWeight="Medium" />
+                <TextBlock MaxHeight="80" Text="{Binding Message}" TextWrapping="Wrap" Margin="0,0,12,0"/>
+              </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="x:String">
+              <TextBlock Text="{Binding }" Margin="12" />
+            </DataTemplate>
+          </ReversibleStackPanel.DataTemplates>
+        </ReversibleStackPanel>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="controls|NotificationManager:topleft /template/ ReversibleStackPanel#PART_Items">
+    <Setter Property="VerticalAlignment" Value="Top"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+  </Style>
+
+  <Style Selector="controls|NotificationManager:topright /template/ ReversibleStackPanel#PART_Items">
+    <Setter Property="VerticalAlignment" Value="Top"/>
+    <Setter Property="HorizontalAlignment" Value="Right"/>
+  </Style>
+
+  <Style Selector="controls|NotificationManager:bottomleft /template/ ReversibleStackPanel#PART_Items">
+    <Setter Property="ReverseOrder" Value="True"/>
+    <Setter Property="VerticalAlignment" Value="Bottom"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+  </Style>
+
+  <Style Selector="controls|NotificationManager:bottomright /template/ ReversibleStackPanel#PART_Items">
+    <Setter Property="ReverseOrder" Value="True"/>
+    <Setter Property="VerticalAlignment" Value="Bottom"/>
+    <Setter Property="HorizontalAlignment" Value="Right"/>
+  </Style>
+</Styles>

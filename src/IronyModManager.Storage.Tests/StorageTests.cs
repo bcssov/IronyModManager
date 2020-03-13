@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -51,6 +51,21 @@ namespace IronyModManager.Storage.Tests
             pref.Locale.Should().Be(GetDbMock().Preferences.Locale);
         }
 
+        /// <summary>
+        /// Defines the test method Should_return_same_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IAppState, IAppState>(It.IsAny<IAppState>())).Returns(dbMock.AppState);
+            var storage = new Storage(dbMock, mapper.Object);
+            var state = storage.GetAppState();
+            state.CollectionModsSearchTerm.Should().Be(GetDbMock().AppState.CollectionModsSearchTerm);
+        }
+
 
         /// <summary>
         /// Defines the test method Should_return_same_window_state_object.
@@ -77,10 +92,33 @@ namespace IronyModManager.Storage.Tests
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
+            {
+                return dbMock.Themes.ToList();
+            });
             var storage = new Storage(dbMock, mapper.Object);
             var themes = storage.GetThemes();
             themes.Count().Should().Be(1);
             themes.FirstOrDefault().Name.Should().Be("test");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_same_mod_collection_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_mod_collection_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IModCollection>>(It.IsAny<IEnumerable<IModCollection>>())).Returns(() =>
+            {
+                return dbMock.ModCollection.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetModCollections();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Name.Should().Be("fake");
         }
 
         /// <summary>
@@ -92,6 +130,10 @@ namespace IronyModManager.Storage.Tests
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
             var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IGameType>>(It.IsAny<IEnumerable<IGameType>>())).Returns(() =>
+            {
+                return dbMock.Games.ToList();
+            });
             var storage = new Storage(dbMock, mapper.Object);
             var result = storage.GetGames();
             result.Count().Should().Be(1);
@@ -110,9 +152,42 @@ namespace IronyModManager.Storage.Tests
             {
                 Locale = "test2"
             };
-            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IPreferences>(It.IsAny<IPreferences>())).Returns((IPreferences s) =>
+            {
+                return new Preferences()
+                {
+                    Locale = s.Locale
+                };
+            });
+            var storage = new Storage(dbMock, mapper.Object);
             storage.SetPreferences(newPref);
-            dbMock.Preferences.Should().Be(newPref);
+            dbMock.Preferences.Locale.Should().Be(newPref.Locale);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var state = new AppState()
+            {
+                CollectionModsSearchTerm = "test2"
+            };
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IAppState>(It.IsAny<IAppState>())).Returns((IAppState s) =>
+            {
+                return new AppState()
+                {
+                    CollectionModsSearchTerm = s.CollectionModsSearchTerm
+                };
+            });
+            var storage = new Storage(dbMock, mapper.Object);            
+            var result = storage.SetAppState(state);
+            dbMock.AppState.CollectionModsSearchTerm.Should().Be(state.CollectionModsSearchTerm);
         }
 
 
@@ -145,7 +220,7 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var key = "test2";            
+            var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             storage.RegisterGame(key, 1, "user_directory", "workshop1");
             dbMock.Games.Count.Should().Be(2);
@@ -167,9 +242,43 @@ namespace IronyModManager.Storage.Tests
             {
                 Height = 300
             };
-            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IWindowState>(It.IsAny<IWindowState>())).Returns((IWindowState s) =>
+            {
+                return new WindowState()
+                {
+                    Height = s.Height
+                };
+            });
+            var storage = new Storage(dbMock, mapper.Object);
             storage.SetWindowState(state);
-            dbMock.WindowState.Should().Be(state);
+            dbMock.WindowState.Height.Should().Be(state.Height);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_modcollection_objects.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_modcollection_objects()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var col = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    Name = "fake2"
+                }
+            };
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<IEnumerable<IModCollection>>(It.IsAny<IEnumerable<IModCollection>>())).Returns((IEnumerable<IModCollection> s) =>
+            {
+                return s;
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            storage.SetModCollections(col);
+            dbMock.ModCollection.Count().Should().Be(1);
+            dbMock.ModCollection.First().Name.Should().Be(col.First().Name);
         }
 
         /// <summary>
@@ -190,6 +299,44 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_app_state_object.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_app_state_object()
+        {
+            DISetup.SetupContainer();
+            var newState = new AppState()
+            {
+                CollectionModsSearchTerm = "test2"
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetAppState(newState);
+            var state = storage.GetAppState();
+            state.CollectionModsSearchTerm.Should().Be(newState.CollectionModsSearchTerm);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_mod_collection_objects.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_mod_collection_objects()
+        {
+            DISetup.SetupContainer();
+            var col = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    Name = "fake2"
+                }
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetModCollections(col);
+            var result = storage.GetModCollections();
+            result.Count().Should().Be(1);
+            result.First().Name.Should().Be(col.First().Name);
+        }
+
+        /// <summary>
         /// Defines the test method Should_add_and_return_added_theme.
         /// </summary>
         [Fact]
@@ -199,8 +346,13 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var newThemeKey = "test2";
             var newThemeUris = new List<string>() { "4", "5" };
-            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
             var brushes = new Dictionary<string, string>() { { "IronyForegroundColor", "#FF000000" } };
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
+            {
+               return dbMock.Themes.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
             storage.RegisterTheme(newThemeKey, newThemeUris, brushes);
             var themes = storage.GetThemes();
             themes.Count().Should().Be(2);
@@ -218,8 +370,13 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var key = "test2";            
-            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            var key = "test2";
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IGameType>>(It.IsAny<IEnumerable<IGameType>>())).Returns(() =>
+            {
+               return dbMock.Games.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
             storage.RegisterGame(key, 1, "user_directory", "workshop1");
             var result = storage.GetGames();
             result.Count().Should().Be(2);
@@ -268,6 +425,17 @@ namespace IronyModManager.Storage.Tests
                     new GameType()
                     {
                         Name = "test"
+                    }
+                },
+                AppState = new AppState()
+                {
+                    CollectionModsSearchTerm = "test"
+                },
+                ModCollection = new List<IModCollection>()
+                {
+                    new ModCollection()
+                    {
+                        Name = "fake"
                     }
                 }
             };

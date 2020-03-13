@@ -1,0 +1,112 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             MinWidth="200"
+             x:Class="IronyModManager.Views.Controls.CollectionModsControlView"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls.Themes;assembly=IronyModManager">
+  <UserControl.Resources>
+    <converter:MathConverter x:Key="MathConverter" />
+  </UserControl.Resources>
+  <Panel Height="{Binding $parent[Window].Height, 
+         Converter={StaticResource MathConverter} 
+         ConverterParameter=x-50}"
+         Width="{Binding $parent[Window].Width, 
+         Converter={StaticResource MathConverter} 
+         ConverterParameter=x/2.05}">
+    <Grid IsSharedSizeScope="True">
+      <DockPanel LastChildFill="True">
+        <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
+        <Panel IsVisible="{Binding !EnteringNewCollection}" HorizontalAlignment="Stretch"
+               VerticalAlignment="Top" DockPanel.Dock="Top">
+          <Grid DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="{Binding $parent[Window].Width, 
+                             Converter={StaticResource MathConverter} 
+                             ConverterParameter=x/4.2}"></ColumnDefinition>
+              <ColumnDefinition Width="{Binding $parent[Window].Width, 
+                             Converter={StaticResource MathConverter} 
+                             ConverterParameter=x/4.2}"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="40"></RowDefinition>
+              <RowDefinition Height="50"></RowDefinition>
+              <RowDefinition Height="30"></RowDefinition>
+              <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Panel Grid.Column="1" Grid.Row="0" Margin="0,0,0,-10"
+                   Width="{Binding $parent[Window].Width, 
+                           Converter={StaticResource MathConverter} 
+                           ConverterParameter=(x/4.2)}">
+              <ContentControl Content="{Binding ExportCollection}"></ContentControl>
+            </Panel>
+            <Panel Grid.Column="0" Grid.Row="1">
+              <DockPanel LastChildFill="True">
+                <ContentControl Content="{Binding SearchMods}" MaxHeight="30"></ContentControl>
+              </DockPanel>
+            </Panel>
+            <Panel Grid.Column="1" Grid.Row="1">
+              <DockPanel HorizontalAlignment="Right">
+                <Button Content="{Binding Remove}" MaxHeight="30"
+                Command="{Binding RemoveCommand}" Margin="10,0,0,0" Width="30"></Button>
+                <!-- For the love of God I can't force this piece of shit to set its width properly -->
+                <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
+                          MaxHeight="30" Margin="10"
+                          Width="{Binding $parent[Window].Width, 
+                           Converter={StaticResource MathConverter} 
+                           ConverterParameter=(x/4.2)-90}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button Content="{Binding Create}" MaxHeight="30"
+                        Command="{Binding CreateCommand}" Margin="0,0,10,0" Width="30"></Button>
+              </DockPanel>
+            </Panel>
+            <Grid ColumnDefinitions="1*,2*,2*,5*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+              <Border BorderThickness="1,1,0,1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+                <CheckBox IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}" HorizontalAlignment="Center"></CheckBox>
+              </Border>
+              <Border BorderThickness="0,1,1,1" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+                <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center"></TextBlock>
+              </Border>
+              <Border BorderThickness="1" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+                <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center"></TextBlock>
+              </Border>
+              <Border BorderThickness="1" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+                <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
+              </Border>
+            </Grid>
+            <controls:DragDropListBox Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     x:Name="modList" Grid.Row="3" Grid.ColumnSpan="2"
+                      Height="{Binding $parent[Window].Height, 
+                       Converter={StaticResource MathConverter} 
+                       ConverterParameter=x-230}" SelectedItem="{Binding SelectedMod}">
+              <controls:DragDropListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="1*,2*,2*,5*">
+                    <Grid.ContextMenu>
+                      <ContextMenu>
+                      </ContextMenu>
+                    </Grid.ContextMenu>
+                    <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
+                                            Grid.Column="2" MaxHeight="40"></controls:MinMaxNumericUpDown>
+                    <TextBlock Text="{Binding Name}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                  </Grid>
+                </DataTemplate>
+              </controls:DragDropListBox.ItemTemplate>
+            </controls:DragDropListBox>          
+        </Grid>
+        </Panel>
+        <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
+          <ContentControl Content="{Binding AddNewCollection}"></ContentControl>
+        </Panel>
+      </DockPanel>
+    </Grid>
+  </Panel>
+</UserControl>

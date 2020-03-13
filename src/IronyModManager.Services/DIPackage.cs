@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -42,6 +42,8 @@ namespace IronyModManager.Services
             container.Register<IWindowStateService, WindowStateService>();
             container.Register<IGameService, GameService>();
             container.Register<IModService, ModService>();
+            container.Register<IAppStateService, AppStateService>();
+            container.Register<IModCollectionService, ModCollectionService>();
         }
 
         #endregion Methods

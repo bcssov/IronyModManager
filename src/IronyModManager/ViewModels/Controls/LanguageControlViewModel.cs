@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-08-2020
 // ***********************************************************************
 // <copyright file="LanguageControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
@@ -98,25 +99,22 @@ namespace IronyModManager.ViewModels.Controls
 
             previousLanguage = SelectedLanguage = Languages.FirstOrDefault(p => p.IsSelected);
 
-            var lanuageChanged = this.WhenAnyValue(p => p.SelectedLanguage).Subscribe(p =>
-            {
-                if (Languages?.Count() > 0 && p != null)
-                {
-                    if (languageService.SetSelected(Languages, p))
-                    {
-                        if (previousLanguage != p)
-                        {
-                            var args = new LocaleChangedEventArgs()
-                            {
-                                Locale = p.Abrv,
-                                OldLocale = previousLanguage.Abrv
-                            };
-                            MessageBus.Current.SendMessage(args);
-                            previousLanguage = p;
-                        }
-                    }
-                }
-            }).DisposeWith(disposables);
+            var lanuageChanged = this.WhenAnyValue(p => p.SelectedLanguage).Where(p => p != null && Languages?.Count() > 0).Subscribe(p =>
+             {
+                 if (languageService.SetSelected(Languages, p))
+                 {
+                     if (previousLanguage != p)
+                     {
+                         var args = new LocaleChangedEventArgs()
+                         {
+                             Locale = p.Abrv,
+                             OldLocale = previousLanguage.Abrv
+                         };
+                         MessageBus.Current.SendMessage(args);
+                         previousLanguage = p;
+                     }
+                 }
+             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

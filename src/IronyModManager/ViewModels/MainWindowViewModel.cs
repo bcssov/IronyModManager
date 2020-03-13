@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-10-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -13,10 +13,13 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Reactive.Disposables;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using System.Linq;
 using IronyModManager.Shared;
+using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
@@ -48,6 +51,38 @@ namespace IronyModManager.ViewModels
         /// <value>The language selector.</value>
         public virtual MainControlViewModel Main { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the overlay message.
+        /// </summary>
+        /// <value>The overlay message.</value>
+        public virtual string OverlayMessage { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [overlay visible].
+        /// </summary>
+        /// <value><c>true</c> if [overlay visible]; otherwise, <c>false</c>.</value>
+        public virtual bool OverlayVisible { get; protected set; }
+
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            MessageBus.Current.Listen<OverlayEventArgs>()
+                .Subscribe(s =>
+                {
+                    OverlayMessage = s.Message;
+                    OverlayVisible = s.IsVisible;
+                }).DisposeWith(disposables);
+
+            base.OnActivated(disposables);
+        }
+
+        #endregion Methods
     }
 }

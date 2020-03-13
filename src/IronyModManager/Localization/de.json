@@ -32,6 +32,49 @@
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version"
     },
+    "Collection_Mods": {
+        "Name": "Sammlung Mods",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "In Ordnung",
+        "Cancel": "Stornieren",
+        "Watermark": "Geben Sie den neuen Sammlungsnamen ein",
+        "Delete_Title": "Sammlung löschen?",
+        "Delete_Header": "Bestätigen Sie das Löschen der Sammlung",
+        "Delete_Message": "Möchten Sie die {CollectionName}-Sammlung wirklich löschen?",
+        "Export": "Export",
+        "Import": "Importieren",
+        "Export_Dialog_Title": "Sammlung exportieren",
+        "Import_Dialog_Title": "Sammlung importieren",
+        "Overlay_Exporting_Message": "Bitte warten Sie beim Exportieren einer Mod-Sammlung...",
+        "Overlay_Importing_Message": "Bitte warten Sie beim Importieren einer Mod-Sammlung...",
+        "Filter": "Suchmods",
+        "Selected": "Ausgewählt",
+        "Mod_Name": "Mod Name",
+        "Order": "Bestellen"
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Sammlung erstellt",
+            "Message": "{CollectionName} wurde erstellt."
+        },
+        "CollectionDeleted": {
+            "Title": "Sammlung gelöscht",
+            "Message": "{CollectionName} wurde gelöscht."
+        },
+        "CollectionExists": {
+            "Title": "Sammlung existiert",
+            "Message": "{CollectionName} existiert bereits."
+        },
+        "CollectionExported": {
+            "Title": "Sammlung exportiert",
+            "Message": "{CollectionName} wurde exportiert."
+        },
+        "CollectionImported": {
+            "Title": "Sammlung importiert",
+            "Message": "{CollectionName} wurde importiert."
+        }
+    },
     "Mod_Url": {
         "Open": "Öffnen Sie die Mod-URL",
         "Copy": "Kopieren Sie die Mod-URL"
@@ -41,6 +84,8 @@
         "Sort_Z_A": "↓"
     },
     "Filter": {
-        "Clear": "X"
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
     }
 }

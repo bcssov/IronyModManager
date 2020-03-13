@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Common;
-using IronyModManager.Implementation.MenuActions;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Log;
 using IronyModManager.Shared;
@@ -43,6 +43,8 @@ namespace IronyModManager.DI
             container.Collection.Register<ILocalizationResourceProvider>(typeof(LocalizationResourceProvider));
             container.Register<IDefaultLocalizationResourceProvider, LocalizationResourceProvider>();
             container.Register<IUrlAction, UrlAction>();
+            container.Register<INotificationAction, NotificationAction>();
+            container.Register<IFileDialogAction, FileDialogAction>();
         }
 
         #endregion Methods

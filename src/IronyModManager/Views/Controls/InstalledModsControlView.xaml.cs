@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-13-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -57,27 +57,26 @@ namespace IronyModManager.Views.Controls
             {
                 modList.PointerMoved += (sender, args) =>
                 {
-                    var vm = DataContext as InstalledModsControlViewModel;
                     var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                     if (hoveredItem != null)
                     {
                         var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                         if (grid != null)
                         {
-                            vm.HoveredMod = hoveredItem.Content as IMod;
-                            if (!string.IsNullOrEmpty(vm.GetHoveredModUrl()))
+                            ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                             {
                                 var menuItems = new List<MenuItem>()
                                 {
                                     new MenuItem()
                                     {
-                                        Header = vm.OpenUrl,
-                                        Command = vm.OpenUrlCommand
+                                        Header = ViewModel.OpenUrl,
+                                        Command = ViewModel.OpenUrlCommand
                                     },
                                     new MenuItem()
                                     {
-                                        Header = vm.CopyUrl,
-                                        Command = vm.CopyUrlCommand
+                                        Header = ViewModel.CopyUrl,
+                                        Command = ViewModel.CopyUrlCommand
                                     }
                                 };
                                 grid.ContextMenu.Items = menuItems;

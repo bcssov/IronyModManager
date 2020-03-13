@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-09-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -27,7 +27,7 @@ namespace IronyModManager.IO
     /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
-    [ExcludeFromCoverage("Shloud be covered by Unit tests from source project.")]
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ArchiveFileReader : IFileReader
     {
         #region Methods
@@ -39,7 +39,7 @@ namespace IronyModManager.IO
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public bool CanRead(string path)
         {
-            return File.Exists(path) && path.EndsWith(Common.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
+            return File.Exists(path) && path.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

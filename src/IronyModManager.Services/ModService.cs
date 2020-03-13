@@ -54,7 +54,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The mod parser
         /// </summary>
-        private IModParser modParser;
+        private readonly IModParser modParser;
 
         #endregion Fields
 
@@ -86,17 +86,12 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         public string BuildModUrl(IMod mod)
         {
-            switch (mod.Source)
+            return mod.Source switch
             {
-                case ModSource.Steam:
-                    return string.Format(Constants.Steam_Url, mod.RemoteId);
-
-                case ModSource.Paradox:
-                    return string.Format(Constants.Paradox_Url, mod.RemoteId);
-
-                default:
-                    return string.Empty;
-            }
+                ModSource.Steam => string.Format(Constants.Steam_Url, mod.RemoteId),
+                ModSource.Paradox => string.Format(Constants.Paradox_Url, mod.RemoteId),
+                _ => string.Empty,
+            };
         }
 
         /// <summary>
@@ -118,6 +113,7 @@ namespace IronyModManager.Services
                 foreach (var installedMod in installedMods)
                 {
                     var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
                     mod.Source = GetModSource(installedMod);
                     if (mod.Source == ModSource.Paradox)
                     {

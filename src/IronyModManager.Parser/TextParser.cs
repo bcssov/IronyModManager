@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-04-2020
 // ***********************************************************************
 // <copyright file="TextParser.cs" company="Mario">
 //     Mario
@@ -94,6 +94,10 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string CleanWhitespace(string line)
         {
+            if (string.IsNullOrEmpty(line))
+            {
+                return string.Empty;
+            }
             var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
             foreach (var item in cleanerConversionMap)
             {

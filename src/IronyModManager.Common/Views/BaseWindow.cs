@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-05-2020
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using IronyModManager.Common.ViewModels;
@@ -30,6 +31,15 @@ namespace IronyModManager.Common.Views
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public abstract class BaseWindow<TViewModel> : ReactiveWindow<TViewModel> where TViewModel : BaseViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// The is activated property
+        /// </summary>
+        public static readonly StyledProperty<bool> IsActivatedProperty = AvaloniaProperty.Register<BaseWindow<TViewModel>, bool>(nameof(IsActivated), true);
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -42,8 +52,8 @@ namespace IronyModManager.Common.Views
                 this.WhenActivated(disposables =>
                 {
                     Disposables = disposables;
-                    IsActivated = true;
                     OnActivated(disposables);
+                    IsActivated = true;
                 });
             }
         }
@@ -56,7 +66,11 @@ namespace IronyModManager.Common.Views
         /// Gets or sets a value indicating whether this instance is activated.
         /// </summary>
         /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
-        public bool IsActivated { get; protected set; }
+        public bool IsActivated
+        {
+            get => GetValue(IsActivatedProperty);
+            protected set => SetValue(IsActivatedProperty, value);
+        }
 
         /// <summary>
         /// Gets the disposables.

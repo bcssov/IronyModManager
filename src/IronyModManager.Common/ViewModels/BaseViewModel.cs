@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-10-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -34,6 +34,16 @@ namespace IronyModManager.Common.ViewModels
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public abstract class BaseViewModel : ReactiveObject, IViewModel, IActivatableViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is activated.
+        /// </summary>
+        /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
+        private bool isActivated;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -44,9 +54,9 @@ namespace IronyModManager.Common.ViewModels
             Activator = DIResolver.Get<ViewModelActivator>();
             this.WhenActivated((CompositeDisposable disposables) =>
             {
-                IsActivated = true;
                 Disposables = disposables;
                 OnActivated(disposables);
+                IsActivated = true;
             });
         }
 
@@ -70,7 +80,11 @@ namespace IronyModManager.Common.ViewModels
         /// Gets or sets a value indicating whether this instance is activated.
         /// </summary>
         /// <value><c>true</c> if this instance is activated; otherwise, <c>false</c>.</value>
-        public bool IsActivated { get; protected set; }
+        public bool IsActivated
+        {
+            get => isActivated;
+            protected set => this.RaiseAndSetIfChanged(ref isActivated, value);
+        }
 
         /// <summary>
         /// Gets the disposables.
@@ -119,12 +133,12 @@ namespace IronyModManager.Common.ViewModels
                 .Subscribe(x =>
                 {
                     OnLocaleChanged(x.Locale, x.OldLocale);
-                });
+                }).DisposeWith(disposables);
             MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
                 .Subscribe(t =>
                 {
                     OnSelectedGameChanged(t.Game);
-                });
+                }).DisposeWith(disposables);
         }
 
         /// <summary>
@@ -133,6 +147,21 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="game">The game.</param>
         protected virtual void OnSelectedGameChanged(IGame game)
         {
+        }
+
+        /// <summary>
+        /// Triggers the overlay.
+        /// </summary>
+        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+        /// <param name="message">The message.</param>
+        protected virtual void TriggerOverlay(bool isVisible, string message = Shared.Constants.EmptyParam)
+        {
+            var args = new OverlayEventArgs()
+            {
+                IsVisible = isVisible,
+                Message = message
+            };
+            MessageBus.Current.SendMessage(args);
         }
 
         #endregion Methods
