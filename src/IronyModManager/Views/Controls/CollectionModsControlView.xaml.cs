@@ -39,11 +39,6 @@ namespace IronyModManager.Views.Controls
         private const string OrderName = "order";
 
         /// <summary>
-        /// The focus handled
-        /// </summary>
-        private bool focusHandled = false;
-
-        /// <summary>
         /// The mod list
         /// </summary>
         private ListBox modList;
@@ -69,7 +64,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual async Task FocusOrderTextboxAsync()
         {
-            await Task.Delay(500);
+            await Task.Delay(100);
             var vm = DataContext as CollectionModsControlViewModel;
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
             if (vm.SelectedMod != null)
@@ -87,7 +82,6 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             }
-            focusHandled = false;
         }
 
         /// <summary>
@@ -149,6 +143,10 @@ namespace IronyModManager.Views.Controls
         {
             if (modList != null)
             {
+                ViewModel.ModReordered += (args) =>
+                {
+                    FocusOrderTextboxAsync().ConfigureAwait(true);
+                };
                 modList.LayoutUpdated += (sender, args) =>
                 {
                     var vm = DataContext as CollectionModsControlViewModel;
@@ -165,14 +163,6 @@ namespace IronyModManager.Views.Controls
                                 var mod = item.Content as IMod;
                                 orderCtrl.Minimum = 1;
                                 orderCtrl.Maximum = items.Count();
-                                orderCtrl.ValueChanged += (sender, args) =>
-                                {
-                                    if (!focusHandled)
-                                    {
-                                        focusHandled = true;
-                                        FocusOrderTextboxAsync().ConfigureAwait(true);
-                                    }
-                                };
                             }
                         }
                     }

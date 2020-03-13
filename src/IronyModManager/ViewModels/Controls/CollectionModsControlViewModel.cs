@@ -45,6 +45,17 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// Delegate ModReorderedDelegate
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        public delegate void ModReorderedDelegate(IMod mod);
+
+        /// <summary>
+        /// Occurs when [mod reordered].
+        /// </summary>
+        public event ModReorderedDelegate ModReordered;
+
+        /// <summary>
         /// The mod name key
         /// </summary>
         private const string ModNameKey = "modName";
@@ -534,8 +545,8 @@ namespace IronyModManager.ViewModels.Controls
 
                         case CommandState.Exists:
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Title);
-                            var existsMssage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
-                            notificationAction.ShowNotification(existsTitle, existsMssage, NotificationType.Warning);
+                            var existsMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExists.Message), notification);
+                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Warning);
                             break;
 
                         case CommandState.NotExecuted:
@@ -707,6 +718,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 SaveState();
             }
+            ModReordered?.Invoke(mod);
             reorderToken = null;
         }
 
