@@ -61,7 +61,7 @@ namespace IronyModManager.Parser.Tests
             result.Tags.Count().Should().Be(2);
             result.Tags.First().Should().Be("Gameplay");
             result.Tags.Last().Should().Be("Fixes");
-            result.Version.Should().Be("version");
+            result.Version.Should().Be("2.5.*");
         }
 
         /// <summary>
