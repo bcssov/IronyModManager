@@ -1,5 +1,5 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-         xmlns:controls="clr-namespace:IronyModManager.Controls.Themes;assembly=IronyModManager">
+         xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
   <Style Selector="controls|MinMaxNumericUpDown">
     <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}"/>

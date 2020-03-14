@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
-using IronyModManager.Controls.Themes;
+using IronyModManager.Controls;
 using IronyModManager.Models.Common;
 using IronyModManager.ViewModels.Controls;
 
@@ -86,6 +86,19 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
+        /// Handles the item dragged.
+        /// </summary>
+        protected virtual void HandleItemDragged()
+        {
+            modList.ItemDragged += (source, destination) =>
+            {
+                var sourceMod = source as IMod;
+                var destinationMod = destination as IMod;
+                sourceMod.Order = destinationMod.Order;
+            };
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -99,19 +112,6 @@ namespace IronyModManager.Views.Controls
                 HandleItemDragged();
             }
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Handles the item dragged.
-        /// </summary>
-        protected virtual void HandleItemDragged()
-        {
-            modList.ItemDragged += (source, destination) =>
-            {
-                var sourceMod = source as IMod;
-                var destinationMod = destination as IMod;
-                sourceMod.Order = destinationMod.Order;
-            };
         }
 
         /// <summary>

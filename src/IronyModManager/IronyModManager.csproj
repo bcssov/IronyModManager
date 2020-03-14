@@ -38,7 +38,6 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
-    <AvaloniaResource Remove="Controls\Themes\NotificationManager.xaml" />
     <AvaloniaResource Remove="Controls\Themes\NumericUpDown.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -74,7 +73,6 @@
     <None Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
-    <None Remove="Controls\Themes\NotificationManager.xaml" />
     <None Remove="Controls\Themes\NumericUpDown.xaml" />
     <None Remove="Controls\Themes\Theme.xaml" />
     <None Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -261,11 +259,6 @@
   </Target>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Themes\NotificationManager.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

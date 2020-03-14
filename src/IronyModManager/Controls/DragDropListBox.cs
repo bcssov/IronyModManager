@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -12,9 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -23,7 +21,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 
-namespace IronyModManager.Controls.Themes
+namespace IronyModManager.Controls
 {
     /// <summary>
     /// Class DragDropListBox.
@@ -32,14 +30,9 @@ namespace IronyModManager.Controls.Themes
     /// </summary>
     /// <seealso cref="Avalonia.Controls.ListBox" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
-    public class DragDropListBox : Avalonia.Controls.ListBox, IStyleable
+    public class DragDropListBox : ListBox, IStyleable
     {
         #region Fields
-
-        /// <summary>
-        /// The move top
-        /// </summary>
-        private const string MoveTop = "MoveTop";
 
         /// <summary>
         /// The move bottom
@@ -47,21 +40,28 @@ namespace IronyModManager.Controls.Themes
         private const string MoveBottom = "MoveBottom";
 
         /// <summary>
+        /// The move top
+        /// </summary>
+        private const string MoveTop = "MoveTop";
+
+        /// <summary>
         /// The classes
         /// </summary>
         private static readonly string[] classes = new string[] { MoveTop, MoveBottom };
-
-        /// <summary>
-        /// The dragged item content
-        /// </summary>
-        private object draggedItemContent;
 
         /// <summary>
         /// The cached item list
         /// </summary>
         private List<object> cachedItemList;
 
+        /// <summary>
+        /// The dragged item content
+        /// </summary>
+        private object draggedItemContent;
+
         #endregion Fields
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DragDropListBox" /> class.
@@ -70,6 +70,8 @@ namespace IronyModManager.Controls.Themes
         {
             cachedItemList = new List<object>();
         }
+
+        #endregion Constructors
 
         #region Delegates
 
@@ -104,6 +106,17 @@ namespace IronyModManager.Controls.Themes
         #region Methods
 
         /// <summary>
+        /// Clears the drag styles.
+        /// </summary>
+        protected virtual void ClearDragStyles()
+        {
+            foreach (ListBoxItem child in this.GetLogicalChildren())
+            {
+                child.Classes.RemoveAll(classes);
+            }
+        }
+
+        /// <summary>
         /// Itemses the changed.
         /// </summary>
         /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
@@ -118,18 +131,6 @@ namespace IronyModManager.Controls.Themes
             else
             {
                 cachedItemList = new List<object>();
-            }
-        }
-
-
-        /// <summary>
-        /// Clears the drag styles.
-        /// </summary>
-        protected virtual void ClearDragStyles()
-        {
-            foreach (ListBoxItem child in this.GetLogicalChildren())
-            {
-                child.Classes.RemoveAll(classes);
             }
         }
 
