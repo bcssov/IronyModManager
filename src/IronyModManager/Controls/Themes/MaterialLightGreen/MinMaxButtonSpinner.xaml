@@ -1,38 +1,39 @@
-﻿<Styles xmlns="https://github.com/avaloniaui">
-  <Style Selector="ButtonSpinner">
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
+  <Style Selector="controls|MinMaxButtonSpinner">
     <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
   </Style>
 
 
-  <Style Selector="ButtonSpinner /template/ RepeatButton#PART_IncreaseButton">
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_IncreaseButton">
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource ThemeForegroundBrush}"
-              Width="9"
-              Height="5"
+              Width="10"
+              Height="6"
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Data="M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z"/>
+              Data="M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z M 0,0 H9 v-1 h-9 v1"/>
       </Template>
     </Setter>
   </Style>
-  <Style Selector="ButtonSpinner /template/ RepeatButton#PART_DecreaseButton">
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_DecreaseButton">
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource ThemeForegroundBrush}"
-              Width="9"
-              Height="5"
+              Width="10"
+              Height="6"
               Stretch="Uniform"
               HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Data="M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z"/>
+              Data="M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z M 0,5 H9 v1 h-9 v-1"/>
       </Template>
     </Setter>
   </Style>
-  <Style Selector="ButtonSpinner:right">
+  <Style Selector="controls|MinMaxButtonSpinner:right">
     <Setter Property="Template">
       <ControlTemplate>
         <Border Name="border"
@@ -58,7 +59,7 @@
       </ControlTemplate>
     </Setter>
   </Style>
-  <Style Selector="ButtonSpinner:left">
+  <Style Selector="controls|MinMaxButtonSpinner:left">
     <Setter Property="Template">
       <ControlTemplate>
         <Border Name="border"
@@ -85,26 +86,26 @@
     </Setter>
   </Style>
 
-  <Style Selector="ButtonSpinner:pointerover /template/ Border#border">
+  <Style Selector="controls|MinMaxButtonSpinner:pointerover /template/ Border#border">
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
   </Style>
-  <Style Selector="ButtonSpinner:focus /template/ Border#border">
+  <Style Selector="controls|MinMaxButtonSpinner:focus /template/ Border#border">
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderHighBrush}" />
   </Style>
-  <Style Selector="ButtonSpinner:error /template/ Border#border">
+  <Style Selector="controls|MinMaxButtonSpinner:error /template/ Border#border">
     <Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}" />
   </Style>
-  <Style Selector="ButtonSpinner">
+  <Style Selector="controls|MinMaxButtonSpinner">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
   </Style>
-  <Style Selector="ButtonSpinner /template/ RepeatButton:pointerover">
-    <Setter Property="Background" Value="{DynamicResource GreyDarken1Brush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource GreyDarken1Brush}" />
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton:pointerover">
+    <Setter Property="Background" Value="{DynamicResource LightGreenLighten1Brush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LightGreenLighten1Brush}" />
   </Style>
-  <Style Selector="ButtonSpinner /template/ RepeatButton">
-    <Setter Property="Background" Value="{DynamicResource GreyDarken3Brush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource GreyDarken3Brush}" />
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton">
+    <Setter Property="Background" Value="{DynamicResource LightGreenLighten3Brush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LightGreenLighten1Brush}" />
   </Style>
 
 </Styles>

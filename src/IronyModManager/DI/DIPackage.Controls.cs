@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Controls.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using Avalonia.Controls.Notifications;
 using IronyModManager.Controls;
-using IronyModManager.Controls.Themes;
 using IronyModManager.Views;
 using SimpleInjector;
 
@@ -38,9 +38,9 @@ namespace IronyModManager.DI
             var notificationFactory = new NotificationFactory();
             container.RegisterInitializer(d =>
             {
-                var notificationManager = new NotificationManager(d.Instance as MainWindow)
+                var notificationManager = new WindowNotificationManager(d.Instance as MainWindow)
                 {
-                    Position = Avalonia.Controls.Notifications.NotificationPosition.BottomRight,
+                    Position = NotificationPosition.BottomRight,
                     MaxItems = 3
                 };
                 notificationFactory.SetManager(notificationManager);

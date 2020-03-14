@@ -99,12 +99,12 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}" />
   </Style>
   <Style Selector="ButtonSpinner /template/ RepeatButton:pointerover">
-    <Setter Property="Background" Value="{DynamicResource GreyDarken1Brush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource GreyDarken1Brush}" />
+    <Setter Property="Background" Value="{DynamicResource LightGreenLighten1Brush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LightGreenLighten1Brush}" />
   </Style>
   <Style Selector="ButtonSpinner /template/ RepeatButton">
-    <Setter Property="Background" Value="{DynamicResource GreyDarken3Brush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource GreyDarken3Brush}" />
+    <Setter Property="Background" Value="{DynamicResource LightGreenLighten3Brush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource LightGreenLighten1Brush}" />
   </Style>
 
 </Styles>

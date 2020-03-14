@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -21,7 +21,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
 
-namespace IronyModManager.Controls.Themes
+namespace IronyModManager.Controls
 {
     /// <summary>
     /// Class MinMaxNumericUpDown.
@@ -37,17 +37,17 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// The minimum maximum allow spin property
         /// </summary>
-        public static readonly StyledProperty<bool> MinMaxAllowSpinProperty = AvaloniaProperty.Register<ButtonSpinner, bool>(nameof(MinMaxAllowSpin), true);
+        public static readonly StyledProperty<bool> MinMaxAllowSpinProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxAllowSpin), true);
 
         /// <summary>
         /// The minimum maximum button spinner location property
         /// </summary>
-        public static readonly StyledProperty<Location> MinMaxButtonSpinnerLocationProperty = AvaloniaProperty.Register<ButtonSpinner, Location>(nameof(MinMaxButtonSpinnerLocation), Location.Left);
+        public static readonly StyledProperty<Location> MinMaxButtonSpinnerLocationProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, Location>(nameof(MinMaxButtonSpinnerLocation), Location.Left);
 
         /// <summary>
         /// Defines the <see cref="ShowButtonSpinner" /> property.
         /// </summary>
-        public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<ButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
+        public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
 
         /// <summary>
         /// The spinner
@@ -64,7 +64,7 @@ namespace IronyModManager.Controls.Themes
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MinMaxNumericUpDown"/> class.
+        /// Initializes a new instance of the <see cref="MinMaxNumericUpDown" /> class.
         /// </summary>
         public MinMaxNumericUpDown() : base()
         {
@@ -174,7 +174,7 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// Handles the <see cref="E:KeyDown" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Handled)
@@ -186,7 +186,7 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// Handles the <see cref="E:LostFocus" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             base.OnLostFocus(e);
@@ -224,7 +224,7 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// Handles the <see cref="E:TemplateApplied" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="TemplateAppliedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="TemplateAppliedEventArgs" /> instance containing the event data.</param>
         protected override void OnTemplateApplied(TemplateAppliedEventArgs e)
         {
             base.OnTemplateApplied(e);
@@ -275,7 +275,7 @@ namespace IronyModManager.Controls.Themes
         /// Handles the <see cref="E:SpinnerSpin" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="SpinEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="SpinEventArgs" /> instance containing the event data.</param>
         private void OnSpinnerSpin(object sender, SpinEventArgs e)
         {
             if (MinMaxAllowSpin && !IsReadOnly)
