@@ -1,12 +1,15 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="IronyModManager.Controls.Themes.Dark.ThemeOverride">
-  <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
-    <Setter Property="MinHeight" Value="50" />
-  </Style>
+  <!-- Includes -->
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.ButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
+
+  <!--Individual styles-->
+  <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
+    <Setter Property="MinHeight" Value="50" />
+  </Style>
   <Style Selector="ListBoxItem.MoveBottom">
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
     <Setter Property="BorderBrush" Value="White"/>

@@ -177,6 +177,7 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            base.OnKeyDown(e);
             if (e.Handled)
             {
                 SetValidSpinDirection();

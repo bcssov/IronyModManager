@@ -82,7 +82,7 @@ namespace IronyModManager.Tests
         public void Should_not_be_control()
         {
             var resolver = new ViewResolver();
-            resolver.IsControl("FakeControlView").Should().BeTrue();
+            resolver.IsControl("FakeControlViewModel").Should().BeFalse();
         }
 
         /// <summary>

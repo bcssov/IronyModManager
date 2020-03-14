@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-08-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -36,6 +36,16 @@ namespace IronyModManager
         /// </summary>
         private const string ControlPattern = "Control";
 
+        /// <summary>
+        /// The view pattern
+        /// </summary>
+        private const string ViewPattern = "View";
+
+        /// <summary>
+        /// The vm pattern
+        /// </summary>
+        private const string VMPattern = "ViewModel";
+
         #endregion Fields
 
         #region Methods
@@ -56,7 +66,7 @@ namespace IronyModManager
             {
                 type = obj.GetType();
             }
-            return type.FullName.Replace("ViewModel", "View");
+            return type.FullName.Replace(VMPattern, ViewPattern);
         }
 
         /// <summary>
@@ -66,10 +76,10 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public virtual string FormatViewModelName<T>()
         {
-            var result = typeof(T).FullName.Replace("View", "ViewModel");
-            if (!result.EndsWith("ViewModel"))
+            var result = typeof(T).FullName.Replace(ViewPattern, VMPattern);
+            if (!result.EndsWith(VMPattern))
             {
-                return $"{result}ViewModel";
+                return $"{result}{VMPattern}";
             }
             return result;
         }
@@ -81,7 +91,7 @@ namespace IronyModManager
         /// <returns><c>true</c> if the specified name is control; otherwise, <c>false</c>.</returns>
         public virtual bool IsControl(string name)
         {
-            return name.Contains(ControlPattern);
+            return name.Contains(ControlPattern) && !name.EndsWith(VMPattern);
         }
 
         /// <summary>
