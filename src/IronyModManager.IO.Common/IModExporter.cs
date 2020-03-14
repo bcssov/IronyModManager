@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="IModExporter.cs" company="Mario">
 //     Mario
@@ -26,6 +26,14 @@ namespace IronyModManager.IO.Common
         #region Methods
 
         /// <summary>
+        /// Applies the collection asynchronous.
+        /// </summary>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <param name="rootDirectory">The root directory.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ApplyCollectionAsync(IReadOnlyCollection<IMod> collectionMods, string rootDirectory);
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -33,7 +41,7 @@ namespace IronyModManager.IO.Common
         /// <param name="mod">The mod.</param>
         /// <param name="modDirectory">The mod directory.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportAsync<T>(string exportPath, T mod, string modDirectory) where T : IModel;
+        Task<bool> ExportAsync<T>(string exportPath, T mod, string modDirectory) where T : IModCollection;
 
         /// <summary>
         /// Imports the asynchronous.
@@ -42,7 +50,7 @@ namespace IronyModManager.IO.Common
         /// <param name="file">The file.</param>
         /// <param name="mod">The mod.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ImportAsync<T>(string file, T mod) where T : IModel;
+        Task<bool> ImportAsync<T>(string file, T mod) where T : IModCollection;
 
         #endregion Methods
     }

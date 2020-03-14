@@ -76,6 +76,14 @@
         "CollectionImported": {
             "Title": "Sammlung importiert",
             "Message": "{CollectionName} wurde importiert."
+        },
+        "CollectionApplied": {
+            "Title": "Sammlung angewendet",
+            "Message": "{CollectionName} wurde angewendet."
+        },
+        "CollectionNotApplied": {
+            "Title": "Sammlung nicht angewendet",
+            "Message": "{CollectionName} wurde nicht angewendet."
         }
     },
     "Mod_Url": {

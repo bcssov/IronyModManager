@@ -76,6 +76,14 @@
         "CollectionImported": {
             "Title": "Collection uvezena",
             "Message": "{CollectionName} je uvezena."
+        },
+        "CollectionApplied": {
+            "Title": "Kolekcija primjenjena",
+            "Message": "{CollectionName} je primjenjena."
+        },
+        "CollectionNotApplied": {
+            "Title": "Kolekcija nije primjenjena",
+            "Message": "{CollectionName} nije primjenjena."
         }
     },
     "Mod_Url": {

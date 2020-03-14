@@ -35,7 +35,7 @@ namespace IronyModManager.IO
         public IEnumerable<string> Dependencies => new List<string> { typeof(Shared.Module).Name,
             typeof(DI.Module).Name,
             typeof(Common.Module).Name,
-            typeof(Models.Common.Module).Name
+            typeof(IronyModManager.Models.Common.Module).Name
         };
 
         /// <summary>
