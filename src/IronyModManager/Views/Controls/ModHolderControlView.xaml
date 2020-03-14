@@ -3,9 +3,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="IronyModManager.Views.Controls.ModHolderControlView">
+             x:Class="IronyModManager.Views.Controls.ModHolderControlView"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager">
+  <UserControl.Resources>
+    <converter:MathConverter x:Key="MathConverter" />
+  </UserControl.Resources>
   <Panel>
-    <ContentControl Content="{Binding InstalledMods}" HorizontalAlignment="Left" Margin="0,10,0,0"></ContentControl>
-    <ContentControl Content="{Binding CollectionMods}" HorizontalAlignment="Right" Margin="0,10,0,0"></ContentControl>
+    <Grid ColumnDefinitions="5*,5*">
+      <ContentControl Content="{Binding InstalledMods}"
+                      Margin="0,10,0,0" Grid.Column="0" Grid.Row="0"></ContentControl>
+      <Panel Grid.Column="1" Grid.Row="0">
+        <ContentControl Content="{Binding CollectionMods}"
+                        Margin="0,10,0,0"></ContentControl>
+        <Panel Width="{Binding $parent[Window].Width, 
+         Converter={StaticResource MathConverter} 
+         ConverterParameter=x/2.1}">
+          <Button Content="{Binding Apply}" Command="{Binding ApplyCommand}"
+                  VerticalAlignment="Bottom" HorizontalAlignment="Left"></Button>
+        </Panel>
+      </Panel>
+    </Grid>
   </Panel>
 </UserControl>

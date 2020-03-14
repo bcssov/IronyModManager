@@ -76,6 +76,11 @@ namespace IronyModManager.Shared
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Order = Prefix + "Order";
         }
+        public static class Mod_Actions
+        {
+            public const string Prefix = nameof(Mod_Actions) + ".";
+            public const string Apply = Prefix + "Apply";
+        }
         public static class Notifications
         {
             public const string Prefix = nameof(Notifications) + ".";
@@ -106,6 +111,18 @@ namespace IronyModManager.Shared
             public static class CollectionImported
             {
                 public const string Prefix = "Notifications." + nameof(CollectionImported) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionApplied
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionApplied) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionNotApplied
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionNotApplied) + ".";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

@@ -53,6 +53,9 @@
         "Mod_Name": "Mod Name",
         "Order": "Order"
     },
+    "Mod_Actions": {
+        "Apply": "Apply"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Collection Created",
@@ -73,6 +76,14 @@
         "CollectionImported": {
             "Title": "Collection Imported",
             "Message": "{CollectionName} has been imported."
+        },
+        "CollectionApplied": {
+            "Title": "Collection Applied",
+            "Message": "{CollectionName} has been applied."
+        },
+        "CollectionNotApplied": {
+            "Title": "Collection Not Applied",
+            "Message": "{CollectionName} has not been applied."
         }
     },
     "Mod_Url": {

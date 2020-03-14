@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-02-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
@@ -42,6 +43,21 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
+
+        /// <summary>
+        /// The mod exporter
+        /// </summary>
+        private readonly IModExporter modExporter;
+
+        /// <summary>
+        /// The mod parser
+        /// </summary>
+        private readonly IModParser modParser;
+
+        /// <summary>
         /// The parser manager
         /// </summary>
         private readonly IParserManager parserManager;
@@ -50,11 +66,6 @@ namespace IronyModManager.Services
         /// The reader
         /// </summary>
         private readonly IReader reader;
-
-        /// <summary>
-        /// The mod parser
-        /// </summary>
-        private readonly IModParser modParser;
 
         #endregion Fields
 
@@ -66,13 +77,20 @@ namespace IronyModManager.Services
         /// <param name="reader">The reader.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="modParser">The mod parser.</param>
+        /// <param name="modExporter">The mod exporter.</param>
+        /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModService(IReader reader, IParserManager parserManager, IModParser modParser, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ModService(IReader reader, IParserManager parserManager,
+            IModParser modParser, IModExporter modExporter,
+            IGameService gameService, IStorageProvider storageProvider,
+            IMapper mapper) : base(storageProvider, mapper)
         {
             this.reader = reader;
             this.parserManager = parserManager;
             this.modParser = modParser;
+            this.modExporter = modExporter;
+            this.gameService = gameService;
         }
 
         #endregion Constructors
@@ -92,6 +110,21 @@ namespace IronyModManager.Services
                 ModSource.Paradox => string.Format(Constants.Paradox_Url, mod.RemoteId),
                 _ => string.Empty,
             };
+        }
+
+        /// <summary>
+        /// Exports the mods asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods)
+        {
+            var game = gameService.GetSelected();
+            if (game == null || mods == null || mods.Count == 0)
+            {
+                return Task.FromResult(false);
+            }
+            return modExporter.ApplyCollectionAsync(mods, game.UserDirectory);
         }
 
         /// <summary>

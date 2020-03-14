@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using IronyModManager.IO.Common;
@@ -99,6 +100,8 @@ namespace IronyModManager.Services.Tests
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
             var mapper = new Mock<IMapper>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
                 return new Mod()
@@ -109,7 +112,7 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, mapper.Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2" });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
@@ -126,8 +129,11 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             try
             {
                 service.GetInstalledMods(null);
@@ -148,8 +154,11 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetModObjects(null, new List<IMod>());
             result.Should().BeNull();
 
@@ -172,10 +181,13 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetModObjects(new Game(), new List<IMod>()
             {
                 new Mod()
@@ -202,10 +214,13 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
@@ -232,10 +247,13 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
@@ -260,7 +278,11 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
             var url = service.BuildModUrl(new Mod()
             {
@@ -280,7 +302,11 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
             var url = service.BuildModUrl(new Mod()
             {
@@ -300,7 +326,11 @@ namespace IronyModManager.Services.Tests
             var modParser = new Mock<IModParser>();
             var parserManager = new Mock<IParserManager>();
             var reader = new Mock<IReader>();
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
             var url = service.BuildModUrl(new Mod()
             {
@@ -310,13 +340,98 @@ namespace IronyModManager.Services.Tests
             url.Should().BeNullOrEmpty();
         }
 
+        /// <summary>
+        /// Defines the test method Should_export_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "test"
+            });
+            modExporter.Setup(p => p.ApplyCollectionAsync(It.IsAny<IReadOnlyCollection<IMod>>(), It.IsAny<string>())).Returns((IReadOnlyCollection<IMod> mods, string rootDir) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_export_mods_when_no_selected_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_export_mods_when_no_selected_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(s => s.GetSelected()).Returns(() =>
+            {
+                return null;
+            });
+            modExporter.Setup(p => p.ApplyCollectionAsync(It.IsAny<IReadOnlyCollection<IMod>>(), It.IsAny<string>())).Returns((IReadOnlyCollection<IMod> mods, string rootDir) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_export_mods_when_collection_null_or_empty.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_export_mods_when_collection_null_or_empty()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modExporter = new Mock<IModExporter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "test"
+            });
+            modExporter.Setup(p => p.ApplyCollectionAsync(It.IsAny<IReadOnlyCollection<IMod>>(), It.IsAny<string>())).Returns((IReadOnlyCollection<IMod> mods, string rootDir) =>
+            {
+                return Task.FromResult(true);
+            });
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ExportModsAsync(new List<IMod>());
+            result.Should().BeFalse();
+
+            result = await service.ExportModsAsync(new List<IMod>());
+            result.Should().BeFalse();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Stellaris_Performance_profiling.
+        /// </summary>
 
 #if FUNCTIONAL_TEST
         [Fact(Timeout = 3000000)]
 #else
-        /// <summary>
-        /// Defines the test method Stellaris_Performance_profiling.
-        /// </summary>
         [Fact(Skip = "This is for functional testing only")]
 #endif
         public void Stellaris_Performance_profiling()

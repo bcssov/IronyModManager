@@ -15,7 +15,7 @@
          ConverterParameter=x-50}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x/2.05}">
+         ConverterParameter=x/2.1}">
     <Grid IsSharedSizeScope="True">
       <DockPanel LastChildFill="True">
         <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
