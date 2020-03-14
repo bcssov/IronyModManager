@@ -14,10 +14,12 @@
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
     <Setter Property="BorderBrush" Value="White"/>
     <Setter Property="Margin" Value="0,0,0,-2"/>
+    <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
   <Style Selector="ListBoxItem.MoveTop">
     <Setter Property="BorderThickness" Value="0,2,0,0"/>
     <Setter Property="BorderBrush" Value="White"/>
     <Setter Property="Margin" Value="0,-2,0,0"/>
+    <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
 </Styles>
