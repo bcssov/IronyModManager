@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -63,11 +64,23 @@ namespace IronyModManager.Views
             }
             else
             {
+                var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
+                var totalScreenY = Screens.All.Max(p => p.WorkingArea.Height);
+                var locX = Position.X + ClientSize.Width > totalScreenX ? totalScreenX - ClientSize.Width : Position.X;
+                var locY = Position.Y + ClientSize.Height > totalScreenY ? totalScreenY - ClientSize.Height : Position.Y;
+                if (locX < 0.0)
+                {
+                    locX = 0;
+                }
+                if (locY < 0.0)
+                {
+                    locY = 0;
+                }
                 state.Height = Convert.ToInt32(ClientSize.Height);
                 state.Width = Convert.ToInt32(ClientSize.Width);
                 state.IsMaximized = false;
-                state.LocationX = Position.X;
-                state.LocationY = Position.Y;
+                state.LocationX = Convert.ToInt32(locX);
+                state.LocationY = Convert.ToInt32(locY);
             }
             service.Save(state);
             return base.HandleClosing();
