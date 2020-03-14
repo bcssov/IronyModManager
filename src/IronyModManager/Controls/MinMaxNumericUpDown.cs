@@ -37,17 +37,17 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The minimum maximum allow spin property
         /// </summary>
-        public static readonly StyledProperty<bool> MinMaxAllowSpinProperty = AvaloniaProperty.Register<ButtonSpinner, bool>(nameof(MinMaxAllowSpin), true);
+        public static readonly StyledProperty<bool> MinMaxAllowSpinProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxAllowSpin), true);
 
         /// <summary>
         /// The minimum maximum button spinner location property
         /// </summary>
-        public static readonly StyledProperty<Location> MinMaxButtonSpinnerLocationProperty = AvaloniaProperty.Register<ButtonSpinner, Location>(nameof(MinMaxButtonSpinnerLocation), Location.Left);
+        public static readonly StyledProperty<Location> MinMaxButtonSpinnerLocationProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, Location>(nameof(MinMaxButtonSpinnerLocation), Location.Left);
 
         /// <summary>
         /// Defines the <see cref="ShowButtonSpinner" /> property.
         /// </summary>
-        public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<ButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
+        public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
 
         /// <summary>
         /// The spinner

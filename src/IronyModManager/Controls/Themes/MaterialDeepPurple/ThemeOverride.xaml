@@ -6,6 +6,8 @@
   </Style>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ListBoxItem.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ButtonSpinner.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
   <Style Selector="ListBoxItem.MoveBottom">
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
     <Setter Property="BorderBrush" Value="Black"/>
