@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 03-14-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,8 +15,10 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Localization.Attributes;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -48,6 +50,19 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the apply.
+        /// </summary>
+        /// <value>The apply.</value>
+        [StaticLocalization(LocalizationResources.Mod_Actions.Apply)]
+        public virtual string Apply { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the apply command.
+        /// </summary>
+        /// <value>The apply command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ApplyCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the collection mods.
         /// </summary>
         /// <value>The collection mods.</value>
@@ -73,6 +88,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 CollectionMods.SetMods(v);
             });
+
+            ApplyCommand = ReactiveCommand.Create(() =>
+            {
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

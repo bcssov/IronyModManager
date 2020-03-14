@@ -53,6 +53,9 @@
         "Mod_Name": "Mod Name",
         "Order": "Order"
     },
+    "Mod_Actions": {
+        "Apply": "Apply"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Collection Created",

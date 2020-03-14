@@ -53,6 +53,9 @@
         "Mod_Name": "Ime moda",
         "Order": "Redoslijed"
     },
+    "Mod_Actions": {
+        "Apply": "Primjeni"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Kolekcija kreirana",

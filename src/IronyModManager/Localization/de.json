@@ -53,6 +53,9 @@
         "Mod_Name": "Mod Name",
         "Order": "Bestellen"
     },
+    "Mod_Actions": {
+        "Apply": "Anwenden"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Sammlung erstellt",
