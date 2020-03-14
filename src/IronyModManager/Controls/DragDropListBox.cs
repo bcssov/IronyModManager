@@ -13,9 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
@@ -135,6 +137,24 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// Itemses the collection changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        protected override void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            base.ItemsCollectionChanged(sender, e);
+            if (Items != null)
+            {
+                cachedItemList = (Items as IEnumerable<object>).ToList();
+            }
+            else
+            {
+                cachedItemList = new List<object>();
+            }
+        }
+
+        /// <summary>
         /// Handles the <see cref="E:PointerMoved" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerEventArgs" /> instance containing the event data.</param>
@@ -199,7 +219,13 @@ namespace IronyModManager.Controls
         /// <returns>ListBoxItem.</returns>
         private ListBoxItem GetHoveredItem(Point position)
         {
-            return (ListBoxItem)this.GetLogicalChildren().FirstOrDefault(x => this.GetVisualsAt(position).Contains(((IVisual)x).GetVisualChildren().First()));
+            var visuals = this.GetVisualsAt(position);
+            if (visuals?.Count() > 0)
+            {
+                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault();
+                return contentPresenter?.TemplatedParent as ListBoxItem;
+            }
+            return null;
         }
 
         #endregion Methods

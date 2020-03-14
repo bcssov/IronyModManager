@@ -1,5 +1,4 @@
-﻿<!-- Of course something's going to be broken -->
-<Styles
+﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ripple="clr-namespace:Ripple;assembly=Ripple">
@@ -9,15 +8,25 @@
     <Setter Property="Padding" Value="2 1" />
     <Setter Property="Template">
       <ControlTemplate>
-        <ContentPresenter Name="PART_ContentPresenter"
-                          Background="{TemplateBinding Background}"
-                          BorderBrush="{TemplateBinding BorderBrush}"
-                          BorderThickness="{TemplateBinding BorderThickness}"
-                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                          Content="{TemplateBinding Content}"
-                          Padding="{TemplateBinding Padding}"
-                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+        <ripple:RippleEffect
+            RippleFill="{DynamicResource RippleEffectBrush}"
+            RippleOpacity="0.2">
+          <Grid Name="grid">
+            <Border Name="buttonBorder"
+                    Background="{Binding $parent[Button].Background}"
+                    CornerRadius="3">
+              <ContentPresenter Name="PART_ContentPresenter"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Content="{TemplateBinding Content}"
+                                Padding="{TemplateBinding Padding}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+            </Border>
+          </Grid>
+        </ripple:RippleEffect>
       </ControlTemplate>
     </Setter>
   </Style>
