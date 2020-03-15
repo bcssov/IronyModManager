@@ -54,7 +54,8 @@
         "Order": "Order"
     },
     "Mod_Actions": {
-        "Apply": "Apply"
+        "Apply": "Apply",
+        "Overlay_Apply_Message": "Please wait while applying mod collection..."
     },
     "Notifications": {
         "CollectionCreated": {

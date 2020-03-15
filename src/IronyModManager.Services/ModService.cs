@@ -124,7 +124,7 @@ namespace IronyModManager.Services
         public Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods)
         {
             var game = gameService.GetSelected();
-            if (game == null || mods == null || mods.Count == 0)
+            if (game == null || mods == null)
             {
                 return Task.FromResult(false);
             }

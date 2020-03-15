@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-15-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -116,6 +116,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (CollectionMods.SelectedModCollection != null)
             {
+                TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 var notificationType = NotificationType.Success;
                 var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList());
                 string title;
@@ -132,6 +133,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationType = NotificationType.Error;
                 }
                 notificationAction.ShowNotification(title, message, notificationType, 5);
+                TriggerOverlay(false);
             }
         }
 

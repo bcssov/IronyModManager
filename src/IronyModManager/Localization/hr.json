@@ -54,7 +54,8 @@
         "Order": "Redoslijed"
     },
     "Mod_Actions": {
-        "Apply": "Primjeni"
+        "Apply": "Primjeni",
+        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija..."
     },
     "Notifications": {
         "CollectionCreated": {

@@ -398,7 +398,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_export_mods_when_collection_null_or_empty.
         /// </summary>
         [Fact]
-        public async Task Should_not_export_mods_when_collection_null_or_empty()
+        public async Task Should_not_export_mods_when_collection_null()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -417,11 +417,8 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ExportModsAsync(new List<IMod>());
-            result.Should().BeFalse();
-
-            result = await service.ExportModsAsync(new List<IMod>());
-            result.Should().BeFalse();
+            var result = await service.ExportModsAsync(null);
+            result.Should().BeFalse();            
         }
 
 

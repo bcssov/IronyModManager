@@ -54,7 +54,8 @@
         "Order": "Bestellen"
     },
     "Mod_Actions": {
-        "Apply": "Anwenden"
+        "Apply": "Anwenden",
+        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden..."
     },
     "Notifications": {
         "CollectionCreated": {

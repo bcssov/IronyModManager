@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-15-2020
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -60,6 +60,11 @@ namespace IronyModManager.Controls
         /// The dragged item content
         /// </summary>
         private object draggedItemContent;
+
+        /// <summary>
+        /// The original cursor
+        /// </summary>
+        private Cursor originalCursor;
 
         #endregion Fields
 
@@ -140,7 +145,7 @@ namespace IronyModManager.Controls
         /// Itemses the collection changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void ItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             base.ItemsCollectionChanged(sender, e);
@@ -194,8 +199,10 @@ namespace IronyModManager.Controls
                 if (hoveredItem != null)
                 {
                     draggedItemContent = hoveredItem.Content;
+                    originalCursor = Cursor;
+                    Cursor = new Cursor(StandardCursorType.DragMove);
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -206,13 +213,17 @@ namespace IronyModManager.Controls
         {
             base.OnPointerReleased(e);
 
-            var hoveredItemContent = GetHoveredItem(e.GetPosition(this))?.Content;
-            if (draggedItemContent != null && hoveredItemContent != null && hoveredItemContent != draggedItemContent)
+            if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased)
             {
-                ItemDragged?.Invoke(draggedItemContent, hoveredItemContent);
+                var hoveredItemContent = GetHoveredItem(e.GetPosition(this))?.Content;
+                if (draggedItemContent != null && hoveredItemContent != null && hoveredItemContent != draggedItemContent)
+                {
+                    ItemDragged?.Invoke(draggedItemContent, hoveredItemContent);
+                }
+                ClearDragStyles();
+                draggedItemContent = null;
+                Cursor = originalCursor;
             }
-            ClearDragStyles();
-            draggedItemContent = null;
         }
 
         /// <summary>
