@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2020
+// Last Modified On : 03-15-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -74,7 +74,7 @@ namespace IronyModManager.Models
         /// Gets or sets the remote identifier.
         /// </summary>
         /// <value>The remote identifier.</value>
-        public virtual int RemoteId { get; set; }
+        public virtual int? RemoteId { get; set; }
 
         /// <summary>
         /// Gets or sets the source.

@@ -188,11 +188,14 @@ namespace IronyModManager.Controls
         {
             base.OnPointerPressed(e);
 
-            var hoveredItem = GetHoveredItem(e.GetPosition(this));
-            if (hoveredItem != null)
+            if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed)
             {
-                draggedItemContent = hoveredItem.Content;
-            }
+                var hoveredItem = GetHoveredItem(e.GetPosition(this));
+                if (hoveredItem != null)
+                {
+                    draggedItemContent = hoveredItem.Content;
+                }
+            }            
         }
 
         /// <summary>

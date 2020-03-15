@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-15-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -104,6 +104,10 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         public string BuildModUrl(IMod mod)
         {
+            if (!mod.RemoteId.HasValue)
+            {
+                return string.Empty;
+            }
             return mod.Source switch
             {
                 ModSource.Steam => string.Format(Constants.Steam_Url, mod.RemoteId),

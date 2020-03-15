@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-15-2020
 // ***********************************************************************
 // <copyright file="ModExporter.cs" company="Mario">
 //     Mario
@@ -203,16 +203,19 @@ namespace IronyModManager.IO
         /// <param name="mod">The mod.</param>
         private void MapPdxId(ModRegistry registry, IMod mod)
         {
-            switch (mod.Source)
+            if (mod.RemoteId.HasValue)
             {
-                case ModSource.Paradox:
-                    registry.PdxId = mod.RemoteId.ToString();
-                    break;
+                switch (mod.Source)
+                {
+                    case ModSource.Paradox:
+                        registry.PdxId = mod.RemoteId.ToString();
+                        break;
 
-                default:
-                    // Assume steam
-                    registry.SteamId = mod.RemoteId.ToString();
-                    break;
+                    default:
+                        // Assume steam
+                        registry.SteamId = mod.RemoteId.ToString();
+                        break;
+                }
             }
         }
 

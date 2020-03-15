@@ -161,7 +161,7 @@ namespace IronyModManager.Services
             var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
             if (collections.Count() > 0)
             {
-                return collections;
+                return collections.OrderBy(p => p.Name);
             }
             return new List<IModCollection>();
         }
