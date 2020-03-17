@@ -38,7 +38,7 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// The stellaris root
         /// </summary>
-        private readonly string stellarisRoot = @"D:\Games\Stellaris\";
+        private readonly string stellarisRoot = @"D:\Games\Steam\steamapps\common\Stellaris\";
 
         /// <summary>
         /// The writer
