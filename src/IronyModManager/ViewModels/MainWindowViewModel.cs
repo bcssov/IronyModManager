@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -46,6 +46,12 @@ namespace IronyModManager.ViewModels
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance has progress.
+        /// </summary>
+        /// <value><c>true</c> if this instance has progress; otherwise, <c>false</c>.</value>
+        public virtual bool HasProgress { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the language selector.
         /// </summary>
         /// <value>The language selector.</value>
@@ -56,6 +62,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The overlay message.</value>
         public virtual string OverlayMessage { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the overlay message progress.
+        /// </summary>
+        /// <value>The overlay message progress.</value>
+        public virtual string OverlayMessageProgress { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [overlay visible].
@@ -78,6 +90,8 @@ namespace IronyModManager.ViewModels
                 {
                     OverlayMessage = s.Message;
                     OverlayVisible = s.IsVisible;
+                    OverlayMessageProgress = s.MessageProgress;
+                    HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
                 }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

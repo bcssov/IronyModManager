@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -41,6 +41,11 @@ namespace IronyModManager.Services
     public class ModService : BaseService, IModService
     {
         #region Fields
+
+        /// <summary>
+        /// The service lock
+        /// </summary>
+        private static readonly object serviceLock = new { };
 
         /// <summary>
         /// The game service
@@ -94,6 +99,15 @@ namespace IronyModManager.Services
         }
 
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [mod analyze].
+        /// </summary>
+        public event ModAnalyzeDelegate ModAnalyze;
+
+        #endregion Events
 
         #region Methods
 
@@ -176,6 +190,9 @@ namespace IronyModManager.Services
             }
             var definitions = new ConcurrentBag<IDefinition>();
 
+            double processed = 0;
+            double total = mods.Count();
+
             mods.AsParallel().ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
@@ -207,8 +224,14 @@ namespace IronyModManager.Services
                         definitions.Add(item);
                     }
                 }
+                lock (serviceLock)
+                {
+                    processed++;
+                    ModAnalyze?.Invoke(Convert.ToInt32(processed / total * 100), true);
+                }
             });
 
+            ModAnalyze?.Invoke(100, false);
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
             return indexed;

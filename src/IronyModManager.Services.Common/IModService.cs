@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -24,6 +24,15 @@ namespace IronyModManager.Services.Common
     /// </summary>
     public interface IModService
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when [mod analyze].
+        /// </summary>
+        event ModAnalyzeDelegate ModAnalyze;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>

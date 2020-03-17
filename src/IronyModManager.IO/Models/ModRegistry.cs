@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="ModRegistry.cs" company="Mario">
 //     Mario
@@ -22,6 +22,32 @@ namespace IronyModManager.IO.Models
     /// </summary>
     internal class ModRegistry
     {
+        #region Fields
+
+        /// <summary>
+        /// The game registry identifier
+        /// </summary>
+        private string gameRegistryId = string.Empty;
+
+        /// <summary>
+        /// The status
+        /// </summary>
+        private string status = string.Empty;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModRegistry" /> class.
+        /// </summary>
+        public ModRegistry()
+        {
+            Tags = new List<string>();
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>
@@ -64,7 +90,21 @@ namespace IronyModManager.IO.Models
         /// </summary>
         /// <value>The game registry identifier.</value>
         [JsonProperty("gameRegistryId")]
-        public string GameRegistryId { get; set; }
+        public string GameRegistryId
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(gameRegistryId))
+                {
+                    return gameRegistryId;
+                }
+                return string.Empty;
+            }
+            set
+            {
+                gameRegistryId = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -113,7 +153,21 @@ namespace IronyModManager.IO.Models
         /// </summary>
         /// <value>The status.</value>
         [JsonProperty("status")]
-        public string Status { get; set; }
+        public string Status
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    return status;
+                }
+                return string.Empty;
+            }
+            set
+            {
+                status = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the steam identifier.

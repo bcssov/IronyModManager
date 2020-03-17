@@ -81,6 +81,9 @@ namespace IronyModManager.Shared
             public const string Prefix = nameof(Mod_Actions) + ".";
             public const string Apply = Prefix + "Apply";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
+            public const string Conflict = Prefix + "Conflict";
+            public const string Overlay_Conflict_Solver_Message = Prefix + "Overlay_Conflict_Solver_Message";
+            public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
         }
         public static class Notifications
         {

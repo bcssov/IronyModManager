@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="DLCLoad.cs" company="Mario">
 //     Mario
@@ -24,6 +24,19 @@ namespace IronyModManager.IO.Models
     /// <seealso cref="IronyModManager.IO.Models.IPdxFormat" />
     internal class DLCLoad : IPdxFormat
     {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DLCLoad"/> class.
+        /// </summary>
+        public DLCLoad()
+        {
+            DisabledDlcs = new List<string>();
+            EnabledMods = new List<string>();
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         /// <summary>

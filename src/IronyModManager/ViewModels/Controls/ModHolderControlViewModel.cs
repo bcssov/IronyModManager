@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -40,6 +40,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
+
+        /// <summary>
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
@@ -62,16 +67,18 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
         /// <param name="modService">The mod service.</param>
+        /// <param name="gameService">The game service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
-        public ModHolderControlViewModel(IModService modService, INotificationAction notificationAction, ILocalizationManager localizationManager,
+        public ModHolderControlViewModel(IModService modService, IGameService gameService, INotificationAction notificationAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel)
         {
             this.modService = modService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
+            this.gameService = gameService;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -79,6 +86,19 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the analyze.
+        /// </summary>
+        /// <value>The analyze.</value>
+        [StaticLocalization(LocalizationResources.Mod_Actions.Conflict)]
+        public virtual string Analyze { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze command.
+        /// </summary>
+        /// <value>The analyze command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AnalyzeCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the apply.
@@ -110,13 +130,50 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
+        /// Analyzes the mods asynchronous.
+        /// </summary>
+        /// <returns>Task.</returns>
+        protected virtual async Task AnalyzeModsAsync()
+        {
+            var game = gameService.GetSelected();
+            if (game != null)
+            {
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = 0
+                });
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Message);
+                await TriggerOverlayAsync(true, message, overlayProgress);
+                modService.ModAnalyze += (percentage, inProgress) =>
+                {
+                    if (inProgress)
+                    {
+                        var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                        {
+                            PercentDone = percentage
+                        });
+                        TriggerOverlay(true, message, overlayProgress);
+                    }
+                    else
+                    {
+                        TriggerOverlay(false);
+                    }
+                };
+                var task = await Task.Run(() =>
+                {
+                    return modService.GetModObjects(game, CollectionMods.SelectedMods);
+                });
+            }
+        }
+
+        /// <summary>
         /// apply collection as an asynchronous operation.
         /// </summary>
         protected virtual async Task ApplyCollectionAsync()
         {
             if (CollectionMods.SelectedModCollection != null)
             {
-                TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 var notificationType = NotificationType.Success;
                 var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList());
                 string title;
@@ -133,7 +190,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationType = NotificationType.Error;
                 }
                 notificationAction.ShowNotification(title, message, notificationType, 5);
-                TriggerOverlay(false);
+                await TriggerOverlayAsync(false);
             }
         }
 
@@ -150,7 +207,12 @@ namespace IronyModManager.ViewModels.Controls
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                ApplyCollectionAsync().ConfigureAwait(true);
+                ApplyCollectionAsync().ConfigureAwait(false);
+            }).DisposeWith(disposables);
+
+            AnalyzeCommand = ReactiveCommand.Create(() =>
+            {
+                AnalyzeModsAsync().ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

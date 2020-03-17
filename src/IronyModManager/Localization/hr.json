@@ -55,7 +55,10 @@
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
-        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija..."
+        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
+        "Conflict": "Rješavanje sukoba",
+        "Overlay_Conflict_Solver_Message": "Pričekajte dok se analiziraju sukobi modova...",
+        "Overlay_Conflict_Solver_Progress": "{PercentDone}%"
     },
     "Notifications": {
         "CollectionCreated": {

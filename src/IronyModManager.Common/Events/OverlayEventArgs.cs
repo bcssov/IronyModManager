@@ -4,7 +4,7 @@
 // Created          : 03-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="OverlayEventArgs.cs" company="Mario">
 //     Mario
@@ -36,6 +36,12 @@ namespace IronyModManager.Common.Events
         /// </summary>
         /// <value>The message.</value>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message progress.
+        /// </summary>
+        /// <value>The message progress.</value>
+        public string MessageProgress { get; set; }
 
         #endregion Properties
     }
