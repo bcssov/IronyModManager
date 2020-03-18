@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -30,9 +30,24 @@ namespace IronyModManager.Parser.Definitions
         #region Fields
 
         /// <summary>
+        /// The code
+        /// </summary>
+        private string code = string.Empty;
+
+        /// <summary>
         /// The definition sha
         /// </summary>
-        private string definitionSHA;
+        private string definitionSHA = string.Empty;
+
+        /// <summary>
+        /// The identifier
+        /// </summary>
+        private string id = string.Empty;
+
+        /// <summary>
+        /// The type
+        /// </summary>
+        private string type = string.Empty;
 
         /// <summary>
         /// The type and identifier
@@ -47,7 +62,22 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the code.
         /// </summary>
         /// <value>The code.</value>
-        public string Code { get; set; }
+        public string Code
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(code))
+                {
+                    return string.Empty;
+                }
+                return code;
+            }
+            set
+            {
+                definitionSHA = string.Empty;
+                code = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -69,8 +99,7 @@ namespace IronyModManager.Parser.Definitions
                 }
                 if (string.IsNullOrWhiteSpace(definitionSHA))
                 {
-                    var code = !string.IsNullOrWhiteSpace(Code) ? Code : string.Empty;
-                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(code).CalculateSHA();
+                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(Code).CalculateSHA();
                 }
                 return definitionSHA;
             }
@@ -92,7 +121,18 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                typeAndId = string.Empty;
+                id = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -104,7 +144,18 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public string Type { get; set; }
+        public string Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                typeAndId = string.Empty;
+                type = value;
+            }
+        }
 
         /// <summary>
         /// Gets the type and identifier.

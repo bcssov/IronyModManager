@@ -58,8 +58,8 @@ namespace IronyModManager.Services.Common
         /// Finds the conflicts.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
-        /// <returns>IIndexedDefinitions.</returns>
-        IIndexedDefinitions FindConflicts(IIndexedDefinitions indexedDefinitions);
+        /// <returns>IConflictResult.</returns>
+        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions);
 
         /// <summary>
         /// Gets the installed mods.

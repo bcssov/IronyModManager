@@ -140,7 +140,9 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = 0
+                    PercentDone = 0,
+                    Count = 1,
+                    TotalCount = 2
                 });
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 await TriggerOverlayAsync(true, message, overlayProgress);
@@ -214,7 +216,9 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = percentage
+                    PercentDone = percentage,
+                    Count = 1,
+                    TotalCount = 2
                 });
                 TriggerOverlay(true, message, overlayProgress);
             };
@@ -224,7 +228,9 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = percentage
+                    PercentDone = percentage,
+                    Count = 2,
+                    TotalCount = 2
                 });
                 TriggerOverlay(true, message, overlayProgress);
             };

@@ -125,7 +125,7 @@
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Remove="Views\MainControlView.xaml" />
-    <None Include="..\LICENSE">
+    <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

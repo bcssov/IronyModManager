@@ -155,7 +155,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual IIndexedDefinitions FindConflicts(IIndexedDefinitions indexedDefinitions)
+        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions)
         {
             var conflicts = new HashSet<IDefinition>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
@@ -166,23 +166,30 @@ namespace IronyModManager.Services
 
             foreach (var item in fileKeys)
             {
-                var defs = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, defs);
+                var definitions = indexedDefinitions.GetByFile(item);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
 
             foreach (var item in typeAndIdKeys)
             {
-                var defs = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, defs);
+                var definitions = indexedDefinitions.GetByTypeAndId(item);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
 
-            var indexed = DIResolver.Get<IIndexedDefinitions>();
-            indexed.InitMap(conflicts);
-            return indexed;
+            var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
+            var result = GetModelInstance<IConflictResult>();
+            var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
+            conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p));
+            var orphanedConflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
+            orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p));
+            result.Conflicts = conflictsIndexed;
+            result.OrphanConflicts = orphanedConflictsIndexed;
+
+            return result;
         }
 
         /// <summary>
@@ -282,13 +289,13 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="conflicts">The conflicts.</param>
-        /// <param name="defs">The defs.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> defs)
+        /// <param name="definitions">The definitions.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions)
         {
-            if (defs.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
+            if (definitions.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
             {
                 var processed = new HashSet<IDefinition>();
-                foreach (var def in defs)
+                foreach (var def in definitions)
                 {
                     if (processed.Contains(def) || conflicts.Contains(def))
                     {
@@ -303,9 +310,10 @@ namespace IronyModManager.Services
                     {
                         if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                         {
+                            var validConflicts = new HashSet<IDefinition>();
                             foreach (var conflict in allConflicts)
                             {
-                                if (conflicts.Contains(conflict))
+                                if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
                                 {
                                     continue;
                                 }
@@ -314,13 +322,26 @@ namespace IronyModManager.Services
                                 {
                                     continue;
                                 }
-                                conflicts.Add(conflict);
+                                validConflicts.Add(conflict);
+                            }
+
+                            var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
+                            if (validConflictsGroup.Count() > 1)
+                            {
+                                var filteredConflicts = validConflictsGroup.Select(p => p.OrderBy(p => p.ModName).First());
+                                foreach (var item in filteredConflicts)
+                                {
+                                    if (!conflicts.Contains(item) && item.ValueType != Parser.Common.ValueType.Namespace)
+                                    {
+                                        conflicts.Add(item);
+                                    }
+                                }
                             }
                         }
                     }
                     else
                     {
-                        if (!conflicts.Contains(def))
+                        if (!conflicts.Contains(def) && def.ValueType != Parser.Common.ValueType.Namespace)
                         {
                             conflicts.Add(def);
                         }
