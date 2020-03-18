@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -99,7 +99,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition = GetDefinitionInstance();
                         var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Id = id;
+                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
                         definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -82,7 +82,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllFileKeys()
         {
-            return fileKeys;
+            return fileKeys.ToHashSet();
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeAndIdKeys()
         {
-            return typeAndIdKeys;
+            return typeAndIdKeys.ToHashSet();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetAllTypeKeys()
         {
-            return typeKeys;
+            return typeKeys.ToHashSet();
         }
 
         /// <summary>
@@ -131,7 +131,17 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> GetByTypeAndId(string type, string id)
         {
-            return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), ConstructKey(type, id));
+            return GetByTypeAndId(ConstructKey(type, id));
+        }
+
+        /// <summary>
+        /// Gets the by type andi d.
+        /// </summary>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetByTypeAndId(string typeAndId)
+        {
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), typeAndId);
         }
 
         /// <summary>

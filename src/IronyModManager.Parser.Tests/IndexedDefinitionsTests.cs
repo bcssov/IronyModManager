@@ -185,10 +185,10 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method Returns_by_type_and_id.
+        /// Defines the test method Returns_by_type_and_id_constructed_key.
         /// </summary>
         [Fact]
-        public void Returns_by_type_and_id()
+        public void Returns_by_type_and_id_constructed_key()
         {
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
@@ -207,6 +207,41 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.InitMap(defs);
             var results = service.GetByTypeAndId("type", "id");
+            results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
+            int match = 0;
+            foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))
+            {
+                if (results.Contains(item))
+                {
+                    match++;
+                }
+            }
+            match.Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_by_type_and_id_non_constructed_key.
+        /// </summary>
+        [Fact]
+        public void Returns_by_type_and_id_non_constructed_key()
+        {
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 3 ? "file" : i.ToString(),
+                    Id = i > 4 && i < 7 ? "id" : i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i > 3 && i < 6 ? "type" : i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.GetByTypeAndId("type-id");
             results.Count().Should().Be(defs.Where(s => s.Type == "type" && s.Id == "id").Count());
             int match = 0;
             foreach (var item in defs.Where(s => s.Type == "type" && s.Id == "id"))

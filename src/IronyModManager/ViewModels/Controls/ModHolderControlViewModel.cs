@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -136,33 +136,27 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task AnalyzeModsAsync()
         {
             var game = gameService.GetSelected();
-            if (game != null)
+            if (game != null && CollectionMods.SelectedMods?.Count > 0)
             {
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = 0
                 });
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Message);
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 await TriggerOverlayAsync(true, message, overlayProgress);
-                modService.ModAnalyze += (percentage, inProgress) =>
-                {
-                    if (inProgress)
-                    {
-                        var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
-                        {
-                            PercentDone = percentage
-                        });
-                        TriggerOverlay(true, message, overlayProgress);
-                    }
-                    else
-                    {
-                        TriggerOverlay(false);
-                    }
-                };
-                var task = await Task.Run(() =>
+                var definitions = await Task.Run(() =>
                 {
                     return modService.GetModObjects(game, CollectionMods.SelectedMods);
                 });
+                var conflicts = await Task.Run(() =>
+                {
+                    if (definitions != null)
+                    {
+                        return modService.FindConflicts(definitions);
+                    }
+                    return null;
+                });
+                await TriggerOverlayAsync(false);
             }
         }
 
@@ -214,6 +208,26 @@ namespace IronyModManager.ViewModels.Controls
             {
                 AnalyzeModsAsync().ConfigureAwait(false);
             }).DisposeWith(disposables);
+
+            modService.ModDefinitionLoad += (percentage) =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = percentage
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            };
+
+            modService.ModDefinitionAnalyze += (percentage) =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = percentage
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            };
 
             base.OnActivated(disposables);
         }

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -27,9 +27,14 @@ namespace IronyModManager.Services.Common
         #region Events
 
         /// <summary>
+        /// Occurs when [mod definition analyze].
+        /// </summary>
+        event ModDefinitionAnalyzeDelegate ModDefinitionAnalyze;
+
+        /// <summary>
         /// Occurs when [mod analyze].
         /// </summary>
-        event ModAnalyzeDelegate ModAnalyze;
+        event ModDefinitionLoadDelegate ModDefinitionLoad;
 
         #endregion Events
 
@@ -48,6 +53,13 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods);
+
+        /// <summary>
+        /// Finds the conflicts.
+        /// </summary>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <returns>IIndexedDefinitions.</returns>
+        IIndexedDefinitions FindConflicts(IIndexedDefinitions indexedDefinitions);
 
         /// <summary>
         /// Gets the installed mods.

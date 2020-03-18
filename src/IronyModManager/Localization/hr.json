@@ -57,7 +57,8 @@
         "Apply": "Primjeni",
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "Conflict": "Rješavanje sukoba",
-        "Overlay_Conflict_Solver_Message": "Pričekajte dok se analiziraju sukobi modova...",
+        "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
         "Overlay_Conflict_Solver_Progress": "{PercentDone}%"
     },
     "Notifications": {

@@ -57,8 +57,9 @@
         "Apply": "Apply",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "Conflict": "Conflict Solver",
-        "Overlay_Conflict_Solver_Message": "Please wait while analyzing mod conflicts...",
-        "Overlay_Conflict_Solver_Progress":  "{PercentDone}%"
+        "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
+        "Overlay_Conflict_Solver_Progress": "{PercentDone}%"
     },
     "Notifications": {
         "CollectionCreated": {

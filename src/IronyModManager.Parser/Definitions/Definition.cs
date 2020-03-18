@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -33,6 +33,11 @@ namespace IronyModManager.Parser.Definitions
         /// The definition sha
         /// </summary>
         private string definitionSHA;
+
+        /// <summary>
+        /// The type and identifier
+        /// </summary>
+        private string typeAndId = string.Empty;
 
         #endregion Fields
 
@@ -64,7 +69,8 @@ namespace IronyModManager.Parser.Definitions
                 }
                 if (string.IsNullOrWhiteSpace(definitionSHA))
                 {
-                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(Code).CalculateSHA();
+                    var code = !string.IsNullOrWhiteSpace(Code) ? Code : string.Empty;
+                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(code).CalculateSHA();
                 }
                 return definitionSHA;
             }
@@ -104,7 +110,17 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the type and identifier.
         /// </summary>
         /// <value>The type and identifier.</value>
-        public string TypeAndId => $"{Type}-{Id}";
+        public string TypeAndId
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(typeAndId))
+                {
+                    typeAndId = $"{Type}-{Id}";
+                }
+                return typeAndId;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type of the value.

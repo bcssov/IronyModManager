@@ -145,11 +145,11 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
-                        result[i].Id.Should().Be("@test");
+                        result[i].Id.Should().Be("fake-@test");
                         result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
-                        result[i].Id.Should().Be("namespace");
+                        result[i].Id.Should().Be("fake-namespace");
                         result[i].ValueType.Should().Be(Common.ValueType.Namespace);
                         break;
                     case 2:

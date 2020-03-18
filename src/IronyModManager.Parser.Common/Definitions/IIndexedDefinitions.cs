@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -60,6 +60,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetByType(string type);
+
+        /// <summary>
+        /// Gets the by type andi d.
+        /// </summary>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByTypeAndId(string typeAndId);
 
         /// <summary>
         /// Gets the by type and identifier.

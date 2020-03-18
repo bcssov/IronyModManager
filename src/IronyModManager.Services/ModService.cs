@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 03-18-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -103,9 +103,14 @@ namespace IronyModManager.Services
         #region Events
 
         /// <summary>
+        /// Occurs when [mod definition analyze].
+        /// </summary>
+        public event ModDefinitionAnalyzeDelegate ModDefinitionAnalyze;
+
+        /// <summary>
         /// Occurs when [mod analyze].
         /// </summary>
-        public event ModAnalyzeDelegate ModAnalyze;
+        public event ModDefinitionLoadDelegate ModDefinitionLoad;
 
         #endregion Events
 
@@ -143,6 +148,41 @@ namespace IronyModManager.Services
                 return Task.FromResult(false);
             }
             return modExporter.ApplyCollectionAsync(mods, game.UserDirectory);
+        }
+
+        /// <summary>
+        /// Finds the conflicts.
+        /// </summary>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <returns>IIndexedDefinitions.</returns>
+        public virtual IIndexedDefinitions FindConflicts(IIndexedDefinitions indexedDefinitions)
+        {
+            var conflicts = new HashSet<IDefinition>();
+            var fileKeys = indexedDefinitions.GetAllFileKeys();
+            var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
+
+            double total = fileKeys.Count() + typeAndIdKeys.Count();
+            double processed = 0;
+
+            foreach (var item in fileKeys)
+            {
+                var defs = indexedDefinitions.GetByFile(item);
+                EvalDefinitions(indexedDefinitions, conflicts, defs);
+                processed++;
+                ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
+            }
+
+            foreach (var item in typeAndIdKeys)
+            {
+                var defs = indexedDefinitions.GetByTypeAndId(item);
+                EvalDefinitions(indexedDefinitions, conflicts, defs);
+                processed++;
+                ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
+            }
+
+            var indexed = DIResolver.Get<IIndexedDefinitions>();
+            indexed.InitMap(conflicts);
+            return indexed;
         }
 
         /// <summary>
@@ -227,14 +267,66 @@ namespace IronyModManager.Services
                 lock (serviceLock)
                 {
                     processed++;
-                    ModAnalyze?.Invoke(Convert.ToInt32(processed / total * 100), true);
+                    ModDefinitionLoad?.Invoke(Convert.ToInt32(processed / total * 100));
                 }
             });
 
-            ModAnalyze?.Invoke(100, false);
+            ModDefinitionLoad?.Invoke(100);
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
             return indexed;
+        }
+
+        /// <summary>
+        /// Evals the definitions.
+        /// </summary>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <param name="conflicts">The conflicts.</param>
+        /// <param name="defs">The defs.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> defs)
+        {
+            if (defs.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
+            {
+                var processed = new HashSet<IDefinition>();
+                foreach (var def in defs)
+                {
+                    if (processed.Contains(def) || conflicts.Contains(def))
+                    {
+                        continue;
+                    }
+                    var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id);
+                    foreach (var conflict in allConflicts)
+                    {
+                        processed.Add(conflict);
+                    }
+                    if (allConflicts.Count() > 1)
+                    {
+                        if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
+                        {
+                            foreach (var conflict in allConflicts)
+                            {
+                                if (conflicts.Contains(conflict))
+                                {
+                                    continue;
+                                }
+                                var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
+                                if (hasOverrides)
+                                {
+                                    continue;
+                                }
+                                conflicts.Add(conflict);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!conflicts.Contains(def))
+                        {
+                            conflicts.Add(def);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
