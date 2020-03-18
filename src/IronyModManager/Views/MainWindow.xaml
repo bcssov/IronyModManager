@@ -35,7 +35,12 @@
                      HorizontalAlignment="Center"
                      Foreground="White" TextWrapping="Wrap" IsVisible="{Binding !HasProgress}"></TextBlock>
       </Grid>
-      <ContentControl Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ContentControl>
+      <ContentControl IsVisible="{Binding MainVisible}" Opacity="{Binding MainOpacity}"
+                      Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+      </ContentControl>
+      <ContentControl IsVisible="{Binding !MainVisible}" Opacity="{Binding MainOpacity}"
+                      Content="{Binding ConflictSolver}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+      </ContentControl>
     </Grid>
   </Panel>
 </Window>

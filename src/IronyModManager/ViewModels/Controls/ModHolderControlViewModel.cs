@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
@@ -159,6 +160,12 @@ namespace IronyModManager.ViewModels.Controls
                     return null;
                 });
                 await TriggerOverlayAsync(false);
+                var args = new NavigationEventArgs()
+                {
+                    Results = conflicts,
+                    State = NavigationState.ConflictSolver
+                };
+                MessageBus.Current.SendMessage(args);
             }
         }
 

@@ -61,6 +61,7 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
+    <AvaloniaResource Remove="Views\MainConflictSolverControlView.xaml" />
     <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\Light\ThemeOverride.xaml" />
@@ -124,6 +125,7 @@
     <None Remove="Views\Controls\SearchModsControlView.xaml" />
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
+    <None Remove="Views\MainConflictSolverControlView.xaml" />
     <None Remove="Views\MainControlView.xaml" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
@@ -335,6 +337,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\NumericUpDown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\MainConflictSolverControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

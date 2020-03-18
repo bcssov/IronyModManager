@@ -61,6 +61,9 @@
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
     },
+    "Conflict_Solver": {
+        "Back": "Zurück"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Sammlung erstellt",

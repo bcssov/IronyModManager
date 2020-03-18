@@ -86,6 +86,11 @@ namespace IronyModManager.Shared
             public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
             public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
         }
+        public static class Conflict_Solver
+        {
+            public const string Prefix = nameof(Conflict_Solver) + ".";
+            public const string Back = Prefix + "Back";
+        }
         public static class Notifications
         {
             public const string Prefix = nameof(Notifications) + ".";

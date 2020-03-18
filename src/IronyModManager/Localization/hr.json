@@ -61,6 +61,9 @@
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
         "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
     },
+    "Conflict_Solver": {
+        "Back": "Nazad"
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Kolekcija kreirana",
