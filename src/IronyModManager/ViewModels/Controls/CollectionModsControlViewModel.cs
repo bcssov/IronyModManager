@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 03-19-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -54,6 +54,9 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IAppStateService appStateService;
 
+        /// <summary>
+        /// The game service
+        /// </summary>
         private readonly IGameService gameService;
 
         /// <summary>
@@ -116,6 +119,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="appStateService">The application state service.</param>
         /// <param name="modService">The mod service.</param>
+        /// <param name="gameService">The game service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
         /// <param name="searchMods">The search mods.</param>
