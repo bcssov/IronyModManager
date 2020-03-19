@@ -45,17 +45,6 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
-        /// Delegate ModReorderedDelegate
-        /// </summary>
-        /// <param name="mod">The mod.</param>
-        public delegate void ModReorderedDelegate(IMod mod);
-
-        /// <summary>
-        /// Occurs when [mod reordered].
-        /// </summary>
-        public event ModReorderedDelegate ModReordered;
-
-        /// <summary>
         /// The mod name key
         /// </summary>
         private const string ModNameKey = "modName";
@@ -64,6 +53,8 @@ namespace IronyModManager.ViewModels.Controls
         /// The application state service
         /// </summary>
         private readonly IAppStateService appStateService;
+
+        private readonly IGameService gameService;
 
         /// <summary>
         /// The localization manager
@@ -133,9 +124,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="urlAction">The URL action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
-            IAppStateService appStateService, IModService modService, AddNewCollectionControlViewModel addNewCollection,
-            ExportModCollectionControlViewModel exportCollection, SearchModsControlViewModel searchMods,
-            SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
+            IAppStateService appStateService, IModService modService, IGameService gameService,
+            AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection,
+            SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IUrlAction urlAction)
         {
             this.modCollectionService = modCollectionService;
@@ -148,10 +139,30 @@ namespace IronyModManager.ViewModels.Controls
             this.notificationAction = notificationAction;
             this.urlAction = urlAction;
             this.modService = modService;
+            this.gameService = gameService;
             SearchMods.ShowArrows = true;
         }
 
         #endregion Constructors
+
+        #region Delegates
+
+        /// <summary>
+        /// Delegate ModReorderedDelegate
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        public delegate void ModReorderedDelegate(IMod mod);
+
+        #endregion Delegates
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [mod reordered].
+        /// </summary>
+        public event ModReorderedDelegate ModReordered;
+
+        #endregion Events
 
         #region Properties
 
@@ -373,16 +384,16 @@ namespace IronyModManager.ViewModels.Controls
             switch (ModNameSortOrder.SortOrder)
             {
                 case SortOrder.Asc:
-                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name).ToObservableCollection());                    
+                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name).ToObservableCollection());
                     break;
 
                 case SortOrder.Desc:
-                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection());                    
+                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection());
                     break;
 
                 default:
                     break;
-            }            
+            }
         }
 
         /// <summary>
@@ -473,7 +484,10 @@ namespace IronyModManager.ViewModels.Controls
 
             CreateCommand = ReactiveCommand.Create(() =>
             {
-                EnteringNewCollection = true;
+                if (gameService.GetSelected() != null)
+                {
+                    EnteringNewCollection = true;
+                }
             }).DisposeWith(disposables);
 
             RemoveCommand = ReactiveCommand.Create(() =>
@@ -728,13 +742,13 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveSelectedCollection()
         {
             var collection = modCollectionService.Create();
-            if (collection != null)
+            if (collection != null && SelectedModCollection != null)
             {
-                collection.Name = SelectedModCollection?.Name;
+                collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
                 collection.IsSelected = true;
                 modCollectionService.Save(collection);
-            }            
+            }
         }
 
         /// <summary>
