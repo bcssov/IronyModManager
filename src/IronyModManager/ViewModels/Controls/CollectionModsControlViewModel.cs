@@ -728,10 +728,13 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveSelectedCollection()
         {
             var collection = modCollectionService.Create();
-            collection.Name = SelectedModCollection.Name;
-            collection.Mods = SelectedMods.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
-            collection.IsSelected = true;
-            modCollectionService.Save(collection);
+            if (collection != null)
+            {
+                collection.Name = SelectedModCollection?.Name;
+                collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
+                collection.IsSelected = true;
+                modCollectionService.Save(collection);
+            }            
         }
 
         /// <summary>
