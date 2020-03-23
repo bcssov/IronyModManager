@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CodexMicroORM.Core.Collections;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Parser.Definitions
@@ -39,6 +40,11 @@ namespace IronyModManager.Parser.Definitions
         private readonly HashSet<string> fileKeys;
 
         /// <summary>
+        /// The pretty print hierarchy
+        /// </summary>
+        private readonly HashSet<IHierarchicalDefinitions> hierarchicalDefinitions;
+
+        /// <summary>
         /// The type and identifier keys
         /// </summary>
         private readonly HashSet<string> typeAndIdKeys;
@@ -61,6 +67,7 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
+            hierarchicalDefinitions = new HashSet<IHierarchicalDefinitions>();
         }
 
         #endregion Constructors
@@ -145,6 +152,15 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets the pretty print hierarchy.
+        /// </summary>
+        /// <returns>IDictionary&lt;System.String, HashSet&lt;KeyValuePair&lt;System.String, System.String&gt;&gt;&gt;.</returns>
+        public IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions()
+        {
+            return hierarchicalDefinitions.ToHashSet();
+        }
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -155,6 +171,7 @@ namespace IronyModManager.Parser.Definitions
                 MapKeys(fileKeys, item.File);
                 MapKeys(typeKeys, item.Type);
                 MapKeys(typeAndIdKeys, ConstructKey(item.Type, item.Id));
+                MapHierarchicalDefinition(item);
                 this.definitions.Add(item);
             }
         }
@@ -167,6 +184,33 @@ namespace IronyModManager.Parser.Definitions
         private string ConstructKey(params string[] keys)
         {
             return string.Join("-", keys);
+        }
+
+        /// <summary>
+        /// Maps the pretty print hierarchy.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        private void MapHierarchicalDefinition(IDefinition definition)
+        {
+            bool shouldAdd = false;
+            var hierarchicalDefinition = hierarchicalDefinitions.FirstOrDefault(p => p.Name.Equals(definition.ParentDirectory));
+            if (hierarchicalDefinition == null)
+            {
+                hierarchicalDefinition = DIResolver.Get<IHierarchicalDefinitions>();
+                hierarchicalDefinition.Name = definition.ParentDirectory;
+                shouldAdd = true;
+            }
+            if (!hierarchicalDefinition.Children.Any(p => p.Name.Equals(definition.Id)))
+            {
+                var child = DIResolver.Get<IHierarchicalDefinitions>();
+                child.Name = definition.Id;
+                child.Key = definition.TypeAndId;
+                hierarchicalDefinition.Children.Add(child);
+                if (shouldAdd)
+                {
+                    hierarchicalDefinitions.Add(hierarchicalDefinition);
+                }
+            }            
         }
 
         /// <summary>

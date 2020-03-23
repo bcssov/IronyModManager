@@ -18,6 +18,7 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Definitions;
+using IronyModManager.Tests.Common;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
@@ -33,6 +34,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_all_definitions()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -68,6 +70,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_by_file()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -103,6 +106,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_all_file_keys()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -129,6 +133,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_by_type()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -159,11 +164,40 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method Returns_hierarchical_objects.
+        /// </summary>
+        [Fact]
+        public void Returns_hierarchical_objects()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 3 ? "file" : i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i > 3 && i < 6 ? "type" : i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.GetHierarchicalDefinitions();
+            results.Count().Should().Be(1);
+            results.First().Children.Count().Should().Be(10);
+        }
+
+        /// <summary>
         /// Defines the test method Returns_all_type_keys.
         /// </summary>
         [Fact]
         public void Returns_all_type_keys()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -190,6 +224,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_by_type_and_id_constructed_key()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -225,6 +260,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_by_type_and_id_non_constructed_key()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {
@@ -260,6 +296,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Returns_all_type_and_id_keys()
         {
+            DISetup.SetupContainer();
             var defs = new List<IDefinition>();
             for (int i = 0; i < 10; i++)
             {

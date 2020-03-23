@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
@@ -43,6 +44,11 @@ namespace IronyModManager.Parser.Definitions
         /// The identifier
         /// </summary>
         private string id = string.Empty;
+
+        /// <summary>
+        /// The parent directory
+        /// </summary>
+        private string parentDirectory = string.Empty;
 
         /// <summary>
         /// The type
@@ -139,6 +145,22 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The name of the mod.</value>
         public string ModName { get; set; }
+
+        /// <summary>
+        /// Gets the parent directory.
+        /// </summary>
+        /// <value>The parent directory.</value>
+        public string ParentDirectory
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(parentDirectory))
+                {
+                    parentDirectory = Path.GetDirectoryName(File);
+                }
+                return parentDirectory;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type.

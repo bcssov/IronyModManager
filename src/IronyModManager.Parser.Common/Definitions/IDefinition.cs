@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The name of the mod.</value>
         string ModName { get; set; }
+
+        /// <summary>
+        /// Gets the parent directory.
+        /// </summary>
+        /// <value>The parent directory.</value>
+        string ParentDirectory { get; }
 
         /// <summary>
         /// Gets or sets the type.

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -75,6 +75,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="id">The identifier.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetByTypeAndId(string type, string id);
+
+        /// <summary>
+        /// Gets the hierarchical definitions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
+        IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions();
 
         /// <summary>
         /// Initializes the map.

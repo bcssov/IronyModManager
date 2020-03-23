@@ -145,7 +145,7 @@ namespace IronyModManager.ViewModels
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:
-                            ConflictSolver.Conflicts = s.Results;
+                            ConflictSolver.Conflicts = s.Results;                            
                             AnimateTransitionAsync(false).ConfigureAwait(false);
                             break;
 
