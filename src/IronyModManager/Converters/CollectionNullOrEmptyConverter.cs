@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 01-21-2020
+// Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
-// <copyright file="LocalizationConverter.cs" company="Mario">
+// <copyright file="CollectionNullOrEmptyConverter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,19 +14,18 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Avalonia.Data.Converters;
-using IronyModManager.DI;
-using IronyModManager.Localization;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Converters
 {
     /// <summary>
-    /// Class LocalizationConverter.
+    /// Class CollectionNullOrEmptyConverter.
     /// Implements the <see cref="Avalonia.Data.Converters.IValueConverter" />
     /// </summary>
     /// <seealso cref="Avalonia.Data.Converters.IValueConverter" />
-    public class LocalizationConverter : IValueConverter
+    public class CollectionNullOrEmptyConverter : IValueConverter
     {
         #region Methods
 
@@ -38,22 +37,15 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null && !string.IsNullOrEmpty(value.ToString()))
+            bool.TryParse(parameter != null ? parameter.ToString() : bool.FalseString, out var invert);
+            if (value is IEnumerable<object> col)
             {
-                var locManager = DIResolver.Get<ILocalizationManager>();
-                string prefix = string.Empty;
-                if (parameter != null && !string.IsNullOrWhiteSpace(parameter.ToString()))
-                {
-                    prefix = parameter.ToString();
-                }
-                var resKey = $"{prefix}{value}";
-                var translation = locManager.GetResource(resKey);
-                return translation;
+                var result = col == null || col.Count() == 0;
+                return invert ? !result : result;
             }
-            return value;
+            return invert ? false : true;
         }
 
         /// <summary>
@@ -67,7 +59,8 @@ namespace IronyModManager.Converters
         [ExcludeFromCoverage("Not being used.")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            bool.TryParse(parameter != null ? parameter.ToString() : bool.FalseString, out var invert);
+            return invert ? false : true;
         }
 
         #endregion Methods

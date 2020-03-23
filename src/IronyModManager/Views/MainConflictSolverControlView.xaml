@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              MinWidth="800" MinHeight="450"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
-  <Panel>
-    <Button Content="{Binding Back}" Command="{Binding BackCommand}"
-        VerticalAlignment="Bottom" HorizontalAlignment="Right"></Button>
+  <UserControl.Resources>
+    <converter:MathConverter x:Key="MathConverter" />
+  </UserControl.Resources>
+  <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid RowDefinitions="4*,6*,1*" ColumnDefinitions="3*,7*">
+      <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
+          VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+    </Grid>
   </Panel>
 </UserControl>

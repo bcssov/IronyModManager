@@ -23,4 +23,32 @@
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
+  <Style Selector="TextBlock.DiffImaginaryLine">
+    <Setter Property="Background" Value="#FF808080" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedLine">
+    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedLine">
+    <Setter Property="Background" Value="#FFFF4500" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffUnchangedPieces">
+    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedPieces">
+    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedPieces">
+    <Setter Property="Background" Value="#FFFF4500" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffModifiedPieces">
+    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
 </Styles>

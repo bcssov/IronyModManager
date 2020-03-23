@@ -88,7 +88,7 @@
                        ConverterParameter=x-230}" SelectedItem="{Binding SelectedMod}">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="1*,2*,2*,5*">
+                  <Grid ColumnDefinitions="1*,2*,2*,5*" Background="Transparent">
                     <Grid.ContextMenu>
                       <ContextMenu>
                       </ContextMenu>
@@ -100,8 +100,8 @@
                   </Grid>
                 </DataTemplate>
               </controls:DragDropListBox.ItemTemplate>
-            </controls:DragDropListBox>          
-        </Grid>
+            </controls:DragDropListBox>
+          </Grid>
         </Panel>
         <Panel IsVisible="{Binding EnteringNewCollection}" HorizontalAlignment="Stretch" DockPanel.Dock="Top">
           <ContentControl Content="{Binding AddNewCollection}"></ContentControl>

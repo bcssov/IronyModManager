@@ -90,6 +90,15 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Conflict_Solver) + ".";
             public const string Back = Prefix + "Back";
+            public static class ContextMenu
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";
+                public const string CopyThis = Prefix + "CopyThis";
+                public const string CopyThisAfterLine = Prefix + "CopyThisAfterLine";
+                public const string CopyThisBeforeLine = Prefix + "CopyThisBeforeLine";
+                public const string MoveUp = Prefix + "MoveUp";
+                public const string MoveDown = Prefix + "MoveDown";
+            }
         }
         public static class Notifications
         {

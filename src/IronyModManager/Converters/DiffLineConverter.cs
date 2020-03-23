@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 01-21-2020
+// Created          : 03-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
-// <copyright file="LocalizationConverter.cs" company="Mario">
+// <copyright file="DiffLineConverter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,18 +15,17 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using IronyModManager.DI;
-using IronyModManager.Localization;
+using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Converters
 {
     /// <summary>
-    /// Class LocalizationConverter.
+    /// Class DiffLineConverter.
     /// Implements the <see cref="Avalonia.Data.Converters.IValueConverter" />
     /// </summary>
     /// <seealso cref="Avalonia.Data.Converters.IValueConverter" />
-    public class LocalizationConverter : IValueConverter
+    public class DiffLineConverter : IValueConverter
     {
         #region Methods
 
@@ -38,22 +37,20 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null && !string.IsNullOrEmpty(value.ToString()))
+            if (value is DiffPiece)
             {
-                var locManager = DIResolver.Get<ILocalizationManager>();
-                string prefix = string.Empty;
-                if (parameter != null && !string.IsNullOrWhiteSpace(parameter.ToString()))
+                var diff = value as DiffPiece;
+                return diff.Type switch
                 {
-                    prefix = parameter.ToString();
-                }
-                var resKey = $"{prefix}{value}";
-                var translation = locManager.GetResource(resKey);
-                return translation;
+                    ChangeType.Deleted => "DiffDeletedLine",
+                    ChangeType.Inserted => "DiffInsertedLine",
+                    ChangeType.Imaginary => "DiffImaginaryLine",
+                    _ => string.Empty,
+                };
             }
-            return value;
+            return string.Empty;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-20-2020
 // ***********************************************************************
 // <copyright file="MathConverter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using info.lundin.math;
 using IronyModManager.Localization;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Converters
 {
@@ -63,6 +64,7 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        [ExcludeFromCoverage("Not being used.")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;

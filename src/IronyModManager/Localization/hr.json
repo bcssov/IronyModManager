@@ -62,7 +62,14 @@
         "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
     },
     "Conflict_Solver": {
-        "Back": "Nazad"
+        "Back": "Nazad",
+        "ContextMenu": {
+            "CopyThis": "Kopiraj odabrano",
+            "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
+            "CopyThisBeforeLine": "Kopiraj odabrano prije linije",
+            "MoveUp": "Pomakni gore",
+            "MoveDown": "Pomakni dolje"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

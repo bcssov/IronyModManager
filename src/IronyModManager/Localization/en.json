@@ -62,7 +62,14 @@
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
     },
     "Conflict_Solver": {
-        "Back": "Back"
+        "Back": "Back",
+        "ContextMenu": {
+            "CopyThis": "Copy This",
+            "CopyThisAfterLine": "Copy This After Line",
+            "CopyThisBeforeLine": "Copy This Before Line",
+            "MoveUp": "Move Up",
+            "MoveDown": "Move Down"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

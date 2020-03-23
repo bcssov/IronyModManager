@@ -61,6 +61,7 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\MergeViewerControlView.xaml" />
     <AvaloniaResource Remove="Views\MainConflictSolverControlView.xaml" />
     <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -121,6 +122,7 @@
     <None Remove="Views\Controls\GameControlView.xaml" />
     <None Remove="Views\Controls\InstalledModsControlView.xaml" />
     <None Remove="Views\Controls\LanguageControlView.xaml" />
+    <None Remove="Views\Controls\MergeViewerControlView.xaml" />
     <None Remove="Views\Controls\ModHolderControlView.xaml" />
     <None Remove="Views\Controls\SearchModsControlView.xaml" />
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
@@ -136,6 +138,7 @@
     <PackageReference Include="Avalonia" Version="0.9.7" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.7" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.7" />
+    <PackageReference Include="DiffPlex" Version="1.5.0" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
     <PackageReference Include="Material.Avalonia" Version="0.9.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.6.1" />
@@ -342,6 +345,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\MainConflictSolverControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\MergeViewerControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
