@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -13,13 +13,16 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using CodexMicroORM.Core.Collections;
 
 namespace IronyModManager.Parser.Common.Definitions
 {
     /// <summary>
     /// Interface IHierarchicalDefinitions
+    /// Implements the <see cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
     /// </summary>
-    public interface IHierarchicalDefinitions
+    /// <seealso cref="CodexMicroORM.Core.Collections.ICEFIndexedListItem" />
+    public interface IHierarchicalDefinitions : ICEFIndexedListItem
     {
         #region Properties
 
@@ -27,7 +30,7 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Gets the children.
         /// </summary>
         /// <value>The children.</value>
-        IList<IHierarchicalDefinitions> Children { get; }
+        ICollection<IHierarchicalDefinitions> Children { get; }
 
         /// <summary>
         /// Gets or sets the key.

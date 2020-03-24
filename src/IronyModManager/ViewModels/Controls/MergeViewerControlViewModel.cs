@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -34,17 +34,6 @@ namespace IronyModManager.ViewModels.Controls
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     public class MergeViewerControlViewModel : BaseViewModel
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
-        /// </summary>
-        public MergeViewerControlViewModel()
-        {
-        }
-
-        #endregion Constructors
-
         #region Properties
 
         /// <summary>
@@ -153,8 +142,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="rightSide">The right side.</param>
         public virtual void SetText(string leftSide, string rightSide)
         {
-            LeftSide = ReplaceTabs(leftSide);
-            RightSide = ReplaceTabs(rightSide);
+            LeftSide = leftSide ?? string.Empty;
+            RightSide = rightSide ?? string.Empty;
             Compare();
         }
 
@@ -335,37 +324,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var sb = new System.Text.StringBuilder();
-            sb.AppendLine(@"asl_close_options2 = { potential = {");
-            sb.AppendLine(@"		always = yes2");
-            sb.AppendLine(@"	}");
-            sb.AppendLine(@"	allow2 = {");
-            sb.AppendLine(@"		always2 = no");
-            sb.AppendLine(@"	}");
-            sb.AppendLine(@"	effect = {");
-            sb.AppendLine(@"		hidden_effect = {");
-            sb.AppendLine(@"			remove_country_flag = asl_options_opened1");
-            sb.AppendLine(@"		}");
-            sb.AppendLine(@"	}");
-            sb.AppendLine(@"}");
-
-            var sb2 = new System.Text.StringBuilder();
-            sb2.AppendLine(@"asl_close_options = { potential = {");
-            sb2.AppendLine(@"		always = yes");
-            sb2.AppendLine(@"	}");
-            sb2.AppendLine(@"	allow = {");
-            sb2.AppendLine(@"		always = yes");
-            sb2.AppendLine(@"	}");
-            sb2.AppendLine(@"	effect = {");
-            sb2.AppendLine(@"		hidden_effect = {");
-            sb2.AppendLine(@"			remove_country_flag = asl_options_opened");
-            sb2.AppendLine(@"			remove_country_flag = asl_options_opened_2");
-            sb2.AppendLine(@"		}");
-            sb2.AppendLine(@"	}");
-            sb2.AppendLine(@"}");
-
-            SetText(sb.ToString(), sb2.ToString());
-
             LeftSideSelected = new ObservableCollection<DiffPiece>();
             RightSideSelected = new ObservableCollection<DiffPiece>();
 
@@ -447,17 +405,6 @@ namespace IronyModManager.ViewModels.Controls
                 orderedSelected.Add(idx, item);
             }
             return orderedSelected.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
-        }
-
-        /// <summary>
-        /// Replaces the tabs.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string ReplaceTabs(string text)
-        {
-            var tabSpace = new string(' ', 4);
-            return text.Replace("\t", tabSpace);
         }
 
         #endregion Methods

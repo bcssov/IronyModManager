@@ -63,6 +63,9 @@
     },
     "Conflict_Solver": {
         "Back": "Nazad",
+        "ConflictedObjects": "Sukobi",
+        "LeftSide": "Lijeva strana",
+        "RightSide": "Desna strana",
         "ContextMenu": {
             "CopyThis": "Kopiraj odabrano",
             "CopyThisAfterLine": "Kopiraj odabrano poslije linije",

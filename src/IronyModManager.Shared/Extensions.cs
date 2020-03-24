@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -26,6 +26,15 @@ namespace IronyModManager.Shared
     [ExcludeFromCoverage("Hash calculation is excluded.")]
     public static class Extensions
     {
+        #region Fields
+
+        /// <summary>
+        /// The tab space
+        /// </summary>
+        private static readonly string tabSpace = new string(' ', 4);
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -51,6 +60,20 @@ namespace IronyModManager.Shared
             using var hash = new SHA256Managed();
             byte[] checksum = hash.ComputeHash(bufferedStream);
             return BitConverter.ToString(checksum).Replace("-", string.Empty);
+        }
+
+        /// <summary>
+        /// Replaces the tabs.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        public static string ReplaceTabs(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+            return value.Replace("\t", tabSpace);
         }
 
         /// <summary>

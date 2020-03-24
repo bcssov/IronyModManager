@@ -12,7 +12,7 @@
     <converter:DiffSubPieceConverter x:Key="DiffSubPieceConverter" />
   </UserControl.Resources>
   <Panel>
-    <Grid ColumnDefinitions="5*,5*">
+    <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
       <ListBox Grid.Column="0" Items="{Binding Diff.OldText.Lines}"
                ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
                SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">

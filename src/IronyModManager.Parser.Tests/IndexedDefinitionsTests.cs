@@ -185,7 +185,7 @@ namespace IronyModManager.Parser.Tests
                 });
             }
             var service = new IndexedDefinitions();
-            service.InitMap(defs);
+            service.InitMap(defs, true);
             var results = service.GetHierarchicalDefinitions();
             results.Count().Should().Be(1);
             results.First().Children.Count().Should().Be(10);

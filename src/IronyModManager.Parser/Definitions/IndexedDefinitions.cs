@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -40,9 +40,9 @@ namespace IronyModManager.Parser.Definitions
         private readonly HashSet<string> fileKeys;
 
         /// <summary>
-        /// The pretty print hierarchy
+        /// The hierarchical definitions
         /// </summary>
-        private readonly HashSet<IHierarchicalDefinitions> hierarchicalDefinitions;
+        private readonly ConcurrentIndexedList<IHierarchicalDefinitions> hierarchicalDefinitions;
 
         /// <summary>
         /// The type and identifier keys
@@ -67,7 +67,7 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
-            hierarchicalDefinitions = new HashSet<IHierarchicalDefinitions>();
+            hierarchicalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
 
         #endregion Constructors
@@ -152,26 +152,30 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Gets the pretty print hierarchy.
+        /// Gets the hierarchical definitions.
         /// </summary>
-        /// <returns>IDictionary&lt;System.String, HashSet&lt;KeyValuePair&lt;System.String, System.String&gt;&gt;&gt;.</returns>
+        /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         public IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions()
         {
-            return hierarchicalDefinitions.ToHashSet();
+            return hierarchicalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
         }
 
         /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        public void InitMap(IEnumerable<IDefinition> definitions)
+        /// <param name="mapHierarhicalDefinitions">if set to <c>true</c> [map hierarhical definitions].</param>
+        public void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarhicalDefinitions = false)
         {
             foreach (var item in definitions)
             {
                 MapKeys(fileKeys, item.File);
                 MapKeys(typeKeys, item.Type);
                 MapKeys(typeAndIdKeys, ConstructKey(item.Type, item.Id));
-                MapHierarchicalDefinition(item);
+                if (mapHierarhicalDefinitions)
+                {
+                    MapHierarchicalDefinition(item);
+                }
                 this.definitions.Add(item);
             }
         }
@@ -193,24 +197,41 @@ namespace IronyModManager.Parser.Definitions
         private void MapHierarchicalDefinition(IDefinition definition)
         {
             bool shouldAdd = false;
-            var hierarchicalDefinition = hierarchicalDefinitions.FirstOrDefault(p => p.Name.Equals(definition.ParentDirectory));
+            var hierarchicalDefinition = hierarchicalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectory);
             if (hierarchicalDefinition == null)
             {
                 hierarchicalDefinition = DIResolver.Get<IHierarchicalDefinitions>();
                 hierarchicalDefinition.Name = definition.ParentDirectory;
                 shouldAdd = true;
             }
-            if (!hierarchicalDefinition.Children.Any(p => p.Name.Equals(definition.Id)))
+            bool exists = false;
+            var children = hierarchicalDefinition.Children as ConcurrentIndexedList<IHierarchicalDefinitions>;
+            if (children != null)
+            {
+                var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                exists = child != null;
+            }
+            else
+            {
+                exists = hierarchicalDefinition.Children.Any(p => p.Name.Equals(definition.Id));
+            }
+            if (!exists)
             {
                 var child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
                 hierarchicalDefinition.Children.Add(child);
+                var newChild = new HashSet<IHierarchicalDefinitions>(hierarchicalDefinition.Children.Select(s => s).OrderBy(p => p.Name));
+                hierarchicalDefinition.Children.Clear();
+                foreach (var item in newChild)
+                {
+                    hierarchicalDefinition.Children.Add(item);
+                }
                 if (shouldAdd)
                 {
                     hierarchicalDefinitions.Add(hierarchicalDefinition);
                 }
-            }            
+            }
         }
 
         /// <summary>

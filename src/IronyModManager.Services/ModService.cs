@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -183,9 +183,9 @@ namespace IronyModManager.Services
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
             var result = GetModelInstance<IConflictResult>();
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
-            conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p));
+            conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p), true);
             var orphanedConflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
-            orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p));
+            orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p), true);
             result.Conflicts = conflictsIndexed;
             result.OrphanConflicts = orphanedConflictsIndexed;
 
@@ -274,13 +274,19 @@ namespace IronyModManager.Services
                 lock (serviceLock)
                 {
                     processed++;
-                    ModDefinitionLoad?.Invoke(Convert.ToInt32(processed / total * 100));
+                    var perc = Convert.ToInt32((processed / total * 100) - 2);
+                    if (perc < 0)
+                    {
+                        perc = 1;
+                    }
+                    ModDefinitionLoad?.Invoke(perc);
                 }
             });
 
-            ModDefinitionLoad?.Invoke(100);
+            ModDefinitionLoad?.Invoke(99);
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
+            ModDefinitionLoad?.Invoke(100);
             return indexed;
         }
 

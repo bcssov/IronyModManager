@@ -6,18 +6,33 @@
              MinWidth="800" MinHeight="450"
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
   <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-    <Grid RowDefinitions="4*,6*,1*" ColumnDefinitions="3*,7*">
-      <TreeView Items="{Binding HierarchalConflicts}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">        
-        <TreeView.DataTemplates>
-          <TreeDataTemplate ItemsSource="{Binding Children}">
-            <TextBlock Text="{Binding Name}"></TextBlock>
-          </TreeDataTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding Name}"></TextBlock>
-          </DataTemplate>
-        </TreeView.DataTemplates>
-      </TreeView>
-      <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+    <Grid RowDefinitions="4*,8*,1*" ColumnDefinitions="3*,7*">
+      <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+        <Grid ColumnDefinitions="*" RowDefinitions="1*,20*">
+          <TextBlock Text="{Binding ConflictedObjects}" Grid.Column="0"
+                     Grid.Row="0" HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <TreeView Items="{Binding HierarchalConflicts}" Grid.Column="0" Grid.Row="1" SelectedItem="{Binding SelectedConflict}">
+            <TreeView.DataTemplates>
+              <TreeDataTemplate ItemsSource="{Binding Children}">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+              </TreeDataTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+              </DataTemplate>
+            </TreeView.DataTemplates>
+          </TreeView>
+        </Grid>
+      </Panel>
+      <Panel Grid.Row="0" Grid.Column="1">
+        <Grid ColumnDefinitions="5*,5*" RowDefinitions="1*,10*">
+          <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0" 
+                     HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0" 
+                     HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <ContentControl Margin="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
+        </Grid>
+      </Panel>
+      <ContentControl Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
           VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
     </Grid>

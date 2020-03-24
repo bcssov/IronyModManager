@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="GenericGfxParserTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -110,12 +111,12 @@ namespace IronyModManager.Parser.Tests
 
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("GFX_text_military_size_2");
-                        result[i].Code.Should().Be(sb3.ToString());
+                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
@@ -170,7 +171,7 @@ namespace IronyModManager.Parser.Tests
 
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:
@@ -250,13 +251,13 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         // determined by the order in the constant locales array
                         result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:                        
                         // determined by the order in the constant locales array
                         result[i].Id.Should().Be("l_russian-large_title_font");
-                        result[i].Code.Should().Be(sb3.ToString());
+                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:

@@ -63,6 +63,9 @@
     },
     "Conflict_Solver": {
         "Back": "Zurück",
+        "ConflictedObjects": "Konfliktobjekte",
+        "LeftSide": "Linke Seite",
+        "RightSide": "Rechte Seite",
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",

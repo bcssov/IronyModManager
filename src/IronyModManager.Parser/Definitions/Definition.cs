@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
@@ -51,6 +52,11 @@ namespace IronyModManager.Parser.Definitions
         private string parentDirectory = string.Empty;
 
         /// <summary>
+        /// The trimmed code
+        /// </summary>
+        private string trimmedCode = string.Empty;
+
+        /// <summary>
         /// The type
         /// </summary>
         private string type = string.Empty;
@@ -81,7 +87,21 @@ namespace IronyModManager.Parser.Definitions
             set
             {
                 definitionSHA = string.Empty;
-                code = value;
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    var lines = value.ReplaceTabs().SplitOnNewLine();
+                    var trimmedLines = new List<string>();
+                    foreach (var line in lines)
+                    {
+                        trimmedLines.Add(line.Trim());
+                    }
+                    trimmedCode = string.Join(Environment.NewLine, trimmedLines.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    code = string.Join(Environment.NewLine, lines.Where(s => !string.IsNullOrWhiteSpace(s)));
+                }
+                else
+                {
+                    code = value;
+                }
             }
         }
 
@@ -103,9 +123,9 @@ namespace IronyModManager.Parser.Definitions
                 {
                     return ContentSHA;
                 }
-                if (string.IsNullOrWhiteSpace(definitionSHA))
+                if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(trimmedCode))
                 {
-                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(Code).CalculateSHA();
+                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(trimmedCode).CalculateSHA();
                 }
                 return definitionSHA;
             }

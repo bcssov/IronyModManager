@@ -90,6 +90,9 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Conflict_Solver) + ".";
             public const string Back = Prefix + "Back";
+            public const string ConflictedObjects = Prefix + "ConflictedObjects";
+            public const string LeftSide = Prefix + "LeftSide";
+            public const string RightSide = Prefix + "RightSide";
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";

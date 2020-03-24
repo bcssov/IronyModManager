@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -86,7 +86,8 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        void InitMap(IEnumerable<IDefinition> definitions);
+        /// <param name="mapHierarhicalDefinitions">if set to <c>true</c> [map hierarhical definitions].</param>
+        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarhicalDefinitions = false);
 
         #endregion Methods
     }
