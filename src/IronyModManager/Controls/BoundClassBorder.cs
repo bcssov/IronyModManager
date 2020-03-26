@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 03-21-2020
+// Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-21-2020
+// Last Modified On : 03-25-2020
 // ***********************************************************************
-// <copyright file="DiffTextBlock.cs" company="Mario">
+// <copyright file="BoundClassBorder.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -20,20 +20,20 @@ using Avalonia.Styling;
 namespace IronyModManager.Controls
 {
     /// <summary>
-    /// Class DiffTextBlock.
-    /// Implements the <see cref="Avalonia.Controls.TextBlock" />
+    /// Class BinaryDiffBorder.
+    /// Implements the <see cref="Avalonia.Controls.Border" />
     /// Implements the <see cref="Avalonia.Styling.IStyleable" />
     /// </summary>
-    /// <seealso cref="Avalonia.Controls.TextBlock" />
+    /// <seealso cref="Avalonia.Controls.Border" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
-    public class DiffTextBlock : TextBlock, IStyleable
+    public class BoundClassBorder : Border, IStyleable
     {
         #region Fields
 
         /// <summary>
         /// The bound classes property
         /// </summary>
-        public static readonly StyledProperty<string> BoundClassesProperty = AvaloniaProperty.Register<DiffTextBlock, string>(nameof(BoundClasses));
+        public static readonly StyledProperty<string> BoundClassesProperty = AvaloniaProperty.Register<BoundClassBorder, string>(nameof(BoundClasses));
 
         /// <summary>
         /// The old classes
@@ -65,7 +65,7 @@ namespace IronyModManager.Controls
         /// Gets the style key.
         /// </summary>
         /// <value>The style key.</value>
-        Type IStyleable.StyleKey => typeof(TextBlock);
+        Type IStyleable.StyleKey => typeof(Border);
 
         #endregion Properties
 
@@ -76,7 +76,7 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="classes">The classes.</param>
         protected virtual void AddClasses(string classes)
-        {            
+        {
             if (oldClasses != null)
             {
                 Classes.RemoveAll(oldClasses);
@@ -97,7 +97,7 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Handles the <see cref="E:PropertyChanged" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);

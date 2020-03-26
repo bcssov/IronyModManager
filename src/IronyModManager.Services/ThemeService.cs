@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-25-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -22,9 +22,7 @@ using IronyModManager.Storage.Common;
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class ThemeService.
-    /// Implements the <see cref="IronyModManager.Services.IThemeService" />
-    /// Implements the <see cref="IronyModManager.Services.BaseService" />
+    /// Class ThemeService. Implements the <see cref="IronyModManager.Services.IThemeService" /> Implements the <see cref="IronyModManager.Services.BaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
     /// <seealso cref="IronyModManager.Services.IThemeService" />
@@ -162,7 +160,6 @@ namespace IronyModManager.Services
             theme.IsSelected = themeItem.Name == selectedType;
             theme.StyleIncludes = themeItem.Styles;
             theme.Name = themeItem.Name;
-            theme.Brushes = themeItem.Brushes;
             return theme;
         }
 

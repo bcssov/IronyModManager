@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 03-26-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -14,6 +14,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -69,7 +71,7 @@ namespace IronyModManager.Views.Controls
                     if (grid != null)
                     {
                         var menuItems = new List<MenuItem>()
-                        {                            
+                        {
                             new MenuItem()
                             {
                                 Header = ViewModel.MoveUp,
@@ -131,7 +133,24 @@ namespace IronyModManager.Views.Controls
                             return;
                         }
                         updating = true;
-                        otherListBox.Scroll.Offset = thisListBox.Scroll.Offset;
+                        var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
+                        var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
+                        var offset = thisListBox.Scroll.Offset;
+                        otherListBox.Scroll.Offset = offset;
+                        if (thisListBox.Scroll.Offset.X > otherMaxX)
+                        {
+                            offset = offset.WithX(otherMaxX);
+                        }
+                        if (thisListBox.Scroll.Offset.Y > otherMaxY)
+                        {
+                            offset = offset.WithY(otherMaxY);
+                        }
+                        if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
+                        {
+                            otherListBox.InvalidateArrange();
+                            thisListBox.InvalidateArrange();
+                            otherListBox.Scroll.Offset = offset;
+                        }                        
                         updating = false;
                     }
                 };

@@ -93,6 +93,9 @@ namespace IronyModManager.Shared
             public const string ConflictedObjects = Prefix + "ConflictedObjects";
             public const string LeftSide = Prefix + "LeftSide";
             public const string RightSide = Prefix + "RightSide";
+            public const string BinaryFile = Prefix + "BinaryFile";
+            public const string TakeLeft = Prefix + "TakeLeft";
+            public const string TakeRight = Prefix + "TakeRight";
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 03-25-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -42,11 +43,15 @@ namespace IronyModManager.ViewModels
         /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
         /// </summary>
         /// <param name="mergeViewer">The merge viewer.</param>
+        /// <param name="binaryMergeViewer">The binary merge viewer.</param>
         /// <param name="modCompareSelector">The mod compare selector.</param>
-        public MainConflictSolverControlViewModel(MergeViewerControlViewModel mergeViewer, ModCompareSelectorControlViewModel modCompareSelector)
+        public MainConflictSolverControlViewModel(MergeViewerControlViewModel mergeViewer,
+            MergeViewerBinaryControlViewModel binaryMergeViewer,
+            ModCompareSelectorControlViewModel modCompareSelector)
         {
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
+            BinaryMergeViewer = binaryMergeViewer;
         }
 
         #endregion Constructors
@@ -67,6 +72,12 @@ namespace IronyModManager.ViewModels
         public virtual ReactiveCommand<Unit, Unit> BackCommand { get; set; }
 
         /// <summary>
+        /// Gets or sets the binary merge viewer.
+        /// </summary>
+        /// <value>The binary merge viewer.</value>
+        public MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the conflicted objects.
         /// </summary>
         /// <value>The conflicted objects.</value>
@@ -84,6 +95,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The hierarchal conflicts.</value>
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary conflict.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary conflict; otherwise, <c>false</c>.</value>
+        public virtual bool IsBinaryConflict { get; protected set; }
 
         /// <summary>
         /// Gets or sets the left side.
@@ -153,8 +170,10 @@ namespace IronyModManager.ViewModels
             {
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key))
                 {
-                    ModCompareSelector.Definitions = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
+                    var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
+                    ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetText(string.Empty, string.Empty);
+                    IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                 }
             }).DisposeWith(disposables);
 
@@ -168,6 +187,14 @@ namespace IronyModManager.ViewModels
                 this.WhenAnyValue(v => v.ModCompareSelector.RightSelectedDefinition).Where(p => p != null).Subscribe(s =>
                 {
                     MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.BinaryMergeViewer.IsActivated).Where(p => p).Subscribe(s =>
+            {
+                Observable.Merge(BinaryMergeViewer.TakeLeftCommand.Select(s => true), BinaryMergeViewer.TakeRightCommand.Select(s => false)).Subscribe(s =>
+                {
+                    // TODO: To enable resolve button here logic when dealing with binary types.
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 

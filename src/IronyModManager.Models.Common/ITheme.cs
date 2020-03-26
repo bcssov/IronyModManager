@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 03-25-2020
 // ***********************************************************************
 // <copyright file="ITheme.cs" company="Mario">
 //     Mario
@@ -26,12 +26,6 @@ namespace IronyModManager.Models.Common
     public interface ITheme : IModel, ILocalizableModel
     {
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the brushes.
-        /// </summary>
-        /// <value>The brushes.</value>
-        IDictionary<string, string> Brushes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

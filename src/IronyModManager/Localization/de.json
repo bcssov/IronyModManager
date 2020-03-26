@@ -66,6 +66,9 @@
         "ConflictedObjects": "Konfliktobjekte",
         "LeftSide": "Linke Seite",
         "RightSide": "Rechte Seite",
+        "BinaryFile": "Binärer Inhalt",
+        "TakeLeft": "Biegen Sie links ab",
+        "TakeRight": "Hier rechts",
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",

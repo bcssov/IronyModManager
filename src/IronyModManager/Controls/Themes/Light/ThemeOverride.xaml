@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="IronyModManager.Controls.Themes.Light.ThemeOverride">  
+        x:Class="IronyModManager.Controls.Themes.Light.ThemeOverride">
   <!-- Includes -->
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.Light.ButtonSpinner.xaml?assembly=IronyModManager"/>
@@ -9,7 +9,7 @@
   <!--Individual styles-->
   <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
     <Setter Property="MinHeight" Value="50" />
-  </Style>  
+  </Style>
   <Style Selector="ListBoxItem.MoveBottom">
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
     <Setter Property="BorderBrush" Value="Black"/>
@@ -31,7 +31,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedLine">
-    <Setter Property="Background" Value="#FFFF4500" />
+    <Setter Property="Background" Value="#FF9999" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffUnchangedPieces">
@@ -43,11 +43,21 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedPieces">
-    <Setter Property="Background" Value="#FFFF4500" />
+    <Setter Property="Background" Value="#FF9999" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffModifiedPieces">
     <Setter Property="Background" Value="#FFFFFF00" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
+  <Style Selector="Border.BlockSelected">
+    <Setter Property="BorderThickness" Value="1,1,1,1"/>
+    <Setter Property="BorderBrush" Value="Green"/>
+  </Style>
+  <Styles.Resources>
+    <Color x:Key="IronyForegroundColor">#FF000000</Color>
+    <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <Color x:Key="IronyThemeSortArrowColor">#FF0000</Color>
+    <SolidColorBrush x:Key="IronyThemeSortArrowBrush" Color="{DynamicResource IronyThemeSortArrowColor}" />
+  </Styles.Resources>
 </Styles>

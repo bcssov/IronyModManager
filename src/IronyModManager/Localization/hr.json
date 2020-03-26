@@ -66,6 +66,9 @@
         "ConflictedObjects": "Sukobi",
         "LeftSide": "Lijeva strana",
         "RightSide": "Desna strana",
+        "BinaryFile": "Binarni sadržaj",
+        "TakeLeft": "Uzmi lijevo",
+        "TakeRight": "Uzmi desno",
         "ContextMenu": {
             "CopyThis": "Kopiraj odabrano",
             "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
