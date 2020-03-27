@@ -12,67 +12,81 @@
     <converter:DiffSubPieceConverter x:Key="DiffSubPieceConverter" />
   </UserControl.Resources>
   <Panel>
-    <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
-      <ListBox Grid.Column="0" Items="{Binding Diff.OldText.Lines}"
-               ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
-               SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
-              <Grid.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-              </Grid.ContextMenu>
-              <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
-              <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
-                                                Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}" 
-                                                HorizontalCacheLength="100" VerticalCacheLength="100">
-                <controls:HorizontalItemsRepeater.ItemTemplate>
-                  <DataTemplate>
-                    <controls:BoundClassTextBlock Text="{Binding Text}"
-                                            BoundClasses="{Binding, Converter={StaticResource DiffSubPieceConverter}}">
-                    </controls:BoundClassTextBlock>
-                  </DataTemplate>
-                </controls:HorizontalItemsRepeater.ItemTemplate>
-              </controls:HorizontalItemsRepeater>
-              <controls:BoundClassTextBlock Grid.Column="1" Text="{Binding Text}" IsVisible="{Binding SubPieces, 
-                         Converter={StaticResource CollectionNullOrEmptyConverter}}"
-                                      BoundClasses="{Binding, Converter={StaticResource DiffLineConverter}}">
-              </controls:BoundClassTextBlock>
-            </Grid>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <ListBox Grid.Column="1" Items="{Binding Diff.NewText.Lines}"
-               ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="rightSide"
-               SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
-              <Grid.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-              </Grid.ContextMenu>
-              <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
-              <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
+    <Panel IsVisible="{Binding EditingText}">
+      <Grid ColumnDefinitions="*" RowDefinitions="9*,1*">
+        <Panel Grid.Column="0" Grid.Row="0">
+          <TextBox TextWrapping="Wrap" Text="{Binding LeftSide}" IsVisible="{Binding EditingLeft}"></TextBox>
+          <TextBox TextWrapping="Wrap" Text="{Binding RightSide}" IsVisible="{Binding EditingRight}"></TextBox>
+        </Panel>
+        <Panel Grid.Column="0" Grid.Row="1">
+          <Button HorizontalAlignment="Left" Content="{Binding OK}" Command="{Binding OKCommand}"></Button>
+          <Button HorizontalAlignment="Right" Content="{Binding Cancel}" Command="{Binding CancelCommand}"></Button>
+        </Panel>
+      </Grid>
+    </Panel>
+    <Panel IsVisible="{Binding !EditingText}">
+      <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
+        <ListBox Grid.Column="0" Items="{Binding Diff.OldText.Lines}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
+                 SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
+                <Grid.ContextMenu>
+                  <ContextMenu>
+                  </ContextMenu>
+                </Grid.ContextMenu>
+                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
+                <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
                                                 Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
-                                                HorizontalCacheLength="100" VerticalCacheLength="100">
-                <controls:HorizontalItemsRepeater.ItemTemplate>
-                  <DataTemplate>
-                    <controls:BoundClassTextBlock Text="{Binding Text}"
-                                            BoundClasses="{Binding, Converter={StaticResource DiffSubPieceConverter}}">
-                    </controls:BoundClassTextBlock>
-                  </DataTemplate>
-                </controls:HorizontalItemsRepeater.ItemTemplate>
-              </controls:HorizontalItemsRepeater>
-              <controls:BoundClassTextBlock Grid.Column="1" Text="{Binding Text}" IsVisible="{Binding SubPieces, 
+                                                  HorizontalCacheLength="100" VerticalCacheLength="100">
+                  <controls:HorizontalItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                      <controls:BoundClassTextBlock Text="{Binding Text}"
+                                              BoundClasses="{Binding, Converter={StaticResource DiffSubPieceConverter}}">
+                      </controls:BoundClassTextBlock>
+                    </DataTemplate>
+                  </controls:HorizontalItemsRepeater.ItemTemplate>
+                </controls:HorizontalItemsRepeater>
+                <controls:BoundClassTextBlock Grid.Column="1" Text="{Binding Text}" IsVisible="{Binding SubPieces, 
                          Converter={StaticResource CollectionNullOrEmptyConverter}}"
-                                      BoundClasses="{Binding, Converter={StaticResource DiffLineConverter}}">
-              </controls:BoundClassTextBlock>
-            </Grid>
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-    </Grid>
+                                        BoundClasses="{Binding, Converter={StaticResource DiffLineConverter}}">
+                </controls:BoundClassTextBlock>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox Grid.Column="1" Items="{Binding Diff.NewText.Lines}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="rightSide"
+                 SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
+                <Grid.ContextMenu>
+                  <ContextMenu>
+                  </ContextMenu>
+                </Grid.ContextMenu>
+                <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
+                <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
+                                                Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
+                                                  HorizontalCacheLength="100" VerticalCacheLength="100">
+                  <controls:HorizontalItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                      <controls:BoundClassTextBlock Text="{Binding Text}"
+                                              BoundClasses="{Binding, Converter={StaticResource DiffSubPieceConverter}}">
+                      </controls:BoundClassTextBlock>
+                    </DataTemplate>
+                  </controls:HorizontalItemsRepeater.ItemTemplate>
+                </controls:HorizontalItemsRepeater>
+                <controls:BoundClassTextBlock Grid.Column="1" Text="{Binding Text}" IsVisible="{Binding SubPieces, 
+                         Converter={StaticResource CollectionNullOrEmptyConverter}}"
+                                        BoundClasses="{Binding, Converter={StaticResource DiffLineConverter}}">
+                </controls:BoundClassTextBlock>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Panel>
   </Panel>
 </UserControl>

@@ -66,15 +66,19 @@
         "ConflictedObjects": "Conflicted Objects",
         "LeftSide": "Left Side",
         "RightSide": "Right Side",
-        "BinaryFile":  "Binary Content",
+        "BinaryFile": "Binary Content",
         "TakeLeft": "Take Left",
         "TakeRight": "Take Right",
+        "OK": "OK",
+        "Cancel": "Cancel",
         "ContextMenu": {
             "CopyThis": "Copy This",
             "CopyThisAfterLine": "Copy This After Line",
             "CopyThisBeforeLine": "Copy This Before Line",
             "MoveUp": "Move Up",
-            "MoveDown": "Move Down"
+            "MoveDown": "Move Down",
+            "Edit": "Edit",
+            "CopyText": "Copy Text"
         }
     },
     "Notifications": {

@@ -96,6 +96,8 @@ namespace IronyModManager.Shared
             public const string BinaryFile = Prefix + "BinaryFile";
             public const string TakeLeft = Prefix + "TakeLeft";
             public const string TakeRight = Prefix + "TakeRight";
+            public const string OK = Prefix + "OK";
+            public const string Cancel = Prefix + "Cancel";
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";
@@ -104,6 +106,8 @@ namespace IronyModManager.Shared
                 public const string CopyThisBeforeLine = Prefix + "CopyThisBeforeLine";
                 public const string MoveUp = Prefix + "MoveUp";
                 public const string MoveDown = Prefix + "MoveDown";
+                public const string Edit = Prefix + "Edit";
+                public const string CopyText = Prefix + "CopyText";
             }
         }
         public static class Notifications

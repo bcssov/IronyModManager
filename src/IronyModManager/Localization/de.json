@@ -69,12 +69,16 @@
         "BinaryFile": "Binärer Inhalt",
         "TakeLeft": "Biegen Sie links ab",
         "TakeRight": "Hier rechts",
+        "OK": "In Ordnung",
+        "Cancel": "Stornieren",
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",
             "CopyThisBeforeLine": "Kopieren Sie diese vor Zeile",
             "MoveUp": "Nach oben gehen",
-            "MoveDown": "Sich abwärts bewegen"
+            "MoveDown": "Sich abwärts bewegen",
+            "Edit": "Bearbeiten Sie dies",
+            "CopyText": "Text kopieren"
         }
     },
     "Notifications": {

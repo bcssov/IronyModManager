@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2020
+// Last Modified On : 03-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -14,8 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -72,6 +70,22 @@ namespace IronyModManager.Views.Controls
                     {
                         var menuItems = new List<MenuItem>()
                         {
+                            new MenuItem()
+                            {
+                                Header = ViewModel.EditThis,
+                                Command = ViewModel.EditThisCommand,
+                                CommandParameter = leftSide
+                            },
+                            new MenuItem()
+                            {
+                                Header = ViewModel.CopyText,
+                                Command = ViewModel.CopyTextCommand,
+                                CommandParameter = leftSide
+                            },
+                            new MenuItem()
+                            {
+                                Header = "-"
+                            },
                             new MenuItem()
                             {
                                 Header = ViewModel.MoveUp,
@@ -150,7 +164,7 @@ namespace IronyModManager.Views.Controls
                             otherListBox.InvalidateArrange();
                             thisListBox.InvalidateArrange();
                             otherListBox.Scroll.Offset = offset;
-                        }                        
+                        }
                         updating = false;
                     }
                 };

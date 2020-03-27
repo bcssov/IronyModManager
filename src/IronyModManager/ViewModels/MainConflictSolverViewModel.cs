@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 03-27-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -173,6 +173,7 @@ namespace IronyModManager.ViewModels
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
                     ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetText(string.Empty, string.Empty);
+                    MergeViewer.ExitEditMode();
                     IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                 }
             }).DisposeWith(disposables);
@@ -182,11 +183,13 @@ namespace IronyModManager.ViewModels
                 this.WhenAnyValue(v => v.ModCompareSelector.LeftSelectedDefinition).Where(p => p != null).Subscribe(s =>
                 {
                     MergeViewer.SetText(s.Code, MergeViewer.RightSide);
+                    MergeViewer.ExitEditMode();
                 }).DisposeWith(disposables);
 
                 this.WhenAnyValue(v => v.ModCompareSelector.RightSelectedDefinition).Where(p => p != null).Subscribe(s =>
                 {
                     MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
+                    MergeViewer.ExitEditMode();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 

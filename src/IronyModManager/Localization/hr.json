@@ -69,12 +69,16 @@
         "BinaryFile": "Binarni sadržaj",
         "TakeLeft": "Uzmi lijevo",
         "TakeRight": "Uzmi desno",
+        "OK": "U redu",
+        "Cancel": "Otkaži",
         "ContextMenu": {
             "CopyThis": "Kopiraj odabrano",
             "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
             "CopyThisBeforeLine": "Kopiraj odabrano prije linije",
             "MoveUp": "Pomakni gore",
-            "MoveDown": "Pomakni dolje"
+            "MoveDown": "Pomakni dolje",
+            "Edit": "Uredi",
+            "CopyText": "Kopiraj Tekst"
         }
     },
     "Notifications": {

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 03-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,10 +17,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -34,7 +36,55 @@ namespace IronyModManager.ViewModels.Controls
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     public class MergeViewerControlViewModel : BaseViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// The URL action
+        /// </summary>
+        private readonly IUrlAction urlAction;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MergeViewerControlViewModel"/> class.
+        /// </summary>
+        /// <param name="urlAction">The URL action.</param>
+        public MergeViewerControlViewModel(IUrlAction urlAction)
+        {
+            this.urlAction = urlAction;
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the cancel.
+        /// </summary>
+        /// <value>The cancel.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Cancel)]
+        public virtual string Cancel { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the cancel command.
+        /// </summary>
+        /// <value>The cancel command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CancelCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the copy text.
+        /// </summary>
+        /// <value>The copy text.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.CopyText)]
+        public virtual string CopyText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the copy text command.
+        /// </summary>
+        /// <value>The copy text command.</value>
+        public virtual ReactiveCommand<bool, Unit> CopyTextCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy this.
@@ -82,6 +132,37 @@ namespace IronyModManager.ViewModels.Controls
         public virtual SideBySideDiffModel Diff { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [editing left].
+        /// </summary>
+        /// <value><c>true</c> if [editing left]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingLeft { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editing right].
+        /// </summary>
+        /// <value><c>true</c> if [editing right]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingRight { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editing text].
+        /// </summary>
+        /// <value><c>true</c> if [editing text]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the edit this.
+        /// </summary>
+        /// <value>The edit this.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.Edit)]
+        public virtual string EditThis { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the edit this command.
+        /// </summary>
+        /// <value>The edit this command.</value>
+        public virtual ReactiveCommand<bool, Unit> EditThisCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the left side.
         /// </summary>
         /// <value>The left side.</value>
@@ -120,6 +201,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> MoveUpCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the ok.
+        /// </summary>
+        /// <value>The ok.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.OK)]
+        public virtual string OK { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the ok command.
+        /// </summary>
+        /// <value>The ok command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OKCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the right side.
         /// </summary>
         /// <value>The right side.</value>
@@ -134,6 +228,16 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Exits the edit mode.
+        /// </summary>
+        public virtual void ExitEditMode()
+        {
+            EditingLeft = false;
+            EditingRight = false;
+            EditingText = false;
+        }
 
         /// <summary>
         /// Sets the text.
@@ -281,6 +385,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// copy text as an asynchronous operation.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected async Task CopyTextAsync(bool leftSide)
+        {
+            await urlAction.CopyAsync(leftSide ? LeftSide : RightSide);
+        }
+
+        /// <summary>
         /// Moves the specified move up.
         /// </summary>
         /// <param name="moveUp">if set to <c>true</c> [move up].</param>
@@ -385,6 +498,29 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Move(false, LeftSideSelected, Diff.NewText.Lines, leftSide);
                 }
+            }).DisposeWith(disposables);
+
+            OKCommand = ReactiveCommand.Create(() =>
+            {
+                SetText(LeftSide, RightSide);
+                ExitEditMode();
+            }).DisposeWith(disposables);
+
+            CancelCommand = ReactiveCommand.Create(() =>
+            {
+                ExitEditMode();
+            }).DisposeWith(disposables);
+
+            EditThisCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                EditingLeft = leftSide;
+                EditingRight = !leftSide;
+                EditingText = true;
+            }).DisposeWith(disposables);
+
+            CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                CopyTextAsync(leftSide).ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
