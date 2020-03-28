@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="GfxParser.cs" company="Mario">
 //     Mario
@@ -56,6 +56,16 @@ namespace IronyModManager.Parser.Generic
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
+        public int Priority => 10;
+
+        #endregion Properties
 
         #region Methods
 

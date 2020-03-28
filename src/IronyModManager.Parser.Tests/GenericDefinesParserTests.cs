@@ -4,9 +4,9 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
-// <copyright file="StellarisDefinesParserTests.cs" company="Mario">
+// <copyright file="GenericDefinesParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -25,7 +25,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class StellarisDefinesParserTests.
     /// </summary>
-    public class StellarisDefinesParserTests
+    public class GenericDefinesParserTests
     {
         /// <summary>
         /// Defines the test method CanParse_should_be_false_then_true.
@@ -38,9 +38,11 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new Games.Stellaris.DefinesParser(new TextParser());
+            var parser = new Generic.DefinesParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\defines\\t.txt";
+            parser.CanParse(args).Should().BeTrue();
+            args.File = "common\\defines.luad";
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -88,7 +90,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Games.Stellaris.DefinesParser(new TextParser());
+            var parser = new Generic.DefinesParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -120,7 +122,7 @@ namespace IronyModManager.Parser.Tests
                     default:
                         break;
                 }
-                result[i].ModName.Should().Be("fake");                
+                result[i].ModName.Should().Be("fake");
             }
         }
 
@@ -134,9 +136,9 @@ namespace IronyModManager.Parser.Tests
 
             var sb = new StringBuilder();
             sb.AppendLine(@"NGraphics = {");
-            sb.AppendLine(@"		CAMERA_DISTANCE_TO_ZOOM				= 10.0 }");            
+            sb.AppendLine(@"		CAMERA_DISTANCE_TO_ZOOM				= 10.0 }");
 
-            
+
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NGraphics = {");
             sb2.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM = 10.0");
@@ -151,7 +153,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new Games.Stellaris.DefinesParser(new TextParser());
+            var parser = new Generic.DefinesParser(new TextParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

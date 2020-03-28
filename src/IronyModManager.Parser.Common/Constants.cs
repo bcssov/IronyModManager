@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -28,6 +28,11 @@ namespace IronyModManager.Parser.Common
         /// The binary type
         /// </summary>
         public const string BinaryType = "binary";
+
+        /// <summary>
+        /// The common path
+        /// </summary>
+        public const string CommonPath = "common";
 
         /// <summary>
         /// The FXH extension
@@ -64,7 +69,31 @@ namespace IronyModManager.Parser.Common
         /// </summary>
         public const string YmlType = "yml";
 
+        /// <summary>
+        /// The defines path
+        /// </summary>
+        public static readonly string DefinesPath = MergePath(CommonPath, "defines");
+
+        /// <summary>
+        /// The on actions path
+        /// </summary>
+        public static readonly string OnActionsPath = MergePath(CommonPath, "on_actions");
+
         #endregion Fields
+
+        #region Methods
+
+        /// <summary>
+        /// Merges the path.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        /// <returns>System.String.</returns>
+        private static string MergePath(params string[] paths)
+        {
+            return string.Join(Path.DirectorySeparatorChar, paths);
+        }
+
+        #endregion Methods
 
         #region Classes
 
@@ -173,17 +202,12 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The generic key ids
             /// </summary>
-            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=" };
+            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             /// <summary>
             /// The path trim parameters
             /// </summary>
             public static readonly char[] PathTrimParameters = new char[] { '\\', '/' };
-
-            /// <summary>
-            /// The stellaris key ids
-            /// </summary>
-            public static readonly string[] StellarisKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=" };
 
             #endregion Fields
         }
@@ -206,24 +230,14 @@ namespace IronyModManager.Parser.Common
             public const string Sound = "sound";
 
             /// <summary>
-            /// The common root files
-            /// </summary>
-            public static readonly string Alerts = MergePath("common", "alerts.txt");
-
-            /// <summary>
             /// The component tags
             /// </summary>
-            public static readonly string ComponentTags = MergePath("common", "component_tags");
-
-            /// <summary>
-            /// The defines
-            /// </summary>
-            public static readonly string Defines = MergePath("common", "defines");
+            public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
 
             /// <summary>
             /// The diplo phrases
             /// </summary>
-            public static readonly string DiploPhrases = MergePath("common", "diplo_phrases");
+            public static readonly string DiploPhrases = MergePath(CommonPath, "diplo_phrases");
 
             /// <summary>
             /// The map galaxy
@@ -231,19 +245,9 @@ namespace IronyModManager.Parser.Common
             public static readonly string MapGalaxy = MergePath("map", "galaxy");
 
             /// <summary>
-            /// The message types
-            /// </summary>
-            public static readonly string MessageTypes = MergePath("common", "message_types.txt");
-
-            /// <summary>
             /// The name lists
             /// </summary>
-            public static readonly string NameLists = MergePath("common", "name_lists");
-
-            /// <summary>
-            /// The on actions flag
-            /// </summary>
-            public static readonly string OnActions = MergePath("common", "on_actions");
+            public static readonly string NameLists = MergePath(CommonPath, "name_lists");
 
             /// <summary>
             /// The portraits
@@ -253,32 +257,27 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The random names
             /// </summary>
-            public static readonly string RandomNames = MergePath("common", "random_names");
+            public static readonly string RandomNames = MergePath(CommonPath, "random_names");
 
             /// <summary>
             /// The solar system initializers
             /// </summary>
-            public static readonly string SolarSystemInitializers = MergePath("common", "solar_system_initializers");
+            public static readonly string SolarSystemInitializers = MergePath(CommonPath, "solar_system_initializers");
 
             /// <summary>
             /// The species names
             /// </summary>
-            public static readonly string SpeciesNames = MergePath("common", "species_names");
-
-            /// <summary>
-            /// The start screen messages
-            /// </summary>
-            public static readonly string StartScreenMessages = MergePath("common", "start_screen_messages");
+            public static readonly string SpeciesNames = MergePath(CommonPath, "species_names");
 
             /// <summary>
             /// The terraform
             /// </summary>
-            public static readonly string Terraform = MergePath("common", "terraform");
+            public static readonly string Terraform = MergePath(CommonPath, "terraform");
 
             /// <summary>
             /// The weapon components
             /// </summary>
-            public static readonly string WeaponComponents = MergePath("common", "component_templates", "weapon_components.csv");
+            public static readonly string WeaponComponents = MergePath(CommonPath, "component_templates", "weapon_components.csv");
 
             /// <summary>
             /// The world GFX
@@ -286,20 +285,6 @@ namespace IronyModManager.Parser.Common
             public static readonly string WorldGfx = MergePath("gfx", "worldgfx");
 
             #endregion Fields
-
-            #region Methods
-
-            /// <summary>
-            /// Merges the path.
-            /// </summary>
-            /// <param name="paths">The paths.</param>
-            /// <returns>System.String.</returns>
-            private static string MergePath(params string[] paths)
-            {
-                return string.Join(Path.DirectorySeparatorChar, paths);
-            }
-
-            #endregion Methods
         }
 
         #endregion Classes

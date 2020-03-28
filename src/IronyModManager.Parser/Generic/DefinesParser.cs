@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -18,14 +18,16 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 
-namespace IronyModManager.Parser.Games.Stellaris
+namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class DefinesParser.
-    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
-    public class DefinesParser : BaseStellarisParser
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
+    public class DefinesParser : BaseParser, IGenericParser
     {
         #region Constructors
 
@@ -39,6 +41,16 @@ namespace IronyModManager.Parser.Games.Stellaris
 
         #endregion Constructors
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
+        public int Priority => 1;
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
@@ -46,9 +58,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public override bool CanParse(CanParseArgs args)
+        public bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && args.File.StartsWith(Common.Constants.Stellaris.Defines, StringComparison.OrdinalIgnoreCase);
+            return args.File.StartsWith(Common.Constants.DefinesPath, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Tests
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 03-28-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 03-28-2020
 // ***********************************************************************
-// <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
+// <copyright file="GenericWholeTextParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,103 +17,71 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Games.Stellaris;
+using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
-
 
 namespace IronyModManager.Parser.Tests
 {
     /// <summary>
-    /// Class StellarisWholeTextParserTests.
+    /// Class GenericWholeTextParserTests.
     /// </summary>
-    public class StellarisWholeTextParserTests
+    public class GenericWholeTextParserTests
     {
         /// <summary>
-        /// Defines the test method CanParse_map_galaxy_should_be_true.
+        /// Defines the test method CanParse_common_root_should_be_true.
         /// </summary>
         [Fact]
-        public void CanParse_map_galaxy_should_be_true()
+        public void CanParse_common_root_should_be_true()
         {
             var args = new CanParseArgs()
             {
-                File = "map\\galaxy\\test.txt",
+                File = "common\\alerts.txt",
                 GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new TextParser());
+            parser.CanParse(args).Should().BeTrue();
+            args.File = "common\\message_types.txt";
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_on_actions_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_on_actions_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\on_actions\\test.txt"         
             };
             var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>
-        /// Defines the test method CanParse_weapon_components_should_be_true.
+        /// Defines the test method CanParse_shader_should_be_true.
         /// </summary>
         [Fact]
-        public void CanParse_weapon_components_should_be_true()
+        public void CanParse_shader_should_be_true()
         {
             var args = new CanParseArgs()
             {
-                File = "common\\component_templates\\weapon_components.csv",
-                GameType = "Stellaris"
+                File = "common\\test.shader"                
             };
             var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>
-        /// Defines the test method CanParse_weapon_components_should_be_true.
+        /// Defines the test method CanParse_text_sound_file_should_be_true.
         /// </summary>
         [Fact]
-        public void CanParse_component_tags_should_be_true()
+        public void CanParse_text_sound_file_should_be_true()
         {
             var args = new CanParseArgs()
             {
-                File = "common\\component_tags\\tags.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new TextParser());
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_diplo_phrase_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_diplo_phrase_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\diplo_phrases\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new TextParser());
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_species_names_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_species_names_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\species_names\\test.txt",
-                GameType = "Stellaris"
-            };
-            var parser = new WholeTextParser(new TextParser());
-            parser.CanParse(args).Should().BeTrue();
-        }
-
-        /// <summary>
-        /// Defines the test method CanParse_terraform_should_be_true.
-        /// </summary>
-        [Fact]
-        public void CanParse_terraform_should_be_true()
-        {
-            var args = new CanParseArgs()
-            {
-                File = "common\\terraform\\test.txt",
-                GameType = "Stellaris"
+                File = "sound\\test.fxh"                
             };
             var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeTrue();
@@ -124,15 +92,16 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method CanParse_name_list_should_be_true.
         /// </summary>
         [Fact]
-        public void CanParse_name_list_should_be_true()
+        public void CanParse_fxh_should_be_true()
         {
             var args = new CanParseArgs()
             {
-                File = "common\\name_lists\\t.txt",
-                GameType = "Stellaris"
+                File = "common\\name_lists\\t.txt"                
             };
             var parser = new WholeTextParser(new TextParser());
-            parser.CanParse(args).Should().BeTrue();            
+            parser.CanParse(args).Should().BeFalse();
+            args.File = "common\\test.fxh";
+            parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>
@@ -143,8 +112,7 @@ namespace IronyModManager.Parser.Tests
         {
             var args = new CanParseArgs()
             {
-                File = "common\\ship_designs\\test.txt",
-                GameType = "Stellaris"
+                File = "common\\ship_designs\\test.txt"                
             };
             var parser = new WholeTextParser(new TextParser());
             parser.CanParse(args).Should().BeFalse();
