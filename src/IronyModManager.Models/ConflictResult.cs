@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Models
     public class ConflictResult : BaseModel, IConflictResult
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets all conflicts.
+        /// </summary>
+        /// <value>All conflicts.</value>
+        public IIndexedDefinitions AllConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the conflicts.

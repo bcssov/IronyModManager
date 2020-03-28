@@ -21,13 +21,11 @@ namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
     /// Class WholeTextParser.
-    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     /// Implements the <see cref="IronyModManager.Parser.Generic.WholeTextParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Generic.WholeTextParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
     public class WholeTextParser : Generic.WholeTextParser, IGameParser
     {
         #region Fields

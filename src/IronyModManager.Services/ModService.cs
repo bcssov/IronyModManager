@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -186,10 +186,36 @@ namespace IronyModManager.Services
             conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p), true);
             var orphanedConflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
             orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p), true);
+            result.AllConflicts = indexedDefinitions;
             result.Conflicts = conflictsIndexed;
             result.OrphanConflicts = orphanedConflictsIndexed;
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the definitions to write.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public virtual IEnumerable<IDefinition> GetDefinitionsToWrite(IConflictResult conflictResult, IDefinition definition)
+        {
+            if (definition.ValueType != Parser.Common.ValueType.Object)
+            {
+                return new List<IDefinition>() { definition };
+            }
+            var definitions = new List<IDefinition>() { definition };
+            var conflicts = FilterValidWriteDefinitions(conflictResult.Conflicts, definition);
+            if (conflicts.Count() > 0)
+            {
+                // TODO: Will need to handle overrides here
+            }
+            var allConflicts = FilterValidWriteDefinitions(conflictResult.AllConflicts, definition).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id)));
+            definitions.AddRange(allConflicts.GroupBy(p => p.Id).Select(p => p.First()));
+            var orphanConflicts = FilterValidWriteDefinitions(conflictResult.OrphanConflicts, definition).Where(p => !allConflicts.Any(c => c.Id.Equals(p.Id)));
+            definitions.AddRange(orphanConflicts.GroupBy(p => p.Id).Select(p => p.First()));
+            return definitions;
         }
 
         /// <summary>
@@ -354,6 +380,22 @@ namespace IronyModManager.Services
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Filters the valid write definitions.
+        /// </summary>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> FilterValidWriteDefinitions(IIndexedDefinitions indexedDefinitions, IDefinition definition)
+        {
+            var conflicts = indexedDefinitions.GetByFile(definition.File);
+            if (conflicts != null)
+            {
+                return conflicts.Where(p => !p.Id.Equals(definition.Id) && p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace);
+            }
+            return new List<IDefinition>();
         }
 
         /// <summary>
