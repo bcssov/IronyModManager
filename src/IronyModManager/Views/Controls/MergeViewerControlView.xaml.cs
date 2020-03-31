@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2020
+// Last Modified On : 03-31-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -63,12 +63,10 @@ namespace IronyModManager.Views.Controls
             var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
             if (hoveredItem != null)
             {
-                if (hoveredItem != null)
+                var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                if (grid != null)
                 {
-                    var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                    if (grid != null)
-                    {
-                        var menuItems = new List<MenuItem>()
+                    var menuItems = new List<MenuItem>()
                         {
                             new MenuItem()
                             {
@@ -121,8 +119,7 @@ namespace IronyModManager.Views.Controls
                                 CommandParameter = leftSide
                             }
                         };
-                        grid.ContextMenu.Items = menuItems;
-                    }
+                    grid.ContextMenu.Items = menuItems;
                 }
             }
         }
