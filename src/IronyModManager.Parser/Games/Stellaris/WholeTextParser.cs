@@ -45,7 +45,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         {
             Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
             Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.Portraits,
-            Common.Constants.Stellaris.ComponentTags
+            Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.DiplomaticActions
         };
 
         #endregion Fields

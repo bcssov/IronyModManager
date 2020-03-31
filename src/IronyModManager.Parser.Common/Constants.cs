@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 03-31-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -233,6 +233,11 @@ namespace IronyModManager.Parser.Common
             /// The component tags
             /// </summary>
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
+
+            /// <summary>
+            /// The diplomatic actions
+            /// </summary>
+            public static readonly string DiplomaticActions = MergePath(CommonPath, "diplomatic_actions");
 
             /// <summary>
             /// The diplo phrases
