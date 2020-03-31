@@ -131,26 +131,26 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.4" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.4" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.4" />
+    <PackageReference Include="Avalonia" Version="0.9.6" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.6" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.6" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
     <PackageReference Include="Material.Avalonia" Version="0.9.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.1.1-prev" />
-    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.2" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="3.1.0" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="4.7.0-rc1" />
+    <PackageReference Include="NLog" Version="4.7.0" />
     <PackageReference Include="ReactiveUI" Version="11.2.3" />
     <PackageReference Include="SimpleInjector" Version="4.9.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="4.9.1" />
     <PackageReference Include="SmartFormat.NET" Version="2.5.0" />
-    <PackageReference Include="Splat.NLog" Version="9.3.11" />
-    <PackageReference Include="Splat.SimpleInjector" Version="9.3.11" />
+    <PackageReference Include="Splat.NLog" Version="9.4.1" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.4.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
   <ItemGroup>
