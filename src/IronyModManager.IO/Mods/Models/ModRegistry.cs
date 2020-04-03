@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="ModRegistry.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Models
+namespace IronyModManager.IO.Mods.Models
 {
     /// <summary>
     /// Class ModRegistry.
@@ -218,7 +218,11 @@ namespace IronyModManager.IO.Models
     /// Class ModRegistryCollection.
     /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Models.ModRegistry}" />
     /// Implements the <see cref="IronyModManager.IO.Models.IPdxFormat" />
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
+    /// Implements the <see cref="IPdxFormat" />
     /// </summary>
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
+    /// <seealso cref="IPdxFormat" />
     /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Models.ModRegistry}" />
     /// <seealso cref="IronyModManager.IO.Models.IPdxFormat" />
     internal class ModRegistryCollection : Dictionary<string, ModRegistry>, IPdxFormat

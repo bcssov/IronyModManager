@@ -4,9 +4,9 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-31-2020
 // ***********************************************************************
-// <copyright file="ModFileReader.cs" company="Mario">
+// <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,18 +16,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO
 {
     /// <summary>
-    /// Class ModFileReader.
-    /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
+    /// Class DiskFileReader.
+    /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
+    /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class ModFileReader : IFileReader
+    public class DiskFileReader : IFileReader
     {
         #region Methods
 
@@ -38,7 +38,7 @@ namespace IronyModManager.IO
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public bool CanRead(string path)
         {
-            return Directory.Exists(path) && path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+            return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -48,19 +48,35 @@ namespace IronyModManager.IO
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
         public IReadOnlyCollection<IFileInfo> Read(string path)
         {
-            var files = Directory.GetFiles(path, "*.mod", SearchOption.TopDirectoryOnly);
+            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
             if (files?.Count() > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
                 {
                     var relativePath = file.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
+                    if (!relativePath.Contains(Path.DirectorySeparatorChar) || relativePath.StartsWith("."))
+                    {
+                        continue;
+                    }
                     var info = DIResolver.Get<IFileInfo>();
-                    var content = File.ReadAllText(file);
+                    using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
-                    info.IsBinary = false;
-                    info.Content = content.SplitOnNewLine();
-                    info.ContentSHA = content.CalculateSHA();
+                    if (Shared.Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        using var streamReader = new StreamReader(stream, true);
+                        var text = streamReader.ReadToEnd();
+                        streamReader.Close();
+                        info.IsBinary = false;
+                        info.Content = text.SplitOnNewLine();
+                        info.ContentSHA = text.CalculateSHA();
+                    }
+                    else
+                    {
+                        info.IsBinary = true;
+                        using var fs = new FileStream(file, FileMode.Open, FileAccess.Read);
+                        info.ContentSHA = fs.CalculateSHA();
+                    }
                     result.Add(info);
                 }
                 return result;

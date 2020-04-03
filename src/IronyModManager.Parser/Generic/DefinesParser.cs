@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -99,7 +99,7 @@ namespace IronyModManager.Parser.Generic
                             def.Code = $"{definesType}{Environment.NewLine}{content}{Environment.NewLine}{Common.Constants.Scripts.ClosingBracket}";
                             def.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
                             def.Id = key;
-                            def.ValueType = Common.ValueType.Variable;
+                            def.ValueType = Common.ValueType.SpecialVariable;
                             result.Add(def);
                         }
                         if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
@@ -134,7 +134,7 @@ namespace IronyModManager.Parser.Generic
                         def.Code = $"{definesType}{Environment.NewLine}{textParser.PrettifyLine(cleaned)}{Environment.NewLine}{Common.Constants.Scripts.ClosingBracket}";
                         def.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
                         def.Id = key;
-                        def.ValueType = Common.ValueType.Variable;
+                        def.ValueType = Common.ValueType.SpecialVariable;
                         result.Add(def);
                     }
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 03-09-2020
+// Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 04-02-2020
 // ***********************************************************************
-// <copyright file="ModExporter.cs" company="Mario">
+// <copyright file="ModWriter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,25 +16,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using IronyModManager.IO.Common;
-using IronyModManager.IO.Models;
+using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
-using SharpCompress.Archives;
-using SharpCompress.Readers;
 
-namespace IronyModManager.IO
+namespace IronyModManager.IO.Mods
 {
     /// <summary>
-    /// Class FileWriter.
-    /// Implements the <see cref="IronyModManager.IO.Common.IModExporter" />
+    /// Class ModWriter.
+    /// Implements the <see cref="IronyModManager.IO.Common.Mods.IModWriter" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Common.IModExporter" />
+    /// <seealso cref="IronyModManager.IO.Common.Mods.IModWriter" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    public class ModExporter : IModExporter
+    public class ModWriter : IModWriter
     {
         #region Fields
 
@@ -63,16 +60,15 @@ namespace IronyModManager.IO
         #region Methods
 
         /// <summary>
-        /// apply collection as an asynchronous operation.
+        /// apply mods as an asynchronous operation.
         /// </summary>
-        /// <param name="collectionMods">The collection mods.</param>
-        /// <param name="rootDirectory">The root directory.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public async Task<bool> ApplyCollectionAsync(IReadOnlyCollection<IMod> collectionMods, string rootDirectory)
+        public async Task<bool> ApplyModsAsync(ModWriterParameters parameters)
         {
-            var dlcPath = Path.Combine(rootDirectory, DLC_load_path);
-            var gameDataPath = Path.Combine(rootDirectory, Game_data_path);
-            var modRegistryPath = Path.Combine(rootDirectory, Mod_registry_path);
+            var dlcPath = Path.Combine(parameters.RootDirectory, DLC_load_path);
+            var gameDataPath = Path.Combine(parameters.RootDirectory, Game_data_path);
+            var modRegistryPath = Path.Combine(parameters.RootDirectory, Mod_registry_path);
             var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
             var gameData = await LoadPdxModelAsync<GameData>(gameDataPath) ?? new GameData();
             var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? new ModRegistryCollection();
@@ -94,7 +90,7 @@ namespace IronyModManager.IO
                 modRegistry.Remove(item);
             }
 
-            foreach (var mod in collectionMods)
+            foreach (var mod in parameters.Mods)
             {
                 ModRegistry pdxMod;
                 // Populate registry
@@ -140,64 +136,53 @@ namespace IronyModManager.IO
         }
 
         /// <summary>
-        /// Exports the asynchronous.
+        /// Creates the mod directory asynchronous.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="exportPath">The export path.</param>
-        /// <param name="mod">The mod.</param>
-        /// <param name="modDirectory">The mod directory.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ExportAsync<T>(string exportPath, T mod, string modDirectory) where T : IModCollection
+        public Task<bool> CreateModDirectoryAsync(ModWriterParameters parameters)
         {
-            // TODO: Add logic for this, at the moment there is no conflict detector
-            if (Directory.Exists(modDirectory))
+            if (!Directory.Exists(parameters.Path))
             {
+                Directory.CreateDirectory(parameters.Path);
             }
-            var content = JsonConvert.SerializeObject(mod, Formatting.Indented);
-            using var zip = ArchiveFactory.Create(SharpCompress.Common.ArchiveType.Zip);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
-            zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
-            zip.SaveTo(exportPath, new SharpCompress.Writers.WriterOptions(SharpCompress.Common.CompressionType.Deflate));
-            zip.Dispose();
             return Task.FromResult(true);
         }
 
         /// <summary>
-        /// Imports the asynchronous.
+        /// Writes the descriptor asynchronous.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="file">The file.</param>
-        /// <param name="mod">The mod.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ImportAsync<T>(string file, T mod) where T : IModCollection
+        public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
         {
-            using var fileStream = File.OpenRead(file);
-            using var reader = ReaderFactory.Open(fileStream);
-            var result = false;
-            while (reader.MoveToNextEntry())
+            // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
+            using var fs = new FileStream(parameters.Path, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
+            using var sw = new StreamWriter(fs);
+            var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+            foreach (var prop in props)
             {
-                if (!reader.Entry.IsDirectory)
+                var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
+                var val = prop.GetValue(parameters.Mod, null);
+                if (val is IEnumerable<string> col)
                 {
-                    var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    using var entryStream = reader.OpenEntryStream();
-                    using var memoryStream = new MemoryStream();
-                    entryStream.CopyTo(memoryStream);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-                    if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
+                    if (col.Count() > 0)
                     {
-                        using var streamReader = new StreamReader(memoryStream, true);
-                        var text = streamReader.ReadToEnd();
-                        streamReader.Close();
-                        JsonConvert.PopulateObject(text, mod);
-                        result = true;
-                    }
-                    else
-                    {
-                        // TODO: Add logic for mod directory import, there is no conflict detector at the moment
+                        await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                        foreach (var item in col)
+                        {
+                            await sw.WriteLineAsync($"\t{item}");
+                        }
+                        await sw.WriteLineAsync($"{attr.PropertyName}=}}");
                     }
                 }
+                else
+                {
+                    await sw.WriteLineAsync($"{attr.PropertyName}={val}");
+                }
             }
-            return Task.FromResult(result);
+            await sw.FlushAsync();
+            return true;
         }
 
         /// <summary>

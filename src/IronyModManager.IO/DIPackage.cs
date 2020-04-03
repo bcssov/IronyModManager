@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,7 +13,10 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Mods;
+using IronyModManager.IO.Readers;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -39,7 +42,9 @@ namespace IronyModManager.IO
             container.Collection.Register(typeof(IFileReader), typeof(DIPackage).Assembly);
             container.Register<IFileInfo, FileInfo>();
             container.Register<IReader, Reader>();
-            container.Register<IModExporter, ModExporter>();
+            container.Register<IModCollectionExporter, ModCollectionExporter>();
+            container.Register<IModWriter, ModWriter>();
+            container.Register<IModPatchExporter, ModPatchExporter>();
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -16,17 +16,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
 using SharpCompress.Readers;
 
-namespace IronyModManager.IO
+namespace IronyModManager.IO.Readers
 {
     /// <summary>
     /// Class ArchiveFileReader.
-    /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
+    /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
+    /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ArchiveFileReader : IFileReader
     {

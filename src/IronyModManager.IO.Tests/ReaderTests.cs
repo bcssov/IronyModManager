@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Readers;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -93,6 +95,9 @@ namespace IronyModManager.IO.Tests
 #if FUNCTIONAL_TEST
         [Fact]
 #else
+        /// <summary>
+        /// Defines the test method Mod_file_read_test.
+        /// </summary>
         [Fact(Skip = "This is for functional testing only")]
 #endif
         public void Mod_file_read_test()
@@ -109,7 +114,9 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Class Reader1.
         /// Implements the <see cref="IronyModManager.IO.IFileReader" />
+        /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// </summary>
+        /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// <seealso cref="IronyModManager.IO.IFileReader" />
         private class Reader1 : IFileReader
         {
@@ -140,7 +147,9 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Class Reader2.
         /// Implements the <see cref="IronyModManager.IO.IFileReader" />
+        /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// </summary>
+        /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// <seealso cref="IronyModManager.IO.IFileReader" />
         private class Reader2 : IFileReader
         {

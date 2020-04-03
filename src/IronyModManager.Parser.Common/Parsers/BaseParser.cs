@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -99,14 +99,15 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition = GetDefinitionInstance();
                         var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
                         definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
+                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
                             definition.ValueType = ValueType.Namespace;
                         }
                         else
                         {
+                            definition.Id = id;
                             definition.ValueType = ValueType.Variable;
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
@@ -206,7 +207,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="typeOverride">The type override.</param>
         /// <returns>System.String.</returns>
         protected virtual string FormatType(string file, string typeOverride = Shared.Constants.EmptyParam)
-        {            
+        {
             var formatted = Path.GetDirectoryName(file);
             var type = Path.GetExtension(file).Trim('.');
             if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))

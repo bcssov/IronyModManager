@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -14,15 +14,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Readers;
 
-namespace IronyModManager.IO
+namespace IronyModManager.IO.Readers
 {
     /// <summary>
     /// Class Reader.
-    /// Implements the <see cref="IronyModManager.IO.Common.IReader" />
+    /// Implements the <see cref="IronyModManager.IO.Common.Readers.IReader" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Common.IReader" />
+    /// <seealso cref="IronyModManager.IO.Common.Readers.IReader" />
     public class Reader : IReader
     {
         #region Fields

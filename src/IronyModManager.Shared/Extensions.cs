@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-02-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -13,9 +13,9 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Data.HashFunction.MetroHash;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace IronyModManager.Shared
@@ -33,6 +33,11 @@ namespace IronyModManager.Shared
         /// </summary>
         private static readonly string tabSpace = new string(' ', 4);
 
+        /// <summary>
+        /// The hash
+        /// </summary>
+        private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
+
         #endregion Fields
 
         #region Methods
@@ -44,9 +49,8 @@ namespace IronyModManager.Shared
         /// <returns>System.String.</returns>
         public static string CalculateSHA(this string value)
         {
-            using var hash = new SHA256Managed();
             var checksum = hash.ComputeHash(Encoding.UTF8.GetBytes(value));
-            return BitConverter.ToString(checksum).Replace("-", string.Empty);
+            return checksum.AsHexString();
         }
 
         /// <summary>
@@ -57,9 +61,8 @@ namespace IronyModManager.Shared
         public static string CalculateSHA(this Stream stream)
         {
             using var bufferedStream = new BufferedStream(stream, 1024 * 32);
-            using var hash = new SHA256Managed();
-            byte[] checksum = hash.ComputeHash(bufferedStream);
-            return BitConverter.ToString(checksum).Replace("-", string.Empty);
+            var checksum = hash.ComputeHash(bufferedStream);
+            return checksum.AsHexString();
         }
 
         /// <summary>

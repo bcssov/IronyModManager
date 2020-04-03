@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -93,7 +93,7 @@ namespace IronyModManager.Parser.Generic
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
                         def.Type = FormatType(args.File, $"{selectedLanguage}-{Common.Constants.YmlType}");
                         def.Id = textParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
-                        def.ValueType = Common.ValueType.Variable;
+                        def.ValueType = Common.ValueType.SpecialVariable;
                         result.Add(def);
                     }
                 }

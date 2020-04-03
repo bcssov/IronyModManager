@@ -146,7 +146,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
-                        result[i].Id.Should().Be("fake-@test");
+                        result[i].Id.Should().Be("@test");
                         result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:

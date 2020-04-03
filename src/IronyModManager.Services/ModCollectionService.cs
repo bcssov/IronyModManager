@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 04-02-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Mods;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
@@ -45,9 +45,9 @@ namespace IronyModManager.Services
         private readonly IGameService gameService;
 
         /// <summary>
-        /// The mod exporter
+        /// The mod collection exporter
         /// </summary>
-        private readonly IModExporter modExporter;
+        private readonly IModCollectionExporter modCollectionExporter;
 
         #endregion Fields
 
@@ -57,14 +57,14 @@ namespace IronyModManager.Services
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
         /// <param name="gameService">The game service.</param>
-        /// <param name="modExporter">The mod exporter.</param>
+        /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IGameService gameService, IModExporter modExporter,
+        public ModCollectionService(IGameService gameService, IModCollectionExporter modCollectionExporter,
             IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.gameService = gameService;
-            this.modExporter = modExporter;
+            this.modCollectionExporter = modCollectionExporter;
         }
 
         #endregion Constructors
@@ -123,7 +123,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ExportAsync(string file, IModCollection modCollection)
         {
-            return modExporter.ExportAsync(file, modCollection, string.Empty);
+            return modCollectionExporter.ExportAsync(new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = modCollection
+            });
         }
 
         /// <summary>
@@ -174,7 +178,11 @@ namespace IronyModManager.Services
         public async Task<IModCollection> ImportAsync(string file)
         {
             var instance = GetModelInstance<IModCollection>();
-            var result = await modExporter.ImportAsync(file, instance);
+            var result = await modCollectionExporter.ImportAsync(new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = instance
+            });
             if (result)
             {
                 return instance;

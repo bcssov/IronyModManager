@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -20,7 +20,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
@@ -53,14 +54,14 @@ namespace IronyModManager.Services
         private readonly IGameService gameService;
 
         /// <summary>
-        /// The mod exporter
-        /// </summary>
-        private readonly IModExporter modExporter;
-
-        /// <summary>
         /// The mod parser
         /// </summary>
         private readonly IModParser modParser;
+
+        /// <summary>
+        /// The mod writer
+        /// </summary>
+        private readonly IModWriter modWriter;
 
         /// <summary>
         /// The parser manager
@@ -82,19 +83,18 @@ namespace IronyModManager.Services
         /// <param name="reader">The reader.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="modParser">The mod parser.</param>
-        /// <param name="modExporter">The mod exporter.</param>
+        /// <param name="modWriter">The mod writer.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
         public ModService(IReader reader, IParserManager parserManager,
-            IModParser modParser, IModExporter modExporter,
-            IGameService gameService, IStorageProvider storageProvider,
-            IMapper mapper) : base(storageProvider, mapper)
+            IModParser modParser, IModWriter modWriter, IGameService gameService,
+            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.reader = reader;
             this.parserManager = parserManager;
             this.modParser = modParser;
-            this.modExporter = modExporter;
+            this.modWriter = modWriter;
             this.gameService = gameService;
         }
 
@@ -147,7 +147,11 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
-            return modExporter.ApplyCollectionAsync(mods, game.UserDirectory);
+            return modWriter.ApplyModsAsync(new ModWriterParameters()
+            {
+                Mods = mods,
+                RootDirectory = game.UserDirectory
+            });
         }
 
         /// <summary>
@@ -167,7 +171,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions, false);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -175,7 +179,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions, true);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -201,7 +205,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public virtual IEnumerable<IDefinition> GetDefinitionsToWrite(IConflictResult conflictResult, IDefinition definition)
         {
-            if (definition.ValueType != Parser.Common.ValueType.Object)
+            if (definition.ValueType != Parser.Common.ValueType.Object && definition.ValueType != Parser.Common.ValueType.Variable)
             {
                 return new List<IDefinition>() { definition };
             }
@@ -322,12 +326,47 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="conflicts">The conflicts.</param>
         /// <param name="definitions">The definitions.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions)
+        /// <param name="evalShouldSkipVariables">if set to <c>true</c> [skip variables].</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, bool evalShouldSkipVariables = false)
         {
             if (definitions.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
             {
+                var validDefinitions = new HashSet<IDefinition>();
+                if (evalShouldSkipVariables && definitions.All(p => p.ValueType == Parser.Common.ValueType.Variable))
+                {
+                    // Must have at least one definition match per file
+                    foreach (var def in definitions)
+                    {
+                        var fileDefs = indexedDefinitions.GetByFile(def.File);
+                        foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
+                        {
+                            var fileConflicts = indexedDefinitions.GetByTypeAndId(fileDef.TypeAndId);
+                            if (fileConflicts.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
+                            {
+                                var validDefs = definitions.Where(p => fileConflicts.Any(d => d.File.Equals(p.File)));
+                                if (validDefs.Count() > 1)
+                                {
+                                    foreach (var item in validDefs)
+                                    {
+                                        if (!validDefinitions.Contains(item))
+                                        {
+                                            validDefinitions.Add(item);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var item in definitions)
+                    {
+                        validDefinitions.Add(item);
+                    }
+                }
                 var processed = new HashSet<IDefinition>();
-                foreach (var def in definitions)
+                foreach (var def in validDefinitions)
                 {
                     if (processed.Contains(def) || conflicts.Contains(def))
                     {
@@ -393,7 +432,11 @@ namespace IronyModManager.Services
             var conflicts = indexedDefinitions.GetByFile(definition.File);
             if (conflicts != null)
             {
-                return conflicts.Where(p => !p.Id.Equals(definition.Id) && p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace);
+                if (definition.ValueType == Parser.Common.ValueType.Variable)
+                {
+                    return conflicts.Where(p => !p.Id.Equals(definition.Id) && (p.ValueType == Parser.Common.ValueType.Object || p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace));
+                }
+                return conflicts.Where(p => !p.Id.Equals(definition.Id) && (p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace));
             }
             return new List<IDefinition>();
         }

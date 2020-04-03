@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
 // <copyright file="IFileInfo.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.IO.Common
+namespace IronyModManager.IO.Common.Readers
 {
     /// <summary>
     /// Interface IFileInfo

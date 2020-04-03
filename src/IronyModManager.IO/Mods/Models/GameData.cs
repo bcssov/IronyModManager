@@ -4,9 +4,9 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 04-01-2020
 // ***********************************************************************
-// <copyright file="DLCLoad.cs" company="Mario">
+// <copyright file="GameData.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,24 +15,25 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Models
+namespace IronyModManager.IO.Mods.Models
 {
     /// <summary>
-    /// Class DLCLoad.
+    /// Class GameData.
     /// Implements the <see cref="IronyModManager.IO.Models.IPdxFormat" />
+    /// Implements the <see cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
     /// </summary>
+    /// <seealso cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
     /// <seealso cref="IronyModManager.IO.Models.IPdxFormat" />
-    internal class DLCLoad : IPdxFormat
+    internal class GameData : IPdxFormat
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DLCLoad"/> class.
+        /// Initializes a new instance of the <see cref="GameData" /> class.
         /// </summary>
-        public DLCLoad()
+        public GameData()
         {
-            DisabledDlcs = new List<string>();
-            EnabledMods = new List<string>();
+            ModsOrder = new List<string>();
         }
 
         #endregion Constructors
@@ -40,18 +41,18 @@ namespace IronyModManager.IO.Models
         #region Properties
 
         /// <summary>
-        /// Gets or sets the disabled DLCS.
+        /// Gets or sets a value indicating whether this instance is EULA accepted.
         /// </summary>
-        /// <value>The disabled DLCS.</value>
-        [JsonProperty("disabled_dlcs")]
-        public List<string> DisabledDlcs { get; set; }
+        /// <value><c>true</c> if this instance is EULA accepted; otherwise, <c>false</c>.</value>
+        [JsonProperty("isEulaAccepted")]
+        public bool IsEulaAccepted { get; set; }
 
         /// <summary>
-        /// Gets or sets the enabled mods.
+        /// Gets or sets the mods order.
         /// </summary>
-        /// <value>The enabled mods.</value>
-        [JsonProperty("enabled_mods")]
-        public List<string> EnabledMods { get; set; }
+        /// <value>The mods order.</value>
+        [JsonProperty("modsOrder")]
+        public List<string> ModsOrder { get; set; }
 
         #endregion Properties
     }
