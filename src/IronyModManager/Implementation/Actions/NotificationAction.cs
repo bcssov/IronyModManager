@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -87,7 +87,8 @@ namespace IronyModManager.Implementation.Actions
             var icon = notificationType switch
             {
                 NotificationType.Info => MessageBox.Avalonia.Enums.Icon.Info,
-                NotificationType.Success => MessageBox.Avalonia.Enums.Icon.Success,
+                // Perhaps I should just fork this project over...
+                NotificationType.Success => MessageBox.Avalonia.Enums.Icon.Plus,
                 NotificationType.Warning => MessageBox.Avalonia.Enums.Icon.Warning,
                 NotificationType.Error => MessageBox.Avalonia.Enums.Icon.Error,
                 _ => MessageBox.Avalonia.Enums.Icon.None,
