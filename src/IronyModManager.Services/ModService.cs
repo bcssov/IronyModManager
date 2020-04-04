@@ -215,7 +215,18 @@ namespace IronyModManager.Services
             {
                 // TODO: Will need to handle overrides here
             }
-            var allConflicts = FilterValidWriteDefinitions(conflictResult.AllConflicts, definition).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id)));
+            List<IDefinition> allConflicts = new List<IDefinition>();
+            if (definition.ValueType == Parser.Common.ValueType.Variable)
+            {
+                foreach (var item in conflictResult.Conflicts.GetByTypeAndId(definition.TypeAndId))
+                {
+                    allConflicts.AddRange(FilterValidWriteDefinitions(conflictResult.AllConflicts, item).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id)) && !allConflicts.Any(c => c.Id.Equals(p.Id))));                    
+                }                
+            }
+            else
+            {
+                allConflicts = FilterValidWriteDefinitions(conflictResult.AllConflicts, definition).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id))).ToList();              
+            }
             definitions.AddRange(allConflicts.GroupBy(p => p.Id).Select(p => p.First()));
             var orphanConflicts = FilterValidWriteDefinitions(conflictResult.OrphanConflicts, definition).Where(p => !allConflicts.Any(c => c.Id.Equals(p.Id)));
             definitions.AddRange(orphanConflicts.GroupBy(p => p.Id).Select(p => p.First()));

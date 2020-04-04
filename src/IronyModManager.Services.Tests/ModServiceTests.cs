@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -1126,6 +1126,9 @@ namespace IronyModManager.Services.Tests
             result.First().Id.Should().Be("a");
         }
 
+        /// <summary>
+        /// Defines the test method Should_return_valid_definitions_to_write_based_on_variable.
+        /// </summary>
         [Fact]
         public void Should_return_valid_definitions_to_write_based_on_variable()
         {
@@ -1165,6 +1168,15 @@ namespace IronyModManager.Services.Tests
                 new Definition()
                 {
                     File = "events\\1.txt",
+                    Code = "cd",
+                    Type = "events",
+                    Id = "ab",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Variable
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
                     Code = "a",
                     Type = "events",
                     Id = "a",
@@ -1174,6 +1186,160 @@ namespace IronyModManager.Services.Tests
                 new Definition()
                 {
                     File = "events\\1.txt",
+                    Code = "c",
+                    Type = "events",
+                    Id = "ab",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Variable
+                }
+            };
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(definitions);
+            var conflict = service.FindConflicts(indexed);
+            var result = service.GetDefinitionsToWrite(conflict, definitions.Last());
+            result.Count().Should().Be(3);
+            result.First().Id.Should().Be("ab");
+            result.ToList()[1].Id.Should().Be("a");
+            result.Last().Id.Should().Be("c");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_valid_definitions_to_write_when_filenames_different_based_on_variable.
+        /// </summary>
+        [Fact]
+        public void Should_return_valid_definitions_to_write_when_filenames_different_based_on_variable()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Type = "events",
+                    Id = "c",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "cd",
+                    Type = "events",
+                    Id = "ab",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Variable
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "a",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "c",
+                    Type = "events",
+                    Id = "ab",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Variable
+                }
+            };
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(definitions);
+            var conflict = service.FindConflicts(indexed);
+            var result = service.GetDefinitionsToWrite(conflict, definitions.Last());
+            result.Count().Should().Be(3);
+            result.First().Id.Should().Be("ab");
+            result.ToList()[1].Id.Should().Be("a");
+            result.Last().Id.Should().Be("c");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_valid_definitions_to_write_in_variable_conflict_using_different_filenames.
+        /// </summary>
+        [Fact]
+        public void Should_return_valid_definitions_to_write_in_variable_conflict_using_different_filenames()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Type = "events",
+                    Id = "c",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "d",
+                    Type = "events",
+                    Id = "ab",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Variable
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "a",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
                     Code = "c",
                     Type = "events",
                     Id = "ab",
