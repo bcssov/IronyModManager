@@ -24,7 +24,7 @@
         </Grid>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1">
-        <Grid ColumnDefinitions="5*,5*" RowDefinitions="1*,10*">
+        <Grid ColumnDefinitions="5*,5*" RowDefinitions="2*,16*">
           <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
           <TextBlock Text="{Binding RightSide}" Grid.Column="1" Grid.Row="0"
