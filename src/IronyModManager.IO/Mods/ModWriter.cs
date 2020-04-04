@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -145,8 +145,9 @@ namespace IronyModManager.IO.Mods
             if (!Directory.Exists(parameters.Path))
             {
                 Directory.CreateDirectory(parameters.Path);
+                return Task.FromResult(true);
             }
-            return Task.FromResult(true);
+            return Task.FromResult(false);
         }
 
         /// <summary>
@@ -173,7 +174,7 @@ namespace IronyModManager.IO.Mods
                         {
                             await sw.WriteLineAsync($"\t{item}");
                         }
-                        await sw.WriteLineAsync($"{attr.PropertyName}=}}");
+                        await sw.WriteLineAsync("}");
                     }
                 }
                 else

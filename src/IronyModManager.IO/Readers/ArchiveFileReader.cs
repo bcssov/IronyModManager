@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -37,9 +37,38 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public bool CanRead(string path)
+        public virtual bool CanRead(string path)
         {
-            return File.Exists(path) && path.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
+            return File.Exists(path) && path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Stream.</returns>
+        public virtual Stream GetStream(string rootPath, string file)
+        {
+            using var fileStream = File.OpenRead(rootPath);
+            using var reader = ReaderFactory.Open(fileStream);
+            while (reader.MoveToNextEntry())
+            {
+                if (!reader.Entry.IsDirectory)
+                {
+                    var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                    var filePath = file.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                    if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        using var entryStream = reader.OpenEntryStream();
+                        var memoryStream = new MemoryStream();
+                        entryStream.CopyTo(memoryStream);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        return memoryStream;
+                    }
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -47,7 +76,7 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public IReadOnlyCollection<IFileInfo> Read(string path)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path)
         {
             using var fileStream = File.OpenRead(path);
             using var reader = ReaderFactory.Open(fileStream);
@@ -67,7 +96,7 @@ namespace IronyModManager.IO.Readers
                     entryStream.CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     info.FileName = relativePath;
-                    if (Shared.Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    if (Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                     {
                         using var streamReader = new StreamReader(memoryStream, true);
                         var text = streamReader.ReadToEnd();

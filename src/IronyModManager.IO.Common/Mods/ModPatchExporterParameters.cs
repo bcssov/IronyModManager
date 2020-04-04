@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -43,6 +43,12 @@ namespace IronyModManager.IO.Common.Mods
         public string Game { get; set; }
 
         /// <summary>
+        /// Gets or sets the mod root path.
+        /// </summary>
+        /// <value>The mod root path.</value>
+        public string ModRootPath { get; set; }
+
+        /// <summary>
         /// Gets or sets the orphan conflicts.
         /// </summary>
         /// <value>The orphan conflicts.</value>
@@ -53,6 +59,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The name of the patch.</value>
         public string PatchName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resolved conflicts.
+        /// </summary>
+        /// <value>The resolved conflicts.</value>
+        public IEnumerable<IDefinition> ResolvedConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the root path.

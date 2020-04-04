@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 04-02-2020
+// Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionMerger.cs" company="Mario">
 //     Mario
@@ -41,14 +41,14 @@ namespace IronyModManager.IO.Mods.Mergers
         protected const string LIOSName = "zzz_";
 
         /// <summary>
-        /// The localisation
+        /// The localization
         /// </summary>
-        protected const string Localisation = "localisation";
+        protected const string Localization = "localisation";
 
         /// <summary>
-        /// The localisation replace
+        /// The localization replace
         /// </summary>
-        protected const string LocalisationReplace = "replace";
+        protected const string LocalizationReplace = "replace";
 
         #endregion Fields
 
@@ -72,6 +72,22 @@ namespace IronyModManager.IO.Mods.Mergers
         public abstract bool CanProcess(string game);
 
         /// <summary>
+        /// Gets the encoding.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Encoding.</returns>
+        public virtual Encoding GetEncoding(IEnumerable<IDefinition> definitions)
+        {
+            EnsureAllSameType(definitions);
+            var definition = definitions.FirstOrDefault(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+            if (!definition.ParentDirectory.StartsWith(Localization))
+            {
+                return new UTF8Encoding(false);
+            }
+            return new UTF8Encoding(true);
+        }
+
+        /// <summary>
         /// Gets the name of the file.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -80,15 +96,16 @@ namespace IronyModManager.IO.Mods.Mergers
         {
             EnsureAllSameType(definitions);
             var definition = definitions.FirstOrDefault(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}.{Path.GetExtension(definition.File)}";
             if (FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase)))
             {
-                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{CleanFileName(definition.Id)}");
+                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{CleanFileName(fileName)}");
             }
-            else if (definition.ParentDirectory.EndsWith(Localisation))
+            else if (definition.ParentDirectory.EndsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
-                return Path.Combine(definition.ParentDirectory, LocalisationReplace, CleanFileName(definition.Id));
+                return Path.Combine(definition.ParentDirectory, LocalizationReplace, CleanFileName(fileName));
             }
-            return Path.Combine(definition.ParentDirectory, $"{LIOSName}{CleanFileName(definition.Id)}");
+            return Path.Combine(definition.ParentDirectory, $"{LIOSName}{CleanFileName(fileName)}");
         }
 
         /// <summary>

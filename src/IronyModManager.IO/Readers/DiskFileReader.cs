@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-31-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -36,9 +36,26 @@ namespace IronyModManager.IO
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public bool CanRead(string path)
+        public virtual bool CanRead(string path)
         {
             return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Stream.</returns>
+        public virtual Stream GetStream(string rootPath, string file)
+        {
+            var fullPath = Path.Combine(rootPath, file);
+            if (File.Exists(fullPath))
+            {
+                var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                return fs;
+            }
+            return null;
         }
 
         /// <summary>
@@ -46,7 +63,7 @@ namespace IronyModManager.IO
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public IReadOnlyCollection<IFileInfo> Read(string path)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path)
         {
             var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
             if (files?.Count() > 0)
@@ -62,7 +79,7 @@ namespace IronyModManager.IO
                     var info = DIResolver.Get<IFileInfo>();
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
-                    if (Shared.Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                     {
                         using var streamReader = new StreamReader(stream, true);
                         var text = streamReader.ReadToEnd();

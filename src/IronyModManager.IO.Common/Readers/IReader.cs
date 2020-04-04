@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="IReader.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace IronyModManager.IO.Common.Readers
 {
@@ -22,6 +23,14 @@ namespace IronyModManager.IO.Common.Readers
     public interface IReader
     {
         #region Methods
+
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Stream.</returns>
+        Stream GetStream(string rootPath, string file);
 
         /// <summary>
         /// Reads the specified path.

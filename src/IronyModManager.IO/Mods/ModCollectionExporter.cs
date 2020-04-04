@@ -4,9 +4,9 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
-// <copyright file="IModCollectionExporter.cs" company="Mario">
+// <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>

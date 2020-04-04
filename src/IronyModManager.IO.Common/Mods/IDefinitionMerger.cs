@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="IDefinitionMerger.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text;
 using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.IO.Common.Mods
@@ -42,6 +43,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if this instance can process the specified game; otherwise, <c>false</c>.</returns>
         bool CanProcess(string game);
+
+        /// <summary>
+        /// Gets the encoding.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>Encoding.</returns>
+        Encoding GetEncoding(IEnumerable<IDefinition> definitions);
 
         /// <summary>
         /// Gets the name of the file.

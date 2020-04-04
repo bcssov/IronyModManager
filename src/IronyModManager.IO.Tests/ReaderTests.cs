@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -74,6 +74,23 @@ namespace IronyModManager.IO.Tests
             result.Count().Should().NotBe(0);
         }
 
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Disk_stream_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Disk_stream_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetStream(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();            
+        }
+
         /// <summary>
         /// Defines the test method Disk_read_test.
         /// </summary>
@@ -90,6 +107,23 @@ namespace IronyModManager.IO.Tests
             var result = reader.Read(ArchiveTestPath);
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().NotBe(0);
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Archive_stream_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Archive_stream_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetStream(ArchiveTestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();
         }
 
 #if FUNCTIONAL_TEST
@@ -131,6 +165,20 @@ namespace IronyModManager.IO.Tests
             }
 
             /// <summary>
+            /// Gets the stream.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>Stream.</returns>
+            public Stream GetStream(string rootPath, string file)
+            {
+                var ms = new MemoryStream();
+                var sw = new StreamWriter(ms);
+                sw.Write("fake1");
+                return ms;
+            }
+
+            /// <summary>
             /// Reads the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
@@ -161,6 +209,20 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake2");
+            }
+
+            /// <summary>
+            /// Gets the stream.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>Stream.</returns>
+            public Stream GetStream(string rootPath, string file)
+            {
+                var ms = new MemoryStream();
+                var sw = new StreamWriter(ms);
+                sw.Write("fake1");
+                return ms;
             }
 
             /// <summary>

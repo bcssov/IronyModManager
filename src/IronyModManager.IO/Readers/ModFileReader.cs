@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ModFileReader.cs" company="Mario">
 //     Mario
@@ -23,13 +23,9 @@ namespace IronyModManager.IO.Readers
 {
     /// <summary>
     /// Class ModFileReader.
-    /// Implements the <see cref="IronyModManager.IO.Common.IFileReader" />
-    /// Implements the <see cref="IFileReader" />
     /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
-    /// <seealso cref="IFileReader" />
-    /// <seealso cref="IronyModManager.IO.Common.IFileReader" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ModFileReader : IFileReader
     {
@@ -40,9 +36,21 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
-        public bool CanRead(string path)
+        public virtual bool CanRead(string path)
         {
             return Directory.Exists(path) && path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the stream.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Stream.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public virtual Stream GetStream(string rootPath, string file)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -50,7 +58,7 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public IReadOnlyCollection<IFileInfo> Read(string path)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path)
         {
             var files = Directory.GetFiles(path, "*.mod", SearchOption.TopDirectoryOnly);
             if (files?.Count() > 0)

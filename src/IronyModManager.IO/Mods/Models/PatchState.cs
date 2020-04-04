@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -35,6 +35,12 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The orphan conflicts.</value>
         public List<IDefinition> OrphanConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resolved conflicts.
+        /// </summary>
+        /// <value>The resolved conflicts.</value>
+        public List<IDefinition> ResolvedConflicts { get; set; }
 
         #endregion Properties
     }
