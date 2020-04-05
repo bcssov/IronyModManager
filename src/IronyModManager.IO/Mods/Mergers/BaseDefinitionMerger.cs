@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionMerger.cs" company="Mario">
 //     Mario
@@ -96,14 +96,21 @@ namespace IronyModManager.IO.Mods.Mergers
         {
             EnsureAllSameType(definitions);
             var definition = definitions.FirstOrDefault(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
-            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}.{Path.GetExtension(definition.File)}";
+            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
             if (FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase)))
             {
                 return Path.Combine(definition.ParentDirectory, $"{FIOSName}{CleanFileName(fileName)}");
             }
-            else if (definition.ParentDirectory.EndsWith(Localization, StringComparison.OrdinalIgnoreCase))
+            else if (definition.ParentDirectory.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
-                return Path.Combine(definition.ParentDirectory, LocalizationReplace, CleanFileName(fileName));
+                if (definition.ParentDirectory.Contains(LocalizationReplace, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Path.Combine(definition.ParentDirectory, CleanFileName(fileName));
+                }
+                else
+                {
+                    return Path.Combine(definition.ParentDirectory, LocalizationReplace, CleanFileName(fileName));
+                }
             }
             return Path.Combine(definition.ParentDirectory, $"{LIOSName}{CleanFileName(fileName)}");
         }
@@ -118,12 +125,12 @@ namespace IronyModManager.IO.Mods.Mergers
             EnsureAllSameType(definitions);
             var namespaces = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
             var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-            var other = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Namespace);
+            var other = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
             StringBuilder sb = new StringBuilder();
             AppendLine(sb, namespaces);
             AppendLine(sb, variables);
             AppendLine(sb, other);
-            return string.Empty;
+            return sb.ToString();
         }
 
         /// <summary>
@@ -135,7 +142,7 @@ namespace IronyModManager.IO.Mods.Mergers
         {
             if (lines?.Count() > 0)
             {
-                sb.AppendJoin(Environment.NewLine, lines.Select(p => p.Code));
+                sb.AppendLine(string.Join(Environment.NewLine, lines.Select(p => p.Code)));
             }
         }
 
@@ -153,13 +160,13 @@ namespace IronyModManager.IO.Mods.Mergers
         /// Ensures the type of all same.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <exception cref="ArgumentException">Not same types</exception>
+        /// <exception cref="ArgumentException">Only one definition is supported.</exception>
         protected virtual void EnsureAllSameType(IEnumerable<IDefinition> definitions)
         {
             var toVerify = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
-            if (toVerify.GroupBy(p => p.Type).Count() > 1)
+            if (toVerify.Count() > 1)
             {
-                throw new ArgumentException("Not same types");
+                throw new ArgumentException("Only one definition is supported.");
             }
         }
 

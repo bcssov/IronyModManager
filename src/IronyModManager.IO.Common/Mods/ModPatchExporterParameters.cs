@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -14,12 +14,14 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common.Mods
 {
     /// <summary>
     /// Class ModPatchExporterParameters.
     /// </summary>
+    [ExcludeFromCoverage("Parameters.")]
     public class ModPatchExporterParameters
     {
         #region Properties

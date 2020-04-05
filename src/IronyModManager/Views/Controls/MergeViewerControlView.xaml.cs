@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-31-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
+using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Views.Controls
@@ -28,6 +29,7 @@ namespace IronyModManager.Views.Controls
     /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel}" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.MergeViewerControlViewModel}" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MergeViewerControlView : BaseControl<MergeViewerControlViewModel>
     {
         #region Fields

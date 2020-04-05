@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -30,6 +31,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Controls.NumericUpDown" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class MinMaxNumericUpDown : NumericUpDown, IStyleable
     {
         #region Fields

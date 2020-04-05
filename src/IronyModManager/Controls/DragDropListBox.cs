@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -32,6 +33,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Controls.ListBox" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class DragDropListBox : ListBox, IStyleable
     {
         #region Fields

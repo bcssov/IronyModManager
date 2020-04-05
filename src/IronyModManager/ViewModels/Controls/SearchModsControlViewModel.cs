@@ -4,7 +4,7 @@
 // Created          : 03-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="SearchModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class SearchModsControlViewModel : BaseViewModel
     {
         #region Properties

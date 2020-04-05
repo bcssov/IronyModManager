@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -23,6 +24,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class ModCompareSelectorControlViewModel : BaseViewModel
     {
         #region Properties

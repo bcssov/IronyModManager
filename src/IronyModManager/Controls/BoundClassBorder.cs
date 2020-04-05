@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="BoundClassBorder.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -26,6 +27,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Controls.Border" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class BoundClassBorder : Border, IStyleable
     {
         #region Fields

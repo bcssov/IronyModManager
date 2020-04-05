@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-27-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -34,6 +34,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MergeViewerControlViewModel : BaseViewModel
     {
         #region Fields
@@ -48,7 +49,7 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MergeViewerControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
         /// <param name="urlAction">The URL action.</param>
         public MergeViewerControlViewModel(IUrlAction urlAction)

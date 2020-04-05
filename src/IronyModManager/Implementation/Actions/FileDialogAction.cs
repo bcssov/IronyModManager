@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Implementation.Actions
 {
@@ -26,6 +27,7 @@ namespace IronyModManager.Implementation.Actions
     /// Implements the <see cref="IronyModManager.Implementation.Actions.IFileDialogAction" />
     /// </summary>
     /// <seealso cref="IronyModManager.Implementation.Actions.IFileDialogAction" />
+    [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class FileDialogAction : IFileDialogAction
     {
         #region Methods

@@ -18,6 +18,11 @@
                 <Attribute>IronyModManager.Shared.ExcludeFromCoverageAttribute$</Attribute>
               </Exclude>
             </Attributes>
+            <Sources>
+              <Exclude>
+                <Source>.*\.xaml$</Source>
+              </Exclude>
+            </Sources>
             <ModulePaths>
               <Exclude>
                 <!-- DI Module is excluded due to the static nature of the project. Unit tests won't help much here even if architecture was different -->

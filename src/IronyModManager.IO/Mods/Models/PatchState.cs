@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -14,12 +14,14 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Mods.Models
 {
     /// <summary>
     /// Class PatchState.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class PatchState
     {
         #region Properties

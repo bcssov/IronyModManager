@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -27,6 +27,7 @@ namespace IronyModManager.ViewModels.Controls
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MergeViewerBinaryControlViewModel : BaseViewModel
     {
         #region Fields
