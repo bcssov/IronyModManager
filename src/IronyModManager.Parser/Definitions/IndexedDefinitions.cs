@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -63,7 +63,8 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         public IndexedDefinitions()
         {
-            definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.File), nameof(IDefinition.Type), nameof(IDefinition.TypeAndId));
+            definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.File), nameof(IDefinition.Type),
+                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectory));
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
@@ -118,6 +119,16 @@ namespace IronyModManager.Parser.Definitions
         public IEnumerable<IDefinition> GetByFile(string file)
         {
             return definitions.GetAllByNameNoLock(nameof(IDefinition.File), file);
+        }
+
+        /// <summary>
+        /// Gets the by parent directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetByParentDirectory(string directory)
+        {
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.ParentDirectory), directory);
         }
 
         /// <summary>

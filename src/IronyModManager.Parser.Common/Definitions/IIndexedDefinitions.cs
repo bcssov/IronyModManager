@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -53,6 +53,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="file">The file.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetByFile(string file);
+
+        /// <summary>
+        /// Gets the by parent directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByParentDirectory(string directory);
 
         /// <summary>
         /// Gets the type of the by.

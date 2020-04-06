@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -98,6 +98,33 @@ namespace IronyModManager.Parser.Tests
                 }
             }
             match.Should().Be(defs.Where(s => s.File == "file").Count());
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_by_parent_directory.
+        /// </summary>
+        [Fact]
+        public void Returns_by_parent_directory()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 3; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = "events\\" + i.ToString() + ".txt",
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.GetByParentDirectory("events");
+            results.Count().Should().Be(defs.Count());
         }
 
         /// <summary>
