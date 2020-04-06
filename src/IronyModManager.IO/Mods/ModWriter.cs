@@ -165,6 +165,11 @@ namespace IronyModManager.IO.Mods
                 Directory.Delete(fullPath, recursive);
                 return Task.FromResult(true);
             }
+            else if (File.Exists(fullPath))
+            {
+                File.Delete(fullPath);
+                return Task.FromResult(true);
+            }
             return Task.FromResult(false);
         }
 

@@ -88,7 +88,7 @@ namespace IronyModManager.IO.Mods
             {
                 var results = new List<bool>
                 {
-                    await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary), parameters.ModRootPath, GetPatchRootPath(parameters.RootPath, parameters.PatchName)),
+                    await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary), Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName)),
                     await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary), GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game)
                 };
                 return results.All(p => p);
@@ -184,6 +184,7 @@ namespace IronyModManager.IO.Mods
             var namespaces = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
             var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
             var others = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+
             foreach (var item in others)
             {
                 var toMerge = new List<IDefinition>() { };
@@ -200,6 +201,16 @@ namespace IronyModManager.IO.Mods
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                     }
+                    // Update filename
+                    foreach (var defNamespace in namespaces)
+                    {
+                        defNamespace.File = fileName;
+                    }
+                    foreach (var variable in variables)
+                    {
+                        variable.File = fileName;
+                    }
+                    item.File = fileName;
                     await File.WriteAllTextAsync(outPath, merger.MergeContent(toMerge), merger.GetEncoding(toMerge));
                     results.Add(true);
                 }

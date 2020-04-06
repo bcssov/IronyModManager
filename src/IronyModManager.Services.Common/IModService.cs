@@ -36,6 +36,11 @@ namespace IronyModManager.Services.Common
         /// </summary>
         event ModDefinitionLoadDelegate ModDefinitionLoad;
 
+        /// <summary>
+        /// Occurs when [mod definition patch load].
+        /// </summary>
+        event ModDefinitionPatchLoadDelegate ModDefinitionPatchLoad;
+
         #endregion Events
 
         #region Methods
@@ -55,6 +60,14 @@ namespace IronyModManager.Services.Common
         /// <param name="mod">The mod.</param>
         /// <returns>System.String.</returns>
         string BuildModUrl(IMod mod);
+
+        /// <summary>
+        /// Creates the patch definition.
+        /// </summary>
+        /// <param name="copy">The copy.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>IDefinition.</returns>
+        IDefinition CreatePatchDefinition(IDefinition copy, string collectionName);
 
         /// <summary>
         /// Exports the mods asynchronous.
@@ -92,6 +105,14 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <returns>IIndexedDefinitions.</returns>
         IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
+
+        /// <summary>
+        /// Loads the patch state asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IConflictResult&gt;.</returns>
+        Task<IConflictResult> LoadPatchStateAsync(IConflictResult conflictResult, string collectionName);
 
         #endregion Methods
     }

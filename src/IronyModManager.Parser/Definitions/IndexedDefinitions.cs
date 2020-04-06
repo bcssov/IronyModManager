@@ -231,8 +231,7 @@ namespace IronyModManager.Parser.Definitions
                 shouldAdd = true;
             }
             bool exists = false;
-            var children = hierarchicalDefinition.Children as ConcurrentIndexedList<IHierarchicalDefinitions>;
-            if (children != null)
+            if (hierarchicalDefinition.Children is ConcurrentIndexedList<IHierarchicalDefinitions> children)
             {
                 var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
                 exists = child != null;

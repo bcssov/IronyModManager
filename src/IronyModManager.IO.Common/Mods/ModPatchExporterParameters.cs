@@ -45,10 +45,10 @@ namespace IronyModManager.IO.Common.Mods
         public string Game { get; set; }
 
         /// <summary>
-        /// Gets or sets the mod root path.
+        /// Gets or sets the mod path.
         /// </summary>
-        /// <value>The mod root path.</value>
-        public string ModRootPath { get; set; }
+        /// <value>The mod path.</value>
+        public string ModPath { get; set; }
 
         /// <summary>
         /// Gets or sets the orphan conflicts.

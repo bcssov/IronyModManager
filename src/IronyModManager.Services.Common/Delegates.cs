@@ -4,7 +4,7 @@
 // Created          : 03-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="Delegates.cs" company="Mario">
 //     Mario
@@ -27,4 +27,10 @@ namespace IronyModManager.Services.Common
     /// </summary>
     /// <param name="percent">The percent.</param>
     public delegate void ModDefinitionLoadDelegate(int percent);
+
+    /// <summary>
+    /// Delegate ModDefinitionPatchLoadDelegate
+    /// </summary>
+    /// <param name="percent">The percent.</param>
+    public delegate void ModDefinitionPatchLoadDelegate(int percent);
 }
