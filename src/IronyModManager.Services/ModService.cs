@@ -477,7 +477,7 @@ namespace IronyModManager.Services
                     }
                     var conflicts = Mapper.Map<IConflictResult>(conflictResult);
                     var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
-                    resolvedIndex.InitMap(resolvedConflicts);
+                    resolvedIndex.InitMap(resolvedConflicts, true);
                     conflicts.ResolvedConflicts = resolvedIndex;
                     return conflicts;
                 }
