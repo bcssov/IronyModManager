@@ -54,6 +54,11 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         private readonly HashSet<string> typeKeys;
 
+        /// <summary>
+        /// The use hierarchal map
+        /// </summary>
+        private bool useHierarchalMap = false;
+
         #endregion Fields
 
         #region Constructors
@@ -76,12 +81,28 @@ namespace IronyModManager.Parser.Definitions
         #region Methods
 
         /// <summary>
+        /// Adds to map.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        public void AddToMap(IDefinition definition)
+        {
+            MapKeys(fileKeys, definition.File);
+            MapKeys(typeKeys, definition.Type);
+            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            if (useHierarchalMap)
+            {
+                MapHierarchicalDefinition(definition);
+            }
+            definitions.Add(definition);
+        }
+
+        /// <summary>
         /// Gets all.
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public IEnumerable<IDefinition> GetAll()
         {
-            return definitions;
+            return new HashSet<IDefinition>(definitions);
         }
 
         /// <summary>
@@ -175,19 +196,13 @@ namespace IronyModManager.Parser.Definitions
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="mapHierarhicalDefinitions">if set to <c>true</c> [map hierarhical definitions].</param>
-        public void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarhicalDefinitions = false)
+        /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
+        public void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false)
         {
+            useHierarchalMap = mapHierarchicalDefinitions;
             foreach (var item in definitions)
             {
-                MapKeys(fileKeys, item.File);
-                MapKeys(typeKeys, item.Type);
-                MapKeys(typeAndIdKeys, ConstructKey(item.Type, item.Id));
-                if (mapHierarhicalDefinitions)
-                {
-                    MapHierarchicalDefinition(item);
-                }
-                this.definitions.Add(item);
+                AddToMap(item);
             }
         }
 

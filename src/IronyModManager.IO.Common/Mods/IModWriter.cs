@@ -25,7 +25,7 @@ namespace IronyModManager.IO.Common.Mods
         #region Methods
 
         /// <summary>
-        /// Applies the collection asynchronous.
+        /// Applies the mods asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
@@ -43,6 +43,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The orphan conflicts.</value>
         IIndexedDefinitions OrphanConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the resolved conflicts.
+        /// </summary>
+        /// <value>The resolved conflicts.</value>
+        IIndexedDefinitions ResolvedConflicts { get; set; }
 
         #endregion Properties
     }

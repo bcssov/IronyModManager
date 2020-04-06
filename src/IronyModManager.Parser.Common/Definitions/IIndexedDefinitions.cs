@@ -24,6 +24,12 @@ namespace IronyModManager.Parser.Common.Definitions
         #region Methods
 
         /// <summary>
+        /// Adds to map.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        void AddToMap(IDefinition definition);
+
+        /// <summary>
         /// Gets all.
         /// </summary>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
@@ -93,8 +99,8 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="mapHierarhicalDefinitions">if set to <c>true</c> [map hierarhical definitions].</param>
-        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarhicalDefinitions = false);
+        /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
+        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         #endregion Methods
     }

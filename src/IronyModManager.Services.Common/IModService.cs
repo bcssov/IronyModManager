@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -41,6 +41,15 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
+        /// Applies the mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ApplyModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
+
+        /// <summary>
         /// Builds the mod URL.
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -62,11 +71,11 @@ namespace IronyModManager.Services.Common
         IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions);
 
         /// <summary>
-        /// Gets the definitions to write.
+        /// Gets the definitions to write asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="definition">The definition.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
         IEnumerable<IDefinition> GetDefinitionsToWrite(IConflictResult conflictResult, IDefinition definition);
 
         /// <summary>

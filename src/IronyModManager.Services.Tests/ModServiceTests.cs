@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -90,7 +90,6 @@ namespace IronyModManager.Services.Tests
                 } };
             });
         }
-
         /// <summary>
         /// Defines the test method Should_return_installed_mods.
         /// </summary>
@@ -104,6 +103,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
                 return new Mod()
@@ -114,11 +114,28 @@ namespace IronyModManager.Services.Tests
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2" });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
+        }
+
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <param name="storageProvider">The storage provider.</param>
+        /// <param name="modParser">The mod parser.</param>
+        /// <param name="parserManager">The parser manager.</param>
+        /// <param name="reader">The reader.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="modWriter">The mod writer.</param>
+        /// <param name="gameService">The game service.</param>
+        /// <param name="modPatchExporter">The mod patch exporter.</param>
+        /// <returns>ModService.</returns>
+        private ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser, Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter, Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter)
+        {
+            return new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, modPatchExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -134,8 +151,9 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             try
             {
                 service.GetInstalledMods(null);
@@ -159,8 +177,9 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.GetModObjects(null, new List<IMod>());
             result.Should().BeNull();
 
@@ -186,10 +205,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.GetModObjects(new Game(), new List<IMod>()
             {
                 new Mod()
@@ -219,10 +239,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
@@ -252,10 +273,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
@@ -283,9 +305,9 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
-
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var url = service.BuildModUrl(new Mod()
             {
                 RemoteId = 1,
@@ -307,9 +329,9 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
-
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var url = service.BuildModUrl(new Mod()
             {
                 RemoteId = 1,
@@ -331,9 +353,9 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
-
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var url = service.BuildModUrl(new Mod()
             {
                 RemoteId = 1,
@@ -355,6 +377,7 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
             {
                 Type = "test"
@@ -364,7 +387,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
             result.Should().BeTrue();
         }
@@ -382,6 +405,7 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(s => s.GetSelected()).Returns(() =>
             {
                 return null;
@@ -391,7 +415,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
             result.Should().BeFalse();
         }
@@ -409,6 +433,7 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
             {
                 Type = "test"
@@ -418,7 +443,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.ExportModsAsync(null);
             result.Should().BeFalse();
         }
@@ -438,10 +463,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -487,10 +513,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -546,10 +573,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -595,10 +623,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -653,10 +682,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -711,10 +741,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -770,10 +801,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -838,10 +870,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -869,7 +902,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a1",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object                    
+                    ValueType = Parser.Common.ValueType.Object
                 },
                 new Definition()
                 {
@@ -886,7 +919,7 @@ namespace IronyModManager.Services.Tests
             var result = service.FindConflicts(indexed);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
-            result.OrphanConflicts.GetAll().Count().Should().Be(0);            
+            result.OrphanConflicts.GetAll().Count().Should().Be(0);
         }
 
         /// <summary>
@@ -904,10 +937,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -950,10 +984,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -987,6 +1022,9 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.First());
             result.Count().Should().Be(2);
             result.First().Id.Should().Be("a");
@@ -1008,10 +1046,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -1054,6 +1093,9 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.First());
             result.Count().Should().Be(2);
             result.First().Id.Should().Be("a");
@@ -1075,10 +1117,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -1121,6 +1164,9 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.First());
             result.Count().Should().Be(1);
             result.First().Id.Should().Be("a");
@@ -1141,10 +1187,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -1196,6 +1243,9 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.Last());
             result.Count().Should().Be(3);
             result.First().Id.Should().Be("ab");
@@ -1218,10 +1268,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -1273,6 +1324,9 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.Last());
             result.Count().Should().Be(3);
             result.First().Id.Should().Be("ab");
@@ -1295,10 +1349,11 @@ namespace IronyModManager.Services.Tests
             var modWriter = new Mock<IModWriter>();
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
 
             SetupMockCase(reader, parserManager, modParser);
 
-            var service = new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var definitions = new List<IDefinition>()
             {
                 new Definition()
@@ -1350,11 +1405,242 @@ namespace IronyModManager.Services.Tests
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
             var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+            conflict.ResolvedConflicts = resolved;
             var result = service.GetDefinitionsToWrite(conflict, definitions.Last());
             result.Count().Should().Be(3);
             result.First().Id.Should().Be("ab");
             result.ToList()[1].Id.Should().Be("a");
             result.Last().Id.Should().Be("c");
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_return_valid_definitions_to_write_when_resolved_conflicts_is_available.
+        /// </summary>
+        [Fact]
+        public void Should_return_valid_definitions_to_write_when_resolved_conflicts_is_available()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+            };
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(definitions);
+            var conflict = service.FindConflicts(indexed);
+            var resolved = new IndexedDefinitions();
+            var resolvedCol = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\zzz_a.txt",
+                    Code = "ab",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "patch",
+                    ValueType = Parser.Common.ValueType.Object
+                }
+            };
+            resolved.InitMap(resolvedCol);
+            conflict.ResolvedConflicts = resolved;
+            var result = service.GetDefinitionsToWrite(conflict, resolvedCol.First());
+            result.Count().Should().Be(1);
+            result.First().Code.Should().Be("ab");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_apply_mod_patch_when_no_game_selected_or_parameters_null.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_apply_mod_patch_when_no_game_selected_or_parameters_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var c = new ConflictResult();
+            var result = await service.ApplyModPatchAsync(c, new Definition(), "colname");
+            result.Should().BeFalse();
+
+            result = await service.ApplyModPatchAsync(null, new Definition(), "colname");
+            result.Should().BeFalse();
+
+            result = await service.ApplyModPatchAsync(c, null, "colname");
+            result.Should().BeFalse();
+
+            result = await service.ApplyModPatchAsync(c, new Definition(), null);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_apply_mod_patch_when_nothing_to_merge.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_apply_mod_patch_when_nothing_to_merge()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(new List<IDefinition>());
+            var c = new ConflictResult()
+            {
+                AllConflicts =  indexed,
+                Conflicts = indexed,
+                OrphanConflicts = indexed,
+                ResolvedConflicts = indexed
+            };
+            var result = await service.ApplyModPatchAsync(c, new Definition(), "colname");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_true_when_applying_patches.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_true_when_applying_patches()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+            modWriter.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            {
+                if (p.Definitions.Count() > 0)
+                {
+                    return true;
+                }
+                return false;
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+            };
+            var all = new IndexedDefinitions();
+            all.InitMap(definitions);
+
+            var orphan = new IndexedDefinitions();
+            orphan.InitMap(new List<IDefinition>());
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+
+            var c = new ConflictResult()
+            {
+                AllConflicts = all,
+                Conflicts = all,
+                OrphanConflicts = orphan,
+                ResolvedConflicts = resolved
+            };            
+            var result = await service.ApplyModPatchAsync(c, new Definition(), "colname");
+            result.Should().BeTrue();
+
         }
 
 

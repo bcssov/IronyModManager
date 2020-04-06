@@ -65,6 +65,39 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method Returns_all_definitions_and_added_definitions.
+        /// </summary>
+        [Fact]
+        public void Returns_all_definitions_and_added_definitions()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            service.AddToMap(new Definition()
+            {
+                Code = "a",
+                Id = "14",
+                Type = "14"
+            });
+            var results = service.GetAll();
+            results.Count().Should().Be(defs.Count + 1);
+        }
+
+        /// <summary>
         /// Defines the test method Returns_by_file.
         /// </summary>
         [Fact]

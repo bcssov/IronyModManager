@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -17,9 +17,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
-using IronyModManager.IO.Mods.Models;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
@@ -78,20 +79,42 @@ namespace IronyModManager.IO.Mods
         /// <exception cref="ArgumentNullException">Game or definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
-            if (parameters.Game == null || parameters.Definitions == null || parameters.Definitions.Count() == 0)
+            if (string.IsNullOrWhiteSpace(parameters.Game) || parameters.Definitions == null || parameters.Definitions.Count() == 0)
             {
                 throw new ArgumentNullException("Game or definitions.");
             }
             var definitionMerger = definitionMergers.FirstOrDefault(p => p.CanProcess(parameters.Game));
             if (definitionMerger != null)
             {
-                List<bool> results = new List<bool>();
-                results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary), parameters.ModRootPath, GetPatchRootPath(parameters.RootPath, parameters.PatchName)));
-                results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary), GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game));
-
+                var results = new List<bool>
+                {
+                    await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary), parameters.ModRootPath, GetPatchRootPath(parameters.RootPath, parameters.PatchName)),
+                    await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary), GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game)
+                };
                 return results.All(p => p);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets the state of the patch.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;IPatchState&gt;.</returns>
+        public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters)
+        {
+            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
+            if (File.Exists(statePath))
+            {
+                var text = await File.ReadAllTextAsync(statePath);
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    var state = DIResolver.Get<IPatchState>();
+                    JsonConvert.PopulateObject(text, state);
+                    return state;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -101,12 +124,10 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> SaveStateAsync(ModPatchExporterParameters parameters)
         {
-            var state = new PatchState()
-            {
-                ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>(),
-                Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>(),
-                OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>()
-            };
+            var state = DIResolver.Get<IPatchState>();
+            state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
+            state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
+            state.OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>();
             var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
             await WriteStateAsync(state, statePath);
             return true;
@@ -196,7 +217,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="model">The model.</param>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> WriteStateAsync(PatchState model, string path)
+        private async Task<bool> WriteStateAsync(IPatchState model, string path)
         {
             await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, new JsonSerializerSettings()
             {

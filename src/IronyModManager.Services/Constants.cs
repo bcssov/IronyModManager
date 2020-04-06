@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-21-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -27,6 +27,11 @@ namespace IronyModManager.Services
         /// The mod directory
         /// </summary>
         public const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The mod extension
+        /// </summary>
+        public const string ModExtension = "." + ModDirectory;
 
         /// <summary>
         /// The paradox mod identifier
