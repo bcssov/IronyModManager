@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -1651,7 +1651,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_create_patch_definition.
         /// </summary>
         [Fact]
-        public void Should_not_create_patch_definition()
+        public async Task Should_not_create_patch_definition()
         {
             DISetup.SetupContainer();
 
@@ -1676,10 +1676,40 @@ namespace IronyModManager.Services.Tests
                 };
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.CreatePatchDefinition(null, "fake");
+            var result = await service.CreatePatchDefinitionAsync(null, "fake");
             result.Should().BeNull();
 
-            result = service.CreatePatchDefinition(new Definition() { File = "1" }, null);
+            result = await service.CreatePatchDefinitionAsync(new Definition() { File = "1" }, null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_create_patch_definition_when_no_selected_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_create_patch_definition_when_no_selected_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+            mapper.Setup(s => s.Map<IDefinition>(It.IsAny<IDefinition>())).Returns((IDefinition o) =>
+            {
+                return new Definition()
+                {
+                    File = o.File
+                };
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var result = await service.CreatePatchDefinitionAsync(new Definition() { File = "1" }, "fake");
             result.Should().BeNull();
         }
 
@@ -1687,7 +1717,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_create_patch_definition.
         /// </summary>
         [Fact]
-        public void Should_create_patch_definition()
+        public async Task Should_create_patch_definition()
         {
             DISetup.SetupContainer();
 
@@ -1712,9 +1742,57 @@ namespace IronyModManager.Services.Tests
                 };
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.CreatePatchDefinition(new Definition() { File = "1" }, "fake");
+            var result = await service.CreatePatchDefinitionAsync(new Definition() { File = "1" }, "fake");
             result.Should().NotBeNull();
             result.ModName.Should().Be("IronyModManager_fake");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_create_patch_definition_and_overwrite_code_from_history.
+        /// </summary>
+        [Fact]
+        public async Task Should_create_patch_definition_and_overwrite_code_from_history()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IDefinition>(It.IsAny<IDefinition>())).Returns((IDefinition o) =>
+            {
+                return new Definition()
+                {
+                    File = o.File,
+                    Id = o.Id,
+                    Type = o.Type
+                };
+            });
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            {
+                var res = new PatchState()
+                {
+                    Conflicts = new List<IDefinition>(),
+                    ResolvedConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    ConflictHistory = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab" } }
+                };
+                return res;
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.CreatePatchDefinitionAsync(new Definition() { File = "1", Id = "test", Type = "events", Code = "a" }, "fake");
+            result.Should().NotBeNull();
+            result.ModName.Should().Be("IronyModManager_fake");
+            result.Code.Should().Be("ab");
         }
 
         /// <summary>

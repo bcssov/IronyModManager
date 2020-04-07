@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -21,11 +21,19 @@ namespace IronyModManager.IO.Mods.Models
 {
     /// <summary>
     /// Class PatchState.
+    /// Implements the <see cref="IronyModManager.IO.Common.Mods.Models.IPatchState" />
     /// </summary>
+    /// <seealso cref="IronyModManager.IO.Common.Mods.Models.IPatchState" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class PatchState : IPatchState
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the conflict history.
+        /// </summary>
+        /// <value>The conflict history.</value>
+        public IEnumerable<IDefinition> ConflictHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the conflicts.

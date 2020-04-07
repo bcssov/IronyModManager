@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -62,12 +62,12 @@ namespace IronyModManager.Services.Common
         string BuildModUrl(IMod mod);
 
         /// <summary>
-        /// Creates the patch definition.
+        /// Creates the patch definition asynchronous.
         /// </summary>
         /// <param name="copy">The copy.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>IDefinition.</returns>
-        IDefinition CreatePatchDefinition(IDefinition copy, string collectionName);
+        /// <returns>Task&lt;IDefinition&gt;.</returns>
+        Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName);
 
         /// <summary>
         /// Exports the mods asynchronous.

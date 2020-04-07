@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Flettu.Lock;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
@@ -41,6 +42,11 @@ namespace IronyModManager.IO.Mods
         /// The state name
         /// </summary>
         private const string StateName = "state" + Constants.JsonExtension;
+
+        /// <summary>
+        /// The service lock
+        /// </summary>
+        private static readonly AsyncLock serviceLock = new AsyncLock();
 
         /// <summary>
         /// The definition mergers
@@ -103,18 +109,10 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;IPatchState&gt;.</returns>
         public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters)
         {
-            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
-            if (File.Exists(statePath))
+            using (await serviceLock.AcquireAsync())
             {
-                var text = await File.ReadAllTextAsync(statePath);
-                if (!string.IsNullOrWhiteSpace(text))
-                {
-                    var state = DIResolver.Get<IPatchState>();
-                    JsonConvert.PopulateObject(text, state);
-                    return state;
-                }
+                return await GetPatchStateInternalAsync(parameters);
             }
-            return null;
         }
 
         /// <summary>
@@ -124,13 +122,27 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> SaveStateAsync(ModPatchExporterParameters parameters)
         {
-            var state = DIResolver.Get<IPatchState>();
-            state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
-            state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
-            state.OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>();
-            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
-            await WriteStateAsync(state, statePath);
-            return true;
+            using (await serviceLock.AcquireAsync())
+            {
+                var state = await GetPatchStateInternalAsync(parameters);
+                var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
+                state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
+                state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
+                state.OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>();
+                var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
+                foreach (var item in state.ResolvedConflicts)
+                {
+                    var existing = history.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId));
+                    if (existing == null)
+                    {
+                        history.Remove(existing);
+                    }
+                    history.Add(item);
+                }
+                state.ConflictHistory = history;
+                await WriteStateAsync(state, statePath);
+                return true;
+            }
         }
 
         /// <summary>
@@ -169,6 +181,27 @@ namespace IronyModManager.IO.Mods
         private string GetPatchRootPath(string path, string patchName)
         {
             return Path.Combine(path, patchName);
+        }
+
+        /// <summary>
+        /// get patch state internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>IPatchState.</returns>
+        private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters)
+        {
+            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
+            if (File.Exists(statePath))
+            {
+                var text = await File.ReadAllTextAsync(statePath);
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    var state = DIResolver.Get<IPatchState>();
+                    JsonConvert.PopulateObject(text, state);
+                    return state;
+                }
+            }
+            return null;
         }
 
         /// <summary>

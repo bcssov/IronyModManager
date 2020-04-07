@@ -4,7 +4,7 @@
 // Created          : 04-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="IPatchState.cs" company="Mario">
 //     Mario
@@ -23,6 +23,12 @@ namespace IronyModManager.IO.Common.Mods.Models
     public interface IPatchState
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the conflict history.
+        /// </summary>
+        /// <value>The conflict history.</value>
+        IEnumerable<IDefinition> ConflictHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the conflicts.

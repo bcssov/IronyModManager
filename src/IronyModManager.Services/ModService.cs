@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -219,17 +219,31 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Creates the patch definition.
+        /// create patch definition as an asynchronous operation.
         /// </summary>
         /// <param name="copy">The copy.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>IDefinition.</returns>
-        public virtual IDefinition CreatePatchDefinition(IDefinition copy, string collectionName)
+        /// <returns>Task&lt;IDefinition&gt;.</returns>
+        public virtual async Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName)
         {
-            if (copy != null && !string.IsNullOrWhiteSpace(collectionName))
+            var game = gameService.GetSelected();
+            if (game != null && copy != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patch = Mapper.Map<IDefinition>(copy);
                 patch.ModName = GeneratePatchName(collectionName);
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                    PatchName = patch.ModName
+                });
+                if (state != null && state.ConflictHistory?.Count() > 0)
+                {
+                    var history = state.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(copy.TypeAndId));
+                    if (history != null)
+                    {
+                        patch.Code = history.Code;
+                    }
+                }
                 return patch;
             }
             return null;
@@ -472,7 +486,7 @@ namespace IronyModManager.Services
                                     resolvedConflicts.Remove(existingConflict);
                                 }
                             }
-                        }                        
+                        }
                         ModDefinitionPatchLoad?.Invoke(Convert.ToInt32(processed / total * 100));
                     }
                     var conflicts = Mapper.Map<IConflictResult>(conflictResult);
