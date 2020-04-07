@@ -2055,6 +2055,53 @@ namespace IronyModManager.Services.Tests
 
 
         /// <summary>
+        /// Defines the test method Should_not_be_a_patch_mod.
+        /// </summary>
+        [Fact]
+        public void Should_not_be_a_patch_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.IsPatchMod(new Mod()
+            {
+                Name = "test"
+            });
+            result.Should().BeFalse();
+            result = service.IsPatchMod(null);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_be_a_patch_mod.
+        /// </summary>
+        [Fact]
+        public void Should_be_a_patch_mod()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.IsPatchMod(new Mod()
+            {
+                Name = "IronyModManager_fake_collection"
+            });
+            result.Should().BeTrue();            
+        }
+
+
+        /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.
         /// </summary>
 

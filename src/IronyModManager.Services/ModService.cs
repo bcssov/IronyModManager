@@ -34,12 +34,12 @@ namespace IronyModManager.Services
 {
     /// <summary>
     /// Class ModService.
-    /// Implements the <see cref="IronyModManager.Services.BaseService" />
+    /// Implements the <see cref="IronyModManager.Services.ModBaseService" />
     /// Implements the <see cref="IronyModManager.Services.Common.IModService" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Services.BaseService" />
+    /// <seealso cref="IronyModManager.Services.ModBaseService" />
     /// <seealso cref="IronyModManager.Services.Common.IModService" />
-    public class ModService : BaseService, IModService
+    public class ModService : ModBaseService, IModService
     {
         #region Fields
 
@@ -47,11 +47,6 @@ namespace IronyModManager.Services
         /// The service lock
         /// </summary>
         private static readonly object serviceLock = new { };
-
-        /// <summary>
-        /// The game service
-        /// </summary>
-        private readonly IGameService gameService;
 
         /// <summary>
         /// The mod parser
@@ -95,13 +90,12 @@ namespace IronyModManager.Services
         /// <param name="mapper">The mapper.</param>
         public ModService(IReader reader, IParserManager parserManager,
             IModParser modParser, IModWriter modWriter, IModPatchExporter modPatchExporter, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper) : base(gameService, storageProvider, mapper)
         {
             this.reader = reader;
             this.parserManager = parserManager;
             this.modParser = modParser;
-            this.modWriter = modWriter;
-            this.gameService = gameService;
+            this.modWriter = modWriter;            
             this.modPatchExporter = modPatchExporter;
         }
 
@@ -137,7 +131,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> ApplyModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
-            var game = gameService.GetSelected();
+            var game = GameService.GetSelected();
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var allMods = GetInstalledMods(game);
@@ -145,7 +139,7 @@ namespace IronyModManager.Services
                 if (definitionMod != null)
                 {
                     var patches = GetDefinitionsToWrite(conflictResult, definition);
-                    var patchName = GeneratePatchName(collectionName);
+                    var patchName = GenerateCollectionPatchName(collectionName);
                     await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
                     {
                         RootDirectory = game.UserDirectory,
@@ -226,11 +220,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IDefinition&gt;.</returns>
         public virtual async Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName)
         {
-            var game = gameService.GetSelected();
+            var game = GameService.GetSelected();
             if (game != null && copy != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patch = Mapper.Map<IDefinition>(copy);
-                patch.ModName = GeneratePatchName(collectionName);
+                patch.ModName = GenerateCollectionPatchName(collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
@@ -256,7 +250,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods)
         {
-            var game = gameService.GetSelected();
+            var game = GameService.GetSelected();
             if (game == null || mods == null)
             {
                 return Task.FromResult(false);
@@ -363,6 +357,10 @@ namespace IronyModManager.Services
                 foreach (var installedMod in installedMods)
                 {
                     var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    if (IsPatchMod(mod))
+                    {
+                        continue;
+                    }
                     mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
                     mod.Source = GetModSource(installedMod);
                     if (mod.Source == ModSource.Paradox)
@@ -443,6 +441,20 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Determines whether [is patch mod] [the specified mod].
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns><c>true</c> if [is patch mod] [the specified mod]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsPatchMod(IMod mod)
+        {
+            if (mod != null && !string.IsNullOrWhiteSpace(mod.Name))
+            {
+                return mod.Name.StartsWith(PatchCollectionName);
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Loads the patch state asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -450,10 +462,10 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IConflictResult&gt;.</returns>
         public virtual async Task<IConflictResult> LoadPatchStateAsync(IConflictResult conflictResult, string collectionName)
         {
-            var game = gameService.GetSelected();
+            var game = GameService.GetSelected();
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
-                var patchName = GeneratePatchName(collectionName);
+                var patchName = GenerateCollectionPatchName(collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
@@ -489,7 +501,10 @@ namespace IronyModManager.Services
                         }
                         ModDefinitionPatchLoad?.Invoke(Convert.ToInt32(processed / total * 100));
                     }
-                    var conflicts = Mapper.Map<IConflictResult>(conflictResult);
+                    var conflicts = GetModelInstance<IConflictResult>();
+                    conflicts.AllConflicts = conflictResult.AllConflicts;
+                    conflicts.Conflicts = conflictResult.Conflicts;
+                    conflicts.OrphanConflicts = conflicts.OrphanConflicts;
                     var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
                     resolvedIndex.InitMap(resolvedConflicts, true);
                     conflicts.ResolvedConflicts = resolvedIndex;
@@ -637,17 +652,6 @@ namespace IronyModManager.Services
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderBy(p => p.Version).FirstOrDefault() != null ? allMods.OrderBy(p => p.Version).FirstOrDefault().Version : string.Empty;
             return mod;
-        }
-
-        /// <summary>
-        /// Generates the name of the patch.
-        /// </summary>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GeneratePatchName(string collectionName)
-        {
-            var fileName = $"{nameof(IronyModManager)}_{collectionName}";
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty));
         }
 
         /// <summary>

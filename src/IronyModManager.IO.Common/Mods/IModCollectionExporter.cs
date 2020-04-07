@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="IModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -37,6 +37,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ImportAsync(ModCollectionExporterParams parameters);
+
+        /// <summary>
+        /// Imports the mod directory asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ImportModDirectoryAsync(ModCollectionExporterParams parameters);
 
         #endregion Methods
     }

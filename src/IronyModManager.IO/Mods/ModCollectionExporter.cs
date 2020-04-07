@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using SharpCompress.Archives;
+using SharpCompress.Common;
 using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Mods
@@ -34,6 +35,15 @@ namespace IronyModManager.IO.Mods
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ModCollectionExporter : IModCollectionExporter
     {
+        #region Fields
+
+        /// <summary>
+        /// The extraction options
+        /// </summary>
+        private static ExtractionOptions extractionOptions;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -43,16 +53,16 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
-            // TODO: Add logic for this, at the moment there is no conflict detector
-            if (Directory.Exists(parameters.ModDirectory))
-            {
-            }
             var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.Indented);
             using var zip = ArchiveFactory.Create(SharpCompress.Common.ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
             zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(SharpCompress.Common.CompressionType.Deflate));
             zip.Dispose();
+            if (Directory.Exists(parameters.ModDirectory))
+            {
+                zip.AddAllFromDirectory(parameters.ModDirectory);
+            }
             return Task.FromResult(true);
         }
 
@@ -63,6 +73,53 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ImportAsync(ModCollectionExporterParams parameters)
         {
+            return Task.FromResult(ImportInternal(parameters, true));
+        }
+
+        /// <summary>
+        /// Imports the mod directory asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportModDirectoryAsync(ModCollectionExporterParams parameters)
+        {
+            return Task.FromResult(ImportInternal(parameters, false));
+        }
+
+        /// <summary>
+        /// Gets the extraction options.
+        /// </summary>
+        /// <returns>ExtractionOptions.</returns>
+        private ExtractionOptions GetExtractionOptions()
+        {
+            if (extractionOptions == null)
+            {
+                extractionOptions = new ExtractionOptions()
+                {
+                    ExtractFullPath = true,
+                    Overwrite = true,
+                    PreserveFileTime = true
+                };
+            }
+            return extractionOptions;
+        }
+
+        /// <summary>
+        /// Imports the internal.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="importInstance">if set to <c>true</c> [import instance].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private bool ImportInternal(ModCollectionExporterParams parameters, bool importInstance)
+        {
+            if (importInstance)
+            {
+                if (Directory.Exists(parameters.ModDirectory))
+                {
+                    Directory.Delete(parameters.ModDirectory);
+                    Directory.CreateDirectory(parameters.ModDirectory);
+                }
+            }
             using var fileStream = File.OpenRead(parameters.File);
             using var reader = ReaderFactory.Open(fileStream);
             var result = false;
@@ -77,19 +134,23 @@ namespace IronyModManager.IO.Mods
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                     {
-                        using var streamReader = new StreamReader(memoryStream, true);
-                        var text = streamReader.ReadToEnd();
-                        streamReader.Close();
-                        JsonConvert.PopulateObject(text, parameters.Mod);
-                        result = true;
+                        if (importInstance)
+                        {
+                            using var streamReader = new StreamReader(memoryStream, true);
+                            var text = streamReader.ReadToEnd();
+                            streamReader.Close();
+                            JsonConvert.PopulateObject(text, parameters.Mod);
+                            result = true;
+                            break;
+                        }
                     }
                     else
                     {
-                        // TODO: Add logic for mod directory import, there is no conflict detector at the moment
+                        reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());                    
                     }
                 }
             }
-            return Task.FromResult(result);
+            return importInstance ? result : true;
         }
 
         #endregion Methods

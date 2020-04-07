@@ -107,6 +107,13 @@ namespace IronyModManager.Services.Common
         IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
 
         /// <summary>
+        /// Determines whether [is patch mod] [the specified mod].
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns><c>true</c> if [is patch mod] [the specified mod]; otherwise, <c>false</c>.</returns>
+        bool IsPatchMod(IMod mod);
+
+        /// <summary>
         /// Loads the patch state asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>

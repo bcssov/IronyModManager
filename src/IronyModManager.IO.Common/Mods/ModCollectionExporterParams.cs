@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
