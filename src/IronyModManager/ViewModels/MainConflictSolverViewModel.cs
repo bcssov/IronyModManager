@@ -368,7 +368,6 @@ namespace IronyModManager.ViewModels
                         break;
                     }
                 }
-                var selectedConflictParent = SelectedConflict;
                 await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.OverlayResolve));
                 IDefinition patchDefinition = null;
                 if (!IsBinaryConflict)

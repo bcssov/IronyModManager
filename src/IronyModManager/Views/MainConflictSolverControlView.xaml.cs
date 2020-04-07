@@ -57,10 +57,12 @@ namespace IronyModManager.Views
             this.WhenAnyValue(v => v.ViewModel.SelectedConflict).Where(p => p != null).Subscribe(s =>
             {
                 int idx = 0;
+                bool matchFound = false;
                 foreach (var item in ViewModel.HierarchalConflicts)
                 {
                     if (item.Children.Contains(ViewModel.SelectedConflict))
                     {
+                        matchFound = true;
                         break;
                     }
                     idx++;
@@ -69,8 +71,7 @@ namespace IronyModManager.Views
                 {
                     idx = ViewModel.HierarchalConflicts.Count() - 1;
                 }
-                var tvItem = conflicts.Presenter.Panel.Children[idx] as TreeViewItem;
-                if (tvItem != null && !tvItem.IsExpanded)
+                if (matchFound && conflicts.Presenter.Panel.Children[idx] is TreeViewItem tvItem && !tvItem.IsExpanded)
                 {
                     tvItem.IsExpanded = true;
                 }
