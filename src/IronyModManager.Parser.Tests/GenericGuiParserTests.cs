@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="GenericGuiParserTests.cs" company="Mario">
 //     Mario
@@ -277,6 +277,6 @@ namespace IronyModManager.Parser.Tests
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("gui\\gui");
             }
-        }
+        }   
     }
 }

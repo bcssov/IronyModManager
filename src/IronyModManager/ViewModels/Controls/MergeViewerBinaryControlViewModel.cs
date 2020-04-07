@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string BinaryFile { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [enable selection].
+        /// </summary>
+        /// <value><c>true</c> if [enable selection]; otherwise, <c>false</c>.</value>
+        public virtual bool EnableSelection { get; set; }
+
+        /// <summary>
         /// Gets or sets the take left.
         /// </summary>
         /// <value>The take left.</value>
@@ -89,6 +95,15 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public void Reset()
+        {
+            TakeLeftClass = string.Empty;
+            TakeRightClass = string.Empty;
+        }
 
         /// <summary>
         /// Called when [activated].

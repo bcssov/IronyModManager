@@ -114,6 +114,13 @@ namespace IronyModManager.Services.Common
         bool IsPatchMod(IMod mod);
 
         /// <summary>
+        /// Determines whether [is patch mod] [the specified mod name].
+        /// </summary>
+        /// <param name="modName">Name of the mod.</param>
+        /// <returns><c>true</c> if [is patch mod] [the specified mod name]; otherwise, <c>false</c>.</returns>
+        bool IsPatchMod(string modName);
+
+        /// <summary>
         /// Loads the patch state asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>

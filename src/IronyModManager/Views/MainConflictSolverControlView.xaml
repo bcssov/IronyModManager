@@ -11,7 +11,9 @@
         <Grid ColumnDefinitions="*" RowDefinitions="1*,20*">
           <TextBlock Text="{Binding ConflictedObjects}" Grid.Column="0"
                      Grid.Row="0" HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <TreeView Items="{Binding HierarchalConflicts}" Grid.Column="0" Grid.Row="1" SelectedItem="{Binding SelectedConflict}">
+          <TreeView Items="{Binding HierarchalConflicts}" Grid.Column="0" Grid.Row="1"
+                    SelectedItem="{Binding SelectedConflict}"
+                    x:Name="conflicts" ScrollViewer.HorizontalScrollBarVisibility="Visible">
             <TreeView.DataTemplates>
               <TreeDataTemplate ItemsSource="{Binding Children}">
                 <TextBlock Text="{Binding Name}"></TextBlock>
@@ -34,8 +36,10 @@
       </Panel>
       <ContentControl IsVisible="{Binding IsBinaryConflict}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
       <ContentControl IsVisible="{Binding !IsBinaryConflict}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
+               VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}"></Button>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
-          VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,0"></Button>
+          VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,10"></Button>
     </Grid>
   </Panel>
 </UserControl>

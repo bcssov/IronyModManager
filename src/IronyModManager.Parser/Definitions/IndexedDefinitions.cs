@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using CodexMicroORM.Core.Collections;
@@ -30,6 +31,11 @@ namespace IronyModManager.Parser.Definitions
         #region Fields
 
         /// <summary>
+        /// The hierarchical definitions
+        /// </summary>
+        private readonly ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
+
+        /// <summary>
         /// The definitions
         /// </summary>
         private readonly ConcurrentIndexedList<IDefinition> definitions;
@@ -40,9 +46,9 @@ namespace IronyModManager.Parser.Definitions
         private readonly HashSet<string> fileKeys;
 
         /// <summary>
-        /// The hierarchical definitions
+        /// The main hierarchal definitions
         /// </summary>
-        private readonly ConcurrentIndexedList<IHierarchicalDefinitions> hierarchicalDefinitions;
+        private readonly ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
 
         /// <summary>
         /// The type and identifier keys
@@ -73,7 +79,8 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
-            hierarchicalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
+            childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
+            mainHierarchalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
 
         #endregion Constructors
@@ -189,7 +196,14 @@ namespace IronyModManager.Parser.Definitions
         /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         public IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions()
         {
-            return hierarchicalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
+            foreach (var item in mainHierarchalDefinitions)
+            {
+                if (childHierarchicalDefinitions.TryGetValue(item.Name, out var value))
+                {
+                    item.Children = value.Select(p => p).ToHashSet();
+                }
+            }
+            return mainHierarchalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
         }
 
         /// <summary>
@@ -200,9 +214,12 @@ namespace IronyModManager.Parser.Definitions
         public void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false)
         {
             useHierarchalMap = mapHierarchicalDefinitions;
-            foreach (var item in definitions)
+            if (definitions != null)
             {
-                AddToMap(item);
+                foreach (var item in definitions)
+                {
+                    AddToMap(item);
+                }
             }
         }
 
@@ -223,38 +240,35 @@ namespace IronyModManager.Parser.Definitions
         private void MapHierarchicalDefinition(IDefinition definition)
         {
             bool shouldAdd = false;
-            var hierarchicalDefinition = hierarchicalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectory);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectory);
             if (hierarchicalDefinition == null)
             {
                 hierarchicalDefinition = DIResolver.Get<IHierarchicalDefinitions>();
                 hierarchicalDefinition.Name = definition.ParentDirectory;
+                childHierarchicalDefinitions.TryAdd(definition.ParentDirectory, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
                 shouldAdd = true;
             }
             bool exists = false;
-            if (hierarchicalDefinition.Children is ConcurrentIndexedList<IHierarchicalDefinitions> children)
+            if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
             {
                 var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
                 exists = child != null;
-            }
-            else
-            {
-                exists = hierarchicalDefinition.Children.Any(p => p.Name.Equals(definition.Id));
             }
             if (!exists)
             {
                 var child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
-                hierarchicalDefinition.Children.Add(child);
-                var newChild = new HashSet<IHierarchicalDefinitions>(hierarchicalDefinition.Children.Select(s => s).OrderBy(p => p.Name));
-                hierarchicalDefinition.Children.Clear();
+                children.Add(child);
+                var newChild = new HashSet<IHierarchicalDefinitions>(children.Select(s => s).OrderBy(p => p.Name));
+                children.Clear();
                 foreach (var item in newChild)
                 {
-                    hierarchicalDefinition.Children.Add(item);
+                    children.Add(item);
                 }
                 if (shouldAdd)
                 {
-                    hierarchicalDefinitions.Add(hierarchicalDefinition);
+                    mainHierarchalDefinitions.Add(hierarchicalDefinition);
                 }
             }
         }

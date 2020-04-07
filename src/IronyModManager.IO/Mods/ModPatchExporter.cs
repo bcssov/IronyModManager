@@ -24,7 +24,6 @@ using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
-using Newtonsoft.Json;
 
 namespace IronyModManager.IO.Mods
 {
@@ -125,6 +124,10 @@ namespace IronyModManager.IO.Mods
             using (await serviceLock.AcquireAsync())
             {
                 var state = await GetPatchStateInternalAsync(parameters);
+                if (state == null)
+                {
+                    state = DIResolver.Get<IPatchState>();
+                }
                 var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
                 state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
                 state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
@@ -140,8 +143,7 @@ namespace IronyModManager.IO.Mods
                     history.Add(item);
                 }
                 state.ConflictHistory = history;
-                await WriteStateAsync(state, statePath);
-                return true;
+                return await WriteStateAsync(state, statePath);
             }
         }
 
@@ -162,12 +164,12 @@ namespace IronyModManager.IO.Mods
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                 }
-                using var fs = new FileStream(outPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
+                using var fs = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
-                await fs.CopyToAsync(stream);
+                await stream.CopyToAsync(fs);
             }
             return true;
         }
@@ -193,12 +195,13 @@ namespace IronyModManager.IO.Mods
             var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
             if (File.Exists(statePath))
             {
-                var text = await File.ReadAllTextAsync(statePath);
-                if (!string.IsNullOrWhiteSpace(text))
+                if (File.Exists(statePath))
                 {
-                    var state = DIResolver.Get<IPatchState>();
-                    JsonConvert.PopulateObject(text, state);
-                    return state;
+                    var text = await File.ReadAllTextAsync(statePath);
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        return JsonDISerializer.Deserialize<IPatchState>(text);
+                    }
                 }
             }
             return null;
@@ -256,17 +259,14 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// write PDX model as an asynchronous operation.
+        /// write state as an asynchronous operation.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private async Task<bool> WriteStateAsync(IPatchState model, string path)
         {
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            }));
+            await File.WriteAllTextAsync(path, JsonDISerializer.Serialize(model));
             return true;
         }
 

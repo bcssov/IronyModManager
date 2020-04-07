@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -13,8 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CodexMicroORM.Core.Collections;
 using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Parser.Definitions
@@ -26,25 +24,13 @@ namespace IronyModManager.Parser.Definitions
     /// <seealso cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
     public class HierarchicalDefinitions : IHierarchicalDefinitions
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HierarchicalDefinitions" /> class.
-        /// </summary>
-        public HierarchicalDefinitions()
-        {
-            Children = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
-        }
-
-        #endregion Constructors
-
         #region Properties
 
         /// <summary>
-        /// Gets the children.
+        /// Gets or sets the children.
         /// </summary>
         /// <value>The children.</value>
-        public ICollection<IHierarchicalDefinitions> Children { get; }
+        public ICollection<IHierarchicalDefinitions> Children { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

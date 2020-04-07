@@ -11,7 +11,8 @@
         <controls:BoundClassBorder BoundClasses="{Binding TakeLeftClass}">
           <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
-            <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}" Grid.Column="0" Grid.Row="1"></Button>
+            <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
           </Grid>
         </controls:BoundClassBorder>
       </Panel>
@@ -19,7 +20,8 @@
         <controls:BoundClassBorder BoundClasses="{Binding TakeRightClass}">
           <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
-            <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}" Grid.Column="0" Grid.Row="1"></Button>
+            <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
           </Grid>
         </controls:BoundClassBorder>
       </Panel>

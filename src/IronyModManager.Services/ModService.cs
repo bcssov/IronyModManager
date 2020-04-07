@@ -95,7 +95,7 @@ namespace IronyModManager.Services
             this.reader = reader;
             this.parserManager = parserManager;
             this.modParser = modParser;
-            this.modWriter = modWriter;            
+            this.modWriter = modWriter;
             this.modPatchExporter = modPatchExporter;
         }
 
@@ -134,10 +134,11 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
-                var allMods = GetInstalledMods(game);
+                var allMods = GetInstalledModsInternal(game, false);
                 var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
                 if (definitionMod != null)
                 {
+                    conflictResult.ResolvedConflicts.AddToMap(definition);
                     var patches = GetDefinitionsToWrite(conflictResult, definition);
                     var patchName = GenerateCollectionPatchName(collectionName);
                     await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
@@ -154,9 +155,9 @@ namespace IronyModManager.Services
                     });
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
-                        Conflicts = conflictResult.Conflicts.GetAll().ToList(),
-                        OrphanConflicts = conflictResult.OrphanConflicts.GetAll().ToList(),
-                        ResolvedConflicts = conflictResult.ResolvedConflicts.GetAll().ToList(),
+                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                        OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -166,7 +167,7 @@ namespace IronyModManager.Services
                         Path = definition.ParentDirectory
                     });
                     var allPatches = new HashSet<IDefinition>(patches);
-                    foreach (var item in conflictResult.Conflicts.GetByParentDirectory(definition.ParentDirectory))
+                    foreach (var item in conflictResult.ResolvedConflicts.GetByParentDirectory(definition.ParentDirectory))
                     {
                         if (!allPatches.Contains(item))
                         {
@@ -301,6 +302,9 @@ namespace IronyModManager.Services
             result.AllConflicts = indexedDefinitions;
             result.Conflicts = conflictsIndexed;
             result.OrphanConflicts = orphanedConflictsIndexed;
+            var resolvedConflicts = DIResolver.Get<IIndexedDefinitions>();
+            resolvedConflicts.InitMap(null, true);
+            result.ResolvedConflicts = resolvedConflicts;
 
             return result;
         }
@@ -346,31 +350,7 @@ namespace IronyModManager.Services
         /// <exception cref="ArgumentNullException">game</exception>
         public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
-            if (game == null)
-            {
-                throw new ArgumentNullException("game");
-            }
-            var result = new List<IMod>();
-            var installedMods = reader.Read(Path.Combine(game.UserDirectory, Constants.ModDirectory));
-            if (installedMods?.Count() > 0)
-            {
-                foreach (var installedMod in installedMods)
-                {
-                    var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
-                    if (IsPatchMod(mod))
-                    {
-                        continue;
-                    }
-                    mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
-                    mod.Source = GetModSource(installedMod);
-                    if (mod.Source == ModSource.Paradox)
-                    {
-                        mod.RemoteId = GetPdxModId(installedMod.FileName);
-                    }
-                    result.Add(mod);
-                }
-            }
-            return result;
+            return GetInstalledModsInternal(game, true);
         }
 
         /// <summary>
@@ -447,9 +427,23 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is patch mod] [the specified mod]; otherwise, <c>false</c>.</returns>
         public virtual bool IsPatchMod(IMod mod)
         {
-            if (mod != null && !string.IsNullOrWhiteSpace(mod.Name))
+            if (mod != null)
             {
-                return mod.Name.StartsWith(PatchCollectionName);
+                return IsPatchMod(mod.Name);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether [is patch mod] [the specified mod name].
+        /// </summary>
+        /// <param name="modName">Name of the mod.</param>
+        /// <returns><c>true</c> if [is patch mod] [the specified mod name]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsPatchMod(string modName)
+        {
+            if (!string.IsNullOrWhiteSpace(modName))
+            {
+                return modName.StartsWith(PatchCollectionName);
             }
             return false;
         }
@@ -504,7 +498,7 @@ namespace IronyModManager.Services
                     var conflicts = GetModelInstance<IConflictResult>();
                     conflicts.AllConflicts = conflictResult.AllConflicts;
                     conflicts.Conflicts = conflictResult.Conflicts;
-                    conflicts.OrphanConflicts = conflicts.OrphanConflicts;
+                    conflicts.OrphanConflicts = conflictResult.OrphanConflicts;
                     var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
                     resolvedIndex.InitMap(resolvedConflicts, true);
                     conflicts.ResolvedConflicts = resolvedIndex;
@@ -647,11 +641,57 @@ namespace IronyModManager.Services
             var mod = DIResolver.Get<IMod>();
             mod.Dependencies = allMods.Select(p => p.Name).ToList();
             mod.DescriptorFile = $"{Constants.ModDirectory}/{patchName}{Constants.ModExtension}";
-            mod.FileName = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName);
+            mod.FileName = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
-            mod.Version = allMods.OrderBy(p => p.Version).FirstOrDefault() != null ? allMods.OrderBy(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
             return mod;
+        }
+
+        /// <summary>
+        /// Gets the definition or default.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IList&lt;IDefinition&gt;.</returns>
+        protected virtual IList<IDefinition> GetDefinitionOrDefault(IIndexedDefinitions definitions)
+        {
+            return definitions != null && definitions.GetAll() != null ? definitions.GetAll().ToList() : new List<IDefinition>();
+        }
+
+        /// <summary>
+        /// Gets the installed mods internal.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        /// <exception cref="ArgumentNullException">game</exception>
+        protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
+        {
+            if (game == null)
+            {
+                throw new ArgumentNullException("game");
+            }
+            var result = new List<IMod>();
+            var installedMods = reader.Read(Path.Combine(game.UserDirectory, Constants.ModDirectory));
+            if (installedMods?.Count() > 0)
+            {
+                foreach (var installedMod in installedMods.Where(p => p.Content.Count() > 0))
+                {
+                    var mod = Mapper.Map<IMod>(modParser.Parse(installedMod.Content));
+                    if (ignorePatchMods && IsPatchMod(mod))
+                    {
+                        continue;
+                    }
+                    mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
+                    mod.Source = GetModSource(installedMod);
+                    if (mod.Source == ModSource.Paradox)
+                    {
+                        mod.RemoteId = GetPdxModId(installedMod.FileName);
+                    }
+                    result.Add(mod);
+                }
+            }
+            return result;
         }
 
         /// <summary>

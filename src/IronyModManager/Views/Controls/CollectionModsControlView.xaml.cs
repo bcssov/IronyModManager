@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -104,7 +105,7 @@ namespace IronyModManager.Views.Controls
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
-        protected override void OnActivated(IDisposable disposables)
+        protected override void OnActivated(CompositeDisposable disposables)
         {
             modList = this.FindControl<DragDropListBox>("modList");
             if (modList != null)

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -143,7 +143,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     PercentDone = 0,
                     Count = 1,
-                    TotalCount = 2
+                    TotalCount = 3
                 });
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 await TriggerOverlayAsync(true, message, overlayProgress);
@@ -159,9 +159,15 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     return null;
                 });
+                var syncedConflicts = await modService.LoadPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+                if (syncedConflicts != null)
+                {
+                    conflicts = syncedConflicts;
+                }
                 await TriggerOverlayAsync(false);
                 var args = new NavigationEventArgs()
                 {
+                    SelectedCollection = CollectionMods.SelectedModCollection,
                     Results = conflicts,
                     State = NavigationState.ConflictSolver
                 };
@@ -210,12 +216,12 @@ namespace IronyModManager.ViewModels.Controls
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {
-                ApplyCollectionAsync().ConfigureAwait(false);
+                ApplyCollectionAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             AnalyzeCommand = ReactiveCommand.Create(() =>
             {
-                AnalyzeModsAsync().ConfigureAwait(false);
+                AnalyzeModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             modService.ModDefinitionLoad += (percentage) =>
@@ -225,7 +231,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     PercentDone = percentage,
                     Count = 1,
-                    TotalCount = 2
+                    TotalCount = 3
                 });
                 TriggerOverlay(true, message, overlayProgress);
             };
@@ -237,7 +243,19 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     PercentDone = percentage,
                     Count = 2,
-                    TotalCount = 2
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            };
+
+            modService.ModDefinitionPatchLoad += (percentage) =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = percentage,
+                    Count = 3,
+                    TotalCount = 3
                 });
                 TriggerOverlay(true, message, overlayProgress);
             };

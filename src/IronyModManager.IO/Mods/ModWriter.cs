@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -159,10 +159,13 @@ namespace IronyModManager.IO.Mods
         public Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters)
         {
             var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
-            bool recursive = fullPath.Equals(parameters.RootDirectory);
             if (Directory.Exists(fullPath))
             {
-                Directory.Delete(fullPath, recursive);
+                var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
+                foreach (var item in files)
+                {
+                    File.Delete(item);
+                }
                 return Task.FromResult(true);
             }
             else if (File.Exists(fullPath))
@@ -182,7 +185,7 @@ namespace IronyModManager.IO.Mods
         {
             // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
             var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
-            using var fs = new FileStream(fullPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None);
+            using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
             using var sw = new StreamWriter(fs);
             var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
             foreach (var prop in props)
@@ -196,14 +199,17 @@ namespace IronyModManager.IO.Mods
                         await sw.WriteLineAsync($"{attr.PropertyName}={{");
                         foreach (var item in col)
                         {
-                            await sw.WriteLineAsync($"\t{item}");
+                            await sw.WriteLineAsync($"\t\"{item}\"");
                         }
                         await sw.WriteLineAsync("}");
                     }
                 }
                 else
                 {
-                    await sw.WriteLineAsync($"{attr.PropertyName}={val}");
+                    if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                    {
+                        await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                    }
                 }
             }
             await sw.FlushAsync();
@@ -292,7 +298,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
         {
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, new JsonSerializerSettings()
+            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.Indented, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
             }));

@@ -54,10 +54,10 @@ namespace IronyModManager.IO.Mods
         public Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
             var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.Indented);
-            using var zip = ArchiveFactory.Create(SharpCompress.Common.ArchiveType.Zip);
+            using var zip = ArchiveFactory.Create(ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
-            zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(SharpCompress.Common.CompressionType.Deflate));
+            zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
             zip.Dispose();
             if (Directory.Exists(parameters.ModDirectory))
             {
@@ -146,7 +146,7 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());                    
+                        reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());
                     }
                 }
             }

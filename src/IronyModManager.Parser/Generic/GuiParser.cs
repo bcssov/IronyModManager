@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="GuiParser.cs" company="Mario">
 //     Mario
@@ -122,7 +122,7 @@ namespace IronyModManager.Parser.Generic
                         currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                         closeBrackets += currentCloseBrackets;
                     }
-                    if (openBrackets - closeBrackets == 2 || openBrackets - previousCloseBrackets == 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
+                    if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
                     {
                         if (definition == null)
                         {
@@ -134,7 +134,7 @@ namespace IronyModManager.Parser.Generic
                             definition.Id = initialKey;
                         }
                         var id = textParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
-                        if (!string.IsNullOrWhiteSpace(id))
+                        if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
                         {
                             definition.Id = id;
                         }

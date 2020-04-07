@@ -59,6 +59,7 @@
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts":  "Please wait while analyzing resolved definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
     },
     "Conflict_Solver": {
@@ -71,6 +72,8 @@
         "TakeRight": "Take Right",
         "OK": "OK",
         "Cancel": "Cancel",
+        "Resolve": "Resolve",
+        "OverlayResolve": "Please wait while resolving conflict...",
         "ContextMenu": {
             "CopyThis": "Copy This",
             "CopyThisAfterLine": "Copy This After Line",

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -170,6 +170,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string LeftSide { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [left side patch mod].
+        /// </summary>
+        /// <value><c>true</c> if [left side patch mod]; otherwise, <c>false</c>.</value>
+        public virtual bool LeftSidePatchMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the left side selected.
         /// </summary>
         /// <value>The left side selected.</value>
@@ -221,6 +227,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string RightSide { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [right side patch mod].
+        /// </summary>
+        /// <value><c>true</c> if [right side patch mod]; otherwise, <c>false</c>.</value>
+        public virtual bool RightSidePatchMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the right side selected.
         /// </summary>
         /// <value>The right side selected.</value>
@@ -238,6 +250,17 @@ namespace IronyModManager.ViewModels.Controls
             EditingLeft = false;
             EditingRight = false;
             EditingText = false;
+        }
+
+        /// <summary>
+        /// Sets the side patch mod.
+        /// </summary>
+        /// <param name="leftSidePatchMod">if set to <c>true</c> [left side patch mod].</param>
+        /// <param name="rightSidePatchMod">if set to <c>true</c> [right side patch mod].</param>
+        public virtual void SetSidePatchMod(bool leftSidePatchMod, bool rightSidePatchMod)
+        {
+            LeftSidePatchMod = leftSidePatchMod;
+            RightSidePatchMod = rightSidePatchMod;
         }
 
         /// <summary>
@@ -521,7 +544,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                CopyTextAsync(leftSide).ConfigureAwait(false);
+                CopyTextAsync(leftSide).ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

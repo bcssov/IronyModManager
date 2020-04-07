@@ -84,6 +84,7 @@ namespace IronyModManager.Shared
             public const string Conflict = Prefix + "Conflict";
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
             public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+            public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
             public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
         }
         public static class Conflict_Solver
@@ -98,6 +99,8 @@ namespace IronyModManager.Shared
             public const string TakeRight = Prefix + "TakeRight";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
+            public const string Resolve = Prefix + "Resolve";
+            public const string OverlayResolve = Prefix + "OverlayResolve";
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";

@@ -6,7 +6,7 @@
              x:Class="IronyModManager.Views.Controls.ModCompareSelectorControlView">
   <Panel>
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
-      <ListBox Grid.Column="0" Items="{Binding Definitions}"
+      <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                SelectedItem="{Binding LeftSelectedDefinition}">
         <ListBox.ItemTemplate>
@@ -19,7 +19,7 @@
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
-      <ListBox Grid.Column="1" Items="{Binding Definitions}"
+      <ListBox Grid.Column="1" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                SelectedItem="{Binding RightSelectedDefinition}">
         <ListBox.ItemTemplate>

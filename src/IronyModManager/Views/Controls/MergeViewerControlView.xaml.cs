@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -68,60 +69,21 @@ namespace IronyModManager.Views.Controls
                 var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                 if (grid != null)
                 {
-                    var menuItems = new List<MenuItem>()
+                    if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
+                    {
+                        grid.ContextMenu.Items = GetNonEditableMenuItems(leftSide);
+                    }
+                    else
+                    {
+                        if (leftSide)
                         {
-                            new MenuItem()
-                            {
-                                Header = ViewModel.EditThis,
-                                Command = ViewModel.EditThisCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.CopyText,
-                                Command = ViewModel.CopyTextCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = "-"
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.MoveUp,
-                                Command = ViewModel.MoveUpCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.MoveDown,
-                                Command = ViewModel.MoveDownCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = "-" // Separator magic string, and it's documented... NOT really!!!
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.CopyThis,
-                                Command = ViewModel.CopyThisCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.CopyThisBeforeLine,
-                                Command = ViewModel.CopyThisBeforeLineCommand,
-                                CommandParameter = leftSide
-                            },
-                            new MenuItem()
-                            {
-                                Header = ViewModel.CopyThisAfterLine,
-                                Command = ViewModel.CopyThisAfterLineCommand,
-                                CommandParameter = leftSide
-                            }
-                        };
-                    grid.ContextMenu.Items = menuItems;
+                            grid.ContextMenu.Items = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                        }
+                        else
+                        {
+                            grid.ContextMenu.Items = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                        }
+                    }
                 }
             }
         }
@@ -174,7 +136,7 @@ namespace IronyModManager.Views.Controls
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
-        protected override void OnActivated(IDisposable disposables)
+        protected override void OnActivated(CompositeDisposable disposables)
         {
             var leftSide = this.FindControl<ListBox>("leftSide");
             var rightSide = this.FindControl<ListBox>("rightSide");
@@ -198,6 +160,107 @@ namespace IronyModManager.Views.Controls
             };
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Gets the actions menu items.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <returns>List&lt;MenuItem&gt;.</returns>
+        private List<MenuItem> GetActionsMenuItems(bool leftSide)
+        {
+            var menuItems = new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ViewModel.CopyTextCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.MoveUp,
+                    Command = ViewModel.MoveUpCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.MoveDown,
+                    Command = ViewModel.MoveDownCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = "-" // Separator magic string, and it's documented... NOT really!!!
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyThis,
+                    Command = ViewModel.CopyThisCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyThisBeforeLine,
+                    Command = ViewModel.CopyThisBeforeLineCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyThisAfterLine,
+                    Command = ViewModel.CopyThisAfterLineCommand,
+                    CommandParameter = leftSide
+                }
+            };
+            return menuItems;
+        }
+
+        /// <summary>
+        /// Gets the editable menu items.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <returns>List&lt;MenuItem&gt;.</returns>
+        private List<MenuItem> GetEditableMenuItems(bool leftSide)
+        {
+            var menuItems = new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.EditThis,
+                    Command = ViewModel.EditThisCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ViewModel.CopyTextCommand,
+                    CommandParameter = leftSide
+                }
+            };
+            return menuItems;
+        }
+
+        /// <summary>
+        /// Gets the non editable menu items.
+        /// </summary>
+        /// <param name="leftSide">The left side.</param>
+        /// <returns>System.Collections.Generic.List&lt;Avalonia.Controls.MenuItem&gt;.</returns>
+        private List<MenuItem> GetNonEditableMenuItems(bool leftSide)
+        {
+            var menuItems = new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyText,
+                    Command = ViewModel.CopyTextCommand,
+                    CommandParameter = leftSide
+                }
+            };
+            return menuItems;
         }
 
         /// <summary>

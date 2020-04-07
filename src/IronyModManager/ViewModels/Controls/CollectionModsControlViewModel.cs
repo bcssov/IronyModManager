@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -855,7 +855,7 @@ namespace IronyModManager.ViewModels.Controls
                         reorderToken.Cancel();
                         reorderToken = new CancellationTokenSource();
                     }
-                    ReorderSelectedItemsAsync(s.Sender, reorderToken.Token).ConfigureAwait(false);
+                    ReorderSelectedItemsAsync(s.Sender, reorderToken.Token).ConfigureAwait(true);
                 }).DisposeWith(Disposables);
             }
         }

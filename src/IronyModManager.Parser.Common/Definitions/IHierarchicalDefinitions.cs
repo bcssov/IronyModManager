@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -27,10 +27,10 @@ namespace IronyModManager.Parser.Common.Definitions
         #region Properties
 
         /// <summary>
-        /// Gets the children.
+        /// Gets or sets the children.
         /// </summary>
         /// <value>The children.</value>
-        ICollection<IHierarchicalDefinitions> Children { get; }
+        ICollection<IHierarchicalDefinitions> Children { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

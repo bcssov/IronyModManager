@@ -2074,7 +2074,7 @@ namespace IronyModManager.Services.Tests
                 Name = "test"
             });
             result.Should().BeFalse();
-            result = service.IsPatchMod(null);
+            result = service.IsPatchMod(default(Mod));
             result.Should().BeFalse();
         }
 

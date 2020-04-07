@@ -59,6 +59,7 @@
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
     },
     "Conflict_Solver": {
@@ -71,6 +72,8 @@
         "TakeRight": "Hier rechts",
         "OK": "In Ordnung",
         "Cancel": "Stornieren",
+        "Resolve": "Lösen",
+        "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",

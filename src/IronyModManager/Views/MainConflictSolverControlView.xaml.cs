@@ -4,17 +4,23 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;
+using ReactiveUI;
 
 namespace IronyModManager.Views
 {
@@ -39,6 +45,37 @@ namespace IronyModManager.Views
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            base.OnActivated(disposables);
+            var conflicts = this.FindControl<TreeView>("conflicts");
+            this.WhenAnyValue(v => v.ViewModel.SelectedConflict).Where(p => p != null).Subscribe(s =>
+            {
+                int idx = 0;
+                foreach (var item in ViewModel.HierarchalConflicts)
+                {
+                    if (item.Children.Contains(ViewModel.SelectedConflict))
+                    {
+                        break;
+                    }
+                    idx++;
+                }
+                if (idx > (ViewModel.HierarchalConflicts.Count() - 1))
+                {
+                    idx = ViewModel.HierarchalConflicts.Count() - 1;
+                }
+                var tvItem = conflicts.Presenter.Panel.Children[idx] as TreeViewItem;
+                if (tvItem != null && !tvItem.IsExpanded)
+                {
+                    tvItem.IsExpanded = true;
+                }
+            }).DisposeWith(disposables);
+        }
 
         /// <summary>
         /// Initializes the component.

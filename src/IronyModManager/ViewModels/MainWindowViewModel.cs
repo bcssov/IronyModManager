@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -145,12 +145,14 @@ namespace IronyModManager.ViewModels
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:
-                            ConflictSolver.Conflicts = s.Results;                            
-                            AnimateTransitionAsync(false).ConfigureAwait(false);
+                            ConflictSolver.Conflicts = s.Results;
+                            ConflictSolver.SelectedModCollection = s.SelectedCollection;
+                            ConflictSolver.Reset();
+                            AnimateTransitionAsync(false).ConfigureAwait(true);
                             break;
 
                         default:
-                            AnimateTransitionAsync(true).ConfigureAwait(false);
+                            AnimateTransitionAsync(true).ConfigureAwait(true);
                             break;
                     }
                 }).DisposeWith(disposables);

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-20-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="DIResolver.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -56,6 +56,10 @@ namespace IronyModManager.DI
         {
             Validate();
             var reg = DIContainer.Container.GetRegistration(type);
+            if (reg == null)
+            {
+                return null;
+            }
             return reg.Registration.ImplementationType;
         }
 
