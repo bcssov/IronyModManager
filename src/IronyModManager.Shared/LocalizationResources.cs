@@ -101,6 +101,8 @@ namespace IronyModManager.Shared
             public const string Cancel = Prefix + "Cancel";
             public const string Resolve = Prefix + "Resolve";
             public const string OverlayResolve = Prefix + "OverlayResolve";
+            public const string NextConflict = Prefix + "NextConflict";
+            public const string PrevConflict = Prefix + "PrevConflict";
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";

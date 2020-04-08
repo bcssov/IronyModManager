@@ -26,7 +26,7 @@
     </Panel>
     <Panel IsVisible="{Binding !EditingText}">
       <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
-        <ListBox Grid.Column="0" Items="{Binding Diff.OldText.Lines}"
+        <ListBox Grid.Column="0" Items="{Binding LeftDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
                  SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
           <ListBox.ItemTemplate>
@@ -56,7 +56,7 @@
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Column="1" Items="{Binding Diff.NewText.Lines}"
+        <ListBox Grid.Column="1" Items="{Binding RightDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="rightSide"
                  SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
           <ListBox.ItemTemplate>

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-08-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -55,6 +55,18 @@ namespace IronyModManager.Views.Controls
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Focuses the conflict.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <param name="leftListBox">The left ListBox.</param>
+        /// <param name="rightListBox">The right ListBox.</param>
+        protected virtual void FocusConflict(int line, ListBox leftListBox, ListBox rightListBox)
+        {
+            leftListBox.SelectedIndex = line;
+            rightListBox.SelectedIndex = line;
+        }
 
         /// <summary>
         /// Handles the context menu.
@@ -158,6 +170,10 @@ namespace IronyModManager.Views.Controls
             {
                 HandleContextMenu(rightSide, false);
             };
+            ViewModel.ConflictFound += (line) =>
+            {
+                FocusConflict(line, leftSide, rightSide);
+            };
 
             base.OnActivated(disposables);
         }
@@ -171,6 +187,22 @@ namespace IronyModManager.Views.Controls
         {
             var menuItems = new List<MenuItem>()
             {
+                new MenuItem()
+                {
+                    Header = ViewModel.NextConflict,
+                    Command = ViewModel.NextConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.PrevConflict,
+                    Command = ViewModel.PrevConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
                 new MenuItem()
                 {
                     Header = ViewModel.CopyText,
@@ -230,6 +262,22 @@ namespace IronyModManager.Views.Controls
             {
                 new MenuItem()
                 {
+                    Header = ViewModel.NextConflict,
+                    Command = ViewModel.NextConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.PrevConflict,
+                    Command = ViewModel.PrevConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
                     Header = ViewModel.EditThis,
                     Command = ViewModel.EditThisCommand,
                     CommandParameter = leftSide
@@ -253,6 +301,22 @@ namespace IronyModManager.Views.Controls
         {
             var menuItems = new List<MenuItem>()
             {
+                new MenuItem()
+                {
+                    Header = ViewModel.NextConflict,
+                    Command = ViewModel.NextConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.PrevConflict,
+                    Command = ViewModel.PrevConflictCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
                 new MenuItem()
                 {
                     Header = ViewModel.CopyText,

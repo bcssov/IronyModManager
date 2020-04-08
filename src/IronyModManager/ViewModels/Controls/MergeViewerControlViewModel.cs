@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-08-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,11 +13,12 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Collections;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
@@ -58,6 +59,25 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Constructors
+
+        #region Delegates
+
+        /// <summary>
+        /// Delegate ConflictFoundDelegate
+        /// </summary>
+        /// <param name="line">The line.</param>
+        public delegate void ConflictFoundDelegate(int line);
+
+        #endregion Delegates
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [conflict found].
+        /// </summary>
+        public event ConflictFoundDelegate ConflictFound;
+
+        #endregion Events
 
         #region Properties
 
@@ -127,12 +147,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> CopyThisCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the difference.
-        /// </summary>
-        /// <value>The difference.</value>
-        public virtual SideBySideDiffModel Diff { get; protected set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [editing left].
         /// </summary>
         /// <value><c>true</c> if [editing left]; otherwise, <c>false</c>.</value>
@@ -164,6 +178,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> EditThisCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the difference.
+        /// </summary>
+        /// <value>The difference.</value>
+        public virtual IList<DiffPieceWithIndex> LeftDiff { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the left side.
         /// </summary>
         /// <value>The left side.</value>
@@ -179,7 +199,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the left side selected.
         /// </summary>
         /// <value>The left side selected.</value>
-        public virtual IEnumerable<DiffPiece> LeftSideSelected { get; set; }
+        public virtual IAvaloniaList<DiffPieceWithIndex> LeftSideSelected { get; set; }
 
         /// <summary>
         /// Gets or sets the move down.
@@ -208,6 +228,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> MoveUpCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the next conflict.
+        /// </summary>
+        /// <value>The next conflict.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.NextConflict)]
+        public virtual string NextConflict { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the next conflict command.
+        /// </summary>
+        /// <value>The next conflict command.</value>
+        public virtual ReactiveCommand<bool, Unit> NextConflictCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the ok.
         /// </summary>
         /// <value>The ok.</value>
@@ -219,6 +252,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The ok command.</value>
         public virtual ReactiveCommand<Unit, Unit> OKCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the previous conflict.
+        /// </summary>
+        /// <value>The previous conflict.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.PrevConflict)]
+        public virtual string PrevConflict { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the previous conflict command.
+        /// </summary>
+        /// <value>The previous conflict command.</value>
+        public virtual ReactiveCommand<bool, Unit> PrevConflictCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the right difference.
+        /// </summary>
+        /// <value>The right difference.</value>
+        public virtual IList<DiffPieceWithIndex> RightDiff { get; protected set; }
 
         /// <summary>
         /// Gets or sets the right side.
@@ -236,7 +288,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the right side selected.
         /// </summary>
         /// <value>The right side selected.</value>
-        public virtual IEnumerable<DiffPiece> RightSideSelected { get; set; }
+        public virtual IAvaloniaList<DiffPieceWithIndex> RightSideSelected { get; set; }
 
         #endregion Properties
 
@@ -281,7 +333,9 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void Compare()
         {
             var builder = new SideBySideDiffBuilder(new Differ());
-            Diff = builder.BuildDiffModel(LeftSide, RightSide, true);
+            var diff = builder.BuildDiffModel(LeftSide, RightSide, true);
+            LeftDiff = GetDiffPieceWithIndex(diff.OldText.Lines);
+            RightDiff = GetDiffPieceWithIndex(diff.NewText.Lines);
         }
 
         /// <summary>
@@ -291,7 +345,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="source">The source.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void Copy(IEnumerable<DiffPiece> selected, IList<DiffPiece> source, IList<DiffPiece> destination, bool leftSide)
+        protected virtual void Copy(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
             if (selected?.Count() > 0)
             {
@@ -319,7 +373,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="source">The source.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void CopyAfterLines(IEnumerable<DiffPiece> selected, IList<DiffPiece> source, IList<DiffPiece> destination, bool leftSide)
+        protected virtual void CopyAfterLines(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
             if (selected?.Count() > 0)
             {
@@ -365,7 +419,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="source">The source.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void CopyBeforeLines(IEnumerable<DiffPiece> selected, IList<DiffPiece> source, IList<DiffPiece> destination, bool leftSide)
+        protected virtual void CopyBeforeLines(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, IList<DiffPieceWithIndex> destination, bool leftSide)
         {
             if (selected?.Count() > 0)
             {
@@ -418,13 +472,104 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Finds the conflict.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <param name="moveDown">if set to <c>true</c> [move down].</param>
+        protected virtual void FindConflict(bool leftSide, bool moveDown)
+        {
+            var selectedItems = leftSide ? LeftSideSelected : RightSideSelected;
+            if (selectedItems?.Count() > 0)
+            {
+                var source = leftSide ? LeftDiff : RightDiff;
+                var idx = source.IndexOf(selectedItems.FirstOrDefault());
+                int? matchIdx = null;
+                if (idx > -1)
+                {
+                    if (moveDown)
+                    {
+                        while (true)
+                        {
+                            idx++;
+                            if (idx > (source.Count - 1))
+                            {
+                                idx = source.Count - 1;
+                                break;
+                            }
+                            if (source[idx].Type == ChangeType.Unchanged)
+                            {
+                                break;
+                            }
+                        }
+                        var line = source.Skip(idx + 1).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
+                        if (line != null)
+                        {
+                            matchIdx = source.IndexOf(line);
+                        }
+                    }
+                    else
+                    {
+                        var reverseSrc = source.Reverse().ToList();
+                        var reverseIdx = source.Count - idx;
+                        while (true)
+                        {
+                            reverseIdx++;
+                            if (reverseIdx > (reverseSrc.Count - 1))
+                            {
+                                reverseIdx = 0;
+                                break;
+                            }
+                            if (reverseSrc[reverseIdx].Type == ChangeType.Unchanged)
+                            {
+                                break;
+                            }
+                        }
+                        var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
+                        if (line != null)
+                        {
+                            matchIdx = source.IndexOf(line);
+                        }
+                    }
+                    if (matchIdx.HasValue)
+                    {
+                        ConflictFound?.Invoke(matchIdx.GetValueOrDefault());
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the index of the difference piece with.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>List&lt;DiffPieceWithIndex&gt;.</returns>
+        protected virtual List<DiffPieceWithIndex> GetDiffPieceWithIndex(List<DiffPiece> lines)
+        {
+            var col = new List<DiffPieceWithIndex>();
+            int counter = 0;
+            foreach (var item in lines)
+            {
+                counter++;
+                col.Add(new DiffPieceWithIndex()
+                {
+                    Index = counter,
+                    Position = item.Position,
+                    SubPieces = item.SubPieces,
+                    Text = item.Text,
+                    Type = item.Type
+                });
+            }
+            return col;
+        }
+
+        /// <summary>
         /// Moves the specified move up.
         /// </summary>
         /// <param name="moveUp">if set to <c>true</c> [move up].</param>
         /// <param name="selected">The selected.</param>
         /// <param name="source">The source.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void Move(bool moveUp, IEnumerable<DiffPiece> selected, IList<DiffPiece> source, bool leftSide)
+        protected virtual void Move(bool moveUp, IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source, bool leftSide)
         {
             if (selected?.Count() > 0)
             {
@@ -461,18 +606,62 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            LeftSideSelected = new ObservableCollection<DiffPiece>();
-            RightSideSelected = new ObservableCollection<DiffPiece>();
+            LeftSideSelected = new AvaloniaList<DiffPieceWithIndex>();
+            RightSideSelected = new AvaloniaList<DiffPieceWithIndex>();
+            var syncingSelection = false;
+
+            LeftSideSelected.CollectionChanged += (sender, args) =>
+            {
+                if (syncingSelection)
+                {
+                    return;
+                }
+                syncingSelection = true;
+                if (LeftSideSelected?.Count > 0)
+                {
+                    RightSideSelected.Clear();
+                    foreach (var item in LeftSideSelected)
+                    {
+                        RightSideSelected.Add(RightDiff[LeftDiff.IndexOf(item)]);
+                    }
+                }
+                else
+                {
+                    RightSideSelected.Clear();
+                }
+                syncingSelection = false;
+            };
+
+            RightSideSelected.CollectionChanged += (sender, args) =>
+            {
+                if (syncingSelection)
+                {
+                    return;
+                }
+                syncingSelection = true;
+                if (RightSideSelected?.Count > 0)
+                {
+                    foreach (var item in RightSideSelected)
+                    {
+                        LeftSideSelected.Add(LeftDiff[RightDiff.IndexOf(item)]);
+                    }
+                }
+                else
+                {
+                    LeftSideSelected.Clear();
+                }
+                syncingSelection = false;
+            };
 
             CopyThisCommand = ReactiveCommand.Create((bool leftSide) =>
             {
                 if (leftSide)
                 {
-                    Copy(LeftSideSelected, Diff.OldText.Lines, Diff.NewText.Lines, leftSide);
+                    Copy(LeftSideSelected, LeftDiff, RightDiff, leftSide);
                 }
                 else
                 {
-                    Copy(RightSideSelected, Diff.NewText.Lines, Diff.OldText.Lines, leftSide);
+                    Copy(RightSideSelected, RightDiff, LeftDiff, leftSide);
                 }
             }).DisposeWith(disposables);
 
@@ -480,11 +669,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    CopyBeforeLines(LeftSideSelected, Diff.OldText.Lines, Diff.NewText.Lines, leftSide);
+                    CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, leftSide);
                 }
                 else
                 {
-                    CopyBeforeLines(RightSideSelected, Diff.NewText.Lines, Diff.OldText.Lines, leftSide);
+                    CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, leftSide);
                 }
             }).DisposeWith(disposables);
 
@@ -492,11 +681,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    CopyAfterLines(LeftSideSelected, Diff.OldText.Lines, Diff.NewText.Lines, leftSide);
+                    CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, leftSide);
                 }
                 else
                 {
-                    CopyAfterLines(RightSideSelected, Diff.NewText.Lines, Diff.OldText.Lines, leftSide);
+                    CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, leftSide);
                 }
             }).DisposeWith(disposables);
 
@@ -504,11 +693,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Move(true, LeftSideSelected, Diff.OldText.Lines, leftSide);
+                    Move(true, LeftSideSelected, LeftDiff, leftSide);
                 }
                 else
                 {
-                    Move(true, LeftSideSelected, Diff.NewText.Lines, leftSide);
+                    Move(true, RightSideSelected, RightDiff, leftSide);
                 }
             }).DisposeWith(disposables);
 
@@ -516,11 +705,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (leftSide)
                 {
-                    Move(false, LeftSideSelected, Diff.OldText.Lines, leftSide);
+                    Move(false, LeftSideSelected, LeftDiff, leftSide);
                 }
                 else
                 {
-                    Move(false, LeftSideSelected, Diff.NewText.Lines, leftSide);
+                    Move(false, RightSideSelected, RightDiff, leftSide);
                 }
             }).DisposeWith(disposables);
 
@@ -547,6 +736,16 @@ namespace IronyModManager.ViewModels.Controls
                 CopyTextAsync(leftSide).ConfigureAwait(true);
             }).DisposeWith(disposables);
 
+            NextConflictCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                FindConflict(leftSide, true);
+            }).DisposeWith(disposables);
+
+            PrevConflictCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                FindConflict(leftSide, false);
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -556,9 +755,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="selected">The selected.</param>
         /// <param name="source">The source.</param>
         /// <returns>Dictionary&lt;System.Int32, DiffPiece&gt;.</returns>
-        protected virtual Dictionary<int, DiffPiece> OrderSelected(IEnumerable<DiffPiece> selected, IList<DiffPiece> source)
+        protected virtual Dictionary<int, DiffPieceWithIndex> OrderSelected(IEnumerable<DiffPieceWithIndex> selected, IList<DiffPieceWithIndex> source)
         {
-            var orderedSelected = new Dictionary<int, DiffPiece>();
+            var orderedSelected = new Dictionary<int, DiffPieceWithIndex>();
             foreach (var item in selected)
             {
                 var idx = source.IndexOf(item);
@@ -568,5 +767,55 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class DiffPieceWithIndex.
+        /// Implements the <see cref="DiffPlex.DiffBuilder.Model.DiffPiece" />
+        /// </summary>
+        /// <seealso cref="DiffPlex.DiffBuilder.Model.DiffPiece" />
+        public class DiffPieceWithIndex : DiffPiece
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the index.
+            /// </summary>
+            /// <value>The index.</value>
+            public int Index { get; set; }
+
+            #endregion Properties
+
+            #region Methods
+
+            /// <summary>
+            /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
+            /// </summary>
+            /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+            /// <returns><c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.</returns>
+            public override bool Equals(object obj)
+            {
+                var result = base.Equals(obj);
+                if (result && obj is DiffPieceWithIndex other)
+                {
+                    return Index.Equals(other.Index);
+                }
+                return result;
+            }
+
+            /// <summary>
+            /// Returns a hash code for this instance.
+            /// </summary>
+            /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
+            #endregion Methods
+        }
+
+        #endregion Classes
     }
 }

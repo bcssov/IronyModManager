@@ -74,6 +74,8 @@
         "Cancel": "Stornieren",
         "Resolve": "Lösen",
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
+        "NextConflict": "Nächster Konflikt",
+        "PrevConflict": "Vorheriger Konflikt",
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",
