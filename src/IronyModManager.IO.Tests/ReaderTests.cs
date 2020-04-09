@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 04-04-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Readers;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -72,6 +74,23 @@ namespace IronyModManager.IO.Tests
             result.Count().Should().NotBe(0);
         }
 
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Disk_stream_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Disk_stream_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetStream(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();            
+        }
+
         /// <summary>
         /// Defines the test method Disk_read_test.
         /// </summary>
@@ -93,6 +112,26 @@ namespace IronyModManager.IO.Tests
 #if FUNCTIONAL_TEST
         [Fact]
 #else
+        /// <summary>
+        /// Defines the test method Archive_stream_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Archive_stream_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetStream(ArchiveTestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Mod_file_read_test.
+        /// </summary>
         [Fact(Skip = "This is for functional testing only")]
 #endif
         public void Mod_file_read_test()
@@ -109,7 +148,9 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Class Reader1.
         /// Implements the <see cref="IronyModManager.IO.IFileReader" />
+        /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// </summary>
+        /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// <seealso cref="IronyModManager.IO.IFileReader" />
         private class Reader1 : IFileReader
         {
@@ -121,6 +162,20 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake1");
+            }
+
+            /// <summary>
+            /// Gets the stream.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>Stream.</returns>
+            public Stream GetStream(string rootPath, string file)
+            {
+                var ms = new MemoryStream();
+                var sw = new StreamWriter(ms);
+                sw.Write("fake1");
+                return ms;
             }
 
             /// <summary>
@@ -140,7 +195,9 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Class Reader2.
         /// Implements the <see cref="IronyModManager.IO.IFileReader" />
+        /// Implements the <see cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// </summary>
+        /// <seealso cref="IronyModManager.IO.Common.Readers.IFileReader" />
         /// <seealso cref="IronyModManager.IO.IFileReader" />
         private class Reader2 : IFileReader
         {
@@ -152,6 +209,20 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake2");
+            }
+
+            /// <summary>
+            /// Gets the stream.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>Stream.</returns>
+            public Stream GetStream(string rootPath, string file)
+            {
+                var ms = new MemoryStream();
+                var sw = new StreamWriter(ms);
+                sw.Write("fake1");
+                return ms;
             }
 
             /// <summary>

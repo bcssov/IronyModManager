@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -99,14 +99,15 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition = GetDefinitionInstance();
                         var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Id = id;
                         definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
+                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
                             definition.ValueType = ValueType.Namespace;
                         }
                         else
                         {
+                            definition.Id = id;
                             definition.ValueType = ValueType.Variable;
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
@@ -207,9 +208,8 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>System.String.</returns>
         protected virtual string FormatType(string file, string typeOverride = Shared.Constants.EmptyParam)
         {
-            var lines = file.Split(Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries);
-            var formatted = string.Join(Path.DirectorySeparatorChar, lines.Take(lines.Length - 1));
-            var type = lines.Last().Split(".").Last();
+            var formatted = Path.GetDirectoryName(file);
+            var type = Path.GetExtension(file).Trim('.');
             if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
             {
                 type = Constants.TxtType;

@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="StellarisSolarSystemInitializersTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Games.Stellaris;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -108,7 +109,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                     case 1:
                         result[i].Id.Should().Be("sol_system_initializer");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 2:

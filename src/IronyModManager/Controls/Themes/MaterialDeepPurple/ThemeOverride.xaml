@@ -23,4 +23,42 @@
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
+  <Style Selector="TextBlock.DiffImaginaryLine">
+    <Setter Property="Background" Value="#FF808080" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedLine">
+    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedLine">
+    <Setter Property="Background" Value="#FF9999" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffUnchangedPieces">
+    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedPieces">
+    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedPieces">
+    <Setter Property="Background" Value="#FF9999" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffModifiedPieces">
+    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="Border.BlockSelected">
+    <Setter Property="BorderThickness" Value="1,1,1,1"/>
+    <Setter Property="BorderBrush" Value="Green"/>
+  </Style>
+  <Styles.Resources>
+    <Color x:Key="IronyForegroundColor">#FF000000</Color>
+    <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <Color x:Key="IronyThemeSortArrowColor">#FF0000</Color>
+    <SolidColorBrush x:Key="IronyThemeSortArrowBrush" Color="{DynamicResource IronyThemeSortArrowColor}" />
+  </Styles.Resources>
 </Styles>

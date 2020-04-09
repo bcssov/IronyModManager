@@ -20,6 +20,8 @@
          ConverterParameter=x/2.1}">
           <Button Content="{Binding Apply}" Command="{Binding ApplyCommand}"
                   VerticalAlignment="Bottom" HorizontalAlignment="Left"></Button>
+          <Button Content="{Binding Analyze}" Command="{Binding AnalyzeCommand}"
+                  VerticalAlignment="Bottom" HorizontalAlignment="Right"></Button>
         </Panel>
       </Panel>
     </Grid>

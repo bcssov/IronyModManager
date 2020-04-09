@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="MinMaxButtonSpinner.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
 {
@@ -25,6 +26,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Controls.ButtonSpinner" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class MinMaxButtonSpinner : ButtonSpinner, IStyleable
     {
         #region Properties

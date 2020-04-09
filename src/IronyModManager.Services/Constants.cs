@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -27,6 +27,11 @@ namespace IronyModManager.Services
         /// The mod directory
         /// </summary>
         public const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The mod extension
+        /// </summary>
+        public const string ModExtension = "." + ModDirectory;
 
         /// <summary>
         /// The paradox mod identifier
@@ -57,20 +62,6 @@ namespace IronyModManager.Services
         /// </summary>
         public static class Themes
         {
-            #region Fields
-
-            /// <summary>
-            /// The irony foreground brush key
-            /// </summary>
-            public const string IronyForegroundBrushKey = "IronyForegroundBrush";
-
-            /// <summary>
-            /// The irony theme sort arrow key
-            /// </summary>
-            public const string IronyThemeSortArrowKey = "IronyThemeSortArrow";
-
-            #endregion Fields
-
             #region Classes
 
             /// <summary>
@@ -84,16 +75,6 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Avalonia.Themes.Default/Accents/BaseDark.xaml";
-
-                /// <summary>
-                /// The irony foreground brush
-                /// </summary>
-                public const string IronyForegroundBrush = "#FFDEDEDE";
-
-                /// <summary>
-                /// The irony theme sort arrow
-                /// </summary>
-                public const string IronyThemeSortArrow = "#FFFF00";
 
                 /// <summary>
                 /// The main resource
@@ -126,16 +107,6 @@ namespace IronyModManager.Services
                 public const string AccentResource = "avares://Avalonia.Themes.Default/Accents/BaseLight.xaml";
 
                 /// <summary>
-                /// The irony foreground brush
-                /// </summary>
-                public const string IronyForegroundBrush = "#FF000000";
-
-                /// <summary>
-                /// The irony theme sort arrow
-                /// </summary>
-                public const string IronyThemeSortArrow = "#FF0000";
-
-                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Avalonia.Themes.Default/DefaultTheme.xaml";
@@ -164,16 +135,6 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.Dark.xaml";
-
-                /// <summary>
-                /// The irony foreground brush
-                /// </summary>
-                public const string IronyForegroundBrush = "#D7CCC8";
-
-                /// <summary>
-                /// The irony theme sort arrow
-                /// </summary>
-                public const string IronyThemeSortArrow = "#FFFF00";
 
                 /// <summary>
                 /// The main resource
@@ -206,16 +167,6 @@ namespace IronyModManager.Services
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml";
 
                 /// <summary>
-                /// The irony foreground brush
-                /// </summary>
-                public const string IronyForegroundBrush = "#FF000000";
-
-                /// <summary>
-                /// The irony theme sort arrow
-                /// </summary>
-                public const string IronyThemeSortArrow = "#FF0000";
-
-                /// <summary>
                 /// The main resource
                 /// </summary>
                 public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
@@ -244,16 +195,6 @@ namespace IronyModManager.Services
                 /// The accent resource
                 /// </summary>
                 public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml";
-
-                /// <summary>
-                /// The irony foreground brush
-                /// </summary>
-                public const string IronyForegroundBrush = "#FF000000";
-
-                /// <summary>
-                /// The irony theme sort arrow
-                /// </summary>
-                public const string IronyThemeSortArrow = "#FF0000";
 
                 /// <summary>
                 /// The main resource

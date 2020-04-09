@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -22,10 +22,12 @@ namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
     /// Class FlagsParser.
-    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
-    public class FlagsParser : BaseStellarisParser
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
+    public class FlagsParser : BaseParser, IGameParser
     {
         #region Constructors
 
@@ -39,6 +41,16 @@ namespace IronyModManager.Parser.Games.Stellaris
 
         #endregion Constructors
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
+        public int Priority => 1;
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
@@ -46,9 +58,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public override bool CanParse(CanParseArgs args)
+        public bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && args.File.StartsWith(Common.Constants.Stellaris.Flags, StringComparison.OrdinalIgnoreCase);
+            return args.IsStellaris() && args.File.StartsWith(Common.Constants.Stellaris.Flags, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-03-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -30,6 +30,11 @@ namespace IronyModManager.Parser.Common
         /// The variable
         /// </summary>
         Variable,
+
+        /// <summary>
+        /// The special variable
+        /// </summary>
+        SpecialVariable,
 
         /// <summary>
         /// The namespace

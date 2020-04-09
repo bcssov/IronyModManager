@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 03-25-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -20,7 +20,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
-using Avalonia.Media;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
@@ -68,11 +67,6 @@ namespace IronyModManager
                 {
                     var style = compileTheme(item);
                     app.Styles.Add(style);
-                }
-                foreach (var item in theme.Brushes)
-                {
-                    var brush = Brush.Parse(item.Value);
-                    app.Resources[item.Key] = brush;
                 }
                 return true;
             }

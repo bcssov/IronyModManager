@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 03-20-2020
 // ***********************************************************************
 // <copyright file="LocalizationConverter.cs" company="Mario">
 //     Mario
@@ -49,7 +49,7 @@ namespace IronyModManager.Converters
                 {
                     prefix = parameter.ToString();
                 }
-                var resKey = $"{prefix}{value.ToString()}";
+                var resKey = $"{prefix}{value}";
                 var translation = locManager.GetResource(resKey);
                 return translation;
             }

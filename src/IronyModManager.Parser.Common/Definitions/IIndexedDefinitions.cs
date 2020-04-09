@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Parser.Common.Definitions
     public interface IIndexedDefinitions
     {
         #region Methods
+
+        /// <summary>
+        /// Adds to map.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        void AddToMap(IDefinition definition);
 
         /// <summary>
         /// Gets all.
@@ -55,11 +61,25 @@ namespace IronyModManager.Parser.Common.Definitions
         IEnumerable<IDefinition> GetByFile(string file);
 
         /// <summary>
+        /// Gets the by parent directory.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByParentDirectory(string directory);
+
+        /// <summary>
         /// Gets the type of the by.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         IEnumerable<IDefinition> GetByType(string type);
+
+        /// <summary>
+        /// Gets the by type andi d.
+        /// </summary>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByTypeAndId(string typeAndId);
 
         /// <summary>
         /// Gets the by type and identifier.
@@ -70,10 +90,17 @@ namespace IronyModManager.Parser.Common.Definitions
         IEnumerable<IDefinition> GetByTypeAndId(string type, string id);
 
         /// <summary>
+        /// Gets the hierarchical definitions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
+        IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions();
+
+        /// <summary>
         /// Initializes the map.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        void InitMap(IEnumerable<IDefinition> definitions);
+        /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
+        void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         #endregion Methods
     }

@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
+             x:Class="IronyModManager.Views.Controls.MergeViewerBinaryControlView">
+  <Panel>
+    <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
+      <Panel Grid.Column="0">
+        <controls:BoundClassBorder BoundClasses="{Binding TakeLeftClass}">
+          <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+            <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
+          </Grid>
+        </controls:BoundClassBorder>
+      </Panel>
+      <Panel Grid.Column="1">
+        <controls:BoundClassBorder BoundClasses="{Binding TakeRightClass}">
+          <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+            <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
+          </Grid>
+        </controls:BoundClassBorder>
+      </Panel>
+    </Grid>
+  </Panel>
+</UserControl>

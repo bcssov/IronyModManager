@@ -81,6 +81,39 @@ namespace IronyModManager.Shared
             public const string Prefix = nameof(Mod_Actions) + ".";
             public const string Apply = Prefix + "Apply";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
+            public const string Conflict = Prefix + "Conflict";
+            public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
+            public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+            public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
+            public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+        }
+        public static class Conflict_Solver
+        {
+            public const string Prefix = nameof(Conflict_Solver) + ".";
+            public const string Back = Prefix + "Back";
+            public const string ConflictedObjects = Prefix + "ConflictedObjects";
+            public const string LeftSide = Prefix + "LeftSide";
+            public const string RightSide = Prefix + "RightSide";
+            public const string BinaryFile = Prefix + "BinaryFile";
+            public const string TakeLeft = Prefix + "TakeLeft";
+            public const string TakeRight = Prefix + "TakeRight";
+            public const string OK = Prefix + "OK";
+            public const string Cancel = Prefix + "Cancel";
+            public const string Resolve = Prefix + "Resolve";
+            public const string OverlayResolve = Prefix + "OverlayResolve";
+            public const string NextConflict = Prefix + "NextConflict";
+            public const string PrevConflict = Prefix + "PrevConflict";
+            public static class ContextMenu
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";
+                public const string CopyThis = Prefix + "CopyThis";
+                public const string CopyThisAfterLine = Prefix + "CopyThisAfterLine";
+                public const string CopyThisBeforeLine = Prefix + "CopyThisBeforeLine";
+                public const string MoveUp = Prefix + "MoveUp";
+                public const string MoveDown = Prefix + "MoveDown";
+                public const string Edit = Prefix + "Edit";
+                public const string CopyText = Prefix + "CopyText";
+            }
         }
         public static class Notifications
         {

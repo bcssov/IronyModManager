@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-03-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="ResourceReader.cs" company="Mario">
 //     Mario
@@ -63,7 +63,6 @@ namespace IronyModManager.DI.Readers
 
             var blob = new StrongNamePublicKeyBlob(publicKey);
             var assemblyName = assembly.GetName();
-            // TODO: No official implementation?!?
             var strongName = new StrongName(blob, assemblyName.Name, assemblyName.Version);
             return strongName;
         }

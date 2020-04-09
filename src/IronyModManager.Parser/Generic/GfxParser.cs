@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="GfxParser.cs" company="Mario">
 //     Mario
@@ -56,6 +56,16 @@ namespace IronyModManager.Parser.Generic
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
+        public int Priority => 10;
+
+        #endregion Properties
 
         #region Methods
 
@@ -113,7 +123,7 @@ namespace IronyModManager.Parser.Generic
                         }
                         if (sbLangs.Length > 0)
                         {
-                            id = $"{sbLangs.ToString()}{id}";
+                            id = $"{sbLangs}{id}";
                         }
                         if (!string.IsNullOrWhiteSpace(id))
                         {
@@ -143,7 +153,7 @@ namespace IronyModManager.Parser.Generic
                         currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                         closeBrackets += currentCloseBrackets;
                     }
-                    if (openBrackets - closeBrackets == 2 || openBrackets - previousCloseBrackets == 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
+                    if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
                     {
                         if (definition == null)
                         {
@@ -163,7 +173,7 @@ namespace IronyModManager.Parser.Generic
                                 sbLangs.Append($"{item}-");
                             }
                         }
-                        if (!string.IsNullOrWhiteSpace(id))
+                        if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
                         {
                             definition.Id = id;
                         }

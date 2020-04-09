@@ -4,15 +4,16 @@
 // Created          : 03-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="CommandResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Implementation
 {
@@ -20,6 +21,7 @@ namespace IronyModManager.Implementation
     /// Class CommandResult.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [ExcludeFromCoverage("Generics are not tested.")]
     public class CommandResult<T>
     {
         #region Constructors

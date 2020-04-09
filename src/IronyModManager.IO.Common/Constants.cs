@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 04-05-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -14,12 +14,14 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common
 {
     /// <summary>
     /// Class Constants.
     /// </summary>
+    [ExcludeFromCoverage("Parameters.")]
     public static class Constants
     {
         #region Fields

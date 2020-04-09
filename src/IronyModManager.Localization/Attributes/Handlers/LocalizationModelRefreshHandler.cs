@@ -4,7 +4,7 @@
 // Created          : 01-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-05-2020
+// Last Modified On : 03-31-2020
 // ***********************************************************************
 // <copyright file="LocalizationModelRefreshHandler.cs" company="Mario">
 //     Mario
@@ -30,7 +30,8 @@ namespace IronyModManager.Localization.Attributes.Handlers
         /// Determines whether this instance can refresh the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance can refresh the specified arguments; otherwise, <c>false</c>.</returns>
+        /// <returns>
+        ///   <c>true</c> if this instance can refresh the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanRefresh(LocalizationRefreshArgs args)
         {
             return typeof(ILocalizableModel).IsAssignableFrom(args.Property.PropertyType);
@@ -44,7 +45,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
         {
             if (args.Property.GetValue(args.Invocation.InvocationTarget, null) is ILocalizableModel val)
             {
-                var props = val.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase))).ToList();
+                var props = val.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase)));
                 if (props.Count() > 0)
                 {
                     foreach (var prop in props)

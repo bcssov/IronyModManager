@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 03-20-2020
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -37,7 +37,11 @@ namespace IronyModManager.Log
         /// <returns><c>true</c> if the specified level is enabled; otherwise, <c>false</c>.</returns>
         public bool IsEnabled(LogEventLevel level)
         {
-            return true; // Let nlog take care of this
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="GenericGuiParserTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 namespace IronyModManager.Parser.Tests
@@ -99,12 +100,12 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("test");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
-                        result[i].Code.Should().Be(sb3.ToString());
+                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
@@ -155,7 +156,7 @@ namespace IronyModManager.Parser.Tests
 
                     case 0:
                         result[i].Id.Should().Be("test");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
@@ -197,7 +198,7 @@ namespace IronyModManager.Parser.Tests
 
                     case 0:
                         result[i].Id.Should().Be("test");
-                        result[i].Code.Should().Be(sb.ToString());
+                        result[i].Code.Should().Be(sb.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
@@ -264,18 +265,18 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("test");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
-                        result[i].Code.Should().Be(sb3.ToString());
+                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("gui\\gui");
             }
-        }
+        }   
     }
 }

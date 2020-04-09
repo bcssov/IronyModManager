@@ -201,14 +201,12 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var newThemeKey = "test2";
             var newThemeUris = new List<string>() { "4", "5" };
-            var brushes = new Dictionary<string, string>() { { "IronyForegroundColor", "#FF000000" } };
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterTheme(newThemeKey, newThemeUris, brushes);
+            storage.RegisterTheme(newThemeKey, newThemeUris);
             dbMock.Themes.Count.Should().Be(2);
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
-            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Brushes.First().Should().Be(brushes.First());
         }
 
 
@@ -346,20 +344,18 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var newThemeKey = "test2";
             var newThemeUris = new List<string>() { "4", "5" };
-            var brushes = new Dictionary<string, string>() { { "IronyForegroundColor", "#FF000000" } };
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
             {
                return dbMock.Themes.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterTheme(newThemeKey, newThemeUris, brushes);
+            storage.RegisterTheme(newThemeKey, newThemeUris);
             var themes = storage.GetThemes();
             themes.Count().Should().Be(2);
             themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
             themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
             themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
-            themes.FirstOrDefault(p => p.Name == newThemeKey).Brushes.First().Should().Be(brushes.First());
         }
 
         /// <summary>

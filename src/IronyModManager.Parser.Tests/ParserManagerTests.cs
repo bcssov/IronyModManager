@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="ParserManagerTests.cs" company="Mario">
 //     Mario
@@ -87,7 +87,9 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Class DefaultParser.
         /// Implements the <see cref="IronyModManager.Parser.Default.IDefaultParser" />
+        /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
         /// </summary>
+        /// <seealso cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
         /// <seealso cref="IronyModManager.Parser.Default.IDefaultParser" />
         class DefaultParser : IDefaultParser
         {
@@ -107,10 +109,18 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Class GenericParser.
         /// Implements the <see cref="IronyModManager.Parser.Generic.IGenericParser" />
+        /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
         /// </summary>
+        /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
         /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
         class GenericParser : IGenericParser
         {
+            /// <summary>
+            /// Gets the priority.
+            /// </summary>
+            /// <value>The priority.</value>
+            public int Priority => 10;
+
             /// <summary>
             /// Determines whether this instance can parse the specified arguments.
             /// </summary>
@@ -137,10 +147,18 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Class GameParser.
         /// Implements the <see cref="IronyModManager.Parser.Games.IGameParser" />
+        /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
         /// </summary>
+        /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
         /// <seealso cref="IronyModManager.Parser.Games.IGameParser" />
         class GameParser : IGameParser
         {
+            /// <summary>
+            /// Gets the priority.
+            /// </summary>
+            /// <value>The priority.</value>
+            public int Priority => 10;
+
             /// <summary>
             /// Determines whether this instance can parse the specified arguments.
             /// </summary>

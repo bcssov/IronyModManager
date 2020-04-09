@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-05-2020
+// Last Modified On : 04-07-2020
 // ***********************************************************************
 // <copyright file="BaseWindow.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
@@ -86,7 +87,7 @@ namespace IronyModManager.Common.Views
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
-        protected virtual void OnActivated(IDisposable disposables)
+        protected virtual void OnActivated(CompositeDisposable disposables)
         {
         }
 

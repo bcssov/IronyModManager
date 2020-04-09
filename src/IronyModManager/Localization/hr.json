@@ -55,7 +55,36 @@
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
-        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija..."
+        "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
+        "Conflict": "Rješavanje sukoba",
+        "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
+        "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
+    },
+    "Conflict_Solver": {
+        "Back": "Nazad",
+        "ConflictedObjects": "Sukobi",
+        "LeftSide": "Lijeva strana",
+        "RightSide": "Desna strana",
+        "BinaryFile": "Binarni sadržaj",
+        "TakeLeft": "Uzmi lijevo",
+        "TakeRight": "Uzmi desno",
+        "OK": "U redu",
+        "Cancel": "Otkaži",
+        "Resolve": "Riješi",
+        "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
+        "NextConflict": "Slijedeći sukob",
+        "PrevConflict": "Prijašnji sukob",
+        "ContextMenu": {
+            "CopyThis": "Kopiraj odabrano",
+            "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
+            "CopyThisBeforeLine": "Kopiraj odabrano prije linije",
+            "MoveUp": "Pomakni gore",
+            "MoveDown": "Pomakni dolje",
+            "Edit": "Uredi",
+            "CopyText": "Kopiraj Tekst"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

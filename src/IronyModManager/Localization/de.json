@@ -55,7 +55,36 @@
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
-        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden..."
+        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
+        "Conflict": "Konfliktlöser",
+        "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
+        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
+    },
+    "Conflict_Solver": {
+        "Back": "Zurück",
+        "ConflictedObjects": "Konfliktobjekte",
+        "LeftSide": "Linke Seite",
+        "RightSide": "Rechte Seite",
+        "BinaryFile": "Binärer Inhalt",
+        "TakeLeft": "Biegen Sie links ab",
+        "TakeRight": "Hier rechts",
+        "OK": "In Ordnung",
+        "Cancel": "Stornieren",
+        "Resolve": "Lösen",
+        "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
+        "NextConflict": "Nächster Konflikt",
+        "PrevConflict": "Vorheriger Konflikt",
+        "ContextMenu": {
+            "CopyThis": "Kopier das",
+            "CopyThisAfterLine": "Kopieren Sie diese After Line",
+            "CopyThisBeforeLine": "Kopieren Sie diese vor Zeile",
+            "MoveUp": "Nach oben gehen",
+            "MoveDown": "Sich abwärts bewegen",
+            "Edit": "Bearbeiten Sie dies",
+            "CopyText": "Text kopieren"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

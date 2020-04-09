@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-19-2020
+// Last Modified On : 04-06-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Avalonia.cs" company="Mario">
 //     Mario
@@ -37,7 +37,6 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterAvaloniaServices(Container container)
         {
-            // TODO: Not sure why also I need to use Splats registration since we've got a DI replacement? Investigate at a later date.
             Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
             Locator.CurrentMutable.RegisterConstant(new AutoDataTemplateBindingHook(), typeof(IPropertyBindingHook));
             container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();

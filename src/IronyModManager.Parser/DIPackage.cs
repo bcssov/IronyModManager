@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2020
+// Last Modified On : 03-23-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -51,6 +51,7 @@ namespace IronyModManager.Parser
             container.Register<IModObject, ModObject>();
             container.Register<IModParser, ModParser>();
             container.Register<ITextParser, TextParser>();
+            container.Register<IHierarchicalDefinitions, HierarchicalDefinitions>();
         }
 
         #endregion Methods

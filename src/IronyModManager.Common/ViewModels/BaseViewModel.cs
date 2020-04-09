@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2020
+// Last Modified On : 03-17-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
@@ -154,14 +155,37 @@ namespace IronyModManager.Common.ViewModels
         /// </summary>
         /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
         /// <param name="message">The message.</param>
-        protected virtual void TriggerOverlay(bool isVisible, string message = Shared.Constants.EmptyParam)
+        /// <param name="progress">The progress.</param>
+        protected virtual void TriggerOverlay(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
             var args = new OverlayEventArgs()
             {
                 IsVisible = isVisible,
-                Message = message
+                Message = message,
+                MessageProgress = progress
             };
             MessageBus.Current.SendMessage(args);
+        }
+
+        /// <summary>
+        /// Triggers the overlay asynchronous.
+        /// </summary>
+        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+        /// <param name="message">The message.</param>
+        /// <param name="progress">The progress.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task TriggerOverlayAsync(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
+        {
+            var args = new OverlayEventArgs()
+            {
+                IsVisible = isVisible,
+                Message = message,
+                MessageProgress = progress
+            };
+            return Task.Run(() =>
+            {
+                MessageBus.Current.SendMessage(args);
+            });
         }
 
         #endregion Methods

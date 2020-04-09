@@ -4,7 +4,7 @@
 // Created          : 01-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 03-31-2020
 // ***********************************************************************
 // <copyright file="DynamicLocalizationAttributeHandler.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Localization.Attributes.Handlers
             var valAttr = (DynamicLocalizationAttribute)args.Attribute;
             var dependentProp = args.Invocation.InvocationTarget.GetType().GetProperty(valAttr.GetDependentProperty());
             var dependentPropValue = dependentProp.GetValue(args.Invocation.InvocationTarget, null);
-            var resKey = $"{valAttr.ResourcePrefix()}{dependentPropValue.ToString()}";
+            var resKey = $"{valAttr.ResourcePrefix()}{dependentPropValue}";
             var translation = DIResolver.Get<ILocalizationManager>().GetResource(resKey);
             return translation;
         }

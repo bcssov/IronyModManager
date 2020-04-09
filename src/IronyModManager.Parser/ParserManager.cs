@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -57,8 +57,8 @@ namespace IronyModManager.Parser
         /// <param name="defaultParser">The default parser.</param>
         public ParserManager(IEnumerable<IGameParser> gameParsers, IEnumerable<IGenericParser> genericParsers, IDefaultParser defaultParser)
         {
-            this.gameParsers = gameParsers;
-            this.genericParsers = genericParsers;
+            this.gameParsers = gameParsers.OrderBy(p => p.Priority);
+            this.genericParsers = genericParsers.OrderBy(p => p.Priority);
             this.defaultParser = defaultParser;
         }
 
@@ -77,14 +77,14 @@ namespace IronyModManager.Parser
             {
                 File = args.File,
                 GameType = args.GameType,
-                Lines = args.Lines
+                Lines = args.Lines ?? new List<string>()
             };
             var parseArgs = new ParserArgs()
             {
                 ContentSHA = args.ContentSHA,
                 ModDependencies = args.ModDependencies,
                 File = args.File,
-                Lines = args.Lines,
+                Lines = args.Lines ?? new List<string>(),
                 ModName = args.ModName
             };
             IEnumerable<IDefinition> result = null;

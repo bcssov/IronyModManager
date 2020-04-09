@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="IGenericParser.cs" company="Mario">
 //     Mario
@@ -24,6 +24,16 @@ namespace IronyModManager.Parser.Common.Parsers
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IDefaultParser" />
     public interface IGenericParser : IDefaultParser
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the priority.
+        /// </summary>
+        /// <value>The priority.</value>
+        int Priority { get; }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>

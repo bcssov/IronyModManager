@@ -16,7 +16,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>1701;1702;NU1603</NoWarn>
+    <NoWarn>1701;1702;NU1603;xUnit1004</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Functional_Test|AnyCPU'">
@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.IO\IronyModManager.IO.csproj" />
+    <ProjectReference Include="..\IronyModManager.Parser\IronyModManager.Parser.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
     <ProjectReference Include="..\IronyModManager.Tests.Common\IronyModManager.Tests.Common.csproj" />
   </ItemGroup>

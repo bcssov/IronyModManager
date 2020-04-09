@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 03-24-2020
 // ***********************************************************************
 // <copyright file="DefaultParserTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Default;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -117,7 +118,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 2:
@@ -234,7 +235,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
-                        result[i].Code.Should().Be(sb2.ToString());
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 2:
@@ -244,7 +245,7 @@ namespace IronyModManager.Parser.Tests
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
-                        result[i].Code.Should().Be(sb3.ToString());
+                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         break;
                     default:
                         break;

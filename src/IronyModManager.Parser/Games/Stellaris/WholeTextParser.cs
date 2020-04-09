@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 03-28-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -15,46 +15,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
     /// <summary>
     /// Class WholeTextParser.
-    /// Implements the <see cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.WholeTextParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Games.Stellaris.BaseStellarisParser" />
-    public class WholeTextParser : BaseStellarisParser
+    /// <seealso cref="IronyModManager.Parser.Generic.WholeTextParser" />
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
+    public class WholeTextParser : Generic.WholeTextParser, IGameParser
     {
         #region Fields
 
         /// <summary>
-        /// The ends with check
-        /// </summary>
-        protected static readonly string[] endsWithCheck = new string[]
-        {
-            Common.Constants.ShaderExtension, Common.Constants.FxhExtension
-        };
-
-        /// <summary>
         /// The equals checks
         /// </summary>
-        protected static readonly string[] equalsChecks = new string[]
+        private static readonly string[] equalsChecks = new string[]
         {
-            Common.Constants.Stellaris.Alerts,
-            Common.Constants.Stellaris.MessageTypes,
             Common.Constants.Stellaris.WeaponComponents
         };
 
         /// <summary>
         /// The starts with checks
         /// </summary>
-        protected static readonly string[] startsWithChecks = new string[]
+        private static readonly string[] startsWithChecks = new string[]
         {
-            Common.Constants.Stellaris.StartScreenMessages, Common.Constants.Stellaris.DiploPhrases,
-            Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists, Common.Constants.Stellaris.OnActions,
-            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.Portraits
+            Common.Constants.Stellaris.DiploPhrases, Common.Constants.Stellaris.MapGalaxy, Common.Constants.Stellaris.NameLists,
+            Common.Constants.Stellaris.SpeciesNames, Common.Constants.Stellaris.Terraform, Common.Constants.Stellaris.Portraits,
+            Common.Constants.Stellaris.ComponentTags, Common.Constants.Stellaris.DiplomaticActions
         };
 
         #endregion Fields
@@ -80,34 +71,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return IsStellaris(args) && IsValidType(args);
-        }
-
-        /// <summary>
-        /// Parses the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public override IEnumerable<IDefinition> Parse(ParserArgs args)
-        {
-            // This type is a bit different and only will conflict in filenames.
-            var def = GetDefinitionInstance();
-            var parsingArgs = ConstructArgs(args, def);
-            MapDefinitionFromArgs(parsingArgs);
-            def.Code = string.Join(Environment.NewLine, args.Lines);
-            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = Common.ValueType.WholeTextFile;
-            return new List<IDefinition> { def };
-        }
-
-        /// <summary>
-        /// Determines whether this instance [can parse ends with] the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance [can parse ends with] the specified arguments; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanParseEndsWith(CanParseArgs args)
-        {
-            return endsWithCheck.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.IsStellaris() && IsValidType(args);
         }
 
         /// <summary>
@@ -121,21 +85,11 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
-        /// Determines whether this instance [can parse sound file] the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance [can parse sound file] the specified arguments; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanParseSoundFile(CanParseArgs args)
-        {
-            return args.File.StartsWith(Common.Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        /// <summary>
         /// Determines whether this instance [can parse starts with] the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance [can parse starts with] the specified arguments; otherwise, <c>false</c>.</returns>
-        protected virtual bool CanParseStartsWith(CanParseArgs args)
+        protected override bool CanParseStartsWith(CanParseArgs args)
         {
             return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
         }
@@ -145,10 +99,9 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if [is valid type] [the specified arguments]; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsValidType(CanParseArgs args)
+        protected override bool IsValidType(CanParseArgs args)
         {
-            return CanParseStartsWith(args) || CanParseEquals(args) ||
-                CanParseEndsWith(args) || CanParseSoundFile(args);
+            return CanParseStartsWith(args) || CanParseEquals(args);
         }
 
         #endregion Methods

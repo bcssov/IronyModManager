@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="IronyModManager.Views.Controls.ModCompareSelectorControlView">
+  <Panel>
+    <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
+      <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               SelectedItem="{Binding LeftSelectedDefinition}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{Binding ModName}"></TextBlock>
+              <TextBlock Text=" - "></TextBlock>
+              <TextBlock Text="{Binding Id}"></TextBlock>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <ListBox Grid.Column="1" Items="{Binding VirtualDefinitions}"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               SelectedItem="{Binding RightSelectedDefinition}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{Binding ModName}"></TextBlock>
+              <TextBlock Text=" - "></TextBlock>
+              <TextBlock Text="{Binding Id}"></TextBlock>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+  </Panel>
+</UserControl>
