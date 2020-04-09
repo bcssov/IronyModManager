@@ -47,7 +47,7 @@
     <PackageReference Include="CodexMicroORM.Core" Version="0.9.3" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.1" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.2" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
