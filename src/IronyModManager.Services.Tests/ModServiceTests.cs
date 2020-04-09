@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -380,9 +380,21 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
             {
-                Type = "test"
+                Type = "test",
+                UserDirectory = "C:\\users\\fake"
+            });
+            modWriter.Setup(p => p.DescriptorExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
             });
             modWriter.Setup(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
@@ -390,7 +402,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, "fake");
             result.Should().BeTrue();
         }
 
@@ -408,6 +420,13 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
             gameService.Setup(s => s.GetSelected()).Returns(() =>
             {
                 return null;
@@ -416,9 +435,13 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
+            modWriter.Setup(p => p.DescriptorExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() });
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, "fake");
             result.Should().BeFalse();
         }
 
@@ -436,6 +459,13 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
             gameService.Setup(s => s.GetSelected()).Returns(new Game()
             {
                 Type = "test"
@@ -444,9 +474,13 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
+            modWriter.Setup(p => p.DescriptorExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(null);
+            var result = await service.ExportModsAsync(null, "fake");
             result.Should().BeFalse();
         }
 

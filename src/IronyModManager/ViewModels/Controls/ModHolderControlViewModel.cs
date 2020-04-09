@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -184,7 +184,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 var notificationType = NotificationType.Success;
-                var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList());
+                var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), CollectionMods.SelectedModCollection.Name);
                 string title;
                 string message;
                 if (result)

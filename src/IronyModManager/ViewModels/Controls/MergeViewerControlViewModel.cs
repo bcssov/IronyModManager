@@ -808,10 +808,7 @@ namespace IronyModManager.ViewModels.Controls
             /// Returns a hash code for this instance.
             /// </summary>
             /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
-            public override int GetHashCode()
-            {
-                return base.GetHashCode();
-            }
+            public override int GetHashCode() => base.GetHashCode();
 
             #endregion Methods
         }

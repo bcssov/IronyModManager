@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="ModWriterParameters.cs" company="Mario">
 //     Mario
@@ -25,6 +25,18 @@ namespace IronyModManager.IO.Common.Mods
     public class ModWriterParameters
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [append only].
+        /// </summary>
+        /// <value><c>true</c> if [append only]; otherwise, <c>false</c>.</value>
+        public bool AppendOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hidden mods.
+        /// </summary>
+        /// <value>The hidden mods.</value>
+        public IReadOnlyCollection<IMod> HiddenMods { get; set; }
 
         /// <summary>
         /// Gets or sets the mod.

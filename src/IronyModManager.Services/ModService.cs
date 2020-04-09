@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -181,6 +181,12 @@ namespace IronyModManager.Services
                             allPatches.Add(item);
                         }
                     }
+                    await modWriter.ApplyModsAsync(new ModWriterParameters()
+                    {
+                        AppendOnly = true,
+                        HiddenMods = new List<IMod>() { mod },
+                        RootDirectory = game.UserDirectory
+                    });
                     return await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                     {
                         Game = game.Type,
@@ -248,19 +254,31 @@ namespace IronyModManager.Services
         /// Exports the mods asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods)
+        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game == null || mods == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
-            return modWriter.ApplyModsAsync(new ModWriterParameters()
+            var allMods = GetInstalledModsInternal(game, false);
+            var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(collectionName));
+            var applyModParams = new ModWriterParameters()
             {
                 Mods = mods,
                 RootDirectory = game.UserDirectory
-            });
+            };
+            if (await modWriter.DescriptorExistsAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = mod.DescriptorFile
+            }))
+            {
+                applyModParams.HiddenMods = new List<IMod>() { mod };
+            }
+            return await modWriter.ApplyModsAsync(applyModParams);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -73,8 +73,11 @@ namespace IronyModManager.IO.Mods
             var gameData = await LoadPdxModelAsync<GameData>(gameDataPath) ?? new GameData();
             var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? new ModRegistryCollection();
 
-            gameData.ModsOrder.Clear();
-            dLCLoad.EnabledMods.Clear();
+            if (!parameters.AppendOnly)
+            {
+                gameData.ModsOrder.Clear();
+                dLCLoad.EnabledMods.Clear();
+            }
 
             // Remove invalid mods
             var toRemove = new List<string>();
@@ -90,37 +93,51 @@ namespace IronyModManager.IO.Mods
                 modRegistry.Remove(item);
             }
 
-            foreach (var mod in parameters.Mods)
+            if (parameters.Mods != null)
             {
-                ModRegistry pdxMod;
-                // Populate registry
-                if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
+                foreach (var mod in parameters.Mods)
                 {
-                    pdxMod = new ModRegistry()
+                    ModRegistry pdxMod;
+                    // Populate registry
+                    if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
                     {
-                        Id = Guid.NewGuid().ToString()
-                    };
-                    modRegistry.Add(pdxMod.Id, pdxMod);
+                        pdxMod = new ModRegistry()
+                        {
+                            Id = Guid.NewGuid().ToString()
+                        };
+                        modRegistry.Add(pdxMod.Id, pdxMod);
+                    }
+                    else
+                    {
+                        pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    }
+                    pdxMod.DisplayName = mod.Name;
+                    pdxMod.Tags = mod.Tags.ToList();
+                    pdxMod.RequiredVersion = mod.Version;
+                    pdxMod.GameRegistryId = mod.DescriptorFile;
+                    pdxMod.Status = Ready_to_play;
+                    pdxMod.Source = MapPdxType(mod.Source);
+                    MapPdxPath(pdxMod, mod);
+                    MapPdxId(pdxMod, mod);
+
+                    // Populate game data
+                    var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    gameData.ModsOrder.Add(entry.Id);
+
+                    // Populate dlc
+                    dLCLoad.EnabledMods.Add(mod.DescriptorFile);
                 }
-                else
+            }
+
+            if (parameters.HiddenMods != null)
+            {
+                foreach (var hiddenMod in parameters.HiddenMods)
                 {
-                    pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    if (!dLCLoad.EnabledMods.Any(p => p.Equals(hiddenMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        dLCLoad.EnabledMods.Add(hiddenMod.DescriptorFile);
+                    }
                 }
-                pdxMod.DisplayName = mod.Name;
-                pdxMod.Tags = mod.Tags.ToList();
-                pdxMod.RequiredVersion = mod.Version;
-                pdxMod.GameRegistryId = mod.DescriptorFile;
-                pdxMod.Status = Ready_to_play;
-                pdxMod.Source = MapPdxType(mod.Source);
-                MapPdxPath(pdxMod, mod);
-                MapPdxId(pdxMod, mod);
-
-                // Populate game data
-                var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                gameData.ModsOrder.Add(entry.Id);
-
-                // Populate dlc
-                dLCLoad.EnabledMods.Add(mod.DescriptorFile);
             }
 
             var tasks = new Task<bool>[]
@@ -146,6 +163,21 @@ namespace IronyModManager.IO.Mods
             if (!Directory.Exists(fullPath))
             {
                 Directory.CreateDirectory(fullPath);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Descriptors the exists asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> DescriptorExistsAsync(ModWriterParameters parameters)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            if (File.Exists(fullPath))
+            {
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);

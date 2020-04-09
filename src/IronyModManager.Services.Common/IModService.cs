@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-09-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -73,8 +73,9 @@ namespace IronyModManager.Services.Common
         /// Exports the mods asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods);
+        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods, string collectionName);
 
         /// <summary>
         /// Finds the conflicts.
