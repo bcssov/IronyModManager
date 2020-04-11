@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -233,6 +233,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 CollectionMods.SetMods(v);
             });
+
+            this.WhenAnyValue(v => v.InstalledMods.RefreshingMods).Subscribe(s =>
+            {
+                CollectionMods.HandleModRefresh(s, InstalledMods.Mods);
+            }).DisposeWith(disposables);
 
             ApplyCommand = ReactiveCommand.Create(() =>
             {

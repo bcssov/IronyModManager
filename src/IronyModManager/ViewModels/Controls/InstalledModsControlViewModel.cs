@@ -297,6 +297,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [refreshing mods].
+        /// </summary>
+        /// <value><c>true</c> if [refreshing mods]; otherwise, <c>false</c>.</value>
+        public virtual bool RefreshingMods { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
@@ -367,6 +373,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void RefreshMods()
         {
+            RefreshingMods = true;
             var previousMods = Mods;
             Bind();
             if (Mods?.Count() > 0)
@@ -380,6 +387,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
             }
+            RefreshingMods = false;
         }
 
         /// <summary>
@@ -421,7 +429,9 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
                 AllMods = Mods.ToHashSet();
-                FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text ?? string.Empty, StringComparison.InvariantCultureIgnoreCase));
+                var searchString = FilterMods.Text ?? string.Empty;
+                FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
+                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
                 AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
 
                 var state = appStateService.Get();
@@ -556,7 +566,9 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
             {
-                FilteredMods = Mods.Where(p => p.Name.Contains(s ?? string.Empty, StringComparison.InvariantCultureIgnoreCase)).ToObservableCollection();
+                var searchString = FilterMods.Text ?? string.Empty;
+                FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
+                    (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
                 ApplyDefaultSort();
                 SaveState();
             }).DisposeWith(disposables);
