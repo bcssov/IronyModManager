@@ -279,23 +279,23 @@ namespace IronyModManager.Services
         /// <summary>
         /// Exports the mods asynchronous.
         /// </summary>
-        /// <param name="mods">The mods.</param>
+        /// <param name="enabledMods">The mods.</param>
+        /// <param name="regularMods">The regular mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods, string collectionName)
+        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, string collectionName)
         {
             var game = GameService.GetSelected();
-            if (game == null || mods == null)
+            if (game == null || enabledMods == null || regularMods == null)
             {
                 return false;
             }
             var allMods = GetInstalledModsInternal(game, false);
-            var regularMods = allMods.Where(p => !IsPatchMod(p));
             var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(collectionName));
             var applyModParams = new ModWriterParameters()
             {
-                OtherMods = regularMods.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
-                EnabledMods = mods,
+                OtherMods = regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
+                EnabledMods = enabledMods,
                 RootDirectory = game.UserDirectory
             };
             if (await modWriter.DescriptorExistsAsync(new ModWriterParameters()
@@ -489,15 +489,17 @@ namespace IronyModManager.Services
             var diffs = descriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
             if (diffs.Count > 0)
             {
+                var tasks = new List<Task>();
                 foreach (var diff in diffs)
                 {
-                    await modWriter.WriteDescriptorAsync(new ModWriterParameters()
+                    tasks.Add(modWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = diff,
                         RootDirectory = game.UserDirectory,
                         Path = diff.DescriptorFile
-                    });
+                    }));
                 }
+                await Task.WhenAll(tasks);
                 return true;
             }
 

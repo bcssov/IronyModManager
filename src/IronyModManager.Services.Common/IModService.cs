@@ -79,10 +79,11 @@ namespace IronyModManager.Services.Common
         /// <summary>
         /// Exports the mods asynchronous.
         /// </summary>
-        /// <param name="mods">The mods.</param>
+        /// <param name="enabledMods">The enabled mods.</param>
+        /// <param name="regularMods">The regular mods.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> mods, string collectionName);
+        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, string collectionName);
 
         /// <summary>
         /// Finds the conflicts.

@@ -131,6 +131,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets all mods.
+        /// </summary>
+        /// <value>All mods.</value>
+        public virtual HashSet<IMod> AllMods { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [all mods enabled].
         /// </summary>
         /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
@@ -414,6 +420,7 @@ namespace IronyModManager.ViewModels.Controls
             if (game != null)
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
+                AllMods = Mods.ToHashSet();
                 FilteredMods = Mods.Where(p => p.Name.Contains(FilterMods.Text ?? string.Empty, StringComparison.InvariantCultureIgnoreCase));
                 AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
 
@@ -425,6 +432,7 @@ namespace IronyModManager.ViewModels.Controls
             else
             {
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
+                AllMods = Mods.ToHashSet();
             }
         }
 
@@ -657,10 +665,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 case Implementation.SortOrder.Asc:
                     FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
+                    AllMods = AllMods.OrderBy(sortProp).ToHashSet();
                     break;
 
                 case Implementation.SortOrder.Desc:
                     FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
+                    AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
                     break;
 
                 default:
