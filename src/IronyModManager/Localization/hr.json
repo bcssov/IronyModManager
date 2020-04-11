@@ -114,11 +114,31 @@
         "CollectionNotApplied": {
             "Title": "Kolekcija nije primjenjena",
             "Message": "{CollectionName} nije primjenjena."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Deskriptori osvježeni",
+            "Message": "Deskriptori su osvježeni."
+        },
+        "DescriptorsLocked": {
+            "Title": "Deskriptori zaključani",
+            "Message": "Deskriptori su zaključani."
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Deskriptori otključani",
+            "Message": "Deskriptori su otključani."
         }
     },
     "Mod_Url": {
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda"
+    },
+    "Descriptor_Actions": {
+        "Delete": "Obriši i ponovno učitaj",
+        "Delete_All": "Izbriši sve i ponovno učitaj",
+        "Lock": "Zaključaj",
+        "Lock_All": "Zaključaj sve",
+        "Unlock": "Otključaj",
+        "Unlock_All": "Otključaj sve"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

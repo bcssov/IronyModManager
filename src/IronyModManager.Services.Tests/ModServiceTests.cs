@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -2131,7 +2131,231 @@ namespace IronyModManager.Services.Tests
             {
                 Name = "IronyModManager_fake_collection"
             });
-            result.Should().BeTrue();            
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_install_mods_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_install_mods_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.InstallModsAsync();
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_install_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_install_mods()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+
+            var result = await service.InstallModsAsync();
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_lock_descriptors_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_lock_descriptors_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.LockDescriptorsAsync(new List<IMod>(), true);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_lock_descriptors_when_no_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_lock_descriptors_when_no_mods()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var result = await service.LockDescriptorsAsync(new List<IMod>(), true);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_lock_descriptors.
+        /// </summary>
+        [Fact]
+        public async Task Should_lock_descriptors()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            modWriter.Setup(p => p.SetDescriptorLockAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var result = await service.LockDescriptorsAsync(new List<IMod>() { new Mod() }, true);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_delete_descriptors_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_delete_descriptors_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.DeleteDescriptorsAsync(new List<IMod>());
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_delete_descriptors_when_no_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_delete_descriptors_when_no_mods()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var result = await service.DeleteDescriptorsAsync(new List<IMod>());
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_delete_descriptors.
+        /// </summary>
+        [Fact]
+        public async Task Should_delete_descriptors()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            modWriter.Setup(p => p.DeleteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var result = await service.DeleteDescriptorsAsync(new List<IMod>() { new Mod() });
+            result.Should().BeTrue();
         }
 
 

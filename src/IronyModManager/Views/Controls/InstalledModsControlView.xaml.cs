@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -65,28 +65,109 @@ namespace IronyModManager.Views.Controls
                         if (grid != null)
                         {
                             ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
-                            {
-                                var menuItems = new List<MenuItem>()
-                                {
-                                    new MenuItem()
-                                    {
-                                        Header = ViewModel.OpenUrl,
-                                        Command = ViewModel.OpenUrlCommand
-                                    },
-                                    new MenuItem()
-                                    {
-                                        Header = ViewModel.CopyUrl,
-                                        Command = ViewModel.CopyUrlCommand
-                                    }
-                                };
-                                grid.ContextMenu.Items = menuItems;
-                            }
+                            var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) ? GetAllMenuItems() : GetActionMenuItems();
+                            grid.ContextMenu.Items = menuItems;
                         }
                     }
                 };
             }
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Gets the action menu items.
+        /// </summary>
+        /// <returns>List&lt;MenuItem&gt;.</returns>
+        private List<MenuItem> GetActionMenuItems()
+        {
+            return new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteDescriptor,
+                    Command = ViewModel.DeleteDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteAllDescriptors,
+                    Command = ViewModel.DeleteAllDescriptorsCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.LockDescriptor,
+                    Command = ViewModel.LockDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.LockAllDescriptors,
+                    Command = ViewModel.LockAllDescriptorsCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.UnlockDescriptor,
+                    Command = ViewModel.UnlockDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.UnlockAllDescriptors,
+                    Command = ViewModel.UnlockAllDescriptorsCommand
+                }
+            };
+        }
+
+        /// <summary>
+        /// Gets all menu items.
+        /// </summary>
+        /// <returns>List&lt;MenuItem&gt;.</returns>
+        private List<MenuItem> GetAllMenuItems()
+        {
+            return new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.OpenUrl,
+                    Command = ViewModel.OpenUrlCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyUrl,
+                    Command = ViewModel.CopyUrlCommand
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteDescriptor,
+                    Command = ViewModel.DeleteDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteAllDescriptors,
+                    Command = ViewModel.DeleteAllDescriptorsCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.LockDescriptor,
+                    Command = ViewModel.LockDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.LockAllDescriptors,
+                    Command = ViewModel.LockAllDescriptorsCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.UnlockDescriptor,
+                    Command = ViewModel.UnlockDescriptorCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.UnlockAllDescriptors,
+                    Command = ViewModel.UnlockAllDescriptorsCommand
+                }
+            };
         }
 
         /// <summary>

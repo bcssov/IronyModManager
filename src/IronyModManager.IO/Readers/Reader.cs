@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-10-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -15,7 +15,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Readers
 {
@@ -49,6 +51,38 @@ namespace IronyModManager.IO.Readers
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Gets the file information.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IFileInfo.</returns>
+        public IFileInfo GetFileInfo(string rootPath, string file)
+        {
+            using var stream = GetStream(rootPath, file);
+            if (stream != null)
+            {
+                var info = DIResolver.Get<IFileInfo>();
+                info.FileName = file;
+                if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                {
+                    using var streamReader = new StreamReader(stream, true);
+                    var text = streamReader.ReadToEnd();
+                    streamReader.Close();
+                    info.IsBinary = false;
+                    info.Content = text.SplitOnNewLine();
+                    info.ContentSHA = text.CalculateSHA();
+                }
+                else
+                {
+                    info.IsBinary = true;
+                    info.ContentSHA = stream.CalculateSHA();
+                }
+                return info;
+            }
+            return null;
+        }
 
         /// <summary>
         /// Gets the stream.

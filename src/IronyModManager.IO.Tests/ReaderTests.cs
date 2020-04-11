@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-10-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -54,6 +54,23 @@ namespace IronyModManager.IO.Tests
             result = reader.Read("fake2");
             result.Count().Should().Be(1);
             result.First().FileName.Should().Be("fake2_result");
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Fileinfo_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Fileinfo_read_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetFileInfo(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();            
         }
 
         /// <summary>

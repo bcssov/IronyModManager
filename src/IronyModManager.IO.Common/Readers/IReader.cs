@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-10-2020
 // ***********************************************************************
 // <copyright file="IReader.cs" company="Mario">
 //     Mario
@@ -23,6 +23,14 @@ namespace IronyModManager.IO.Common.Readers
     public interface IReader
     {
         #region Methods
+
+        /// <summary>
+        /// Gets the file information.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IFileInfo.</returns>
+        IFileInfo GetFileInfo(string rootPath, string file);
 
         /// <summary>
         /// Gets the stream.

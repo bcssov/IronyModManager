@@ -59,7 +59,7 @@
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts":  "Please wait while analyzing resolved definitions...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
     },
     "Conflict_Solver": {
@@ -75,7 +75,7 @@
         "Resolve": "Resolve",
         "OverlayResolve": "Please wait while resolving conflict...",
         "NextConflict": "Next Conflict",
-        "PrevConflict":  "Prev Conflict",
+        "PrevConflict": "Prev Conflict",
         "ContextMenu": {
             "CopyThis": "Copy This",
             "CopyThisAfterLine": "Copy This After Line",
@@ -114,11 +114,31 @@
         "CollectionNotApplied": {
             "Title": "Collection Not Applied",
             "Message": "{CollectionName} has not been applied."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Descriptors refreshed",
+            "Message": "Descriptors have been refreshed."
+        },
+        "DescriptorsLocked": {
+            "Title": "Descriptors locked",
+            "Message": "Descriptors have been locked."
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Descriptors unlocked",
+            "Message": "Descriptors have been unlocked."
         }
     },
     "Mod_Url": {
         "Open": "Open Mod Url",
         "Copy": "Copy Mod Url"
+    },
+    "Descriptor_Actions": {
+        "Delete": "Delete And Reload",
+        "Delete_All": "Delete All And Reload",
+        "Lock": "Lock",
+        "Lock_All": "Lock All",
+        "Unlock": "Unlock",
+        "Unlock_All": "Unlock All"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

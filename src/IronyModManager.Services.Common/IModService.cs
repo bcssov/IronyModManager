@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -70,6 +70,13 @@ namespace IronyModManager.Services.Common
         Task<IDefinition> CreatePatchDefinitionAsync(IDefinition copy, string collectionName);
 
         /// <summary>
+        /// Deletes the descriptors asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods);
+
+        /// <summary>
         /// Exports the mods asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -108,6 +115,12 @@ namespace IronyModManager.Services.Common
         IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
 
         /// <summary>
+        /// Installs the mods asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> InstallModsAsync();
+
+        /// <summary>
         /// Determines whether [is patch mod] [the specified mod].
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -128,6 +141,14 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IConflictResult&gt;.</returns>
         Task<IConflictResult> LoadPatchStateAsync(IConflictResult conflictResult, string collectionName);
+
+        /// <summary>
+        /// Locks the descriptors asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
 
         #endregion Methods
     }
