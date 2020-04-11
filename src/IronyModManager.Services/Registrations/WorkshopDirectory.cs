@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="WorkshopDirectory.cs" company="Mario">
 //     Mario
@@ -108,7 +108,7 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string GetSteamLinuxRootPath()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), PathHelper.MergePaths("Library", "Application Support", "Steam"));
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Steam");
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string GetSteamOSXRootPath()
         {
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Steam");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), PathHelper.MergePaths("Library", "Application Support", "Steam"));
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="UserDirectory.cs" company="Mario">
 //     Mario
@@ -33,19 +33,21 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         public static string GetDirectory()
         {
-            var userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string rootUserDirectory = string.Empty;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
+                var userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
                 rootUserDirectory = Path.Combine(userDirectory, PathHelper.MergePaths("Documents", "Paradox Interactive"));
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                rootUserDirectory = Path.Combine(userDirectory, PathHelper.MergePaths(".local", "share", "Paradox Interactive"));
+                var userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                rootUserDirectory = Path.Combine(userDirectory, PathHelper.MergePaths("Paradox Interactive"));
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                rootUserDirectory = Path.Combine(userDirectory, PathHelper.MergePaths($"Documents", "Paradox Interactive"));
+                var userDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                rootUserDirectory = Path.Combine(userDirectory, PathHelper.MergePaths("Paradox Interactive"));
             }
             return rootUserDirectory;
         }

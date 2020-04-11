@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -168,9 +168,9 @@ namespace IronyModManager.Storage
                 }
                 var game = DIResolver.Get<IGameType>();
                 game.Name = name;
-                game.UserDirectory = userDirectory;
+                game.UserDirectory = userDirectory ?? string.Empty;
                 game.SteamAppId = appId;
-                game.WorkshopDirectory = workshopDirectory;
+                game.WorkshopDirectory = workshopDirectory ?? string.Empty;
                 Database.Games.Add(game);
                 return true;
             }
@@ -184,7 +184,7 @@ namespace IronyModManager.Storage
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">Theme is already registered</exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
