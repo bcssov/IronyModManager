@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-10-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -46,7 +46,7 @@ namespace IronyModManager.Models
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        [DescriptorProperty("path")]
+        [DescriptorProperty("path", "archive", ".zip")]
         public virtual string FileName { get; set; }
 
         /// <summary>
@@ -87,12 +87,6 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The source.</value>
         public virtual ModSource Source { get; set; }
-
-        /// <summary>
-        /// Gets or sets the supported version.
-        /// </summary>
-        /// <value>The supported version.</value>
-        public virtual string SupportedVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.

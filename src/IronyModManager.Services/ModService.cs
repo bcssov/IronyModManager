@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -251,6 +251,32 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// delete descriptors as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && mods?.Count() > 0)
+            {
+                var tasks = new List<Task>();
+                foreach (var item in mods)
+                {
+                    var task = modWriter.DeleteDescriptorAsync(new ModWriterParameters()
+                    {
+                        Mod = item,
+                        RootDirectory = game.UserDirectory
+                    });
+                    tasks.Add(task);
+                }
+                await Task.WhenAll(tasks);
+                return true;
+            }
+            return false; ;
+        }
+
+        /// <summary>
         /// Exports the mods asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -264,16 +290,18 @@ namespace IronyModManager.Services
                 return false;
             }
             var allMods = GetInstalledModsInternal(game, false);
+            var regularMods = allMods.Where(p => !IsPatchMod(p));
             var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(collectionName));
             var applyModParams = new ModWriterParameters()
             {
-                Mods = mods,
+                OtherMods = regularMods.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
+                EnabledMods = mods,
                 RootDirectory = game.UserDirectory
             };
             if (await modWriter.DescriptorExistsAsync(new ModWriterParameters()
             {
                 RootDirectory = game.UserDirectory,
-                Path = mod.DescriptorFile
+                Mod = mod
             }))
             {
                 applyModParams.HiddenMods = new List<IMod>() { mod };
@@ -398,9 +426,6 @@ namespace IronyModManager.Services
                 else
                 {
                     // Check user directory and workshop directory.
-                    // Technically we don't need this since newer pdx mod launchers use absolute paths.
-                    // IronyModManager will always require that a user runs the PDX mod launcher first when new mods are installed.
-                    // This program will not be a replacement for mod installation only for mod management.
                     var userDirectoryMod = Path.Combine(game.UserDirectory, m.FileName);
                     var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, m.FileName);
                     if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
@@ -436,6 +461,47 @@ namespace IronyModManager.Services
             indexed.InitMap(definitions);
             ModDefinitionLoad?.Invoke(100);
             return indexed;
+        }
+
+        /// <summary>
+        /// install mods as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> InstallModsAsync()
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return false;
+            }
+            var mods = GetInstalledModsInternal(game, false);
+            var descriptors = new List<IMod>();
+            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Constants.ModDirectory), ModSource.Local);
+            if (userDirectoryMods?.Count() > 0)
+            {
+                descriptors.AddRange(userDirectoryMods);
+            }
+            var workshopDirectoryMods = GetAllModDescriptors(game.WorkshopDirectory, ModSource.Steam);
+            if (workshopDirectoryMods?.Count() > 0)
+            {
+                descriptors.AddRange(workshopDirectoryMods);
+            }
+            var diffs = descriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
+            if (diffs.Count > 0)
+            {
+                foreach (var diff in diffs)
+                {
+                    await modWriter.WriteDescriptorAsync(new ModWriterParameters()
+                    {
+                        Mod = diff,
+                        RootDirectory = game.UserDirectory,
+                        Path = diff.DescriptorFile
+                    });
+                }
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -524,6 +590,33 @@ namespace IronyModManager.Services
                 }
             };
             return null;
+        }
+
+        /// <summary>
+        /// lock descriptors as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && mods?.Count() > 0)
+            {
+                var tasks = new List<Task>();
+                foreach (var item in mods)
+                {
+                    var task = modWriter.SetDescriptorLockAsync(new ModWriterParameters()
+                    {
+                        Mod = item,
+                        RootDirectory = game.UserDirectory
+                    }, isLocked);
+                    tasks.Add(task);
+                }
+                await Task.WhenAll(tasks);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -667,6 +760,92 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets all mod descriptors.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="modSource">The mod source.</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        protected virtual IEnumerable<IMod> GetAllModDescriptors(string path, ModSource modSource)
+        {
+            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}") : new string[] { };
+            var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : new string[] { };
+            var mods = new List<IMod>();
+
+            void parseModFiles(string path, ModSource source, bool isDirectory)
+            {
+                var fileInfo = reader.GetFileInfo(path, Constants.DescriptorFile);
+                if (fileInfo == null)
+                {
+                    return;
+                }
+                var mod = Mapper.Map<IMod>(modParser.Parse(fileInfo.Content));
+                mod.FileName = path.Replace("\\", "/");
+                mod.Source = source;
+                var cleanedPath = path;
+                if (!isDirectory)
+                {
+                    cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+                }
+
+                switch (mod.Source)
+                {
+                    case ModSource.Local:
+                        mod.DescriptorFile = $"{Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Constants.ModExtension}";
+                        break;
+
+                    case ModSource.Steam:
+                        mod.DescriptorFile = $"{Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Constants.ModExtension}";
+                        break;
+
+                    case ModSource.Paradox:
+                        if (!isDirectory)
+                        {
+                            var modParentDirectory = Path.GetDirectoryName(path);
+                            mod.RemoteId = GetPdxModId(modParentDirectory, isDirectory);
+                        }
+                        else
+                        {
+                            mod.RemoteId = GetPdxModId(path, isDirectory);
+                        }
+                        mod.DescriptorFile = $"{Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Constants.ModExtension}";
+                        break;
+
+                    default:
+                        break;
+                }
+                mods.Add(mod);
+            }
+            if (files.Count() > 0)
+            {
+                foreach (var file in files)
+                {
+                    parseModFiles(file, modSource, false);
+                }
+            }
+            if (directories.Count() > 0)
+            {
+                foreach (var directory in directories)
+                {
+                    var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
+                            LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
+                    var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}");
+                    if (zipFiles.Count() > 0)
+                    {
+                        foreach (var zip in zipFiles)
+                        {
+                            parseModFiles(zip, modSourceOverride, false);
+                        }
+                    }
+                    else
+                    {
+                        parseModFiles(directory, modSourceOverride, true);
+                    }
+                }
+            }
+            return mods;
+        }
+
+        /// <summary>
         /// Gets the definition or default.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -733,11 +912,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// Gets the PDX mod identifier.
         /// </summary>
-        /// <param name="filename">The filename.</param>
+        /// <param name="path">The path.</param>
+        /// <param name="isDirectory">if set to <c>true</c> [is directory].</param>
         /// <returns>System.Int32.</returns>
-        protected virtual int GetPdxModId(string filename)
+        protected virtual int GetPdxModId(string path, bool isDirectory = false)
         {
-            var name = Path.GetFileNameWithoutExtension(filename);
+            var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
             int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
             return id;
         }

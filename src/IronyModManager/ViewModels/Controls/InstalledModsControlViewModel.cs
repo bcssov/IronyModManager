@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,10 +18,12 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -66,9 +68,19 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
 
         /// <summary>
         /// The URL action
@@ -88,6 +100,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="InstalledModsControlViewModel" /> class.
         /// </summary>
         /// <param name="gameService">The game service.</param>
+        /// <param name="localizationManager">The localization manager.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="appStateService">The application state service.</param>
         /// <param name="modSelectedSortOrder">The mod selected sort order.</param>
@@ -95,15 +108,18 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
         /// <param name="filterMods">The filter mods.</param>
         /// <param name="urlAction">The URL action.</param>
-        public InstalledModsControlViewModel(IGameService gameService,
+        /// <param name="notificationAction">The notification action.</param>
+        public InstalledModsControlViewModel(IGameService gameService, ILocalizationManager localizationManager,
             IModService modService, IAppStateService appStateService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
-            SearchModsControlViewModel filterMods, IUrlAction urlAction)
+            SearchModsControlViewModel filterMods, IUrlAction urlAction, INotificationAction notificationAction)
         {
             this.modService = modService;
             this.gameService = gameService;
             this.appStateService = appStateService;
             this.urlAction = urlAction;
+            this.notificationAction = notificationAction;
+            this.localizationManager = localizationManager;
             ModNameSortOrder = modNameSortOrder;
             ModVersionSortOrder = modVersionSortOrder;
             ModSelectedSortOrder = modSelectedSortOrder;
@@ -132,6 +148,32 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The copy URL command.</value>
         public virtual ReactiveCommand<Unit, Unit> CopyUrlCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the delete all descriptors.
+        /// </summary>
+        /// <value>The delete all descriptors.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Delete_All)]
+        public virtual string DeleteAllDescriptors { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the delete all descriptors command.
+        /// </summary>
+        /// <value>The delete all descriptors command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DeleteAllDescriptorsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the delete descriptor.
+        /// </summary>
+        /// <value>The delete descriptor.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Delete)]
+        public virtual string DeleteDescriptor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the delete descriptor command.
+        /// </summary>
+        /// <value>The delete descriptor command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DeleteDescriptorCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the enable all command.
@@ -163,6 +205,32 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The hovered mod.</value>
         public virtual IMod HoveredMod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the lock all descriptors.
+        /// </summary>
+        /// <value>The lock all descriptors.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Lock_All)]
+        public virtual string LockAllDescriptors { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the lock all descriptors command.
+        /// </summary>
+        /// <value>The lock all descriptors command.</value>
+        public virtual ReactiveCommand<Unit, Unit> LockAllDescriptorsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the lock descriptor.
+        /// </summary>
+        /// <value>The lock descriptor.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Lock)]
+        public virtual string LockDescriptor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the lock descriptor command.
+        /// </summary>
+        /// <value>The lock descriptor command.</value>
+        public virtual ReactiveCommand<Unit, Unit> LockDescriptorCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -229,6 +297,32 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Installed_Mods.Name)]
         public virtual string Title { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the unlock all descriptors.
+        /// </summary>
+        /// <value>The unlock all descriptors.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Unlock_All)]
+        public virtual string UnlockAllDescriptors { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the unlock all descriptors command.
+        /// </summary>
+        /// <value>The unlock all descriptors command.</value>
+        public virtual ReactiveCommand<Unit, Unit> UnlockAllDescriptorsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the unlock descriptor.
+        /// </summary>
+        /// <value>The unlock descriptor.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.Unlock)]
+        public virtual string UnlockDescriptor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the unlock descriptor command.
+        /// </summary>
+        /// <value>The unlock descriptor command.</value>
+        public virtual ReactiveCommand<Unit, Unit> UnlockDescriptorCommand { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -260,6 +354,26 @@ namespace IronyModManager.ViewModels.Controls
             FilterMods.WatermarkText = FilterModsWatermark;
 
             base.OnLocaleChanged(newLocale, oldLocale);
+        }
+
+        /// <summary>
+        /// Refreshes the mods.
+        /// </summary>
+        public virtual void RefreshMods()
+        {
+            var previousMods = Mods;
+            Bind();
+            if (Mods?.Count() > 0)
+            {
+                foreach (var item in previousMods.Where(p => p.IsSelected))
+                {
+                    var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    if (mod != null)
+                    {
+                        mod.IsSelected = true;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -315,6 +429,23 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// delete descriptor as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual async Task DeleteDescriptorAsync(IEnumerable<IMod> mods)
+        {
+            if (mods?.Count() > 0)
+            {
+                await modService.DeleteDescriptorsAsync(mods);
+                await modService.InstallModsAsync();
+                RefreshMods();
+                var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
+                var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
+                notificationAction.ShowNotification(title, message, NotificationType.Info);
+            }
+        }
+
+        /// <summary>
         /// Initializes the default sort order.
         /// </summary>
         /// <param name="dictKey">The dictionary key.</param>
@@ -356,6 +487,22 @@ namespace IronyModManager.ViewModels.Controls
             InitDefaultSortOrder(ModSelectedKey, ModSelectedSortOrder, Implementation.SortOrder.None, ModSelected, appState);
             FilterMods.Text = appState?.InstalledModsSearchTerm;
             FilterMods.WatermarkText = FilterModsWatermark;
+        }
+
+        /// <summary>
+        /// lock descriptor as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        protected virtual async Task LockDescriptorAsync(IEnumerable<IMod> mods, bool isLocked)
+        {
+            if (mods?.Count() > 0)
+            {
+                await modService.LockDescriptorsAsync(mods, isLocked);
+                var title = isLocked ? localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsLocked.Title) : localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsUnlocked.Title);
+                var message = isLocked ? localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsLocked.Message) : localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsUnlocked.Message);
+                notificationAction.ShowNotification(title, message, NotificationType.Info);
+            }
         }
 
         /// <summary>
@@ -421,6 +568,54 @@ namespace IronyModManager.ViewModels.Controls
             Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
             {
                 AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
+            }).DisposeWith(disposables);
+
+            DeleteDescriptorCommand = ReactiveCommand.Create(() =>
+            {
+                if (HoveredMod != null)
+                {
+                    DeleteDescriptorAsync(new List<IMod>() { HoveredMod }).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            DeleteAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            {
+                if (FilteredMods != null)
+                {
+                    DeleteDescriptorAsync(FilteredMods).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            LockDescriptorCommand = ReactiveCommand.Create(() =>
+            {
+                if (HoveredMod != null)
+                {
+                    LockDescriptorAsync(new List<IMod>() { HoveredMod }, true).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            LockAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            {
+                if (FilteredMods != null)
+                {
+                    LockDescriptorAsync(FilteredMods, true).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            UnlockDescriptorCommand = ReactiveCommand.Create(() =>
+            {
+                if (HoveredMod != null)
+                {
+                    LockDescriptorAsync(new List<IMod>() { HoveredMod }, false).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            UnlockAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            {
+                if (FilteredMods != null)
+                {
+                    LockDescriptorAsync(FilteredMods, false).ConfigureAwait(true);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

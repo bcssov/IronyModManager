@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -93,39 +93,19 @@ namespace IronyModManager.IO.Mods
                 modRegistry.Remove(item);
             }
 
-            if (parameters.Mods != null)
+            if (parameters.EnabledMods != null)
             {
-                foreach (var mod in parameters.Mods)
+                foreach (var mod in parameters.EnabledMods)
                 {
-                    ModRegistry pdxMod;
-                    // Populate registry
-                    if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        pdxMod = new ModRegistry()
-                        {
-                            Id = Guid.NewGuid().ToString()
-                        };
-                        modRegistry.Add(pdxMod.Id, pdxMod);
-                    }
-                    else
-                    {
-                        pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                    }
-                    pdxMod.DisplayName = mod.Name;
-                    pdxMod.Tags = mod.Tags.ToList();
-                    pdxMod.RequiredVersion = mod.Version;
-                    pdxMod.GameRegistryId = mod.DescriptorFile;
-                    pdxMod.Status = Ready_to_play;
-                    pdxMod.Source = MapPdxType(mod.Source);
-                    MapPdxPath(pdxMod, mod);
-                    MapPdxId(pdxMod, mod);
+                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
+                }
+            }
 
-                    // Populate game data
-                    var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                    gameData.ModsOrder.Add(entry.Id);
-
-                    // Populate dlc
-                    dLCLoad.EnabledMods.Add(mod.DescriptorFile);
+            if (parameters.OtherMods != null)
+            {
+                foreach (var mod in parameters.OtherMods)
+                {
+                    SyncData(dLCLoad, gameData, modRegistry, mod, false);
                 }
             }
 
@@ -169,13 +149,33 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// Deletes the descriptor asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> DeleteDescriptorAsync(ModWriterParameters parameters)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+            if (File.Exists(fullPath))
+            {
+                _ = new System.IO.FileInfo(fullPath)
+                {
+                    IsReadOnly = false
+                };
+                File.Delete(fullPath);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
         /// Descriptors the exists asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> DescriptorExistsAsync(ModWriterParameters parameters)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
             if (File.Exists(fullPath))
             {
                 return Task.FromResult(true);
@@ -203,6 +203,26 @@ namespace IronyModManager.IO.Mods
             else if (File.Exists(fullPath))
             {
                 File.Delete(fullPath);
+                return Task.FromResult(true);
+            }
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Sets the descriptor lock asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> SetDescriptorLockAsync(ModWriterParameters parameters, bool isLocked)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+            if (File.Exists(fullPath))
+            {
+                _ = new System.IO.FileInfo(fullPath)
+                {
+                    IsReadOnly = isLocked
+                };
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
@@ -240,7 +260,14 @@ namespace IronyModManager.IO.Mods
                 {
                     if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
                     {
-                        await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                        if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
+                        {
+                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
+                        }
+                        else
+                        {
+                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                        }
                     }
                 }
             }
@@ -295,9 +322,13 @@ namespace IronyModManager.IO.Mods
         /// <param name="mod">The mod.</param>
         private void MapPdxPath(ModRegistry registry, IMod mod)
         {
-            if (mod.FileName.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+            if (mod.FileName.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
             {
                 registry.ArchivePath = mod.FileName;
+                if (mod.Source != ModSource.Local)
+                {
+                    registry.DirPath = Path.GetDirectoryName(mod.FileName);
+                }
             }
             else
             {
@@ -319,6 +350,50 @@ namespace IronyModManager.IO.Mods
                 _ => "local",
             };
             return pdxSource;
+        }
+
+        /// <summary>
+        /// Synchronizes the data.
+        /// </summary>
+        /// <param name="dLCLoad">The d lc load.</param>
+        /// <param name="gameData">The game data.</param>
+        /// <param name="modRegistry">The mod registry.</param>
+        /// <param name="mod">The mod.</param>
+        /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
+        private void SyncData(DLCLoad dLCLoad, GameData gameData, ModRegistryCollection modRegistry, IMod mod, bool isEnabled)
+        {
+            ModRegistry pdxMod;
+            // Populate registry
+            if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
+            {
+                pdxMod = new ModRegistry()
+                {
+                    Id = Guid.NewGuid().ToString()
+                };
+                modRegistry.Add(pdxMod.Id, pdxMod);
+            }
+            else
+            {
+                pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+            }
+            pdxMod.DisplayName = mod.Name;
+            pdxMod.Tags = mod.Tags.ToList();
+            pdxMod.RequiredVersion = mod.Version;
+            pdxMod.GameRegistryId = mod.DescriptorFile;
+            pdxMod.Status = Ready_to_play;
+            pdxMod.Source = MapPdxType(mod.Source);
+            MapPdxPath(pdxMod, mod);
+            MapPdxId(pdxMod, mod);
+
+            // Populate game data
+            var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+            gameData.ModsOrder.Add(entry.Id);
+
+            // Populate dlc
+            if (isEnabled)
+            {
+                dLCLoad.EnabledMods.Add(mod.DescriptorFile);
+            }
         }
 
         /// <summary>

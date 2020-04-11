@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -39,6 +39,13 @@ namespace IronyModManager.IO.Common.Mods
         Task<bool> CreateModDirectoryAsync(ModWriterParameters parameters);
 
         /// <summary>
+        /// Deletes the descriptor asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> DeleteDescriptorAsync(ModWriterParameters parameters);
+
+        /// <summary>
         /// Descriptors the exists asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -51,6 +58,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters);
+
+        /// <summary>
+        /// Sets the descriptor lock asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> SetDescriptorLockAsync(ModWriterParameters parameters, bool isLocked);
 
         /// <summary>
         /// Writes the descriptor asynchronous.

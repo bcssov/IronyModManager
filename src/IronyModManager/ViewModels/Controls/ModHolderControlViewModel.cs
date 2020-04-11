@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-10-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
@@ -204,11 +205,30 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// install mods as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task InstallModsAsync()
+        {
+            if (await modService.InstallModsAsync())
+            {
+                if (InstalledMods.IsActivated)
+                {
+                    InstalledMods.RefreshMods();
+                }
+            }
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Where(v => v != null).Subscribe(s =>
+            {
+                InstallModsAsync().ConfigureAwait(true);
+            }).DisposeWith(disposables);
+
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
                 CollectionMods.SetMods(v);

@@ -160,12 +160,40 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class DescriptorsRefreshed
+            {
+                public const string Prefix = "Notifications." + nameof(DescriptorsRefreshed) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class DescriptorsLocked
+            {
+                public const string Prefix = "Notifications." + nameof(DescriptorsLocked) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class DescriptorsUnlocked
+            {
+                public const string Prefix = "Notifications." + nameof(DescriptorsUnlocked) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
         }
         public static class Mod_Url
         {
             public const string Prefix = nameof(Mod_Url) + ".";
             public const string Open = Prefix + "Open";
             public const string Copy = Prefix + "Copy";
+        }
+        public static class Descriptor_Actions
+        {
+            public const string Prefix = nameof(Descriptor_Actions) + ".";
+            public const string Delete = Prefix + "Delete";
+            public const string Delete_All = Prefix + "Delete_All";
+            public const string Lock = Prefix + "Lock";
+            public const string Lock_All = Prefix + "Lock_All";
+            public const string Unlock = Prefix + "Unlock";
+            public const string Unlock_All = Prefix + "Unlock_All";
         }
         public static class Sorting
         {

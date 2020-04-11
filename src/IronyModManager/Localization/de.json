@@ -114,11 +114,31 @@
         "CollectionNotApplied": {
             "Title": "Sammlung nicht angewendet",
             "Message": "{CollectionName} wurde nicht angewendet."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Deskriptoren aktualisiert",
+            "Message": "Deskriptoren wurden aktualisiert."
+        },
+        "DescriptorsLocked": {
+            "Title": "Deskriptoren gesperrt",
+            "Message": "Deskriptoren wurden gesperrt."
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Descriptors unlocked",
+            "Message": "Deskriptoren wurden freigeschaltet."
         }
     },
     "Mod_Url": {
         "Open": "Öffnen Sie die Mod-URL",
         "Copy": "Kopieren Sie die Mod-URL"
+    },
+    "Descriptor_Actions": {
+        "Delete": "Löschen und neu laden",
+        "Delete_All": "Alle löschen und neu laden",
+        "Lock": "Sperren",
+        "Lock_All": "Sperre Alle",
+        "Unlock": "Freischalten",
+        "Unlock_All": "Alle freischalten"
     },
     "Sorting": {
         "Sort_A_Z": "↑",

@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-09-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="ModWriterParameters.cs" company="Mario">
 //     Mario
@@ -33,6 +33,12 @@ namespace IronyModManager.IO.Common.Mods
         public bool AppendOnly { get; set; }
 
         /// <summary>
+        /// Gets or sets the enabled mods.
+        /// </summary>
+        /// <value>The enabled mods.</value>
+        public IReadOnlyCollection<IMod> EnabledMods { get; set; }
+
+        /// <summary>
         /// Gets or sets the hidden mods.
         /// </summary>
         /// <value>The hidden mods.</value>
@@ -45,10 +51,10 @@ namespace IronyModManager.IO.Common.Mods
         public IMod Mod { get; set; }
 
         /// <summary>
-        /// Gets or sets the mods.
+        /// Gets or sets the other mods.
         /// </summary>
-        /// <value>The mods.</value>
-        public IReadOnlyCollection<IMod> Mods { get; set; }
+        /// <value>The other mods.</value>
+        public IReadOnlyCollection<IMod> OtherMods { get; set; }
 
         /// <summary>
         /// Gets or sets the path.
