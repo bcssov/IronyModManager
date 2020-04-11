@@ -185,7 +185,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 var notificationType = NotificationType.Success;
-                var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), CollectionMods.SelectedModCollection.Name);
+                var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), InstalledMods.AllMods.ToList(), CollectionMods.SelectedModCollection.Name);
                 string title;
                 string message;
                 if (result)

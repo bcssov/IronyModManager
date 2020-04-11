@@ -33,6 +33,7 @@ using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -402,7 +403,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, "fake");
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, "fake");
             result.Should().BeTrue();
         }
 
@@ -441,7 +442,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, "fake");
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, new List<IMod> { new Mod() }, "fake");
             result.Should().BeFalse();
         }
 
@@ -480,7 +481,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.ExportModsAsync(null, "fake");
+            var result = await service.ExportModsAsync(null, null, "fake");
             result.Should().BeFalse();
         }
 
@@ -2194,6 +2195,65 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.InstallModsAsync();
             result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_install_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_install_mods()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                WorkshopDirectory = "C:\\workshop"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            reader.Setup(p =>p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns((string root, string path) =>
+            {
+                var sb = new System.Text.StringBuilder(115);
+                sb.AppendLine(@"path=""c:/fake""");
+                sb.AppendLine(@"name=""Fake""");
+                sb.AppendLine(@"picture=""thumbnail.png""");
+                sb.AppendLine(@"tags={");
+                sb.AppendLine(@"	""Gameplay""");
+                sb.AppendLine(@"	""Fixes""");
+                sb.AppendLine(@"}");
+                sb.AppendLine(@"supported_version=""2.6.*""");
+
+                return new FileInfo()
+                {
+                    Content = sb.ToString().SplitOnNewLine(),
+                    ContentSHA = "test",
+                    FileName = "fake.mod",
+                    IsBinary = false
+                };
+            });
+
+            var result = await service.InstallModsAsync();
+            result.Should().BeTrue();
         }
 
         /// <summary>
