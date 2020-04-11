@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-11-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -354,6 +354,21 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Handles the mod refresh.
+        /// </summary>
+        /// <param name="isRefreshing">if set to <c>true</c> [is refreshing].</param>
+        /// <param name="mods">The mods.</param>
+        public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods)
+        {
+            skipModCollectionSave = true;
+            if (!isRefreshing && mods?.Count() > 0)
+            {
+                SetMods(mods);
+                HandleModCollectionChange();
+            }
+        }
+
+        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -413,6 +428,42 @@ namespace IronyModManager.ViewModels.Controls
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
             await TriggerOverlayAsync(false);
+        }
+
+        /// <summary>
+        /// Handles the mod collection change.
+        /// </summary>
+        protected virtual void HandleModCollectionChange()
+        {
+            skipModCollectionSave = true;
+            ExportCollection.CanExport = SelectedModCollection != null;
+            ExportCollection.CollectionName = SelectedModCollection?.Name;
+            SaveState();
+            foreach (var item in Mods)
+            {
+                item.IsSelected = false;
+            }
+            var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
+            var selectedMods = new List<IMod>().ToObservableCollection();
+            if (existingCollection != null)
+            {
+                foreach (var item in existingCollection.Mods)
+                {
+                    var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
+                    if (mod != null)
+                    {
+                        mod.IsSelected = true;
+                        selectedMods.Add(mod);
+                    }
+                }
+            }
+            SetSelectedMods(selectedMods);
+            AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+            var state = appStateService.Get();
+            InitSortersAndFilters(state);
+            ApplySort();
+            SaveSelectedCollection();
+            skipModCollectionSave = false;
         }
 
         /// <summary>
@@ -504,35 +555,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
-                skipModCollectionSave = true;
-                ExportCollection.CanExport = SelectedModCollection != null;
-                ExportCollection.CollectionName = SelectedModCollection?.Name;
-                SaveState();
-                foreach (var item in Mods)
-                {
-                    item.IsSelected = false;
-                }
-                var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
-                var selectedMods = new List<IMod>().ToObservableCollection();
-                if (existingCollection != null)
-                {
-                    foreach (var item in existingCollection.Mods)
-                    {
-                        var mod = Mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.InvariantCultureIgnoreCase));
-                        if (mod != null)
-                        {
-                            mod.IsSelected = true;
-                            selectedMods.Add(mod);
-                        }
-                    }
-                }
-                SetSelectedMods(selectedMods);
-                AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
-                var state = appStateService.Get();
-                InitSortersAndFilters(state);
-                ApplySort();
-                SaveSelectedCollection();
-                skipModCollectionSave = false;
+                HandleModCollectionChange();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.AddNewCollection.IsActivated).Where(p => p == true).Subscribe(activated =>
@@ -601,7 +624,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (!string.IsNullOrWhiteSpace(s))
                     {
-                        SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase));
+                        SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
                     }
                     SaveState();
                 }).DisposeWith(disposables);
@@ -613,9 +636,11 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = SelectedMods.IndexOf(SelectedMod);
                     }
+                    var searchString = SearchMods.Text ?? string.Empty;
                     if (!s.Result)
                     {
-                        var mod = SelectedMods.Skip(index + 1).FirstOrDefault(s => s.Name.Contains(SearchMods.Text, StringComparison.InvariantCultureIgnoreCase));
+                        var mod = SelectedMods.Skip(index + 1).FirstOrDefault(s => s.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
+                                        (s.RemoteId.HasValue && s.RemoteId.GetValueOrDefault().ToString().Contains(searchString)));
                         if (mod != null && mod != SelectedMod)
                         {
                             SelectedMod = mod;
@@ -624,7 +649,8 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         var reverseIndex = SelectedMods.Count - index;
-                        var mod = SelectedMods.Reverse().Skip(reverseIndex).FirstOrDefault(s => s.Name.Contains(SearchMods.Text, StringComparison.InvariantCultureIgnoreCase));
+                        var mod = SelectedMods.Reverse().Skip(reverseIndex).FirstOrDefault(s => s.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
+                                        (s.RemoteId.HasValue && s.RemoteId.GetValueOrDefault().ToString().Contains(searchString)));
                         if (mod != null && mod != SelectedMod)
                         {
                             SelectedMod = mod;
