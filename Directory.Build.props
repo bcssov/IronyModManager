@@ -16,6 +16,7 @@
     <MicrosoftExtensionsDependencyModelVersion>[3.1.2]</MicrosoftExtensionsDependencyModelVersion>
     <MicrosoftDotNetPlatformAbstractionsVersion>[3.1.2]</MicrosoftDotNetPlatformAbstractionsVersion>
     <MicrosoftNETCorePlatformsVersion>[3.1.0]</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftWin32Registry>[4.7.0]</MicrosoftWin32Registry>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning">
