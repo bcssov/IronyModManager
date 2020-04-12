@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-08-2020
+// Last Modified On : 04-12-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -747,6 +747,14 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            SetText(string.Empty, string.Empty);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-12-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -268,8 +268,8 @@ namespace IronyModManager.ViewModels
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
-                    MergeViewer.SetText(string.Empty, string.Empty);
                     MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                    MergeViewer.SetText(string.Empty, string.Empty);
                     MergeViewer.ExitEditMode();
                 }
             }).DisposeWith(disposables);
@@ -280,8 +280,8 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
-                        MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                        MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)
                         {
@@ -310,8 +310,8 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
-                        MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                        MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)
                         {
@@ -344,6 +344,24 @@ namespace IronyModManager.ViewModels
                     takeLeftBinary = s;
                     ResolveEnabled = true;
                 }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.MergeViewer.LeftSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
+            {
+                if (MergeViewer.LeftSidePatchMod)
+                {
+                    var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modService.IsPatchMod(p.ModName));
+                    SyncCode(patchDefinition);
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.MergeViewer.RightSide).Where(p => !string.IsNullOrWhiteSpace(p)).Subscribe(s =>
+            {
+                if (MergeViewer.RightSidePatchMod)
+                {
+                    var patchDefinition = ModCompareSelector.VirtualDefinitions.FirstOrDefault(p => modService.IsPatchMod(p.ModName));
+                    SyncCode(patchDefinition);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -380,14 +398,7 @@ namespace IronyModManager.ViewModels
                 }
                 if (patchDefinition != null)
                 {
-                    if (MergeViewer.LeftSidePatchMod)
-                    {
-                        patchDefinition.Code = MergeViewer.LeftSide;
-                    }
-                    else
-                    {
-                        patchDefinition.Code = MergeViewer.RightSide;
-                    }
+                    SyncCode(patchDefinition);
                     if (await modService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
                     {
                         FilterHierarchalConflicts(Conflicts);
@@ -417,8 +428,29 @@ namespace IronyModManager.ViewModels
                 if (SelectedConflict == null)
                 {
                     ModCompareSelector.Reset();
+                    MergeViewer.Reset();
+                    BinaryMergeViewer.Reset();
                 }
                 await TriggerOverlayAsync(false);
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes the code.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        protected virtual void SyncCode(IDefinition definition)
+        {
+            if (definition != null)
+            {
+                if (MergeViewer.LeftSidePatchMod)
+                {
+                    definition.Code = MergeViewer.LeftSide;
+                }
+                else
+                {
+                    definition.Code = MergeViewer.RightSide;
+                }
             }
         }
 

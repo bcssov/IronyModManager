@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-12-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -134,24 +134,33 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
-                var allMods = GetInstalledModsInternal(game, false);
-                var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (definitionMod != null)
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var allMods = GetInstalledModsInternal(game, false).ToList();
+                IMod mod;
+                if (!allMods.Any(p => p.Name.Equals(patchName)))
                 {
-                    conflictResult.ResolvedConflicts.AddToMap(definition);
-                    var patches = GetDefinitionsToWrite(conflictResult, definition);
-                    var patchName = GenerateCollectionPatchName(collectionName);
-                    await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
-                    {
-                        RootDirectory = game.UserDirectory,
-                        Path = Path.Combine(Constants.ModDirectory, patchName)
-                    });
-                    var mod = GeneratePatchModDescriptor(allMods, game, patchName);
+                    mod = GeneratePatchModDescriptor(allMods, game, patchName);
                     await modWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
                         Path = mod.DescriptorFile
+                    });
+                    allMods.Add(mod);
+                }
+                else
+                {
+                    mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
+                }
+                var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                if (definitionMod != null)
+                {
+                    conflictResult.ResolvedConflicts.AddToMap(definition);
+                    var patches = GetDefinitionsToWrite(conflictResult, definition);
+                    await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = Path.Combine(Constants.ModDirectory, patchName)
                     });
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
