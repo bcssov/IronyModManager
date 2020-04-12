@@ -63,6 +63,14 @@ licenseUrl:https://raw.githubusercontent.com/Microsoft/slow-cheetah/master/LICEN
 license Type:MIT
 
 ####################################################################################################
+Package:Nerdbank.GitVersioning
+Version:3.1.74
+project URL:https://github.com/dotnet/Nerdbank.GitVersioning
+Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
+licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
+
+####################################################################################################
 Package:NLog
 Version:4.7.0
 project URL:https://nlog-project.org/
