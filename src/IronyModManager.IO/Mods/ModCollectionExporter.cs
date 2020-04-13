@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -57,12 +57,12 @@ namespace IronyModManager.IO.Mods
             using var zip = ArchiveFactory.Create(ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
-            zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
-            zip.Dispose();
             if (Directory.Exists(parameters.ModDirectory))
             {
                 zip.AddAllFromDirectory(parameters.ModDirectory);
             }
+            zip.SaveTo(parameters.File, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
+            zip.Dispose();
             return Task.FromResult(true);
         }
 
@@ -112,11 +112,11 @@ namespace IronyModManager.IO.Mods
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool ImportInternal(ModCollectionExporterParams parameters, bool importInstance)
         {
-            if (importInstance)
+            if (!importInstance)
             {
                 if (Directory.Exists(parameters.ModDirectory))
                 {
-                    Directory.Delete(parameters.ModDirectory);
+                    Directory.Delete(parameters.ModDirectory, true);
                     Directory.CreateDirectory(parameters.ModDirectory);
                 }
             }
@@ -128,14 +128,14 @@ namespace IronyModManager.IO.Mods
                 if (!reader.Entry.IsDirectory)
                 {
                     var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    using var entryStream = reader.OpenEntryStream();
-                    using var memoryStream = new MemoryStream();
-                    entryStream.CopyTo(memoryStream);
-                    memoryStream.Seek(0, SeekOrigin.Begin);
                     if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                     {
                         if (importInstance)
                         {
+                            using var entryStream = reader.OpenEntryStream();
+                            using var memoryStream = new MemoryStream();
+                            entryStream.CopyTo(memoryStream);
+                            memoryStream.Seek(0, SeekOrigin.Begin);
                             using var streamReader = new StreamReader(memoryStream, true);
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
