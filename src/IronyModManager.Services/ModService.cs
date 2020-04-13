@@ -230,6 +230,32 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// clean patch collection as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> CleanPatchCollectionAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return false;
+            }
+            var patchName = GenerateCollectionPatchName(collectionName);
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
+            if (mod != null)
+            {
+                await DeleteDescriptorsAsync(new List<IMod> { mod });
+            }
+            await modWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName)
+            }, true);
+            return true;
+        }
+
+        /// <summary>
         /// create patch definition as an asynchronous operation.
         /// </summary>
         /// <param name="copy">The copy.</param>

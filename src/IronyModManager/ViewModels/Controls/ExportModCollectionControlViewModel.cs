@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -141,10 +141,6 @@ namespace IronyModManager.ViewModels.Controls
 
             ImportCommand = ReactiveCommand.Create(() =>
             {
-                if (!CanExport)
-                {
-                    return new CommandResult<string>(string.Empty, CommandState.NotExecuted);
-                }
                 var task = Task.Run(async () =>
                 {
                     var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.ZipExtensionWithoutDot);

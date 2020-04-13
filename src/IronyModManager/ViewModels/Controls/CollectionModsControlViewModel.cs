@@ -730,6 +730,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (modCollectionService.Delete(collectionName))
                 {
+                    await modService.CleanPatchCollectionAsync(collectionName);
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
                     notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
@@ -835,7 +836,7 @@ namespace IronyModManager.ViewModels.Controls
 
                 modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
-                    skipReorder = true;                  
+                    skipReorder = true;
                     if (!skipModCollectionSave)
                     {
                         var needsSave = false;

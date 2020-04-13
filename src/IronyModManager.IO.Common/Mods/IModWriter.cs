@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -56,8 +56,9 @@ namespace IronyModManager.IO.Common.Mods
         /// Purges the mod directory asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="deleteAll">if set to <c>true</c> [delete all].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters);
+        Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters, bool deleteAll = false);
 
         /// <summary>
         /// Sets the descriptor lock asynchronous.

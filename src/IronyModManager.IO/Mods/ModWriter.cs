@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -187,16 +187,24 @@ namespace IronyModManager.IO.Mods
         /// Purges the mod directory asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="deleteAll">if set to <c>true</c> [delete all].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters)
+        public Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters, bool deleteAll = false)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
             if (Directory.Exists(fullPath))
             {
-                var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
-                foreach (var item in files)
+                if (!deleteAll)
                 {
-                    File.Delete(item);
+                    var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
+                    foreach (var item in files)
+                    {
+                        File.Delete(item);
+                    }
+                }
+                else
+                {
+                    Directory.Delete(fullPath, true);
                 }
                 return Task.FromResult(true);
             }
@@ -236,7 +244,7 @@ namespace IronyModManager.IO.Mods
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
         {
             // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
             using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
             using var sw = new StreamWriter(fs);
             var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));

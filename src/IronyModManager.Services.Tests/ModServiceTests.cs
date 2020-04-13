@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -1630,7 +1630,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
-            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
                 if (p.Definitions.Count() > 0)
@@ -1959,7 +1959,7 @@ namespace IronyModManager.Services.Tests
                 };
                 return res;
             });
-            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
 
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
@@ -2065,7 +2065,7 @@ namespace IronyModManager.Services.Tests
                 };
                 return res;
             });
-            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
 
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
@@ -2415,6 +2415,61 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var result = await service.DeleteDescriptorsAsync(new List<IMod>() { new Mod() });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_clean_collection_patch.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_clean_collection_patch()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.CleanPatchCollectionAsync("fake");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_clean_collection_patch.
+        /// </summary>
+        [Fact]
+        public async Task Should_clean_collection_patch()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            modWriter.Setup(p => p.DeleteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+
+            var result = await service.CleanPatchCollectionAsync("fake");
             result.Should().BeTrue();
         }
 
