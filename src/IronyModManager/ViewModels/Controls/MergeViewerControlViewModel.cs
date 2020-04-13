@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-12-2020
+// Last Modified On : 04-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The URL action
         /// </summary>
         private readonly IUrlAction urlAction;
+
+        /// <summary>
+        /// The syncing selection
+        /// </summary>
+        private bool syncingSelection = false;
 
         #endregion Fields
 
@@ -302,6 +307,14 @@ namespace IronyModManager.ViewModels.Controls
             EditingLeft = false;
             EditingRight = false;
             EditingText = false;
+        }
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            SetText(string.Empty, string.Empty);
         }
 
         /// <summary>
@@ -608,7 +621,6 @@ namespace IronyModManager.ViewModels.Controls
         {
             LeftSideSelected = new AvaloniaList<DiffPieceWithIndex>();
             RightSideSelected = new AvaloniaList<DiffPieceWithIndex>();
-            var syncingSelection = false;
 
             LeftSideSelected.CollectionChanged += (sender, args) =>
             {
@@ -617,19 +629,7 @@ namespace IronyModManager.ViewModels.Controls
                     return;
                 }
                 syncingSelection = true;
-                if (LeftSideSelected?.Count > 0)
-                {
-                    RightSideSelected.Clear();
-                    foreach (var item in LeftSideSelected)
-                    {
-                        RightSideSelected.Add(RightDiff[LeftDiff.IndexOf(item)]);
-                    }
-                }
-                else
-                {
-                    RightSideSelected.Clear();
-                }
-                syncingSelection = false;
+                SyncSelectionsAsync(true).ConfigureAwait(true);
             };
 
             RightSideSelected.CollectionChanged += (sender, args) =>
@@ -639,18 +639,7 @@ namespace IronyModManager.ViewModels.Controls
                     return;
                 }
                 syncingSelection = true;
-                if (RightSideSelected?.Count > 0)
-                {
-                    foreach (var item in RightSideSelected)
-                    {
-                        LeftSideSelected.Add(LeftDiff[RightDiff.IndexOf(item)]);
-                    }
-                }
-                else
-                {
-                    LeftSideSelected.Clear();
-                }
-                syncingSelection = false;
+                SyncSelectionsAsync(false).ConfigureAwait(true);
             };
 
             CopyThisCommand = ReactiveCommand.Create((bool leftSide) =>
@@ -750,14 +739,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public virtual void Reset()
-        {
-            SetText(string.Empty, string.Empty);
-        }
-
-        /// <summary>
         /// Orders the selected.
         /// </summary>
         /// <param name="selected">The selected.</param>
@@ -772,6 +753,32 @@ namespace IronyModManager.ViewModels.Controls
                 orderedSelected.Add(idx, item);
             }
             return orderedSelected.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        /// <summary>
+        /// synchronize selections as an asynchronous operation.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual async Task SyncSelectionsAsync(bool leftSide)
+        {
+            await Task.Delay(100);
+            var sourceDiff = leftSide ? LeftDiff : RightDiff;
+            var syncDiff = !leftSide ? LeftDiff : RightDiff;
+            var sourceCol = leftSide ? LeftSideSelected : RightSideSelected;
+            var syncCol = !leftSide ? LeftSideSelected : RightSideSelected;
+            if (sourceCol?.Count > 0)
+            {
+                syncCol.Clear();
+                foreach (var item in sourceCol)
+                {
+                    syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                }
+            }
+            else
+            {
+                syncCol.Clear();
+            }
+            syncingSelection = false;
         }
 
         #endregion Methods
