@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-12-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -162,14 +162,6 @@ namespace IronyModManager.Services
                         RootDirectory = game.UserDirectory,
                         Path = Path.Combine(Constants.ModDirectory, patchName)
                     });
-                    await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
-                    {
-                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                        OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
-                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                        RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                        PatchName = patchName
-                    });
                     await modWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                     {
                         RootDirectory = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName),
@@ -196,7 +188,7 @@ namespace IronyModManager.Services
                         HiddenMods = new List<IMod>() { mod },
                         RootDirectory = game.UserDirectory
                     });
-                    return await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                    var result = await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                     {
                         Game = game.Type,
                         Definitions = allPatches,
@@ -204,6 +196,15 @@ namespace IronyModManager.Services
                         ModPath = definitionMod.FileName,
                         PatchName = patchName
                     });
+                    await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+                    {
+                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                        OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
+                        RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                        PatchName = patchName
+                    });
+                    return result;
                 }
             }
             return false;
@@ -568,15 +569,33 @@ namespace IronyModManager.Services
                     foreach (var item in state.OrphanConflicts.GroupBy(p => p.TypeAndId))
                     {
                         processed += item.Count();
+                        var files = new List<string>();
+                        if (state.ResolvedConflicts != null)
+                        {
+                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                            if (resolved?.Count() > 0)
+                            {
+                                files.AddRange(resolved.Select(p => p.File));
+                            }
+                        }
                         var matchedConflicts = conflictResult.OrphanConflicts.GetByTypeAndId(item.First().TypeAndId);
-                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory);
+                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
                         ModDefinitionPatchLoad?.Invoke(Convert.ToInt32(processed / total * 100));
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
                         processed += item.Count();
+                        var files = new List<string>();
+                        if (state.ResolvedConflicts != null)
+                        {
+                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                            if (resolved?.Count() > 0)
+                            {
+                                files.AddRange(resolved.Select(p => p.File));
+                            }
+                        }
                         var matchedConflicts = conflictResult.Conflicts.GetByTypeAndId(item.First().TypeAndId);
-                        var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory);
+                        var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
                         if (synced)
                         {
                             foreach (var diff in item)
@@ -965,18 +984,19 @@ namespace IronyModManager.Services
         /// <param name="cachedConflicts">The cached conflicts.</param>
         /// <param name="patchName">Name of the patch.</param>
         /// <param name="userDirectory">The user directory.</param>
+        /// <param name="files">The files.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> SyncPatchStatesAsync(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts, string patchName, string userDirectory)
+        protected virtual async Task<bool> SyncPatchStatesAsync(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts, string patchName, string userDirectory, params string[] files)
         {
             var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.File.Equals(p.File) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             if (cachedDiffs.Count() != cachedConflicts.Count())
             {
-                foreach (var diff in cachedConflicts)
+                foreach (var file in files)
                 {
                     await modWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                     {
                         RootDirectory = Path.Combine(userDirectory, Constants.ModDirectory, patchName),
-                        Path = diff.File
+                        Path = file
                     });
                 }
                 return true;

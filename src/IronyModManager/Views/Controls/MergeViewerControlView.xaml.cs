@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-08-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -211,22 +211,6 @@ namespace IronyModManager.Views.Controls
                 },
                 new MenuItem()
                 {
-                    Header = "-"
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.MoveUp,
-                    Command = ViewModel.MoveUpCommand,
-                    CommandParameter = leftSide
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.MoveDown,
-                    Command = ViewModel.MoveDownCommand,
-                    CommandParameter = leftSide
-                },
-                new MenuItem()
-                {
                     Header = "-" // Separator magic string, and it's documented... NOT really!!!
                 },
                 new MenuItem()
@@ -287,7 +271,23 @@ namespace IronyModManager.Views.Controls
                     Header = ViewModel.CopyText,
                     Command = ViewModel.CopyTextCommand,
                     CommandParameter = leftSide
-                }
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.MoveUp,
+                    Command = ViewModel.MoveUpCommand,
+                    CommandParameter = leftSide
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.MoveDown,
+                    Command = ViewModel.MoveDownCommand,
+                    CommandParameter = leftSide
+                },
             };
             return menuItems;
         }

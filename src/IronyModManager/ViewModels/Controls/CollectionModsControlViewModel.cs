@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -835,8 +835,7 @@ namespace IronyModManager.ViewModels.Controls
 
                 modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
-                    skipReorder = true;
-                    AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                    skipReorder = true;                  
                     if (!skipModCollectionSave)
                     {
                         var needsSave = false;
@@ -867,6 +866,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         SetSelectedMods(SelectedMods, false);
                     }
+                    AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
