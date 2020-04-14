@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-14-2020
 // ***********************************************************************
 // <copyright file="BaseControl.cs" company="Mario">
 //     Mario
@@ -77,7 +77,7 @@ namespace IronyModManager.Common.Views
         /// Gets the disposables.
         /// </summary>
         /// <value>The disposables.</value>
-        protected IDisposable Disposables { get; private set; }
+        protected CompositeDisposable Disposables { get; private set; }
 
         #endregion Properties
 

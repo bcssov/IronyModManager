@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.9.7" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.9.0-preview1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.7" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.7" />
     <PackageReference Include="DiffPlex" Version="1.6.1" />

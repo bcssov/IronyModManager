@@ -114,6 +114,17 @@ namespace IronyModManager.Shared
                 public const string Edit = Prefix + "Edit";
                 public const string CopyText = Prefix + "CopyText";
             }
+            public static class EditorContextMenu
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(EditorContextMenu) + ".";
+                public const string Copy = Prefix + "Copy";
+                public const string Cut = Prefix + "Cut";
+                public const string Delete = Prefix + "Delete";
+                public const string Paste = Prefix + "Paste";
+                public const string Undo = Prefix + "Undo";
+                public const string Redo = Prefix + "Redo";
+                public const string SelectAll = Prefix + "SelectAll";
+            }
         }
         public static class Notifications
         {

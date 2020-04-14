@@ -7,7 +7,7 @@
   </Style>
 
 
-  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_IncreaseButton">
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_DecreaseButton">
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource ThemeForegroundBrush}"
@@ -20,7 +20,7 @@
       </Template>
     </Setter>
   </Style>
-  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_DecreaseButton">
+  <Style Selector="controls|MinMaxButtonSpinner /template/ RepeatButton#PART_IncreaseButton">
     <Setter Property="Content">
       <Template>
         <Path Fill="{DynamicResource ThemeForegroundBrush}"

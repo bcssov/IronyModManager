@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -19,9 +19,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using AvaloniaEdit;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
+using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
@@ -150,6 +152,11 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var editorLeft = this.FindControl<TextEditor>("editorLeft");
+            var editorRight = this.FindControl<TextEditor>("editorRight");
+            SetEditorOptions(editorLeft);
+            SetEditorOptions(editorRight);
+
             var leftSide = this.FindControl<ListBox>("leftSide");
             var rightSide = this.FindControl<ListBox>("rightSide");
 
@@ -176,6 +183,64 @@ namespace IronyModManager.Views.Controls
             };
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Sets the editor options.
+        /// </summary>
+        /// <param name="editor">The editor.</param>
+        protected virtual void SetEditorOptions(TextEditor editor)
+        {
+            var ctx = new ContextMenu();
+            ctx.Items = new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorCopy,
+                    Command = ReactiveCommand.Create(() =>  editor.Copy()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorCut,
+                    Command = ReactiveCommand.Create(() =>  editor.Cut()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorPaste,
+                    Command = ReactiveCommand.Create(() =>  editor.Paste()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorDelete,
+                    Command = ReactiveCommand.Create(() =>  editor.Delete()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorSelectAll,
+                    Command = ReactiveCommand.Create(() =>  editor.SelectAll()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorUndo,
+                    Command = ReactiveCommand.Create(() =>  editor.Undo()).DisposeWith(Disposables)
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.EditorRedo,
+                    Command = ReactiveCommand.Create(() =>  editor.Redo()).DisposeWith(Disposables)
+                }
+            };
+            editor.ContextMenu = ctx;
+            editor.Options = new TextEditorOptions()
+            {
+                ConvertTabsToSpaces = true,
+                IndentationSize = 4
+            };
+            editor.TextArea.ActiveInputHandler = new Implementation.AvaloniaEdit.TextAreaInputHandler(editor);
         }
 
         /// <summary>

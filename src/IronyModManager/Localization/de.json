@@ -84,6 +84,15 @@
             "MoveDown": "Sich abwärts bewegen",
             "Edit": "Bearbeiten Sie dies",
             "CopyText": "Text kopieren"
+        },
+        "EditorContextMenu": {
+            "Copy": "Kopieren",
+            "Cut": "Schnitt",
+            "Delete": "Löschen",
+            "Paste": "Einfügen",
+            "Undo": "Rückgängig machen",
+            "Redo": "Wiederholen",
+            "SelectAll": "Wählen Sie Alle"
         }
     },
     "Notifications": {

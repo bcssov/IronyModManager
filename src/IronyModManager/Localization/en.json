@@ -84,6 +84,15 @@
             "MoveDown": "Move Down",
             "Edit": "Edit",
             "CopyText": "Copy Text"
+        },
+        "EditorContextMenu": {
+            "Copy": "Copy",
+            "Cut": "Cut",
+            "Delete": "Delete",
+            "Paste": "Paste",
+            "Undo": "Undo",
+            "Redo": "Redo",
+            "SelectAll": "Select All"
         }
     },
     "Notifications": {

@@ -84,6 +84,15 @@
             "MoveDown": "Pomakni dolje",
             "Edit": "Uredi",
             "CopyText": "Kopiraj Tekst"
+        },
+        "EditorContextMenu": {
+            "Copy": "Kopiraj",
+            "Cut": "Izreži",
+            "Delete": "Obriši",
+            "Paste": "Zalijepi",
+            "Undo": "Poništi",
+            "Redo": "Ponovi",
+            "SelectAll": "Odaberi sve"
         }
     },
     "Notifications": {

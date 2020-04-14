@@ -19,6 +19,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using AvaloniaEdit.Document;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
@@ -170,6 +171,55 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool EditingText { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the editor copy.
+        /// </summary>
+        /// <value>The editor copy.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Copy)]
+        public virtual string EditorCopy { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor cut.
+        /// </summary>
+        /// <value>The editor cut.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Cut)]
+        public virtual string EditorCut { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor delete.
+        /// </summary>
+        /// <value>The editor delete.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Delete)]
+        public virtual string EditorDelete { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor paste.
+        /// </summary>
+        /// <value>The editor paste.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Paste)]
+        public virtual string EditorPaste { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor redo.
+        /// </summary>
+        /// <value>The editor redo.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Redo)]
+        public virtual string EditorRedo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor select all.
+        /// </summary>
+        /// <value>The editor select all.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.SelectAll)]
+        public virtual string EditorSelectAll { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor undo.
+        /// </summary>
+        /// <value>The editor undo.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.EditorContextMenu.Undo)]
+        public virtual string EditorUndo { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the edit this.
         /// </summary>
         /// <value>The edit this.</value>
@@ -187,6 +237,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The difference.</value>
         public virtual IList<DiffPieceWithIndex> LeftDiff { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the left document.
+        /// </summary>
+        /// <value>The left document.</value>
+        public virtual TextDocument LeftDocument { get; protected set; }
 
         /// <summary>
         /// Gets or sets the left side.
@@ -278,6 +334,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IList<DiffPieceWithIndex> RightDiff { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the right document.
+        /// </summary>
+        /// <value>The right document.</value>
+        public virtual TextDocument RightDocument { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the right side.
         /// </summary>
         /// <value>The right side.</value>
@@ -335,8 +397,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="rightSide">The right side.</param>
         public virtual void SetText(string leftSide, string rightSide)
         {
-            LeftSide = leftSide ?? string.Empty;
-            RightSide = rightSide ?? string.Empty;
+            LeftSide = !string.IsNullOrEmpty(leftSide) ? leftSide.ReplaceTabs() : string.Empty;
+            RightSide = !string.IsNullOrEmpty(rightSide) ? rightSide.ReplaceTabs() : string.Empty;
+            LeftDocument = new TextDocument(LeftSide);
+            RightDocument = new TextDocument(RightSide);
             Compare();
         }
 
@@ -704,7 +768,14 @@ namespace IronyModManager.ViewModels.Controls
 
             OKCommand = ReactiveCommand.Create(() =>
             {
-                SetText(LeftSide, RightSide);
+                if (EditingLeft)
+                {
+                    SetText(LeftDocument.Text, RightSide);
+                }
+                else
+                {
+                    SetText(LeftSide, RightDocument.Text);
+                }
                 ExitEditMode();
             }).DisposeWith(disposables);
 

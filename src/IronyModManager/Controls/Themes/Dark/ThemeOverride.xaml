@@ -5,6 +5,7 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.ButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
 
   <!--Individual styles-->
   <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
@@ -59,5 +60,7 @@
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyThemeSortArrowColor">#FFFF00</Color>
     <SolidColorBrush x:Key="IronyThemeSortArrowBrush" Color="{DynamicResource IronyThemeSortArrowColor}" />
+    <Color x:Key="IronyBackgroundColor">#FF282828</Color>
+    <SolidColorBrush x:Key="IronyBackgroundBrush" Color="{DynamicResource IronyBackgroundColor}" />
   </Styles.Resources>
 </Styles>
