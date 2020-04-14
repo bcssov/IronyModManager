@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Threading.Tasks;
 using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Editing;
@@ -34,6 +35,16 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         /// </summary>
         private readonly TextEditor editor;
 
+        /// <summary>
+        /// The handle all events
+        /// </summary>
+        private bool handleAllEvents = false;
+
+        /// <summary>
+        /// The mouse handler
+        /// </summary>
+        private ITextAreaInputHandler mouseHandler;
+
         #endregion Fields
 
         #region Constructors
@@ -45,6 +56,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         public TextAreaInputHandler(TextEditor editor) : base(editor.TextArea)
         {
             this.editor = editor;
+            editor.ContextMenu.MenuClosed += ContextMenu_MenuClosed;
         }
 
         #endregion Constructors
@@ -74,6 +86,30 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         }
 
         /// <summary>
+        /// reset flag as an asynchronous operation.
+        /// </summary>
+        protected async Task ResetFlagAsync()
+        {
+            await Task.Delay(100);
+            handleAllEvents = false;
+            if (mouseHandler != null)
+            {
+                mouseHandler.Detach();
+                NestedInputHandlers.Add(mouseHandler);
+            }
+        }
+
+        /// <summary>
+        /// Handles the MenuClosed event of the ContextMenu control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="Avalonia.Interactivity.RoutedEventArgs"/> instance containing the event data.</param>
+        private void ContextMenu_MenuClosed(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            ResetFlagAsync().ConfigureAwait(true);
+        }
+
+        /// <summary>
         /// Determines whether [is left mouse button] [the specified p].
         /// </summary>
         /// <param name="p">The p.</param>
@@ -92,7 +128,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         private void TextArea_PointerMoved(object sender, PointerEventArgs e)
         {
             // Avalonia edit is killing RMB
-            e.Handled = (editor.ContextMenu?.IsOpen).GetValueOrDefault();
+            e.Handled = handleAllEvents;
         }
 
         /// <summary>
@@ -106,6 +142,13 @@ namespace IronyModManager.Implementation.AvaloniaEdit
             var rmb = IsRightMouseButton(e.GetCurrentPoint(null));
             if (rmb && editor.ContextMenu != null)
             {
+                // Aside from forking the whole project over and fixing the mess, we can hack our way around. It just ain't worth it.
+                if (mouseHandler == null)
+                {
+                    mouseHandler = NestedInputHandlers.FirstOrDefault(p => p.GetType().Name.Contains("SelectionMouseHandler"));
+                }
+                handleAllEvents = true;
+                NestedInputHandlers.Remove(mouseHandler);
                 editor.ContextMenu.Open(editor);
             }
         }
@@ -118,7 +161,7 @@ namespace IronyModManager.Implementation.AvaloniaEdit
         private void TextArea_PointerReleased(object sender, PointerReleasedEventArgs e)
         {
             // Avalonia edit is killing RMB
-            e.Handled = (editor.ContextMenu?.IsOpen).GetValueOrDefault();
+            e.Handled = handleAllEvents;
         }
 
         #endregion Methods
