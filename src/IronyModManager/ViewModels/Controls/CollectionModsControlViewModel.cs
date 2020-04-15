@@ -827,10 +827,13 @@ namespace IronyModManager.ViewModels.Controls
                 skipReorder = true;
             }
             int counter = 0;
-            foreach (var item in selectedMods)
+            if (selectedMods != null)
             {
-                counter++;
-                item.Order = counter;
+                foreach (var item in selectedMods)
+                {
+                    counter++;
+                    item.Order = counter;
+                }
             }
             SelectedMods = selectedMods;
             var order = 1;

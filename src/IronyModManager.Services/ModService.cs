@@ -599,7 +599,7 @@ namespace IronyModManager.Services
                         if (state.ResolvedConflicts != null)
                         {
                             var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (resolved?.Count() > 0)
+                            if (resolved.Count() > 0)
                             {
                                 files.AddRange(resolved.Select(p => p.File));
                             }
@@ -615,7 +615,7 @@ namespace IronyModManager.Services
                         if (state.ResolvedConflicts != null)
                         {
                             var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (resolved?.Count() > 0)
+                            if (resolved.Count() > 0)
                             {
                                 files.AddRange(resolved.Select(p => p.File));
                             }
@@ -738,7 +738,7 @@ namespace IronyModManager.Services
                                 var t = 1;
                             }
                             bool canAdd = false;
-                            var fileDefs = indexedDefinitions.GetByFile(conflict.File);                            
+                            var fileDefs = indexedDefinitions.GetByFile(conflict.File);
                             foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
                             {
                                 var fileConflicts = indexedDefinitions.GetByTypeAndId(fileDef.TypeAndId);
@@ -755,10 +755,6 @@ namespace IronyModManager.Services
                             if (canAdd)
                             {
                                 allowedConflicts.Add(conflict);
-                            }
-                            else
-                            {
-                                var t = 1;
                             }
                         }
                         else
