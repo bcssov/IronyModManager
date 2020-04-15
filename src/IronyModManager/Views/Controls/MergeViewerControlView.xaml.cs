@@ -162,8 +162,8 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var editorLeft = this.FindControl<TextEditor>("editorLeft");
-            var editorRight = this.FindControl<TextEditor>("editorRight");
+            var editorLeft = this.FindControl<IronyModManager.Controls.TextEditor>("editorLeft");
+            var editorRight = this.FindControl<IronyModManager.Controls.TextEditor>("editorRight");
             SetEditorOptions(editorLeft, true);
             SetEditorOptions(editorRight, false);
 

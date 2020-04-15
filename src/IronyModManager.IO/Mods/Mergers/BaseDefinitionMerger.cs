@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Mods.Mergers
 {
@@ -99,20 +100,20 @@ namespace IronyModManager.IO.Mods.Mergers
             var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
             if (FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase)))
             {
-                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{CleanFileName(fileName)}");
+                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
             }
             else if (definition.ParentDirectory.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
                 if (definition.ParentDirectory.Contains(LocalizationReplace, StringComparison.OrdinalIgnoreCase))
                 {
-                    return Path.Combine(definition.ParentDirectory, CleanFileName(fileName));
+                    return Path.Combine(definition.ParentDirectory, fileName.GenerateValidFileName());
                 }
                 else
                 {
-                    return Path.Combine(definition.ParentDirectory, LocalizationReplace, CleanFileName(fileName));
+                    return Path.Combine(definition.ParentDirectory, LocalizationReplace, fileName.GenerateValidFileName());
                 }
             }
-            return Path.Combine(definition.ParentDirectory, $"{LIOSName}{CleanFileName(fileName)}");
+            return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
         }
 
         /// <summary>
@@ -144,16 +145,6 @@ namespace IronyModManager.IO.Mods.Mergers
             {
                 sb.AppendLine(string.Join(Environment.NewLine, lines.Select(p => p.Code)));
             }
-        }
-
-        /// <summary>
-        /// Cleans the name of the file.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string CleanFileName(string fileName)
-        {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty)).Replace(" ", "_");
         }
 
         /// <summary>

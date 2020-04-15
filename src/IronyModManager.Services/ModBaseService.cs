@@ -12,11 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
-using System;
-using System.IO;
 using System.Linq;
+using System;
 using AutoMapper;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -72,7 +72,7 @@ namespace IronyModManager.Services
         protected virtual string GenerateCollectionPatchName(string collectionName)
         {
             var fileName = $"{PatchCollectionName}{collectionName}";
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty)).Replace(" ", "_");
+            return fileName.GenerateValidFileName();
         }
 
         #endregion Methods

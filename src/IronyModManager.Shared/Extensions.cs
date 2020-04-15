@@ -38,6 +38,11 @@ namespace IronyModManager.Shared
         /// </summary>
         private static readonly string tabSpace = new string(' ', 4);
 
+        /// <summary>
+        /// The empty string characters
+        /// </summary>
+        private static string[] emptyStringCharacters = new string[] { " " };
+
         #endregion Fields
 
         #region Methods
@@ -63,6 +68,22 @@ namespace IronyModManager.Shared
             using var bufferedStream = new BufferedStream(stream, 1024 * 32);
             var checksum = hash.ComputeHash(bufferedStream);
             return checksum.AsHexString();
+        }
+
+        /// <summary>
+        /// Generates the name of the valid file.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        public static string GenerateValidFileName(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+            var fileName = Path.GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
+            fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
+            return fileName;
         }
 
         /// <summary>
