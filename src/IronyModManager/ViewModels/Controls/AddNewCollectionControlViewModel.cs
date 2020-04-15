@@ -4,7 +4,7 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -112,11 +112,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (!string.IsNullOrWhiteSpace(NewCollectionName))
                 {
+                    var colName = NewCollectionName.Trim();
                     var collections = modCollectionService.GetAll();
                     if (collections != null && !collections.Any(s => s.Name.Equals(NewCollectionName)))
                     {
                         var collection = modCollectionService.Create();
-                        collection.Name = NewCollectionName;
+                        collection.Name = colName;
                         collection.IsSelected = true;
                         if (modCollectionService.Save(collection))
                         {
@@ -126,10 +127,10 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else
                     {
-                        return new CommandResult<string>(NewCollectionName, CommandState.Exists);
+                        return new CommandResult<string>(colName, CommandState.Exists);
                     }
                 }
-                return new CommandResult<string>(NewCollectionName, CommandState.Failed);
+                return new CommandResult<string>(!string.IsNullOrEmpty(NewCollectionName) ? NewCollectionName.Trim() : string.Empty, CommandState.Failed);
             }, createEnabled).DisposeWith(disposables);
 
             CancelCommand = ReactiveCommand.Create(() =>

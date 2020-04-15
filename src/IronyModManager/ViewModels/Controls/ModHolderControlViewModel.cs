@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -138,7 +138,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task AnalyzeModsAsync()
         {
             var game = gameService.GetSelected();
-            if (game != null && CollectionMods.SelectedMods?.Count > 0)
+            if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
             {
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {

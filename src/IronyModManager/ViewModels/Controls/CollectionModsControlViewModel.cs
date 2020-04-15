@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -233,6 +234,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IMod HoveredMod { get; set; }
 
         /// <summary>
+        /// Gets or sets the maximum order.
+        /// </summary>
+        /// <value>The maximum order.</value>
+        public virtual int MaxOrder { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the mod collections.
         /// </summary>
         /// <value>The mod collections.</value>
@@ -388,7 +395,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             Mods = mods;
 
-            SetSelectedMods(mods != null ? mods.Where(p => p.IsSelected).ToObservableCollection() : new List<IMod>().ToObservableCollection());
+            SetSelectedMods(mods != null ? mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
             var state = appStateService.Get();
@@ -439,13 +446,16 @@ namespace IronyModManager.ViewModels.Controls
             ExportCollection.CanExport = SelectedModCollection != null;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState();
-            foreach (var item in Mods)
+            if (Mods != null)
             {
-                item.IsSelected = false;
+                foreach (var item in Mods)
+                {
+                    item.IsSelected = false;
+                }
             }
             var existingCollection = modCollectionService.Get(SelectedModCollection?.Name ?? string.Empty);
-            var selectedMods = new List<IMod>().ToObservableCollection();
-            if (existingCollection != null)
+            var selectedMods = new ObservableCollection<IMod>();
+            if (existingCollection?.Mods?.Count() > 0 && Mods != null)
             {
                 foreach (var item in existingCollection.Mods)
                 {
@@ -458,7 +468,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }
             SetSelectedMods(selectedMods);
-            AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+            AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
             var state = appStateService.Get();
             InitSortersAndFilters(state);
             ApplySort();
@@ -529,7 +539,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new List<IMod>().ToObservableCollection());
+            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
             var state = appStateService.Get();
@@ -570,12 +580,15 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         case CommandState.Success:
                             skipModCollectionSave = true;
-                            foreach (var mod in Mods)
+                            if (Mods != null)
                             {
-                                mod.IsSelected = false;
+                                foreach (var mod in Mods)
+                                {
+                                    mod.IsSelected = false;
+                                }
                             }
-                            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new List<IMod>().ToObservableCollection());
-                            AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
+                            AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
@@ -622,7 +635,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
                 {
-                    if (!string.IsNullOrWhiteSpace(s))
+                    if (!string.IsNullOrWhiteSpace(s) && SelectedMods != null)
                     {
                         SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
                     }
@@ -631,6 +644,10 @@ namespace IronyModManager.ViewModels.Controls
 
                 Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
                 {
+                    if (SelectedMods == null)
+                    {
+                        return;
+                    }
                     var index = -1;
                     if (SelectedMod != null)
                     {
@@ -748,22 +765,25 @@ namespace IronyModManager.ViewModels.Controls
         {
             // Allow task to be canceled
             await Task.Delay(500, cancellationToken);
-            var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
-            if (swapItem != null)
+            if (SelectedMods != null)
             {
-                var index = SelectedMods.IndexOf(swapItem);
-                SelectedMods.Remove(mod);
-                SelectedMods.Insert(index, mod);
-                SetSelectedMods(SelectedMods);
-                ModNameSortOrder.SetSortOrder(SortOrder.None);
-                SelectedMod = mod;
-                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
+                if (swapItem != null)
                 {
-                    SaveSelectedCollection();
+                    var index = SelectedMods.IndexOf(swapItem);
+                    SelectedMods.Remove(mod);
+                    SelectedMods.Insert(index, mod);
+                    SetSelectedMods(SelectedMods);
+                    ModNameSortOrder.SetSortOrder(SortOrder.None);
+                    SelectedMod = mod;
+                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                    {
+                        SaveSelectedCollection();
+                    }
+                    SaveState();
                 }
-                SaveState();
+                ModReordered?.Invoke(mod);
             }
-            ModReordered?.Invoke(mod);
             reorderToken = null;
         }
 
@@ -813,6 +833,12 @@ namespace IronyModManager.ViewModels.Controls
                 item.Order = counter;
             }
             SelectedMods = selectedMods;
+            var order = 1;
+            if (SelectedMods?.Count > 0)
+            {
+                order = SelectedMods.Count;
+            }
+            MaxOrder = order;
             if (canShutdownReorder)
             {
                 skipReorder = false;
@@ -830,7 +856,7 @@ namespace IronyModManager.ViewModels.Controls
             modOrderChanged = null;
             if (Mods != null && Disposables != null)
             {
-                AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
 
                 var sourceList = Mods.ToSourceList();
 
@@ -840,25 +866,28 @@ namespace IronyModManager.ViewModels.Controls
                     if (!skipModCollectionSave)
                     {
                         var needsSave = false;
-                        if (s.Value)
+                        if (SelectedMods != null)
                         {
-                            if (!SelectedMods.Contains(s.Sender))
+                            if (s.Value)
                             {
-                                SelectedMods.Add(s.Sender);
-                                ModNameSortOrder.SetSortOrder(SortOrder.None);
-                                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                                if (!SelectedMods.Contains(s.Sender))
                                 {
-                                    SaveState();
+                                    SelectedMods.Add(s.Sender);
+                                    ModNameSortOrder.SetSortOrder(SortOrder.None);
+                                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                                    {
+                                        SaveState();
+                                    }
+                                    needsSave = true;
                                 }
-                                needsSave = true;
                             }
-                        }
-                        else
-                        {
-                            if (SelectedMods.Contains(s.Sender))
+                            else
                             {
-                                SelectedMods.Remove(s.Sender);
-                                needsSave = true;
+                                if (SelectedMods.Contains(s.Sender))
+                                {
+                                    SelectedMods.Remove(s.Sender);
+                                    needsSave = true;
+                                }
                             }
                         }
                         if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name) && needsSave)
@@ -867,7 +896,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         SetSelectedMods(SelectedMods, false);
                     }
-                    AllModsEnabled = SelectedMods.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                    AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 

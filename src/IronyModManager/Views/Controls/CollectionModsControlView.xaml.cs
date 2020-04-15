@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.Controls;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
+using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
@@ -158,14 +159,9 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetOrderParameters()
         {
-            ViewModel.ModReordered += (args) =>
-            {
-                FocusOrderTextboxAsync(args).ConfigureAwait(true);
-            };
-            modList.LayoutUpdated += (sender, args) =>
+            void setMaxValue()
             {
                 var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
-                var items = modList.Items as IEnumerable<IMod>;
                 foreach (var item in listboxItems)
                 {
                     var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
@@ -174,12 +170,27 @@ namespace IronyModManager.Views.Controls
                         var orderCtrl = grid.GetLogicalChildren().OfType<MinMaxNumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
                         if (orderCtrl != null)
                         {
-                            var mod = item.Content as IMod;
                             orderCtrl.Minimum = 1;
-                            orderCtrl.Maximum = items.Count();
+                            orderCtrl.Maximum = ViewModel.MaxOrder;
                         }
                     }
                 }
+            }
+
+            ViewModel.ModReordered += (args) =>
+            {
+                setMaxValue();
+                FocusOrderTextboxAsync(args).ConfigureAwait(true);
+            };
+
+            this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
+            {
+                setMaxValue();
+            }).DisposeWith(Disposables);
+
+            modList.LayoutUpdated += (sender, args) =>
+            {
+                setMaxValue();
             };
         }
 
