@@ -118,6 +118,7 @@
     <None Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
+    <None Remove="Implementation\AvaloniaEdit\Resources\PDXScript.xshd" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <None Remove="Views\Controls\CollectionModsControlView.xaml" />
     <None Remove="Views\Controls\ExportModCollectionControlView.xaml" />
@@ -234,6 +235,7 @@
     <EmbeddedResource Include="Controls\Themes\Dark\ThemeOverride.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Implementation\AvaloniaEdit\Resources\PDXScript.xshd" />
     <EmbeddedResource Include="Views\Controls\ThemeControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

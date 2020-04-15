@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-02-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -29,14 +29,14 @@ namespace IronyModManager.Shared
         #region Fields
 
         /// <summary>
-        /// The tab space
-        /// </summary>
-        private static readonly string tabSpace = new string(' ', 4);
-
-        /// <summary>
         /// The hash
         /// </summary>
         private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
+
+        /// <summary>
+        /// The tab space
+        /// </summary>
+        private static readonly string tabSpace = new string(' ', 4);
 
         #endregion Fields
 
@@ -83,10 +83,11 @@ namespace IronyModManager.Shared
         /// Splits the on new line.
         /// </summary>
         /// <param name="value">The value.</param>
+        /// <param name="ignoreEmpty">if set to <c>true</c> [ignore empty].</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        public static IEnumerable<string> SplitOnNewLine(this string value)
+        public static IEnumerable<string> SplitOnNewLine(this string value, bool ignoreEmpty = true)
         {
-            return value.Contains("\r\n") ? value.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : value.Split("\n", StringSplitOptions.RemoveEmptyEntries);
+            return value.Contains("\r\n") ? value.Split("\r\n", ignoreEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None) : value.Split("\n", ignoreEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None);
         }
 
         #endregion Methods

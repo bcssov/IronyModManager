@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-14-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -13,13 +13,18 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Text;
+using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using AvaloniaEdit;
+using AvaloniaEdit.Highlighting;
+using AvaloniaEdit.Highlighting.Xshd;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
@@ -36,6 +41,11 @@ namespace IronyModManager.Views.Controls
     public class MergeViewerControlView : BaseControl<MergeViewerControlViewModel>
     {
         #region Fields
+
+        /// <summary>
+        /// The PDX script
+        /// </summary>
+        private static IHighlightingDefinition pdxScript;
 
         /// <summary>
         /// The updating
@@ -154,8 +164,8 @@ namespace IronyModManager.Views.Controls
         {
             var editorLeft = this.FindControl<TextEditor>("editorLeft");
             var editorRight = this.FindControl<TextEditor>("editorRight");
-            SetEditorOptions(editorLeft);
-            SetEditorOptions(editorRight);
+            SetEditorOptions(editorLeft, true);
+            SetEditorOptions(editorRight, false);
 
             var leftSide = this.FindControl<ListBox>("leftSide");
             var rightSide = this.FindControl<ListBox>("rightSide");
@@ -189,49 +199,52 @@ namespace IronyModManager.Views.Controls
         /// Sets the editor options.
         /// </summary>
         /// <param name="editor">The editor.</param>
-        protected virtual void SetEditorOptions(TextEditor editor)
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void SetEditorOptions(TextEditor editor, bool leftSide)
         {
-            var ctx = new ContextMenu();
-            ctx.Items = new List<MenuItem>()
+            var ctx = new ContextMenu
             {
-                new MenuItem()
+                Items = new List<MenuItem>()
                 {
-                    Header = ViewModel.EditorCopy,
-                    Command = ReactiveCommand.Create(() =>  editor.Copy()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorCut,
-                    Command = ReactiveCommand.Create(() =>  editor.Cut()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorPaste,
-                    Command = ReactiveCommand.Create(() =>  editor.Paste()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorDelete,
-                    Command = ReactiveCommand.Create(() =>  editor.Delete()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorSelectAll,
-                    Command = ReactiveCommand.Create(() =>  editor.SelectAll()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = "-"
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorUndo,
-                    Command = ReactiveCommand.Create(() =>  editor.Undo()).DisposeWith(Disposables)
-                },
-                new MenuItem()
-                {
-                    Header = ViewModel.EditorRedo,
-                    Command = ReactiveCommand.Create(() =>  editor.Redo()).DisposeWith(Disposables)
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorCopy,
+                        Command = ReactiveCommand.Create(() =>  editor.Copy()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorCut,
+                        Command = ReactiveCommand.Create(() =>  editor.Cut()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorPaste,
+                        Command = ReactiveCommand.Create(() =>  editor.Paste()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorDelete,
+                        Command = ReactiveCommand.Create(() =>  editor.Delete()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorSelectAll,
+                        Command = ReactiveCommand.Create(() =>  editor.SelectAll()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = "-"
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorUndo,
+                        Command = ReactiveCommand.Create(() =>  editor.Undo()).DisposeWith(Disposables)
+                    },
+                    new MenuItem()
+                    {
+                        Header = ViewModel.EditorRedo,
+                        Command = ReactiveCommand.Create(() =>  editor.Redo()).DisposeWith(Disposables)
+                    }
                 }
             };
             editor.ContextMenu = ctx;
@@ -241,6 +254,39 @@ namespace IronyModManager.Views.Controls
                 IndentationSize = 4
             };
             editor.TextArea.ActiveInputHandler = new Implementation.AvaloniaEdit.TextAreaInputHandler(editor);
+            if (pdxScript == null)
+            {
+                var bytes = ResourceReader.GetEmbeddedResource(Constants.Resources.PDXScript);
+                var xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+                using var sr = new StringReader(xml);
+                using var reader = XmlReader.Create(sr);
+                pdxScript = HighlightingLoader.Load(HighlightingLoader.LoadXshd(reader), HighlightingManager.Instance);
+            }
+            editor.SyntaxHighlighting = pdxScript;
+            bool manualAppend = false;
+            editor.TextChanged += (sender, args) =>
+            {
+                // It's a hack I know see: https://github.com/AvaloniaUI/AvaloniaEdit/issues/99.
+                // I'd need to go into the code to fix it and it ain't worth it. There doesn't seem to be any feedback on this issue as well.
+                var lines = editor.Text.SplitOnNewLine(false).ToList();
+                if (lines.Count() > 3)
+                {
+                    if (manualAppend)
+                    {
+                        manualAppend = false;
+                        return;
+                    }
+                    for (int i = 1; i <= 3; i++)
+                    {
+                        var last = lines[lines.Count() - i];
+                        if (!string.IsNullOrWhiteSpace(last))
+                        {
+                            manualAppend = true;
+                            editor.AppendText("\r\n");
+                        }
+                    }
+                }
+            };
         }
 
         /// <summary>

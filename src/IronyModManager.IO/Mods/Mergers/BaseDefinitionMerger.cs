@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionMerger.cs" company="Mario">
 //     Mario
@@ -153,7 +153,7 @@ namespace IronyModManager.IO.Mods.Mergers
         /// <returns>System.String.</returns>
         protected virtual string CleanFileName(string fileName)
         {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty));
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty)).Replace(" ", "_");
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-14-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -770,11 +770,13 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (EditingLeft)
                 {
-                    SetText(LeftDocument.Text, RightSide);
+                    string merged = string.Join(Environment.NewLine, LeftDocument.Text.SplitOnNewLine());
+                    SetText(merged, RightSide);
                 }
                 else
                 {
-                    SetText(LeftSide, RightDocument.Text);
+                    string merged = string.Join(Environment.NewLine, RightDocument.Text.SplitOnNewLine());
+                    SetText(LeftSide, merged);
                 }
                 ExitEditMode();
             }).DisposeWith(disposables);
@@ -789,6 +791,8 @@ namespace IronyModManager.ViewModels.Controls
                 EditingLeft = leftSide;
                 EditingRight = !leftSide;
                 EditingText = true;
+                LeftDocument = new TextDocument(LeftSide);
+                RightDocument = new TextDocument(RightSide);
             }).DisposeWith(disposables);
 
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>

@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -72,7 +72,7 @@ namespace IronyModManager.Services
         protected virtual string GenerateCollectionPatchName(string collectionName)
         {
             var fileName = $"{PatchCollectionName}{collectionName}";
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty));
+            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, character) => current.Replace(character.ToString(), string.Empty)).Replace(" ", "_");
         }
 
         #endregion Methods
