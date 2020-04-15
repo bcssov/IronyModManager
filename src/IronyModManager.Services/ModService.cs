@@ -733,10 +733,6 @@ namespace IronyModManager.Services
                     {
                         if (conflict.ValueType == Parser.Common.ValueType.Variable)
                         {
-                            if (conflict.Id.Contains("corvette_cost_6"))
-                            {
-                                var t = 1;
-                            }
                             bool canAdd = false;
                             var fileDefs = indexedDefinitions.GetByFile(conflict.File);
                             foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
