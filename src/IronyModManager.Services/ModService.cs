@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-15-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -728,22 +728,57 @@ namespace IronyModManager.Services
                         continue;
                     }
                     var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id);
+                    var allowedConflicts = new HashSet<IDefinition>();
                     foreach (var conflict in allConflicts)
                     {
+                        if (conflict.ValueType == Parser.Common.ValueType.Variable)
+                        {
+                            if (conflict.Id.Contains("corvette_cost_6"))
+                            {
+                                var t = 1;
+                            }
+                            bool canAdd = false;
+                            var fileDefs = indexedDefinitions.GetByFile(conflict.File);                            
+                            foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
+                            {
+                                var fileConflicts = indexedDefinitions.GetByTypeAndId(fileDef.TypeAndId);
+                                if (fileConflicts.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
+                                {
+                                    var validDefs = definitions.Where(p => fileConflicts.Any(d => d.File.Equals(p.File)));
+                                    if (validDefs.Count() > 1)
+                                    {
+                                        canAdd = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (canAdd)
+                            {
+                                allowedConflicts.Add(conflict);
+                            }
+                            else
+                            {
+                                var t = 1;
+                            }
+                        }
+                        else
+                        {
+                            allowedConflicts.Add(conflict);
+                        }
                         processed.Add(conflict);
                     }
-                    if (allConflicts.Count() > 1)
+                    if (allowedConflicts.Count() > 1)
                     {
-                        if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
+                        if (!allowedConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                         {
                             var validConflicts = new HashSet<IDefinition>();
-                            foreach (var conflict in allConflicts)
+                            foreach (var conflict in allowedConflicts)
                             {
                                 if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
                                 {
                                     continue;
                                 }
-                                var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
+                                var hasOverrides = allowedConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
                                 if (hasOverrides)
                                 {
                                     continue;
