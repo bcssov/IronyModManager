@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -86,6 +86,12 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Events
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editing yaml].
+        /// </summary>
+        /// <value><c>true</c> if [editing yaml]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingYaml { get; set; }
 
         /// <summary>
         /// Gets or sets the cancel.
@@ -377,6 +383,7 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void Reset()
         {
             SetText(string.Empty, string.Empty);
+            EditingYaml = false;
         }
 
         /// <summary>

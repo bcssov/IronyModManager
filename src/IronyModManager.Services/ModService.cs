@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -156,7 +157,6 @@ namespace IronyModManager.Services
                 if (definitionMod != null)
                 {
                     conflictResult.ResolvedConflicts.AddToMap(definition);
-                    var patches = GetDefinitionsToWrite(conflictResult, definition);
                     await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
                     {
                         RootDirectory = game.UserDirectory,
@@ -167,7 +167,7 @@ namespace IronyModManager.Services
                         RootDirectory = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName),
                         Path = definition.ParentDirectory
                     });
-                    var allPatches = new HashSet<IDefinition>(patches);
+                    var allPatches = new HashSet<IDefinition>() { definition };
                     foreach (var item in conflictResult.ResolvedConflicts.GetByParentDirectory(definition.ParentDirectory))
                     {
                         if (!allPatches.Contains(item))
@@ -362,7 +362,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions, false);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -370,7 +370,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions, true);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -389,39 +389,6 @@ namespace IronyModManager.Services
             result.ResolvedConflicts = resolvedConflicts;
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the definitions to write.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="definition">The definition.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public virtual IEnumerable<IDefinition> GetDefinitionsToWrite(IConflictResult conflictResult, IDefinition definition)
-        {
-            if (definition.ValueType != Parser.Common.ValueType.Object && definition.ValueType != Parser.Common.ValueType.Variable)
-            {
-                return new List<IDefinition>() { definition };
-            }
-            var definitions = new List<IDefinition>() { definition };
-            var resolvedConflicts = FilterValidWriteDefinitions(conflictResult.ResolvedConflicts, definition);
-            var conflicts = FilterValidWriteDefinitions(conflictResult.Conflicts, definition).Where(p => !resolvedConflicts.Any(c => c.Id.Equals(p.Id)));
-            List<IDefinition> allConflicts = new List<IDefinition>();
-            if (definition.ValueType == Parser.Common.ValueType.Variable)
-            {
-                foreach (var item in conflictResult.Conflicts.GetByTypeAndId(definition.TypeAndId))
-                {
-                    allConflicts.AddRange(FilterValidWriteDefinitions(conflictResult.AllConflicts, item).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id)) && !allConflicts.Any(c => c.Id.Equals(p.Id))));
-                }
-            }
-            else
-            {
-                allConflicts = FilterValidWriteDefinitions(conflictResult.AllConflicts, definition).Where(p => !conflicts.Any(c => c.Id.Equals(p.Id))).ToList();
-            }
-            definitions.AddRange(allConflicts.GroupBy(p => p.Id).Select(p => p.First()));
-            var orphanConflicts = FilterValidWriteDefinitions(conflictResult.OrphanConflicts, definition).Where(p => !allConflicts.Any(c => c.Id.Equals(p.Id)));
-            definitions.AddRange(orphanConflicts.GroupBy(p => p.Id).Select(p => p.First()));
-            return definitions;
         }
 
         /// <summary>
@@ -681,146 +648,66 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="conflicts">The conflicts.</param>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="evalShouldSkipVariables">if set to <c>true</c> [skip variables].</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, bool evalShouldSkipVariables = false)
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions)
         {
-            if (definitions.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
+            var validDefinitions = new HashSet<IDefinition>();
+            foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
             {
-                var validDefinitions = new HashSet<IDefinition>();
-                if (evalShouldSkipVariables && definitions.All(p => p.ValueType == Parser.Common.ValueType.Variable))
+                validDefinitions.Add(item);
+            }
+            var processed = new HashSet<IDefinition>();
+            foreach (var def in validDefinitions)
+            {
+                if (processed.Contains(def) || conflicts.Contains(def))
                 {
-                    // Must have at least one definition match per file
-                    foreach (var def in definitions)
-                    {
-                        var fileDefs = indexedDefinitions.GetByFile(def.File);
-                        foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
-                        {
-                            var fileConflicts = indexedDefinitions.GetByTypeAndId(fileDef.TypeAndId);
-                            if (fileConflicts.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
-                            {
-                                var validDefs = definitions.Where(p => fileConflicts.Any(d => d.File.Equals(p.File)));
-                                if (validDefs.Count() > 1)
-                                {
-                                    foreach (var item in validDefs)
-                                    {
-                                        if (!validDefinitions.Contains(item))
-                                        {
-                                            validDefinitions.Add(item);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    continue;
                 }
-                else
+                var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id).Where(p => IsValidDefinitionType(p));
+                foreach (var conflict in allConflicts)
                 {
-                    foreach (var item in definitions)
-                    {
-                        validDefinitions.Add(item);
-                    }
+                    processed.Add(conflict);
                 }
-                var processed = new HashSet<IDefinition>();
-                foreach (var def in validDefinitions)
+                if (allConflicts.Count() > 1)
                 {
-                    if (processed.Contains(def) || conflicts.Contains(def))
+                    if (!allConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
                     {
-                        continue;
-                    }
-                    var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id);
-                    var allowedConflicts = new HashSet<IDefinition>();
-                    foreach (var conflict in allConflicts)
-                    {
-                        if (conflict.ValueType == Parser.Common.ValueType.Variable)
+                        var validConflicts = new HashSet<IDefinition>();
+                        foreach (var conflict in allConflicts)
                         {
-                            bool canAdd = false;
-                            var fileDefs = indexedDefinitions.GetByFile(conflict.File);
-                            foreach (var fileDef in fileDefs.Where(p => p.ValueType == Parser.Common.ValueType.Object).ToList())
+                            if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
                             {
-                                var fileConflicts = indexedDefinitions.GetByTypeAndId(fileDef.TypeAndId);
-                                if (fileConflicts.GroupBy(p => p.ModName.ToLowerInvariant()).Count() > 1)
-                                {
-                                    var validDefs = definitions.Where(p => fileConflicts.Any(d => d.File.Equals(p.File)));
-                                    if (validDefs.Count() > 1)
-                                    {
-                                        canAdd = true;
-                                        break;
-                                    }
-                                }
+                                continue;
                             }
-                            if (canAdd)
+                            var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
+                            if (hasOverrides)
                             {
-                                allowedConflicts.Add(conflict);
+                                continue;
                             }
+                            validConflicts.Add(conflict);
                         }
-                        else
-                        {
-                            allowedConflicts.Add(conflict);
-                        }
-                        processed.Add(conflict);
-                    }
-                    if (allowedConflicts.Count() > 1)
-                    {
-                        if (!allowedConflicts.All(p => p.DefinitionSHA.Equals(def.DefinitionSHA)))
-                        {
-                            var validConflicts = new HashSet<IDefinition>();
-                            foreach (var conflict in allowedConflicts)
-                            {
-                                if (conflicts.Contains(conflict) || validConflicts.Contains(conflict))
-                                {
-                                    continue;
-                                }
-                                var hasOverrides = allowedConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
-                                if (hasOverrides)
-                                {
-                                    continue;
-                                }
-                                validConflicts.Add(conflict);
-                            }
 
-                            var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
-                            if (validConflictsGroup.Count() > 1)
+                        var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
+                        if (validConflictsGroup.Count() > 1)
+                        {
+                            var filteredConflicts = validConflictsGroup.Select(p => p.OrderBy(p => p.ModName).First());
+                            foreach (var item in filteredConflicts)
                             {
-                                var filteredConflicts = validConflictsGroup.Select(p => p.OrderBy(p => p.ModName).First());
-                                foreach (var item in filteredConflicts)
+                                if (!conflicts.Contains(item) && IsValidDefinitionType(item))
                                 {
-                                    if (!conflicts.Contains(item) && item.ValueType != Parser.Common.ValueType.Namespace)
-                                    {
-                                        conflicts.Add(item);
-                                    }
+                                    conflicts.Add(item);
                                 }
                             }
                         }
                     }
-                    else
+                }
+                else if (allConflicts.Count() == 1)
+                {
+                    if (allConflicts.FirstOrDefault() != def && !conflicts.Contains(def) && IsValidDefinitionType(def))
                     {
-                        if (!conflicts.Contains(def) && def.ValueType != Parser.Common.ValueType.Namespace)
-                        {
-                            conflicts.Add(def);
-                        }
+                        conflicts.Add(def);
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Filters the valid write definitions.
-        /// </summary>
-        /// <param name="indexedDefinitions">The indexed definitions.</param>
-        /// <param name="definition">The definition.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> FilterValidWriteDefinitions(IIndexedDefinitions indexedDefinitions, IDefinition definition)
-        {
-            var conflicts = indexedDefinitions.GetByFile(definition.File);
-            if (conflicts != null)
-            {
-                if (definition.ValueType == Parser.Common.ValueType.Variable)
-                {
-                    return conflicts.Where(p => !p.Id.Equals(definition.Id) && (p.ValueType == Parser.Common.ValueType.Object || p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace));
-                }
-                return conflicts.Where(p => !p.Id.Equals(definition.Id) && (p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace));
-            }
-            return new List<IDefinition>();
         }
 
         /// <summary>
@@ -1006,6 +893,49 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Determines whether [is valid definition type] [the specified definition].
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if [is valid definition type] [the specified definition]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsValidDefinitionType(IDefinition definition)
+        {
+            return definition != null && definition.ValueType != Parser.Common.ValueType.Variable && definition.ValueType != Parser.Common.ValueType.Namespace;
+        }
+
+        /// <summary>
+        /// Merges the definitions.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
+        {
+            void appendLine(StringBuilder sb, IEnumerable<IDefinition> lines)
+            {
+                if (lines?.Count() > 0)
+                {
+                    sb.AppendLine(string.Join(Environment.NewLine, lines.Select(p => p.Code)));
+                }
+            }
+            if (definitions?.Count() > 0)
+            {
+                var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
+                var variableDefinitions = definitions.Where(p => !IsValidDefinitionType(p));
+                if (variableDefinitions.Count() > 0)
+                {
+                    foreach (var definition in otherDefinitions)
+                    {
+                        var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                        var variables = variableDefinitions.Where(p => definition.Code.Contains(p.Id));
+                        StringBuilder sb = new StringBuilder();
+                        appendLine(sb, namespaces);
+                        appendLine(sb, variables);
+                        appendLine(sb, new List<IDefinition> { definition });
+                        definition.Code = sb.ToString();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Parses the mod files.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -1017,7 +947,7 @@ namespace IronyModManager.Services
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
-                definitions.AddRange(parserManager.Parse(new ParserManagerArgs()
+                var fileDefs = parserManager.Parse(new ParserManagerArgs()
                 {
                     ContentSHA = fileInfo.ContentSHA,
                     File = fileInfo.FileName,
@@ -1025,7 +955,9 @@ namespace IronyModManager.Services
                     Lines = fileInfo.Content,
                     ModDependencies = modObject.Dependencies,
                     ModName = modObject.Name
-                }));
+                });
+                MergeDefinitions(fileDefs);
+                definitions.AddRange(fileDefs);
             }
             return definitions;
         }

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -45,7 +45,12 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The PDX script
         /// </summary>
-        private static IHighlightingDefinition pdxScript;
+        private static IHighlightingDefinition pdxScriptHighlightingDefinition;
+
+        /// <summary>
+        /// The yaml highlighting definition
+        /// </summary>
+        private static IHighlightingDefinition yamlHighlightingDefinition;
 
         /// <summary>
         /// The updating
@@ -78,6 +83,20 @@ namespace IronyModManager.Views.Controls
         {
             leftListBox.SelectedIndex = line;
             rightListBox.SelectedIndex = line;
+        }
+
+        /// <summary>
+        /// Gets the highlighting definition.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IHighlightingDefinition.</returns>
+        protected virtual IHighlightingDefinition GetHighlightingDefinition(string path)
+        {
+            var bytes = ResourceReader.GetEmbeddedResource(path);
+            var xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            using var sr = new StringReader(xml);
+            using var reader = XmlReader.Create(sr);
+            return HighlightingLoader.Load(HighlightingLoader.LoadXshd(reader), HighlightingManager.Instance);
         }
 
         /// <summary>
@@ -248,21 +267,40 @@ namespace IronyModManager.Views.Controls
                 }
             };
             editor.ContextMenu = ctx;
+
             editor.Options = new TextEditorOptions()
             {
                 ConvertTabsToSpaces = true,
                 IndentationSize = 4
             };
             editor.TextArea.ActiveInputHandler = new Implementation.AvaloniaEdit.TextAreaInputHandler(editor);
-            if (pdxScript == null)
+
+            ViewModel.WhenAnyValue(p => p.EditingYaml).Subscribe(s =>
             {
-                var bytes = ResourceReader.GetEmbeddedResource(Constants.Resources.PDXScript);
-                var xml = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                using var sr = new StringReader(xml);
-                using var reader = XmlReader.Create(sr);
-                pdxScript = HighlightingLoader.Load(HighlightingLoader.LoadXshd(reader), HighlightingManager.Instance);
+                setEditMode();
+            }).DisposeWith(Disposables);
+            setEditMode();
+
+            void setEditMode()
+            {
+                if (ViewModel.EditingYaml)
+                {
+                    if (yamlHighlightingDefinition == null)
+                    {
+                        yamlHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.YAML);
+                    }
+                    editor.SyntaxHighlighting = yamlHighlightingDefinition;
+                }
+                else
+                {
+                    if (pdxScriptHighlightingDefinition == null)
+                    {
+                        pdxScriptHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.PDXScript);
+                    }
+                    editor.SyntaxHighlighting = pdxScriptHighlightingDefinition;
+                }
             }
-            editor.SyntaxHighlighting = pdxScript;
+
             bool manualAppend = false;
             editor.TextChanged += (sender, args) =>
             {

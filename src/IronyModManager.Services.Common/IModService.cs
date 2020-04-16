@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -98,14 +98,6 @@ namespace IronyModManager.Services.Common
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <returns>IConflictResult.</returns>
         IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions);
-
-        /// <summary>
-        /// Gets the definitions to write asynchronous.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="definition">The definition.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IDefinition&gt;&gt;.</returns>
-        IEnumerable<IDefinition> GetDefinitionsToWrite(IConflictResult conflictResult, IDefinition definition);
 
         /// <summary>
         /// Gets the installed mods.

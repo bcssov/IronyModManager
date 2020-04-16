@@ -4,9 +4,9 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
-// <copyright file="StellarisDefinitionMerger.cs" company="Mario">
+// <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,14 +14,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.IO.Mods.Mergers
+namespace IronyModManager.IO.Mods.InfoProviders
 {
     /// <summary>
-    /// Class StellarisDefinitionMerger.
-    /// Implements the <see cref="IronyModManager.IO.Mods.Mergers.BaseDefinitionMerger" />
+    /// Class StellarisDefinitionInfoProvider.
+    /// Implements the <see cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Mods.Mergers.BaseDefinitionMerger" />
-    public class StellarisDefinitionMerger : BaseDefinitionMerger
+    /// <seealso cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
+    public class StellarisDefinitionInfoProvider : BaseDefinitionInfoProvider
     {
         #region Properties
 

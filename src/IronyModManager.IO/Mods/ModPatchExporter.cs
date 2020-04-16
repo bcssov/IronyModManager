@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -50,7 +50,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The definition mergers
         /// </summary>
-        private readonly IEnumerable<IDefinitionMerger> definitionMergers;
+        private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
         /// <summary>
         /// The reader
@@ -65,10 +65,10 @@ namespace IronyModManager.IO.Mods
         /// Initializes a new instance of the <see cref="ModPatchExporter" /> class.
         /// </summary>
         /// <param name="reader">The reader.</param>
-        /// <param name="definitionMergers">The definition mergers.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionMerger> definitionMergers)
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
+        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders)
         {
-            this.definitionMergers = definitionMergers;
+            this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
         }
 
@@ -88,7 +88,7 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException("Game or definitions.");
             }
-            var definitionMerger = definitionMergers.FirstOrDefault(p => p.CanProcess(parameters.Game));
+            var definitionMerger = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
             if (definitionMerger != null)
             {
                 var results = new List<bool>
@@ -217,37 +217,22 @@ namespace IronyModManager.IO.Mods
         private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game)
         {
             List<bool> results = new List<bool>();
-            var namespaces = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-            var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-            var others = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+            var validDefinitions = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
 
-            foreach (var item in others)
+            foreach (var item in validDefinitions)
             {
-                var toMerge = new List<IDefinition>() { };
-                toMerge.AddRange(namespaces);
-                toMerge.AddRange(variables);
-                toMerge.Add(item);
-
-                var merger = definitionMergers.FirstOrDefault(p => p.CanProcess(game));
+                var merger = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (merger != null)
                 {
-                    var fileName = merger.GetFileName(toMerge);
+                    var fileName = merger.GetFileName(item);
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                     }
                     // Update filename
-                    foreach (var defNamespace in namespaces)
-                    {
-                        defNamespace.File = fileName;
-                    }
-                    foreach (var variable in variables)
-                    {
-                        variable.File = fileName;
-                    }
                     item.File = fileName;
-                    await File.WriteAllTextAsync(outPath, merger.MergeContent(toMerge), merger.GetEncoding(toMerge));
+                    await File.WriteAllTextAsync(outPath, item.Code, merger.GetEncoding(item));
                     results.Add(true);
                 }
                 else

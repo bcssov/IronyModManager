@@ -4,9 +4,9 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
-// <copyright file="IDefinitionMerger.cs" company="Mario">
+// <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,11 +19,9 @@ using IronyModManager.Parser.Common.Definitions;
 namespace IronyModManager.IO.Common.Mods
 {
     /// <summary>
-    /// Interface IDefinitionMerger
-    /// Implements the <see cref="IronyModManager.IO.Common.Mods.IDefaultDefinitionMerger" />
+    /// Interface IDefinitionInfoProvider
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Common.Mods.IDefaultDefinitionMerger" />
-    public interface IDefinitionMerger
+    public interface IDefinitionInfoProvider
     {
         #region Properties
 
@@ -47,23 +45,16 @@ namespace IronyModManager.IO.Common.Mods
         /// <summary>
         /// Gets the encoding.
         /// </summary>
-        /// <param name="definitions">The definitions.</param>
+        /// <param name="definition">The definition.</param>
         /// <returns>Encoding.</returns>
-        Encoding GetEncoding(IEnumerable<IDefinition> definitions);
+        Encoding GetEncoding(IDefinition definition);
 
         /// <summary>
         /// Gets the name of the file.
         /// </summary>
-        /// <param name="definitions">The definitions.</param>
+        /// <param name="definition">The definition.</param>
         /// <returns>System.String.</returns>
-        string GetFileName(IEnumerable<IDefinition> definitions);
-
-        /// <summary>
-        /// Merges the content.
-        /// </summary>
-        /// <param name="definitions">The definitions.</param>
-        /// <returns>System.String.</returns>
-        string MergeContent(IEnumerable<IDefinition> definitions);
+        string GetFileName(IDefinition definition);
 
         #endregion Methods
     }

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -108,7 +108,7 @@ namespace IronyModManager.Shared
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public static IEnumerable<string> SplitOnNewLine(this string value, bool ignoreEmpty = true)
         {
-            return value.Contains("\r\n") ? value.Split("\r\n", ignoreEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None) : value.Split("\n", ignoreEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None);
+            return value.Replace("\r", string.Empty).Split("\n", ignoreEmpty ? StringSplitOptions.RemoveEmptyEntries : StringSplitOptions.None);
         }
 
         #endregion Methods
