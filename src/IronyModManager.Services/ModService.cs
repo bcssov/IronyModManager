@@ -741,6 +741,26 @@ namespace IronyModManager.Services
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : new string[] { };
             var mods = new List<IMod>();
 
+            void setDescriptorPath(IMod mod, string desiredPath, string localPath)
+            {
+                if (desiredPath == localPath)
+                {
+                    mod.DescriptorFile = desiredPath;
+                }
+                else
+                {
+                    if (mod.RemoteId.GetValueOrDefault() > 0)
+                    {
+                        mod.DescriptorFile = desiredPath;
+                    }
+                    else
+                    {
+                        mod.Source = ModSource.Local;
+                        mod.DescriptorFile = localPath;
+                    }
+                }
+            }
+
             void parseModFiles(string path, ModSource source, bool isDirectory)
             {
                 var fileInfo = reader.GetFileInfo(path, Constants.DescriptorFile);
@@ -757,14 +777,27 @@ namespace IronyModManager.Services
                     cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
                 }
 
+                var localPath = $"{Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Constants.ModExtension}";
                 switch (mod.Source)
                 {
                     case ModSource.Local:
-                        mod.DescriptorFile = $"{Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Constants.ModExtension}";
+                        setDescriptorPath(mod, localPath, localPath);
                         break;
 
                     case ModSource.Steam:
-                        mod.DescriptorFile = $"{Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Constants.ModExtension}";
+                        if (mod.RemoteId.GetValueOrDefault() == 0)
+                        {
+                            if (!isDirectory)
+                            {
+                                var modParentDirectory = Path.GetDirectoryName(path);
+                                mod.RemoteId = GetSteamModId(modParentDirectory, isDirectory);
+                            }
+                            else
+                            {
+                                mod.RemoteId = GetSteamModId(path, isDirectory);
+                            }
+                        }
+                        setDescriptorPath(mod, $"{Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Constants.ModExtension}", localPath);
                         break;
 
                     case ModSource.Paradox:
@@ -777,7 +810,7 @@ namespace IronyModManager.Services
                         {
                             mod.RemoteId = GetPdxModId(path, isDirectory);
                         }
-                        mod.DescriptorFile = $"{Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Constants.ModExtension}";
+                        setDescriptorPath(mod, $"{Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Constants.ModExtension}", localPath);
                         break;
 
                     default:
@@ -889,6 +922,19 @@ namespace IronyModManager.Services
         {
             var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
             int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
+            return id;
+        }
+
+        /// <summary>
+        /// Gets the steam mod identifier.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="isDirectory">if set to <c>true</c> [is directory].</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetSteamModId(string path, bool isDirectory = false)
+        {
+            var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
+            int.TryParse(name.Replace(Constants.Steam_mod_id, string.Empty), out var id);
             return id;
         }
 
