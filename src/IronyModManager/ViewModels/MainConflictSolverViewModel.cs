@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-12-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -41,6 +41,11 @@ namespace IronyModManager.ViewModels
     public class MainConflictSolverControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The localization
+        /// </summary>
+        private const string localization = "localisation";
 
         /// <summary>
         /// The localization manager
@@ -280,6 +285,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
+                        MergeViewer.EditingYaml = s.Type.StartsWith(localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.ExitEditMode();
@@ -310,6 +316,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
+                        MergeViewer.EditingYaml = s.Type.StartsWith(localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.ExitEditMode();

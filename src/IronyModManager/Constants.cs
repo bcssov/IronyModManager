@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -68,6 +68,11 @@ namespace IronyModManager
             /// The PDX script
             /// </summary>
             public const string PDXScript = "Implementation\\AvaloniaEdit\\Resources\\PDXScript.xshd";
+
+            /// <summary>
+            /// The yaml
+            /// </summary>
+            public const string YAML = "Implementation\\AvaloniaEdit\\Resources\\YAML.xshd";
 
             #endregion Fields
         }
