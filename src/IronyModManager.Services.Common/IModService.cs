@@ -115,6 +115,15 @@ namespace IronyModManager.Services.Common
         IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
 
         /// <summary>
+        /// Ignores the mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
+
+        /// <summary>
         /// Installs the mods asynchronous.
         /// </summary>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>

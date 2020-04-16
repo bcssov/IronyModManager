@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -43,6 +43,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The game.</value>
         public string Game { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ignored conflicts.
+        /// </summary>
+        /// <value>The ignored conflicts.</value>
+        public IEnumerable<IDefinition> IgnoredConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the mod path.

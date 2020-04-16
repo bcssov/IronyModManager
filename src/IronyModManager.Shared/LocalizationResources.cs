@@ -100,6 +100,7 @@ namespace IronyModManager.Shared
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
             public const string Resolve = Prefix + "Resolve";
+            public const string Ignore = Prefix + "Ignore";
             public const string OverlayResolve = Prefix + "OverlayResolve";
             public const string NextConflict = Prefix + "NextConflict";
             public const string PrevConflict = Prefix + "PrevConflict";

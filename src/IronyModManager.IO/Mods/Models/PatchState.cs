@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-16-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -40,6 +40,12 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The conflicts.</value>
         public IEnumerable<IDefinition> Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ignored conflicts.
+        /// </summary>
+        /// <value>The ignored conflicts.</value>
+        public IEnumerable<IDefinition> IgnoredConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the orphan conflicts.

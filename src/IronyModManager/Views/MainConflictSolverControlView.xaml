@@ -38,6 +38,8 @@
       <ContentControl IsVisible="{Binding !IsBinaryConflict}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
                VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}"></Button>
+      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
+               VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" IsEnabled="{Binding IgnoreEnabled}"></Button>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
           VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,10"></Button>
     </Grid>

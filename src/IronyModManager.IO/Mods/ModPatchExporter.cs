@@ -132,6 +132,7 @@ namespace IronyModManager.IO.Mods
                 state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
                 state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
                 state.OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>();
+                state.IgnoredConflicts = parameters.IgnoredConflicts != null ? parameters.IgnoredConflicts.ToList() : new List<IDefinition>();
                 var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
                 foreach (var item in state.ResolvedConflicts)
                 {
@@ -200,7 +201,28 @@ namespace IronyModManager.IO.Mods
                     var text = await File.ReadAllTextAsync(statePath);
                     if (!string.IsNullOrWhiteSpace(text))
                     {
-                        return JsonDISerializer.Deserialize<IPatchState>(text);
+                        var model = JsonDISerializer.Deserialize<IPatchState>(text);
+                        if (model.ConflictHistory == null)
+                        {
+                            model.ConflictHistory = new List<IDefinition>();
+                        }
+                        if (model.Conflicts == null)
+                        {
+                            model.Conflicts = new List<IDefinition>();
+                        }
+                        if (model.IgnoredConflicts == null)
+                        {
+                            model.IgnoredConflicts = new List<IDefinition>();
+                        }
+                        if (model.OrphanConflicts == null)
+                        {
+                            model.OrphanConflicts = new List<IDefinition>();
+                        }
+                        if (model.ResolvedConflicts == null)
+                        {
+                            model.ResolvedConflicts = new List<IDefinition>();
+                        }
+                        return model;
                     }
                 }
             }

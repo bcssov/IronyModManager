@@ -73,6 +73,7 @@
         "OK": "In Ordnung",
         "Cancel": "Stornieren",
         "Resolve": "Lösen",
+        "Ignore": "Ignorieren",
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",

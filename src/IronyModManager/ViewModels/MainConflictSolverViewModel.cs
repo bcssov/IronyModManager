@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -128,6 +128,25 @@ namespace IronyModManager.ViewModels
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the ignore.
+        /// </summary>
+        /// <value>The ignore.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Ignore)]
+        public virtual string Ignore { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the ignore command.
+        /// </summary>
+        /// <value>The ignore command.</value>
+        public virtual ReactiveCommand<Unit, Unit> IgnoreCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [ignore enabled].
+        /// </summary>
+        /// <value><c>true</c> if [ignore enabled]; otherwise, <c>false</c>.</value>
+        public virtual bool IgnoreEnabled { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is binary conflict.
         /// </summary>
         /// <value><c>true</c> if this instance is binary conflict; otherwise, <c>false</c>.</value>
@@ -200,6 +219,7 @@ namespace IronyModManager.ViewModels
         public void Reset()
         {
             ModCompareSelector.Reset();
+            IgnoreEnabled = false;
         }
 
         /// <summary>
@@ -211,20 +231,28 @@ namespace IronyModManager.ViewModels
             if (conflictResult != null && conflictResult.Conflicts != null)
             {
                 var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToHashSet();
+
+                var resolved = new List<IHierarchicalDefinitions>();
                 if (conflictResult.ResolvedConflicts != null)
                 {
-                    foreach (var topLevelResolvedConflicts in conflictResult.ResolvedConflicts.GetHierarchicalDefinitions())
+                    resolved.AddRange(conflictResult.ResolvedConflicts.GetHierarchicalDefinitions());
+                }
+                if (conflictResult.IgnoredConflicts != null)
+                {
+                    resolved.AddRange(conflictResult.IgnoredConflicts.GetHierarchicalDefinitions());
+                }
+
+                foreach (var topLevelResolvedConflicts in resolved)
+                {
+                    var topLevelConflict = conflicts.FirstOrDefault(p => p.Name.Equals(topLevelResolvedConflicts.Name));
+                    if (topLevelResolvedConflicts != null && topLevelConflict != null)
                     {
-                        var topLevelConflict = conflicts.FirstOrDefault(p => p.Name.Equals(topLevelResolvedConflicts.Name));
-                        if (topLevelResolvedConflicts != null && topLevelConflict != null)
+                        foreach (var childResolvedConflict in topLevelResolvedConflicts.Children)
                         {
-                            foreach (var childResolvedConflict in topLevelResolvedConflicts.Children)
+                            var child = topLevelConflict.Children.FirstOrDefault(p => p.Name.Equals(childResolvedConflict.Name));
+                            if (child != null)
                             {
-                                var child = topLevelConflict.Children.FirstOrDefault(p => p.Name.Equals(childResolvedConflict.Name));
-                                if (child != null)
-                                {
-                                    topLevelConflict.Children.Remove(child);
-                                }
+                                topLevelConflict.Children.Remove(child);
                             }
                         }
                     }
@@ -257,7 +285,12 @@ namespace IronyModManager.ViewModels
 
             ResolveCommand = ReactiveCommand.Create(() =>
             {
-                ResolveConflictAsync().ConfigureAwait(true);
+                ResolveConflictAsync(true).ConfigureAwait(true);
+            }).DisposeWith(disposables);
+
+            IgnoreCommand = ReactiveCommand.Create(() =>
+            {
+                ResolveConflictAsync(false).ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.Conflicts).Subscribe(s =>
@@ -276,6 +309,11 @@ namespace IronyModManager.ViewModels
                     MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                     MergeViewer.SetText(string.Empty, string.Empty);
                     MergeViewer.ExitEditMode();
+                    IgnoreEnabled = true;
+                }
+                else
+                {
+                    IgnoreEnabled = false;
                 }
             }).DisposeWith(disposables);
 
@@ -375,9 +413,10 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
-        /// add new definition as an asynchronous operation.
+        /// resolve conflict as an asynchronous operation.
         /// </summary>
-        protected virtual async Task ResolveConflictAsync()
+        /// <param name="resolve">if set to <c>true</c> [resolve].</param>
+        protected virtual async Task ResolveConflictAsync(bool resolve)
         {
             if (ModCompareSelector.VirtualDefinitions?.Count() > 0)
             {
@@ -406,7 +445,9 @@ namespace IronyModManager.ViewModels
                 if (patchDefinition != null)
                 {
                     SyncCode(patchDefinition);
-                    if (await modService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
+                    if (resolve ?
+                        await modService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name) :
+                        await modService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
                     {
                         FilterHierarchalConflicts(Conflicts);
                         IHierarchicalDefinitions selectedConflict = null;
