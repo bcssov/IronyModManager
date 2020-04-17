@@ -4,7 +4,7 @@
 // Created          : 04-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionMergerTests.cs" company="Mario">
 //     Mario
@@ -183,7 +183,7 @@ namespace IronyModManager.IO.Tests
         /// <summary>
         /// Gets the service.
         /// </summary>
-        /// <returns>StellarisDefinitionMerger.</returns>
+        /// <returns>StellarisDefinitionInfoProvider.</returns>
         private StellarisDefinitionInfoProvider GetService()
         {
             return new StellarisDefinitionInfoProvider();

@@ -516,7 +516,7 @@ namespace IronyModManager.Services
                         if (state.IgnoredConflicts != null)
                         {
                             var ignored = state.IgnoredConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (ignored != null && CheckSyncPatchData(matchedConflicts, item))
+                            if (ignored.Count() > 0 && !IsCachedDefinitionDifferent(matchedConflicts, item))
                             {
                                 ignoredConflicts.AddRange(ignored);
                             }
@@ -540,7 +540,7 @@ namespace IronyModManager.Services
                         if (state.IgnoredConflicts != null)
                         {
                             var ignored = state.IgnoredConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (ignored != null && CheckSyncPatchData(matchedConflicts, item))
+                            if (ignored.Count() > 0 && !IsCachedDefinitionDifferent(matchedConflicts, item))
                             {
                                 ignoredConflicts.AddRange(ignored);
                             }
@@ -568,7 +568,7 @@ namespace IronyModManager.Services
                     conflicts.ResolvedConflicts = resolvedIndex;
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
-                    conflictResult.IgnoredConflicts = ignoredIndex;
+                    conflicts.IgnoredConflicts = ignoredIndex;
                     return conflicts;
                 }
             };
@@ -600,18 +600,6 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        /// Checks the synchronize patch data.
-        /// </summary>
-        /// <param name="currentConflicts">The current conflicts.</param>
-        /// <param name="cachedConflicts">The cached conflicts.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual bool CheckSyncPatchData(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts)
-        {
-            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.File.Equals(p.File) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
-            return cachedDiffs.Count() != cachedConflicts.Count();
         }
 
         /// <summary>
@@ -824,7 +812,7 @@ namespace IronyModManager.Services
 
             void setDescriptorPath(IMod mod, string desiredPath, string localPath)
             {
-                if (desiredPath == localPath)
+                if (desiredPath.Equals(localPath, StringComparison.OrdinalIgnoreCase))
                 {
                     mod.DescriptorFile = desiredPath;
                 }
@@ -1020,6 +1008,18 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Determines whether [is cached definition different] [the specified current conflicts].
+        /// </summary>
+        /// <param name="currentConflicts">The current conflicts.</param>
+        /// <param name="cachedConflicts">The cached conflicts.</param>
+        /// <returns><c>true</c> if [is cached definition different] [the specified current conflicts]; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsCachedDefinitionDifferent(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts)
+        {
+            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.File.Equals(p.File) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
+            return cachedDiffs.Count() != cachedConflicts.Count();
+        }
+
+        /// <summary>
         /// Determines whether [is valid definition type] [the specified definition].
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -1071,6 +1071,10 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> ParseModFiles(IGame game, IEnumerable<IFileInfo> fileInfos, IModObject modObject)
         {
+            if (fileInfos == null)
+            {
+                return null;
+            }
             var definitions = new List<IDefinition>();
             foreach (var fileInfo in fileInfos)
             {
@@ -1100,7 +1104,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual async Task<bool> SyncPatchStatesAsync(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts, string patchName, string userDirectory, params string[] files)
         {
-            if (CheckSyncPatchData(currentConflicts, cachedConflicts))
+            if (IsCachedDefinitionDifferent(currentConflicts, cachedConflicts))
             {
                 foreach (var file in files)
                 {
