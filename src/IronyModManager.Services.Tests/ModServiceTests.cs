@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -1902,6 +1902,176 @@ namespace IronyModManager.Services.Tests
             result.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method Should_not_ignore_mod_patch_when_no_game_selected_or_parameters_null.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_ignore_mod_patch_when_no_game_selected_or_parameters_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var c = new ConflictResult();
+            var result = await service.IgnoreModPatchAsync(c, new Definition(), "colname");
+            result.Should().BeFalse();
+
+            result = await service.IgnoreModPatchAsync(null, new Definition(), "colname");
+            result.Should().BeFalse();
+
+            result = await service.IgnoreModPatchAsync(c, null, "colname");
+            result.Should().BeFalse();
+
+            result = await service.IgnoreModPatchAsync(c, new Definition(), null);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_ignore_mod_patch_when_nothing_to_merge.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_ignore_mod_patch_when_nothing_to_merge()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(new List<IDefinition>());
+            var c = new ConflictResult()
+            {
+                AllConflicts = indexed,
+                Conflicts = indexed,
+                OrphanConflicts = indexed,
+                ResolvedConflicts = indexed,
+                IgnoredConflicts = indexed
+            };
+            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_true_when_ignoring_patches.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_true_when_ignoring_patches()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            modWriter.Setup(p => p.CreateModDirectoryAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            {
+                if (p.Definitions.Count() > 0)
+                {
+                    return true;
+                }
+                return false;
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\2.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+            };
+            var all = new IndexedDefinitions();
+            all.InitMap(definitions);
+
+            var orphan = new IndexedDefinitions();
+            orphan.InitMap(new List<IDefinition>());
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>());
+
+            var ignored = new IndexedDefinitions();
+            ignored.InitMap(new List<IDefinition>());
+
+
+            var c = new ConflictResult()
+            {
+                AllConflicts = all,
+                Conflicts = all,
+                OrphanConflicts = orphan,
+                ResolvedConflicts = resolved,
+                IgnoredConflicts = ignored
+            };
+            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
+            result.Should().BeTrue();
+        }
 
         /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.

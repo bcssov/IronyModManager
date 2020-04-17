@@ -48,7 +48,7 @@ namespace IronyModManager.IO.Mods
         private static readonly AsyncLock serviceLock = new AsyncLock();
 
         /// <summary>
-        /// The definition mergers
+        /// The definition information providers
         /// </summary>
         private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
@@ -88,8 +88,8 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException("Game or definitions.");
             }
-            var definitionMerger = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
-            if (definitionMerger != null)
+            var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
+            if (definitionInfoProvider != null)
             {
                 var results = new List<bool>
                 {
@@ -132,6 +132,7 @@ namespace IronyModManager.IO.Mods
                 state.ResolvedConflicts = parameters.ResolvedConflicts != null ? parameters.ResolvedConflicts.ToList() : new List<IDefinition>();
                 state.Conflicts = parameters.Conflicts != null ? parameters.Conflicts.ToList() : new List<IDefinition>();
                 state.OrphanConflicts = parameters.OrphanConflicts != null ? parameters.OrphanConflicts.ToList() : new List<IDefinition>();
+                state.IgnoredConflicts = parameters.IgnoredConflicts != null ? parameters.IgnoredConflicts.ToList() : new List<IDefinition>();
                 var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
                 foreach (var item in state.ResolvedConflicts)
                 {
@@ -200,7 +201,28 @@ namespace IronyModManager.IO.Mods
                     var text = await File.ReadAllTextAsync(statePath);
                     if (!string.IsNullOrWhiteSpace(text))
                     {
-                        return JsonDISerializer.Deserialize<IPatchState>(text);
+                        var model = JsonDISerializer.Deserialize<IPatchState>(text);
+                        if (model.ConflictHistory == null)
+                        {
+                            model.ConflictHistory = new List<IDefinition>();
+                        }
+                        if (model.Conflicts == null)
+                        {
+                            model.Conflicts = new List<IDefinition>();
+                        }
+                        if (model.IgnoredConflicts == null)
+                        {
+                            model.IgnoredConflicts = new List<IDefinition>();
+                        }
+                        if (model.OrphanConflicts == null)
+                        {
+                            model.OrphanConflicts = new List<IDefinition>();
+                        }
+                        if (model.ResolvedConflicts == null)
+                        {
+                            model.ResolvedConflicts = new List<IDefinition>();
+                        }
+                        return model;
                     }
                 }
             }
@@ -221,10 +243,10 @@ namespace IronyModManager.IO.Mods
 
             foreach (var item in validDefinitions)
             {
-                var merger = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
-                if (merger != null)
+                var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
+                if (infoProvider != null)
                 {
-                    var fileName = merger.GetFileName(item);
+                    var fileName = infoProvider.GetFileName(item);
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                     {
@@ -232,7 +254,7 @@ namespace IronyModManager.IO.Mods
                     }
                     // Update filename
                     item.File = fileName;
-                    await File.WriteAllTextAsync(outPath, item.Code, merger.GetEncoding(item));
+                    await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                     results.Add(true);
                 }
                 else
