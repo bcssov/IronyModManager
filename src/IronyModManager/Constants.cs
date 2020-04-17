@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -42,6 +42,11 @@ namespace IronyModManager
         /// The unhandled error title
         /// </summary>
         public const string UnhandledErrorTitle = "Error";
+
+        /// <summary>
+        /// The wiki URL
+        /// </summary>
+        public const string WikiUrl = "https://github.com/bcssov/IronyModManager/wiki";
 
         #endregion Fields
 

@@ -10,7 +10,11 @@
       <Panel>
         <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
         <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
-        <ContentControl Content="{Binding LanguageSelector}" HorizontalAlignment="Left" VerticalAlignment="Top"></ContentControl>
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left" VerticalAlignment="Top">
+          <ContentControl Content="{Binding LanguageSelector}"></ContentControl>
+          <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}" Margin="20,0"
+                BorderThickness="0,0,0,0" Background="Transparent"></Button>
+        </StackPanel>
       </Panel>
       <Panel>
         <ContentControl Content="{Binding ModHolder}" HorizontalAlignment="Stretch"></ContentControl>
