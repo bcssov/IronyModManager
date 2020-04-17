@@ -45,7 +45,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The localization
         /// </summary>
-        private const string localization = "localisation";
+        private const string Localization = "localisation";
 
         /// <summary>
         /// The localization manager
@@ -323,7 +323,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
-                        MergeViewer.EditingYaml = s.Type.StartsWith(localization);
+                        MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.ExitEditMode();
@@ -354,7 +354,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null)
                     {
-                        MergeViewer.EditingYaml = s.Type.StartsWith(localization);
+                        MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.ExitEditMode();

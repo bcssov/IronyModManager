@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ViewResolver.cs" company="Mario">
 //     Mario
@@ -20,7 +20,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.DI.Assemblies;
 
-namespace IronyModManager
+namespace IronyModManager.Implementation
 {
     /// <summary>
     /// Class ViewResolver.

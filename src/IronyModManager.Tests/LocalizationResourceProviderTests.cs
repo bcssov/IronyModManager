@@ -4,7 +4,7 @@
 // Created          : 02-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="LocalizationResourceProviderTests.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using IronyModManager.Implementation;
 using Xunit;
 
 namespace IronyModManager.Tests

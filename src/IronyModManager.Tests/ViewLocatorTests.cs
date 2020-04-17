@@ -4,7 +4,7 @@
 // Created          : 02-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ViewLocatorTests.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using FluentAssertions;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Common.Views;
+using IronyModManager.Implementation;
 using IronyModManager.Models;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;

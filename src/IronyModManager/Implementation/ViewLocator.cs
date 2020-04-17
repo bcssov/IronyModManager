@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ViewLocator.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Shared;
 
-namespace IronyModManager
+namespace IronyModManager.Implementation
 {
     /// <summary>
     /// Class ViewLocator.

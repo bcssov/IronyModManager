@@ -4,7 +4,7 @@
 // Created          : 02-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ViewResolverTests.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.Tests.Common;
 using IronyModManager.Tests.Views;
 using IronyModManager.Tests.ViewModels;
 using Xunit;
+using IronyModManager.Implementation;
 
 namespace IronyModManager.Tests
 {

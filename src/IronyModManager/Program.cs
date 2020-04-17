@@ -12,13 +12,14 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Dialogs;
 using IronyModManager.DI;
+using IronyModManager.Implementation;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
 
@@ -120,7 +121,7 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Logs the error.
+        /// log error as an asynchronous operation.
         /// </summary>
         /// <param name="e">The e.</param>
         private static void LogError(Exception e)
@@ -145,7 +146,7 @@ namespace IronyModManager
                 }
                 var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
                 // We're deadlocking the thread, so kill the task after x amount of seconds.
-                messageBox.Show().Wait(TimeSpan.FromSeconds(10));
+                messageBox.ShowAsync().Wait(TimeSpan.FromSeconds(10));
             }
         }
 
@@ -156,8 +157,8 @@ namespace IronyModManager
         /// <param name="e">The <see cref="UnobservedTaskExceptionEventArgs" /> instance containing the event data.</param>
         private static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            LogError(e.Exception);
             e.SetObserved();
+            LogError(e.Exception);
         }
 
         #endregion Methods

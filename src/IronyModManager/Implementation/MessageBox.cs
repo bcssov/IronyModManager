@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-09-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
 using MsgBox = MessageBox.Avalonia;
 
-namespace IronyModManager
+namespace IronyModManager.Implementation
 {
     /// <summary>
     /// Class MessageBoxes.
@@ -45,9 +45,9 @@ namespace IronyModManager
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;System.String&gt;.</returns>
-        public static MsgBox.BaseWindows.IMsBoxWindow<string> GetFatalErrorWindow(string title, string header, string message)
+        public static FatalErrorMessageBox GetFatalErrorWindow(string title, string header, string message)
         {
-            var messageBox = MsgBox.MessageBoxManager.GetMessageBoxCustomWindow(new MessageBoxCustomParams
+            var parameters = new MessageBoxCustomParams
             {
                 CanResize = false,
                 ShowInCenter = true,
@@ -57,8 +57,11 @@ namespace IronyModManager
                 Icon = MsgBox.Enums.Icon.Error,
                 WindowIcon = GetIcon(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
-            });
-            return messageBox;
+            };
+            var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
+            parameters.Window = window;
+            window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
+            return new FatalErrorMessageBox(window);
         }
 
         /// <summary>
