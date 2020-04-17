@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
@@ -119,39 +118,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            ExportCommand = ReactiveCommand.Create(() =>
+            ExportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (!CanExport)
                 {
                     return new CommandResult<string>(string.Empty, CommandState.NotExecuted);
                 }
-                var task = Task.Run(async () =>
-                {
-                    var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        return result;
-                    }
-                    return string.Empty;
-                });
-                Task.WaitAll(task);
-                var result = task.Result;
+                var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 
-            ImportCommand = ReactiveCommand.Create(() =>
+            ImportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var task = Task.Run(async () =>
-                {
-                    var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.ZipExtensionWithoutDot);
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        return result;
-                    }
-                    return string.Empty;
-                });
-                Task.WaitAll(task);
-                var result = task.Result;
+                var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.ZipExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 
