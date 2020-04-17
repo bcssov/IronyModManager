@@ -325,10 +325,6 @@
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>nlog.config</DependentUpon>
     </None>
-    <None Update="nlog.win-x86.config">
-      <IsTransformFile>true</IsTransformFile>
-      <DependentUpon>nlog.config</DependentUpon>
-    </None>
     <None Update="Plugins\Note.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
