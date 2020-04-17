@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -448,6 +448,11 @@ namespace IronyModManager.Services
             var diffs = descriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
             if (diffs.Count > 0)
             {
+                await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Constants.ModDirectory
+                });
                 var tasks = new List<Task>();
                 foreach (var diff in diffs)
                 {
@@ -705,6 +710,11 @@ namespace IronyModManager.Services
                 if (!allMods.Any(p => p.Name.Equals(patchName)))
                 {
                     mod = GeneratePatchModDescriptor(allMods, game, patchName);
+                    await modWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = Constants.ModDirectory
+                    });
                     await modWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
@@ -826,7 +836,7 @@ namespace IronyModManager.Services
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : new string[] { };
             var mods = new List<IMod>();
 
-            void setDescriptorPath(IMod mod, string desiredPath, string localPath)
+            static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
             {
                 if (desiredPath.Equals(localPath, StringComparison.OrdinalIgnoreCase))
                 {
@@ -1051,7 +1061,7 @@ namespace IronyModManager.Services
         /// <param name="definitions">The definitions.</param>
         protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
-            void appendLine(StringBuilder sb, IEnumerable<IDefinition> lines)
+            static void appendLine(StringBuilder sb, IEnumerable<IDefinition> lines)
             {
                 if (lines?.Count() > 0)
                 {

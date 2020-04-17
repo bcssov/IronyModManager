@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -14,7 +14,9 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
 using MsgBox = MessageBox.Avalonia;
@@ -58,10 +60,25 @@ namespace IronyModManager.Implementation
                 WindowIcon = GetIcon(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
             };
-            var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
-            parameters.Window = window;
-            window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
-            return new FatalErrorMessageBox(window);
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
+                parameters.Window = window;
+                window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
+                return new FatalErrorMessageBox(window);
+            }
+            else
+            {
+                var task = Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
+                    parameters.Window = window;
+                    window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
+                    return new FatalErrorMessageBox(window);
+                });
+                Task.WaitAll(task);
+                return task.Result;
+            }
         }
 
         /// <summary>
