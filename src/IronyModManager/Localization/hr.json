@@ -85,7 +85,8 @@
             "MoveUp": "Pomakni gore",
             "MoveDown": "Pomakni dolje",
             "Edit": "Uredi",
-            "CopyText": "Kopiraj Tekst"
+            "CopyText": "Kopiraj Tekst",
+            "Delete": "Obriši"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",

@@ -85,7 +85,8 @@
             "MoveUp": "Nach oben gehen",
             "MoveDown": "Sich abwärts bewegen",
             "Edit": "Bearbeiten Sie dies",
-            "CopyText": "Text kopieren"
+            "CopyText": "Text kopieren",
+            "Delete": "Löschen"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",

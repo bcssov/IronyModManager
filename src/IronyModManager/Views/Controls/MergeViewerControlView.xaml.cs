@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -324,6 +324,9 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
+                lines = editor.Text.SplitOnNewLine().ToList();
+                string text = string.Join(Environment.NewLine, lines);
+                ViewModel.CurrentEditText = text;
             };
         }
 
@@ -424,6 +427,12 @@ namespace IronyModManager.Views.Controls
                 new MenuItem()
                 {
                     Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteText,
+                    Command = ViewModel.DeleteTextCommand,
+                    CommandParameter = leftSide
                 },
                 new MenuItem()
                 {

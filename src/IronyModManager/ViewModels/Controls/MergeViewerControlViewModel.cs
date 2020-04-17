@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -88,12 +88,6 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether [editing yaml].
-        /// </summary>
-        /// <value><c>true</c> if [editing yaml]; otherwise, <c>false</c>.</value>
-        public virtual bool EditingYaml { get; set; }
-
-        /// <summary>
         /// Gets or sets the cancel.
         /// </summary>
         /// <value>The cancel.</value>
@@ -159,6 +153,25 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> CopyThisCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the current edit text.
+        /// </summary>
+        /// <value>The current edit text.</value>
+        public virtual string CurrentEditText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the delete text.
+        /// </summary>
+        /// <value>The delete text.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.Delete)]
+        public virtual string DeleteText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the delete text command.
+        /// </summary>
+        /// <value>The delete text command.</value>
+        public virtual ReactiveCommand<bool, Unit> DeleteTextCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [editing left].
         /// </summary>
         /// <value><c>true</c> if [editing left]; otherwise, <c>false</c>.</value>
@@ -175,6 +188,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [editing text]; otherwise, <c>false</c>.</value>
         public virtual bool EditingText { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editing yaml].
+        /// </summary>
+        /// <value><c>true</c> if [editing yaml]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingYaml { get; set; }
 
         /// <summary>
         /// Gets or sets the editor copy.
@@ -372,6 +391,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void ExitEditMode()
         {
+            CurrentEditText = string.Empty;
             EditingLeft = false;
             EditingRight = false;
             EditingText = false;
@@ -553,6 +573,31 @@ namespace IronyModManager.ViewModels.Controls
         protected async Task CopyTextAsync(bool leftSide)
         {
             await urlAction.CopyAsync(leftSide ? LeftSide : RightSide);
+        }
+
+        /// <summary>
+        /// Deletes the lines.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void DeleteLines(bool leftSide)
+        {
+            var selected = leftSide ? LeftSideSelected : RightSideSelected;
+            var source = leftSide ? LeftDiff : RightDiff;
+            if (selected.Count > 0 && selected?.Count() < source?.Count())
+            {
+                foreach (var item in selected)
+                {
+                    source.Remove(item);
+                }
+                if (leftSide)
+                {
+                    SetText(string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)), RightSide);
+                }
+                else
+                {
+                    SetText(LeftSide, string.Join(Environment.NewLine, source.Where(p => p.Text != null).Select(p => p.Text)));
+                }
+            }
         }
 
         /// <summary>
@@ -773,6 +818,8 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            var okEnabled = this.WhenAnyValue(v => v.CurrentEditText, v => !string.IsNullOrWhiteSpace(v));
+
             OKCommand = ReactiveCommand.Create(() =>
             {
                 if (EditingLeft)
@@ -786,7 +833,7 @@ namespace IronyModManager.ViewModels.Controls
                     SetText(LeftSide, merged);
                 }
                 ExitEditMode();
-            }).DisposeWith(disposables);
+            }, okEnabled).DisposeWith(disposables);
 
             CancelCommand = ReactiveCommand.Create(() =>
             {
@@ -798,6 +845,14 @@ namespace IronyModManager.ViewModels.Controls
                 EditingLeft = leftSide;
                 EditingRight = !leftSide;
                 EditingText = true;
+                if (leftSide)
+                {
+                    CurrentEditText = LeftSide;
+                }
+                else
+                {
+                    CurrentEditText = RightSide;
+                }
                 LeftDocument = new TextDocument(LeftSide);
                 RightDocument = new TextDocument(RightSide);
             }).DisposeWith(disposables);
@@ -815,6 +870,11 @@ namespace IronyModManager.ViewModels.Controls
             PrevConflictCommand = ReactiveCommand.Create((bool leftSide) =>
             {
                 FindConflict(leftSide, false);
+            }).DisposeWith(disposables);
+
+            DeleteTextCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                DeleteLines(leftSide);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
