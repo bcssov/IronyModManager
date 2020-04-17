@@ -53,7 +53,7 @@ namespace IronyModManager.Implementation.Actions
                 dialog.InitialFileName = initialFileName;
             }
             var result = await dialog.ShowAsync(GetMainWindow());
-            var file = result.FirstOrDefault();
+            var file = result?.FirstOrDefault();
             return file;
         }
 
