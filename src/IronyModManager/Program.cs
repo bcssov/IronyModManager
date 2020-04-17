@@ -121,7 +121,7 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// log error as an asynchronous operation.
+        /// Logs the error.
         /// </summary>
         /// <param name="e">The e.</param>
         private static void LogError(Exception e)
