@@ -139,6 +139,7 @@
         }
     },
     "Mod_Url": {
+        "OpenInSteam": "Open In Steam",
         "Open": "Open Mod Url",
         "Copy": "Copy Mod Url"
     },

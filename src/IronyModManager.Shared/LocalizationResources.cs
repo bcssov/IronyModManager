@@ -194,6 +194,7 @@ namespace IronyModManager.Shared
         public static class Mod_Url
         {
             public const string Prefix = nameof(Mod_Url) + ".";
+            public const string OpenInSteam = Prefix + "OpenInSteam";
             public const string Open = Prefix + "Open";
             public const string Copy = Prefix + "Copy";
         }

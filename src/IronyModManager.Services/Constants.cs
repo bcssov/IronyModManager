@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -52,6 +52,11 @@ namespace IronyModManager.Services
         /// The steam mod identifier
         /// </summary>
         public const string Steam_mod_id = "ugc_";
+
+        /// <summary>
+        /// The steam protocol URI
+        /// </summary>
+        public const string Steam_protocol_uri = "steam://openurl/{0}";
 
         /// <summary>
         /// The steam URL

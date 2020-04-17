@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -284,6 +284,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual SortOrderControlViewModel ModVersionSortOrder { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the open in steam.
+        /// </summary>
+        /// <value>The open in steam.</value>
+        [StaticLocalization(LocalizationResources.Mod_Url.OpenInSteam)]
+        public virtual string OpenInSteam { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open in steam command.
+        /// </summary>
+        /// <value>The open in steam command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenInSteamCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the open URL.
         /// </summary>
         /// <value>The open URL.</value>
@@ -338,6 +351,20 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Gets the hovered mod steam URL.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public virtual string GetHoveredModSteamUrl()
+        {
+            if (HoveredMod != null)
+            {
+                var url = modService.BuildSteamUrl(HoveredMod);
+                return url;
+            }
+            return string.Empty;
+        }
 
         /// <summary>
         /// Gets the selected mod URL.
@@ -551,7 +578,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.OpenAsync(url);
+                    urlAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -560,7 +587,16 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.CopyAsync(url);
+                    urlAction.CopyAsync(url).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            OpenInSteamCommand = ReactiveCommand.Create(() =>
+            {
+                var url = GetHoveredModSteamUrl();
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    urlAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 

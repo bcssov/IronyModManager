@@ -361,10 +361,59 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var url = service.BuildModUrl(new Mod()
             {
-                RemoteId = 1,
+                RemoteId = null,
                 Source = ModSource.Local
             });
             url.Should().BeNullOrEmpty();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_return_steam_protocol_url.
+        /// </summary>
+        [Fact]
+        public void Should_return_steam_protocol_url()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var url = service.BuildSteamUrl(new Mod()
+            {
+                RemoteId = 1,
+                Source = ModSource.Steam
+            });
+            url.Should().Be("steam://openurl/https://steamcommunity.com/sharedfiles/filedetails/?id=1");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_steam_protocol_url.
+        /// </summary>
+        [Fact]
+        public void Should_not_return_steam_protocol_url()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var url = service.BuildSteamUrl(new Mod()
+            {
+                RemoteId = 1,
+                Source = ModSource.Paradox
+            });
+            url.Should().BeNullOrWhiteSpace();
         }
 
         /// <summary>
@@ -1660,26 +1709,26 @@ namespace IronyModManager.Services.Tests
                 };
             });
             modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
-            reader.Setup(p =>p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns((string root, string path) =>
-            {
-                var sb = new System.Text.StringBuilder(115);
-                sb.AppendLine(@"path=""c:/fake""");
-                sb.AppendLine(@"name=""Fake""");
-                sb.AppendLine(@"picture=""thumbnail.png""");
-                sb.AppendLine(@"tags={");
-                sb.AppendLine(@"	""Gameplay""");
-                sb.AppendLine(@"	""Fixes""");
-                sb.AppendLine(@"}");
-                sb.AppendLine(@"supported_version=""2.6.*""");
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns((string root, string path) =>
+             {
+                 var sb = new System.Text.StringBuilder(115);
+                 sb.AppendLine(@"path=""c:/fake""");
+                 sb.AppendLine(@"name=""Fake""");
+                 sb.AppendLine(@"picture=""thumbnail.png""");
+                 sb.AppendLine(@"tags={");
+                 sb.AppendLine(@"	""Gameplay""");
+                 sb.AppendLine(@"	""Fixes""");
+                 sb.AppendLine(@"}");
+                 sb.AppendLine(@"supported_version=""2.6.*""");
 
-                return new FileInfo()
-                {
-                    Content = sb.ToString().SplitOnNewLine(),
-                    ContentSHA = "test",
-                    FileName = "fake.mod",
-                    IsBinary = false
-                };
-            });
+                 return new FileInfo()
+                 {
+                     Content = sb.ToString().SplitOnNewLine(),
+                     ContentSHA = "test",
+                     FileName = "fake.mod",
+                     IsBinary = false
+                 };
+             });
 
             var result = await service.InstallModsAsync();
             result.Should().BeTrue();

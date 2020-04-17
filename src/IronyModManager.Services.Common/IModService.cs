@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -60,6 +60,13 @@ namespace IronyModManager.Services.Common
         /// <param name="mod">The mod.</param>
         /// <returns>System.String.</returns>
         string BuildModUrl(IMod mod);
+
+        /// <summary>
+        /// Builds the steam URL.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        string BuildSteamUrl(IMod mod);
 
         /// <summary>
         /// Cleans the patch collection asynchronous.

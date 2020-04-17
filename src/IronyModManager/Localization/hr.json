@@ -139,6 +139,7 @@
         }
     },
     "Mod_Url": {
+        "OpenInSteam": "Otvori u steamu",
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda"
     },

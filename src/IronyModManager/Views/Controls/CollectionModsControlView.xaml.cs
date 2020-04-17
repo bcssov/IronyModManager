@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -132,21 +132,38 @@ namespace IronyModManager.Views.Controls
                     if (grid != null)
                     {
                         ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                        if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
+                        if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
                         {
-                            var menuItems = new List<MenuItem>()
+                            var menuItems = new List<MenuItem>();
+                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                             {
-                                new MenuItem()
+                                menuItems.Add(new MenuItem()
                                 {
                                     Header = ViewModel.OpenUrl,
                                     Command = ViewModel.OpenUrlCommand
-                                },
-                                new MenuItem()
+                                });
+                                menuItems.Add(new MenuItem()
                                 {
                                     Header = ViewModel.CopyUrl,
                                     Command = ViewModel.CopyUrlCommand
+                                });
+                            }
+                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
+                            {
+                                var menuItem = new MenuItem()
+                                {
+                                    Header = ViewModel.OpenInSteam,
+                                    Command = ViewModel.OpenInSteamCommand
+                                };
+                                if (menuItems.Count == 0)
+                                {
+                                    menuItems.Add(menuItem);
                                 }
-                            };
+                                else
+                                {
+                                    menuItems.Insert(1, menuItem);
+                                }
+                            }
                             grid.ContextMenu.Items = menuItems;
                         }
                     }

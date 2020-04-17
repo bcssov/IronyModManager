@@ -146,12 +146,28 @@ namespace IronyModManager.Services
             {
                 return string.Empty;
             }
-            return mod.Source switch
+            if (mod.Source == ModSource.Paradox)
             {
-                ModSource.Steam => string.Format(Constants.Steam_Url, mod.RemoteId),
-                ModSource.Paradox => string.Format(Constants.Paradox_Url, mod.RemoteId),
-                _ => string.Empty,
-            };
+                return string.Format(Constants.Paradox_Url, mod.RemoteId);
+            }
+            else
+            {
+                return string.Format(Constants.Steam_Url, mod.RemoteId);
+            }
+        }
+
+        /// <summary>
+        /// Builds the steam URL.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <returns>System.String.</returns>
+        public virtual string BuildSteamUrl(IMod mod)
+        {
+            if (mod.RemoteId.HasValue && mod.Source != ModSource.Paradox)
+            {
+                return string.Format(Constants.Steam_protocol_uri, BuildModUrl(mod));
+            }
+            return string.Empty;
         }
 
         /// <summary>

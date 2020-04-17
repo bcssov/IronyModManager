@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 04-17-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -65,7 +65,7 @@ namespace IronyModManager.Views.Controls
                         if (grid != null)
                         {
                             ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                            var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) ? GetAllMenuItems() : GetActionMenuItems();
+                            var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                             grid.ContextMenu.Items = menuItems;
                         }
                     }
@@ -121,18 +121,38 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetAllMenuItems()
         {
-            return new List<MenuItem>()
+            var menuItems = new List<MenuItem>();
+            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
             {
-                new MenuItem()
+                menuItems.Add(new MenuItem()
                 {
                     Header = ViewModel.OpenUrl,
                     Command = ViewModel.OpenUrlCommand
-                },
-                new MenuItem()
+                });
+                menuItems.Add(new MenuItem()
                 {
                     Header = ViewModel.CopyUrl,
                     Command = ViewModel.CopyUrlCommand
-                },
+                });
+            }
+            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
+            {
+                var menuItem = new MenuItem()
+                {
+                    Header = ViewModel.OpenInSteam,
+                    Command = ViewModel.OpenInSteamCommand
+                };
+                if (menuItems.Count == 0)
+                {
+                    menuItems.Add(menuItem);
+                }
+                else
+                {
+                    menuItems.Insert(1, menuItem);
+                }
+            }
+            menuItems.AddRange(new List<MenuItem>()
+            {
                 new MenuItem()
                 {
                     Header = "-"
@@ -167,7 +187,8 @@ namespace IronyModManager.Views.Controls
                     Header = ViewModel.UnlockAllDescriptors,
                     Command = ViewModel.UnlockAllDescriptorsCommand
                 }
-            };
+            });
+            return menuItems;
         }
 
         /// <summary>
