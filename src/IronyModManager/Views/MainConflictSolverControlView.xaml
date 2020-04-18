@@ -13,9 +13,8 @@
     <Grid RowDefinitions="4*,8*,1.1*" ColumnDefinitions="3*,7*">
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <Grid ColumnDefinitions="*" RowDefinitions="1*,20*">
-          <StackPanel Orientation="Vertical">
-            <TextBlock Text="{Binding ConflictedObjects}" Grid.Column="0"
-                       Grid.Row="0" HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" >
+            <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
             <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                      HorizontalAlignment="Stretch" MinHeight="30">
               <ComboBox.ItemTemplate>
