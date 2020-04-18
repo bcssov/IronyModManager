@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="DefaultParser.cs" company="Mario">
 //     Mario
@@ -36,5 +36,15 @@ namespace IronyModManager.Parser.Default
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public override string ParserName => nameof(DefaultParser);
+
+        #endregion Properties
     }
 }

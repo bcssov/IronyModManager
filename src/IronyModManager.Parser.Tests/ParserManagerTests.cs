@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="ParserManagerTests.cs" company="Mario">
 //     Mario
@@ -43,9 +43,11 @@ namespace IronyModManager.Parser.Tests
             var manager = new ParserManager(gameParser, genericParser, defaultParser);
             var result = manager.Parse(new ParserManagerArgs()
             {
-                File = "fake-game"
+                File = "fake-game",
+                GameType = "game"
             });
             result.First().File.Should().Be("game_parser");
+            result.First().UsedParser.Should().Be("GameParser");
         }
 
         /// <summary>
@@ -61,9 +63,11 @@ namespace IronyModManager.Parser.Tests
             var manager = new ParserManager(gameParser, genericParser, defaultParser);
             var result = manager.Parse(new ParserManagerArgs()
             {
-                File = "fake-generic"
+                File = "fake-generic",
+                GameType = "game"
             });
             result.First().File.Should().Be("generic_parser");
+            result.First().UsedParser.Should().Be("GenericParser");
         }
 
         /// <summary>
@@ -79,9 +83,11 @@ namespace IronyModManager.Parser.Tests
             var manager = new ParserManager(gameParser, genericParser, defaultParser);
             var result = manager.Parse(new ParserManagerArgs()
             {
-                File = "fake"
+                File = "fake",
+                GameType = "game"
             });
             result.First().File.Should().Be("default_parser");
+            result.First().UsedParser.Should().Be("DefaultParser");
         }
 
         /// <summary>
@@ -93,6 +99,12 @@ namespace IronyModManager.Parser.Tests
         /// <seealso cref="IronyModManager.Parser.Default.IDefaultParser" />
         class DefaultParser : IDefaultParser
         {
+            /// <summary>
+            /// Gets the name of the parser.
+            /// </summary>
+            /// <value>The name of the parser.</value>
+            public string ParserName => nameof(DefaultParser);
+
             /// <summary>
             /// Parses the specified arguments.
             /// </summary>
@@ -115,6 +127,12 @@ namespace IronyModManager.Parser.Tests
         /// <seealso cref="IronyModManager.Parser.Generic.IGenericParser" />
         class GenericParser : IGenericParser
         {
+            /// <summary>
+            /// Gets the name of the parser.
+            /// </summary>
+            /// <value>The name of the parser.</value>
+            public string ParserName => nameof(GenericParser);
+
             /// <summary>
             /// Gets the priority.
             /// </summary>
@@ -153,6 +171,12 @@ namespace IronyModManager.Parser.Tests
         /// <seealso cref="IronyModManager.Parser.Games.IGameParser" />
         class GameParser : IGameParser
         {
+            /// <summary>
+            /// Gets the name of the parser.
+            /// </summary>
+            /// <value>The name of the parser.</value>
+            public string ParserName => nameof(GameParser);
+
             /// <summary>
             /// Gets the priority.
             /// </summary>

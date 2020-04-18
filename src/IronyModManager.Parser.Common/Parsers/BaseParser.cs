@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -50,6 +50,16 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public abstract string ParserName { get; }
+
+        #endregion Properties
 
         #region Methods
 

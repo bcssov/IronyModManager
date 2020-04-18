@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="GuiParser.cs" company="Mario">
 //     Mario
@@ -45,10 +45,16 @@ namespace IronyModManager.Parser.Generic
         #region Properties
 
         /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public override string ParserName => "Generic" + nameof(GuiParser);
+
+        /// <summary>
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 10;
+        public int Priority => 2;
 
         #endregion Properties
 

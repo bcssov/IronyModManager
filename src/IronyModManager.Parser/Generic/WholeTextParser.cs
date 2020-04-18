@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -63,6 +63,12 @@ namespace IronyModManager.Parser.Generic
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public override string ParserName => "Generic" + nameof(WholeTextParser);
 
         /// <summary>
         /// Gets the priority.

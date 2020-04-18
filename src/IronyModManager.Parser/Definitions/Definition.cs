@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -216,6 +216,12 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets the used parser.
+        /// </summary>
+        /// <value>The used parser.</value>
+        public string UsedParser { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
@@ -246,6 +252,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(DefinitionSHA) => DefinitionSHA,
                 nameof(ModName) => ModName,
                 nameof(ParentDirectory) => ParentDirectory,
+                nameof(UsedParser) => UsedParser,
                 _ => Id,
             };
         }

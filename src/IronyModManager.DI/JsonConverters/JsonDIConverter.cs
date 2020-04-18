@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="JsonDIConverter.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -33,8 +34,12 @@ namespace IronyModManager.DI.JsonConverters
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            var registration = DIResolver.GetImplementationType(objectType);
-            return registration != null;
+            if (!typeof(IEnumerable).IsAssignableFrom(objectType))
+            {
+                var registration = DIResolver.GetImplementationType(objectType);
+                return registration != null;
+            }
+            return false;
         }
 
         /// <summary>
