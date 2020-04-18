@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -200,7 +200,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 if (childHierarchicalDefinitions.TryGetValue(item.Name, out var value))
                 {
-                    item.Children = value.Select(p => p).ToHashSet();
+                    item.Children = value.Select(p => p).OrderBy(p => p.Name).ToHashSet();
                 }
             }
             return mainHierarchalDefinitions.Select(p => p).OrderBy(p => p.Name).ToHashSet();
@@ -260,12 +260,6 @@ namespace IronyModManager.Parser.Definitions
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
                 children.Add(child);
-                var newChild = new HashSet<IHierarchicalDefinitions>(children.Select(s => s).OrderBy(p => p.Name));
-                children.Clear();
-                foreach (var item in newChild)
-                {
-                    children.Add(item);
-                }
                 if (shouldAdd)
                 {
                     mainHierarchalDefinitions.Add(hierarchicalDefinition);
