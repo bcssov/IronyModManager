@@ -585,6 +585,65 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_find_orphan_filename_conflicts.
+        /// </summary>
+        [Fact]
+        public void Should_find_orphan_filename_conflicts()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var definitions = new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "a",
+                    Id = "a",
+                    Type= "events",
+                    ModName = "test1",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "a",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                },
+                new Definition()
+                {
+                    File = "events\\1.txt",
+                    Code = "b",
+                    Type = "events",
+                    Id = "c",
+                    ModName = "test2",
+                    ValueType = Parser.Common.ValueType.Object
+                }
+            };
+            var indexed = new IndexedDefinitions();
+            indexed.InitMap(definitions);
+            var result = service.FindConflicts(indexed);
+            result.Conflicts.GetAll().Count().Should().Be(2);
+            result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
+            result.OrphanConflicts.GetAll().Count().Should().Be(1);
+            result.Conflicts.GetAll().All(p => p.ModName == "test1" || p.ModName == "test2").Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Should_find_definition_conflicts.
         /// </summary>
         [Fact]

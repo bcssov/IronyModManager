@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -294,6 +294,7 @@ namespace IronyModManager.Services
         public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions)
         {
             var conflicts = new HashSet<IDefinition>();
+            var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
             var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
 
@@ -303,7 +304,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -311,7 +312,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
                 processed++;
                 ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
             }
@@ -321,7 +322,7 @@ namespace IronyModManager.Services
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
             conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p), true);
             var orphanedConflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
-            orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p), true);
+            orphanedConflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() == 1).SelectMany(p => p), false);
             result.AllConflicts = indexedDefinitions;
             result.Conflicts = conflictsIndexed;
             result.OrphanConflicts = orphanedConflictsIndexed;
@@ -629,7 +630,8 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="conflicts">The conflicts.</param>
         /// <param name="definitions">The definitions.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions)
+        /// <param name="fileConflictCache">The file conflict cache.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, Dictionary<string, bool> fileConflictCache)
         {
             var validDefinitions = new HashSet<IDefinition>();
             foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
@@ -683,9 +685,31 @@ namespace IronyModManager.Services
                 }
                 else if (allConflicts.Count() == 1)
                 {
-                    if (allConflicts.FirstOrDefault() != def && !conflicts.Contains(def) && IsValidDefinitionType(def))
+                    if (fileConflictCache.TryGetValue(def.File, out var result))
                     {
-                        conflicts.Add(def);
+                        if (result)
+                        {
+                            if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                            {
+                                conflicts.Add(def);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var fileDefs = indexedDefinitions.GetByFile(def.File);
+                        if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                        {
+                            fileConflictCache.TryAdd(def.File, true);
+                            if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                            {
+                                conflicts.Add(def);
+                            }
+                        }
+                        else
+                        {
+                            fileConflictCache.TryAdd(def.File, false);
+                        }
                     }
                 }
             }
