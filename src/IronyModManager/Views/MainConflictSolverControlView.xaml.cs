@@ -4,17 +4,16 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Linq;
+using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
@@ -52,30 +51,23 @@ namespace IronyModManager.Views
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            base.OnActivated(disposables);
-            var conflicts = this.FindControl<TreeView>("conflicts");
-            this.WhenAnyValue(v => v.ViewModel.SelectedConflict).Where(p => p != null).Subscribe(s =>
+            var conflictList = this.FindControl<ListBox>("conflictList");
+            conflictList.SelectionChanged += (sender, args) =>
             {
-                int idx = 0;
-                bool matchFound = false;
-                foreach (var item in ViewModel.HierarchalConflicts)
+                if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
                 {
-                    if (item.Children.Contains(ViewModel.SelectedConflict))
-                    {
-                        matchFound = true;
-                        break;
-                    }
-                    idx++;
+                    ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
                 }
-                if (idx > (ViewModel.HierarchalConflicts.Count() - 1))
+                else
                 {
-                    idx = ViewModel.HierarchalConflicts.Count() - 1;
+                    ViewModel.SelectedConflict = null;
                 }
-                if (matchFound && conflicts.Presenter.Panel.Children[idx] is TreeViewItem tvItem && !tvItem.IsExpanded)
-                {
-                    tvItem.IsExpanded = true;
-                }
+            };
+            this.WhenAnyValue(v => v.ViewModel.SelectedParentConflict).Subscribe(s =>
+            {
+                conflictList.SelectedIndex = 0;
             }).DisposeWith(disposables);
+            base.OnActivated(disposables);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -208,6 +208,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The selected mod collection.</value>
         public virtual IModCollection SelectedModCollection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selected parent conflict.
+        /// </summary>
+        /// <value>The selected parent conflict.</value>
+        public virtual IHierarchicalDefinitions SelectedParentConflict { get; set; }
 
         #endregion Properties
 

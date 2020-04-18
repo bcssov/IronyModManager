@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Styling.IStyleable" />
     /// <seealso cref="AvaloniaEdit.TextEditor" />
+    [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class TextEditor : AvaloniaEdit.TextEditor, IStyleable
     {
         #region Fields

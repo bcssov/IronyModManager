@@ -4,25 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              MinWidth="800" MinHeight="450"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
+  <UserControl.Resources>
+    <converter:MathConverter x:Key="MathConverter" />
+  </UserControl.Resources>
   <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Grid RowDefinitions="4*,8*,1.1*" ColumnDefinitions="3*,7*">
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <Grid ColumnDefinitions="*" RowDefinitions="1*,20*">
-          <TextBlock Text="{Binding ConflictedObjects}" Grid.Column="0"
-                     Grid.Row="0" HorizontalAlignment="Center" Margin="10"></TextBlock>
-          <TreeView Items="{Binding HierarchalConflicts}" Grid.Column="0" Grid.Row="1"
-                    SelectedItem="{Binding SelectedConflict}"
-                    x:Name="conflicts" ScrollViewer.HorizontalScrollBarVisibility="Visible">
-            <TreeView.DataTemplates>
-              <TreeDataTemplate ItemsSource="{Binding Children}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-              </TreeDataTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding Name}"></TextBlock>
-              </DataTemplate>
-            </TreeView.DataTemplates>
-          </TreeView>
+          <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding ConflictedObjects}" Grid.Column="0"
+                       Grid.Row="0" HorizontalAlignment="Center" Margin="10"></TextBlock>
+            <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
+                     HorizontalAlignment="Stretch" MinHeight="30">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
+                     Height="{Binding $parent[Window].Height, 
+                     Converter={StaticResource MathConverter} 
+                     ConverterParameter=x-50}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
         </Grid>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1">
