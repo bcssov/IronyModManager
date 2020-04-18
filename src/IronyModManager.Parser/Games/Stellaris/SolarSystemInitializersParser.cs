@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
@@ -40,6 +40,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public override string ParserName => "Stellaris" + nameof(SolarSystemInitializersParser);
 
         /// <summary>
         /// Gets the priority.

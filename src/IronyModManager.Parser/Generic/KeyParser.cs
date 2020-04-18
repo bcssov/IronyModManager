@@ -53,6 +53,12 @@ namespace IronyModManager.Parser.Generic
         #region Properties
 
         /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        public override string ParserName => "Generic" + nameof(KeyParser);
+
+        /// <summary>
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>

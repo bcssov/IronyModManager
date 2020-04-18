@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="IDefaultParser.cs" company="Mario">
 //     Mario
@@ -24,6 +24,16 @@ namespace IronyModManager.Parser.Common.Parsers
     /// </summary>
     public interface IDefaultParser
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets the name of the parser.
+        /// </summary>
+        /// <value>The name of the parser.</value>
+        string ParserName { get; }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>

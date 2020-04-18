@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-31-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -78,6 +78,11 @@ namespace IronyModManager.Parser.Common
         /// The on actions path
         /// </summary>
         public static readonly string OnActionsPath = MergePath(CommonPath, "on_actions");
+
+        /// <summary>
+        /// The parser map path
+        /// </summary>
+        public static readonly string ParserMapPath = MergePath("Maps", "{0}ParserMap" + Shared.Constants.JsonExtension);
 
         #endregion Fields
 

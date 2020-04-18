@@ -297,6 +297,9 @@
     <None Update="Localization\en.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Maps\StellarisParserMap.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TransformOnBuild>true</TransformOnBuild>

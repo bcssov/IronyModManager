@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="DetectDuplicates.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class DetectDuplicates.
     /// </summary>
-    public class DetectDuplicates
+    public class StellarisValidation
     {
         #region Fields
 
@@ -50,10 +50,10 @@ namespace IronyModManager.Parser.Tests
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DetectDuplicates" /> class.
+        /// Initializes a new instance of the <see cref="StellarisValidation" /> class.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public DetectDuplicates(ITestOutputHelper writer)
+        public StellarisValidation(ITestOutputHelper writer)
         {
             this.writer = writer;
         }
@@ -65,16 +65,17 @@ namespace IronyModManager.Parser.Tests
         /// <summary>
         /// Defines the test method Detect.
         /// </summary>
+        /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
+        /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
 
 #if !FUNCTIONAL_TEST
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
 
-
         [Fact(Timeout = 300000)]
 #endif
-        public void StellarisDetect()
+        public void StellarisDetectDuplicatesAndGenerateParserMap()
         {
             DISetup.SetupContainer();
 
@@ -94,7 +95,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"fonts.gfx"))
+                //if (relativePath.Contains(@"_ancient_relics_particles.gfx"))
                 //{
                 //    Debugger.Break();
                 //}
@@ -142,13 +143,76 @@ namespace IronyModManager.Parser.Tests
                     undefined.Add(relativePath);
                 }
             }
+
             var indexed = new IndexedDefinitions();
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
             var objects = new List<string>();
+            var textParser = new TextParser();
+            var parserMap = new List<IParserMap>();
+
             foreach (var item in typesKeys)
             {
-                var types = indexed.GetByType(item);
+                var types = indexed.GetByType(item).ToHashSet();
+                string usedParser = types.First().UsedParser;
+                var groupedParsers = types.GroupBy(p => p.UsedParser);
+                if (groupedParsers.Count() > 1)
+                {
+                    // Decide based on count which parser is the right one
+                    var ordered = groupedParsers.OrderByDescending(p => p.Count());
+                    if (groupedParsers.All(p => p.First().UsedParser.Equals("GenericKeyParser") || p.First().UsedParser.Equals("DefaultParser")))
+                    {
+                        var objectIds = new List<string>();
+                        foreach (var type in types)
+                        {
+                            var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
+                            objectIds.Add(id);
+                        }
+                        if (objectIds.GroupBy(p => p).Count() == objectIds.Count)
+                        {
+                            usedParser = "DefaultParser";
+                        }
+                        else
+                        {
+                            usedParser = ordered.First().First().UsedParser;
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Fatal error. Check parsers.");
+                    }
+                }
+                else if (groupedParsers.Count() > 2)
+                {
+                    throw new ArgumentException("Fatal error. Check parsers.");
+                }
+                else if (usedParser == "GenericKeyParser")
+                {
+                    var objectIds = new List<string>();
+                    foreach (var type in types)
+                    {
+                        var reserved = new string[] { "entity", "animation", "music" };
+                        var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
+                        objectIds.Add(reserved.Any(p => p.Equals(id, StringComparison.OrdinalIgnoreCase)) ? "reserved" : id);
+                    }
+                    if (objectIds.GroupBy(p => p).Count() == objectIds.Count)
+                    {
+                        usedParser = "DefaultParser";
+                    }
+                    else
+                    {
+                        usedParser = types.First().UsedParser;
+                    }
+                }
+                var path = Path.GetDirectoryName(types.First().File);
+                if (!parserMap.Any(p => p.DirectoryPath.Equals(path) && p.PreferredParser.Equals(usedParser)))
+                {
+                    parserMap.Add(new ParserMap()
+                    {
+                        DirectoryPath = path,
+                        PreferredParser = usedParser
+                    });
+                }
 
                 var grouped = types.GroupBy(p => p.ValueType);
                 if (grouped.Count() == 0)
@@ -174,6 +238,8 @@ namespace IronyModManager.Parser.Tests
             }
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Undefined{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, undefined.OrderBy(s => s))}");
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
+
+            File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json", JsonDISerializer.Serialize(parserMap));
         }
 
         /// <summary>

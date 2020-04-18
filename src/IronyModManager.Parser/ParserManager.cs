@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -12,8 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
@@ -31,6 +34,11 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// All parsers
+        /// </summary>
+        private readonly List<IDefaultParser> allParsers;
+
+        /// <summary>
         /// The default parser
         /// </summary>
         private readonly IDefaultParser defaultParser;
@@ -45,6 +53,11 @@ namespace IronyModManager.Parser
         /// </summary>
         private readonly IEnumerable<IGenericParser> genericParsers;
 
+        /// <summary>
+        /// The parser maps
+        /// </summary>
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, List<IParserMap>>> parserMaps;
+
         #endregion Fields
 
         #region Constructors
@@ -57,9 +70,15 @@ namespace IronyModManager.Parser
         /// <param name="defaultParser">The default parser.</param>
         public ParserManager(IEnumerable<IGameParser> gameParsers, IEnumerable<IGenericParser> genericParsers, IDefaultParser defaultParser)
         {
+            parserMaps = new ConcurrentDictionary<string, ConcurrentDictionary<string, List<IParserMap>>>();
             this.gameParsers = gameParsers.OrderBy(p => p.Priority);
             this.genericParsers = genericParsers.OrderBy(p => p.Priority);
             this.defaultParser = defaultParser;
+            allParsers = new List<IDefaultParser>() { this.defaultParser };
+            allParsers.AddRange(this.gameParsers);
+            allParsers.AddRange(this.genericParsers);
+            ValidateParserNames(gameParsers);
+            ValidateParserNames(genericParsers);
         }
 
         #endregion Constructors
@@ -87,25 +106,131 @@ namespace IronyModManager.Parser
                 Lines = args.Lines ?? new List<string>(),
                 ModName = args.ModName
             };
-            IEnumerable<IDefinition> result = null;
-            var gameParser = gameParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
-            if (gameParser != null)
+            var preferredParserNames = GetPreferredParsers(args.GameType, Path.GetDirectoryName(args.File));
+            IDefaultParser preferredParser = null;
+            if (preferredParserNames?.Count() > 0)
             {
-                result = gameParser.Parse(parseArgs);
+                var gameParser = gameParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
+                if (gameParsers.Count() > 0)
+                {
+                    preferredParser = gameParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                }
+                var genericParser = genericParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
+                if (preferredParser == null && genericParser.Count() > 0)
+                {
+                    preferredParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                }
+                if (preferredParser == null && preferredParserNames.Any(p => defaultParser.ParserName.Equals(p)))
+                {
+                    preferredParser = defaultParser;
+                }
+            }
+            IEnumerable<IDefinition> result = null;
+            // This will be auto generated when a game is scanned for the first time. It was rushed and is now generated via unit test and is no where near as completed.
+            if (preferredParser != null)
+            {
+                result = preferredParser.Parse(parseArgs);
+                SetParser(result, preferredParser.ParserName);
             }
             else
             {
-                var genericParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
-                if (genericParser != null)
+                var gameParser = gameParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                if (gameParser != null)
                 {
-                    result = genericParser.Parse(parseArgs);
+                    result = gameParser.Parse(parseArgs);
+                    SetParser(result, gameParser.ParserName);
                 }
                 else
                 {
-                    result = defaultParser.Parse(parseArgs);
+                    var genericParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                    if (genericParser != null)
+                    {
+                        result = genericParser.Parse(parseArgs);
+                        SetParser(result, genericParser.ParserName);
+                    }
+                    else
+                    {
+                        result = defaultParser.Parse(parseArgs);
+                        SetParser(result, defaultParser.ParserName);
+                    }
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Gets the preferred parser.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="location">The location.</param>
+        /// <returns>System.String.</returns>
+        private IEnumerable<string> GetPreferredParsers(string game, string location)
+        {
+            location = location.ToLowerInvariant();
+            IEnumerable<string> parser = null;
+            if (parserMaps.TryGetValue(game, out var maps))
+            {
+                if (maps.TryGetValue(location, out var value))
+                {
+                    parser = value.Select(p => p.PreferredParser);
+                }
+            }
+            else
+            {
+                var path = string.Format(Constants.ParserMapPath, game);
+                if (File.Exists(path))
+                {
+                    var content = File.ReadAllText(path);
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        var cachedMap = JsonDISerializer.Deserialize<List<IParserMap>>(content);
+                        var grouped = cachedMap.GroupBy(p => p.DirectoryPath);
+                        var newMaps = new ConcurrentDictionary<string, List<IParserMap>>();
+                        foreach (var item in grouped)
+                        {
+                            var id = item.First().DirectoryPath.ToLowerInvariant();                            
+                            newMaps.TryAdd(id, item.Select(p => p).ToList());
+                            if (id.Equals(location))
+                            {
+                                parser = item.Select(p => p.PreferredParser);
+                            }                            
+                        }
+                        parserMaps.TryAdd(game, newMaps);
+                    }
+                }
+            }
+            return parser;
+        }
+
+        /// <summary>
+        /// Sets the parser.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="parserName">Name of the parser.</param>
+        private void SetParser(IEnumerable<IDefinition> definitions, string parserName)
+        {
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    item.UsedParser = parserName;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validates the parser names.
+        /// </summary>
+        /// <param name="parsers">The parsers.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
+        private void ValidateParserNames(IEnumerable<IDefaultParser> parsers)
+        {
+            var invalid = parsers.GroupBy(p => p.ParserName).Where(s => s.Count() > 1);
+            if (invalid.Count() > 0)
+            {
+                var message = string.Join(',', invalid.SelectMany(s => s).Select(s => s.ParserName));
+                throw new ArgumentOutOfRangeException($"Duplicate parsers detected: {message}");
+            }
         }
 
         #endregion Methods
