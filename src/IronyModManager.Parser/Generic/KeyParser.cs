@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -82,7 +82,19 @@ namespace IronyModManager.Parser.Generic
                         closeBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                         if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
                         {
-                            return true;
+                            int idLoc = -1;
+                            foreach (var item in Common.Constants.Scripts.GenericKeyIds)
+                            {
+                                idLoc = cleaned.IndexOf(item);
+                                if (idLoc > -1)
+                                {
+                                    break;
+                                }
+                            }
+                            if (cleaned.Substring(0, idLoc).Count(s => s == Common.Constants.Scripts.OpeningBracket) == 1)
+                            {
+                                return true;
+                            }
                         }
                         if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
@@ -97,7 +109,20 @@ namespace IronyModManager.Parser.Generic
                     closeBrackets += line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                     if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
                     {
-                        return true;
+                        var bracketLocation = cleaned.IndexOf(Common.Constants.Scripts.OpeningBracket.ToString());
+                        int idLoc = -1;
+                        foreach (var item in Common.Constants.Scripts.GenericKeyIds)
+                        {
+                            idLoc = cleaned.IndexOf(item);
+                            if (idLoc > -1)
+                            {
+                                break;
+                            }
+                        }
+                        if (idLoc < bracketLocation || bracketLocation == -1)
+                        {
+                            return true;
+                        }
                     }
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
@@ -146,7 +171,7 @@ namespace IronyModManager.Parser.Generic
                         break;
                     }
                 }
-                if (idLoc < bracketLocation || bracketLocation == -1 || args.Inline)
+                if (idLoc < bracketLocation || bracketLocation == -1 || (args.Inline && cleaned.Substring(0, idLoc).Count(s => s == Common.Constants.Scripts.OpeningBracket) == 1))
                 {
                     key = textParser.GetValue(cleaned, sep);
                 }

@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-24-2020
+// Last Modified On : 04-18-2020
 // ***********************************************************************
 // <copyright file="GenericKeyParserTests.cs" company="Mario">
 //     Mario
@@ -207,6 +207,160 @@ namespace IronyModManager.Parser.Tests
                 result[i].ModName.Should().Be("fake");
                 result[i].Type.Should().Be("events\\txt");
             }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_inline_edge_case_should_not_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_inline_edge_case_should_not_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"create_envoys = {		create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "events\\fake.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new KeyParser(new TextParser());
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("events\\fake.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Code.Trim().Should().Be("create_envoys = {        create_ship = { name = random graphical_culture = \"ehof_01\" design = \"NAME_Compound_Envoy\" } }");
+                        result[i].Id.Should().Be("create_envoys");
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("events\\txt");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_two_line_edge_case_should_not_parse.
+        /// </summary>
+        [Fact]
+        public void Parse_two_line_edge_case_should_not_parse()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"create_envoys = {		");
+            sb.AppendLine(@"create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "events\\fake.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new KeyParser(new TextParser());
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("events\\fake.txt");
+                switch (i)
+                {
+                    case 0:
+                        var expected = new System.Text.StringBuilder(126);
+                        expected.AppendLine(@"create_envoys = {        ");
+                        expected.AppendLine(@"create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
+                        result[i].Code.Trim().Should().Be(expected.ToString().Trim());
+                        result[i].Id.Should().Be("create_envoys");
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("events\\txt");
+            }
+        }
+
+
+        /// <summary>
+        /// Defines the test method Parse_inline_edge_case_should_parse.
+        /// </summary>
+        [Fact]
+        public void CanParse_inline_edge_case_should_parse()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"entity = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
+
+            var args = new CanParseArgs()
+            {
+                File = "common\\gamerules\\test.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+            };
+            var parser = new KeyParser(new TextParser());
+            var result = parser.CanParse(args);
+            result.Should().BeTrue();
+        }
+        /// <summary>
+        /// Defines the test method Parse_inline_edge_case_should_not_parse.
+        /// </summary>
+        [Fact]
+        public void CanParse_inline_edge_case_should_not_parse()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"create_envoys = {		create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
+
+            var args = new CanParseArgs()
+            {
+                File = "common\\gamerules\\test.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+            };
+            var parser = new KeyParser(new TextParser());
+            var result = parser.CanParse(args);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_two_line_edge_case_should_not_parse.
+        /// </summary>
+        [Fact]
+        public void CanParse_two_line_edge_case_should_not_parse()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"create_envoys = {		");
+            sb.AppendLine(@"create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
+
+            var args = new CanParseArgs()
+            {
+                File = "common\\gamerules\\test.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+            };
+            var parser = new KeyParser(new TextParser());
+            var result = parser.CanParse(args);
+            result.Should().BeFalse();
         }
     }
 }
