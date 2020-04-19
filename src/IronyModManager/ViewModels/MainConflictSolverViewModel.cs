@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -172,6 +172,12 @@ namespace IronyModManager.ViewModels
         public virtual ModCompareSelectorControlViewModel ModCompareSelector { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the index of the previous conflict.
+        /// </summary>
+        /// <value>The index of the previous conflict.</value>
+        public virtual int? PreviousConflictIndex { get; set; }
+
+        /// <summary>
         /// Gets or sets the resolve.
         /// </summary>
         /// <value>The resolve.</value>
@@ -234,6 +240,8 @@ namespace IronyModManager.ViewModels
         /// <param name="conflictResult">The conflict result.</param>
         protected virtual void FilterHierarchalConflicts(IConflictResult conflictResult)
         {
+            var index = PreviousConflictIndex;
+            PreviousConflictIndex = null;
             if (conflictResult != null && conflictResult.Conflicts != null)
             {
                 var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToHashSet();
@@ -265,6 +273,21 @@ namespace IronyModManager.ViewModels
                     conflicts.RemoveWhere(p => p.Children == null || p.Children.Count == 0);
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
+                if (SelectedParentConflict != null)
+                {
+                    var conflictName = SelectedParentConflict.Name;
+                    SelectedParentConflict = null;
+                    var newSelected = HierarchalConflicts.FirstOrDefault(p => p.Name.Equals(conflictName));
+                    if (newSelected != null)
+                    {
+                        PreviousConflictIndex = index;
+                        if (PreviousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
+                        {
+                            PreviousConflictIndex = newSelected.Children.Count - 1;
+                        }
+                        SelectedParentConflict = newSelected;
+                    }
+                }
             }
             else
             {
@@ -308,6 +331,7 @@ namespace IronyModManager.ViewModels
             {
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key))
                 {
+                    PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
@@ -319,6 +343,7 @@ namespace IronyModManager.ViewModels
                 }
                 else
                 {
+                    PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
             }).DisposeWith(disposables);
