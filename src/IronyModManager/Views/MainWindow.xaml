@@ -23,17 +23,14 @@
         <Grid.Background>
           <SolidColorBrush Color="Black" Opacity="0.75"></SolidColorBrush>
         </Grid.Background>
-        <StackPanel VerticalAlignment="Center" IsVisible="{Binding HasProgress}">
+        <Grid RowDefinitions="5*,5*">
           <TextBlock FontSize="24" Text="{Binding OverlayMessage}"
-                     HorizontalAlignment="Center"
-                     Foreground="White" TextWrapping="Wrap"></TextBlock>
-          <TextBlock Margin="0,20,0,0" FontSize="24" Text="{Binding OverlayMessageProgress}"
-                     HorizontalAlignment="Center"
-                     Foreground="White" TextWrapping="Wrap"></TextBlock>
-        </StackPanel>
-        <TextBlock FontSize="24" Text="{Binding OverlayMessage}"
-                     HorizontalAlignment="Center"
-                     Foreground="White" TextWrapping="Wrap" IsVisible="{Binding !HasProgress}"></TextBlock>
+                     HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                     Foreground="White" TextWrapping="Wrap" Grid.Row="0"></TextBlock>
+          <TextBlock FontSize="24" Text="{Binding OverlayMessageProgress}"
+                     HorizontalAlignment="Center" VerticalAlignment="Top" IsVisible="{Binding HasProgress}"
+                     Foreground="White" TextWrapping="Wrap" Grid.Row="1"></TextBlock>
+        </Grid>
       </Grid>
       <ContentControl IsVisible="{Binding MainVisible}" Opacity="{Binding MainOpacity}"
                       Content="{Binding Main}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

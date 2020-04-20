@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IThemeService.cs" company="Mario">
 //     Mario
@@ -14,12 +14,14 @@
 using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
-namespace IronyModManager.Services
+namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IThemeService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IThemeService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IThemeService : IBaseService
     {
         #region Methods
 

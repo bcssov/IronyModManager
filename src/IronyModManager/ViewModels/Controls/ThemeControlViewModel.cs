@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,7 +21,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Services;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 

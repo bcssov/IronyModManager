@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="JsonDISerializer.cs" company="Mario">
 //     Mario
@@ -13,7 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.DI.JsonConverters;
+using IronyModManager.DI.Json;
 using Newtonsoft.Json;
 
 namespace IronyModManager.DI
@@ -53,7 +53,7 @@ namespace IronyModManager.DI
         /// <returns>System.String.</returns>
         public static string Serialize<T>(T model)
         {
-            return JsonConvert.SerializeObject(model, Formatting.Indented, GetSettings(false));
+            return JsonConvert.SerializeObject(model, Formatting.None, GetSettings(false));
         }
 
         /// <summary>
@@ -68,6 +68,7 @@ namespace IronyModManager.DI
                 return new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new WritablePropertiesResolver(),
                     Converters = converters
                 };
             }
@@ -75,7 +76,8 @@ namespace IronyModManager.DI
             {
                 return new JsonSerializerSettings()
                 {
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    ContractResolver = new WritablePropertiesResolver()
                 };
             }
         }

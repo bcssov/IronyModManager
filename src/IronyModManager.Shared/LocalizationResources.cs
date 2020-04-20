@@ -13,6 +13,7 @@ namespace IronyModManager.Shared
             public const string Prefix = nameof(App) + ".";
             public const string Title = Prefix + "Title";
             public const string Wiki = Prefix + "Wiki";
+            public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
         }
         public static class FatalError
         {

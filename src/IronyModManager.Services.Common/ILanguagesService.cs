@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="ILanguagesService.cs" company="Mario">
 //     Mario
@@ -21,8 +21,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface ILanguagesService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface ILanguagesService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface ILanguagesService : IBaseService
     {
         #region Methods
 

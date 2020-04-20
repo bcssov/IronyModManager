@@ -98,6 +98,10 @@ namespace IronyModManager.Services
             this.modParser = modParser;
             this.modWriter = modWriter;
             this.modPatchExporter = modPatchExporter;
+            modPatchExporter.WriteOperationState += (args) =>
+            {
+                OnShutdownState(args);
+            };
         }
 
         #endregion Constructors
@@ -250,7 +254,7 @@ namespace IronyModManager.Services
                 await Task.WhenAll(tasks);
                 return true;
             }
-            return false; ;
+            return false;
         }
 
         /// <summary>
@@ -300,13 +304,15 @@ namespace IronyModManager.Services
 
             double total = fileKeys.Count() + typeAndIdKeys.Count();
             double processed = 0;
+            ModDefinitionAnalyze?.Invoke(0);
 
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
                 EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
                 processed++;
-                ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
+                var perc = GetProgressPercentage(total, processed);
+                ModDefinitionAnalyze?.Invoke(perc);
             }
 
             foreach (var item in typeAndIdKeys)
@@ -314,9 +320,11 @@ namespace IronyModManager.Services
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
                 EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
                 processed++;
-                ModDefinitionAnalyze?.Invoke(Convert.ToInt32(processed / total * 100));
+                var perc = GetProgressPercentage(total, processed);
+                ModDefinitionAnalyze?.Invoke(perc);
             }
 
+            ModDefinitionAnalyze?.Invoke(99);
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
             var result = GetModelInstance<IConflictResult>();
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
@@ -332,6 +340,7 @@ namespace IronyModManager.Services
             var ignoredConflicts = DIResolver.Get<IIndexedDefinitions>();
             ignoredConflicts.InitMap(null, true);
             result.IgnoredConflicts = ignoredConflicts;
+            ModDefinitionAnalyze?.Invoke(100);
 
             return result;
         }
@@ -363,6 +372,7 @@ namespace IronyModManager.Services
 
             double processed = 0;
             double total = mods.Count();
+            ModDefinitionLoad?.Invoke(0);
 
             mods.AsParallel().ForAll((m) =>
             {
@@ -395,11 +405,7 @@ namespace IronyModManager.Services
                 lock (serviceLock)
                 {
                     processed++;
-                    var perc = Convert.ToInt32((processed / total * 100) - 2);
-                    if (perc < 0)
-                    {
-                        perc = 1;
-                    }
+                    var perc = GetProgressPercentage(total, processed);
                     ModDefinitionLoad?.Invoke(perc);
                 }
             });
@@ -511,11 +517,31 @@ namespace IronyModManager.Services
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
+                ModDefinitionPatchLoad?.Invoke(0);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
                     PatchName = patchName
                 });
+                if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
+                {
+                    if (state == null)
+                    {
+                        ModDefinitionPatchLoad?.Invoke(99);
+                    }
+                    await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                    {
+                        Game = game.Type,
+                        OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
+                        RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                        ModPath = Path.Combine(Constants.ModDirectory, patchName),
+                        PatchName = patchName
+                    });
+                    if (state == null)
+                    {
+                        ModDefinitionPatchLoad?.Invoke(100);
+                    }
+                }
                 if (state != null)
                 {
                     var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
@@ -544,7 +570,8 @@ namespace IronyModManager.Services
                             }
                         }
                         await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
-                        ModDefinitionPatchLoad?.Invoke(Convert.ToInt32(processed / total * 100));
+                        var perc = GetProgressPercentage(total, processed, 97);
+                        ModDefinitionPatchLoad?.Invoke(perc);
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
@@ -579,8 +606,11 @@ namespace IronyModManager.Services
                                 }
                             }
                         }
-                        ModDefinitionPatchLoad?.Invoke(Convert.ToInt32(processed / total * 100));
+                        var perc = GetProgressPercentage(total, processed, 97);
+                        ModDefinitionPatchLoad?.Invoke(perc);
                     }
+
+                    ModDefinitionPatchLoad?.Invoke(99);
                     var conflicts = GetModelInstance<IConflictResult>();
                     conflicts.AllConflicts = conflictResult.AllConflicts;
                     conflicts.Conflicts = conflictResult.Conflicts;
@@ -591,6 +621,8 @@ namespace IronyModManager.Services
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
                     conflicts.IgnoredConflicts = ignoredIndex;
+                    ModDefinitionPatchLoad?.Invoke(100);
+
                     return conflicts;
                 }
             };
@@ -771,27 +803,6 @@ namespace IronyModManager.Services
                     if (resolve)
                     {
                         exportPatches.Add(definition);
-
-                        await modWriter.PurgeModDirectoryAsync(new ModWriterParameters()
-                        {
-                            RootDirectory = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName),
-                            Path = definition.ParentDirectory
-                        });
-                        foreach (var item in conflictResult.ResolvedConflicts.GetByParentDirectory(definition.ParentDirectory))
-                        {
-                            if (!exportPatches.Contains(item))
-                            {
-                                exportPatches.Add(item);
-                            }
-                        }
-                    }
-
-                    foreach (var item in conflictResult.OrphanConflicts.GetAll())
-                    {
-                        if (!exportPatches.Contains(item))
-                        {
-                            exportPatches.Add(item);
-                        }
                     }
 
                     await modWriter.ApplyModsAsync(new ModWriterParameters()
@@ -1042,6 +1053,27 @@ namespace IronyModManager.Services
             var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
             int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
             return id;
+        }
+
+        /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 98)
+        {
+            var perc = Convert.ToInt32((processed / total * 100) - 2);
+            if (perc < 1)
+            {
+                perc = 1;
+            }
+            else if (perc > maxPerc)
+            {
+                perc = maxPerc;
+            }
+            return perc;
         }
 
         /// <summary>

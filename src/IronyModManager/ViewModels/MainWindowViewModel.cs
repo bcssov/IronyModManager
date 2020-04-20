@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -102,6 +102,17 @@ namespace IronyModManager.ViewModels
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Triggers the manual overlay.
+        /// </summary>
+        /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
+        /// <param name="message">The message.</param>
+        public void TriggerManualOverlay(bool isVisible, string message)
+        {
+            OverlayMessage = message;
+            OverlayVisible = isVisible;
+        }
 
         /// <summary>
         /// animate transition as an asynchronous operation.

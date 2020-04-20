@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -413,7 +413,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
         {
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.Indented, new JsonSerializerSettings()
+            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
             }));

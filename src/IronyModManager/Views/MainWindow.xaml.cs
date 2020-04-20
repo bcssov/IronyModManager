@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -13,15 +13,21 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;
+using ReactiveUI;
 
 namespace IronyModManager.Views
 {
@@ -33,6 +39,20 @@ namespace IronyModManager.Views
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainWindow : BaseWindow<MainWindowViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The prevent shutdown
+        /// </summary>
+        private bool preventShutdown = false;
+
+        /// <summary>
+        /// The shutdown requested
+        /// </summary>
+        private bool shutdownRequested = false;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -103,6 +123,44 @@ namespace IronyModManager.Views
                 pos = pos.WithY(state.LocationY.GetValueOrDefault());
                 Position = pos;
             }
+        }
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            MessageBus.Current.Listen<ShutdownStateEventArgs>()
+                .Subscribe(x =>
+                {
+                    preventShutdown = x.PreventShutdown;
+                    if (shutdownRequested && !preventShutdown)
+                    {
+                        Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            Environment.Exit(0);
+                        });
+                    }
+                }).DisposeWith(disposables);
+            base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:Closing" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (preventShutdown)
+            {
+                e.Cancel = true;
+                shutdownRequested = true;
+                var locManager = DIResolver.Get<ILocalizationManager>();
+                var message = locManager.GetResource(LocalizationResources.App.BackgroundOperationMessage);
+                ViewModel.TriggerManualOverlay(true, message);
+            }
+            base.OnClosing(e);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-20-2020
 // ***********************************************************************
 // <copyright file="GenericDefinesParserTests.cs" company="Mario">
 //     Mario
@@ -127,6 +127,119 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
+        /// Defines the test method Parse_complex_type_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_complex_type_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"	NInterface = {");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"		TOPBAR_BUTTONS_SHORTCUTS				= {");
+            sb.AppendLine(@"		""contacts"" ""F1""");
+            sb.AppendLine(@"		""situation"" ""F2""");
+            sb.AppendLine(@"		""technology"" ""F3""");
+            sb.AppendLine(@"		""empire"" ""F4""");
+            sb.AppendLine(@"		""leaders"" ""F5""");
+            sb.AppendLine(@"		""species"" ""F6""");
+            sb.AppendLine(@"		""ship_designer"" ""F7""");
+            sb.AppendLine(@"		""fleet_manager"" ""F8""");
+            sb.AppendLine(@"		""edicts"" ""F9""");
+            sb.AppendLine(@"		""policies"" ""F10""");
+            sb.AppendLine(@"		}}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new TextParser());
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.txt");
+                switch (i)
+                {
+                    case 0:                        
+                        result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
+                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].Code.Should().Be("NInterface = {\r\nTOPBAR_BUTTONS_SHORTCUTS = {\r\n\"contacts\" \"F1\"\r\n\"situation\" \"F2\"\r\n\"technology\" \"F3\"\r\n\"empire\" \"F4\"\r\n\"leaders\" \"F5\"\r\n\"species\" \"F6\"\r\n\"ship_designer\" \"F7\"\r\n\"fleet_manager\" \"F8\"\r\n\"edicts\" \"F9\"\r\n\"policies\" \"F10\"\r\n}\r\n}");
+                        result[i].Type.Should().Be("common\\defines\\NInterface-txt");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_complex_type_edge_case_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_complex_type_edge_case_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"	NInterface = { TOPBAR_BUTTONS_SHORTCUTS				= {");
+            sb.AppendLine(@"		""contacts"" ""F1""");
+            sb.AppendLine(@"		""situation"" ""F2""");
+            sb.AppendLine(@"		""technology"" ""F3""");
+            sb.AppendLine(@"		""empire"" ""F4""");
+            sb.AppendLine(@"		""leaders"" ""F5""");
+            sb.AppendLine(@"		""species"" ""F6""");
+            sb.AppendLine(@"		""ship_designer"" ""F7""");
+            sb.AppendLine(@"		""fleet_manager"" ""F8""");
+            sb.AppendLine(@"		""edicts"" ""F9""");
+            sb.AppendLine(@"		""policies"" ""F10""");
+            sb.AppendLine(@"		}}");
+
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new TextParser());
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(1);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.txt");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
+                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].Code.Should().Be("NInterface = {\r\nTOPBAR_BUTTONS_SHORTCUTS = {\r\n\"contacts\" \"F1\"\r\n\"situation\" \"F2\"\r\n\"technology\" \"F3\"\r\n\"empire\" \"F4\"\r\n\"leaders\" \"F5\"\r\n\"species\" \"F6\"\r\n\"ship_designer\" \"F7\"\r\n\"fleet_manager\" \"F8\"\r\n\"edicts\" \"F9\"\r\n\"policies\" \"F10\"\r\n}\r\n}");
+                        result[i].Type.Should().Be("common\\defines\\NInterface-txt");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
         /// Defines the test method Parse_should_yield_results.
         /// </summary>
         [Fact]
@@ -169,6 +282,70 @@ namespace IronyModManager.Parser.Tests
                         result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_multiple_types_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_multiple_types_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"NArmy = {");
+            sb.AppendLine(@"	ARMY_MILITARY_POWER_EXPONENT = 0.5	# 0.65");
+            sb.AppendLine(@"}");
+            sb.AppendLine(@"");
+            sb.AppendLine(@"NGameplay = {");
+            sb.AppendLine(@"	ASCENSION_PERKS_SLOTS = 12");
+            sb.AppendLine(@"	JUMP_DRIVE_COOLDOWN = 0");
+            sb.AppendLine(@"}");
+
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "common\\defines\\t.txt",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new Generic.DefinesParser(new TextParser());
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(3);
+            for (int i = 0; i < 1; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("common\\defines\\t.txt");
+                switch (i)
+                {
+                    case 0:                        
+                        result[i].Id.Should().Be("ARMY_MILITARY_POWER_EXPONENT");
+                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NArmy-txt");
+                        result[i].Code.Should().Be("NArmy = {\r\nARMY_MILITARY_POWER_EXPONENT = 0.5 # 0.65\r\n}");
+                        break;                    
+                    case 1:
+                        result[i].Id.Should().Be("ASCENSION_PERKS_SLOTS");
+                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
+                        result[i].Code.Should().Be("NGameplay = {\r\nASCENSION_PERKS_SLOTS = 12\r\n}");
+                        break;
+                    case 2:
+                        result[i].Id.Should().Be("JUMP_DRIVE_COOLDOWN");
+                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
+                        result[i].Code.Should().Be("NGameplay = {\r\nJUMP_DRIVE_COOLDOWN = 0\r\n}");
                         break;
                     default:
                         break;

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-21-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IPreferencesService.cs" company="Mario">
 //     Mario
@@ -21,8 +21,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IPreferencesService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IPreferencesService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IPreferencesService : IBaseService
     {
         #region Methods
 

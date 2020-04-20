@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -158,13 +158,10 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="progress">The progress.</param>
         protected virtual void TriggerOverlay(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            var args = new OverlayEventArgs()
+            Task.Run(() =>
             {
-                IsVisible = isVisible,
-                Message = message,
-                MessageProgress = progress
-            };
-            MessageBus.Current.SendMessage(args);
+                TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
+            });
         }
 
         /// <summary>
@@ -184,6 +181,22 @@ namespace IronyModManager.Common.ViewModels
             };
             return Task.Run(() =>
             {
+                MessageBus.Current.SendMessage(args);
+            });
+        }
+
+        /// <summary>
+        /// Triggers the prevent shutdown.
+        /// </summary>
+        /// <param name="cannotShutdown">if set to <c>true</c> [cannot shutdown].</param>
+        protected virtual void TriggerPreventShutdown(bool cannotShutdown)
+        {
+            Task.Run(() =>
+            {
+                var args = new ShutdownStateEventArgs()
+                {
+                    PreventShutdown = cannotShutdown
+                };
                 MessageBus.Current.SendMessage(args);
             });
         }

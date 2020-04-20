@@ -1,7 +1,8 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager",
-        "Wiki": "Wiki"
+        "Wiki": "Wiki",
+        "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi."
     },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",

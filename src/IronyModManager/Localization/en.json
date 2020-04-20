@@ -1,7 +1,8 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager",
-        "Wiki": "Wiki"
+        "Wiki": "Wiki",
+        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed..."
     },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",

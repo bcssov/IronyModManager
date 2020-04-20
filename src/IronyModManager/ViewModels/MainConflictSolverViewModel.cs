@@ -301,6 +301,11 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            modService.ShutdownState += (args) =>
+            {
+                TriggerPreventShutdown(args);
+            };
+
             BackCommand = ReactiveCommand.Create(() =>
             {
                 var args = new NavigationEventArgs()

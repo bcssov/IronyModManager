@@ -1,7 +1,8 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager",
-        "Wiki": "Wiki"
+        "Wiki": "Wiki",
+        "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist..."
     },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",

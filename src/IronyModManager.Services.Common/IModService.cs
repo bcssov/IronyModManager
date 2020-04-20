@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -21,8 +21,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IModService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IModService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IModService : IBaseService
     {
         #region Events
 

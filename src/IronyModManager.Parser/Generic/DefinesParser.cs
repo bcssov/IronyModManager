@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
@@ -80,6 +81,8 @@ namespace IronyModManager.Parser.Generic
             int? openBrackets = null;
             int closeBrackets = 0;
             string type = string.Empty;
+            IDefinition definition = null;
+            StringBuilder sb = null;
             foreach (var line in args.Lines)
             {
                 if (line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
@@ -91,25 +94,53 @@ namespace IronyModManager.Parser.Generic
                     var cleaned = textParser.CleanWhitespace(line);
                     if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Common.Constants.Scripts.VariableSeparatorId))
                     {
-                        type = textParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                        if (string.IsNullOrEmpty(type))
+                        {
+                            type = textParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                        }
                         openBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                         var content = textParser.PrettifyLine(cleaned.Replace($"{type}{Common.Constants.Scripts.DefinitionSeparatorId}", string.Empty).Replace($"{type}{Common.Constants.Scripts.VariableSeparatorId}", string.Empty).Trim());
                         if (!string.IsNullOrWhiteSpace(content))
                         {
-                            var key = textParser.GetKey(content, Common.Constants.Scripts.VariableSeparatorId);
-                            var def = GetDefinitionInstance();
-                            var parsingArgs = ConstructArgs(args, def);
-                            MapDefinitionFromArgs(parsingArgs);
-                            var definesType = textParser.PrettifyLine($"{type}{Common.Constants.Scripts.DefinitionSeparatorId}");
-                            def.Code = $"{definesType}{Environment.NewLine}{content}{Environment.NewLine}{Common.Constants.Scripts.ClosingBracket}";
-                            def.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
-                            def.Id = key;
-                            def.ValueType = Common.ValueType.SpecialVariable;
-                            result.Add(def);
+                            if (sb == null)
+                            {
+                                sb = new StringBuilder();
+                            }
+                            if (sb.Length == 0)
+                            {
+                                var definesType = textParser.PrettifyLine($"{type}{Common.Constants.Scripts.DefinitionSeparatorId}");
+                                sb.AppendLine(definesType);
+                            }
+                            sb.AppendLine(content);                            
+                            if (definition == null)
+                            {
+                                definition = GetDefinitionInstance();
+                                var parsingArgs = ConstructArgs(args, definition);
+                                MapDefinitionFromArgs(parsingArgs);
+                                definition.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
+                                definition.ValueType = Common.ValueType.SpecialVariable;
+                            }
+                            if (string.IsNullOrEmpty(definition.Id))
+                            {
+                                var key = textParser.GetKey(content, Common.Constants.Scripts.VariableSeparatorId);
+                                definition.Id = key;
+                            }
+                        }
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets - closeBrackets <= 1)
+                        {
+                            if (definition != null)
+                            {
+                                sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
+                                definition.Code = sb.ToString();
+                                result.Add(definition);
+                            }
+                            definition = null;
+                            sb = null;
                         }
                         if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
+                            type = string.Empty;
                             openBrackets = null;
                             closeBrackets = 0;
                         }
@@ -132,19 +163,44 @@ namespace IronyModManager.Parser.Generic
                     }
                     if (!string.IsNullOrWhiteSpace(cleaned))
                     {
-                        var definesType = textParser.PrettifyLine($"{type}{Common.Constants.Scripts.DefinitionSeparatorId}");
-                        var key = textParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
-                        var def = GetDefinitionInstance();
-                        var parsingArgs = ConstructArgs(args, def);
-                        MapDefinitionFromArgs(parsingArgs);
-                        def.Code = $"{definesType}{Environment.NewLine}{textParser.PrettifyLine(cleaned)}{Environment.NewLine}{Common.Constants.Scripts.ClosingBracket}";
-                        def.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
-                        def.Id = key;
-                        def.ValueType = Common.ValueType.SpecialVariable;
-                        result.Add(def);
+                        if (sb == null)
+                        {
+                            sb = new StringBuilder();
+                        }
+                        if (sb.Length == 0)
+                        {
+                            var definesType = textParser.PrettifyLine($"{type}{Common.Constants.Scripts.DefinitionSeparatorId}");
+                            sb.AppendLine(definesType);
+                        }
+                        sb.AppendLine(textParser.PrettifyLine(cleaned));
+                        if (definition == null)
+                        {
+                            definition = GetDefinitionInstance();
+                            var parsingArgs = ConstructArgs(args, definition);
+                            MapDefinitionFromArgs(parsingArgs);
+                            definition.Type = FormatType(args.File, $"{type}-{Common.Constants.TxtType}");
+                            definition.ValueType = Common.ValueType.SpecialVariable;
+                        }
+                        if (string.IsNullOrEmpty(definition.Id))
+                        {
+                            var key = textParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
+                            definition.Id = key;
+                        }
+                    }
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets - closeBrackets <= 1)
+                    {
+                        if (definition != null)
+                        {
+                            sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
+                            definition.Code = sb.ToString();
+                            result.Add(definition);
+                        }
+                        definition = null;
+                        sb = null;
                     }
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
+                        type = string.Empty;
                         openBrackets = null;
                         closeBrackets = 0;
                     }

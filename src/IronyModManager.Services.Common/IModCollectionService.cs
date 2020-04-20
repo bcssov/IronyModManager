@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -20,8 +20,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IModCollectionService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IModCollectionService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IModCollectionService : IBaseService
     {
         #region Methods
 

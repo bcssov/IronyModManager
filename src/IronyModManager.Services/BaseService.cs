@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="BaseService.cs" company="Mario">
 //     Mario
@@ -16,14 +16,17 @@ using System;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
+using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
 {
     /// <summary>
     /// Class BaseService.
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public abstract class BaseService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public abstract class BaseService : IBaseService
     {
         #region Constructors
 
@@ -39,6 +42,15 @@ namespace IronyModManager.Services
         }
 
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [shutdown state].
+        /// </summary>
+        public event ShutdownStateDelegate ShutdownState;
+
+        #endregion Events
 
         #region Properties
 
@@ -66,6 +78,15 @@ namespace IronyModManager.Services
         protected virtual T GetModelInstance<T>() where T : class, IModel
         {
             return DIResolver.Get<T>();
+        }
+
+        /// <summary>
+        /// Called when [shutdown state].
+        /// </summary>
+        /// <param name="cannotShutdown">if set to <c>true</c> [cannot shutdown].</param>
+        protected virtual void OnShutdownState(bool cannotShutdown)
+        {
+            ShutdownState?.Invoke(cannotShutdown);
         }
 
         #endregion Methods

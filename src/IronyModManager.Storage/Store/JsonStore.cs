@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -18,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
-using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Store;
 using Jot.Storage;
@@ -99,7 +98,7 @@ namespace IronyModManager.Storage
         {
             string filePath = GetfilePath(id);
             var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
-            string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.Indented, TypeNameHandling = TypeNameHandling.None });
+            string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
@@ -134,7 +133,7 @@ namespace IronyModManager.Storage
         /// <param name="instance">The instance.</param>
         /// <returns>System.String.</returns>
         private string FormatTypeName(object instance)
-        {            
+        {
             Type type;
             if (instance is IProxyTargetAccessor proxy)
             {

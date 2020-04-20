@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="JsonDIConverter.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IronyModManager.DI.JsonConverters
+namespace IronyModManager.DI.Json
 {
     /// <summary>
     /// Class JsonDIConverter.

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IAppStateService.cs" company="Mario">
 //     Mario
@@ -19,8 +19,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IAppStateService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IAppStateService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IAppStateService : IBaseService
     {
         #region Methods
 

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -40,6 +40,11 @@ namespace IronyModManager.Parser.Definitions
         /// The definition sha
         /// </summary>
         private string definitionSHA = string.Empty;
+
+        /// <summary>
+        /// The external definition sha
+        /// </summary>
+        private string externalDefinitionSHA = string.Empty;
 
         /// <summary>
         /// The identifier
@@ -123,11 +128,22 @@ namespace IronyModManager.Parser.Definitions
                 {
                     return ContentSHA;
                 }
-                if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(trimmedCode))
+                if (!string.IsNullOrEmpty(externalDefinitionSHA))
                 {
-                    definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(trimmedCode).CalculateSHA();
+                    return externalDefinitionSHA;
                 }
-                return definitionSHA;
+                else
+                {
+                    if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(trimmedCode))
+                    {
+                        definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(trimmedCode).CalculateSHA();
+                    }
+                    return definitionSHA;
+                }
+            }
+            set
+            {
+                externalDefinitionSHA = value;
             }
         }
 

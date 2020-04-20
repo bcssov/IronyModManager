@@ -4,7 +4,7 @@
 // Created          : 01-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IWindowStateService.cs" company="Mario">
 //     Mario
@@ -17,8 +17,10 @@ namespace IronyModManager.Services.Common
 {
     /// <summary>
     /// Interface IWindowStateService
+    /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
-    public interface IWindowStateService
+    /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
+    public interface IWindowStateService : IBaseService
     {
         #region Methods
 

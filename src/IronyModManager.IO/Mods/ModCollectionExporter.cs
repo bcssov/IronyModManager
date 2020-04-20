@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -53,7 +53,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> ExportAsync(ModCollectionExporterParams parameters)
         {
-            var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.Indented);
+            var content = JsonConvert.SerializeObject(parameters.Mod, Formatting.None);
             using var zip = ArchiveFactory.Create(ArchiveType.Zip);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             zip.AddEntry(Common.Constants.ExportedModContentId, stream, false);
