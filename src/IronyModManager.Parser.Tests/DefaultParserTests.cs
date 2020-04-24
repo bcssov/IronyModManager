@@ -207,7 +207,8 @@ namespace IronyModManager.Parser.Tests
             sb3.AppendLine(@"		always = yes");
             sb3.AppendLine(@"	}");
             sb3.AppendLine(@"	effect = {");
-            sb3.AppendLine(@"	}}");
+            sb3.AppendLine(@"	}");
+            sb3.AppendLine(@"}");
 
             var args = new ParserArgs()
             {

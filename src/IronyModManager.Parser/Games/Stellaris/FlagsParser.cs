@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
@@ -76,13 +77,21 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            var valType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
+            if (valType == Common.ValueType.WholeTextFile)
+            {
+                var errors = EvalForErrorsOnly(args);
+                if (errors != null)
+                {
+                    return errors;
+                }
+            }
+
             var def = GetDefinitionInstance();
-            var parsingArgs = ConstructArgs(args, def);
-            MapDefinitionFromArgs(parsingArgs);
             def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
-            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
-            def.ValueType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
-            def.Type = FormatType(args.File, def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType);
+            def.Id = Path.GetFileName(args.File);
+            def.ValueType = valType;
+            MapDefinitionFromArgs(def, args, def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType);
             return new List<IDefinition> { def };
         }
 

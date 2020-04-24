@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -29,6 +29,11 @@ namespace IronyModManager.Shared
         #region Fields
 
         /// <summary>
+        /// The empty string characters
+        /// </summary>
+        private static readonly string[] emptyStringCharacters = new string[] { " " };
+
+        /// <summary>
         /// The hash
         /// </summary>
         private static readonly IMetroHash128 hash = MetroHash128Factory.Instance.Create();
@@ -37,11 +42,6 @@ namespace IronyModManager.Shared
         /// The tab space
         /// </summary>
         private static readonly string tabSpace = new string(' ', 4);
-
-        /// <summary>
-        /// The empty string characters
-        /// </summary>
-        private static string[] emptyStringCharacters = new string[] { " " };
 
         #endregion Fields
 

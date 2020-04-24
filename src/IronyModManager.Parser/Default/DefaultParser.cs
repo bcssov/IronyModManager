@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="DefaultParser.cs" company="Mario">
 //     Mario
@@ -12,8 +12,10 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
-using System.Linq;
 using System;
+using System.Linq;
+using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 
 namespace IronyModManager.Parser.Default
@@ -30,8 +32,8 @@ namespace IronyModManager.Parser.Default
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public DefaultParser(ICodeParser textParser) : base(textParser)
+        /// <param name="codeParser">The text parser.</param>
+        public DefaultParser(ICodeParser codeParser) : base(codeParser)
         {
         }
 
@@ -46,5 +48,19 @@ namespace IronyModManager.Parser.Default
         public override string ParserName => nameof(DefaultParser);
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Parses the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
+        {
+            return ParseRoot(args);
+        }
+
+        #endregion Methods
     }
 }

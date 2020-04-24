@@ -6,13 +6,14 @@
 // Last Modified By : Mario
 // Last Modified On : 04-24-2020
 // ***********************************************************************
-// <copyright file="TextParser.cs" company="Mario">
+// <copyright file="CodeParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -197,6 +198,33 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
+        /// Parses the script.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IParseResponse.</returns>
+        public IParseResponse ParseScript(IEnumerable<string> lines, string file)
+        {
+            var line = string.Join(Environment.NewLine, lines);
+            var response = Parsers.ParseScriptFile(file, line);
+            var result = DIResolver.Get<IParseResponse>();
+            if (response.IsSuccess)
+            {
+                var successResponse = Parsers.ProcessStatements(Path.GetFileName(file), file, response.GetResult());
+                result.Value = MapNode(successResponse);
+            }
+            else
+            {
+                var errorResponse = response.GetError();
+                var error = DIResolver.Get<IScriptError>();
+                error.Column = errorResponse.Column;
+                error.Line = errorResponse.Line;
+                result.Error = error;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Prettifies the line.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -231,7 +259,7 @@ namespace IronyModManager.Parser
         protected IScriptNode MapNode(Node node, int level = 1)
         {
             string code = null;
-            if (level == 2)
+            if (level >= 2 && level <= 3)
             {
                 code = FormatCode(node.ToRaw);
             }
@@ -239,7 +267,7 @@ namespace IronyModManager.Parser
             var leaves = node.AllChildren.Where(x => x.IsLeafC).Select(x => MapScriptKeyValue(x.leaf, level + 1)).ToList();
             var values = node.AllChildren.Where(x => x.IsLeafValueC).Select(x => MapScriptValue(x.leafvalue, level + 1)).ToList();
             var result = DIResolver.Get<IScriptNode>();
-            result.Key = node.Key;
+            result.Key = node.Key.Trim();
             result.Nodes = nodes;
             result.Values = values;
             result.KeyValues = leaves;
@@ -256,13 +284,13 @@ namespace IronyModManager.Parser
         protected IScriptKeyValue MapScriptKeyValue(Leaf leaf, int level = 1)
         {
             string code = null;
-            if (level == 2)
+            if (level >= 2 && level <= 3)
             {
                 code = FormatCode(leaf.ToRaw);
             }
             var result = DIResolver.Get<IScriptKeyValue>();
-            result.Key = leaf.Key;
-            result.Value = leaf.Value.ToRawString();
+            result.Key = leaf.Key.Trim();
+            result.Value = leaf.Value.ToRawString().Trim();
             result.Code = code;
             return result;
         }
@@ -276,13 +304,13 @@ namespace IronyModManager.Parser
         protected IScriptValue MapScriptValue(LeafValue leafValue, int level = 1)
         {
             string code = null;
-            if (level == 2)
+            if (level >= 2 && level <= 3)
             {
                 code = FormatCode(leafValue.ToRaw);
             }
             var result = DIResolver.Get<IScriptValue>();
             result.Code = code;
-            result.Value = leafValue.Key;
+            result.Value = leafValue.Key.Trim();
             return result;
         }
 

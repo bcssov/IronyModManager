@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -100,7 +100,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         trimmedLines.Add(line.Trim());
                     }
-                    trimmedCode = string.Join(Environment.NewLine, trimmedLines.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    trimmedCode = string.Join(" ", trimmedLines.Where(s => !string.IsNullOrWhiteSpace(s)));
                     code = string.Join(Environment.NewLine, lines.Where(s => !string.IsNullOrWhiteSpace(s)));
                 }
                 else

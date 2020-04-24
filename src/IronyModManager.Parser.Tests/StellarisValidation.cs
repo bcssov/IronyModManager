@@ -163,7 +163,7 @@ namespace IronyModManager.Parser.Tests
                     if (groupedParsers.All(p => p.First().UsedParser.Equals("GenericKeyParser") || p.First().UsedParser.Equals("DefaultParser")))
                     {
                         var objectIds = new List<string>();
-                        foreach (var type in types)
+                        foreach (var type in types.Where(p => p.ValueType != Common.ValueType.Invalid))
                         {
                             var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
                             objectIds.Add(id);
@@ -189,7 +189,7 @@ namespace IronyModManager.Parser.Tests
                 else if (usedParser == "GenericKeyParser")
                 {
                     var objectIds = new List<string>();
-                    foreach (var type in types)
+                    foreach (var type in types.Where(p => p.ValueType != Common.ValueType.Invalid))
                     {
                         var reserved = new string[] { "entity", "animation", "music" };
                         var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");

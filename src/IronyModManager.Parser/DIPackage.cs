@@ -51,8 +51,8 @@ namespace IronyModManager.Parser
             container.Register<IDefaultParser, DefaultParser>();
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
-                 typeof(BinaryParser), typeof(DefinesParser), typeof(GfxParser),
-                 typeof(GuiParser), typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                 typeof(BinaryParser), typeof(DefinesParser), typeof(GraphicsParser),
+                 typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
@@ -67,6 +67,8 @@ namespace IronyModManager.Parser
             container.Register<IScriptValue, ScriptValue>();
             container.Register<IScriptKeyValue, ScriptKeyValue>();
             container.Register<IScriptNode, ScriptNode>();
+            container.Register<IScriptError, ScriptError>();
+            container.Register<IParseResponse, ParseResponse>();
         }
 
         #endregion Methods

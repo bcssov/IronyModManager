@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
@@ -68,6 +69,14 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
         string GetValue(string line, string key);
+
+        /// <summary>
+        /// Parses the script.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IParseResponse.</returns>
+        IParseResponse ParseScript(IEnumerable<string> lines, string file);
 
         /// <summary>
         /// Prettifies the line.

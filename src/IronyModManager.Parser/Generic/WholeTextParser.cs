@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -97,12 +97,17 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            var errors = EvalForErrorsOnly(args);
+            if (errors != null)
+            {
+                return errors;
+            }
+
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
-            var parsingArgs = ConstructArgs(args, def);
-            MapDefinitionFromArgs(parsingArgs);
+            MapDefinitionFromArgs(def, args);
             def.Code = string.Join(Environment.NewLine, args.Lines);
-            def.Id = args.File.Split(Common.Constants.Scripts.PathTrimParameters, StringSplitOptions.RemoveEmptyEntries).Last();
+            def.Id = Path.GetFileName(args.File);
             def.ValueType = Common.ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }

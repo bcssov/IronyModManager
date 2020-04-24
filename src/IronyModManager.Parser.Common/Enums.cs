@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-03-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -49,6 +49,11 @@ namespace IronyModManager.Parser.Common
         /// <summary>
         /// The binary
         /// </summary>
-        Binary
+        Binary,
+
+        /// <summary>
+        /// The invalid
+        /// </summary>
+        Invalid
     }
 }

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -130,11 +130,6 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
-            /// The bitmap fonts identifier
-            /// </summary>
-            public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
-
-            /// <summary>
             /// The closing bracket
             /// </summary>
             public const char ClosingBracket = '}';
@@ -150,29 +145,19 @@ namespace IronyModManager.Parser.Common
             public const string GraphicsTypeName = "name";
 
             /// <summary>
-            /// The GUI types
+            /// The invalid
             /// </summary>
-            public const string GuiTypes = "guiTypes";
+            public const string Invalid = "invalid";
 
             /// <summary>
-            /// The GUI types identifier
+            /// The languages identifier
             /// </summary>
-            public const string GuiTypesId = GuiTypes + VariableSeparatorId;
+            public const string LanguagesId = "languages";
 
             /// <summary>
             /// The namespace identifier
             /// </summary>
-            public const string NamespaceId = "namespace" + VariableSeparatorId;
-
-            /// <summary>
-            /// The object types
-            /// </summary>
-            public const string ObjectTypes = "objectTypes";
-
-            /// <summary>
-            /// The object types identifier
-            /// </summary>
-            public const string ObjectTypesId = "objectTypes" + VariableSeparatorId;
+            public const string NamespaceId = "namespace";
 
             /// <summary>
             /// The opening bracket
@@ -180,24 +165,9 @@ namespace IronyModManager.Parser.Common
             public const char OpeningBracket = '{';
 
             /// <summary>
-            /// The position type identifier
-            /// </summary>
-            public const string PositionTypeId = "positionType" + VariableSeparatorId;
-
-            /// <summary>
             /// The script comment identifier
             /// </summary>
             public const string ScriptCommentId = "#";
-
-            /// <summary>
-            /// The sprite types
-            /// </summary>
-            public const string SpriteTypes = "spriteTypes";
-
-            /// <summary>
-            /// The sprite types identifier
-            /// </summary>
-            public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
 
             /// <summary>
             /// The variable separator identifier
@@ -210,9 +180,9 @@ namespace IronyModManager.Parser.Common
             public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             /// <summary>
-            /// The path trim parameters
+            /// The generic keys
             /// </summary>
-            public static readonly char[] PathTrimParameters = new char[] { '\\', '/' };
+            public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
 
             #endregion Fields
         }
@@ -288,11 +258,6 @@ namespace IronyModManager.Parser.Common
             /// The weapon components
             /// </summary>
             public static readonly string WeaponComponents = MergePath(CommonPath, "component_templates", "weapon_components.csv");
-
-            /// <summary>
-            /// The world GFX
-            /// </summary>
-            public static readonly string WorldGfx = MergePath("gfx", "worldgfx");
 
             #endregion Fields
         }
