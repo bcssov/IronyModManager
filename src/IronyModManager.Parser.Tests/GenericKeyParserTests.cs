@@ -66,7 +66,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = new List<string> { "test", "test2 = {}" }
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "events\\test.txt";
             args.Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -133,7 +133,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -185,7 +185,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -228,7 +228,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -272,7 +272,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -316,7 +316,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeTrue();
         }
@@ -336,7 +336,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeFalse();
         }
@@ -358,7 +358,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
             };
-            var parser = new KeyParser(new TextParser());
+            var parser = new KeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeFalse();
         }

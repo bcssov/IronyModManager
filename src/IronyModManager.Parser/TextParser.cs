@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="TextParser.cs" company="Mario">
 //     Mario
@@ -16,18 +16,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using CWTools.CSharp;
+using CWTools.Parser;
+using CWTools.Process;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Parser
 {
     /// <summary>
     /// Class TextParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ITextParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.ITextParser" />
-    [ExcludeFromCoverage("Text parser is tested in parser implementations.")]
-    public class TextParser : ITextParser
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.ICodeParser" />
+    [ExcludeFromCoverage("Code parser is tested in parser implementations.")]
+    public class CodeParser : ICodeParser
     {
         #region Fields
 
@@ -205,6 +210,80 @@ namespace IronyModManager.Parser
             }
             cleaned = string.Join(' ', cleaned.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
             return cleaned;
+        }
+
+        /// <summary>
+        /// Formats the code.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns>System.String.</returns>
+        protected string FormatCode(Types.Statement source)
+        {
+            return source.PrettyPrint().Replace("\r", string.Empty).Replace("\n", Environment.NewLine).Trim(Environment.NewLine.ToCharArray()).ReplaceTabs();
+        }
+
+        /// <summary>
+        /// Maps the node.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="level">The level.</param>
+        /// <returns>IScriptNode.</returns>
+        protected IScriptNode MapNode(Node node, int level = 1)
+        {
+            string code = null;
+            if (level == 2)
+            {
+                code = FormatCode(node.ToRaw);
+            }
+            var nodes = node.AllChildren.Where(x => x.IsNodeC).Select(x => MapNode(x.node, level + 1)).ToList();
+            var leaves = node.AllChildren.Where(x => x.IsLeafC).Select(x => MapScriptKeyValue(x.leaf, level + 1)).ToList();
+            var values = node.AllChildren.Where(x => x.IsLeafValueC).Select(x => MapScriptValue(x.leafvalue, level + 1)).ToList();
+            var result = DIResolver.Get<IScriptNode>();
+            result.Key = node.Key;
+            result.Nodes = nodes;
+            result.Values = values;
+            result.KeyValues = leaves;
+            result.Code = code;
+            return result;
+        }
+
+        /// <summary>
+        /// Maps the script key value.
+        /// </summary>
+        /// <param name="leaf">The leaf.</param>
+        /// <param name="level">The level.</param>
+        /// <returns>IScriptKeyValue.</returns>
+        protected IScriptKeyValue MapScriptKeyValue(Leaf leaf, int level = 1)
+        {
+            string code = null;
+            if (level == 2)
+            {
+                code = FormatCode(leaf.ToRaw);
+            }
+            var result = DIResolver.Get<IScriptKeyValue>();
+            result.Key = leaf.Key;
+            result.Value = leaf.Value.ToRawString();
+            result.Code = code;
+            return result;
+        }
+
+        /// <summary>
+        /// Maps the script value.
+        /// </summary>
+        /// <param name="leafValue">The leaf value.</param>
+        /// <param name="level">The level.</param>
+        /// <returns>IScriptValue.</returns>
+        protected IScriptValue MapScriptValue(LeafValue leafValue, int level = 1)
+        {
+            string code = null;
+            if (level == 2)
+            {
+                code = FormatCode(leafValue.ToRaw);
+            }
+            var result = DIResolver.Get<IScriptValue>();
+            result.Code = code;
+            result.Value = leafValue.Key;
+            return result;
         }
 
         #endregion Methods

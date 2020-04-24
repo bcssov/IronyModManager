@@ -35,7 +35,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Initializes a new instance of the <see cref="FlagsParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public FlagsParser(ITextParser textParser) : base(textParser)
+        public FlagsParser(ICodeParser textParser) : base(textParser)
         {
         }
 

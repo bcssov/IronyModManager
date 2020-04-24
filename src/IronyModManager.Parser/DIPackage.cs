@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -17,11 +17,13 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Parser.Default;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Models;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -59,9 +61,12 @@ namespace IronyModManager.Parser
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
             container.Register<IModParser, ModParser>();
-            container.Register<ITextParser, TextParser>();
+            container.Register<ICodeParser, CodeParser>();
             container.Register<IHierarchicalDefinitions, HierarchicalDefinitions>();
             container.Register<IParserMap, ParserMap>();
+            container.Register<IScriptValue, ScriptValue>();
+            container.Register<IScriptKeyValue, ScriptKeyValue>();
+            container.Register<IScriptNode, ScriptNode>();
         }
 
         #endregion Methods

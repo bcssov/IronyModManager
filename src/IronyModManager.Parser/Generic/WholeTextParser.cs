@@ -56,7 +56,7 @@ namespace IronyModManager.Parser.Generic
         /// Initializes a new instance of the <see cref="WholeTextParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public WholeTextParser(ITextParser textParser) : base(textParser)
+        public WholeTextParser(ICodeParser textParser) : base(textParser)
         {
         }
 

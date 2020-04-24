@@ -136,7 +136,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(trimmedCode))
                     {
-                        definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(trimmedCode).CalculateSHA();
+                        definitionSHA = DIResolver.Get<ICodeParser>().CleanWhitespace(trimmedCode).CalculateSHA();
                     }
                     return definitionSHA;
                 }

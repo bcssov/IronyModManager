@@ -33,7 +33,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Initializes a new instance of the <see cref="SolarSystemInitializersParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public SolarSystemInitializersParser(ITextParser textParser) : base(textParser)
+        public SolarSystemInitializersParser(ICodeParser textParser) : base(textParser)
         {
         }
 

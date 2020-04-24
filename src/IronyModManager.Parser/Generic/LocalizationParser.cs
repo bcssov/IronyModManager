@@ -35,7 +35,7 @@ namespace IronyModManager.Parser.Generic
         /// Initializes a new instance of the <see cref="LocalizationParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public LocalizationParser(ITextParser textParser) : base(textParser)
+        public LocalizationParser(ICodeParser textParser) : base(textParser)
         {
         }
 

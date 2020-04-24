@@ -4,9 +4,9 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
-// <copyright file="ITextParser.cs" company="Mario">
+// <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,7 +19,7 @@ namespace IronyModManager.Parser.Common.Parsers
     /// <summary>
     /// Interface ITextParser
     /// </summary>
-    public interface ITextParser
+    public interface ICodeParser
     {
         #region Methods
 

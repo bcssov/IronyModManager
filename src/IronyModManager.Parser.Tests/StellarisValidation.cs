@@ -148,7 +148,7 @@ namespace IronyModManager.Parser.Tests
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
             var objects = new List<string>();
-            var textParser = new TextParser();
+            var textParser = new CodeParser();
             var parserMap = new List<IParserMap>();
 
             foreach (var item in typesKeys)

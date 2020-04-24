@@ -34,7 +34,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// The text parser
         /// </summary>
-        protected readonly ITextParser textParser;
+        protected readonly ICodeParser textParser;
 
         #endregion Fields
 
@@ -44,7 +44,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Initializes a new instance of the <see cref="BaseParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public BaseParser(ITextParser textParser)
+        public BaseParser(ICodeParser textParser)
         {
             this.textParser = textParser;
         }

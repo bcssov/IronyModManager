@@ -38,7 +38,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\gamerules\\test.txt",
             };
-            var parser = new GuiParser(new TextParser());
+            var parser = new GuiParser(new CodeParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "gui\\gui.gui";
             parser.CanParse(args).Should().BeTrue();
@@ -87,7 +87,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GuiParser(new TextParser());
+            var parser = new GuiParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(2);
@@ -142,7 +142,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GuiParser(new TextParser());
+            var parser = new GuiParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -184,7 +184,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GuiParser(new TextParser());
+            var parser = new GuiParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -252,7 +252,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new GuiParser(new TextParser());
+            var parser = new GuiParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(2);

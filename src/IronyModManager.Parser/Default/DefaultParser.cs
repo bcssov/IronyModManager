@@ -31,7 +31,7 @@ namespace IronyModManager.Parser.Default
         /// Initializes a new instance of the <see cref="DefaultParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public DefaultParser(ITextParser textParser) : base(textParser)
+        public DefaultParser(ICodeParser textParser) : base(textParser)
         {
         }
 
