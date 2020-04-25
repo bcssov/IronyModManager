@@ -65,7 +65,7 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
             return args.File.StartsWith(Common.Constants.DefinesPath, StringComparison.OrdinalIgnoreCase);
         }
@@ -77,13 +77,10 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            if (args.Lines.Count() < MaxLines)
+            var errors = EvalForErrorsOnly(args);
+            if (errors != null)
             {
-                var errors = EvalForErrorsOnly(args);
-                if (errors != null)
-                {
-                    return errors;
-                }
+                return errors;
             }
 
             var result = new List<IDefinition>();
@@ -125,7 +122,7 @@ namespace IronyModManager.Parser.Generic
                             if (definition == null)
                             {
                                 definition = GetDefinitionInstance();
-                                MapDefinitionFromArgs(definition, args, $"{type}-{Common.Constants.TxtType}");
+                                MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                                 definition.ValueType = Common.ValueType.SpecialVariable;
                             }
                             if (string.IsNullOrEmpty(definition.Id))
@@ -183,7 +180,7 @@ namespace IronyModManager.Parser.Generic
                         if (definition == null)
                         {
                             definition = GetDefinitionInstance();
-                            MapDefinitionFromArgs(definition, args, $"{type}-{Common.Constants.TxtType}");
+                            MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{type}-{Common.Constants.TxtType}"));
                             definition.ValueType = Common.ValueType.SpecialVariable;
                         }
                         if (string.IsNullOrEmpty(definition.Id))

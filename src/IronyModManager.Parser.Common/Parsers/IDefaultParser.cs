@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="IDefaultParser.cs" company="Mario">
 //     Mario
@@ -35,6 +35,13 @@ namespace IronyModManager.Parser.Common.Parsers
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Determines whether this instance can parse the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+        bool CanParse(CanParseArgs args);
 
         /// <summary>
         /// Parses the specified arguments.

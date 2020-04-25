@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ParserManagerTests.cs" company="Mario">
 //     Mario
@@ -36,7 +36,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Should_invoke_game_parser()
         {
-            var defaultParser = new DefaultParser();
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
             var genericParser = new List<IGenericParser>() { new GenericParser() };
             var gameParser = new List<IGameParser>() { new GameParser() };
 
@@ -56,7 +56,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Should_invoke_generic_parser()
         {
-            var defaultParser = new DefaultParser();
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
             var genericParser = new List<IGenericParser>() { new GenericParser() };
             var gameParser = new List<IGameParser>() { new GameParser() };
 
@@ -76,7 +76,7 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void Should_invoke_default_parser()
         {
-            var defaultParser = new DefaultParser();
+            var defaultParser = new List<IDefaultParser>() { new DefaultParser() };
             var genericParser = new List<IGenericParser>() { new GenericParser() };
             var gameParser = new List<IGameParser>() { new GameParser() };
 
@@ -104,6 +104,16 @@ namespace IronyModManager.Parser.Tests
             /// </summary>
             /// <value>The name of the parser.</value>
             public string ParserName => nameof(DefaultParser);
+
+            /// <summary>
+            /// Determines whether this instance can parse the specified arguments.
+            /// </summary>
+            /// <param name="args">The arguments.</param>
+            /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+            public bool CanParse(CanParseArgs args)
+            {
+                return true;
+            }
 
             /// <summary>
             /// Parses the specified arguments.

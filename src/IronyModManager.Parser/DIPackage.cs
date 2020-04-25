@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -48,11 +48,15 @@ namespace IronyModManager.Parser
         {
             container.Register<IDefinition, Definition>();
             container.Register<IIndexedDefinitions, IndexedDefinitions>();
-            container.Register<IDefaultParser, DefaultParser>();
+            container.Collection.Register(typeof(IDefaultParser), new List<Type>()
+            {
+                typeof(DefaultParser), typeof(SimpleDefaultParser)
+            });
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
                  typeof(BinaryParser), typeof(DefinesParser), typeof(GraphicsParser),
-                 typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                 typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser),
+                 typeof(SimpleKeyParser), typeof(SimpleGFXParser), typeof(SimpleGUIParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {

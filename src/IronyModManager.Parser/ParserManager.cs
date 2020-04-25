@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -39,9 +39,9 @@ namespace IronyModManager.Parser
         private readonly List<IDefaultParser> allParsers;
 
         /// <summary>
-        /// The default parser
+        /// The default parsers
         /// </summary>
-        private readonly IDefaultParser defaultParser;
+        private readonly IEnumerable<IDefaultParser> defaultParsers;
 
         /// <summary>
         /// The game parsers
@@ -67,14 +67,14 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="gameParsers">The game parsers.</param>
         /// <param name="genericParsers">The generic parsers.</param>
-        /// <param name="defaultParser">The default parser.</param>
-        public ParserManager(IEnumerable<IGameParser> gameParsers, IEnumerable<IGenericParser> genericParsers, IDefaultParser defaultParser)
+        /// <param name="defaultParsers">The default parsers.</param>
+        public ParserManager(IEnumerable<IGameParser> gameParsers, IEnumerable<IGenericParser> genericParsers, IEnumerable<IDefaultParser> defaultParsers)
         {
             parserMaps = new ConcurrentDictionary<string, ConcurrentDictionary<string, List<IParserMap>>>();
             this.gameParsers = gameParsers.OrderBy(p => p.Priority);
             this.genericParsers = genericParsers.OrderBy(p => p.Priority);
-            this.defaultParser = defaultParser;
-            allParsers = new List<IDefaultParser>() { this.defaultParser };
+            this.defaultParsers = defaultParsers;
+            allParsers = new List<IDefaultParser>(this.defaultParsers);
             allParsers.AddRange(this.gameParsers);
             allParsers.AddRange(this.genericParsers);
             ValidateParserNames(gameParsers);
@@ -120,9 +120,10 @@ namespace IronyModManager.Parser
                 {
                     preferredParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
-                if (preferredParser == null && preferredParserNames.Any(p => defaultParser.ParserName.Equals(p)))
+                var defaultParser = defaultParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
+                if (preferredParser == null && defaultParsers.Count() > 0)
                 {
-                    preferredParser = defaultParser;
+                    preferredParser = defaultParser.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
             }
             IEnumerable<IDefinition> result = null;
@@ -150,8 +151,9 @@ namespace IronyModManager.Parser
                     }
                     else
                     {
-                        result = defaultParser.Parse(parseArgs);
-                        SetParser(result, defaultParser.ParserName);
+                        var parser = defaultParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
+                        result = parser.Parse(parseArgs);
+                        SetParser(result, parser.ParserName);
                     }
                 }
             }
@@ -188,12 +190,12 @@ namespace IronyModManager.Parser
                         var newMaps = new ConcurrentDictionary<string, List<IParserMap>>();
                         foreach (var item in grouped)
                         {
-                            var id = item.First().DirectoryPath.ToLowerInvariant();                            
+                            var id = item.First().DirectoryPath.ToLowerInvariant();
                             newMaps.TryAdd(id, item.Select(p => p).ToList());
                             if (id.Equals(location))
                             {
                                 parser = item.Select(p => p.PreferredParser);
-                            }                            
+                            }
                         }
                         parserMaps.TryAdd(game, newMaps);
                     }

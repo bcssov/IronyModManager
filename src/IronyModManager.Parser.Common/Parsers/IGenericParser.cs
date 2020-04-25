@@ -4,16 +4,15 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 04-19-2020
 // ***********************************************************************
 // <copyright file="IGenericParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
-using IronyModManager.Parser.Common.Args;
+using System.Collections.Generic;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
@@ -33,16 +32,5 @@ namespace IronyModManager.Parser.Common.Parsers
         int Priority { get; }
 
         #endregion Properties
-
-        #region Methods
-
-        /// <summary>
-        /// Determines whether this instance can parse the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        bool CanParse(CanParseArgs args);
-
-        #endregion Methods
     }
 }

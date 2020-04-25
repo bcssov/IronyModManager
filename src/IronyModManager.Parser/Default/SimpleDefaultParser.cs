@@ -1,42 +1,39 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 04-25-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="FlagsParser.cs" company="Mario">
+// <copyright file="SimpleDefaultParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 
-namespace IronyModManager.Parser.Games.Stellaris
+namespace IronyModManager.Parser.Default
 {
     /// <summary>
-    /// Class FlagsParser.
+    /// Class FastDefaultParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGameParser" />
-    public class FlagsParser : BaseParser, IGameParser
+    public class SimpleDefaultParser : BaseParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlagsParser" /> class.
+        /// Initializes a new instance of the <see cref="SimpleDefaultParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public FlagsParser(ICodeParser textParser) : base(textParser)
+        /// <param name="codeParser">The code parser.</param>
+        public SimpleDefaultParser(ICodeParser codeParser) : base(codeParser)
         {
         }
 
@@ -48,13 +45,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Stellaris" + nameof(FlagsParser);
-
-        /// <summary>
-        /// Gets the priority.
-        /// </summary>
-        /// <value>The priority.</value>
-        public int Priority => 1;
+        public override string ParserName => nameof(SimpleDefaultParser);
 
         #endregion Properties
 
@@ -67,7 +58,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.IsStellaris() && args.File.StartsWith(Common.Constants.Stellaris.Flags, StringComparison.OrdinalIgnoreCase);
+            return HasPassedComplexThreshold(args.Lines);
         }
 
         /// <summary>
@@ -77,22 +68,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var valType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
-            if (valType == Common.ValueType.WholeTextFile)
+            var errors = EvalSimpleParseForErrorsOnly(args);
+            if (errors != null)
             {
-                var errors = EvalForErrorsOnly(args);
-                if (errors != null)
-                {
-                    return errors;
-                }
+                return errors;
             }
-
-            var def = GetDefinitionInstance();
-            def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
-            def.Id = Path.GetFileName(args.File);
-            def.ValueType = valType;
-            MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType));
-            return new List<IDefinition> { def };
+            return ParseSimple(args);
         }
 
         #endregion Methods

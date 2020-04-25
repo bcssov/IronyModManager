@@ -30,7 +30,7 @@ namespace IronyModManager.Parser.Tests
     public class GenericGraphicsParserTests
     {
         /// <summary>
-        /// Defines the test method CanParse_should_be_false_then_true.
+        /// Defines the test method CanParse_gui_should_be_false_then_true.
         /// </summary>
         [Fact]
         public void CanParse_gui_should_be_false_then_true()
@@ -46,7 +46,7 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method Parse_edge_case_should_yield_results.
+        /// Defines the test method Parse_gui_edge_case_should_yield_results.
         /// </summary>
         [Fact]
         public void Parse_gui_edge_case_should_yield_results()
@@ -116,7 +116,7 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method Parse_inline_edge_case_should_yield_results.
+        /// Defines the test method Parse_gui_ending_edge_case_should_yield_results.
         /// </summary>
         [Fact]
         public void Parse_gui_ending_edge_case_should_yield_results()
@@ -169,7 +169,7 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method Parse_inline_edge_case_should_yield_results.
+        /// Defines the test method Parse_gui_inline_edge_case_should_yield_results.
         /// </summary>
         [Fact]
         public void Parse_gui_inline_edge_case_should_yield_results()
@@ -219,7 +219,7 @@ namespace IronyModManager.Parser.Tests
         }
 
         /// <summary>
-        /// Defines the test method Parse_should_yield_results.
+        /// Defines the test method Parse_gui_should_yield_results.
         /// </summary>
         [Fact]
         public void Parse_gui_should_yield_results()
@@ -483,18 +483,6 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"}");
 
 
-
-            var sb3 = new StringBuilder();
-            sb3.AppendLine(@"bitmapfonts = {");
-            sb3.AppendLine(@"	 bitmapfont_override = {");
-            sb3.AppendLine(@"		name = ""large_title_font""");
-            sb3.AppendLine(@"        ttf_font = ""Easter_bigger""");
-            sb3.AppendLine(@"        ttf_size = ""30""");
-            sb3.AppendLine(@"		languages = { ""l_russian"" }");
-            sb3.AppendLine(@"	 }");
-            sb3.AppendLine(@"}");
-
-
             var args = new ParserArgs()
             {
                 ContentSHA = "sha",
@@ -507,7 +495,7 @@ namespace IronyModManager.Parser.Tests
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(2);
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
                 result[i].Dependencies.First().Should().Be("1");
@@ -521,8 +509,8 @@ namespace IronyModManager.Parser.Tests
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     case 1:
-                        result[i].Id.Should().Be("l_russian-large_title_font");
-                        result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
+                        result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
+                        result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:

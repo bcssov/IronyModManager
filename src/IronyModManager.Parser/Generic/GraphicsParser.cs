@@ -66,9 +66,9 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
+            return !HasPassedComplexThreshold(args.Lines) && (args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -78,35 +78,21 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            // CWTools is slow on large files, so skip these and use a legacy parser
-            if (args.Lines.Count() > MaxLines)
-            {
-                if (args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
-                {
-                    var parser = new FastGUIParser();
-                    return parser.Parse(args);
-                }
-                else
-                {
-                    var parser = new FastGFXParser();
-                    return parser.Parse(args);
-                }
-            }
-            return ParseFirstLevel(args);
+            return ParseComplexFirstLevel(args);
         }
 
         /// <summary>
-        /// Evals the key value for identifier.
+        /// Evals the complex parse key value for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected override string EvalKeyValueForId(IScriptKeyValue value)
+        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
         {
             if (Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
             {
                 return value.Value;
             }
-            return base.EvalKeyValueForId(value);
+            return base.EvalComplexParseKeyValueForId(value);
         }
 
         #endregion Methods
