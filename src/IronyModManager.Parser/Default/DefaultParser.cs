@@ -52,19 +52,23 @@ namespace IronyModManager.Parser.Default
         #region Methods
 
         /// <summary>
+        /// Determines whether this instance can parse the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+        public override bool CanParse(CanParseArgs args)
+        {
+            return !HasPassedComplexThreshold(args.Lines);
+        }
+
+        /// <summary>
         /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            // CWTools is slow on large files, so skip these and use a legacy parser
-            if (args.Lines.Count() > MaxLines)
-            {
-                var parser = new FastDefaultParser();
-                return parser.Parse(args);
-            }
-            return ParseRoot(args);
+            return ParseComplexRoot(args);
         }
 
         #endregion Methods

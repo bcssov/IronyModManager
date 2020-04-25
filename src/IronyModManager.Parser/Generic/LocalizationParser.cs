@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -64,7 +64,7 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
             return args.File.EndsWith(Common.Constants.LocalizationExtension, StringComparison.OrdinalIgnoreCase);
         }
@@ -94,7 +94,7 @@ namespace IronyModManager.Parser.Generic
                     if (string.IsNullOrWhiteSpace(lang))
                     {
                         var def = GetDefinitionInstance();
-                        MapDefinitionFromArgs(def, args, $"{selectedLanguage}-{Common.Constants.YmlType}");
+                        MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
                         def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
                         def.ValueType = Common.ValueType.SpecialVariable;

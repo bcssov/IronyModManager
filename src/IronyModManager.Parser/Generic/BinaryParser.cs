@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -65,7 +65,7 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
             return !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
@@ -79,7 +79,7 @@ namespace IronyModManager.Parser.Generic
         {
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
-            MapDefinitionFromArgs(def, args, Common.Constants.BinaryType);
+            MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: Common.Constants.BinaryType));
             def.Code = string.Empty;
             def.Id = Path.GetFileName(args.File);
             def.ValueType = Common.ValueType.Binary;

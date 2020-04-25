@@ -4,9 +4,9 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="GenericKeyParserTests.cs" company="Mario">
+// <copyright file="GenericSimpleKeyParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -28,7 +28,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class GenericEventParserTests.
     /// </summary>
-    public class GenericKeyParserTests
+    public class GenericSimpleKeyParserTests
     {
         /// <summary>
         /// Defines the test method CanParse_should_be_false_then_true.
@@ -36,6 +36,17 @@ namespace IronyModManager.Parser.Tests
         [Fact]
         public void CanParse_should_be_false_then_true()
         {
+            var lines = new HashSet<string>();
+            foreach (var l in new List<string> { "test", "test2 = {}" })
+            {
+                lines.Add(l);
+            }
+            for (int i = 0; i < 21000; i++)
+            {
+                lines.Add(i.ToString());
+            }
+            var lines2 = new HashSet<string>();            
+
             var sb = new StringBuilder();
             sb.AppendLine(@"@test = 1");
             sb.AppendLine(@"");
@@ -61,15 +72,24 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"    }");
             sb.AppendLine(@"}");
 
+            foreach (var item in sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+            {
+                lines2.Add(item);
+            }
+            for (int i = 0; i < 21000; i++)
+            {
+                lines2.Add(i.ToString());
+            }
+
             var args = new CanParseArgs()
             {
                 File = "common\\gamerules\\test.txt",
-                Lines = new List<string> { "test", "test2 = {}" }
+                Lines = lines
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             parser.CanParse(args).Should().BeFalse();
             args.File = "events\\test.txt";
-            args.Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            args.Lines = lines2;
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -133,7 +153,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(3);
@@ -177,12 +197,6 @@ namespace IronyModManager.Parser.Tests
             var sb = new StringBuilder();
             sb.AppendLine(@"entity = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
 
-            var sb2 = new StringBuilder();
-            sb2.AppendLine(@"entity = {");
-            sb2.AppendLine(@"    name = ""ai_01_blue_sponsored_colonizer_entity""");
-            sb2.AppendLine(@"    clone = ""ai_01_blue_colonizer_entity""");
-            sb2.AppendLine(@"}");
-
 
             var args = new ParserArgs()
             {
@@ -192,7 +206,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -204,7 +218,7 @@ namespace IronyModManager.Parser.Tests
                 switch (i)
                 {
                     case 0:
-                        result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
+                        result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("ai_01_blue_sponsored_colonizer_entity");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
@@ -225,17 +239,7 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"create_envoys = {		create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
-
-            var sb2 = new System.Text.StringBuilder();
-            sb2.AppendLine(@"create_envoys = {");
-            sb2.AppendLine(@"    create_ship = {");
-            sb2.AppendLine(@"        name = random");
-            sb2.AppendLine(@"        graphical_culture = ""ehof_01""");
-            sb2.AppendLine(@"        design = ""NAME_Compound_Envoy""");
-            sb2.AppendLine(@"    }");
-            sb2.AppendLine(@"}");
-
+            sb.AppendLine(@"create_envoys = {    create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
 
             var args = new ParserArgs()
             {
@@ -245,7 +249,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -257,7 +261,7 @@ namespace IronyModManager.Parser.Tests
                 switch (i)
                 {
                     case 0:
-                        result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
+                        result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("create_envoys");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
@@ -278,18 +282,8 @@ namespace IronyModManager.Parser.Tests
             DISetup.SetupContainer();
 
             var sb = new StringBuilder();
-            sb.AppendLine(@"create_envoys = {		");
+            sb.AppendLine(@"create_envoys = {");
             sb.AppendLine(@"create_ship = { name = random graphical_culture = ""ehof_01"" design = ""NAME_Compound_Envoy"" } }");
-
-            var sb2 = new System.Text.StringBuilder();
-            sb2.AppendLine(@"create_envoys = {");
-            sb2.AppendLine(@"    create_ship = {");
-            sb2.AppendLine(@"        name = random");
-            sb2.AppendLine(@"        graphical_culture = ""ehof_01""");
-            sb2.AppendLine(@"        design = ""NAME_Compound_Envoy""");
-            sb2.AppendLine(@"    }");
-            sb2.AppendLine(@"}");
-
 
             var args = new ParserArgs()
             {
@@ -299,7 +293,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);
@@ -311,7 +305,7 @@ namespace IronyModManager.Parser.Tests
                 switch (i)
                 {
                     case 0:
-                        result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
+                        result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("create_envoys");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
@@ -334,13 +328,22 @@ namespace IronyModManager.Parser.Tests
 
             var sb = new StringBuilder();
             sb.AppendLine(@"entity = { name = ""ai_01_blue_sponsored_colonizer_entity"" clone = ""ai_01_blue_colonizer_entity"" }");
+            var lines = new HashSet<string>();
+            foreach (var item in sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+            {
+                lines.Add(item);
+            }
+            for (int i = 0; i < 21000; i++)
+            {
+                lines.Add(i.ToString());
+            }
 
             var args = new CanParseArgs()
             {
                 File = "common\\gamerules\\test.txt",
-                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                Lines = lines
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeTrue();
         }
@@ -360,7 +363,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeFalse();
         }
@@ -382,7 +385,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
             };
-            var parser = new KeyParser(new CodeParser());
+            var parser = new SimpleKeyParser(new CodeParser());
             var result = parser.CanParse(args);
             result.Should().BeFalse();
         }

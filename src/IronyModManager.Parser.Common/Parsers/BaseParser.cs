@@ -34,9 +34,9 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Fields
 
         /// <summary>
-        /// The maximum lines
+        /// The complex parse lines threshold
         /// </summary>
-        protected const int MaxLines = 20000;
+        protected const int ComplexParseLinesThreshold = 20000;
 
         /// <summary>
         /// The code parser
@@ -71,6 +71,13 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Methods
 
         /// <summary>
+        /// Determines whether this instance can parse the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
+        public abstract bool CanParse(CanParseArgs args);
+
+        /// <summary>
         /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -78,18 +85,45 @@ namespace IronyModManager.Parser.Common.Parsers
         public abstract IEnumerable<IDefinition> Parse(ParserArgs args);
 
         /// <summary>
-        /// Evals the definition identifier.
+        /// Constructs the arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="sb">The sb.</param>
+        /// <param name="openBrackets">The open brackets.</param>
+        /// <param name="closeBrackets">The close brackets.</param>
+        /// <param name="line">The line.</param>
+        /// <param name="inline">if set to <c>true</c> [inline].</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <returns>ParsingArgs.</returns>
+        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb = null, int? openBrackets = null, int? closeBrackets = null, string line = Shared.Constants.EmptyParam, bool? inline = null, string typeOverride = Shared.Constants.EmptyParam)
+        {
+            return new ParsingArgs()
+            {
+                Args = args,
+                ClosingBracket = closeBrackets.GetValueOrDefault(),
+                Definition = definition,
+                Line = line,
+                OpeningBracket = openBrackets.GetValueOrDefault(),
+                StringBuilder = sb,
+                Inline = inline.GetValueOrDefault(),
+                TypeOverride = typeOverride
+            };
+        }
+
+        /// <summary>
+        /// Evals the complex parse definition identifier.
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="defaultId">The default identifier.</param>
         /// <returns>System.String.</returns>
-        protected virtual string EvalDefinitionId(IEnumerable<IScriptKeyValue> values, string defaultId)
+        protected virtual string EvalComplexParseDefinitionId(IEnumerable<IScriptKeyValue> values, string defaultId)
         {
             if (values?.Count() > 0)
             {
                 foreach (var item in values)
                 {
-                    string id = EvalKeyValueForId(item);
+                    string id = EvalComplexParseKeyValueForId(item);
                     if (!string.IsNullOrWhiteSpace(id))
                     {
                         return id;
@@ -100,11 +134,11 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Evals for errors only.
+        /// Evals the complex parse for errors only.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns>IronyModManager.Parser.Common.Parsers.Models.IScriptError.</returns>
-        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> EvalComplexParseForErrorsOnly(ParserArgs args)
         {
             var value = codeParser.ParseScript(args.Lines, args.File);
             if (value.Error != null)
@@ -115,13 +149,69 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Evals the key value for identifier.
+        /// Evals the complex parse key value for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected virtual string EvalKeyValueForId(IScriptKeyValue value)
+        protected virtual string EvalComplexParseKeyValueForId(IScriptKeyValue value)
         {
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Evals for errors only.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
+        {
+            if (HasPassedComplexThreshold(args.Lines))
+            {
+                return EvalSimpleParseForErrorsOnly(args);
+            }
+            return EvalComplexParseForErrorsOnly(args);
+        }
+
+        /// <summary>
+        /// Evals the simple parse for errors only.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> EvalSimpleParseForErrorsOnly(ParserArgs args)
+        {
+            var text = string.Join(Environment.NewLine, args.Lines);
+            var openBracket = text.Count(s => s == Constants.Scripts.OpeningBracket);
+            var closeBracket = text.Count(s => s == Constants.Scripts.ClosingBracket);
+            if (openBracket != closeBracket)
+            {
+                var error = DIResolver.Get<IScriptError>();
+                error.Line = 0;
+                error.Column = 0;
+                error.Message = "Number of open and close curly brackets does not match. This indicates a syntax error somewhere in the file.";
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Finalizes the simple parse object definition.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition FinalizeSimpleParseObjectDefinition(ParsingArgs args)
+        {
+            MapDefinitionFromArgs(args);
+            return args.Definition;
+        }
+
+        /// <summary>
+        /// Finalizes the simple parse variable definition.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition FinalizeSimpleParseVariableDefinition(ParsingArgs args)
+        {
+            MapDefinitionFromArgs(args);
+            return args.Definition;
         }
 
         /// <summary>
@@ -174,26 +264,43 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Maps the definition from arguments.
+        /// Determines whether [has passed complex threshold] [the specified lines].
         /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <param name="args">The arguments.</param>
-        /// <param name="typeOverride">The type override.</param>
-        protected virtual void MapDefinitionFromArgs(IDefinition definition, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
+        /// <param name="lines">The lines.</param>
+        /// <returns><c>true</c> if [has passed complex threshold] [the specified lines]; otherwise, <c>false</c>.</returns>
+        protected virtual bool HasPassedComplexThreshold(IEnumerable<string> lines)
         {
-            definition.ContentSHA = args.ContentSHA;
-            definition.Dependencies = args.ModDependencies;
-            definition.ModName = args.ModName;
-            definition.File = args.File;
-            definition.Type = FormatType(args.File, typeOverride);
+            return lines?.Count() > ComplexParseLinesThreshold;
         }
 
         /// <summary>
-        /// Parses the specified arguments.
+        /// Maps the definition from arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        protected virtual void MapDefinitionFromArgs(ParsingArgs args)
+        {
+            args.Definition.ContentSHA = args.Args.ContentSHA;
+            args.Definition.Dependencies = args.Args.ModDependencies;
+            args.Definition.ModName = args.Args.ModName;
+            args.Definition.File = args.Args.File;
+            args.Definition.Type = FormatType(args.Args.File, args.TypeOverride);
+        }
+
+        /// <summary>
+        /// Called when [simple parse read object line].
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        protected virtual void OnSimpleParseReadObjectLine(ParsingArgs args)
+        {
+            args.StringBuilder.AppendLine(args.Line);
+        }
+
+        /// <summary>
+        /// Parses the complex first level.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseFirstLevel(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> ParseComplexFirstLevel(ParserArgs args)
         {
             var result = new List<IDefinition>();
             var value = codeParser.ParseScript(args.Lines, args.File);
@@ -207,8 +314,8 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     foreach (var item in value.Value.Nodes)
                     {
-                        result.AddRange(ParseScriptKeyValues(item.KeyValues, args, parent: item.Key));
-                        result.AddRange(ParseScriptNodes(item.Nodes, args, parent: item.Key));
+                        result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key));
+                        result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key));
                     }
                 }
             }
@@ -216,11 +323,11 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the root.
+        /// Parses the complex root.
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> ParseComplexRoot(ParserArgs args)
         {
             var result = new List<IDefinition>();
             var values = codeParser.ParseScript(args.Lines, args.File);
@@ -230,40 +337,21 @@ namespace IronyModManager.Parser.Common.Parsers
             }
             else
             {
-                result.AddRange(ParseScriptKeyValues(values.Value.KeyValues, args));
-                result.AddRange(ParseScriptNodes(values.Value.Nodes, args));
+                result.AddRange(ParseComplexScriptKeyValues(values.Value.KeyValues, args));
+                result.AddRange(ParseComplexScriptNodes(values.Value.Nodes, args));
             }
             return result;
         }
 
         /// <summary>
-        /// Parses the script error.
-        /// </summary>
-        /// <param name="error">The error.</param>
-        /// <param name="args">The arguments.</param>
-        /// <param name="typeOverride">The type override.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
-        {
-            var definition = GetDefinitionInstance();
-            definition.ErrorColumn = error.Column;
-            definition.ErrorLine = error.Line;
-            definition.ErrorMessage = error.Message;
-            definition.Id = Constants.Scripts.Invalid;
-            definition.ValueType = ValueType.Invalid;
-            MapDefinitionFromArgs(definition, args);
-            return definition;
-        }
-
-        /// <summary>
-        /// Parses the script key values.
+        /// Parses the complex script key values.
         /// </summary>
         /// <param name="keyValues">The key values.</param>
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual IEnumerable<IDefinition> ParseComplexScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
         {
             var result = new List<IDefinition>();
             if (keyValues?.Count() > 0)
@@ -271,7 +359,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 foreach (var item in keyValues)
                 {
                     var definition = GetDefinitionInstance();
-                    MapDefinitionFromArgs(definition, args);
+                    MapDefinitionFromArgs(ConstructArgs(args, definition));
                     definition.Code = FormatCode(item.Code, parent);
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
@@ -290,14 +378,14 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the script nodes.
+        /// Parses the complex script nodes.
         /// </summary>
         /// <param name="nodes">The nodes.</param>
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
         {
             var result = new List<IDefinition>();
             if (nodes?.Count() > 0)
@@ -317,12 +405,12 @@ namespace IronyModManager.Parser.Common.Parsers
                             }
                         }
                     }
-                    string id = EvalDefinitionId(item.KeyValues, item.Key);
+                    string id = EvalComplexParseDefinitionId(item.KeyValues, item.Key);
                     if (sbLangs.Length > 0)
                     {
                         id = $"{sbLangs}{id}";
                     }
-                    MapDefinitionFromArgs(definition, args, typeOverride);
+                    MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride));
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
                     definition.Code = FormatCode(item.Code, parent);
@@ -332,6 +420,172 @@ namespace IronyModManager.Parser.Common.Parsers
             return result;
         }
 
+        /// <summary>
+        /// Parses the script error.
+        /// </summary>
+        /// <param name="error">The error.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
+        {
+            var definition = GetDefinitionInstance();
+            definition.ErrorColumn = error.Column;
+            definition.ErrorLine = error.Line;
+            definition.ErrorMessage = error.Message;
+            definition.Id = Constants.Scripts.Invalid;
+            definition.ValueType = ValueType.Invalid;
+            MapDefinitionFromArgs(ConstructArgs(args, definition));
+            return definition;
+        }
+
+        /// <summary>
+        /// Parses the simple.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseSimple(ParserArgs args)
+        {
+            var result = new List<IDefinition>();
+            IDefinition definition = null;
+            var sb = new StringBuilder();
+            int? openBrackets = null;
+            int closeBrackets = 0;
+            foreach (var line in args.Lines)
+            {
+                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
+                {
+                    continue;
+                }
+                if (!openBrackets.HasValue)
+                {
+                    var cleaned = codeParser.CleanWhitespace(line);
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
+                    {
+                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
+                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
+                        sb.Clear();
+                        var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        definition = GetDefinitionInstance();
+                        definition.Id = id;
+                        definition.ValueType = Common.ValueType.Object;
+                        bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline);
+                        OnSimpleParseReadObjectLine(parsingArgs);
+                        // incase some wise ass opened and closed an object definition in the same line
+                        if (inline)
+                        {
+                            openBrackets = null;
+                            closeBrackets = 0;
+                            definition.Code = sb.ToString();
+                            result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
+                        }
+                    }
+                    else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
+                    {
+                        definition = GetDefinitionInstance();
+                        var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
+                        definition.Code = line;
+                        if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
+                            definition.ValueType = ValueType.Namespace;
+                        }
+                        else
+                        {
+                            definition.Id = id;
+                            definition.ValueType = ValueType.Variable;
+                        }
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
+                        result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
+                    }
+                }
+                else
+                {
+                    if (line.Contains(Constants.Scripts.OpeningBracket))
+                    {
+                        openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
+                    }
+                    if (line.Contains(Constants.Scripts.ClosingBracket))
+                    {
+                        closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
+                    }
+                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
+                    OnSimpleParseReadObjectLine(parsingArgs);
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                    {
+                        openBrackets = null;
+                        closeBrackets = 0;
+                        definition.Code = sb.ToString();
+                        result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
+                    }
+                }
+            }
+            return result;
+        }
+
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ParsingArgs.
+        /// </summary>
+        protected class ParsingArgs
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the arguments.
+            /// </summary>
+            /// <value>The arguments.</value>
+            public ParserArgs Args { get; set; }
+
+            /// <summary>
+            /// Gets or sets the closing bracket.
+            /// </summary>
+            /// <value>The closing bracket.</value>
+            public int ClosingBracket { get; set; }
+
+            /// <summary>
+            /// Gets or sets the definition.
+            /// </summary>
+            /// <value>The definition.</value>
+            public IDefinition Definition { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="ParsingArgs" /> is inline.
+            /// </summary>
+            /// <value><c>true</c> if inline; otherwise, <c>false</c>.</value>
+            public bool Inline { get; set; }
+
+            /// <summary>
+            /// Gets or sets the line.
+            /// </summary>
+            /// <value>The line.</value>
+            public string Line { get; set; }
+
+            /// <summary>
+            /// Gets or sets the opening bracket.
+            /// </summary>
+            /// <value>The opening bracket.</value>
+            public int? OpeningBracket { get; set; }
+
+            /// <summary>
+            /// Gets or sets the string builder.
+            /// </summary>
+            /// <value>The string builder.</value>
+            public StringBuilder StringBuilder { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type override.
+            /// </summary>
+            /// <value>The type override.</value>
+            public string TypeOverride { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

@@ -66,7 +66,12 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
+        {
+            return !HasPassedComplexThreshold(args.Lines) && EvalContainsKeyElements(args);
+        }
+
+        protected virtual bool EvalContainsKeyElements(CanParseArgs args)
         {
             int? openBrackets = null;
             int closeBrackets = 0;
@@ -75,7 +80,7 @@ namespace IronyModManager.Parser.Generic
                 var cleaned = codeParser.CleanWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
-                    if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Common.Constants.Scripts.VariableSeparatorId))
+                    if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
                     {
                         openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
                         closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
@@ -140,27 +145,21 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            // CWTools is slow on large files, so skip these and use a legacy parser
-            if (args.Lines.Count() > MaxLines)
-            {
-                var parser = new FastKeyParser();
-                return parser.Parse(args);
-            }
-            return ParseRoot(args);
+            return ParseComplexRoot(args);
         }
 
         /// <summary>
-        /// Evals the key value for identifier.
+        /// Evals the complex parse key value for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected override string EvalKeyValueForId(IScriptKeyValue value)
+        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
         {
             if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
             {
                 return value.Value;
             }
-            return base.EvalKeyValueForId(value);
+            return base.EvalComplexParseKeyValueForId(value);
         }
 
         #endregion Methods

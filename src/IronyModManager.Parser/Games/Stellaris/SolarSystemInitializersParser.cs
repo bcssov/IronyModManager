@@ -17,7 +17,6 @@ using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
-using IronyModManager.Parser.Default;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -65,7 +64,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
             return args.IsStellaris() && args.File.StartsWith(Common.Constants.Stellaris.SolarSystemInitializers, StringComparison.OrdinalIgnoreCase);
         }
@@ -77,12 +76,16 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            if (args.Lines.Count() > MaxLines)
+            if (HasPassedComplexThreshold(args.Lines))
             {
-                var parser = new FastDefaultParser();
-                return parser.Parse(args);
+                var error = EvalSimpleParseForErrorsOnly(args);
+                if (error != null)
+                {
+                    return error;
+                }
+                return ParseSimple(args);
             }
-            return ParseRoot(args);
+            return ParseComplexRoot(args);
         }
 
         #endregion Methods

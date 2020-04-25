@@ -85,7 +85,7 @@ namespace IronyModManager.Parser.Generic
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public virtual bool CanParse(CanParseArgs args)
+        public override bool CanParse(CanParseArgs args)
         {
             return IsValidType(args);
         }
@@ -98,7 +98,7 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             // Doesn't seem to like fxh and or shader file extensions
-            if (!endsWithCheck.Any(p => args.File.EndsWith(p)) && args.Lines.Count() < MaxLines)
+            if (!endsWithCheck.Any(p => args.File.EndsWith(p)))
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)
@@ -109,7 +109,7 @@ namespace IronyModManager.Parser.Generic
 
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
-            MapDefinitionFromArgs(def, args);
+            MapDefinitionFromArgs(ConstructArgs(args, def));
             def.Code = string.Join(Environment.NewLine, args.Lines);
             def.Id = Path.GetFileName(args.File);
             def.ValueType = Common.ValueType.WholeTextFile;
