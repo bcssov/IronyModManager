@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -173,7 +173,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SelectedCollection = CollectionMods.SelectedModCollection,
                     Results = conflicts,
-                    State = NavigationState.ConflictSolver
+                    State = NavigationState.ConflictSolver,
+                    SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
                 };
                 MessageBus.Current.SendMessage(args);
             }

@@ -248,6 +248,12 @@ namespace IronyModManager.ViewModels
         public virtual IModCollection SelectedModCollection { get; set; }
 
         /// <summary>
+        /// Gets or sets the selected mods order.
+        /// </summary>
+        /// <value>The selected mods order.</value>
+        public virtual IList<string> SelectedModsOrder { get; set; }
+
+        /// <summary>
         /// Gets or sets the selected parent conflict.
         /// </summary>
         /// <value>The selected parent conflict.</value>
@@ -386,6 +392,7 @@ namespace IronyModManager.ViewModels
             {
                 var args = new NavigationEventArgs()
                 {
+                    SelectedMods = SelectedModsOrder,
                     SelectedCollection = SelectedModCollection,
                     Results = Conflicts,
                     State = NavigationState.Main
@@ -420,6 +427,7 @@ namespace IronyModManager.ViewModels
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
+                    ModCompareSelector.SelectedModsOrder = SelectedModsOrder;
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;

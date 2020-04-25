@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="NavigationEventArgs.cs" company="Mario">
 //     Mario
@@ -39,6 +39,12 @@ namespace IronyModManager.Common.Events
         /// </summary>
         /// <value>The selected collection.</value>
         public IModCollection SelectedCollection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selected mods.
+        /// </summary>
+        /// <value>The selected mods.</value>
+        public IList<string> SelectedMods { get; set; }
 
         /// <summary>
         /// Gets or sets the state.

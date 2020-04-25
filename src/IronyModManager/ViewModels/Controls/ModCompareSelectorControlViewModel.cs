@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -89,6 +89,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IDefinition RightSelectedDefinition { get; set; }
 
         /// <summary>
+        /// Gets or sets the selected mods order.
+        /// </summary>
+        /// <value>The selected mods order.</value>
+        public virtual IList<string> SelectedModsOrder { get; set; }
+
+        /// <summary>
         /// Gets or sets the virtual definitions.
         /// </summary>
         /// <value>The virtual definitions.</value>
@@ -116,7 +122,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (!IsBinaryConflict)
             {
-                var col = definitions.ToHashSet();
+                var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
                 var newDefinition = await modService.CreatePatchDefinitionAsync(col.First(), CollectionName);
                 if (newDefinition != null)
                 {
@@ -126,7 +132,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             else
             {
-                VirtualDefinitions = definitions;
+                VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
             }
         }
 
