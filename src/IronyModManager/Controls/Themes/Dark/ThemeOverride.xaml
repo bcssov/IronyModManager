@@ -23,6 +23,10 @@
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
+  <Style Selector="TextBlock.PatchMod">
+    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
   <Style Selector="TextBlock.DiffImaginaryLine">
     <Setter Property="Background" Value="#FF808080" />
     <Setter Property="Foreground" Value="Black"/>

@@ -3,7 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ModCompareSelectorControlView">
+  <UserControl.Resources>
+    <converter:PatchModConverter x:Key="PatchModConverter" />
+  </UserControl.Resources>
   <Panel>
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
       <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
@@ -12,9 +17,12 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding ModName}"></TextBlock>
-              <TextBlock Text=" - "></TextBlock>
-              <TextBlock Text="{Binding Id}"></TextBlock>
+              <controls:BoundClassTextBlock Text="{Binding ModName}"
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock  Text=" - "
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock  Text="{Binding Id}"
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
@@ -25,9 +33,12 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{Binding ModName}"></TextBlock>
-              <TextBlock Text=" - "></TextBlock>
-              <TextBlock Text="{Binding Id}"></TextBlock>
+              <controls:BoundClassTextBlock Text="{Binding ModName}"
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock  Text=" - "
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock  Text="{Binding Id}"
+                                            BoundClasses="{Binding, Converter={StaticResource PatchModConverter}}"></controls:BoundClassTextBlock>
             </StackPanel>
           </DataTemplate>
         </ListBox.ItemTemplate>
