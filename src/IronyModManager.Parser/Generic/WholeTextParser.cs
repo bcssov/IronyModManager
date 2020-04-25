@@ -98,7 +98,7 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             // Doesn't seem to like fxh and or shader file extensions
-            if (!endsWithCheck.Any(p => args.File.EndsWith(p)))
+            if (!endsWithCheck.Any(p => args.File.EndsWith(p)) && args.Lines.Count() < MaxLines)
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)

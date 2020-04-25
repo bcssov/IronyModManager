@@ -81,7 +81,7 @@
         "PrevConflict": "Vorheriger Konflikt",
         "InvalidConflicts": {
             "Name": "Ungültig",
-            "Error": "Fehler in Zeile: {Line} Spalte: {Column}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}."
+            "Error": "Fehler in Zeile: {Line} Spalte: {Column}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
             "CopyThis": "Kopier das",

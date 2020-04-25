@@ -81,7 +81,7 @@
         "PrevConflict": "Prijašnji sukob",
         "InvalidConflicts": {
             "Name": "Nevažeći",
-            "Error": "Pogreška u retku: {Line} stupac: {Column}. Prijavite ovu pogrešku autoru mod-a: {ModName}."
+            "Error": "Pogreška u retku: {Line} stupac: {Column}. Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
             "CopyThis": "Kopiraj odabrano",

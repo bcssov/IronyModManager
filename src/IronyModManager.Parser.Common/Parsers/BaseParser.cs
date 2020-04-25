@@ -34,6 +34,11 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Fields
 
         /// <summary>
+        /// The maximum lines
+        /// </summary>
+        protected const int MaxLines = 20000;
+
+        /// <summary>
         /// The code parser
         /// </summary>
         protected readonly ICodeParser codeParser;
@@ -241,8 +246,9 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
         {
             var definition = GetDefinitionInstance();
-            definition.ErrorLine = error.Column;
+            definition.ErrorColumn = error.Column;
             definition.ErrorLine = error.Line;
+            definition.ErrorMessage = error.Message;
             definition.Id = Constants.Scripts.Invalid;
             definition.ValueType = ValueType.Invalid;
             MapDefinitionFromArgs(definition, args);
@@ -267,7 +273,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     var definition = GetDefinitionInstance();
                     MapDefinitionFromArgs(definition, args);
                     definition.Code = FormatCode(item.Code, parent);
-                    if (item.Key.StartsWith(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
+                    if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
                         definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
                         definition.ValueType = ValueType.Namespace;

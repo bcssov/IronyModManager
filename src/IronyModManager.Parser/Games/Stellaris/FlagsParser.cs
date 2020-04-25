@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -78,7 +78,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var valType = !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
-            if (valType == Common.ValueType.WholeTextFile)
+            if (valType == Common.ValueType.WholeTextFile && args.Lines.Count() < MaxLines)
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -140,6 +140,12 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            // CWTools is slow on large files, so skip these and use a legacy parser
+            if (args.Lines.Count() > MaxLines)
+            {
+                var parser = new FastKeyParser();
+                return parser.Parse(args);
+            }
             return ParseRoot(args);
         }
 

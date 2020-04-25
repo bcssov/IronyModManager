@@ -166,6 +166,12 @@ namespace IronyModManager.Parser.Definitions
         public long ErrorLine { get; set; }
 
         /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        /// <value>The error message.</value>
+        public string ErrorMessage { get; set; }
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
@@ -283,6 +289,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(UsedParser) => UsedParser,
                 nameof(ErrorColumn) => ErrorColumn,
                 nameof(ErrorLine) => ErrorLine,
+                nameof(ErrorMessage) => ErrorMessage,
                 _ => Id,
             };
         }

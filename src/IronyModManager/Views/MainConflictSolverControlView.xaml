@@ -46,8 +46,8 @@
           <ContentControl Margin="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
         </Grid>
       </Panel>
-      <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding !IsConflictSolverAvailable}">
-        <TextBlock TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}"></TextBlock>
+      <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
+        <TextBlock TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0"></TextBlock>
       </Panel>
       <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
       <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>

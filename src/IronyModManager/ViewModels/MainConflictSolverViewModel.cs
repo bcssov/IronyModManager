@@ -324,19 +324,28 @@ namespace IronyModManager.ViewModels
                     }
                     conflicts.RemoveWhere(p => p.Children == null || p.Children.Count == 0);
                 }
-                var invalid = conflictResult.Conflicts.GetByValueType(Parser.Common.ValueType.Invalid);
+                var invalid = conflictResult.AllConflicts.GetByValueType(Parser.Common.ValueType.Invalid);
                 if (invalid?.Count() > 0)
                 {
                     var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
                     invalidDef.Name = Invalid;
                     invalidDef.Key = InvalidKey;
+                    var children = new List<IHierarchicalDefinitions>();
                     foreach (var item in invalid)
                     {
                         var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
-                        invalidChild.Name = item.Id;
-                        invalidChild.Key = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error), new { item.ModName, Line = item.ErrorLine, Column = item.ErrorLine });
-                        invalidDef.Children.Add(invalidChild);
+                        invalidChild.Name = item.File;
+                        invalidChild.Key = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error), new
+                        {
+                            item.ModName,
+                            Line = item.ErrorLine,
+                            Column = item.ErrorColumn,
+                            Environment.NewLine,
+                            Message = item.ErrorMessage
+                        });
+                        children.Add(invalidChild);
                     }
+                    invalidDef.Children = children;
                     conflicts.Add(invalidDef);
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
@@ -407,7 +416,7 @@ namespace IronyModManager.ViewModels
 
             this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
             {
-                if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key))
+                if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
@@ -431,7 +440,7 @@ namespace IronyModManager.ViewModels
             {
                 this.WhenAnyValue(v => v.ModCompareSelector.LeftSelectedDefinition).Subscribe(s =>
                 {
-                    if (s != null)
+                    if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
@@ -462,7 +471,7 @@ namespace IronyModManager.ViewModels
 
                 this.WhenAnyValue(v => v.ModCompareSelector.RightSelectedDefinition).Subscribe(s =>
                 {
-                    if (s != null)
+                    if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));

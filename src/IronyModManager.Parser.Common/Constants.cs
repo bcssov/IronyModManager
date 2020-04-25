@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -130,6 +130,11 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
+            /// The bitmap fonts identifier
+            /// </summary>
+            public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
+
+            /// <summary>
             /// The closing bracket
             /// </summary>
             public const char ClosingBracket = '}';
@@ -145,6 +150,16 @@ namespace IronyModManager.Parser.Common
             public const string GraphicsTypeName = "name";
 
             /// <summary>
+            /// The GUI types
+            /// </summary>
+            public const string GuiTypes = "guiTypes";
+
+            /// <summary>
+            /// The GUI types identifier
+            /// </summary>
+            public const string GuiTypesId = GuiTypes + VariableSeparatorId;
+
+            /// <summary>
             /// The invalid
             /// </summary>
             public const string Invalid = "invalid";
@@ -157,7 +172,22 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The namespace identifier
             /// </summary>
-            public const string NamespaceId = "namespace";
+            public const string NamespaceId = Namespace + VariableSeparatorId;
+
+            /// <summary>
+            /// The namespace
+            /// </summary>
+            public const string Namespace = "namespace";
+
+            /// <summary>
+            /// The object types
+            /// </summary>
+            public const string ObjectTypes = "objectTypes";
+
+            /// <summary>
+            /// The object types identifier
+            /// </summary>
+            public const string ObjectTypesId = "objectTypes" + VariableSeparatorId;
 
             /// <summary>
             /// The opening bracket
@@ -165,9 +195,24 @@ namespace IronyModManager.Parser.Common
             public const char OpeningBracket = '{';
 
             /// <summary>
+            /// The position type identifier
+            /// </summary>
+            public const string PositionTypeId = "positionType" + VariableSeparatorId;
+
+            /// <summary>
             /// The script comment identifier
             /// </summary>
             public const string ScriptCommentId = "#";
+
+            /// <summary>
+            /// The sprite types
+            /// </summary>
+            public const string SpriteTypes = "spriteTypes";
+
+            /// <summary>
+            /// The sprite types identifier
+            /// </summary>
+            public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
 
             /// <summary>
             /// The variable separator identifier

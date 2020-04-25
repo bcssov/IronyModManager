@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
@@ -13,9 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Default;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -75,6 +77,11 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            if (args.Lines.Count() > MaxLines)
+            {
+                var parser = new FastDefaultParser();
+                return parser.Parse(args);
+            }
             return ParseRoot(args);
         }
 

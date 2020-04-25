@@ -4,7 +4,7 @@
 // Created          : 04-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="IScriptError.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Parser.Common.Parsers.Models
         /// </summary>
         /// <value>The line.</value>
         long Line { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        /// <value>The message.</value>
+        string Message { get; set; }
 
         #endregion Properties
     }

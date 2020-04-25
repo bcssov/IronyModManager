@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -77,10 +77,13 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var errors = EvalForErrorsOnly(args);
-            if (errors != null)
+            if (args.Lines.Count() < MaxLines)
             {
-                return errors;
+                var errors = EvalForErrorsOnly(args);
+                if (errors != null)
+                {
+                    return errors;
+                }
             }
 
             var result = new List<IDefinition>();

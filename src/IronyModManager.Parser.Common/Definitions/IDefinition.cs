@@ -63,6 +63,12 @@ namespace IronyModManager.Parser.Common.Definitions
         long ErrorLine { get; set; }
 
         /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        /// <value>The error message.</value>
+        string ErrorMessage { get; set; }
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>

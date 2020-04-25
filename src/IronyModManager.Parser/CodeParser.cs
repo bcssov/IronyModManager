@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -219,6 +219,7 @@ namespace IronyModManager.Parser
                 var error = DIResolver.Get<IScriptError>();
                 error.Column = errorResponse.Column;
                 error.Line = errorResponse.Line;
+                error.Message = errorResponse.ErrorMessage;
                 result.Error = error;
             }
             return result;
