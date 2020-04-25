@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -1108,7 +1108,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is valid definition type] [the specified definition]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsValidDefinitionType(IDefinition definition)
         {
-            return definition != null && definition.ValueType != Parser.Common.ValueType.Variable && definition.ValueType != Parser.Common.ValueType.Namespace;
+            return definition != null && definition.ValueType != Parser.Common.ValueType.Variable && definition.ValueType != Parser.Common.ValueType.Namespace && definition.ValueType != Parser.Common.ValueType.Invalid;
         }
 
         /// <summary>

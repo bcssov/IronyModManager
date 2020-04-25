@@ -79,6 +79,10 @@
         "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
         "NextConflict": "Slijedeći sukob",
         "PrevConflict": "Prijašnji sukob",
+        "InvalidConflicts": {
+            "Name": "Nevažeći",
+            "Error": "Pogreška u retku: {Line} stupac: {Column}. Prijavite ovu pogrešku autoru mod-a: {ModName}."
+        },
         "ContextMenu": {
             "CopyThis": "Kopiraj odabrano",
             "CopyThisAfterLine": "Kopiraj odabrano poslije linije",

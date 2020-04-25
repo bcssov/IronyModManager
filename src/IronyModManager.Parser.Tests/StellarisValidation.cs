@@ -4,9 +4,9 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="DetectDuplicates.cs" company="Mario">
+// <copyright file="StellarisValidation.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -67,6 +67,7 @@ namespace IronyModManager.Parser.Tests
         /// </summary>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
+        /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
 
 #if !FUNCTIONAL_TEST
 
@@ -95,7 +96,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"_ancient_relics_particles.gfx"))
+                //if (relativePath.Contains(@"gfx\particles\ships\lithoid_01_titan_weapon_core.asset"))
                 //{
                 //    Debugger.Break();
                 //}
@@ -144,6 +145,7 @@ namespace IronyModManager.Parser.Tests
                 }
             }
 
+            var invalid = new HashSet<string>();
             var indexed = new IndexedDefinitions();
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
@@ -153,7 +155,22 @@ namespace IronyModManager.Parser.Tests
 
             foreach (var item in typesKeys)
             {
-                var types = indexed.GetByType(item).ToHashSet();
+                var all = indexed.GetByType(item);
+                var types = all.Where(p => p.ValueType != Common.ValueType.Invalid).ToHashSet();
+                if (all.Any(p => p.ValueType == Common.ValueType.Invalid))
+                {
+                    foreach (var def in all.Where(p => p.ValueType == Common.ValueType.Invalid))
+                    {
+                        if (!invalid.Contains(def.File))
+                        {
+                            invalid.Add(def.File);
+                        }
+                    }
+                }
+                if (types.Count == 0)
+                {
+                    continue;
+                }
                 string usedParser = types.First().UsedParser;
                 var groupedParsers = types.GroupBy(p => p.UsedParser);
                 if (groupedParsers.Count() > 1)
@@ -163,7 +180,7 @@ namespace IronyModManager.Parser.Tests
                     if (groupedParsers.All(p => p.First().UsedParser.Equals("GenericKeyParser") || p.First().UsedParser.Equals("DefaultParser")))
                     {
                         var objectIds = new List<string>();
-                        foreach (var type in types.Where(p => p.ValueType != Common.ValueType.Invalid))
+                        foreach (var type in types)
                         {
                             var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
                             objectIds.Add(id);
@@ -189,7 +206,7 @@ namespace IronyModManager.Parser.Tests
                 else if (usedParser == "GenericKeyParser")
                 {
                     var objectIds = new List<string>();
-                    foreach (var type in types.Where(p => p.ValueType != Common.ValueType.Invalid))
+                    foreach (var type in types)
                     {
                         var reserved = new string[] { "entity", "animation", "music" };
                         var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
@@ -237,6 +254,7 @@ namespace IronyModManager.Parser.Tests
                 }
             }
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Undefined{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, undefined.OrderBy(s => s))}");
+            writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Invalid{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, invalid.OrderBy(s => s))}");
             writer.WriteLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
 
             File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json", JsonDISerializer.Serialize(parserMap));

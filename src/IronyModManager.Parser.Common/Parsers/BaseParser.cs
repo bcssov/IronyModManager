@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -241,6 +241,8 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
         {
             var definition = GetDefinitionInstance();
+            definition.ErrorLine = error.Column;
+            definition.ErrorLine = error.Line;
             definition.Id = Constants.Scripts.Invalid;
             definition.ValueType = ValueType.Invalid;
             MapDefinitionFromArgs(definition, args);

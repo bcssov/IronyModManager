@@ -79,6 +79,10 @@
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",
+        "InvalidConflicts": {
+            "Name": "Ungültig",
+            "Error": "Fehler in Zeile: {Line} Spalte: {Column}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}."
+        },
         "ContextMenu": {
             "CopyThis": "Kopier das",
             "CopyThisAfterLine": "Kopieren Sie diese After Line",
