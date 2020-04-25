@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-13-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -51,6 +51,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> DescriptorExistsAsync(ModWriterParameters parameters);
+
+        /// <summary>
+        /// Mods the directory exists asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ModDirectoryExistsAsync(ModWriterParameters parameters);
 
         /// <summary>
         /// Purges the mod directory asynchronous.

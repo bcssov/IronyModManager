@@ -279,13 +279,21 @@ namespace IronyModManager.Services
                 EnabledMods = enabledMods,
                 RootDirectory = game.UserDirectory
             };
-            if (await modWriter.DescriptorExistsAsync(new ModWriterParameters()
+            if (await modWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {
                 RootDirectory = game.UserDirectory,
-                Mod = mod
+                Path = mod.FileName
             }))
             {
-                applyModParams.HiddenMods = new List<IMod>() { mod };
+                if (await modWriter.WriteDescriptorAsync(new ModWriterParameters()
+                {
+                    Mod = mod,
+                    RootDirectory = game.UserDirectory,
+                    Path = mod.DescriptorFile
+                }))
+                {
+                    applyModParams.HiddenMods = new List<IMod>() { mod };
+                }
             }
             return await modWriter.ApplyModsAsync(applyModParams);
         }

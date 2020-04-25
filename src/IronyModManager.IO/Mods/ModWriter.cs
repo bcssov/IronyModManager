@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -181,6 +181,21 @@ namespace IronyModManager.IO.Mods
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Mods the directory exists asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ModDirectoryExistsAsync(ModWriterParameters parameters)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            if (!Directory.Exists(fullPath))
+            {
+                return Task.FromResult(false);
+            }
+            return Task.FromResult(Directory.EnumerateFileSystemEntries(fullPath).Any());
         }
 
         /// <summary>

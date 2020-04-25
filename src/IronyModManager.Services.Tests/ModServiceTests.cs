@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -446,6 +446,14 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
             modWriter.Setup(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
                 return Task.FromResult(true);
@@ -485,6 +493,14 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
             modWriter.Setup(p => p.DescriptorExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
                 return Task.FromResult(true);
@@ -521,6 +537,14 @@ namespace IronyModManager.Services.Tests
                 Type = "test"
             });
             modWriter.Setup(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
             {
                 return Task.FromResult(true);
             });
