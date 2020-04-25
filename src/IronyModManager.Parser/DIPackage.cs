@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -17,11 +17,13 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Parser.Default;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Mod;
+using IronyModManager.Parser.Models;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -49,8 +51,8 @@ namespace IronyModManager.Parser
             container.Register<IDefaultParser, DefaultParser>();
             container.Collection.Register(typeof(IGenericParser), new List<Type>()
             {
-                 typeof(BinaryParser), typeof(DefinesParser), typeof(GfxParser),
-                 typeof(GuiParser), typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
+                 typeof(BinaryParser), typeof(DefinesParser), typeof(GraphicsParser),
+                 typeof(KeyParser), typeof(LocalizationParser), typeof(Generic.WholeTextParser)
             });
             container.Collection.Register(typeof(IGameParser), new List<Type>
             {
@@ -59,9 +61,14 @@ namespace IronyModManager.Parser
             container.Register<IParserManager, ParserManager>();
             container.Register<IModObject, ModObject>();
             container.Register<IModParser, ModParser>();
-            container.Register<ITextParser, TextParser>();
+            container.Register<ICodeParser, CodeParser>();
             container.Register<IHierarchicalDefinitions, HierarchicalDefinitions>();
             container.Register<IParserMap, ParserMap>();
+            container.Register<IScriptValue, ScriptValue>();
+            container.Register<IScriptKeyValue, ScriptKeyValue>();
+            container.Register<IScriptNode, ScriptNode>();
+            container.Register<IScriptError, ScriptError>();
+            container.Register<IParseResponse, ParseResponse>();
         }
 
         #endregion Methods

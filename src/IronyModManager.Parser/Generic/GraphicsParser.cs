@@ -4,39 +4,40 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="BinaryParser.cs" company="Mario">
+// <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class BinaryParser.
+    /// Class GuiParser.
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class BinaryParser : BaseParser, IGenericParser
+    public class GraphicsParser : BaseParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryParser" /> class.
+        /// Initializes a new instance of the <see cref="GraphicsParser" /> class.
         /// </summary>
-        /// <param name="codeParser">The text parser.</param>
-        public BinaryParser(ICodeParser codeParser) : base(codeParser)
+        /// <param name="textParser">The text parser.</param>
+        public GraphicsParser(ICodeParser textParser) : base(textParser)
         {
         }
 
@@ -48,13 +49,13 @@ namespace IronyModManager.Parser.Generic
         /// Gets the name of the parser.
         /// </summary>
         /// <value>The name of the parser.</value>
-        public override string ParserName => "Generic" + nameof(BinaryParser);
+        public override string ParserName => "Generic" + nameof(GraphicsParser);
 
         /// <summary>
         /// Gets the priority.
         /// </summary>
         /// <value>The priority.</value>
-        public int Priority => 1;
+        public int Priority => 2;
 
         #endregion Properties
 
@@ -67,7 +68,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public bool CanParse(CanParseArgs args)
         {
-            return !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -77,13 +78,35 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            // This type is a bit different and only will conflict in filenames.
-            var def = GetDefinitionInstance();
-            MapDefinitionFromArgs(def, args, Common.Constants.BinaryType);
-            def.Code = string.Empty;
-            def.Id = Path.GetFileName(args.File);
-            def.ValueType = Common.ValueType.Binary;
-            return new List<IDefinition> { def };
+            // CWTools is slow on large files, so skip these and use a legacy parser
+            if (args.Lines.Count() > MaxLines)
+            {
+                if (args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
+                {
+                    var parser = new FastGUIParser();
+                    return parser.Parse(args);
+                }
+                else
+                {
+                    var parser = new FastGFXParser();
+                    return parser.Parse(args);
+                }
+            }
+            return ParseFirstLevel(args);
+        }
+
+        /// <summary>
+        /// Evals the key value for identifier.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalKeyValueForId(IScriptKeyValue value)
+        {
+            if (Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
+            {
+                return value.Value;
+            }
+            return base.EvalKeyValueForId(value);
         }
 
         #endregion Methods

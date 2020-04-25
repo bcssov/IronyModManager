@@ -583,7 +583,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
             var source = leftSide ? LeftDiff : RightDiff;
-            if (selected.Count > 0 && selected?.Count() < source?.Count())
+            if (selected != null && source != null && (selected.Count > 0 && selected.Count() < source.Count()))
             {
                 foreach (var item in selected)
                 {

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -57,9 +57,9 @@ namespace IronyModManager.Parser.Definitions
         private string parentDirectory = string.Empty;
 
         /// <summary>
-        /// The trimmed code
+        /// The single line code
         /// </summary>
-        private string trimmedCode = string.Empty;
+        private string singleLineCode = string.Empty;
 
         /// <summary>
         /// The type
@@ -95,12 +95,12 @@ namespace IronyModManager.Parser.Definitions
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var lines = value.ReplaceTabs().SplitOnNewLine();
-                    var trimmedLines = new List<string>();
+                    var singleLine = new List<string>();
                     foreach (var line in lines)
                     {
-                        trimmedLines.Add(line.Trim());
+                        singleLine.Add(line.Trim());
                     }
-                    trimmedCode = string.Join(Environment.NewLine, trimmedLines.Where(s => !string.IsNullOrWhiteSpace(s)));
+                    singleLineCode = string.Join(' ', singleLine.Where(s => !string.IsNullOrWhiteSpace(s)));
                     code = string.Join(Environment.NewLine, lines.Where(s => !string.IsNullOrWhiteSpace(s)));
                 }
                 else
@@ -134,9 +134,9 @@ namespace IronyModManager.Parser.Definitions
                 }
                 else
                 {
-                    if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(trimmedCode))
+                    if (string.IsNullOrWhiteSpace(definitionSHA) && !string.IsNullOrWhiteSpace(singleLineCode))
                     {
-                        definitionSHA = DIResolver.Get<ITextParser>().CleanWhitespace(trimmedCode).CalculateSHA();
+                        definitionSHA = DIResolver.Get<ICodeParser>().CleanWhitespace(singleLineCode).CalculateSHA();
                     }
                     return definitionSHA;
                 }
@@ -152,6 +152,24 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The dependencies.</value>
         public IEnumerable<string> Dependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error column.
+        /// </summary>
+        /// <value>The error column.</value>
+        public long ErrorColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error line.
+        /// </summary>
+        /// <value>The error line.</value>
+        public long ErrorLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        /// <value>The error message.</value>
+        public string ErrorMessage { get; set; }
 
         /// <summary>
         /// Gets or sets the file.
@@ -269,6 +287,9 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ModName) => ModName,
                 nameof(ParentDirectory) => ParentDirectory,
                 nameof(UsedParser) => UsedParser,
+                nameof(ErrorColumn) => ErrorColumn,
+                nameof(ErrorLine) => ErrorLine,
+                nameof(ErrorMessage) => ErrorMessage,
                 _ => Id,
             };
         }

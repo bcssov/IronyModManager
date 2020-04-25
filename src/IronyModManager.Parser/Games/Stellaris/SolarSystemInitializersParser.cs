@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
@@ -13,8 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Parser.Common.Args;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Default;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -33,7 +36,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Initializes a new instance of the <see cref="SolarSystemInitializersParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public SolarSystemInitializersParser(ITextParser textParser) : base(textParser)
+        public SolarSystemInitializersParser(ICodeParser textParser) : base(textParser)
         {
         }
 
@@ -65,6 +68,21 @@ namespace IronyModManager.Parser.Games.Stellaris
         public bool CanParse(CanParseArgs args)
         {
             return args.IsStellaris() && args.File.StartsWith(Common.Constants.Stellaris.SolarSystemInitializers, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Parses the specified arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
+        {
+            if (args.Lines.Count() > MaxLines)
+            {
+                var parser = new FastDefaultParser();
+                return parser.Parse(args);
+            }
+            return ParseRoot(args);
         }
 
         #endregion Methods

@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <PackageReference Include="CodexMicroORM.Core" Version="0.9.3" />
+    <PackageReference Include="CWTools" Version="0.4.0-alpha3" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.1.74">

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="GfxParser.cs" company="Mario">
+// <copyright file="FastGFXParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,18 +17,16 @@ using System.Linq;
 using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Default;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GfxParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
+    /// Class FastGFXParser.
+    /// Implements the <see cref="IronyModManager.Parser.Default.FastDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GfxParser : BaseParser, IGenericParser
+    /// <seealso cref="IronyModManager.Parser.Default.FastDefaultParser" />
+    internal class FastGFXParser : FastDefaultParser
     {
         #region Fields
 
@@ -45,45 +43,7 @@ namespace IronyModManager.Parser.Generic
 
         #endregion Fields
 
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GfxParser" /> class.
-        /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public GfxParser(ITextParser textParser) : base(textParser)
-        {
-        }
-
-        #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the name of the parser.
-        /// </summary>
-        /// <value>The name of the parser.</value>
-        public override string ParserName => "Generic" + nameof(GfxParser);
-
-        /// <summary>
-        /// Gets the priority.
-        /// </summary>
-        /// <value>The priority.</value>
-        public int Priority => 2;
-
-        #endregion Properties
-
         #region Methods
-
-        /// <summary>
-        /// Determines whether this instance can parse the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
-        {
-            return args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
-        }
 
         /// <summary>
         /// Parses the specified arguments.
@@ -105,7 +65,7 @@ namespace IronyModManager.Parser.Generic
                 {
                     continue;
                 }
-                var cleaned = textParser.CleanWhitespace(line);
+                var cleaned = codeParser.CleanWhitespace(line);
                 var localTypeId = ids.FirstOrDefault(s => cleaned.StartsWith(s, StringComparison.OrdinalIgnoreCase));
                 if (!string.IsNullOrWhiteSpace(localTypeId))
                 {
@@ -119,7 +79,7 @@ namespace IronyModManager.Parser.Generic
                         sbLangs.Clear();
                         definition = GetDefinitionInstance();
                         definition.ValueType = Common.ValueType.Object;
-                        var id = textParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         foreach (var item in Common.Constants.Localization.Locales)
                         {
                             if (line.Contains(item, StringComparison.OrdinalIgnoreCase))
@@ -165,13 +125,13 @@ namespace IronyModManager.Parser.Generic
                         {
                             sb.Clear();
                             sbLangs.Clear();
-                            sb.AppendLine(textParser.PrettifyLine($"{typeId}{Common.Constants.Scripts.OpeningBracket}"));
+                            sb.AppendLine(codeParser.PrettifyLine($"{typeId}{Common.Constants.Scripts.OpeningBracket}"));
                             definition = GetDefinitionInstance();
                             definition.ValueType = Common.ValueType.Object;
-                            var initialKey = textParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                            var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
                             definition.Id = initialKey;
                         }
-                        var id = textParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         foreach (var item in Common.Constants.Localization.Locales)
                         {
                             if (line.Contains(item, StringComparison.OrdinalIgnoreCase))

@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -29,6 +30,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels
 {
@@ -41,6 +43,11 @@ namespace IronyModManager.ViewModels
     public class MainConflictSolverControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The invalid key
+        /// </summary>
+        private const string InvalidKey = "invalid";
 
         /// <summary>
         /// The localization
@@ -147,10 +154,35 @@ namespace IronyModManager.ViewModels
         public virtual bool IgnoreEnabled { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the invalid.
+        /// </summary>
+        /// <value>The invalid.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.Name)]
+        public virtual string Invalid { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is binary conflict.
         /// </summary>
         /// <value><c>true</c> if this instance is binary conflict; otherwise, <c>false</c>.</value>
         public virtual bool IsBinaryConflict { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is binary viewer visible.
+        /// </summary>
+        /// <value><c>true</c> if this instance is binary viewer visible; otherwise, <c>false</c>.</value>
+        public virtual bool IsBinaryViewerVisible { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is conflict solver available.
+        /// </summary>
+        /// <value><c>true</c> if this instance is conflict solver available; otherwise, <c>false</c>.</value>
+        public virtual bool IsConflictSolverAvailable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is merge viewer visible.
+        /// </summary>
+        /// <value><c>true</c> if this instance is merge viewer visible; otherwise, <c>false</c>.</value>
+        public virtual bool IsMergeViewerVisible { get; set; }
 
         /// <summary>
         /// Gets or sets the left side.
@@ -226,12 +258,32 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            FilterHierarchalConflicts(Conflicts);
+            base.OnLocaleChanged(newLocale, oldLocale);
+        }
+
+        /// <summary>
         /// Resets this instance.
         /// </summary>
         public void Reset()
         {
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
+        }
+
+        /// <summary>
+        /// Evals the viewer visibility.
+        /// </summary>
+        protected virtual void EvalViewerVisibility()
+        {
+            IsBinaryViewerVisible = IsBinaryConflict && IsConflictSolverAvailable;
+            IsMergeViewerVisible = !IsBinaryConflict && IsConflictSolverAvailable;
         }
 
         /// <summary>
@@ -271,6 +323,30 @@ namespace IronyModManager.ViewModels
                         }
                     }
                     conflicts.RemoveWhere(p => p.Children == null || p.Children.Count == 0);
+                }
+                var invalid = conflictResult.AllConflicts.GetByValueType(Parser.Common.ValueType.Invalid);
+                if (invalid?.Count() > 0)
+                {
+                    var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
+                    invalidDef.Name = Invalid;
+                    invalidDef.Key = InvalidKey;
+                    var children = new List<IHierarchicalDefinitions>();
+                    foreach (var item in invalid)
+                    {
+                        var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
+                        invalidChild.Name = item.File;
+                        invalidChild.Key = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error), new
+                        {
+                            item.ModName,
+                            Line = item.ErrorLine,
+                            Column = item.ErrorColumn,
+                            Environment.NewLine,
+                            Message = item.ErrorMessage
+                        });
+                        children.Add(invalidChild);
+                    }
+                    invalidDef.Children = children;
+                    conflicts.Add(invalidDef);
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
                 if (SelectedParentConflict != null)
@@ -332,9 +408,15 @@ namespace IronyModManager.ViewModels
                 FilterHierarchalConflicts(s);
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
+            {
+                IsConflictSolverAvailable = !(s?.Key == InvalidKey);
+                EvalViewerVisibility();
+            }).DisposeWith(disposables);
+
             this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
             {
-                if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key))
+                if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
@@ -344,6 +426,7 @@ namespace IronyModManager.ViewModels
                     MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                     MergeViewer.SetText(string.Empty, string.Empty);
                     MergeViewer.ExitEditMode();
+                    EvalViewerVisibility();
                     IgnoreEnabled = true;
                 }
                 else
@@ -357,7 +440,7 @@ namespace IronyModManager.ViewModels
             {
                 this.WhenAnyValue(v => v.ModCompareSelector.LeftSelectedDefinition).Subscribe(s =>
                 {
-                    if (s != null)
+                    if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
@@ -388,7 +471,7 @@ namespace IronyModManager.ViewModels
 
                 this.WhenAnyValue(v => v.ModCompareSelector.RightSelectedDefinition).Subscribe(s =>
                 {
-                    if (s != null)
+                    if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
                         MergeViewer.SetSidePatchMod(modService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));

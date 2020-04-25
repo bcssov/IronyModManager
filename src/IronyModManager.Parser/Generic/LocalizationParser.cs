@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -35,7 +35,7 @@ namespace IronyModManager.Parser.Generic
         /// Initializes a new instance of the <see cref="LocalizationParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public LocalizationParser(ITextParser textParser) : base(textParser)
+        public LocalizationParser(ICodeParser textParser) : base(textParser)
         {
         }
 
@@ -94,11 +94,9 @@ namespace IronyModManager.Parser.Generic
                     if (string.IsNullOrWhiteSpace(lang))
                     {
                         var def = GetDefinitionInstance();
-                        var parsingArgs = ConstructArgs(args, def);
-                        MapDefinitionFromArgs(parsingArgs);
+                        MapDefinitionFromArgs(def, args, $"{selectedLanguage}-{Common.Constants.YmlType}");
                         def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
-                        def.Type = FormatType(args.File, $"{selectedLanguage}-{Common.Constants.YmlType}");
-                        def.Id = textParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                        def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
                         def.ValueType = Common.ValueType.SpecialVariable;
                         result.Add(def);
                     }

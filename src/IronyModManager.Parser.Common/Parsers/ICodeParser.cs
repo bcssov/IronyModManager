@@ -4,22 +4,23 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
-// <copyright file="ITextParser.cs" company="Mario">
+// <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
     /// <summary>
     /// Interface ITextParser
     /// </summary>
-    public interface ITextParser
+    public interface ICodeParser
     {
         #region Methods
 
@@ -68,6 +69,14 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
         string GetValue(string line, string key);
+
+        /// <summary>
+        /// Parses the script.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IParseResponse.</returns>
+        IParseResponse ParseScript(IEnumerable<string> lines, string file);
 
         /// <summary>
         /// Prettifies the line.

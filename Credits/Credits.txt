@@ -185,6 +185,14 @@ licenseUrl:https://github.com/adamhathcock/sharpcompress/blob/master/LICENSE.txt
 license Type:MIT
 
 ####################################################################################################
+Package:CWTools
+Version:0.4.0-alpha3
+project URL:
+Description:A library for parsing editing and validating Paradox Interactive script files.
+licenseUrl:
+license Type:MIT
+
+####################################################################################################
 Package:FluentAssertions
 Version:5.10.3
 project URL:https://www.fluentassertions.com/

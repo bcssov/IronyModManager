@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-18-2020
+// Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
-// <copyright file="GuiParser.cs" company="Mario">
+// <copyright file="FastGUIParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,58 +17,18 @@ using System.Linq;
 using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Default;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GuiParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
+    /// Class FastGUIParser.
+    /// Implements the <see cref="IronyModManager.Parser.Default.FastDefaultParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GuiParser : BaseParser, IGenericParser
+    /// <seealso cref="IronyModManager.Parser.Default.FastDefaultParser" />
+    internal class FastGUIParser : FastDefaultParser
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GuiParser" /> class.
-        /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public GuiParser(ITextParser textParser) : base(textParser)
-        {
-        }
-
-        #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the name of the parser.
-        /// </summary>
-        /// <value>The name of the parser.</value>
-        public override string ParserName => "Generic" + nameof(GuiParser);
-
-        /// <summary>
-        /// Gets the priority.
-        /// </summary>
-        /// <value>The priority.</value>
-        public int Priority => 2;
-
-        #endregion Properties
-
         #region Methods
-
-        /// <summary>
-        /// Determines whether this instance can parse the specified arguments.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
-        public bool CanParse(CanParseArgs args)
-        {
-            return args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase);
-        }
 
         /// <summary>
         /// Parses the specified arguments.
@@ -88,7 +48,7 @@ namespace IronyModManager.Parser.Generic
                 {
                     continue;
                 }
-                var cleaned = textParser.CleanWhitespace(line);
+                var cleaned = codeParser.CleanWhitespace(line);
                 if (cleaned.StartsWith(Common.Constants.Scripts.GuiTypesId, StringComparison.OrdinalIgnoreCase))
                 {
                     openBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
@@ -99,7 +59,7 @@ namespace IronyModManager.Parser.Generic
                         sb.Clear();
                         definition = GetDefinitionInstance();
                         definition.ValueType = Common.ValueType.Object;
-                        var id = textParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
@@ -136,10 +96,10 @@ namespace IronyModManager.Parser.Generic
                             sb.AppendLine($"{Common.Constants.Scripts.GuiTypes} {Common.Constants.Scripts.VariableSeparatorId} {Common.Constants.Scripts.OpeningBracket}");
                             definition = GetDefinitionInstance();
                             definition.ValueType = Common.ValueType.Object;
-                            var initialKey = textParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                            var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
                             definition.Id = initialKey;
                         }
-                        var id = textParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
                         {
                             definition.Id = id;

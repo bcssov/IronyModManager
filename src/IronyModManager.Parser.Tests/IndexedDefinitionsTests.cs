@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -131,6 +131,34 @@ namespace IronyModManager.Parser.Tests
                 }
             }
             match.Should().Be(defs.Where(s => s.File == "file").Count());
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_by_value_type.
+        /// </summary>
+        [Fact]
+        public void Returns_by_value_type()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 5 ? "file" : i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    ValueType = Common.ValueType.Object
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.GetByValueType(Common.ValueType.Object);
+            results.Count().Should().Be(10);            
         }
 
         /// <summary>

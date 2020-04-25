@@ -37,7 +37,7 @@
           </StackPanel>
         </Grid>
       </Panel>
-      <Panel Grid.Row="0" Grid.Column="1">
+      <Panel Grid.Row="0" Grid.Column="1" IsVisible="{Binding IsConflictSolverAvailable}">
         <Grid ColumnDefinitions="5*,5*" RowDefinitions="2*,16*">
           <TextBlock Text="{Binding LeftSide}" Grid.Column="0" Grid.Row="0"
                      HorizontalAlignment="Center" Margin="10"></TextBlock>
@@ -46,14 +46,20 @@
           <ContentControl Margin="10" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding ModCompareSelector}"></ContentControl>
         </Grid>
       </Panel>
-      <ContentControl IsVisible="{Binding IsBinaryConflict}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
-      <ContentControl IsVisible="{Binding !IsBinaryConflict}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
+      <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
+        <TextBlock TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0"></TextBlock>
+      </Panel>
+      <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
+      <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
-               VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}"></Button>
+              VerticalAlignment="Bottom" HorizontalAlignment="Left"
+              Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}"  IsVisible="{Binding IsConflictSolverAvailable}"></Button>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
-               VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" IsEnabled="{Binding IgnoreEnabled}"></Button>
+              VerticalAlignment="Bottom" HorizontalAlignment="Center"
+              Margin="0,0,0,10" IsEnabled="{Binding IgnoreEnabled}"  IsVisible="{Binding IsConflictSolverAvailable}"></Button>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
-          VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,20,10"></Button>
+              VerticalAlignment="Bottom" HorizontalAlignment="Right"
+              Margin="0,0,20,10"></Button>
     </Grid>
   </Panel>
 </UserControl>

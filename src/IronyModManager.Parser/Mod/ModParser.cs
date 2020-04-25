@@ -32,7 +32,7 @@ namespace IronyModManager.Parser.Mod
         /// <summary>
         /// The text parser
         /// </summary>
-        private readonly ITextParser textParser;
+        private readonly ICodeParser textParser;
 
         #endregion Fields
 
@@ -42,7 +42,7 @@ namespace IronyModManager.Parser.Mod
         /// Initializes a new instance of the <see cref="ModParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public ModParser(ITextParser textParser)
+        public ModParser(ICodeParser textParser)
         {
             this.textParser = textParser;
         }

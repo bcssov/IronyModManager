@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-24-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -56,7 +56,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// Initializes a new instance of the <see cref="WholeTextParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public WholeTextParser(ITextParser textParser) : base(textParser)
+        public WholeTextParser(ICodeParser textParser) : base(textParser)
         {
         }
 

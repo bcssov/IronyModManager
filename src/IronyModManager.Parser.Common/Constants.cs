@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -160,9 +160,24 @@ namespace IronyModManager.Parser.Common
             public const string GuiTypesId = GuiTypes + VariableSeparatorId;
 
             /// <summary>
+            /// The invalid
+            /// </summary>
+            public const string Invalid = "invalid";
+
+            /// <summary>
+            /// The languages identifier
+            /// </summary>
+            public const string LanguagesId = "languages";
+
+            /// <summary>
             /// The namespace identifier
             /// </summary>
-            public const string NamespaceId = "namespace" + VariableSeparatorId;
+            public const string NamespaceId = Namespace + VariableSeparatorId;
+
+            /// <summary>
+            /// The namespace
+            /// </summary>
+            public const string Namespace = "namespace";
 
             /// <summary>
             /// The object types
@@ -210,9 +225,9 @@ namespace IronyModManager.Parser.Common
             public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             /// <summary>
-            /// The path trim parameters
+            /// The generic keys
             /// </summary>
-            public static readonly char[] PathTrimParameters = new char[] { '\\', '/' };
+            public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
 
             #endregion Fields
         }
@@ -288,11 +303,6 @@ namespace IronyModManager.Parser.Common
             /// The weapon components
             /// </summary>
             public static readonly string WeaponComponents = MergePath(CommonPath, "component_templates", "weapon_components.csv");
-
-            /// <summary>
-            /// The world GFX
-            /// </summary>
-            public static readonly string WorldGfx = MergePath("gfx", "worldgfx");
 
             #endregion Fields
         }

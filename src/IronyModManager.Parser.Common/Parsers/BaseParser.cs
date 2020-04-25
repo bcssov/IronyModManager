@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using System.Text;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Parser.Common.Parsers.Models;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
@@ -32,9 +34,14 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Fields
 
         /// <summary>
-        /// The text parser
+        /// The maximum lines
         /// </summary>
-        protected readonly ITextParser textParser;
+        protected const int MaxLines = 20000;
+
+        /// <summary>
+        /// The code parser
+        /// </summary>
+        protected readonly ICodeParser codeParser;
 
         #endregion Fields
 
@@ -43,10 +50,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public BaseParser(ITextParser textParser)
+        /// <param name="codeParser">The code parser.</param>
+        public BaseParser(ICodeParser codeParser)
         {
-            this.textParser = textParser;
+            this.codeParser = codeParser;
         }
 
         #endregion Constructors
@@ -68,146 +75,76 @@ namespace IronyModManager.Parser.Common.Parsers
         /// </summary>
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public virtual IEnumerable<IDefinition> Parse(ParserArgs args)
+        public abstract IEnumerable<IDefinition> Parse(ParserArgs args);
+
+        /// <summary>
+        /// Evals the definition identifier.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string EvalDefinitionId(IEnumerable<IScriptKeyValue> values, string defaultId)
         {
-            var result = new List<IDefinition>();
-            IDefinition definition = null;
-            var sb = new StringBuilder();
-            int? openBrackets = null;
-            int closeBrackets = 0;
-            foreach (var line in args.Lines)
+            if (values?.Count() > 0)
             {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
+                foreach (var item in values)
                 {
-                    continue;
-                }
-                if (!openBrackets.HasValue)
-                {
-                    var cleaned = textParser.CleanWhitespace(line);
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
+                    string id = EvalKeyValueForId(item);
+                    if (!string.IsNullOrWhiteSpace(id))
                     {
-                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        sb.Clear();
-                        var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition = GetDefinitionInstance();
-                        definition.Id = id;
-                        definition.ValueType = ValueType.Object;
-                        bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline);
-                        OnReadObjectLine(parsingArgs);
-                        // incase some wise ass opened and closed an object definition in the same line
-                        if (inline)
-                        {
-                            openBrackets = null;
-                            closeBrackets = 0;
-                            definition.Code = sb.ToString();
-                            result.Add(FinalizeObjectDefinition(parsingArgs));
-                        }
-                    }
-                    else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
-                    {
-                        definition = GetDefinitionInstance();
-                        var id = textParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Code = line;
-                        if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
-                            definition.ValueType = ValueType.Namespace;
-                        }
-                        else
-                        {
-                            definition.Id = id;
-                            definition.ValueType = ValueType.Variable;
-                        }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
-                        result.Add(FinalizeVariableDefinition(parsingArgs));
-                    }
-                }
-                else
-                {
-                    if (line.Contains(Constants.Scripts.OpeningBracket))
-                    {
-                        openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
-                    }
-                    if (line.Contains(Constants.Scripts.ClosingBracket))
-                    {
-                        closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
-                    }
-                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
-                    OnReadObjectLine(parsingArgs);
-                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                    {
-                        openBrackets = null;
-                        closeBrackets = 0;
-                        definition.Code = sb.ToString();
-                        result.Add(FinalizeObjectDefinition(parsingArgs));
+                        return id;
                     }
                 }
             }
-            return result;
+            return defaultId;
         }
 
         /// <summary>
-        /// Constructs the arguments.
+        /// Evals for errors only.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <param name="definition">The definition.</param>
-        /// <param name="sb">The sb.</param>
-        /// <param name="openBrackets">The open brackets.</param>
-        /// <param name="closeBrackets">The close brackets.</param>
-        /// <param name="line">The line.</param>
-        /// <param name="inline">if set to <c>true</c> [inline].</param>
-        /// <returns>ParsingArgs.</returns>
-        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb, int? openBrackets, int closeBrackets, string line, bool inline)
+        /// <returns>IronyModManager.Parser.Common.Parsers.Models.IScriptError.</returns>
+        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
         {
-            return new ParsingArgs()
+            var value = codeParser.ParseScript(args.Lines, args.File);
+            if (value.Error != null)
             {
-                Args = args,
-                ClosingBracket = closeBrackets,
-                Definition = definition,
-                Line = line,
-                OpeningBracket = openBrackets,
-                StringBuilder = sb,
-                Inline = inline
-            };
+                return new List<IDefinition>() { ParseScriptError(value.Error, args) };
+            }
+            return null;
         }
 
         /// <summary>
-        /// Constructs the arguments.
+        /// Evals the key value for identifier.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="definition">The definition.</param>
-        /// <returns>ParsingArgs.</returns>
-        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition)
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string EvalKeyValueForId(IScriptKeyValue value)
         {
-            return new ParsingArgs()
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Formats the code.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="parent">The parent.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string FormatCode(string code, string parent)
+        {
+            if (string.IsNullOrWhiteSpace(parent))
             {
-                Args = args,
-                Definition = definition,
-            };
-        }
-
-        /// <summary>
-        /// Finalizes the object definition.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeObjectDefinition(ParsingArgs args)
-        {
-            MapDefinitionFromArgs(args);
-            return args.Definition;
-        }
-
-        /// <summary>
-        /// Finalizes the variable definition.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeVariableDefinition(ParsingArgs args)
-        {
-            MapDefinitionFromArgs(args);
-            return args.Definition;
+                return code;
+            }
+            var lines = code.SplitOnNewLine();
+            var sb = new StringBuilder();
+            sb.AppendLine($"{parent} = {{");
+            foreach (var item in lines)
+            {
+                sb.AppendLine($"{new string(' ', 4)}{item}");
+            }
+            sb.Append("}");
+            return sb.ToString();
         }
 
         /// <summary>
@@ -239,82 +176,162 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <summary>
         /// Maps the definition from arguments.
         /// </summary>
+        /// <param name="definition">The definition.</param>
         /// <param name="args">The arguments.</param>
-        protected virtual void MapDefinitionFromArgs(ParsingArgs args)
+        /// <param name="typeOverride">The type override.</param>
+        protected virtual void MapDefinitionFromArgs(IDefinition definition, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
         {
-            args.Definition.ContentSHA = args.Args.ContentSHA;
-            args.Definition.Dependencies = args.Args.ModDependencies;
-            args.Definition.ModName = args.Args.ModName;
-            args.Definition.File = args.Args.File;
-            var type = FormatType(args.Args.File);
-            args.Definition.Type = type;
+            definition.ContentSHA = args.ContentSHA;
+            definition.Dependencies = args.ModDependencies;
+            definition.ModName = args.ModName;
+            definition.File = args.File;
+            definition.Type = FormatType(args.File, typeOverride);
         }
 
         /// <summary>
-        /// Called when [read object line].
+        /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        protected virtual void OnReadObjectLine(ParsingArgs args)
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseFirstLevel(ParserArgs args)
         {
-            args.StringBuilder.AppendLine(args.Line);
+            var result = new List<IDefinition>();
+            var value = codeParser.ParseScript(args.Lines, args.File);
+            if (value.Error != null)
+            {
+                result.Add(ParseScriptError(value.Error, args));
+            }
+            else
+            {
+                if (value.Value.Nodes?.Count() > 0)
+                {
+                    foreach (var item in value.Value.Nodes)
+                    {
+                        result.AddRange(ParseScriptKeyValues(item.KeyValues, args, parent: item.Key));
+                        result.AddRange(ParseScriptNodes(item.Nodes, args, parent: item.Key));
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the root.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args)
+        {
+            var result = new List<IDefinition>();
+            var values = codeParser.ParseScript(args.Lines, args.File);
+            if (values.Error != null)
+            {
+                result.Add(ParseScriptError(values.Error, args));
+            }
+            else
+            {
+                result.AddRange(ParseScriptKeyValues(values.Value.KeyValues, args));
+                result.AddRange(ParseScriptNodes(values.Value.Nodes, args));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the script error.
+        /// </summary>
+        /// <param name="error">The error.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
+        {
+            var definition = GetDefinitionInstance();
+            definition.ErrorColumn = error.Column;
+            definition.ErrorLine = error.Line;
+            definition.ErrorMessage = error.Message;
+            definition.Id = Constants.Scripts.Invalid;
+            definition.ValueType = ValueType.Invalid;
+            MapDefinitionFromArgs(definition, args);
+            return definition;
+        }
+
+        /// <summary>
+        /// Parses the script key values.
+        /// </summary>
+        /// <param name="keyValues">The key values.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        {
+            var result = new List<IDefinition>();
+            if (keyValues?.Count() > 0)
+            {
+                foreach (var item in keyValues)
+                {
+                    var definition = GetDefinitionInstance();
+                    MapDefinitionFromArgs(definition, args);
+                    definition.Code = FormatCode(item.Code, parent);
+                    if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                    {
+                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
+                        definition.ValueType = ValueType.Namespace;
+                    }
+                    else
+                    {
+                        definition.Id = item.Key;
+                        definition.ValueType = ValueType.Variable;
+                    }
+                    result.Add(definition);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the script nodes.
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        {
+            var result = new List<IDefinition>();
+            if (nodes?.Count() > 0)
+            {
+                foreach (var item in nodes)
+                {
+                    var definition = GetDefinitionInstance();
+                    var sbLangs = new StringBuilder();
+                    if (item.Nodes != null && item.Nodes.Any(s => s.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var langNode = item.Nodes.FirstOrDefault(p => p.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase));
+                        if (langNode.Values?.Count > 0)
+                        {
+                            foreach (var value in langNode.Values.OrderBy(p => p.Value))
+                            {
+                                sbLangs.Append($"{value.Value}-");
+                            }
+                        }
+                    }
+                    string id = EvalDefinitionId(item.KeyValues, item.Key);
+                    if (sbLangs.Length > 0)
+                    {
+                        id = $"{sbLangs}{id}";
+                    }
+                    MapDefinitionFromArgs(definition, args, typeOverride);
+                    definition.Id = id;
+                    definition.ValueType = ValueType.Object;
+                    definition.Code = FormatCode(item.Code, parent);
+                    result.Add(definition);
+                }
+            }
+            return result;
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class ParsingArgs.
-        /// </summary>
-        protected class ParsingArgs
-        {
-            #region Properties
-
-            /// <summary>
-            /// Gets or sets the arguments.
-            /// </summary>
-            /// <value>The arguments.</value>
-            public ParserArgs Args { get; set; }
-
-            /// <summary>
-            /// Gets or sets the closing bracket.
-            /// </summary>
-            /// <value>The closing bracket.</value>
-            public int ClosingBracket { get; set; }
-
-            /// <summary>
-            /// Gets or sets the definition.
-            /// </summary>
-            /// <value>The definition.</value>
-            public IDefinition Definition { get; set; }
-
-            /// <summary>
-            /// Gets or sets a value indicating whether this <see cref="ParsingArgs" /> is inline.
-            /// </summary>
-            /// <value><c>true</c> if inline; otherwise, <c>false</c>.</value>
-            public bool Inline { get; set; }
-
-            /// <summary>
-            /// Gets or sets the line.
-            /// </summary>
-            /// <value>The line.</value>
-            public string Line { get; set; }
-
-            /// <summary>
-            /// Gets or sets the opening bracket.
-            /// </summary>
-            /// <value>The opening bracket.</value>
-            public int? OpeningBracket { get; set; }
-
-            /// <summary>
-            /// Gets or sets the string builder.
-            /// </summary>
-            /// <value>The string builder.</value>
-            public StringBuilder StringBuilder { get; set; }
-
-            #endregion Properties
-        }
-
-        #endregion Classes
     }
 }

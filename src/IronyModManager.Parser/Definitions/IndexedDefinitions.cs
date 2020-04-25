@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -75,7 +75,7 @@ namespace IronyModManager.Parser.Definitions
         public IndexedDefinitions()
         {
             definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.File), nameof(IDefinition.Type),
-                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectory));
+                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectory), nameof(IDefinition.ValueType));
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
@@ -188,6 +188,16 @@ namespace IronyModManager.Parser.Definitions
         public IEnumerable<IDefinition> GetByTypeAndId(string typeAndId)
         {
             return definitions.GetAllByNameNoLock(nameof(IDefinition.TypeAndId), typeAndId);
+        }
+
+        /// <summary>
+        /// Gets the type of the by value.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetByValueType(Common.ValueType type)
+        {
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type);
         }
 
         /// <summary>

@@ -106,6 +106,12 @@ namespace IronyModManager.Shared
             public const string OverlayResolve = Prefix + "OverlayResolve";
             public const string NextConflict = Prefix + "NextConflict";
             public const string PrevConflict = Prefix + "PrevConflict";
+            public static class InvalidConflicts
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(InvalidConflicts) + ".";
+                public const string Name = Prefix + "Name";
+                public const string Error = Prefix + "Error";
+            }
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";

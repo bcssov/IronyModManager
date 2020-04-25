@@ -4,19 +4,21 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -29,22 +31,13 @@ namespace IronyModManager.Parser.Generic
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class KeyParser : BaseParser, IGenericParser
     {
-        #region Fields
-
-        /// <summary>
-        /// The event identifier
-        /// </summary>
-        private string key = string.Empty;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyParser" /> class.
         /// </summary>
         /// <param name="textParser">The text parser.</param>
-        public KeyParser(ITextParser textParser) : base(textParser)
+        public KeyParser(ICodeParser textParser) : base(textParser)
         {
         }
 
@@ -79,17 +72,17 @@ namespace IronyModManager.Parser.Generic
             int closeBrackets = 0;
             foreach (var line in args.Lines)
             {
-                var cleaned = textParser.CleanWhitespace(line);
+                var cleaned = codeParser.CleanWhitespace(line);
                 if (!openBrackets.HasValue)
                 {
                     if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Common.Constants.Scripts.VariableSeparatorId))
                     {
-                        openBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
-                        if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
+                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
+                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
+                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(codeParser.GetValue(line, s))))
                         {
                             int idLoc = -1;
-                            foreach (var item in Common.Constants.Scripts.GenericKeyIds)
+                            foreach (var item in Constants.Scripts.GenericKeyIds)
                             {
                                 idLoc = cleaned.IndexOf(item);
                                 if (idLoc > -1)
@@ -97,7 +90,7 @@ namespace IronyModManager.Parser.Generic
                                     break;
                                 }
                             }
-                            if (cleaned.Substring(0, idLoc).Count(s => s == Common.Constants.Scripts.OpeningBracket) == 1)
+                            if (cleaned.Substring(0, idLoc).Count(s => s == Constants.Scripts.OpeningBracket) == 1)
                             {
                                 return true;
                             }
@@ -111,13 +104,13 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    openBrackets += line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
-                    closeBrackets += line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
-                    if (openBrackets - closeBrackets <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(line, s))))
+                    openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
+                    closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
+                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(codeParser.GetValue(line, s))))
                     {
-                        var bracketLocation = cleaned.IndexOf(Common.Constants.Scripts.OpeningBracket.ToString());
+                        var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket.ToString());
                         int idLoc = -1;
-                        foreach (var item in Common.Constants.Scripts.GenericKeyIds)
+                        foreach (var item in Constants.Scripts.GenericKeyIds)
                         {
                             idLoc = cleaned.IndexOf(item);
                             if (idLoc > -1)
@@ -141,48 +134,33 @@ namespace IronyModManager.Parser.Generic
         }
 
         /// <summary>
-        /// Finalizes the object definition.
+        /// Parses the specified arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns>IDefinition.</returns>
-        protected override IDefinition FinalizeObjectDefinition(ParsingArgs args)
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var result = base.FinalizeObjectDefinition(args);
-            if (!string.IsNullOrWhiteSpace(key))
+            // CWTools is slow on large files, so skip these and use a legacy parser
+            if (args.Lines.Count() > MaxLines)
             {
-                result.Id = key;
-                key = string.Empty;
+                var parser = new FastKeyParser();
+                return parser.Parse(args);
             }
-            return result;
+            return ParseRoot(args);
         }
 
         /// <summary>
-        /// Called when [read object line].
+        /// Evals the key value for identifier.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        protected override void OnReadObjectLine(ParsingArgs args)
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalKeyValueForId(IScriptKeyValue value)
         {
-            var cleaned = textParser.CleanWhitespace(args.Line);
-            if (args.OpeningBracket - args.ClosingBracket <= 1 && Common.Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(textParser.GetValue(cleaned, s))))
+            if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
             {
-                string sep = string.Empty;
-                var bracketLocation = cleaned.IndexOf(Common.Constants.Scripts.OpeningBracket.ToString());
-                int idLoc = -1;
-                foreach (var item in Common.Constants.Scripts.GenericKeyIds)
-                {
-                    idLoc = cleaned.IndexOf(item);
-                    if (idLoc > -1)
-                    {
-                        sep = item;
-                        break;
-                    }
-                }
-                if (idLoc < bracketLocation || bracketLocation == -1 || (args.Inline && cleaned.Substring(0, idLoc).Count(s => s == Common.Constants.Scripts.OpeningBracket) == 1))
-                {
-                    key = textParser.GetValue(cleaned, sep);
-                }
+                return value.Value;
             }
-            base.OnReadObjectLine(args);
+            return base.EvalKeyValueForId(value);
         }
 
         #endregion Methods
