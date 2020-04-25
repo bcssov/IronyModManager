@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-25-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -108,6 +108,8 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="ArgumentNullException">Game</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">Game</exception>
+        /// <exception cref="ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
@@ -172,14 +174,17 @@ namespace IronyModManager.IO.Mods
             state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
             state.IgnoredConflicts = MapDefinitions(parameters.IgnoredConflicts, false);
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
-            foreach (var item in state.ResolvedConflicts)
+            if (parameters.ResolvedConflicts != null)
             {
-                var existing = history.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId));
-                if (existing == null)
+                foreach (var item in parameters.ResolvedConflicts.Where(s => !string.IsNullOrWhiteSpace(s.Code)))
                 {
-                    history.Remove(existing);
+                    var existing = history.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId));
+                    if (existing == null)
+                    {
+                        history.Remove(existing);
+                    }
+                    history.Add(item);
                 }
-                history.Add(item);
             }
             state.ConflictHistory = MapDefinitions(history, true);
             return StoreState(state, path);
@@ -292,10 +297,9 @@ namespace IronyModManager.IO.Mods
                     }
                     cachedState = cached;
                     lastCachedStatePath = statePath;
-                    return cached;
                 }
             }
-            return null;
+            return cached;
         }
 
         /// <summary>
