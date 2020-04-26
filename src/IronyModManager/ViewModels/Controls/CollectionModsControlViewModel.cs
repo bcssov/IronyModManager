@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -532,15 +532,6 @@ namespace IronyModManager.ViewModels.Controls
             SearchMods.WatermarkText = SearchModsWatermark;
             SearchMods.Text = state?.CollectionModsSearchTerm;
             ModNameSortOrder.Text = ModName;
-            if (!string.IsNullOrWhiteSpace(state.CollectionModsSortColumn) && Enum.IsDefined(typeof(SortOrder), state.CollectionModsSortMode))
-            {
-                var sort = (SortOrder)state.CollectionModsSortMode;
-                ModNameSortOrder.SortOrder = sort;
-            }
-            else
-            {
-                ModNameSortOrder.SortOrder = SortOrder.Asc;
-            }
             if (!string.IsNullOrWhiteSpace(state.CollectionModsSelectedMod) && SelectedMods != null)
             {
                 SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod));
@@ -556,7 +547,38 @@ namespace IronyModManager.ViewModels.Controls
             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
             if (selected != null)
             {
+                RecognizeSortOrder(selected);
                 SelectedModCollection = selected;
+            }
+        }
+
+        /// <summary>
+        /// Recognizes the sort order.
+        /// </summary>
+        /// <param name="modCollection">The mod collection.</param>
+        protected virtual void RecognizeSortOrder(IModCollection modCollection)
+        {
+            // modCollection sort order
+            if (modCollection?.Mods.Count() > 0 && Mods?.Count() > 0)
+            {
+                var mods = Mods.Where(p => modCollection.Mods.Any(a => a.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)));
+                if (mods.Count() > 0)
+                {
+                    var ascending = mods.OrderBy(p => p.Name).Select(p => p.DescriptorFile);
+                    var descending = mods.OrderByDescending(p => p.Name).Select(p => p.DescriptorFile);
+                    if (ascending.SequenceEqual(modCollection.Mods))
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.Asc);
+                    }
+                    else if (descending.SequenceEqual(modCollection.Mods))
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.Desc);
+                    }
+                    else
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.None);
+                    }
+                }
             }
         }
 
@@ -809,14 +831,14 @@ namespace IronyModManager.ViewModels.Controls
                     var index = SelectedMods.IndexOf(swapItem);
                     SelectedMods.Remove(mod);
                     SelectedMods.Insert(index, mod);
-                    SetSelectedMods(SelectedMods);
-                    ModNameSortOrder.SetSortOrder(SortOrder.None);
+                    SetSelectedMods(SelectedMods);                    
                     SelectedMod = mod;
                     if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                     {
                         SaveSelectedCollection();
                     }
                     SaveState();
+                    RecognizeSortOrder(SelectedModCollection);
                 }
                 ModReordered?.Invoke(mod);
             }
@@ -832,9 +854,12 @@ namespace IronyModManager.ViewModels.Controls
             if (collection != null && SelectedModCollection != null)
             {
                 collection.Name = SelectedModCollection.Name;
-                collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile);
+                collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
-                modCollectionService.Save(collection);
+                if (modCollectionService.Save(collection))
+                {
+                    SelectedModCollection.Mods = collection.Mods.ToList();
+                }
             }
         }
 
@@ -847,7 +872,6 @@ namespace IronyModManager.ViewModels.Controls
             state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
             state.CollectionModsSearchTerm = SearchMods.Text;
             state.CollectionModsSortColumn = ModNameKey;
-            state.CollectionModsSortMode = (int)ModNameSortOrder.SortOrder;
             appStateService.Save(state);
         }
 
@@ -911,8 +935,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 if (!SelectedMods.Contains(s.Sender))
                                 {
-                                    SelectedMods.Add(s.Sender);
-                                    ModNameSortOrder.SetSortOrder(SortOrder.None);
+                                    SelectedMods.Add(s.Sender);                                                           
                                     if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                                     {
                                         SaveState();
@@ -934,6 +957,7 @@ namespace IronyModManager.ViewModels.Controls
                             SaveSelectedCollection();
                         }
                         SetSelectedMods(SelectedMods, false);
+                        RecognizeSortOrder(SelectedModCollection);
                     }
                     AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                     skipReorder = false;

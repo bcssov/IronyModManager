@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="IAppState.cs" company="Mario">
 //     Mario
@@ -42,12 +42,6 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The collection mods sort column.</value>
         string CollectionModsSortColumn { get; set; }
-
-        /// <summary>
-        /// Gets or sets the collection mods sort mode.
-        /// </summary>
-        /// <value>The collection mods sort mode.</value>
-        int CollectionModsSortMode { get; set; }
 
         /// <summary>
         /// Gets or sets the installed mods search term.
