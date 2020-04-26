@@ -14,6 +14,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -32,6 +33,7 @@ using IronyModManager.Shared;
 using IronyModManager.ViewModels;
 using IronyModManager.Views;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager
 {
@@ -146,7 +148,11 @@ namespace IronyModManager
         /// <param name="desktop">The desktop.</param>
         protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var appTitle = DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title);
+            var appTitle = Smart.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
+                new
+                {
+                    AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion
+                });
             desktop.MainWindow.Title = appTitle;
         }
 

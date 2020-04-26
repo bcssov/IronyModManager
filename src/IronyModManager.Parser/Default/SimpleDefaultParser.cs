@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="SimpleDefaultParser.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Default
 {
@@ -33,7 +34,8 @@ namespace IronyModManager.Parser.Default
         /// Initializes a new instance of the <see cref="SimpleDefaultParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
-        public SimpleDefaultParser(ICodeParser codeParser) : base(codeParser)
+        /// <param name="logger">The logger.</param>
+        public SimpleDefaultParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 

@@ -100,7 +100,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new SimpleDefaultParser(new CodeParser());
+            var parser = new SimpleDefaultParser(new CodeParser(), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(4);
@@ -217,7 +217,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new SimpleDefaultParser(new CodeParser());
+            var parser = new SimpleDefaultParser(new CodeParser(), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(4);

@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -34,8 +35,9 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalizationParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public LocalizationParser(ICodeParser textParser) : base(textParser)
+        /// <param name="codeParser">The code parser.</param>
+        /// <param name="logger">The logger.</param>
+        public LocalizationParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 

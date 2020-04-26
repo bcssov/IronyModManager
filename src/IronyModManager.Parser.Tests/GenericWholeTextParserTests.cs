@@ -39,7 +39,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\alerts.txt",
                 GameType = "Stellaris"
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeTrue();
             args.File = "common\\message_types.txt";
             parser.CanParse(args).Should().BeTrue();
@@ -55,7 +55,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\on_actions\\test.txt"         
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\test.shader"                
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -83,7 +83,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "sound\\test.fxh"                
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -98,7 +98,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\name_lists\\t.txt"                
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\test.fxh";
             parser.CanParse(args).Should().BeTrue();
@@ -114,7 +114,7 @@ namespace IronyModManager.Parser.Tests
             {
                 File = "common\\ship_designs\\test.txt"                
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeFalse();
         }
 
@@ -141,7 +141,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new WholeTextParser(new CodeParser());
+            var parser = new WholeTextParser(new CodeParser(), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(1);

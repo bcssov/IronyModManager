@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -36,7 +37,8 @@ namespace IronyModManager.Parser.Generic
         /// Initializes a new instance of the <see cref="BinaryParser" /> class.
         /// </summary>
         /// <param name="codeParser">The text parser.</param>
-        public BinaryParser(ICodeParser codeParser) : base(codeParser)
+        /// <param name="logger">The logger.</param>
+        public BinaryParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -67,7 +69,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

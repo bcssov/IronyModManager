@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -14,30 +14,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
-    /// Class GuiParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Class GraphicsParser.
+    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GraphicsParser : BaseParser, IGenericParser
+    public class GraphicsParser : BaseGraphicsParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphicsParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public GraphicsParser(ICodeParser textParser) : base(textParser)
+        /// <param name="codeParser">The code parser.</param>
+        /// <param name="logger">The logger.</param>
+        public GraphicsParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -68,7 +69,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !HasPassedComplexThreshold(args.Lines) && (args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
+            return !HasPassedComplexThreshold(args.Lines) && (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -88,11 +89,29 @@ namespace IronyModManager.Parser.Generic
         /// <returns>System.String.</returns>
         protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
         {
-            if (Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
+            if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
             {
                 return value.Value;
             }
             return base.EvalComplexParseKeyValueForId(value);
+        }
+
+        /// <summary>
+        /// Parses the simple.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected override IEnumerable<IDefinition> ParseSimple(ParserArgs args)
+        {
+            // Called as a part of a fallback strategy
+            if (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                return ParseGUI(args);
+            }
+            else
+            {
+                return ParseGFX(args);
+            }
         }
 
         #endregion Methods

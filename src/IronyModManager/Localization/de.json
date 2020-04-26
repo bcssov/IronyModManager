@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager",
+        "Title": "Irony Mod Manager {AppVersion}",
         "Wiki": "Wiki",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist..."
     },

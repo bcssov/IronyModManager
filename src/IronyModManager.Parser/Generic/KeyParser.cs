@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -14,30 +14,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
+using IronyModManager.Shared;
+using Constants = IronyModManager.Parser.Common.Constants;
 
 namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class KeyParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseKeyParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.BaseKeyParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class KeyParser : BaseParser, IGenericParser
+    public class KeyParser : BaseKeyParser, IGenericParser
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public KeyParser(ICodeParser textParser) : base(textParser)
+        /// <param name="codeParser">The code parser.</param>
+        /// <param name="logger">The logger.</param>
+        public KeyParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 
@@ -69,73 +71,6 @@ namespace IronyModManager.Parser.Generic
         public override bool CanParse(CanParseArgs args)
         {
             return !HasPassedComplexThreshold(args.Lines) && EvalContainsKeyElements(args);
-        }
-
-        protected virtual bool EvalContainsKeyElements(CanParseArgs args)
-        {
-            int? openBrackets = null;
-            int closeBrackets = 0;
-            foreach (var line in args.Lines)
-            {
-                var cleaned = codeParser.CleanWhitespace(line);
-                if (!openBrackets.HasValue)
-                {
-                    if (cleaned.Contains(Common.Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
-                    {
-                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(codeParser.GetValue(line, s))))
-                        {
-                            int idLoc = -1;
-                            foreach (var item in Constants.Scripts.GenericKeyIds)
-                            {
-                                idLoc = cleaned.IndexOf(item);
-                                if (idLoc > -1)
-                                {
-                                    break;
-                                }
-                            }
-                            if (cleaned.Substring(0, idLoc).Count(s => s == Constants.Scripts.OpeningBracket) == 1)
-                            {
-                                return true;
-                            }
-                        }
-                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                        {
-                            openBrackets = null;
-                            closeBrackets = 0;
-                        }
-                    }
-                }
-                else
-                {
-                    openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
-                    closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
-                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(codeParser.GetValue(line, s))))
-                    {
-                        var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpeningBracket.ToString());
-                        int idLoc = -1;
-                        foreach (var item in Constants.Scripts.GenericKeyIds)
-                        {
-                            idLoc = cleaned.IndexOf(item);
-                            if (idLoc > -1)
-                            {
-                                break;
-                            }
-                        }
-                        if (idLoc < bracketLocation || bracketLocation == -1)
-                        {
-                            return true;
-                        }
-                    }
-                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                    {
-                        openBrackets = null;
-                        closeBrackets = 0;
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>

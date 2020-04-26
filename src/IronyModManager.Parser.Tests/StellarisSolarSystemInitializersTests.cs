@@ -40,7 +40,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\gamerules\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new SolarSystemInitializersParser(new CodeParser());
+            var parser = new SolarSystemInitializersParser(new CodeParser(), null);
             parser.CanParse(args).Should().BeFalse();
             args.File = "common\\solar_system_initializers\\test.txt";
             args.Lines = new List<string> { "test", "test2 = {}" };
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new SolarSystemInitializersParser(new CodeParser());
+            var parser = new SolarSystemInitializersParser(new CodeParser(), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(4);

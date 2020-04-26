@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Text;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -36,7 +37,8 @@ namespace IronyModManager.Parser.Generic
         /// Initializes a new instance of the <see cref="DefinesParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
-        public DefinesParser(ICodeParser codeParser) : base(codeParser)
+        /// <param name="logger">The logger.</param>
+        public DefinesParser(ICodeParser codeParser, ILogger logger) : base(codeParser, logger)
         {
         }
 

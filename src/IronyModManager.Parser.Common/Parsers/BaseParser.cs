@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-26-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// </summary>
         protected readonly ICodeParser codeParser;
 
+        /// <summary>
+        /// The logger
+        /// </summary>
+        protected readonly ILogger logger;
+
         #endregion Fields
 
         #region Constructors
@@ -51,9 +56,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Initializes a new instance of the <see cref="BaseParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
-        public BaseParser(ICodeParser codeParser)
+        /// <param name="logger">The logger.</param>
+        public BaseParser(ICodeParser codeParser, ILogger logger)
         {
             this.codeParser = codeParser;
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -162,12 +169,25 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Evals for errors only.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args, bool fallbackToSimpleParser = true)
         {
             if (HasPassedComplexThreshold(args.Lines))
             {
                 return EvalSimpleParseForErrorsOnly(args);
+            }
+            if (fallbackToSimpleParser)
+            {
+                try
+                {
+                    return EvalComplexParseForErrorsOnly(args);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                    return EvalSimpleParseForErrorsOnly(args);
+                }
             }
             return EvalComplexParseForErrorsOnly(args);
         }
@@ -299,48 +319,98 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the complex first level.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexFirstLevel(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> ParseComplexFirstLevel(ParserArgs args, bool fallbackToSimpleParser = true)
         {
-            var result = new List<IDefinition>();
-            var value = codeParser.ParseScript(args.Lines, args.File);
-            if (value.Error != null)
+            List<IDefinition> parse()
             {
-                result.Add(ParseScriptError(value.Error, args));
+                var result = new List<IDefinition>();
+                var value = codeParser.ParseScript(args.Lines, args.File);
+                if (value.Error != null)
+                {
+                    result.Add(ParseScriptError(value.Error, args));
+                }
+                else
+                {
+                    if (value.Value.Nodes?.Count() > 0)
+                    {
+                        foreach (var item in value.Value.Nodes)
+                        {
+                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key));
+                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key));
+                        }
+                    }
+                }
+                return result;
+            }
+            if (fallbackToSimpleParser)
+            {
+                try
+                {
+                    return parse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                    var error = EvalSimpleParseForErrorsOnly(args);
+                    if (error != null)
+                    {
+                        return error;
+                    }
+                    return ParseSimple(args);
+                }
             }
             else
             {
-                if (value.Value.Nodes?.Count() > 0)
-                {
-                    foreach (var item in value.Value.Nodes)
-                    {
-                        result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key));
-                        result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key));
-                    }
-                }
+                return parse();
             }
-            return result;
         }
 
         /// <summary>
         /// Parses the complex root.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexRoot(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> ParseComplexRoot(ParserArgs args, bool fallbackToSimpleParser = true)
         {
-            var result = new List<IDefinition>();
-            var values = codeParser.ParseScript(args.Lines, args.File);
-            if (values.Error != null)
+            List<IDefinition> parse()
             {
-                result.Add(ParseScriptError(values.Error, args));
+                var result = new List<IDefinition>();
+                var values = codeParser.ParseScript(args.Lines, args.File);
+                if (values.Error != null)
+                {
+                    result.Add(ParseScriptError(values.Error, args));
+                }
+                else
+                {
+                    result.AddRange(ParseComplexScriptKeyValues(values.Value.KeyValues, args));
+                    result.AddRange(ParseComplexScriptNodes(values.Value.Nodes, args));
+                }
+                return result;
+            }
+            if (fallbackToSimpleParser)
+            {
+                try
+                {
+                    return parse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                    var error = EvalSimpleParseForErrorsOnly(args);
+                    if (error != null)
+                    {
+                        return error;
+                    }
+                    return ParseSimple(args);
+                }
             }
             else
             {
-                result.AddRange(ParseComplexScriptKeyValues(values.Value.KeyValues, args));
-                result.AddRange(ParseComplexScriptNodes(values.Value.Nodes, args));
+                return parse();
             }
-            return result;
         }
 
         /// <summary>
