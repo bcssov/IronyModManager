@@ -269,10 +269,11 @@ namespace IronyModManager.Services
         /// Evals the definition priority.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <returns>IDefinition.</returns>
-        public IDefinition EvalDefinitionPriority(IEnumerable<IDefinition> definitions)
+        /// <returns>IPriorityDefinitionResult.</returns>
+        public IPriorityDefinitionResult EvalDefinitionPriority(IEnumerable<IDefinition> definitions)
         {
             var game = GameService.GetSelected();
+            var result = GetModelInstance<IPriorityDefinitionResult>();
             if (game != null && definitions?.Count() > 1)
             {
                 var uniqueDefinitions = definitions.GroupBy(p => p.ModName).Select(p => p.First());
@@ -281,7 +282,8 @@ namespace IronyModManager.Services
                     // Has same filenames?
                     if (uniqueDefinitions.GroupBy(p => p.File.ToLowerInvariant()).Count() == 1)
                     {
-                        return uniqueDefinitions.Last();
+                        result.Definition = uniqueDefinitions.Last();
+                        result.PriorityType = DefinitionPriorityType.ModOrder;
                     }
                     else
                     {
@@ -291,21 +293,27 @@ namespace IronyModManager.Services
                         {
                             if (provider.DefinitionUsesFIOSRules(uniqueDefinitions.First()))
                             {
-                                return uniqueDefinitions.OrderBy(p => p.File).First();
+                                result.Definition = uniqueDefinitions.OrderBy(p => p.File.ToLowerInvariant()).First();
+                                result.PriorityType = DefinitionPriorityType.FIOS;
                             }
                             else
                             {
-                                return uniqueDefinitions.OrderBy(p => p.File).Last();
+                                result.Definition = uniqueDefinitions.OrderBy(p => p.File.ToLowerInvariant()).Last();
+                                result.PriorityType = DefinitionPriorityType.LIOS;
                             }
                         }
                     }
                 }
                 else
                 {
-                    return definitions?.FirstOrDefault();
+                    result.Definition = definitions?.FirstOrDefault();
                 }
             }
-            return definitions?.FirstOrDefault();
+            else
+            {
+                result.Definition = definitions?.FirstOrDefault();
+            }
+            return result;
         }
 
         /// <summary>

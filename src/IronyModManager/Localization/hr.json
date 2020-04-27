@@ -79,6 +79,11 @@
         "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
         "NextConflict": "Slijedeći sukob",
         "PrevConflict": "Prijašnji sukob",
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Redoslijed učitavanja)"
+        },
         "InvalidConflicts": {
             "Name": "Nevažeći",
             "Error": "Pogreška u retku: {Line} stupac: {Column}. Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}"

@@ -7,18 +7,19 @@
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ModCompareSelectorControlView">
   <UserControl.Resources>
-    <converter:DefinitionModConverter x:Key="DefinitionModConverter" />
+    <converter:DefinitionPriorityClassConverter x:Key="DefinitionPriorityClassConverter" />
+    <converter:DefinitionPriorityTextConverter x:Key="DefinitionPriorityTextConverter" />
   </UserControl.Resources>
   <Panel>
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
-      <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"               
+      <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
                SelectedItem="{Binding LeftSelectedDefinition}">
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
               <controls:BoundClassTextBlock Text="{Binding ModName}">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
@@ -26,7 +27,7 @@
               </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock Text=" - ">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
@@ -34,11 +35,25 @@
               </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock Text="{Binding Id}">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
                 </controls:BoundClassTextBlock.BoundClasses>
+              </controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock>
+                <controls:BoundClassTextBlock.BoundClasses>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                  </MultiBinding>
+                </controls:BoundClassTextBlock.BoundClasses>
+                <controls:BoundClassTextBlock.Text>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                  </MultiBinding>
+                </controls:BoundClassTextBlock.Text>
               </controls:BoundClassTextBlock>
             </StackPanel>
           </DataTemplate>
@@ -51,7 +66,7 @@
             <StackPanel Orientation="Horizontal">
               <controls:BoundClassTextBlock Text="{Binding ModName}">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
@@ -59,19 +74,33 @@
               </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock Text=" - ">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>   
+                </controls:BoundClassTextBlock.BoundClasses>
               </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock Text="{Binding Id}">
                 <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionModConverter}" Mode="OneWay">
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
                   </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>      
+                </controls:BoundClassTextBlock.BoundClasses>
+              </controls:BoundClassTextBlock>
+              <controls:BoundClassTextBlock>
+                <controls:BoundClassTextBlock.BoundClasses>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                  </MultiBinding>
+                </controls:BoundClassTextBlock.BoundClasses>
+                <controls:BoundClassTextBlock.Text>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                  </MultiBinding>
+                </controls:BoundClassTextBlock.Text>
               </controls:BoundClassTextBlock>
             </StackPanel>
           </DataTemplate>

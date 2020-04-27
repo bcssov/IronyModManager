@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -46,6 +46,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IAppState, AppState>();
             container.RegisterModel<IModCollection, ModCollection>();
             container.RegisterModel<IConflictResult, ConflictResult>();
+            container.RegisterModel<IPriorityDefinitionResult, PriorityDefinitionResult>();
         }
 
         #endregion Methods

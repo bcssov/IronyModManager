@@ -124,11 +124,11 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
                 var priorityDefinition = modService.EvalDefinitionPriority(col);
-                if (priorityDefinition == null)
+                if (priorityDefinition?.Definition == null)
                 {
-                    priorityDefinition = col.First();
+                    priorityDefinition.Definition = col.First();
                 }
-                var newDefinition = await modService.CreatePatchDefinitionAsync(priorityDefinition, CollectionName);
+                var newDefinition = await modService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
                 if (newDefinition != null)
                 {
                     col.Add(newDefinition);

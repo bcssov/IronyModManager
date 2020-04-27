@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 04-27-2020
 // ***********************************************************************
-// <copyright file="DefinitionModConverter.cs" company="Mario">
+// <copyright file="DefinitionPriorityClassConverter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -23,13 +23,11 @@ using IronyModManager.Services.Common;
 namespace IronyModManager.Converters
 {
     /// <summary>
-    /// Class DefinitionModConverter.
-    /// Implements the <see cref="Avalonia.Data.Converters.IValueConverter" />
+    /// Class DefinitionPriorityClassConverter.
     /// Implements the <see cref="Avalonia.Data.Converters.IMultiValueConverter" />
     /// </summary>
     /// <seealso cref="Avalonia.Data.Converters.IMultiValueConverter" />
-    /// <seealso cref="Avalonia.Data.Converters.IValueConverter" />
-    public class DefinitionModConverter : IMultiValueConverter
+    public class DefinitionPriorityClassConverter : IMultiValueConverter
     {
         #region Methods
 
@@ -68,7 +66,7 @@ namespace IronyModManager.Converters
                     if (!noPatchMod)
                     {
                         var priority = service.EvalDefinitionPriority(clean);
-                        if (priority == definition)
+                        if (priority?.Definition == definition)
                         {
                             return "CopiedDefinition";
                         }

@@ -96,8 +96,8 @@ namespace IronyModManager.Services.Common
         /// Evals the definition priority.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <returns>IDefinition.</returns>
-        IDefinition EvalDefinitionPriority(IEnumerable<IDefinition> definitions);
+        /// <returns>IPriorityDefinitionResult.</returns>
+        IPriorityDefinitionResult EvalDefinitionPriority(IEnumerable<IDefinition> definitions);
 
         /// <summary>
         /// Exports the mods asynchronous.

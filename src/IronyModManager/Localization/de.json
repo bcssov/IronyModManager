@@ -79,6 +79,11 @@
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Ladereihenfolge)"
+        },
         "InvalidConflicts": {
             "Name": "Ungültig",
             "Error": "Fehler in Zeile: {Line} Spalte: {Column}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}"

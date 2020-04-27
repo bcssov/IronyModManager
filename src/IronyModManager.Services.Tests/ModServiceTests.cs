@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -58,6 +58,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <returns>ModService.</returns>
         private ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
@@ -2231,7 +2232,7 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
             var result = service.EvalDefinitionPriority(null);
-            result.Should().BeNull();
+            result.Definition.Should().BeNull();
         }
 
         /// <summary>
@@ -2263,7 +2264,8 @@ namespace IronyModManager.Services.Tests
 
             var def = new Definition();
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def });
-            result.Should().Be(def);
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.None);
         }
 
         /// <summary>
@@ -2296,7 +2298,8 @@ namespace IronyModManager.Services.Tests
             var def = new Definition() { File = "test.txt", ModName="1" };
             var def2 = new Definition() { File = "test.txt", ModName="2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
-            result.Should().Be(def2);
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
         }
 
         /// <summary>
@@ -2329,7 +2332,8 @@ namespace IronyModManager.Services.Tests
             var def = new Definition() { File = "test1.txt", ModName = "1" };
             var def2 = new Definition() { File = "test2.txt", ModName = "2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
-            result.Should().Be(def);
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.FIOS);
         }
 
         /// <summary>
@@ -2362,7 +2366,8 @@ namespace IronyModManager.Services.Tests
             var def = new Definition() { File = "test1.txt", ModName = "1" };
             var def2 = new Definition() { File = "test2.txt", ModName = "2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
-            result.Should().Be(def2);
+            result.Definition.Should().Be(def2);
+            result.PriorityType.Should().Be(DefinitionPriorityType.LIOS);
         }
 
         /// <summary>

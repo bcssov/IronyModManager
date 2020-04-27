@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 04-27-2020
 // ***********************************************************************
-// <copyright file="DefinitionModConverterTests.cs" company="Mario">
+// <copyright file="DefinitionPriorityClassConverterTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.Converters;
+using IronyModManager.Models;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Services.Common;
@@ -28,7 +29,7 @@ namespace IronyModManager.Tests
     /// <summary>
     /// Class PatchModConverterTests.
     /// </summary>
-    public class DefinitionModConverterTests
+    public class DefinitionPriorityClassConverterTests
     {
         /// <summary>
         /// Defines the test method Class_should_be_patch_mod.
@@ -37,7 +38,7 @@ namespace IronyModManager.Tests
         public void Class_should_be_patch_mod()
         {
             DISetup.SetupContainer();
-            var converter = new DefinitionModConverter();
+            var converter = new DefinitionPriorityClassConverter();
             var service = new Mock<IModService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(true);
             DISetup.Container.RegisterInstance(service.Object);
@@ -53,7 +54,7 @@ namespace IronyModManager.Tests
         public void Class_should_be_copied_definition()
         {
             DISetup.SetupContainer();
-            var converter = new DefinitionModConverter();
+            var converter = new DefinitionPriorityClassConverter();
             var service = new Mock<IModService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns((string p) =>
             {
@@ -67,7 +68,7 @@ namespace IronyModManager.Tests
             var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt" };
             var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt" };
             var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt" };
-            service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(def);
+            service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def });
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
             result.Should().Be("CopiedDefinition");
         }
@@ -82,7 +83,7 @@ namespace IronyModManager.Tests
             var service = new Mock<IModService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(false);
             DISetup.Container.RegisterInstance(service.Object);
-            var converter = new DefinitionModConverter();
+            var converter = new DefinitionPriorityClassConverter();
             var def = new Definition() { ModName = "IronyModManager_fake" };
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def }, def }, null, null, null);
             result.ToString().Should().BeNullOrEmpty();
