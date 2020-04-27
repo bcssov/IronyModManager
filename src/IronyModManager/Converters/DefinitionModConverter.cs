@@ -72,10 +72,6 @@ namespace IronyModManager.Converters
                         {
                             return "CopiedDefinition";
                         }
-                        else if (priority == null && col.ElementAt(0) == definition)
-                        {
-                            return "CopiedDefinition";
-                        }
                     }
                 }
             }

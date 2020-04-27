@@ -302,7 +302,7 @@ namespace IronyModManager.Services
                 }
                 else
                 {
-                    return null;
+                    return definitions?.FirstOrDefault();
                 }
             }
             return definitions?.FirstOrDefault();
