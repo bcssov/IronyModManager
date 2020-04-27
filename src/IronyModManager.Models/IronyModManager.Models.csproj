@@ -57,7 +57,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.9.2" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="4.10.2" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 
