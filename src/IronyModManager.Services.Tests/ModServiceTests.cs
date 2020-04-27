@@ -48,6 +48,25 @@ namespace IronyModManager.Services.Tests
     public class ModServiceTests
     {
         /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <param name="storageProvider">The storage provider.</param>
+        /// <param name="modParser">The mod parser.</param>
+        /// <param name="parserManager">The parser manager.</param>
+        /// <param name="reader">The reader.</param>
+        /// <param name="mapper">The mapper.</param>
+        /// <param name="modWriter">The mod writer.</param>
+        /// <param name="gameService">The game service.</param>
+        /// <param name="modPatchExporter">The mod patch exporter.</param>
+        /// <returns>ModService.</returns>
+        private ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
+            Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
+            Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
+        {
+            return new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, modPatchExporter.Object, gameService.Object, definitionInfoProviders, storageProvider.Object, mapper.Object);
+        }
+
+        /// <summary>
         /// Setups the mock case.
         /// </summary>
         /// <param name="reader">The reader.</param>
@@ -122,23 +141,6 @@ namespace IronyModManager.Services.Tests
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
-        }
-
-        /// <summary>
-        /// Gets the service.
-        /// </summary>
-        /// <param name="storageProvider">The storage provider.</param>
-        /// <param name="modParser">The mod parser.</param>
-        /// <param name="parserManager">The parser manager.</param>
-        /// <param name="reader">The reader.</param>
-        /// <param name="mapper">The mapper.</param>
-        /// <param name="modWriter">The mod writer.</param>
-        /// <param name="gameService">The game service.</param>
-        /// <param name="modPatchExporter">The mod patch exporter.</param>
-        /// <returns>ModService.</returns>
-        private ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser, Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter, Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter)
-        {
-            return new ModService(reader.Object, parserManager.Object, modParser.Object, modWriter.Object, modPatchExporter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -2203,6 +2205,164 @@ namespace IronyModManager.Services.Tests
             };
             var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_null.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var result = service.EvalDefinitionPriority(null);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition();
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def });
+            result.Should().Be(def);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_last_object.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_last_object()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test.txt", ModName="1" };
+            var def2 = new Definition() { File = "test.txt", ModName="2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Should().Be(def2);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_due_to_FIOS.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_due_to_FIOS()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Should().Be(def);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_first_object_due_to_LIOS.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_first_object_due_to_LIOS()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(false);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Should().Be(def2);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -91,6 +91,13 @@ namespace IronyModManager.Services.Common
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods);
+
+        /// <summary>
+        /// Evals the definition priority.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IDefinition.</returns>
+        IDefinition EvalDefinitionPriority(IEnumerable<IDefinition> definitions);
 
         /// <summary>
         /// Exports the mods asynchronous.

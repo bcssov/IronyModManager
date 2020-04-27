@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -71,6 +71,17 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <param name="game">The game.</param>
         /// <returns>CanProcess.</returns>
         public abstract bool CanProcess(string game);
+
+        /// <summary>
+        /// Definitions the uses fios rules.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool DefinitionUsesFIOSRules(IDefinition definition)
+        {
+            EnsureValidType(definition);
+            return FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase));
+        }
 
         /// <summary>
         /// Gets the encoding.

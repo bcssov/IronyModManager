@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -123,7 +123,12 @@ namespace IronyModManager.ViewModels.Controls
             if (!IsBinaryConflict)
             {
                 var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                var newDefinition = await modService.CreatePatchDefinitionAsync(col.First(), CollectionName);
+                var priorityDefinition = modService.EvalDefinitionPriority(col);
+                if (priorityDefinition == null)
+                {
+                    priorityDefinition = col.First();
+                }
+                var newDefinition = await modService.CreatePatchDefinitionAsync(priorityDefinition, CollectionName);
                 if (newDefinition != null)
                 {
                     col.Add(newDefinition);

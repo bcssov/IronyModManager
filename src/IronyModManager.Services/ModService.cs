@@ -50,6 +50,11 @@ namespace IronyModManager.Services
         private static readonly object serviceLock = new { };
 
         /// <summary>
+        /// The definition information providers
+        /// </summary>
+        private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
+
+        /// <summary>
         /// The mod parser
         /// </summary>
         private readonly IModParser modParser;
@@ -87,10 +92,12 @@ namespace IronyModManager.Services
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="gameService">The game service.</param>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
         public ModService(IReader reader, IParserManager parserManager,
-            IModParser modParser, IModWriter modWriter, IModPatchExporter modPatchExporter, IGameService gameService,
+            IModParser modParser, IModWriter modWriter, IModPatchExporter modPatchExporter,
+            IGameService gameService, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IStorageProvider storageProvider, IMapper mapper) : base(gameService, storageProvider, mapper)
         {
             this.reader = reader;
@@ -98,6 +105,7 @@ namespace IronyModManager.Services
             this.modParser = modParser;
             this.modWriter = modWriter;
             this.modPatchExporter = modPatchExporter;
+            this.definitionInfoProviders = definitionInfoProviders;
             modPatchExporter.WriteOperationState += (args) =>
             {
                 OnShutdownState(args);
@@ -255,6 +263,49 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Evals the definition priority.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IDefinition.</returns>
+        public IDefinition EvalDefinitionPriority(IEnumerable<IDefinition> definitions)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && definitions?.Count() > 1)
+            {
+                var uniqueDefinitions = definitions.GroupBy(p => p.ModName).Select(p => p.First());
+                if (uniqueDefinitions.Count() > 1)
+                {
+                    // Has same filenames?
+                    if (uniqueDefinitions.GroupBy(p => p.File.ToLowerInvariant()).Count() == 1)
+                    {
+                        return uniqueDefinitions.Last();
+                    }
+                    else
+                    {
+                        // Using FIOS or LIOS?
+                        var provider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                        if (provider != null)
+                        {
+                            if (provider.DefinitionUsesFIOSRules(uniqueDefinitions.First()))
+                            {
+                                return uniqueDefinitions.OrderBy(p => p.File).First();
+                            }
+                            else
+                            {
+                                return uniqueDefinitions.OrderBy(p => p.File).Last();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            return definitions?.FirstOrDefault();
         }
 
         /// <summary>

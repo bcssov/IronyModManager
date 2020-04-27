@@ -23,8 +23,12 @@
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
+  <Style Selector="TextBlock.CopiedDefinition">
+    <Setter Property="Background" Value="#ffc58b" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
   <Style Selector="TextBlock.PatchMod">
-    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Background" Value="#e0ffe0" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffImaginaryLine">
@@ -32,7 +36,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffInsertedLine">
-    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Background" Value="#e0ffe0" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedLine">
@@ -40,11 +44,11 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffUnchangedPieces">
-    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Background" Value="#ffe28b" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffInsertedPieces">
-    <Setter Property="Background" Value="#FF90EE90" />
+    <Setter Property="Background" Value="#e0ffe0" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedPieces">
@@ -52,7 +56,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffModifiedPieces">
-    <Setter Property="Background" Value="#FFFFFF00" />
+    <Setter Property="Background" Value="#ffe28b" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="Border.BlockSelected">
