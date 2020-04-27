@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
@@ -68,6 +69,10 @@ namespace IronyModManager.Converters
                     {
                         var priority = service.EvalDefinitionPriority(clean);
                         if (priority == definition)
+                        {
+                            return "CopiedDefinition";
+                        }
+                        else if (priority == null && col.ElementAt(0) == definition)
                         {
                             return "CopiedDefinition";
                         }
