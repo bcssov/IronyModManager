@@ -150,10 +150,11 @@
             "Message": "Deskriptoren wurden freigeschaltet."
         }
     },
-    "Mod_Url": {
+    "Mod_App_Actions": {
         "OpenInSteam": "In Steam öffnen",
         "Open": "Öffnen Sie die Mod-URL",
-        "Copy": "Kopieren Sie die Mod-URL"
+        "Copy": "Kopieren Sie die Mod-URL",
+        "OpenInAssociatedApp": "In zugehöriger App öffnen"
     },
     "Descriptor_Actions": {
         "Delete": "Löschen und neu laden",

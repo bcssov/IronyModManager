@@ -4,9 +4,9 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
-// <copyright file="UrlAction.cs" company="Mario">
+// <copyright file="AppAction.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -23,12 +23,12 @@ using IronyModManager.Shared;
 namespace IronyModManager.Implementation.Actions
 {
     /// <summary>
-    /// Class UrlActions.
-    /// Implements the <see cref="IronyModManager.Implementation.Actions.IUrlAction" />
+    /// Class AppAction.
+    /// Implements the <see cref="IronyModManager.Implementation.Actions.IAppAction" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Implementation.Actions.IUrlAction" />
+    /// <seealso cref="IronyModManager.Implementation.Actions.IAppAction" />
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
-    public class UrlAction : IUrlAction
+    public class AppAction : IAppAction
     {
         #region Methods
 

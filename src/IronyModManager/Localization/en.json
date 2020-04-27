@@ -150,10 +150,11 @@
             "Message": "Descriptors have been unlocked."
         }
     },
-    "Mod_Url": {
+    "Mod_App_Actions": {
         "OpenInSteam": "Open In Steam",
         "Open": "Open Mod Url",
-        "Copy": "Copy Mod Url"
+        "Copy": "Copy Mod Url",
+        "OpenInAssociatedApp": "Open In Associated App"
     },
     "Descriptor_Actions": {
         "Delete": "Delete And Reload",

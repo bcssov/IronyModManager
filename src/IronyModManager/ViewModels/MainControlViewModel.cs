@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// The URL action
         /// </summary>
-        private readonly IUrlAction urlAction;
+        private readonly IAppAction appAction;
 
         #endregion Fields
 
@@ -50,18 +50,18 @@ namespace IronyModManager.ViewModels
         /// <param name="languageControl">The language control.</param>
         /// <param name="gameControl">The game control.</param>
         /// <param name="modControl">The mod control.</param>
-        /// <param name="urlAction">The URL action.</param>
+        /// <param name="appAction">The URL action.</param>
         public MainControlViewModel(ThemeControlViewModel themeControl,
             LanguageControlViewModel languageControl,
             GameControlViewModel gameControl,
             ModHolderControlViewModel modControl,
-            IUrlAction urlAction)
+            IAppAction appAction)
         {
             ThemeSelector = themeControl;
             LanguageSelector = languageControl;
             GameSelector = gameControl;
             ModHolder = modControl;
-            this.urlAction = urlAction;
+            this.appAction = appAction;
         }
 
         #endregion Constructors
@@ -117,7 +117,7 @@ namespace IronyModManager.ViewModels
         {
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                await urlAction.OpenAsync(Constants.WikiUrl);
+                await appAction.OpenAsync(Constants.WikiUrl);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

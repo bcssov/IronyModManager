@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -51,6 +51,11 @@ namespace IronyModManager.ViewModels.Controls
         private const string ModNameKey = "modName";
 
         /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The application state service
         /// </summary>
         private readonly IAppStateService appStateService;
@@ -79,11 +84,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
-
-        /// <summary>
-        /// The URL action
-        /// </summary>
-        private readonly IUrlAction urlAction;
 
         /// <summary>
         /// The mod order changed
@@ -127,12 +127,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modNameSort">The mod name sort.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
-        /// <param name="urlAction">The URL action.</param>
+        /// <param name="appAction">The application action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
-            INotificationAction notificationAction, IUrlAction urlAction)
+            INotificationAction notificationAction, IAppAction appAction)
         {
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -142,7 +142,7 @@ namespace IronyModManager.ViewModels.Controls
             ModNameSortOrder = modNameSort;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
-            this.urlAction = urlAction;
+            this.appAction = appAction;
             this.modService = modService;
             this.gameService = gameService;
             SearchMods.ShowArrows = true;
@@ -187,7 +187,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.Copy)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.Copy)]
         public virtual string CopyUrl { get; protected set; }
 
         /// <summary>
@@ -279,10 +279,23 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ModSelected { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the open in associated application.
+        /// </summary>
+        /// <value>The open in associated application.</value>
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.OpenInAssociatedApp)]
+        public virtual string OpenInAssociatedApp { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open in associated application command.
+        /// </summary>
+        /// <value>The open in associated application command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenInAssociatedAppCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the open in steam.
         /// </summary>
         /// <value>The open in steam.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.OpenInSteam)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.OpenInSteam)]
         public virtual string OpenInSteam { get; protected set; }
 
         /// <summary>
@@ -295,7 +308,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the open URL.
         /// </summary>
         /// <value>The open URL.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.Open)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.Open)]
         public virtual string OpenUrl { get; protected set; }
 
         /// <summary>
@@ -553,36 +566,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Recognizes the sort order.
-        /// </summary>
-        /// <param name="modCollection">The mod collection.</param>
-        protected virtual void RecognizeSortOrder(IModCollection modCollection)
-        {
-            // modCollection sort order
-            if (modCollection?.Mods.Count() > 0 && Mods?.Count() > 0)
-            {
-                var mods = Mods.Where(p => modCollection.Mods.Any(a => a.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)));
-                if (mods.Count() > 0)
-                {
-                    var ascending = mods.OrderBy(p => p.Name).Select(p => p.DescriptorFile);
-                    var descending = mods.OrderByDescending(p => p.Name).Select(p => p.DescriptorFile);
-                    if (ascending.SequenceEqual(modCollection.Mods))
-                    {
-                        ModNameSortOrder.SetSortOrder(SortOrder.Asc);
-                    }
-                    else if (descending.SequenceEqual(modCollection.Mods))
-                    {
-                        ModNameSortOrder.SetSortOrder(SortOrder.Desc);
-                    }
-                    else
-                    {
-                        ModNameSortOrder.SetSortOrder(SortOrder.None);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -756,7 +739,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.OpenAsync(url).ConfigureAwait(true);
+                    appAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -765,7 +748,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.CopyAsync(url).ConfigureAwait(true);
+                    appAction.CopyAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -774,7 +757,15 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.OpenAsync(url).ConfigureAwait(true);
+                    appAction.OpenAsync(url).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            OpenInAssociatedAppCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                {
+                    appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -789,6 +780,36 @@ namespace IronyModManager.ViewModels.Controls
         {
             base.OnSelectedGameChanged(game);
             LoadModCollections();
+        }
+
+        /// <summary>
+        /// Recognizes the sort order.
+        /// </summary>
+        /// <param name="modCollection">The mod collection.</param>
+        protected virtual void RecognizeSortOrder(IModCollection modCollection)
+        {
+            // modCollection sort order
+            if (modCollection?.Mods.Count() > 0 && Mods?.Count() > 0)
+            {
+                var mods = Mods.Where(p => modCollection.Mods.Any(a => a.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)));
+                if (mods.Count() > 0)
+                {
+                    var ascending = mods.OrderBy(p => p.Name).Select(p => p.DescriptorFile);
+                    var descending = mods.OrderByDescending(p => p.Name).Select(p => p.DescriptorFile);
+                    if (ascending.SequenceEqual(modCollection.Mods))
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.Asc);
+                    }
+                    else if (descending.SequenceEqual(modCollection.Mods))
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.Desc);
+                    }
+                    else
+                    {
+                        ModNameSortOrder.SetSortOrder(SortOrder.None);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -831,7 +852,7 @@ namespace IronyModManager.ViewModels.Controls
                     var index = SelectedMods.IndexOf(swapItem);
                     SelectedMods.Remove(mod);
                     SelectedMods.Insert(index, mod);
-                    SetSelectedMods(SelectedMods);                    
+                    SetSelectedMods(SelectedMods);
                     SelectedMod = mod;
                     if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                     {
@@ -935,7 +956,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 if (!SelectedMods.Contains(s.Sender))
                                 {
-                                    SelectedMods.Add(s.Sender);                                                           
+                                    SelectedMods.Add(s.Sender);
                                     if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                                     {
                                         SaveState();

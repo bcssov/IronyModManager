@@ -1134,7 +1134,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -1181,7 +1182,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2090,7 +2092,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2138,7 +2141,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {

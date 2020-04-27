@@ -150,10 +150,11 @@
             "Message": "Deskriptori su otključani."
         }
     },
-    "Mod_Url": {
+    "Mod_App_Actions": {
         "OpenInSteam": "Otvori u steamu",
         "Open": "Otvori adresu moda",
-        "Copy": "Kopiraj adresu moda"
+        "Copy": "Kopiraj adresu moda",
+        "OpenInAssociatedApp": "Otvorite u pridruženoj aplikaciji"
     },
     "Descriptor_Actions": {
         "Delete": "Obriši i ponovno učitaj",

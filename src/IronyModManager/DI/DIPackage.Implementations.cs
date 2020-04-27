@@ -43,7 +43,7 @@ namespace IronyModManager.DI
             container.Register<ILogger, Logger>();
             container.Collection.Register<ILocalizationResourceProvider>(typeof(LocalizationResourceProvider));
             container.Register<IDefaultLocalizationResourceProvider, LocalizationResourceProvider>();
-            container.Register<IUrlAction, UrlAction>();
+            container.Register<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
         }

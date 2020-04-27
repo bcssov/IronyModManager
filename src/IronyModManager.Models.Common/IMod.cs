@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -34,6 +34,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The descriptor file.</value>
         string DescriptorFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full path.
+        /// </summary>
+        /// <value>The full path.</value>
+        string FullPath { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

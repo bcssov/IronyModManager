@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The URL action
         /// </summary>
-        private readonly IUrlAction urlAction;
+        private readonly IAppAction appAction;
 
         /// <summary>
         /// The syncing selection
@@ -58,10 +58,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
-        /// <param name="urlAction">The URL action.</param>
-        public MergeViewerControlViewModel(IUrlAction urlAction)
+        /// <param name="appAction">The application action.</param>
+        public MergeViewerControlViewModel(IAppAction appAction)
         {
-            this.urlAction = urlAction;
+            this.appAction = appAction;
         }
 
         #endregion Constructors
@@ -572,7 +572,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
         protected async Task CopyTextAsync(bool leftSide)
         {
-            await urlAction.CopyAsync(leftSide ? LeftSide : RightSide);
+            await appAction.CopyAsync(leftSide ? LeftSide : RightSide);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -149,6 +149,22 @@ namespace IronyModManager.Views.Controls
                 else
                 {
                     menuItems.Insert(1, menuItem);
+                }
+            }
+            if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+            {
+                var menuItem = new MenuItem()
+                {
+                    Header = ViewModel.OpenInAssociatedApp,
+                    Command = ViewModel.OpenInAssociatedAppCommand
+                };
+                if (menuItems.Count == 0)
+                {
+                    menuItems.Add(menuItem);
+                }
+                else
+                {
+                    menuItems.Insert(0, menuItem);
                 }
             }
             menuItems.AddRange(new List<MenuItem>()

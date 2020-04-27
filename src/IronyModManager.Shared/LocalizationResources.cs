@@ -207,12 +207,13 @@ namespace IronyModManager.Shared
                 public const string Message = Prefix + "Message";
             }
         }
-        public static class Mod_Url
+        public static class Mod_App_Actions
         {
-            public const string Prefix = nameof(Mod_Url) + ".";
+            public const string Prefix = nameof(Mod_App_Actions) + ".";
             public const string OpenInSteam = Prefix + "OpenInSteam";
             public const string Open = Prefix + "Open";
             public const string Copy = Prefix + "Copy";
+            public const string OpenInAssociatedApp = Prefix + "OpenInAssociatedApp";
         }
         public static class Descriptor_Actions
         {

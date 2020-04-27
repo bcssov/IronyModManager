@@ -4,7 +4,7 @@
 // Created          : 04-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="TextEditor.cs" company="Mario">
 //     Mario
@@ -35,9 +35,9 @@ namespace IronyModManager.Controls
         #region Fields
 
         /// <summary>
-        /// The URL action
+        /// The application action
         /// </summary>
-        private IUrlAction urlAction;
+        private IAppAction appAction;
 
         #endregion Fields
 
@@ -76,11 +76,11 @@ namespace IronyModManager.Controls
         /// <returns>Task.</returns>
         protected virtual Task CopyTextAsync(string text)
         {
-            if (urlAction == null)
+            if (appAction == null)
             {
-                urlAction = DIResolver.Get<IUrlAction>();
+                appAction = DIResolver.Get<IAppAction>();
             }
-            return urlAction.CopyAsync(text);
+            return appAction.CopyAsync(text);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -48,6 +48,12 @@ namespace IronyModManager.Models
         /// <value>The name of the file.</value>
         [DescriptorProperty("path", "archive", ".zip")]
         public virtual string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full path.
+        /// </summary>
+        /// <value>The full path.</value>
+        public string FullPath { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

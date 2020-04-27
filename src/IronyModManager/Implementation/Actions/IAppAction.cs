@@ -4,9 +4,9 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
-// <copyright file="IUrlAction.cs" company="Mario">
+// <copyright file="IAppAction.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 namespace IronyModManager.Implementation.Actions
 {
     /// <summary>
-    /// Interface IUrlActions
+    /// Interface IAppAction
     /// </summary>
-    public interface IUrlAction
+    public interface IAppAction
     {
         #region Methods
 

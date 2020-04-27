@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -58,6 +58,11 @@ namespace IronyModManager.ViewModels.Controls
         private const string ModVersionKey = "modVersion";
 
         /// <summary>
+        /// The URL action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The preferences service
         /// </summary>
         private readonly IAppStateService appStateService;
@@ -83,11 +88,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
-        /// The URL action
-        /// </summary>
-        private readonly IUrlAction urlAction;
-
-        /// <summary>
         /// The sort orders
         /// </summary>
         private Dictionary<string, SortOrderControlViewModel> sortOrders;
@@ -107,17 +107,17 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modNameSortOrder">The mod name sort order.</param>
         /// <param name="modVersionSortOrder">The mod version sort order.</param>
         /// <param name="filterMods">The filter mods.</param>
-        /// <param name="urlAction">The URL action.</param>
+        /// <param name="appAction">The application action.</param>
         /// <param name="notificationAction">The notification action.</param>
         public InstalledModsControlViewModel(IGameService gameService, ILocalizationManager localizationManager,
             IModService modService, IAppStateService appStateService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
-            SearchModsControlViewModel filterMods, IUrlAction urlAction, INotificationAction notificationAction)
+            SearchModsControlViewModel filterMods, IAppAction appAction, INotificationAction notificationAction)
         {
             this.modService = modService;
             this.gameService = gameService;
             this.appStateService = appStateService;
-            this.urlAction = urlAction;
+            this.appAction = appAction;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
             ModNameSortOrder = modNameSortOrder;
@@ -146,7 +146,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.Copy)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.Copy)]
         public virtual string CopyUrl { get; protected set; }
 
         /// <summary>
@@ -284,10 +284,23 @@ namespace IronyModManager.ViewModels.Controls
         public virtual SortOrderControlViewModel ModVersionSortOrder { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the open in associated application.
+        /// </summary>
+        /// <value>The open in associated application.</value>
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.OpenInAssociatedApp)]
+        public virtual string OpenInAssociatedApp { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open in associated application command.
+        /// </summary>
+        /// <value>The open in associated application command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenInAssociatedAppCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the open in steam.
         /// </summary>
         /// <value>The open in steam.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.OpenInSteam)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.OpenInSteam)]
         public virtual string OpenInSteam { get; protected set; }
 
         /// <summary>
@@ -300,7 +313,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the open URL.
         /// </summary>
         /// <value>The open URL.</value>
-        [StaticLocalization(LocalizationResources.Mod_Url.Open)]
+        [StaticLocalization(LocalizationResources.Mod_App_Actions.Open)]
         public virtual string OpenUrl { get; protected set; }
 
         /// <summary>
@@ -578,7 +591,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.OpenAsync(url).ConfigureAwait(true);
+                    appAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -587,7 +600,7 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.CopyAsync(url).ConfigureAwait(true);
+                    appAction.CopyAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -596,7 +609,15 @@ namespace IronyModManager.ViewModels.Controls
                 var url = GetHoveredModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    urlAction.OpenAsync(url).ConfigureAwait(true);
+                    appAction.OpenAsync(url).ConfigureAwait(true);
+                }
+            }).DisposeWith(disposables);
+
+            OpenInAssociatedAppCommand = ReactiveCommand.Create(() =>
+            {
+                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                {
+                    appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
