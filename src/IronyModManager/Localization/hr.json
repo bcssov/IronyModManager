@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager {AppVersion}",
+        "Title": "Irony Mod Manager: {AppVersion}",
         "Wiki": "Wiki",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi."
     },
