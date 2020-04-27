@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -110,6 +110,7 @@ namespace IronyModManager.IO.Mods
         /// <exception cref="ArgumentNullException">Definitions.</exception>
         /// <exception cref="ArgumentNullException">Game</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">Game</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
@@ -432,6 +433,10 @@ namespace IronyModManager.IO.Mods
                 await Task.Factory.StartNew(async () =>
                 {
                     var state = JsonDISerializer.Serialize(model);
+                    if (!Directory.Exists(Path.GetDirectoryName(statePath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(statePath));
+                    }
                     await File.WriteAllTextAsync(statePath, state);
                     WriteOperationState?.Invoke(false);
                 }).ConfigureAwait(false);

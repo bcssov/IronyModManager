@@ -17,41 +17,17 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <controls:BoundClassTextBlock Text="{Binding ModName}">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
-              <controls:BoundClassTextBlock Text=" - ">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
-              <controls:BoundClassTextBlock Text="{Binding Id}">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock>
                 <controls:BoundClassTextBlock.BoundClasses>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
                 </controls:BoundClassTextBlock.BoundClasses>
                 <controls:BoundClassTextBlock.Text>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
                 </controls:BoundClassTextBlock.Text>
               </controls:BoundClassTextBlock>
@@ -64,41 +40,17 @@
         <ListBox.ItemTemplate>
           <DataTemplate>
             <StackPanel Orientation="Horizontal">
-              <controls:BoundClassTextBlock Text="{Binding ModName}">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
-              <controls:BoundClassTextBlock Text=" - ">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
-              <controls:BoundClassTextBlock Text="{Binding Id}">
-                <controls:BoundClassTextBlock.BoundClasses>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
-                  </MultiBinding>
-                </controls:BoundClassTextBlock.BoundClasses>
-              </controls:BoundClassTextBlock>
               <controls:BoundClassTextBlock>
                 <controls:BoundClassTextBlock.BoundClasses>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
                 </controls:BoundClassTextBlock.BoundClasses>
                 <controls:BoundClassTextBlock.Text>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
-                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}"/>
-                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}"/>
+                    <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
                 </controls:BoundClassTextBlock.Text>
               </controls:BoundClassTextBlock>

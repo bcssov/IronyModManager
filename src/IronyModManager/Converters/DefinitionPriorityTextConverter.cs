@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverter.cs" company="Mario">
 //     Mario
@@ -67,18 +67,23 @@ namespace IronyModManager.Converters
                         if (!noPatchMod)
                         {
                             var priority = service.EvalDefinitionPriority(clean);
-                            if (priority?.Definition == definition && priority.PriorityType != DefinitionPriorityType.None)
+                            if (priority?.Definition == definition)
                             {
-                                return priority.PriorityType switch
+                                var type = priority.PriorityType switch
                                 {
-                                    DefinitionPriorityType.FIOS => $" {locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.FIOS)}",
-                                    DefinitionPriorityType.LIOS => $" {locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.LIOS)}",
-                                    DefinitionPriorityType.ModOrder => $" {locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Order)}",
+                                    DefinitionPriorityType.FIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.FIOS),
+                                    DefinitionPriorityType.LIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.LIOS),
+                                    DefinitionPriorityType.ModOrder => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Order),
                                     _ => string.Empty
                                 };
+                                if (!string.IsNullOrWhiteSpace(type))
+                                {
+                                    return $"{definition.ModName} - {definition.Id} {type}";
+                                }
                             }
                         }
                     }
+                    return $"{definition.ModName} - {definition.Id}";
                 }
             }
             return string.Empty;

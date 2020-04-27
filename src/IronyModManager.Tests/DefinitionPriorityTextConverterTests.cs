@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverterTests.cs" company="Mario">
 //     Mario
@@ -36,16 +36,16 @@ namespace IronyModManager.Tests
         /// Defines the test method Text_should_be_empty_when_patch_mod.
         /// </summary>
         [Fact]
-        public void Text_should_be_empty_when_patch_mod()
+        public void Text_should_not_include_priority_type_for_patch_mod()
         {
             DISetup.SetupContainer();
             var converter = new DefinitionPriorityTextConverter();
             var service = new Mock<IModService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(true);
             DISetup.Container.RegisterInstance(service.Object);
-            var def = new Definition() { ModName = "IronyModManager_fake" };
+            var def = new Definition() { ModName = "IronyModManager_fake", Id = "t1" };
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def }, def }, null, null, null);
-            result.ToString().Should().BeNullOrEmpty();
+            result.Should().Be("IronyModManager_fake - t1");
         }
 
         /// <summary>
@@ -71,12 +71,12 @@ namespace IronyModManager.Tests
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("FIOS")))).Returns("FIOS");
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("LIOS")))).Returns("LIOS");
             DISetup.Container.RegisterInstance(locManager.Object);
-            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt" };
-            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt" };
-            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt" };
+            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt", Id = "t1" };
+            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt", Id = "t1" };
+            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt", Id = "t1" };
             service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.ModOrder });
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
-            result.Should().Be(" Order");
+            result.Should().Be("IronyModManager_fake1 - t1 Order");
         }
 
         /// <summary>
@@ -102,12 +102,12 @@ namespace IronyModManager.Tests
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("FIOS")))).Returns("FIOS");
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("LIOS")))).Returns("LIOS");
             DISetup.Container.RegisterInstance(locManager.Object);
-            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt" };
-            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt" };
-            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt" };
+            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt", Id = "t1" };
+            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt,", Id = "t1" };
+            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt", Id = "t1" };
             service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.FIOS });
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
-            result.Should().Be(" FIOS");
+            result.Should().Be("IronyModManager_fake1 - t1 FIOS");
         }
 
         /// <summary>
@@ -133,28 +133,28 @@ namespace IronyModManager.Tests
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("FIOS")))).Returns("FIOS");
             locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("LIOS")))).Returns("LIOS");
             DISetup.Container.RegisterInstance(locManager.Object);
-            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt" };
-            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt" };
-            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt" };
+            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt", Id = "t1" };
+            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt", Id = "t1" };
+            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt", Id = "t1" };
             service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.LIOS });
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
-            result.Should().Be(" LIOS");
+            result.Should().Be("IronyModManager_fake1 - t1 LIOS");
         }
 
         /// <summary>
         /// Defines the test method Text_should_be_empty.
         /// </summary>
         [Fact]
-        public void Text_should_be_empty()
+        public void Text_should_include_priority_type()
         {
             DISetup.SetupContainer();
             var service = new Mock<IModService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(false);
             DISetup.Container.RegisterInstance(service.Object);
             var converter = new DefinitionPriorityTextConverter();
-            var def = new Definition() { ModName = "IronyModManager_fake" };
+            var def = new Definition() { ModName = "IronyModManager_fake", Id = "t1" };
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def }, def }, null, null, null);
-            result.ToString().Should().BeNullOrEmpty();
+            result.Should().Be("IronyModManager_fake - t1");
         }
     }
 }
