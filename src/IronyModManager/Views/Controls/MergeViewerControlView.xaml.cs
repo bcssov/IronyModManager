@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -17,11 +17,14 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
@@ -53,9 +56,14 @@ namespace IronyModManager.Views.Controls
         private static IHighlightingDefinition yamlHighlightingDefinition;
 
         /// <summary>
-        /// The updating
+        /// The scroll source
         /// </summary>
-        private bool updating = false;
+        private ListBox scrollSource;
+
+        /// <summary>
+        /// The scroll token
+        /// </summary>
+        private CancellationTokenSource scrollToken;
 
         #endregion Fields
 
@@ -72,6 +80,36 @@ namespace IronyModManager.Views.Controls
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Delays the synchronize scroll asynchronous.
+        /// </summary>
+        /// <param name="thisListBox">The this ListBox.</param>
+        /// <param name="otherListBox">The other ListBox.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task DelaySyncScrollAsync(ListBox thisListBox, ListBox otherListBox)
+        {
+            var thisMaxX = Math.Abs(thisListBox.Scroll.Extent.Width - thisListBox.Scroll.Viewport.Width);
+            var thisMaxY = Math.Abs(thisListBox.Scroll.Extent.Height - thisListBox.Scroll.Viewport.Height);
+            var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
+            var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
+            var offset = thisListBox.Scroll.Offset;
+            if (thisListBox.Scroll.Offset.X > otherMaxX || thisListBox.Scroll.Offset.X == thisMaxX)
+            {
+                offset = offset.WithX(otherMaxX);
+            }
+            if (thisListBox.Scroll.Offset.Y > otherMaxY || thisListBox.Scroll.Offset.Y == thisMaxY)
+            {
+                offset = offset.WithY(otherMaxY);
+            }
+            if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
+            {
+                otherListBox.InvalidateArrange();
+                thisListBox.InvalidateArrange();
+                otherListBox.Scroll.Offset = offset;
+            }
+            return Task.FromResult(true);
+        }
 
         /// <summary>
         /// Focuses the conflict.
@@ -146,30 +184,27 @@ namespace IronyModManager.Views.Controls
                 {
                     if (scrollArgs.Property == ScrollViewer.HorizontalScrollBarValueProperty || scrollArgs.Property == ScrollViewer.VerticalScrollBarValueProperty)
                     {
-                        if (updating || thisListBox.Scroll == null || otherListBox.Scroll == null)
+                        if (thisListBox.Scroll == null || otherListBox.Scroll == null || scrollSource == otherListBox)
                         {
                             return;
                         }
-                        updating = true;
-                        var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
-                        var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
-                        var offset = thisListBox.Scroll.Offset;
-                        otherListBox.Scroll.Offset = offset;
-                        if (thisListBox.Scroll.Offset.X > otherMaxX)
+                        scrollSource = thisListBox;
+                        if (scrollToken == null)
                         {
-                            offset = offset.WithX(otherMaxX);
+                            scrollToken = new CancellationTokenSource();
                         }
-                        if (thisListBox.Scroll.Offset.Y > otherMaxY)
+                        else
                         {
-                            offset = offset.WithY(otherMaxY);
+                            scrollToken.Cancel();
+                            scrollToken = new CancellationTokenSource();
                         }
-                        if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
+                        Dispatcher.UIThread.InvokeAsync(async () =>
                         {
-                            otherListBox.InvalidateArrange();
-                            thisListBox.InvalidateArrange();
-                            otherListBox.Scroll.Offset = offset;
-                        }
-                        updating = false;
+                            await Task.Delay(50, scrollToken.Token);
+                            await DelaySyncScrollAsync(thisListBox, otherListBox);
+                            await Task.Delay(10);
+                            scrollSource = null;
+                        });
                     }
                 };
             }
@@ -189,7 +224,6 @@ namespace IronyModManager.Views.Controls
             var leftSide = this.FindControl<ListBox>("leftSide");
             var rightSide = this.FindControl<ListBox>("rightSide");
 
-            updating = false;
             leftSide.PropertyChanged += (sender, args) =>
             {
                 HandleListBoxPropertyChanged(args, leftSide, rightSide);

@@ -29,7 +29,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.PatchMod">
-    <Setter Property="Background" Value="#e0ffe0" />
+    <Setter Property="Background" Value="#66cc99" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffImaginaryLine">
@@ -37,7 +37,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffInsertedLine">
-    <Setter Property="Background" Value="#e0ffe0" />
+    <Setter Property="Background" Value="#66cc99" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedLine">
@@ -49,7 +49,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffInsertedPieces">
-    <Setter Property="Background" Value="#e0ffe0" />
+    <Setter Property="Background" Value="#66cc99" />
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="TextBlock.DiffDeletedPieces">
