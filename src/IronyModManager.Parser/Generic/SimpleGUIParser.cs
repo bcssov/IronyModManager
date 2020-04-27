@@ -79,7 +79,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseGFX(args);
+            return ParseGUI(args);
         }
 
         #endregion Methods
