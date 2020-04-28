@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -309,8 +309,11 @@ namespace IronyModManager.IO.Mods
             if (File.Exists(path))
             {
                 var content = await File.ReadAllTextAsync(path);
-                var result = JsonConvert.DeserializeObject<T>(content);
-                return result;
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+                    var result = JsonConvert.DeserializeObject<T>(content);
+                    return result;
+                }
             }
             return default;
         }
@@ -428,6 +431,11 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
         {
+            var dirPath = Path.GetDirectoryName(path);
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
             await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore

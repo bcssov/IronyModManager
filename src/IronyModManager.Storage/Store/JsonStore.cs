@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -102,7 +102,9 @@ namespace IronyModManager.Storage
 
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
+            {
                 Directory.CreateDirectory(directory);
+            }
 
             File.WriteAllText(filePath, serialized);
         }
