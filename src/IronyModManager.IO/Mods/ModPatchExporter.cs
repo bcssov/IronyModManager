@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Flettu.Lock;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
@@ -25,6 +24,7 @@ using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
 {
@@ -260,16 +260,11 @@ namespace IronyModManager.IO.Mods
         {
             var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
             var cached = GetPatchState(statePath);
-            if (cached == null && writeLock.TaskId.HasValue)
-            {
-                while (writeLock.TaskId.HasValue)
-                {
-                    // wait until lock is released
-                }
-            }
             if (File.Exists(statePath) && cached == null)
             {
+                using var mutex = await writeLock.LockAsync();
                 var text = await File.ReadAllTextAsync(statePath);
+                mutex.Dispose();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     cached = JsonDISerializer.Deserialize<IPatchState>(text);
@@ -414,31 +409,30 @@ namespace IronyModManager.IO.Mods
         /// <param name="path">The path.</param>
         private async Task WriteStateInBackground(IPatchState model, string path)
         {
-            using (await writeLock.AcquireAsync())
+            var mutex = await writeLock.LockAsync();
+            WriteOperationState?.Invoke(true);
+            var statePath = Path.Combine(path, StateName);
+            var backupPath = Path.Combine(path, StateBackup);
+            if (File.Exists(backupPath))
             {
-                WriteOperationState?.Invoke(true);
-                var statePath = Path.Combine(path, StateName);
-                var backupPath = Path.Combine(path, StateBackup);
-                if (File.Exists(backupPath))
-                {
-                    File.Delete(backupPath);
-                }
-                if (File.Exists(statePath))
-                {
-                    File.Copy(statePath, backupPath);
-                }
-                await Task.Factory.StartNew(async () =>
-                {
-                    var state = JsonDISerializer.Serialize(model);
-                    var dirPath = Path.GetDirectoryName(statePath);
-                    if (!Directory.Exists(dirPath))
-                    {
-                        Directory.CreateDirectory(dirPath);
-                    }
-                    await File.WriteAllTextAsync(statePath, state);
-                    WriteOperationState?.Invoke(false);
-                }).ConfigureAwait(false);
+                File.Delete(backupPath);
             }
+            if (File.Exists(statePath))
+            {
+                File.Copy(statePath, backupPath);
+            }
+            await Task.Factory.StartNew(async () =>
+            {
+                var state = JsonDISerializer.Serialize(model);
+                var dirPath = Path.GetDirectoryName(statePath);
+                if (!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+                await File.WriteAllTextAsync(statePath, state);
+                WriteOperationState?.Invoke(false);
+                mutex.Dispose();
+            }).ConfigureAwait(false);
         }
 
         #endregion Methods

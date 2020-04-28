@@ -8,10 +8,9 @@ with codecs.open("Credits.txt", "r", "utf-8") as r:
         if "Package" in line:
             if not line in new_lines:
                 can_read = True
-                new_lines.append(
-                    "####################################################################################################\r\n")
+                new_lines.append("#########################\r\n")
         if can_read:
-            if not ("#") in line:
+            if not line.strip().startswith("#"):
                 new_lines.append(line)
             else:
                 can_read = False
