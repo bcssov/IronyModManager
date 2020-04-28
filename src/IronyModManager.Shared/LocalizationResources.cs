@@ -122,6 +122,7 @@ namespace IronyModManager.Shared
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver." + nameof(ContextMenu) + ".";
+                public const string CopyAll = Prefix + "CopyAll";
                 public const string CopyThis = Prefix + "CopyThis";
                 public const string CopyThisAfterLine = Prefix + "CopyThisAfterLine";
                 public const string CopyThisBeforeLine = Prefix + "CopyThisBeforeLine";

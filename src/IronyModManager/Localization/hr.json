@@ -89,6 +89,7 @@
             "Error": "Pogreška u retku: {Line} stupac: {Column}. Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
+            "CopyAll": "Kopiraj sve",
             "CopyThis": "Kopiraj odabrano",
             "CopyThisAfterLine": "Kopiraj odabrano poslije linije",
             "CopyThisBeforeLine": "Kopiraj odabrano prije linije",

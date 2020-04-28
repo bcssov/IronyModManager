@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -99,6 +99,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The cancel command.</value>
         public virtual ReactiveCommand<Unit, Unit> CancelCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the copy all.
+        /// </summary>
+        /// <value>The copy all.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.CopyAll)]
+        public virtual string CopyAll { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the copy all command.
+        /// </summary>
+        /// <value>The copy all command.</value>
+        public virtual ReactiveCommand<bool, Unit> CopyAllCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy text.
@@ -757,6 +770,18 @@ namespace IronyModManager.ViewModels.Controls
                 syncingSelection = true;
                 SyncSelectionsAsync(false).ConfigureAwait(true);
             };
+
+            CopyAllCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                if (leftSide)
+                {
+                    Copy(LeftDiff, LeftDiff, RightDiff, leftSide);
+                }
+                else
+                {
+                    Copy(RightDiff, RightDiff, LeftDiff, leftSide);
+                }
+            }).DisposeWith(disposables);
 
             CopyThisCommand = ReactiveCommand.Create((bool leftSide) =>
             {

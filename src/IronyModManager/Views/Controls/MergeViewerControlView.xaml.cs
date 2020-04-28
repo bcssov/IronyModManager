@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -398,6 +398,12 @@ namespace IronyModManager.Views.Controls
                 new MenuItem()
                 {
                     Header = "-" // Separator magic string, and it's documented... NOT really!!!
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CopyAll,
+                    Command = ViewModel.CopyAllCommand,
+                    CommandParameter = leftSide
                 },
                 new MenuItem()
                 {
