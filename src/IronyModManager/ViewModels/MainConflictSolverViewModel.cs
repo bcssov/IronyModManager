@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-29-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -347,7 +347,8 @@ namespace IronyModManager.ViewModels
                             Line = item.ErrorLine,
                             Column = item.ErrorColumn,
                             Environment.NewLine,
-                            Message = item.ErrorMessage
+                            Message = item.ErrorMessage,
+                            item.File
                         });
                         children.Add(invalidChild);
                     }

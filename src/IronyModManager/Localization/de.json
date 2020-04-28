@@ -86,7 +86,7 @@
         },
         "InvalidConflicts": {
             "Name": "Ungültig",
-            "Error": "Fehler in Zeile: {Line} Spalte: {Column}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
+            "Error": "Fehler in Zeile: {Line} Spalte: {Column} Datei: {File}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
             "CopyAll": "Kopiere alles",
