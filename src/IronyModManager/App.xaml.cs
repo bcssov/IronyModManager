@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -27,7 +26,6 @@ using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
-using IronyModManager.Services;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;

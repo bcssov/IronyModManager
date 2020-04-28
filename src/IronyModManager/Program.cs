@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 04-28-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Dialogs;
+using Avalonia.Threading;
 using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Localization;
@@ -147,6 +148,7 @@ namespace IronyModManager
                 var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
                 // We're deadlocking the thread, so kill the task after x amount of seconds.
                 messageBox.ShowAsync().Wait(TimeSpan.FromSeconds(10));
+                Dispatcher.UIThread.InvokeAsync(() => Environment.Exit(0));
             }
         }
 
