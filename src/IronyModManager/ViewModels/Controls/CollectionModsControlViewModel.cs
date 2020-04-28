@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-29-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -549,18 +549,23 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod));
             }
+            RecognizeSortOrder(SelectedModCollection);
         }
 
         /// <summary>
         /// Loads the mod collections.
         /// </summary>
-        protected virtual void LoadModCollections()
+        /// <param name="recognizeSortOrder">if set to <c>true</c> [recognize sort order].</param>
+        protected virtual void LoadModCollections(bool recognizeSortOrder = true)
         {
             ModCollections = modCollectionService.GetAll();
             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
             if (selected != null)
             {
-                RecognizeSortOrder(selected);
+                if (recognizeSortOrder)
+                {
+                    RecognizeSortOrder(selected);
+                }
                 SelectedModCollection = selected;
             }
         }
@@ -576,7 +581,7 @@ namespace IronyModManager.ViewModels.Controls
 
             var state = appStateService.Get();
             InitSortersAndFilters(state);
-            LoadModCollections();
+            LoadModCollections(false);
             ApplySort();
 
             CreateCommand = ReactiveCommand.Create(() =>
