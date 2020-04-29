@@ -63,6 +63,21 @@ namespace IronyModManager.IO.Tests
         }
 
         /// <summary>
+        /// Defines the test method Encoding_name_lists_should_be_uft8_bom.
+        /// </summary>
+        [Fact]
+        public void Encoding_name_lists_should_be_uft8_bom()
+        {
+            var service = GetService();
+            var result = service.GetEncoding(new Definition()
+            {
+                File = "common\\name_lists\\test.txt",
+                ValueType = Parser.Common.ValueType.SpecialVariable
+            });
+            result.GetPreamble().Length.Should().Be(3);
+        }
+
+        /// <summary>
         /// Defines the test method Encoding_should_not_be_uft8_bom.
         /// </summary>
         [Fact]

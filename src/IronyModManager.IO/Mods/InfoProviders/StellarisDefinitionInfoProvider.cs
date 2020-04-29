@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 04-29-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -13,6 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text;
+using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
@@ -23,6 +25,15 @@ namespace IronyModManager.IO.Mods.InfoProviders
     /// <seealso cref="IronyModManager.IO.Mods.InfoProviders.BaseDefinitionInfoProvider" />
     public class StellarisDefinitionInfoProvider : BaseDefinitionInfoProvider
     {
+        #region Fields
+
+        /// <summary>
+        /// The name lists
+        /// </summary>
+        private const string NameLists = "name_lists";
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -44,6 +55,21 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public override bool CanProcess(string game)
         {
             return game.Equals(Shared.Constants.GamesTypes.Stellaris.Name);
+        }
+
+        /// <summary>
+        /// Gets the encoding.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>Encoding.</returns>
+        public override Encoding GetEncoding(IDefinition definition)
+        {
+            EnsureValidType(definition);
+            if (definition.ParentDirectory.EndsWith(NameLists, StringComparison.OrdinalIgnoreCase))
+            {
+                return new UTF8Encoding(true);
+            }
+            return base.GetEncoding(definition);
         }
 
         #endregion Methods
