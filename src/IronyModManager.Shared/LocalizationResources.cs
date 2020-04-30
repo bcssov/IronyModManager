@@ -54,6 +54,12 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Supported_Version = Prefix + "Supported_Version";
+            public static class InvalidMods
+            {
+                public const string Prefix = "Installed_Mods." + nameof(InvalidMods) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
         }
         public static class Collection_Mods
         {

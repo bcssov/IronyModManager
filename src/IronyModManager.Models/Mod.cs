@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -60,6 +60,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         public virtual bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
+        public bool IsValid { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

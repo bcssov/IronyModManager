@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -1117,24 +1117,34 @@ namespace IronyModManager.Services
                     {
                         mod.RemoteId = GetPdxModId(installedMod.FileName);
                     }
-                    if (Path.IsPathFullyQualified(mod.FileName))
+                    if (string.IsNullOrWhiteSpace(mod.FileName))
                     {
-                        mod.FullPath = mod.FileName;
+                        mod.FileName = string.Empty;
+                        mod.FullPath = string.Empty;
                     }
                     else
                     {
-                        // Check user directory and workshop directory.
-                        var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
-                        var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
-                        if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
+                        if (Path.IsPathFullyQualified(mod.FileName))
                         {
-                            mod.FullPath = userDirectoryMod;
+                            mod.FullPath = mod.FileName;
                         }
-                        else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
+                        else
                         {
-                            mod.FullPath = workshopDirectoryMod;
+                            // Check user directory and workshop directory.
+                            var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
+                            var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
+                            if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
+                            {
+                                mod.FullPath = userDirectoryMod;
+                            }
+                            else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
+                            {
+                                mod.FullPath = workshopDirectoryMod;
+                            }
                         }
                     }
+                    // Validate if path exists
+                    mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
                     result.Add(mod);
                 }
             }

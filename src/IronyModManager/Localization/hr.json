@@ -32,7 +32,11 @@
         "Filter": "Filtriraj modove",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
-        "Supported_Version": "Podržana verzija"
+        "Supported_Version": "Podržana verzija",
+        "InvalidMods": {
+            "Title": "Otkriveni su nevažeći modovi",
+            "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
+        }
     },
     "Collection_Mods": {
         "Name": "Kolekcija modova",

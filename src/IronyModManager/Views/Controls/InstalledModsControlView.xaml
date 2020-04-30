@@ -41,7 +41,7 @@
                   <ContextMenu>
                   </ContextMenu>
                 </Grid.ContextMenu>
-                <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                <CheckBox IsEnabled="{Binding IsValid}" IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
                 <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
                 <TextBlock Text="{Binding Version}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>

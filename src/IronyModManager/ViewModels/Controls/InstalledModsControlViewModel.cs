@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -469,10 +470,15 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Mods = modService.GetInstalledMods(game).ToObservableCollection();
                 AllMods = Mods.ToHashSet();
+                var invalidMods = AllMods.Where(p => !p.IsValid);
+                if (invalidMods.Count() > 0)
+                {
+                    RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(true);
+                }
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
-                AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
+                AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
 
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
@@ -634,7 +640,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (FilteredMods?.Count() > 0)
                 {
-                    bool enabled = (Mods?.All(p => p.IsSelected)).GetValueOrDefault();
+                    bool enabled = Mods.Where(p => p.IsValid).All(p => p.IsSelected);
                     foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
@@ -644,7 +650,7 @@ namespace IronyModManager.ViewModels.Controls
 
             Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
             {
-                AllModsEnabled = Mods.Count() > 0 && Mods.All(p => p.IsSelected);
+                AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
             }).DisposeWith(disposables);
 
             DeleteDescriptorCommand = ReactiveCommand.Create(() =>
@@ -707,6 +713,29 @@ namespace IronyModManager.ViewModels.Controls
             Bind(game);
 
             base.OnSelectedGameChanged(game);
+        }
+
+        /// <summary>
+        /// remove invalid mods prompt as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual async Task RemoveInvalidModsPromptAsync(IEnumerable<IMod> mods)
+        {
+            var messages = new List<string>();
+            foreach (var item in mods)
+            {
+                messages.Add($"{item.Name} ({item.DescriptorFile})");
+            }
+            var title = localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Title);
+            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Installed_Mods.InvalidMods.Message), new
+            {
+                Mods = string.Join(Environment.NewLine, messages),
+                Environment.NewLine
+            });
+            if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
+            {
+                await DeleteDescriptorAsync(mods);
+            }
         }
 
         /// <summary>

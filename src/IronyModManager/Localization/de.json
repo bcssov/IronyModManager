@@ -32,7 +32,11 @@
         "Filter": "Filter Mods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Supported_Version": "Unterstützte Version"
+        "Supported_Version": "Unterstützte Version",
+        "InvalidMods": {
+            "Title": "Ungültige Mods erkannt",
+            "Message": "Folgende Mods fehlen:{NewLine}{Mods}.{NewLine}{NewLine}Möchten Sie die Deskriptoren löschen?"
+        }
     },
     "Collection_Mods": {
         "Name": "Sammlung Mods",

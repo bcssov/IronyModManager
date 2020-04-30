@@ -32,7 +32,11 @@
         "Filter": "Filter Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
-        "Supported_Version": "Supported Version"
+        "Supported_Version": "Supported Version",
+        "InvalidMods": {
+            "Title": "Invalid Mods Detected",
+            "Message": "The following mods are missing:{NewLine}{Mods}.{NewLine}{NewLine}Do you want to delete the descriptors?"
+        }
     },
     "Collection_Mods": {
         "Name": "Collection Mods",
