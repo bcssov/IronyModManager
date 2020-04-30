@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -199,6 +199,7 @@ namespace IronyModManager.IO.Mods
         private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string modRootPath, string patchRootPath, bool checkIfExists)
         {
             var tasks = new List<Task>();
+            var streams = new List<Stream>();
             foreach (var def in definitions)
             {
                 var outPath = Path.Combine(patchRootPath, def.File);
@@ -206,21 +207,28 @@ namespace IronyModManager.IO.Mods
                 {
                     continue;
                 }
-                using var stream = reader.GetStream(modRootPath, def.File);
+                var stream = reader.GetStream(modRootPath, def.File);
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                 }
-                using var fs = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+                var fs = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
-                }
+                }                
                 tasks.Add(stream.CopyToAsync(fs));
+                streams.Add(stream);
+                streams.Add(fs);                
             }
             if (tasks.Count > 0)
             {
                 await Task.WhenAll(tasks);
+                foreach (var fs in streams)
+                {
+                    fs.Close();
+                    await fs.DisposeAsync();
+                }
             }
             return true;
         }
