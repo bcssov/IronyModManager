@@ -38,7 +38,7 @@ namespace IronyModManager.Parser.Generic
         /// <summary>
         /// The key regex
         /// </summary>
-        protected static readonly Regex keyRegex = new Regex("^[a-zA-Z0-9._]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        protected static readonly Regex keyRegex = new Regex(@"^[\w_.-]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion Fields
 
