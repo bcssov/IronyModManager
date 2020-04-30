@@ -86,8 +86,8 @@
         },
         "InvalidConflicts": {
             "Name": "Invalid",
-            "Error": "Error at line: {Line} column: {Column} file: {File}. Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Error at file: {File}. Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}"
+            "Error": "Error at line: {Line} column: {Column} file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
+            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
             "CopyAll": "Copy All",

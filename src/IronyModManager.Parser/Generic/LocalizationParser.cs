@@ -93,6 +93,7 @@ namespace IronyModManager.Parser.Generic
             var result = new List<IDefinition>();
             var errors = new List<string>();
             string selectedLanguage = string.Empty;
+            string prevId = string.Empty;
             foreach (var line in args.Lines)
             {
                 if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
@@ -108,13 +109,14 @@ namespace IronyModManager.Parser.Generic
                 {
                     if (string.IsNullOrWhiteSpace(lang))
                     {
-                        var message = ValidateKey(line);
+                        var message = ValidateKey(line, prevId);
                         if (string.IsNullOrWhiteSpace(message))
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
                             def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
                             def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                            prevId = def.Id;
                             def.ValueType = Common.ValueType.SpecialVariable;
                             result.Add(def);
                         }
@@ -149,20 +151,21 @@ namespace IronyModManager.Parser.Generic
         /// Validates the key.
         /// </summary>
         /// <param name="line">The line.</param>
+        /// <param name="previousKey">The previous key.</param>
         /// <returns>System.String.</returns>
-        protected virtual string ValidateKey(string line)
+        protected virtual string ValidateKey(string line, string previousKey)
         {
             var cleaned = codeParser.CleanWhitespace(line);
             if (!cleaned.Contains(Common.Constants.Localization.YmlSeparator.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                return $"Missing separator on line: {line}.";
+                return $"Missing separator near key: {previousKey}.";
             }
             else
             {
                 var key = cleaned.Split(Common.Constants.Localization.YmlSeparator)[0].Trim();
                 if (!keyRegex.IsMatch(key))
                 {
-                    return $"Line contains invalid characters in key: {key}.";
+                    return $"Line contains invalid characters in key: {key}";
                 }
             }
             return string.Empty;

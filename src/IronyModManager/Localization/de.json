@@ -86,8 +86,8 @@
         },
         "InvalidConflicts": {
             "Name": "Ungültig",
-            "Error": "Fehler in Zeile: {Line} Spalte: {Column} Datei: {File}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Fehler in der Datei: {File}. Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
+            "Error": "Fehler in Zeile: {Line} Spalte: {Column} Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
+            "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
         },
         "ContextMenu": {
             "CopyAll": "Kopiere alles",
