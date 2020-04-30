@@ -165,7 +165,7 @@ namespace IronyModManager.Parser.Generic
                 var key = cleaned.Split(Common.Constants.Localization.YmlSeparator)[0].Trim();
                 if (!keyRegex.IsMatch(key))
                 {
-                    return $"Line contains invalid characters in key: {key}";
+                    return $"Line contains invalid characters in key: {key}.";
                 }
             }
             return string.Empty;
