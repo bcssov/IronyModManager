@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -14,9 +14,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
@@ -30,6 +33,15 @@ namespace IronyModManager.Parser.Generic
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     public class LocalizationParser : BaseParser, IGenericParser
     {
+        #region Fields
+
+        /// <summary>
+        /// The key regex
+        /// </summary>
+        protected static readonly Regex keyRegex = new Regex("^[a-zA-Z0-9._]*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -79,6 +91,7 @@ namespace IronyModManager.Parser.Generic
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
             var result = new List<IDefinition>();
+            var errors = new List<string>();
             string selectedLanguage = string.Empty;
             foreach (var line in args.Lines)
             {
@@ -95,14 +108,28 @@ namespace IronyModManager.Parser.Generic
                 {
                     if (string.IsNullOrWhiteSpace(lang))
                     {
-                        var def = GetDefinitionInstance();
-                        MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                        def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
-                        def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
-                        def.ValueType = Common.ValueType.SpecialVariable;
-                        result.Add(def);
+                        var message = ValidateKey(line);
+                        if (string.IsNullOrWhiteSpace(message))
+                        {
+                            var def = GetDefinitionInstance();
+                            MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
+                            def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                            def.ValueType = Common.ValueType.SpecialVariable;
+                            result.Add(def);
+                        }
+                        else
+                        {
+                            errors.Add(message);
+                        }
                     }
                 }
+            }
+            if (errors.Count > 0)
+            {
+                var error = DIResolver.Get<IScriptError>();
+                error.Message = string.Join(Environment.NewLine, errors);
+                return new List<IDefinition>() { ParseScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
             }
             return result;
         }
@@ -116,6 +143,29 @@ namespace IronyModManager.Parser.Generic
         {
             var lang = Common.Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s, StringComparison.OrdinalIgnoreCase));
             return lang;
+        }
+
+        /// <summary>
+        /// Validates the key.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ValidateKey(string line)
+        {
+            var cleaned = codeParser.CleanWhitespace(line);
+            if (!cleaned.Contains(Common.Constants.Localization.YmlSeparator.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                return $"Missing separator on line: {line}.";
+            }
+            else
+            {
+                var key = cleaned.Split(Common.Constants.Localization.YmlSeparator)[0].Trim();
+                if (!keyRegex.IsMatch(key))
+                {
+                    return $"Line contains invalid characters in key: {key}.";
+                }
+            }
+            return string.Empty;
         }
 
         #endregion Methods

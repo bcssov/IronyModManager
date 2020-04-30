@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-29-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -341,7 +341,10 @@ namespace IronyModManager.ViewModels
                     {
                         var invalidChild = DIResolver.Get<IHierarchicalDefinitions>();
                         invalidChild.Name = item.File;
-                        invalidChild.Key = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error), new
+                        var message = item.ErrorColumn.HasValue || item.ErrorLine.HasValue ?
+                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.Error) :
+                            localizationManager.GetResource(LocalizationResources.Conflict_Solver.InvalidConflicts.ErrorNoLine);
+                        invalidChild.Key = Smart.Format(message, new
                         {
                             item.ModName,
                             Line = item.ErrorLine,

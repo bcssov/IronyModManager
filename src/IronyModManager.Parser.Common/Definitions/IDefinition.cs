@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -54,13 +54,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Gets or sets the error column.
         /// </summary>
         /// <value>The error column.</value>
-        long ErrorColumn { get; set; }
+        long? ErrorColumn { get; set; }
 
         /// <summary>
         /// Gets or sets the error line.
         /// </summary>
         /// <value>The error line.</value>
-        long ErrorLine { get; set; }
+        long? ErrorLine { get; set; }
 
         /// <summary>
         /// Gets or sets the error message.

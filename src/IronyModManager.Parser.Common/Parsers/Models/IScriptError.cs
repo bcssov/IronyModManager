@@ -4,7 +4,7 @@
 // Created          : 04-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="IScriptError.cs" company="Mario">
 //     Mario
@@ -27,13 +27,13 @@ namespace IronyModManager.Parser.Common.Parsers.Models
         /// Gets or sets the column.
         /// </summary>
         /// <value>The column.</value>
-        long Column { get; set; }
+        long? Column { get; set; }
 
         /// <summary>
         /// Gets or sets the line.
         /// </summary>
         /// <value>The line.</value>
-        long Line { get; set; }
+        long? Line { get; set; }
 
         /// <summary>
         /// Gets or sets the message.

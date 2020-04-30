@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 04-30-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -205,8 +205,6 @@ namespace IronyModManager.Parser.Common.Parsers
             if (openBracket != closeBracket)
             {
                 var error = DIResolver.Get<IScriptError>();
-                error.Line = 0;
-                error.Column = 0;
                 error.Message = "Number of open and close curly brackets does not match. This indicates a syntax error somewhere in the file.";
             }
             return null;

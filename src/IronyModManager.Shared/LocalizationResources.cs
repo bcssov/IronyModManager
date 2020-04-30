@@ -118,6 +118,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Conflict_Solver." + nameof(InvalidConflicts) + ".";
                 public const string Name = Prefix + "Name";
                 public const string Error = Prefix + "Error";
+                public const string ErrorNoLine = Prefix + "ErrorNoLine";
             }
             public static class ContextMenu
             {
