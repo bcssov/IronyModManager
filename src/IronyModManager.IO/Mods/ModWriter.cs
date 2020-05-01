@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 05-01-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -109,14 +109,21 @@ namespace IronyModManager.IO.Mods
                 }
             }
 
-            if (parameters.HiddenMods != null)
+            if (parameters.TopPriorityMods != null)
             {
-                foreach (var hiddenMod in parameters.HiddenMods)
+                foreach (var mod in parameters.TopPriorityMods)
                 {
-                    if (!dLCLoad.EnabledMods.Any(p => p.Equals(hiddenMod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
+                    var existingEntry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    if (existingEntry != null)
                     {
-                        dLCLoad.EnabledMods.Add(hiddenMod.DescriptorFile);
+                        gameData.ModsOrder.Remove(existingEntry.Id);
                     }
+                    var existingEnabledMod = dLCLoad.EnabledMods.FirstOrDefault(p => p.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                    if (!string.IsNullOrWhiteSpace(existingEnabledMod))
+                    {
+                        dLCLoad.EnabledMods.Remove(existingEnabledMod);
+                    }
+                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
                 }
             }
 
@@ -403,7 +410,7 @@ namespace IronyModManager.IO.Mods
                 pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
             }
             pdxMod.DisplayName = mod.Name;
-            pdxMod.Tags = mod.Tags.ToList();
+            pdxMod.Tags = mod.Tags != null ? mod.Tags.ToList() : null;
             pdxMod.RequiredVersion = mod.Version;
             pdxMod.GameRegistryId = mod.DescriptorFile;
             pdxMod.Status = Ready_to_play;

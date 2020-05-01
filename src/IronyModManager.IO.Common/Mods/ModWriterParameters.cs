@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 05-01-2020
 // ***********************************************************************
 // <copyright file="ModWriterParameters.cs" company="Mario">
 //     Mario
@@ -39,12 +39,6 @@ namespace IronyModManager.IO.Common.Mods
         public IReadOnlyCollection<IMod> EnabledMods { get; set; }
 
         /// <summary>
-        /// Gets or sets the hidden mods.
-        /// </summary>
-        /// <value>The hidden mods.</value>
-        public IReadOnlyCollection<IMod> HiddenMods { get; set; }
-
-        /// <summary>
         /// Gets or sets the mod.
         /// </summary>
         /// <value>The mod.</value>
@@ -67,6 +61,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The root directory.</value>
         public string RootDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets the top priority mods.
+        /// </summary>
+        /// <value>The top priority mods.</value>
+        public IReadOnlyCollection<IMod> TopPriorityMods { get; set; }
 
         #endregion Properties
     }

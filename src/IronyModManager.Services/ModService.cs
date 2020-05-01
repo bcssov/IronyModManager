@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 05-01-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -351,7 +351,7 @@ namespace IronyModManager.Services
                     Path = mod.DescriptorFile
                 }))
                 {
-                    applyModParams.HiddenMods = new List<IMod>() { mod };
+                    applyModParams.TopPriorityMods = new List<IMod>() { mod };
                 }
             }
             return await modWriter.ApplyModsAsync(applyModParams);
@@ -907,7 +907,7 @@ namespace IronyModManager.Services
                     await modWriter.ApplyModsAsync(new ModWriterParameters()
                     {
                         AppendOnly = true,
-                        HiddenMods = new List<IMod>() { mod },
+                        TopPriorityMods = new List<IMod>() { mod },
                         RootDirectory = game.UserDirectory
                     });
 
@@ -949,12 +949,13 @@ namespace IronyModManager.Services
         protected virtual IMod GeneratePatchModDescriptor(IEnumerable<IMod> allMods, IGame game, string patchName)
         {
             var mod = DIResolver.Get<IMod>();
-            mod.Dependencies = allMods.Select(p => p.Name).ToList();
+            mod.Dependencies = allMods.Where(p => p.Dependencies?.Count() > 0).Select(p => p.Name).Distinct().ToList();
             mod.DescriptorFile = $"{Constants.ModDirectory}/{patchName}{Constants.ModExtension}";
             mod.FileName = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.Tags = new List<string>() { "Fixes" };
             return mod;
         }
 
