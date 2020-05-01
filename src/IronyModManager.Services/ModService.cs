@@ -949,7 +949,11 @@ namespace IronyModManager.Services
         protected virtual IMod GeneratePatchModDescriptor(IEnumerable<IMod> allMods, IGame game, string patchName)
         {
             var mod = DIResolver.Get<IMod>();
-            mod.Dependencies = allMods.Where(p => p.Dependencies?.Count() > 0).Select(p => p.Name).Distinct().ToList();
+            var dependencies = allMods.Where(p => p.Dependencies?.Count() > 0).Select(p => p.Name).Distinct().ToList();
+            if (dependencies.Count > 0)
+            {
+                mod.Dependencies = dependencies;
+            }
             mod.DescriptorFile = $"{Constants.ModDirectory}/{patchName}{Constants.ModExtension}";
             mod.FileName = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName).Replace("\\", "/");
             mod.Name = patchName;
