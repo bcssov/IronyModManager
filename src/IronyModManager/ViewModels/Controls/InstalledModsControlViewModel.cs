@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 05-01-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -716,11 +716,21 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// The showing prompt
+        /// </summary>
+        private bool showingPrompt = false;
+
+        /// <summary>
         /// remove invalid mods prompt as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
         protected virtual async Task RemoveInvalidModsPromptAsync(IEnumerable<IMod> mods)
         {
+            if (showingPrompt)
+            {
+                return;
+            }
+            showingPrompt = true;
             var messages = new List<string>();
             foreach (var item in mods)
             {
@@ -736,6 +746,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await DeleteDescriptorAsync(mods);
             }
+            showingPrompt = false;
         }
 
         /// <summary>
