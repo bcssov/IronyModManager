@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <Description>Irony Mod Manager Models Common Component</Description>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>Irony Mod Manager Models Common Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Models Common Component</PackageReleaseNotes>
@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

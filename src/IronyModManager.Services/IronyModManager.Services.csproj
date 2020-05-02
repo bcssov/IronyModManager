@@ -6,7 +6,7 @@
     <Copyright>Mario</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
@@ -38,7 +38,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

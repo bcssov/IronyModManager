@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Description>IronyModManager.Tests</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>IronyModManager.Tests</PackageTags>
     <PackageReleaseNotes>IronyModManager.Tests</PackageReleaseNotes>
@@ -51,7 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

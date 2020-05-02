@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon>Assets\avalonia-logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\logo.ico</ApplicationIcon>
     <StartupObject>IronyModManager.Program</StartupObject>
     <Authors>Mario</Authors>
     <Company>Mario</Company>
@@ -11,7 +11,7 @@
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/bcssov/IronyModManager</PackageProjectUrl>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <RepositoryUrl>https://github.com/bcssov/IronyModManager</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
@@ -97,7 +97,6 @@
     <AvaloniaResource Remove="Views\MainControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\avalonia-logo.ico" />
     <None Remove="Controls\Themes\Dark\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
@@ -179,13 +178,6 @@
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\avalonia-logo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\avalonia-logo.ico" />
     <EmbeddedResource Include="Controls\Themes\Dark\MinMaxButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -289,6 +281,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Update="Assets\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Update="Localization\de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

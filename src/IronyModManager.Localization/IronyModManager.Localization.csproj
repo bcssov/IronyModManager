@@ -5,7 +5,7 @@
     <Description>Irony Mod Manager Localization Component</Description>
     <Product>Irony Mod Manager</Product>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>Irony Mod Manager Localization Component</PackageTags>
     <PackageReleaseNotes>Irony Mod Manager Localization Component</PackageReleaseNotes>
@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

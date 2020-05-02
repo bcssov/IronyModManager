@@ -6,7 +6,7 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <Description>IronyModManager.Parser.Tests</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>IronyModManager.Parser.Tests</PackageTags>
     <PackageReleaseNotes>IronyModManager.Parser.Tests</PackageReleaseNotes>
@@ -37,7 +37,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

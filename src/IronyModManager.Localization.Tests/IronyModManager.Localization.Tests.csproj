@@ -6,7 +6,7 @@
     <AssemblyOriginatorKeyFile>../../keys/Irony-Main.snk</AssemblyOriginatorKeyFile>
     <Description>IronyModManager.Localization.Tests</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>IronyModManager.Localization.Tests</PackageTags>
     <Configurations>Debug;Release;Functional_Test</Configurations>
@@ -59,7 +59,7 @@
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

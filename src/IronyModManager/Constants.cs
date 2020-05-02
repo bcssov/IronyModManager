@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 05-02-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -62,12 +62,12 @@ namespace IronyModManager
             /// <summary>
             /// The logo icon
             /// </summary>
-            public const string LogoIco = "Assets\\avalonia-logo.ico";
+            public const string LogoIco = "Assets\\logo.ico";
 
             /// <summary>
             /// The logo PNG
             /// </summary>
-            public const string LogoPng = "Assets\\avalonia-logo.png";
+            public const string LogoPng = "Assets\\logo.png";
 
             /// <summary>
             /// The PDX script

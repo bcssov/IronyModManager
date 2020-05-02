@@ -8,7 +8,7 @@
     <Configurations>Debug;Release;Functional_Test</Configurations>
     <Description>Irony Mod Manager IO Common Component</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>avalonia-logo.png</PackageIcon>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageIconUrl />
     <PackageTags>Irony Mod Manager IO Common Component</PackageTags>    
   </PropertyGroup>
@@ -36,7 +36,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\IronyModManager\Assets\avalonia-logo.png">
+    <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
