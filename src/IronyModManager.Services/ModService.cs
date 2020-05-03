@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 05-03-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -306,7 +306,7 @@ namespace IronyModManager.Services
                 }
                 else
                 {
-                    result.Definition = definitions?.FirstOrDefault();
+                    result.Definition = definitions.FirstOrDefault();
                 }
             }
             else
