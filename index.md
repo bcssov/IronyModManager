@@ -11,7 +11,7 @@ Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/
 
 ### Issues\Bugs
 Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues). 
-* Be sure to include as much detailed information.
+* Be sure to include as much detailed information as you can.
 * Be sure to include steps to reproduce and issue.
 * Be sure to provide logs if you report crashes. Logs can be found in the logs directory of your Irony install.
 
