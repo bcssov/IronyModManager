@@ -97,6 +97,7 @@
     <AvaloniaResource Remove="Views\MainControlView.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\logo.ico" />
     <None Remove="Controls\Themes\Dark\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
@@ -178,6 +179,13 @@
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\logo.ico" />
     <EmbeddedResource Include="Controls\Themes\Dark\MinMaxButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
