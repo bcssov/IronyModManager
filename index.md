@@ -7,4 +7,4 @@ Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/
 Reports issues [here](https://github.com/bcssov/IronyModManager/issues).
 
 ### Download
-Download latest beta version: [v1.0.81-beta](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.81-beta).
+Download latest beta version: [v1.0.83-beta](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.83-beta).
