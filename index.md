@@ -14,3 +14,9 @@ Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues)
 
 ### Download
 * Latest beta version: [v1.0.83-beta](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.83-beta).
+
+### Notes
+Feedback on how Irony performs on OSX\Linux would be welcome. Just open a new issue on the [issue tracker](https://github.com/bcssov/IronyModManager/issues) and I'm sure we can sort something out to ensure max compatibility with these operating systems in case something does not work as expected.
+
+* OSX is untested and should be considered experimental (I have no testers and no machine to test on)
+* Linux x64 was briefly tested and should be considered experimental (incase the Stellaris folder is not detected check the Wiki FAQ)
