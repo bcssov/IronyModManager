@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 05-05-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -51,6 +51,7 @@ namespace IronyModManager.DI
             container.Register<MergeViewerControlView>();
             container.Register<ModCompareSelectorControlView>();
             container.Register<MergeViewerBinaryControlView>();
+            container.Register<ModConflictIgnoreControlView>();
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 05-05-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -167,6 +167,7 @@ namespace IronyModManager.IO.Mods
                 state = DIResolver.Get<IPatchState>();
             }
             var path = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName));
+            state.IgnoreConflictPaths = parameters.IgnoreConflictPaths;
             state.ResolvedConflicts = MapDefinitions(parameters.ResolvedConflicts, false);
             state.Conflicts = MapDefinitions(parameters.Conflicts, false);
             state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
@@ -216,10 +217,10 @@ namespace IronyModManager.IO.Mods
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
-                }                
+                }
                 tasks.Add(stream.CopyToAsync(fs));
                 streams.Add(stream);
-                streams.Add(fs);                
+                streams.Add(fs);
             }
             if (tasks.Count > 0)
             {
@@ -276,6 +277,10 @@ namespace IronyModManager.IO.Mods
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     cached = JsonDISerializer.Deserialize<IPatchState>(text);
+                    if (string.IsNullOrEmpty(cached.IgnoreConflictPaths))
+                    {
+                        cached.IgnoreConflictPaths = string.Empty;
+                    }
                     if (cached.ConflictHistory == null)
                     {
                         cached.ConflictHistory = new List<IDefinition>();

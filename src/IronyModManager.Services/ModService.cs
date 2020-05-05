@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-03-2020
+// Last Modified On : 05-05-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
@@ -29,6 +30,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -407,6 +409,9 @@ namespace IronyModManager.Services
             var ignoredConflicts = DIResolver.Get<IIndexedDefinitions>();
             ignoredConflicts.InitMap(null, true);
             result.IgnoredConflicts = ignoredConflicts;
+            var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
+            ruleIgnoredDefinitions.InitMap(null, true);
+            result.RuleIgnoredConflicts = ruleIgnoredDefinitions;
             ModDefinitionAnalyze?.Invoke(100);
 
             return result;
@@ -416,8 +421,7 @@ namespace IronyModManager.Services
         /// Gets the installed mods.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>IEnumerable&lt;IModObject&gt;.</returns>
-        /// <exception cref="ArgumentNullException">game</exception>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
             return GetInstalledModsInternal(game, true);
@@ -612,73 +616,17 @@ namespace IronyModManager.Services
                     int processed = 0;
                     foreach (var item in state.OrphanConflicts.GroupBy(p => p.TypeAndId))
                     {
-                        processed += item.Count();
-                        var files = new List<string>();
-                        if (state.ResolvedConflicts != null)
-                        {
-                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (resolved.Count() > 0)
-                            {
-                                files.AddRange(resolved.Select(p => p.File));
-                            }
-                        }
-                        var matchedConflicts = conflictResult.OrphanConflicts.GetByTypeAndId(item.First().TypeAndId);
-                        if (state.IgnoredConflicts != null)
-                        {
-                            var ignored = state.IgnoredConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (ignored.Count() > 0 && !IsCachedDefinitionDifferent(matchedConflicts, item))
-                            {
-                                ignoredConflicts.AddRange(ignored);
-                            }
-                        }
-                        var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
-                        if (synced)
-                        {
-                            foreach (var diff in item)
-                            {
-                                var existingConflict = resolvedConflicts.FirstOrDefault(p => p.TypeAndId.Equals(diff.TypeAndId));
-                                if (existingConflict != null)
-                                {
-                                    resolvedConflicts.Remove(existingConflict);
-                                }
-                            }
-                        }
+                        var files = ProcessPatchStateFiles(state, item, ref processed);
+                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
+                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 97);
                         ModDefinitionPatchLoad?.Invoke(perc);
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
-                        processed += item.Count();
-                        var files = new List<string>();
-                        if (state.ResolvedConflicts != null)
-                        {
-                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (resolved.Count() > 0)
-                            {
-                                files.AddRange(resolved.Select(p => p.File));
-                            }
-                        }
-                        var matchedConflicts = conflictResult.Conflicts.GetByTypeAndId(item.First().TypeAndId);
-                        if (state.IgnoredConflicts != null)
-                        {
-                            var ignored = state.IgnoredConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (ignored.Count() > 0 && !IsCachedDefinitionDifferent(matchedConflicts, item))
-                            {
-                                ignoredConflicts.AddRange(ignored);
-                            }
-                        }
-                        var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
-                        if (synced)
-                        {
-                            foreach (var diff in item)
-                            {
-                                var existingConflict = resolvedConflicts.FirstOrDefault(p => p.TypeAndId.Equals(diff.TypeAndId));
-                                if (existingConflict != null)
-                                {
-                                    resolvedConflicts.Remove(existingConflict);
-                                }
-                            }
-                        }
+                        var files = ProcessPatchStateFiles(state, item, ref processed);
+                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
+                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 97);
                         ModDefinitionPatchLoad?.Invoke(perc);
                     }
@@ -694,9 +642,12 @@ namespace IronyModManager.Services
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
                     conflicts.IgnoredConflicts = ignoredIndex;
+                    conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
+                    EvalModIgnoreDefinitions(conflicts);
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
+                        IgnoreConflictPaths = conflicts.IgnoredPaths,
                         Conflicts = GetDefinitionOrDefault(conflicts.Conflicts),
                         OrphanConflicts = GetDefinitionOrDefault(conflicts.OrphanConflicts),
                         ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
@@ -715,6 +666,7 @@ namespace IronyModManager.Services
                     {
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                         {
+                            IgnoreConflictPaths = conflictResult.IgnoredPaths,
                             Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
                             OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
                             ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
@@ -753,6 +705,33 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Saves the ignored paths asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            EvalModIgnoreDefinitions(conflictResult);
+            var patchName = GenerateCollectionPatchName(collectionName);
+            return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+            {
+                IgnoreConflictPaths = conflictResult.IgnoredPaths,
+                Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
+                IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
+                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                PatchName = patchName
+            });
         }
 
         /// <summary>
@@ -847,6 +826,41 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Evals the mod ignore definitions.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        protected virtual void EvalModIgnoreDefinitions(IConflictResult conflictResult)
+        {
+            var ruleIgnoredDefinitions = DIResolver.Get<IIndexedDefinitions>();
+            ruleIgnoredDefinitions.InitMap(null, true);
+            if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
+            {
+                var rules = new List<string>();
+                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                foreach (var line in lines)
+                {
+                    rules.Add(line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar));
+                }
+                foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                {
+                    var name = topConflict.Name;
+                    if (!name.EndsWith(Path.DirectorySeparatorChar))
+                    {
+                        name = $"{name}{Path.DirectorySeparatorChar}";
+                    }
+                    if (rules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        foreach (var item in topConflict.Children)
+                        {
+                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                        }
+                    }
+                }
+            }
+            conflictResult.RuleIgnoredConflicts = ruleIgnoredDefinitions;
+        }
+
+        /// <summary>
         /// export mod patch definition as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -926,6 +940,7 @@ namespace IronyModManager.Services
 
                     var stateResult = await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
+                        IgnoreConflictPaths = conflictResult.IgnoredPaths,
                         Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
                         OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
@@ -937,6 +952,28 @@ namespace IronyModManager.Services
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Finds the patch state matched conflicts.
+        /// </summary>
+        /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <param name="state">The state.</param>
+        /// <param name="ignoredConflicts">The ignored conflicts.</param>
+        /// <param name="item">The item.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> FindPatchStateMatchedConflicts(IIndexedDefinitions indexedDefinitions, IPatchState state, List<IDefinition> ignoredConflicts, IGrouping<string, IDefinition> item)
+        {
+            var matchedConflicts = indexedDefinitions.GetByTypeAndId(item.First().TypeAndId);
+            if (state.IgnoredConflicts != null)
+            {
+                var ignored = state.IgnoredConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                if (ignored.Count() > 0 && !IsCachedDefinitionDifferent(matchedConflicts, item))
+                {
+                    ignoredConflicts.AddRange(ignored);
+                }
+            }
+            return matchedConflicts;
         }
 
         /// <summary>
@@ -1305,6 +1342,54 @@ namespace IronyModManager.Services
                 definitions.AddRange(fileDefs);
             }
             return definitions;
+        }
+
+        /// <summary>
+        /// Processes the patch state files.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="processed">The processed.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        protected virtual IList<string> ProcessPatchStateFiles(IPatchState state, IGrouping<string, IDefinition> item, ref int processed)
+        {
+            processed += item.Count();
+            var files = new List<string>();
+            if (state.ResolvedConflicts != null)
+            {
+                var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                if (resolved.Count() > 0)
+                {
+                    files.AddRange(resolved.Select(p => p.File));
+                }
+            }
+
+            return files;
+        }
+
+        /// <summary>
+        /// synchronize patch state as an asynchronous operation.
+        /// </summary>
+        /// <param name="userDirectory">The user directory.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <param name="resolvedConflicts">The resolved conflicts.</param>
+        /// <param name="item">The item.</param>
+        /// <param name="files">The files.</param>
+        /// <param name="matchedConflicts">The matched conflicts.</param>
+        protected virtual async Task SyncPatchStateAsync(string userDirectory, string patchName, List<IDefinition> resolvedConflicts, IGrouping<string, IDefinition> item, IList<string> files, IEnumerable<IDefinition> matchedConflicts)
+        {
+            var synced = await SyncPatchStatesAsync(matchedConflicts, item, patchName, userDirectory, files.ToArray());
+            if (synced)
+            {
+                foreach (var diff in item)
+                {
+                    var existingConflict = resolvedConflicts.FirstOrDefault(p => p.TypeAndId.Equals(diff.TypeAndId));
+                    if (existingConflict != null)
+                    {
+                        resolvedConflicts.Remove(existingConflict);
+                    }
+                }
+            }
         }
 
         /// <summary>

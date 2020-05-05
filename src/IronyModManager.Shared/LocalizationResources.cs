@@ -109,6 +109,7 @@ namespace IronyModManager.Shared
             public const string Cancel = Prefix + "Cancel";
             public const string Resolve = Prefix + "Resolve";
             public const string Ignore = Prefix + "Ignore";
+            public const string IgnoreRules = Prefix + "IgnoreRules";
             public const string OverlayResolve = Prefix + "OverlayResolve";
             public const string NextConflict = Prefix + "NextConflict";
             public const string PrevConflict = Prefix + "PrevConflict";
@@ -150,6 +151,13 @@ namespace IronyModManager.Shared
                 public const string Redo = Prefix + "Redo";
                 public const string SelectAll = Prefix + "SelectAll";
             }
+        }
+        public static class ConflictIgnore
+        {
+            public const string Prefix = nameof(ConflictIgnore) + ".";
+            public const string Save = Prefix + "Save";
+            public const string Cancel = Prefix + "Cancel";
+            public const string Watermark = Prefix + "Watermark";
         }
         public static class Notifications
         {

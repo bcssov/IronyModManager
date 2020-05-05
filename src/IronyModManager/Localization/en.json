@@ -80,6 +80,7 @@
         "Cancel": "Cancel",
         "Resolve": "Resolve",
         "Ignore": "Ignore",
+        "IgnoreRules": "Ignore Rules",
         "OverlayResolve": "Please wait while resolving conflict...",
         "NextConflict": "Next Conflict",
         "PrevConflict": "Prev Conflict",
@@ -113,6 +114,11 @@
             "Redo": "Redo",
             "SelectAll": "Select All"
         }
+    },
+    "ConflictIgnore": {
+        "Save": "Save",
+        "Cancel": "Cancel",
+        "Watermark": "Use # for comments. New line is a new rule."
     },
     "Notifications": {
         "CollectionCreated": {

@@ -80,6 +80,7 @@
         "Cancel": "Otkaži",
         "Resolve": "Riješi",
         "Ignore": "Ignoriraj",
+        "IgnoreRules": "Pravila ignoriranja",
         "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
         "NextConflict": "Slijedeći sukob",
         "PrevConflict": "Prijašnji sukob",
@@ -113,6 +114,11 @@
             "Redo": "Ponovi",
             "SelectAll": "Odaberi sve"
         }
+    },
+    "ConflictIgnore": {
+        "Save": "Spremi",
+        "Cancel": "Otkaži",
+        "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
     },
     "Notifications": {
         "CollectionCreated": {
