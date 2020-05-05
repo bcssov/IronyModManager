@@ -80,6 +80,7 @@
         "Cancel": "Stornieren",
         "Resolve": "Lösen",
         "Ignore": "Ignorieren",
+        "IgnoreRules": "Regeln ignorieren",
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",
@@ -113,6 +114,11 @@
             "Redo": "Wiederholen",
             "SelectAll": "Wählen Sie Alle"
         }
+    },
+    "ConflictIgnore": {
+        "Save": "Speichern",
+        "Cancel": "Stornieren",
+        "Watermark": "Verwenden Sie # für Kommentare. Neue Zeile ist eine neue Regel."
     },
     "Notifications": {
         "CollectionCreated": {

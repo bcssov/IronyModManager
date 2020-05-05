@@ -642,6 +642,7 @@ namespace IronyModManager.Services
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
                     conflicts.IgnoredConflicts = ignoredIndex;
+                    conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     EvalModIgnoreDefinitions(conflicts);
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
@@ -719,6 +720,7 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
+            EvalModIgnoreDefinitions(conflictResult);
             var patchName = GenerateCollectionPatchName(collectionName);
             return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
             {
@@ -833,12 +835,25 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
-                var rules = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#")).ToList();
-                foreach (var item in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                var rules = new List<string>();
+                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                foreach (var line in lines)
                 {
-                    if (rules.Any(x => item.Name.StartsWith(x)))
+                    rules.Add(line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar));
+                }
+                foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
+                {
+                    var name = topConflict.Name;
+                    if (!name.EndsWith(Path.DirectorySeparatorChar))
                     {
-                        ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                        name = $"{name}{Path.DirectorySeparatorChar}";
+                    }
+                    if (rules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        foreach (var item in topConflict.Children)
+                        {
+                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                        }
                     }
                 }
             }

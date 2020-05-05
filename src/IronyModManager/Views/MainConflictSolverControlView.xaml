@@ -10,7 +10,10 @@
     <converter:MathConverter x:Key="MathConverter" />
   </UserControl.Resources>
   <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-    <Grid RowDefinitions="3.5*,9.5*,1.1*" ColumnDefinitions="3*,7*">
+    <Panel IsVisible="{Binding EditingIgnoreConflictsRules}">
+      <ContentControl Content="{Binding IgnoreConflictsRules}"></ContentControl>
+    </Panel>
+    <Grid RowDefinitions="3.5*,9.5*,1.1*" ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <Grid ColumnDefinitions="*" RowDefinitions="1*,20*">
           <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" >
@@ -47,17 +50,21 @@
         </Grid>
       </Panel>
       <Panel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsVisible="{Binding !IsConflictSolverAvailable}">
-        <TextBox TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0,20,10" 
+        <TextBox TextWrapping="Wrap" Text="{Binding SelectedConflict.Key}" Margin="10,0,20,10"
                  IsReadOnly="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"></TextBox>
       </Panel>
       <ContentControl IsVisible="{Binding IsBinaryViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding BinaryMergeViewer}"></ContentControl>
       <ContentControl IsVisible="{Binding IsMergeViewerVisible}" Margin="10" Grid.Row="1" Grid.Column="1" Content="{Binding MergeViewer}"></ContentControl>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Resolve}" Command="{Binding ResolveCommand}"
               VerticalAlignment="Bottom" HorizontalAlignment="Left"
-              Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}"  IsVisible="{Binding IsConflictSolverAvailable}"></Button>
-      <Button Grid.Row="2" Grid.Column="1" Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
-              VerticalAlignment="Bottom" HorizontalAlignment="Center"
-              Margin="0,0,0,10" IsEnabled="{Binding IgnoreEnabled}"  IsVisible="{Binding IsConflictSolverAvailable}"></Button>
+              Margin="10,0,0,10" IsEnabled="{Binding ResolveEnabled}" IsVisible="{Binding IsConflictSolverAvailable}"></Button>
+      <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center"
+                  Margin="0,0,0,10" VerticalAlignment="Bottom" Orientation="Horizontal">
+        <Button Content="{Binding Ignore}" Command="{Binding IgnoreCommand}"
+              IsEnabled="{Binding IgnoreEnabled}" IsVisible="{Binding IsConflictSolverAvailable}" Margin="0,0,10,0"></Button>
+        <Button Content="{Binding IgnoreRules}" Command="{Binding IgnoreRulesCommand}"
+              IsVisible="{Binding IsConflictSolverAvailable}" Margin="10,0,0,0"></Button>
+      </StackPanel>
       <Button Grid.Row="2" Grid.Column="1" Content="{Binding Back}" Command="{Binding BackCommand}"
               VerticalAlignment="Bottom" HorizontalAlignment="Right"
               Margin="0,0,20,10"></Button>
