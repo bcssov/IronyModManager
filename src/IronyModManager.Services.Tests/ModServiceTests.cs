@@ -2299,8 +2299,8 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
 
-            var def = new Definition() { File = "test.txt", ModName="1" };
-            var def2 = new Definition() { File = "test.txt", ModName="2" };
+            var def = new Definition() { File = "test.txt", ModName = "1" };
+            var def2 = new Definition() { File = "test.txt", ModName = "2" };
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
             result.Definition.Should().Be(def2);
             result.PriorityType.Should().Be(DefinitionPriorityType.ModOrder);
@@ -2372,6 +2372,89 @@ namespace IronyModManager.Services.Tests
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
             result.Definition.Should().Be(def2);
             result.PriorityType.Should().Be(DefinitionPriorityType.LIOS);
+        }
+
+        /// <summary>
+        /// Defines the test method SaveIgnoredPathsAsync_should_be_false_when_game_is_null.
+        /// </summary>
+        [Fact]
+        public async Task SaveIgnoredPathsAsync_should_be_false_when_game_is_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult(), "test");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method SaveIgnoredPathsAsync_should_be_false.
+        /// </summary>
+        [Fact]
+        public async Task SaveIgnoredPathsAsync_should_be_false()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult(), "test");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method SaveIgnoredPathsAsync_should_be_true.
+        /// </summary>
+        [Fact]
+        public async Task SaveIgnoredPathsAsync_should_be_true()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.SaveIgnoredPathsAsync(new ConflictResult(), "test");
+            result.Should().BeTrue();
         }
 
         /// <summary>

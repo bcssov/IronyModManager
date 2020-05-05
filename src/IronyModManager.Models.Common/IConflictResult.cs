@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 05-05-2020
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
@@ -45,6 +45,12 @@ namespace IronyModManager.Models.Common
         IIndexedDefinitions IgnoredConflicts { get; set; }
 
         /// <summary>
+        /// Gets or sets the ignored paths.
+        /// </summary>
+        /// <value>The ignored paths.</value>
+        string IgnoredPaths { get; set; }
+
+        /// <summary>
         /// Gets or sets the orphan conflicts.
         /// </summary>
         /// <value>The orphan conflicts.</value>
@@ -55,6 +61,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The resolved conflicts.</value>
         IIndexedDefinitions ResolvedConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rule ignored conflicts.
+        /// </summary>
+        /// <value>The rule ignored conflicts.</value>
+        IIndexedDefinitions RuleIgnoredConflicts { get; set; }
 
         #endregion Properties
     }

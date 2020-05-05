@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-05-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -174,6 +174,14 @@ namespace IronyModManager.Services.Common
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
+
+        /// <summary>
+        /// Saves the ignored paths asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
 
         #endregion Methods
     }
