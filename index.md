@@ -1,7 +1,7 @@
 Irony Mod Manager is a new mod manager for Paradox Games which at the moment supports Stellaris only but at a later date support for additional games will be added. The games which will be supported are the ones which support the newest Paradox Launcher.
 
 ### Download
-* Latest beta version: [v1.0.83-beta](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.83-beta).
+* Latest beta version: [v1.0.86-beta](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.86-beta).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
