@@ -59,6 +59,11 @@ namespace IronyModManager.IO.Mods
         private const string StateName = "state" + Shared.Constants.JsonExtension;
 
         /// <summary>
+        /// The externally loaded code
+        /// </summary>
+        private static readonly HashSet<string> externallyLoadedCode = new HashSet<string>();
+
+        /// <summary>
         /// The write lock
         /// </summary>
         private static readonly AsyncLock writeLock = new AsyncLock();
@@ -67,11 +72,6 @@ namespace IronyModManager.IO.Mods
         /// The cached state
         /// </summary>
         private static IPatchState cachedState;
-
-        /// <summary>
-        /// The externally loaded code
-        /// </summary>
-        private static HashSet<string> externallyLoadedCode = new HashSet<string>();
 
         /// <summary>
         /// The last cached state path
@@ -121,8 +121,8 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">Game.</exception>
-        /// <exception cref="ArgumentNullException">Definitions.</exception>
+        /// <exception cref="System.ArgumentNullException">Game.</exception>
+        /// <exception cref="System.ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
@@ -214,7 +214,7 @@ namespace IronyModManager.IO.Mods
             {
                 foreach (var item in parameters.Definitions.Where(s => !string.IsNullOrWhiteSpace(s.Code) && !modifiedHistory.Any(p => p.TypeAndId.Equals(s.TypeAndId))))
                 {
-                    var existingHits = indexed.GetByTypeAndId(item.TypeAndId).ToList();                    
+                    var existingHits = indexed.GetByTypeAndId(item.TypeAndId).ToList();
                     history.RemoveAll(p => existingHits.Any(x => p.Equals(x)));
                     history.Add(item);
                     modifiedHistory.Add(item);

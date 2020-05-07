@@ -23,13 +23,13 @@
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
-  <Style Selector="TextBlock.CopiedDefinition">
-    <Setter Property="Background" Value="#ffc58b" />
-    <Setter Property="Foreground" Value="Black"/>
+  <Style Selector="Border.CopiedDefinition">
+    <Setter Property="BorderThickness" Value="4,4,4,4"/>
+    <Setter Property="BorderBrush" Value="#ffc58b" />
   </Style>
-  <Style Selector="TextBlock.PatchMod">
-    <Setter Property="Background" Value="#66cc99" />
-    <Setter Property="Foreground" Value="Black"/>
+  <Style Selector="Border.PatchMod">
+    <Setter Property="BorderThickness" Value="4,4,4,4"/>
+    <Setter Property="BorderBrush" Value="#66cc99" />
   </Style>
   <Style Selector="TextBlock.DiffImaginaryLine">
     <Setter Property="Background" Value="#FF808080" />
@@ -60,7 +60,7 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
   <Style Selector="Border.BlockSelected">
-    <Setter Property="BorderThickness" Value="1,1,1,1"/>
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
     <Setter Property="BorderBrush" Value="Green"/>
   </Style>
   <Styles.Resources>
