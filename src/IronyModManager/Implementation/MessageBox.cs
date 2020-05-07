@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-18-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -13,9 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.IO;
 using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
@@ -29,15 +27,6 @@ namespace IronyModManager.Implementation
     [ExcludeFromCoverage("Won't test external GUI component.")]
     public static class MessageBoxes
     {
-        #region Fields
-
-        /// <summary>
-        /// The icon
-        /// </summary>
-        private static Bitmap icon;
-
-        #endregion Fields
-
         #region Methods
 
         /// <summary>
@@ -57,7 +46,7 @@ namespace IronyModManager.Implementation
                 ContentHeader = header,
                 ContentMessage = message,
                 Icon = MsgBox.Enums.Icon.Error,
-                WindowIcon = GetIcon(),
+                WindowIcon = StaticResources.GetAppIconBitmap(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
             };
             if (Dispatcher.UIThread.CheckAccess())
@@ -101,25 +90,10 @@ namespace IronyModManager.Implementation
                 ContentMessage = message,
                 Icon = icon,
                 ButtonDefinitions = MsgBox.Enums.ButtonEnum.YesNo,
-                WindowIcon = GetIcon(),
+                WindowIcon = StaticResources.GetAppIconBitmap(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
             });
             return msgBox;
-        }
-
-        /// <summary>
-        /// Gets the icon.
-        /// </summary>
-        /// <returns>Bitmap.</returns>
-        private static Bitmap GetIcon()
-        {
-            if (icon == null)
-            {
-                using var ms = new MemoryStream(Shared.ResourceReader.GetEmbeddedResource(Constants.Resources.LogoIco));
-                // TODO: Check in a future package if this is is finally implemented? Why have a property in a parameter if it does nothing?
-                icon = new Bitmap(ms);
-            }
-            return icon;
         }
 
         #endregion Methods

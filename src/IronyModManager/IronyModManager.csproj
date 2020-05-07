@@ -44,6 +44,7 @@
     <AvaloniaResource Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\MinMaxButtonSpinner.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\ManagedDialog.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ComboBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
@@ -113,6 +114,7 @@
     <None Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Light\MinMaxButtonSpinner.xaml" />
+    <None Remove="Controls\Themes\ManagedDialog.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ComboBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
@@ -414,6 +416,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Controls\ModConflictIgnoreControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Themes\ManagedDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

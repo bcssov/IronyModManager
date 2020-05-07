@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,13 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Dialogs;
 using Avalonia.Threading;
+using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Localization;
@@ -42,7 +42,7 @@ namespace IronyModManager
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .UseManagedSystemDialogs().AfterSetup((s) =>
+                .UseManagedDialogs().AfterSetup((s) =>
                 {
 # if DEBUG
                     if (!Design.IsDesignMode)

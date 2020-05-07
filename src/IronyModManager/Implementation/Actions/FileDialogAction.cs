@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -77,10 +77,6 @@ namespace IronyModManager.Implementation.Actions
                 dialog.InitialFileName = initialFileName;
             }
             var result = await dialog.ShowAsync(GetMainWindow());
-            if (result != null && !result.EndsWith(Shared.Constants.ZipExtension))
-            {
-                result = $"{result}{Shared.Constants.ZipExtension}";
-            }
             return result;
         }
 
