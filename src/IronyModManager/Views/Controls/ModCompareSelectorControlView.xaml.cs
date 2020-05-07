@@ -11,8 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
@@ -28,6 +30,15 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class ModCompareSelectorControlView : BaseControl<ModCompareSelectorControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The mod compare class
+        /// </summary>
+        private const string ModCompareClass = "ModCompare";
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -48,12 +59,28 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            void appendClass(ListBox listBox)
+            {
+                var children = listBox.GetLogicalChildren().Cast<ListBoxItem>();
+                if (children != null)
+                {
+                    foreach (var item in children)
+                    {
+                        if (!item.Classes.Contains(ModCompareClass))
+                        {
+                            item.Classes.Add(ModCompareClass);
+                        }
+                    }
+                }
+            }
             var left = this.FindControl<ListBox>("leftSide");
             var right = this.FindControl<ListBox>("rightSide");
             LayoutUpdated += (sender, args) =>
             {
                 left.InvalidateArrange();
                 right.InvalidateArrange();
+                appendClass(left);
+                appendClass(right);
             };
             base.OnActivated(disposables);
         }
