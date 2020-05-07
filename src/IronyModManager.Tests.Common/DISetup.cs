@@ -4,7 +4,7 @@
 // Created          : 01-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="DISetup.cs" company="Mario">
 //     Mario
@@ -48,6 +48,7 @@ namespace IronyModManager.Tests.Common
                     Container = Container,
                     PluginPathAndName = Constants.PluginsPathAndName
                 });
+            Container.Register<ILogger, Logger>();
         }
 
         #endregion Methods
