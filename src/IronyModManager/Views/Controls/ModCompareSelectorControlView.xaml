@@ -14,7 +14,7 @@
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
       <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-               SelectedItem="{Binding LeftSelectedDefinition}">
+               SelectedItem="{Binding LeftSelectedDefinition}" x:Name="leftSide">
         <ListBox.ItemTemplate>
           <DataTemplate>
             <controls:BoundClassTextBlock TextWrapping="Wrap">
@@ -36,7 +36,7 @@
       </ListBox>
       <ListBox Grid.Column="1" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-               SelectedItem="{Binding RightSelectedDefinition}">
+               SelectedItem="{Binding RightSelectedDefinition}" x:Name="rightSide">
         <ListBox.ItemTemplate>
           <DataTemplate>
             <controls:BoundClassTextBlock TextWrapping="Wrap">

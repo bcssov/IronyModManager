@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 05-06-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -102,8 +102,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="line">The line.</param>
         /// <param name="inline">if set to <c>true</c> [inline].</param>
         /// <param name="typeOverride">The type override.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>ParsingArgs.</returns>
-        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb = null, int? openBrackets = null, int? closeBrackets = null, string line = Shared.Constants.EmptyParam, bool? inline = null, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb = null,
+            int? openBrackets = null, int? closeBrackets = null, string line = Shared.Constants.EmptyParam, bool? inline = null,
+            string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
             return new ParsingArgs()
             {
@@ -114,7 +117,8 @@ namespace IronyModManager.Parser.Common.Parsers
                 OpeningBracket = openBrackets.GetValueOrDefault(),
                 StringBuilder = sb,
                 Inline = inline.GetValueOrDefault(),
-                TypeOverride = typeOverride
+                TypeOverride = typeOverride,
+                IsFirstLevel = isFirstLevel
             };
         }
 
@@ -297,6 +301,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="args">The arguments.</param>
         protected virtual void MapDefinitionFromArgs(ParsingArgs args)
         {
+            args.Definition.IsFirstLevel = args.IsFirstLevel;
             args.Definition.ContentSHA = args.Args.ContentSHA;
             args.Definition.Dependencies = args.Args.ModDependencies;
             args.Definition.ModName = args.Args.ModName;
@@ -335,8 +340,8 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         foreach (var item in value.Value.Nodes)
                         {
-                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key));
-                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key));
+                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key, isFirstLevel: false));
+                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key, isFirstLevel: false));
                         }
                     }
                 }
@@ -402,7 +407,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         return error;
                     }
-                    return ParseSimple(args);
+                    return ParseSimple(args, false);
                 }
             }
             else
@@ -418,8 +423,9 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual IEnumerable<IDefinition> ParseComplexScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             if (keyValues?.Count() > 0)
@@ -427,7 +433,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 foreach (var item in keyValues)
                 {
                     var definition = GetDefinitionInstance();
-                    MapDefinitionFromArgs(ConstructArgs(args, definition));
+                    MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
                     definition.Code = FormatCode(item.Code, parent);
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
@@ -452,8 +458,9 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             if (nodes?.Count() > 0)
@@ -478,7 +485,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         id = $"{sbLangs}{id}";
                     }
-                    MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride));
+                    MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
                     definition.Code = FormatCode(item.Code, parent);
@@ -511,8 +518,9 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Parses the simple.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseSimple(ParserArgs args)
+        protected virtual IEnumerable<IDefinition> ParseSimple(ParserArgs args, bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
             IDefinition definition = null;
@@ -538,7 +546,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition.Id = id;
                         definition.ValueType = Common.ValueType.Object;
                         bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline, isFirstLevel: isFirstLevel);
                         OnSimpleParseReadObjectLine(parsingArgs);
                         // incase some wise ass opened and closed an object definition in the same line
                         if (inline)
@@ -564,7 +572,7 @@ namespace IronyModManager.Parser.Common.Parsers
                             definition.Id = id;
                             definition.ValueType = ValueType.Variable;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: isFirstLevel);
                         result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
                     }
                 }
@@ -578,7 +586,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
                     }
-                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false);
+                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false, isFirstLevel: isFirstLevel);
                     OnSimpleParseReadObjectLine(parsingArgs);
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                     {
@@ -626,6 +634,12 @@ namespace IronyModManager.Parser.Common.Parsers
             /// </summary>
             /// <value><c>true</c> if inline; otherwise, <c>false</c>.</value>
             public bool Inline { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this instance is first level.
+            /// </summary>
+            /// <value><c>true</c> if this instance is first level; otherwise, <c>false</c>.</value>
+            public bool IsFirstLevel { get; set; }
 
             /// <summary>
             /// Gets or sets the line.

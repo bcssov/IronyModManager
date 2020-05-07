@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -941,6 +941,7 @@ namespace IronyModManager.Services
                     var stateResult = await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
                         IgnoreConflictPaths = conflictResult.IgnoredPaths,
+                        Definitions = exportPatches,
                         Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
                         OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
@@ -1286,12 +1287,35 @@ namespace IronyModManager.Services
         /// <param name="definitions">The definitions.</param>
         protected virtual void MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
-            static void appendLine(StringBuilder sb, IEnumerable<IDefinition> lines)
+            static void appendLine(StringBuilder sb, IEnumerable<string> lines)
             {
                 if (lines?.Count() > 0)
                 {
-                    sb.AppendLine(string.Join(Environment.NewLine, lines.Select(p => p.Code)));
+                    sb.AppendLine(string.Join(Environment.NewLine, lines));
                 }
+            }
+            static string mergeCode(string code, IEnumerable<string> lines)
+            {
+                if (lines.Count() > 0)
+                {
+                    var index = code.IndexOf("{") + 1;
+                    var result = code.Insert(index, Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
+                    return string.Join(Environment.NewLine, result.SplitOnNewLine());
+                }
+                return code;
+            }
+            static List<string> cleanCode(IEnumerable<IDefinition> defs)
+            {
+                var result = new List<string>();
+                if (defs.Count() > 0)
+                {
+                    foreach (var item in defs)
+                    {
+                        var filtered = item.Code.Substring(item.Code.IndexOf("{") + 1).Replace("\r", string.Empty).Replace("\n", string.Empty);
+                        result.Add(filtered.Substring(0, filtered.LastIndexOf("}")).Trim());
+                    }
+                }
+                return result;
             }
             if (definitions?.Count() > 0)
             {
@@ -1303,11 +1327,19 @@ namespace IronyModManager.Services
                     {
                         var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                         var variables = variableDefinitions.Where(p => definition.Code.Contains(p.Id));
-                        StringBuilder sb = new StringBuilder();
-                        appendLine(sb, namespaces);
-                        appendLine(sb, variables);
-                        appendLine(sb, new List<IDefinition> { definition });
-                        definition.Code = sb.ToString();
+                        if (definition.IsFirstLevel)
+                        {
+                            StringBuilder sb = new StringBuilder();
+                            appendLine(sb, namespaces.Select(p => p.Code));
+                            appendLine(sb, variables.Select(p => p.Code));
+                            appendLine(sb, new List<string> { definition.Code });
+                            definition.Code = sb.ToString();
+                        }
+                        else
+                        {
+                            definition.Code = mergeCode(definition.Code, cleanCode(variables));
+                            definition.Code = mergeCode(definition.Code, cleanCode(namespaces));
+                        }
                     }
                 }
             }

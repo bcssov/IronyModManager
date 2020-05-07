@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-06-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -329,7 +329,7 @@ namespace IronyModManager.ViewModels
             PreviousConflictIndex = null;
             if (conflictResult != null && conflictResult.Conflicts != null)
             {
-                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToHashSet();
+                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToList();
 
                 var resolved = new List<IHierarchicalDefinitions>();
                 if (conflictResult.ResolvedConflicts != null)
@@ -346,19 +346,30 @@ namespace IronyModManager.ViewModels
                 }
                 foreach (var topLevelResolvedConflicts in resolved)
                 {
-                    var topLevelConflict = conflicts.FirstOrDefault(p => p.Name.Equals(topLevelResolvedConflicts.Name));
-                    if (topLevelConflict != null)
+                    IEnumerable<IHierarchicalDefinitions> topLevelConflicts;
+                    if (topLevelResolvedConflicts.Name.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
                     {
-                        foreach (var childResolvedConflict in topLevelResolvedConflicts.Children)
+                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(Localization, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else
+                    {
+                        topLevelConflicts = conflicts.Where(p => p.Name.Equals(topLevelResolvedConflicts.Name));
+                    }
+                    if (topLevelConflicts.Count() > 0)
+                    {
+                        foreach (var topLevelConflict in topLevelConflicts)
                         {
-                            var child = topLevelConflict.Children.FirstOrDefault(p => p.Name.Equals(childResolvedConflict.Name));
-                            if (child != null)
+                            foreach (var childResolvedConflict in topLevelResolvedConflicts.Children)
                             {
-                                topLevelConflict.Children.Remove(child);
+                                var child = topLevelConflict.Children.FirstOrDefault(p => p.Key.Equals(childResolvedConflict.Key));
+                                if (child != null)
+                                {
+                                    topLevelConflict.Children.Remove(child);
+                                }
                             }
                         }
                     }
-                    conflicts.RemoveWhere(p => p.Children == null || p.Children.Count == 0);
+                    conflicts.RemoveAll(p => p.Children == null || p.Children.Count == 0);
                 }
                 var invalid = conflictResult.AllConflicts.GetByValueType(Parser.Common.ValueType.Invalid);
                 if (invalid?.Count() > 0)

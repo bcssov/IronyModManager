@@ -4,13 +4,15 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Reactive.Disposables;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
@@ -39,6 +41,22 @@ namespace IronyModManager.Views.Controls
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            var left = this.FindControl<ListBox>("leftSide");
+            var right = this.FindControl<ListBox>("rightSide");
+            LayoutUpdated += (sender, args) =>
+            {
+                left.InvalidateArrange();
+                right.InvalidateArrange();
+            };
+            base.OnActivated(disposables);
+        }
 
         /// <summary>
         /// Initializes the component.
