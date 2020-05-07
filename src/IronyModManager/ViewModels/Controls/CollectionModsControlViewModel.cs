@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-29-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -94,6 +94,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod selected changed
         /// </summary>
         private IDisposable modSelectedChanged;
+
+        /// <summary>
+        /// The refresh in progress
+        /// </summary>
+        private bool refreshInProgress = false;
 
         /// <summary>
         /// The reorder token
@@ -407,11 +412,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="mods">The mods.</param>
         public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods)
         {
-            skipModCollectionSave = true;
+            if (isRefreshing)
+            {
+                refreshInProgress = true;
+            }
             if (!isRefreshing && mods?.Count() > 0)
             {
                 SetMods(mods);
                 HandleModCollectionChange();
+                refreshInProgress = false;
             }
         }
 
@@ -952,7 +961,7 @@ namespace IronyModManager.ViewModels.Controls
                 modSelectedChanged = sourceList.Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
                 {
                     skipReorder = true;
-                    if (!skipModCollectionSave)
+                    if (!skipModCollectionSave && !refreshInProgress)
                     {
                         var needsSave = false;
                         if (SelectedMods != null)
@@ -989,7 +998,7 @@ namespace IronyModManager.ViewModels.Controls
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
-                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => !skipReorder && s.Value > 0).Subscribe(s =>
+                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => !refreshInProgress && !skipReorder && s.Value > 0).Subscribe(s =>
                 {
                     if (reorderToken == null)
                     {
