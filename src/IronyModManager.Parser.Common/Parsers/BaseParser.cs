@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2020
+// Last Modified On : 05-07-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -319,58 +319,6 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the complex first level.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexFirstLevel(ParserArgs args, bool fallbackToSimpleParser = true)
-        {
-            List<IDefinition> parse()
-            {
-                var result = new List<IDefinition>();
-                var value = codeParser.ParseScript(args.Lines, args.File);
-                if (value.Error != null)
-                {
-                    result.Add(ParseScriptError(value.Error, args));
-                }
-                else
-                {
-                    if (value.Value.Nodes?.Count() > 0)
-                    {
-                        foreach (var item in value.Value.Nodes)
-                        {
-                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key, isFirstLevel: false));
-                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key, isFirstLevel: false));
-                        }
-                    }
-                }
-                return result;
-            }
-            if (fallbackToSimpleParser)
-            {
-                try
-                {
-                    return parse();
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                    var error = EvalSimpleParseForErrorsOnly(args);
-                    if (error != null)
-                    {
-                        return error;
-                    }
-                    return ParseSimple(args);
-                }
-            }
-            else
-            {
-                return parse();
-            }
-        }
-
-        /// <summary>
         /// Parses the complex root.
         /// </summary>
         /// <param name="args">The arguments.</param>
@@ -493,6 +441,58 @@ namespace IronyModManager.Parser.Common.Parsers
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Parses the complex second level.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseComplexSecondLevel(ParserArgs args, bool fallbackToSimpleParser = true)
+        {
+            List<IDefinition> parse()
+            {
+                var result = new List<IDefinition>();
+                var value = codeParser.ParseScript(args.Lines, args.File);
+                if (value.Error != null)
+                {
+                    result.Add(ParseScriptError(value.Error, args));
+                }
+                else
+                {
+                    if (value.Value.Nodes?.Count() > 0)
+                    {
+                        foreach (var item in value.Value.Nodes)
+                        {
+                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key, isFirstLevel: false));
+                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key, isFirstLevel: false));
+                        }
+                    }
+                }
+                return result;
+            }
+            if (fallbackToSimpleParser)
+            {
+                try
+                {
+                    return parse();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                    var error = EvalSimpleParseForErrorsOnly(args);
+                    if (error != null)
+                    {
+                        return error;
+                    }
+                    return ParseSimple(args);
+                }
+            }
+            else
+            {
+                return parse();
+            }
         }
 
         /// <summary>
