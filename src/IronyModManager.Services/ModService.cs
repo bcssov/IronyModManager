@@ -835,11 +835,20 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
-                var rules = new List<string>();
+                var ignoreRules = new List<string>();
+                var includeRules = new List<string>();
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
-                    rules.Add(line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar));
+                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    if (!parsed.StartsWith("!"))
+                    {
+                        ignoreRules.Add(parsed);
+                    }
+                    else
+                    {
+                        includeRules.Add(parsed.TrimStart('!'));
+                    }
                 }
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
@@ -848,7 +857,7 @@ namespace IronyModManager.Services
                     {
                         name = $"{name}{Path.DirectorySeparatorChar}";
                     }
-                    if (rules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
                     {
                         foreach (var item in topConflict.Children)
                         {
@@ -1136,6 +1145,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        /// <exception cref="System.ArgumentNullException">game</exception>
         /// <exception cref="ArgumentNullException">game</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
