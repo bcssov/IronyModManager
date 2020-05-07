@@ -329,7 +329,7 @@ namespace IronyModManager.ViewModels
             PreviousConflictIndex = null;
             if (conflictResult != null && conflictResult.Conflicts != null)
             {
-                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToHashSet();
+                var conflicts = conflictResult.Conflicts.GetHierarchicalDefinitions().ToList();
 
                 var resolved = new List<IHierarchicalDefinitions>();
                 if (conflictResult.ResolvedConflicts != null)
@@ -369,7 +369,7 @@ namespace IronyModManager.ViewModels
                             }
                         }
                     }
-                    conflicts.RemoveWhere(p => p.Children == null || p.Children.Count == 0);
+                    conflicts.RemoveAll(p => p.Children == null || p.Children.Count == 0);
                 }
                 var invalid = conflictResult.AllConflicts.GetByValueType(Parser.Common.ValueType.Invalid);
                 if (invalid?.Count() > 0)
