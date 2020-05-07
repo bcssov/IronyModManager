@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 05-06-2020
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -100,8 +100,9 @@ namespace IronyModManager.Parser.Generic
         /// Parses the simple.
         /// </summary>
         /// <param name="args">The arguments.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected override IEnumerable<IDefinition> ParseSimple(ParserArgs args)
+        protected override IEnumerable<IDefinition> ParseSimple(ParserArgs args, bool isFirstLevel = true)
         {
             // Called as a part of a fallback strategy
             if (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 05-06-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -195,6 +195,12 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is first level.
+        /// </summary>
+        /// <value><c>true</c> if this instance is first level; otherwise, <c>false</c>.</value>
+        public bool IsFirstLevel { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -290,6 +296,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ErrorColumn) => ErrorColumn,
                 nameof(ErrorLine) => ErrorLine,
                 nameof(ErrorMessage) => ErrorMessage,
+                nameof(IsFirstLevel) => IsFirstLevel,
                 _ => Id,
             };
         }

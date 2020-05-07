@@ -4,7 +4,7 @@
 // Created          : 04-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 05-06-2020
 // ***********************************************************************
 // <copyright file="BaseGraphicsParser.cs" company="Mario">
 //     Mario
@@ -115,7 +115,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             definition.Id = id;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
                         definition.Code = sb.ToString();
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
@@ -168,7 +168,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             trimEnding = trimEnding[0..^1].TrimEnd();
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
                         if (openBrackets - closeBrackets <= 1)
                         {
@@ -232,7 +232,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             definition.Id = id;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
                         definition.Code = sb.ToString();
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
@@ -277,7 +277,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             trimEnding = trimEnding[0..^1].TrimEnd();
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false);
+                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
                         if (openBrackets - closeBrackets <= 1)
                         {
