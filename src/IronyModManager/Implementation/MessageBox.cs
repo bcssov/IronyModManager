@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -46,12 +46,12 @@ namespace IronyModManager.Implementation
                 ContentHeader = header,
                 ContentMessage = message,
                 Icon = MsgBox.Enums.Icon.Error,
-                WindowIcon = StaticResources.GetAppIconBitmap(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
             };
             if (Dispatcher.UIThread.CheckAccess())
             {
                 var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
+                window.Icon = StaticResources.GetAppIcon();
                 parameters.Window = window;
                 window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
                 return new FatalErrorMessageBox(window);
@@ -61,6 +61,7 @@ namespace IronyModManager.Implementation
                 var task = Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
+                    window.Icon = StaticResources.GetAppIcon();
                     parameters.Window = window;
                     window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
                     return new FatalErrorMessageBox(window);
@@ -80,8 +81,7 @@ namespace IronyModManager.Implementation
         /// <returns>MessageBox.Avalonia.BaseWindows.MsBoxStandardWindow.</returns>
         public static MsgBox.BaseWindows.IMsBoxWindow<MsgBox.Enums.ButtonResult> GetYesNoWindow(string title, string header, string message, MsgBox.Enums.Icon icon)
         {
-            // Can this messagebox not break something in an update?
-            var msgBox = MsgBox.MessageBoxManager.GetMessageBoxStandardWindow(new MessageBoxStandardParams()
+            var parameters = new MessageBoxStandardParams()
             {
                 CanResize = false,
                 ShowInCenter = true,
@@ -90,10 +90,13 @@ namespace IronyModManager.Implementation
                 ContentMessage = message,
                 Icon = icon,
                 ButtonDefinitions = MsgBox.Enums.ButtonEnum.YesNo,
-                WindowIcon = StaticResources.GetAppIconBitmap(),
                 WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
-            });
-            return msgBox;
+            };
+            var window = new MsgBox.Views.MsBoxStandardWindow(parameters.Style);
+            parameters.Window = window;
+            window.Icon = StaticResources.GetAppIcon();
+            window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
+            return new MsgBox.BaseWindows.MsBoxStandardWindow(window);
         }
 
         #endregion Methods
