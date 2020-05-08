@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -62,14 +62,11 @@ namespace IronyModManager.Views.Controls
             void appendClass(ListBox listBox)
             {
                 var children = listBox.GetLogicalChildren().Cast<ListBoxItem>();
-                if (children != null)
+                foreach (var item in children)
                 {
-                    foreach (var item in children)
+                    if (!item.Classes.Contains(ModCompareClass))
                     {
-                        if (!item.Classes.Contains(ModCompareClass))
-                        {
-                            item.Classes.Add(ModCompareClass);
-                        }
+                        item.Classes.Add(ModCompareClass);
                     }
                 }
             }
