@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -47,6 +47,11 @@ namespace IronyModManager.Parser.Definitions
         private string externalDefinitionSHA = string.Empty;
 
         /// <summary>
+        /// The file
+        /// </summary>
+        private string file = string.Empty;
+
+        /// <summary>
         /// The identifier
         /// </summary>
         private string id = string.Empty;
@@ -55,6 +60,11 @@ namespace IronyModManager.Parser.Definitions
         /// The parent directory
         /// </summary>
         private string parentDirectory = string.Empty;
+
+        /// <summary>
+        /// The parent directory ci
+        /// </summary>
+        private string parentDirectoryCI = string.Empty;
 
         /// <summary>
         /// The single line code
@@ -175,7 +185,25 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
-        public string File { get; set; }
+        public string File
+        {
+            get
+            {
+                return file;
+            }
+            set
+            {
+                var val = value ?? string.Empty;
+                file = val;
+                FileCI = val.ToLowerInvariant();
+            }
+        }
+
+        /// <summary>
+        /// Gets the file ci.
+        /// </summary>
+        /// <value>The file ci.</value>
+        public string FileCI { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -219,6 +247,22 @@ namespace IronyModManager.Parser.Definitions
                     parentDirectory = Path.GetDirectoryName(File);
                 }
                 return parentDirectory;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parent directory ci.
+        /// </summary>
+        /// <value>The parent directory ci.</value>
+        public string ParentDirectoryCI
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(parentDirectoryCI))
+                {
+                    parentDirectoryCI = Path.GetDirectoryName(FileCI);
+                }
+                return parentDirectoryCI;
             }
         }
 
@@ -297,6 +341,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ErrorLine) => ErrorLine,
                 nameof(ErrorMessage) => ErrorMessage,
                 nameof(IsFirstLevel) => IsFirstLevel,
+                nameof(FileCI) => FileCI,
+                nameof(ParentDirectoryCI) => ParentDirectoryCI,
                 _ => Id,
             };
         }

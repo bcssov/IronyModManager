@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public virtual Encoding GetEncoding(IDefinition definition)
         {
             EnsureValidType(definition);
-            if (!definition.ParentDirectory.StartsWith(Localization))
+            if (!definition.ParentDirectory.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
                 return new UTF8Encoding(false);
             }

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -282,7 +282,7 @@ namespace IronyModManager.Services
                 if (uniqueDefinitions.Count() > 1)
                 {
                     // Has same filenames?
-                    if (uniqueDefinitions.GroupBy(p => p.File.ToLowerInvariant()).Count() == 1)
+                    if (uniqueDefinitions.GroupBy(p => p.FileCI).Count() == 1)
                     {
                         result.Definition = uniqueDefinitions.Last();
                         result.PriorityType = DefinitionPriorityType.ModOrder;
@@ -295,12 +295,12 @@ namespace IronyModManager.Services
                         {
                             if (provider.DefinitionUsesFIOSRules(uniqueDefinitions.First()))
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => p.File.ToLowerInvariant()).First();
+                                result.Definition = uniqueDefinitions.OrderBy(p => p.FileCI).First();
                                 result.PriorityType = DefinitionPriorityType.FIOS;
                             }
                             else
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => p.File.ToLowerInvariant()).Last();
+                                result.Definition = uniqueDefinitions.OrderBy(p => p.FileCI).Last();
                                 result.PriorityType = DefinitionPriorityType.LIOS;
                             }
                         }
@@ -795,7 +795,7 @@ namespace IronyModManager.Services
                 }
                 else if (allConflicts.Count() == 1)
                 {
-                    if (fileConflictCache.TryGetValue(def.File, out var result))
+                    if (fileConflictCache.TryGetValue(def.FileCI, out var result))
                     {
                         if (result)
                         {
@@ -807,10 +807,10 @@ namespace IronyModManager.Services
                     }
                     else
                     {
-                        var fileDefs = indexedDefinitions.GetByFile(def.File);
+                        var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
                         if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
                         {
-                            fileConflictCache.TryAdd(def.File, true);
+                            fileConflictCache.TryAdd(def.FileCI, true);
                             if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                             {
                                 conflicts.Add(def);
@@ -818,7 +818,7 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            fileConflictCache.TryAdd(def.File, false);
+                            fileConflictCache.TryAdd(def.FileCI, false);
                         }
                     }
                 }
@@ -1145,7 +1145,6 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        /// <exception cref="System.ArgumentNullException">game</exception>
         /// <exception cref="ArgumentNullException">game</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
@@ -1277,7 +1276,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is cached definition different] [the specified current conflicts]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsCachedDefinitionDifferent(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts)
         {
-            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.File.Equals(p.File) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
+            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             return cachedDiffs.Count() != cachedConflicts.Count();
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2020
+// Last Modified On : 05-08-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -75,6 +75,12 @@ namespace IronyModManager.Parser.Common.Definitions
         string File { get; set; }
 
         /// <summary>
+        /// Gets the file ci.
+        /// </summary>
+        /// <value>The file ci.</value>
+        string FileCI { get; }
+
+        /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
@@ -97,6 +103,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The parent directory.</value>
         string ParentDirectory { get; }
+
+        /// <summary>
+        /// Gets the parent directory ci.
+        /// </summary>
+        /// <value>The parent directory ci.</value>
+        string ParentDirectoryCI { get; }
 
         /// <summary>
         /// Gets or sets the type.
