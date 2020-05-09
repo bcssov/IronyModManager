@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 05-09-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogViewModel.cs" company="Avalonia">
 //     Avalonia
@@ -61,11 +61,6 @@ namespace IronyModManager.Controls.Dialogs
         /// The saving file
         /// </summary>
         private readonly bool _savingFile;
-
-        /// <summary>
-        /// The selecting directory
-        /// </summary>
-        private readonly bool _selectingDirectory;
 
         /// <summary>
         /// The already cancelled
@@ -164,7 +159,7 @@ namespace IronyModManager.Controls.Dialogs
                 }
             }
 
-            _selectingDirectory = dialog is OpenFolderDialog;
+            SelectingFolder = dialog is OpenFolderDialog;
 
             if (dialog is SaveFileDialog sfd)
             {
@@ -284,7 +279,7 @@ namespace IronyModManager.Controls.Dialogs
         /// Gets a value indicating whether [selecting folder].
         /// </summary>
         /// <value><c>true</c> if [selecting folder]; otherwise, <c>false</c>.</value>
-        public bool SelectingFolder => _selectingDirectory;
+        public bool SelectingFolder { get; }
 
         /// <summary>
         /// Gets the selection mode.
@@ -407,7 +402,7 @@ namespace IronyModManager.Controls.Dialogs
 
                     Items.AddRange(infos.Where(x =>
                     {
-                        if (_selectingDirectory)
+                        if (SelectingFolder)
                         {
                             if (!(x is DirectoryInfo))
                             {
@@ -454,7 +449,7 @@ namespace IronyModManager.Controls.Dialogs
         /// </summary>
         public void Ok()
         {
-            if (_selectingDirectory)
+            if (SelectingFolder)
             {
                 CompleteRequested?.Invoke(new[] { Location });
             }
@@ -529,7 +524,7 @@ namespace IronyModManager.Controls.Dialogs
             {
                 try
                 {
-                    if (_selectingDirectory)
+                    if (SelectingFolder)
                     {
                         SelectedItems.Clear();
                     }
@@ -543,7 +538,7 @@ namespace IronyModManager.Controls.Dialogs
                                 SelectedItems.Remove(item);
                         }
 
-                        if (!_selectingDirectory)
+                        if (!SelectingFolder)
                         {
                             var selectedItem = SelectedItems.FirstOrDefault();
 

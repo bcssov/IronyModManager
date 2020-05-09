@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 05-09-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -17,7 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Avalonia;
@@ -56,14 +55,9 @@ namespace IronyModManager.Views.Controls
         private static IHighlightingDefinition yamlHighlightingDefinition;
 
         /// <summary>
-        /// The scroll source
+        /// The syncing scroll
         /// </summary>
-        private ListBox scrollSource;
-
-        /// <summary>
-        /// The scroll token
-        /// </summary>
-        private CancellationTokenSource scrollToken;
+        private bool syncingScroll = false;
 
         #endregion Fields
 
@@ -184,26 +178,17 @@ namespace IronyModManager.Views.Controls
                 {
                     if (scrollArgs.Property == ScrollViewer.HorizontalScrollBarValueProperty || scrollArgs.Property == ScrollViewer.VerticalScrollBarValueProperty)
                     {
-                        if (thisListBox.Scroll == null || otherListBox.Scroll == null || scrollSource == otherListBox)
+                        if (thisListBox.Scroll == null || otherListBox.Scroll == null || syncingScroll)
                         {
                             return;
                         }
-                        scrollSource = thisListBox;
-                        if (scrollToken == null)
-                        {
-                            scrollToken = new CancellationTokenSource();
-                        }
-                        else
-                        {
-                            scrollToken.Cancel();
-                            scrollToken = new CancellationTokenSource();
-                        }
+                        syncingScroll = true;
                         Dispatcher.UIThread.InvokeAsync(async () =>
                         {
-                            await Task.Delay(50, scrollToken.Token);
+                            await Task.Delay(50);
                             await DelaySyncScrollAsync(thisListBox, otherListBox);
                             await Task.Delay(10);
-                            scrollSource = null;
+                            syncingScroll = false;
                         });
                     }
                 };
