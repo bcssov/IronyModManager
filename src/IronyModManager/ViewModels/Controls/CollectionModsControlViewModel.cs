@@ -128,6 +128,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="gameService">The game service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
+        /// <param name="modifyCollection">The modify collection.</param>
         /// <param name="searchMods">The search mods.</param>
         /// <param name="modNameSort">The mod name sort.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -135,7 +136,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="appAction">The application action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, IModService modService, IGameService gameService,
-            AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection,
+            AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
         {
@@ -145,6 +146,7 @@ namespace IronyModManager.ViewModels.Controls
             ExportCollection = exportCollection;
             SearchMods = searchMods;
             ModNameSortOrder = modNameSort;
+            ModifyCollection = modifyCollection;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
@@ -249,6 +251,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The mod collections.</value>
         public virtual IEnumerable<IModCollection> ModCollections { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the modify collection.
+        /// </summary>
+        /// <value>The modify collection.</value>
+        public virtual ModifyCollectionControlViewModel ModifyCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.

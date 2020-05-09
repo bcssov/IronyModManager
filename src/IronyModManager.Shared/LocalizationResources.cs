@@ -97,6 +97,8 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Order = Prefix + "Order";
+            public const string Rename = Prefix + "Rename";
+            public const string Duplicate = Prefix + "Duplicate";
         }
         public static class Mod_Actions
         {

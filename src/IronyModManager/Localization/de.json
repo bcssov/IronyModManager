@@ -67,7 +67,9 @@
         "Filter": "Suchmods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Order": "Bestellen"
+        "Order": "Bestellen",
+        "Rename": "Umbenennen",
+        "Duplicate": "Duplizieren"
     },
     "Mod_Actions": {
         "Apply": "Anwenden",

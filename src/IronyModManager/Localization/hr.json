@@ -67,7 +67,9 @@
         "Filter": "Traži modove",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
-        "Order": "Redoslijed"
+        "Order": "Redoslijed",
+        "Rename": "Preimenuj",
+        "Duplicate": "Dupliciraj"
     },
     "Mod_Actions": {
         "Apply": "Primjeni",

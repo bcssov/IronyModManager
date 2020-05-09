@@ -67,7 +67,9 @@
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
-        "Order": "Order"
+        "Order": "Order",
+        "Rename": "Rename",
+        "Duplicate": "Duplicate"
     },
     "Mod_Actions": {
         "Apply": "Apply",
