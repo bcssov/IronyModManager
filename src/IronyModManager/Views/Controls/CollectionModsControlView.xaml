@@ -50,7 +50,7 @@
             <Panel Grid.Column="1" Grid.Row="1">
               <DockPanel HorizontalAlignment="Right">
                 <Button Content="{Binding Remove}" MaxHeight="30"
-                Command="{Binding RemoveCommand}" Margin="10,0,0,0" Width="30"></Button>
+                Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
                 <!-- For the love of God I can't force this piece of shit to set its width properly -->
                 <ComboBox Items="{Binding ModCollections}" SelectedItem="{Binding SelectedModCollection}"
                           MaxHeight="30" Margin="10"
@@ -64,7 +64,7 @@
                   </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button Content="{Binding Create}" MaxHeight="30"
-                        Command="{Binding CreateCommand}" Margin="0,0,10,0" Width="30"></Button>
+                        Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
               </DockPanel>
             </Panel>
             <Grid ColumnDefinitions="1*,2*,2*,5*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
