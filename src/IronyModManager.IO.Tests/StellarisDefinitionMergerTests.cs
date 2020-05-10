@@ -175,7 +175,7 @@ namespace IronyModManager.IO.Tests
                 ValueType = Parser.Common.ValueType.SpecialVariable,
                 Id = "t"
             });
-            result.Should().Be("localisation\\replace\\t.yml");
+            result.Should().Be("localisation\\replace\\zzz_t.yml");
         }
 
         /// <summary>
@@ -191,9 +191,38 @@ namespace IronyModManager.IO.Tests
                 ValueType = Parser.Common.ValueType.SpecialVariable,
                 Id = "t"
             });
-            result.Should().Be("localisation\\replace\\t.yml");
+            result.Should().Be("localisation\\replace\\zzz_t.yml");
         }
 
+
+        /// <summary>
+        /// Defines the test method GetFilename_FIOS_Prefixed_should_append_additional_prefixes.
+        /// </summary>
+        [Fact]
+        public void GetFilename_FIOS_Prefixed_should_append_additional_prefixes()
+        {
+            var service = GetService();
+            var result = service.GetFileName(new Definition()
+            {
+                File = "common\\ship_behaviors\\!!!_a.txt",
+                ValueType = Parser.Common.ValueType.SpecialVariable,
+                Id = "t"
+            });
+            result.Should().Be("common\\ship_behaviors\\!!!_!!!_t.txt");
+        }
+
+        [Fact]
+        public void GetFilename_LIOS_Prefixed_should_append_additional_prefixes()
+        {
+            var service = GetService();
+            var result = service.GetFileName(new Definition()
+            {
+                File = "common\\anomalies\\zzz_z.txt",
+                ValueType = Parser.Common.ValueType.SpecialVariable,
+                Id = "t"
+            });
+            result.Should().Be("common\\anomalies\\zzz_zzz_t.txt");
+        }
 
         /// <summary>
         /// Gets the service.
