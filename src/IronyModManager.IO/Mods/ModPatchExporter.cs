@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -121,8 +121,8 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="System.ArgumentNullException">Game.</exception>
-        /// <exception cref="System.ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">Game.</exception>
+        /// <exception cref="ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
@@ -393,6 +393,7 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
             newInstance.IsFirstLevel = original.IsFirstLevel;
+            newInstance.FileNames = original.FileNames;
             return newInstance;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -771,7 +771,7 @@ namespace IronyModManager.Services
                             {
                                 continue;
                             }
-                            var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Contains(conflict.ModName))).GetValueOrDefault());
+                            var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
                             if (hasOverrides)
                             {
                                 continue;
@@ -810,10 +810,18 @@ namespace IronyModManager.Services
                         var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
                         if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
                         {
-                            fileConflictCache.TryAdd(def.FileCI, true);
-                            if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                            var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
+                            if (hasOverrides.GetValueOrDefault())
                             {
-                                conflicts.Add(def);
+                                fileConflictCache.TryAdd(def.FileCI, false);
+                            }
+                            else
+                            {
+                                fileConflictCache.TryAdd(def.FileCI, true);
+                                if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                {
+                                    conflicts.Add(def);
+                                }
                             }
                         }
                         else

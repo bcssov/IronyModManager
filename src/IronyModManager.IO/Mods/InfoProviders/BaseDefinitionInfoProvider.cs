@@ -142,35 +142,42 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>System.String.</returns>
         protected virtual string EnsureRuleEnforced(IDefinition definition, string proposedFilename, bool isFIOS)
         {
-            var fileNames = new List<string>() { definition.File, proposedFilename };
+            var fileNames = new List<string>() { proposedFilename };
+            fileNames.AddRange(definition.FileNames);
             int counter = 0;
             if (isFIOS)
             {
                 fileNames = fileNames.OrderBy(p => p).ToList();
-                while (fileNames.FirstOrDefault() == definition.File)
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                string newFileName = proposedFilename;
+                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
-                    var fileName = Path.GetFileName(proposedFilename);
-                    fileNames.Add(proposedFilename.Replace(fileName, $"{FIOSName}{fileName}"));
+                    var fileName = Path.GetFileName(newFileName);
+                    newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
+                    fileNames.Add(newFileName);
                     fileNames = fileNames.OrderBy(p => p).ToList();
                     counter++;
                     if (counter > 10)
                     {
-                        break;
+                        return proposedFilename;
                     }
                 }
             }
             else
             {
                 fileNames = fileNames.OrderByDescending(p => p).ToList();
-                while (fileNames.FirstOrDefault() == definition.File)
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                string newFileName = proposedFilename;
+                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
-                    var fileName = Path.GetFileName(proposedFilename);
-                    fileNames.Add(proposedFilename.Replace(fileName, $"{LIOSName}{fileName}"));
+                    var fileName = Path.GetFileName(newFileName);
+                    newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
+                    fileNames.Add(newFileName);
                     fileNames = fileNames.OrderByDescending(p => p).ToList();
                     counter++;
                     if (counter > 10)
                     {
-                        break;
+                        return proposedFilename;
                     }
                 }
             }
