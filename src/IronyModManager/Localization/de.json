@@ -9,6 +9,10 @@
         "Title": "Error",
         "Header": "Schwerwiegender Fehler"
     },
+    "SavingError": {
+        "Title": "Fehler speichern",
+        "Message": "Etwas scheint Ironys Fähigkeit zu blockieren, in Mod-Dateien zu schreiben. Bitte melden Sie dies im GitHub Issue Tracker und veröffentlichen Sie das Fehlerprotokoll."
+    },
     "Languages": {
         "Name": "Sprache"
     },

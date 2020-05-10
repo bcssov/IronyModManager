@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -74,18 +74,25 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
+        /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IModService modService, IGameService gameService, INotificationAction notificationAction, ILocalizationManager localizationManager,
-            InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel)
+            InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel, ILogger logger)
         {
             this.modService = modService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
             this.gameService = gameService;
+            this.logger = logger;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
 
         #endregion Constructors
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
 
         #region Properties
 
@@ -114,6 +121,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The apply command.</value>
         public virtual ReactiveCommand<Unit, Unit> ApplyCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [applying collection].
+        /// </summary>
+        /// <value><c>true</c> if [applying collection]; otherwise, <c>false</c>.</value>
+        public virtual bool ApplyingCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the collection mods.
@@ -185,27 +198,43 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual async Task ApplyCollectionAsync()
         {
+            if (ApplyingCollection)
+            {
+                return;
+            }
+            ApplyingCollection = true;
             if (CollectionMods.SelectedModCollection != null)
             {
                 await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
                 var notificationType = NotificationType.Success;
-                var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), InstalledMods.AllMods.ToList(), CollectionMods.SelectedModCollection.Name);
-                string title;
-                string message;
-                if (result)
+                try
                 {
-                    title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Title);
-                    message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
+                    var result = await modService.ExportModsAsync(CollectionMods.SelectedMods.ToList(), InstalledMods.AllMods.ToList(), CollectionMods.SelectedModCollection.Name);
+                    string title;
+                    string message;
+                    if (result)
+                    {
+                        title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Title);
+                        message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
+                    }
+                    else
+                    {
+                        title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Title);
+                        message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
+                        notificationType = NotificationType.Error;
+                    }
+                    notificationAction.ShowNotification(title, message, notificationType, 5);
                 }
-                else
-                {
-                    title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Title);
-                    message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionNotApplied.Message), new { CollectionName = CollectionMods.SelectedModCollection.Name });
-                    notificationType = NotificationType.Error;
+                catch (Exception ex)
+                {                    
+                    var title = localizationManager.GetResource(LocalizationResources.SavingError.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.SavingError.Message);
+                    logger.Error(ex);
+                    notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 }
-                notificationAction.ShowNotification(title, message, notificationType, 5);
                 await TriggerOverlayAsync(false);
             }
+            ApplyingCollection = false;
         }
 
         /// <summary>
@@ -228,6 +257,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var applyEnabled = this.WhenAnyValue(v => v.ApplyingCollection, v => !v);
+
             this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Where(v => v != null).Subscribe(s =>
             {
                 InstallModsAsync().ConfigureAwait(true);
@@ -246,7 +277,7 @@ namespace IronyModManager.ViewModels.Controls
             ApplyCommand = ReactiveCommand.Create(() =>
             {
                 ApplyCollectionAsync().ConfigureAwait(true);
-            }).DisposeWith(disposables);
+            }, applyEnabled).DisposeWith(disposables);
 
             AnalyzeCommand = ReactiveCommand.Create(() =>
             {

@@ -9,6 +9,10 @@
         "Title": "Error",
         "Header": "Fatal Error"
     },
+    "SavingError": {
+        "Title": "Save Error",
+        "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    },
     "Languages": {
         "Name": "Language"
     },

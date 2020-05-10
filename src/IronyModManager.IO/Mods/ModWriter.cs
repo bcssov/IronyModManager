@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.IO.Mods.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
+using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
 {
@@ -54,6 +55,11 @@ namespace IronyModManager.IO.Mods
         /// The ready to play
         /// </summary>
         private const string Ready_to_play = "ready_to_play";
+
+        /// <summary>
+        /// The write lock
+        /// </summary>
+        private static readonly AsyncLock writeLock = new AsyncLock();
 
         #endregion Fields
 
@@ -127,14 +133,17 @@ namespace IronyModManager.IO.Mods
                 }
             }
 
-            var tasks = new Task<bool>[]
+            Task<bool>[] tasks;
+            using (var mutex = await writeLock.LockAsync())
             {
-                WritePdxModelAsync(dLCLoad, dlcPath),
-                WritePdxModelAsync(gameData, gameDataPath),
-                WritePdxModelAsync(modRegistry, modRegistryPath),
-            };
-
-            await Task.WhenAll(tasks);
+                tasks = new Task<bool>[]
+                {
+                    WritePdxModelAsync(dLCLoad, dlcPath),
+                    WritePdxModelAsync(gameData, gameDataPath),
+                    WritePdxModelAsync(modRegistry, modRegistryPath),
+                };
+                await Task.WhenAll(tasks);
+            }
 
             return tasks.All(p => p.Result);
         }
@@ -410,7 +419,7 @@ namespace IronyModManager.IO.Mods
                 pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
             }
             pdxMod.DisplayName = mod.Name;
-            pdxMod.Tags = mod.Tags != null ? mod.Tags.ToList() : null;
+            pdxMod.Tags = mod.Tags?.ToList();
             pdxMod.RequiredVersion = mod.Version;
             pdxMod.GameRegistryId = mod.DescriptorFile;
             pdxMod.Status = Ready_to_play;
@@ -442,6 +451,14 @@ namespace IronyModManager.IO.Mods
             if (!Directory.Exists(dirPath))
             {
                 Directory.CreateDirectory(dirPath);
+            }
+
+            if (File.Exists(path))
+            {
+                _ = new System.IO.FileInfo(path)
+                {
+                    IsReadOnly = false
+                };
             }
             await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
             {

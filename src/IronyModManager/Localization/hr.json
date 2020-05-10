@@ -9,6 +9,10 @@
         "Title": "Greška",
         "Header": "Fatalna pogreška"
     },
+    "SavingError": {
+        "Title": "Greška prilikom snimanja",
+        "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
+    },
     "Languages": {
         "Name": "Jezik"
     },

@@ -22,6 +22,12 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string Header = Prefix + "Header";
         }
+        public static class SavingError
+        {
+            public const string Prefix = nameof(SavingError) + ".";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
         public static class Languages
         {
             public const string Prefix = nameof(Languages) + ".";
