@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-02-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace IronyModManager
 {
@@ -47,6 +48,11 @@ namespace IronyModManager
         /// The wiki URL
         /// </summary>
         public const string WikiUrl = "https://github.com/bcssov/IronyModManager/wiki";
+
+        /// <summary>
+        /// The logs location
+        /// </summary>
+        public static readonly string LogsLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
 
         #endregion Fields
 

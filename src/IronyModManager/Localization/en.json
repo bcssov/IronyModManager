@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "Wiki": "Wiki",
+        "Logs": "Logs",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed..."
     },
     "FatalError": {

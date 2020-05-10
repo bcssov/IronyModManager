@@ -8,9 +8,13 @@
   <Panel>
     <StackPanel Orientation="Vertical">
       <Panel>
-        <ContentControl Content="{Binding ThemeSelector}" HorizontalAlignment="Right" VerticalAlignment="Top"></ContentControl>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+          <Button Content="{Binding Logs}" Command="{Binding LogsCommand}" Margin="20,0"
+                BorderThickness="0,0,0,0" Background="Transparent" Foreground="{DynamicResource IronyThemeSortArrowBrush}"></Button>
+          <ContentControl Content="{Binding ThemeSelector}"></ContentControl>
+        </StackPanel>
         <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
-        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
           <ContentControl Content="{Binding LanguageSelector}"></ContentControl>
           <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}" Margin="20,0"
                 BorderThickness="0,0,0,0" Background="Transparent" Foreground="{DynamicResource IronyThemeSortArrowBrush}"></Button>
