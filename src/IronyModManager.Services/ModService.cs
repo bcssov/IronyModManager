@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -295,12 +295,12 @@ namespace IronyModManager.Services
                         {
                             if (provider.DefinitionUsesFIOSRules(uniqueDefinitions.First()))
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => p.FileCI).First();
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).First();
                                 result.PriorityType = DefinitionPriorityType.FIOS;
                             }
                             else
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => p.FileCI).Last();
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.File), StringComparer.Ordinal).Last();
                                 result.PriorityType = DefinitionPriorityType.LIOS;
                             }
                         }
