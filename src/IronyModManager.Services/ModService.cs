@@ -577,37 +577,6 @@ namespace IronyModManager.Services
                     RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
                     PatchName = patchName
                 });
-                var exportedConflicts = false;
-                if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
-                {
-                    if (state == null)
-                    {
-                        ModDefinitionPatchLoad?.Invoke(99);
-                    }
-                    if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
-                    {
-                        Game = game.Type,
-                        OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
-                        RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                        ModPath = Path.Combine(Constants.ModDirectory, patchName),
-                        PatchName = patchName
-                    }))
-                    {
-                        foreach (var item in conflictResult.OrphanConflicts.GetAll())
-                        {
-                            var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
-                            if (existing.Count() == 0)
-                            {
-                                conflictResult.ResolvedConflicts.AddToMap(item);
-                            }
-                        }
-                        exportedConflicts = true;
-                    }
-                    if (state == null)
-                    {
-                        ModDefinitionPatchLoad?.Invoke(100);
-                    }
-                }
                 if (state != null)
                 {
                     var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
@@ -629,6 +598,29 @@ namespace IronyModManager.Services
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 97);
                         ModDefinitionPatchLoad?.Invoke(perc);
+                    }
+
+                    if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
+                    {
+                        ModDefinitionPatchLoad?.Invoke(98);
+                        if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                        {
+                            Game = game.Type,
+                            OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
+                            RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
+                            PatchName = patchName
+                        }))
+                        {
+                            foreach (var item in conflictResult.OrphanConflicts.GetAll())
+                            {
+                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
+                                if (existing.Count() == 0)
+                                {
+                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                }
+                            }
+                        }
                     }
 
                     ModDefinitionPatchLoad?.Invoke(99);
@@ -662,6 +654,31 @@ namespace IronyModManager.Services
                 }
                 else
                 {
+                    var exportedConflicts = false;
+                    if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
+                    {
+                        ModDefinitionPatchLoad?.Invoke(99);
+                        if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                        {
+                            Game = game.Type,
+                            OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
+                            RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
+                            PatchName = patchName
+                        }))
+                        {
+                            foreach (var item in conflictResult.OrphanConflicts.GetAll())
+                            {
+                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
+                                if (existing.Count() == 0)
+                                {
+                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                }
+                            }
+                            exportedConflicts = true;
+                        }
+                        ModDefinitionPatchLoad?.Invoke(100);
+                    }
                     if (exportedConflicts)
                     {
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()

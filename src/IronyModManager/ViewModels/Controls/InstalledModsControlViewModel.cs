@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -87,6 +87,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The showing prompt
+        /// </summary>
+        private bool showingPrompt = false;
 
         /// <summary>
         /// The sort orders
@@ -437,6 +442,16 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void ApplyDefaultSort()
         {
             var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
+            ApplySort(sortModel.Key);
+        }
+
+        /// <summary>
+        /// Applies the sort.
+        /// </summary>
+        /// <param name="sortBy">The sort by.</param>
+        protected virtual void ApplySort(string sortBy)
+        {
+            var sortModel = sortOrders.FirstOrDefault(p => p.Key == sortBy);
             switch (sortModel.Key)
             {
                 case ModNameKey:
@@ -584,11 +599,11 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(v => v.ModNameSortOrder.IsActivated, v => v.ModVersionSortOrder.IsActivated, v => v.ModSelectedSortOrder.IsActivated).Where(s => s.Item1 && s.Item2 && s.Item3)
             .Subscribe(s =>
              {
-                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModNameKey, x => x.Name)),
-                     ModVersionSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModVersionKey, x => x.Version)),
-                     ModSelectedSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModSelectedKey, x => x.IsSelected))).Subscribe(s =>
+                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => ModNameKey),
+                     ModVersionSortOrder.SortCommand.Select(_ => ModVersionKey),
+                     ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(s =>
                  {
-                     SortFunction(s.Value, s.Key);
+                     ApplySort(s);
                  }).DisposeWith(disposables);
              }).DisposeWith(disposables);
 
@@ -716,11 +731,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// The showing prompt
-        /// </summary>
-        private bool showingPrompt = false;
-
-        /// <summary>
         /// remove invalid mods prompt as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -750,6 +760,21 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Resolves the comparer.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dictKey">The dictionary key.</param>
+        /// <returns>IComparer&lt;T&gt;.</returns>
+        protected virtual IComparer<T> ResolveComparer<T>(string dictKey)
+        {
+            if (dictKey.Equals(ModNameKey))
+            {
+                return (IComparer<T>)StringComparer.OrdinalIgnoreCase;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Saves the state.
         /// </summary>
         protected virtual void SaveState()
@@ -765,21 +790,39 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Sorts the function.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="sortProp">The sort property.</param>
         /// <param name="dictKey">The dictionary key.</param>
-        protected virtual void SortFunction(Func<IMod, object> sortProp, string dictKey)
+        protected virtual void SortFunction<T>(Func<IMod, T> sortProp, string dictKey)
         {
             var sortOrder = sortOrders[dictKey];
+            IComparer<T> comparer = ResolveComparer<T>(dictKey);
             switch (sortOrder.SortOrder)
             {
                 case Implementation.SortOrder.Asc:
-                    FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
-                    AllMods = AllMods.OrderBy(sortProp).ToHashSet();
+                    if (comparer != null)
+                    {
+                        FilteredMods = FilteredMods.OrderBy(sortProp, comparer).ToObservableCollection();
+                        AllMods = AllMods.OrderBy(sortProp, comparer).ToHashSet();
+                    }
+                    else
+                    {
+                        FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
+                        AllMods = AllMods.OrderBy(sortProp).ToHashSet();
+                    }
                     break;
 
                 case Implementation.SortOrder.Desc:
-                    FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
-                    AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
+                    if (comparer != null)
+                    {
+                        FilteredMods = FilteredMods.OrderByDescending(sortProp, comparer).ToObservableCollection();
+                        AllMods = AllMods.OrderByDescending(sortProp, comparer).ToHashSet();
+                    }
+                    else
+                    {
+                        FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
+                        AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
+                    }
                     break;
 
                 default:
