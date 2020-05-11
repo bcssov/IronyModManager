@@ -89,6 +89,16 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The checking state
+        /// </summary>
+        private bool checkingState = false;
+
+        /// <summary>
+        /// The mod order changed
+        /// </summary>
+        private IDisposable modChanged;
+
+        /// <summary>
         /// The showing prompt
         /// </summary>
         private bool showingPrompt = false;
@@ -495,6 +505,19 @@ namespace IronyModManager.ViewModels.Controls
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
                 AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
 
+                if (Disposables != null)
+                {
+                    modChanged?.Dispose();
+                    modChanged = null;
+                    modChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+                    {
+                        if (!checkingState)
+                        {
+                            CheckModEnabledStateAsync().ConfigureAwait(false);
+                        }
+                    }).DisposeWith(Disposables);
+                }
+
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
 
@@ -505,6 +528,17 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
+        }
+
+        /// <summary>
+        /// check mod enabled state as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task CheckModEnabledStateAsync()
+        {
+            checkingState = true;
+            await Task.Delay(50);
+            AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
+            checkingState = false;
         }
 
         /// <summary>
@@ -661,11 +695,6 @@ namespace IronyModManager.ViewModels.Controls
                         item.IsSelected = !enabled;
                     }
                 }
-            }).DisposeWith(disposables);
-
-            Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
-            {
-                AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
             }).DisposeWith(disposables);
 
             DeleteDescriptorCommand = ReactiveCommand.Create(() =>
