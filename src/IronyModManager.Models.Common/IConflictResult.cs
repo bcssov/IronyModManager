@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
@@ -20,9 +20,11 @@ namespace IronyModManager.Models.Common
     /// <summary>
     /// Interface IConflictResult
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
+    /// Implements the <see cref="System.IDisposable" />
     /// </summary>
+    /// <seealso cref="System.IDisposable" />
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IConflictResult : IModel
+    public interface IConflictResult : IModel, IDisposable
     {
         #region Properties
 

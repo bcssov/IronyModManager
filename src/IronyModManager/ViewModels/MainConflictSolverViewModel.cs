@@ -459,12 +459,7 @@ namespace IronyModManager.ViewModels
 
             BackCommand = ReactiveCommand.Create(() =>
             {
-                Conflicts?.AllConflicts.Dispose();
-                Conflicts?.Conflicts.Dispose();
-                Conflicts?.IgnoredConflicts.Dispose();
-                Conflicts?.OrphanConflicts.Dispose();
-                Conflicts?.ResolvedConflicts.Dispose();
-                Conflicts?.RuleIgnoredConflicts.Dispose();
+                Conflicts?.Dispose();
                 Conflicts = null;
                 SelectedModsOrder = null;
                 SelectedModCollection = null;
