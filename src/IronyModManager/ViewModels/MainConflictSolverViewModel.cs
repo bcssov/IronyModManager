@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -459,11 +459,17 @@ namespace IronyModManager.ViewModels
 
             BackCommand = ReactiveCommand.Create(() =>
             {
+                Conflicts?.AllConflicts.Dispose();
+                Conflicts?.Conflicts.Dispose();
+                Conflicts?.IgnoredConflicts.Dispose();
+                Conflicts?.OrphanConflicts.Dispose();
+                Conflicts?.ResolvedConflicts.Dispose();
+                Conflicts?.RuleIgnoredConflicts.Dispose();
+                Conflicts = null;
+                SelectedModsOrder = null;
+                SelectedModCollection = null;
                 var args = new NavigationEventArgs()
                 {
-                    SelectedMods = SelectedModsOrder,
-                    SelectedCollection = SelectedModCollection,
-                    Results = Conflicts,
                     State = NavigationState.Main
                 };
                 MessageBus.Current.SendMessage(args);

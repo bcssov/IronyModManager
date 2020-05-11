@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -33,32 +33,37 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// The hierarchical definitions
         /// </summary>
-        private readonly ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
+        private ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>> childHierarchicalDefinitions;
 
         /// <summary>
         /// The definitions
         /// </summary>
-        private readonly ConcurrentIndexedList<IDefinition> definitions;
+        private ConcurrentIndexedList<IDefinition> definitions;
+
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool disposed = false;
 
         /// <summary>
         /// The file keys
         /// </summary>
-        private readonly HashSet<string> fileKeys;
+        private HashSet<string> fileKeys;
 
         /// <summary>
         /// The main hierarchal definitions
         /// </summary>
-        private readonly ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+        private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
 
         /// <summary>
         /// The type and identifier keys
         /// </summary>
-        private readonly HashSet<string> typeAndIdKeys;
+        private HashSet<string> typeAndIdKeys;
 
         /// <summary>
         /// The type keys
         /// </summary>
-        private readonly HashSet<string> typeKeys;
+        private HashSet<string> typeKeys;
 
         /// <summary>
         /// The use hierarchal map
@@ -101,6 +106,28 @@ namespace IronyModManager.Parser.Definitions
                 MapHierarchicalDefinition(definition);
             }
             definitions.Add(definition);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (disposed)
+            {
+                return;
+            }
+            disposed = true;
+            definitions.Clear();
+            definitions = null;
+            fileKeys.Clear();
+            fileKeys = null;
+            typeAndIdKeys.Clear();
+            typeAndIdKeys = null;
+            childHierarchicalDefinitions.Clear();
+            childHierarchicalDefinitions = null;
+            mainHierarchalDefinitions.Clear();
+            mainHierarchalDefinitions = null;
         }
 
         /// <summary>

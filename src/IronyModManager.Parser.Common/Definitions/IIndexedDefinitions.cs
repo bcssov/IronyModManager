@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -18,8 +18,10 @@ namespace IronyModManager.Parser.Common.Definitions
 {
     /// <summary>
     /// Interface IIndexedDefinitions
+    /// Implements the <see cref="System.IDisposable" />
     /// </summary>
-    public interface IIndexedDefinitions
+    /// <seealso cref="System.IDisposable" />
+    public interface IIndexedDefinitions : IDisposable
     {
         #region Methods
 
