@@ -61,6 +61,7 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Supported_Version = Prefix + "Supported_Version";
+            public const string RefreshingModList = Prefix + "RefreshingModList";
             public static class InvalidMods
             {
                 public const string Prefix = "Installed_Mods." + nameof(InvalidMods) + ".";
@@ -229,6 +230,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class NewDescriptorsChecked
+            {
+                public const string Prefix = "Notifications." + nameof(NewDescriptorsChecked) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
         }
         public static class Mod_App_Actions
         {
@@ -241,6 +248,7 @@ namespace IronyModManager.Shared
         public static class Descriptor_Actions
         {
             public const string Prefix = nameof(Descriptor_Actions) + ".";
+            public const string CheckNew = Prefix + "CheckNew";
             public const string Delete = Prefix + "Delete";
             public const string Delete_All = Prefix + "Delete_All";
             public const string Lock = Prefix + "Lock";

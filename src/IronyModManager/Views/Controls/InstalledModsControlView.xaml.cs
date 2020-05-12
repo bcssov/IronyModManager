@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -82,6 +82,11 @@ namespace IronyModManager.Views.Controls
         {
             return new List<MenuItem>()
             {
+                new MenuItem()
+                {
+                    Header = ViewModel.CheckNewMods,
+                    Command = ViewModel.CheckNewModsCommand
+                },
                 new MenuItem()
                 {
                     Header = ViewModel.DeleteDescriptor,
@@ -172,6 +177,11 @@ namespace IronyModManager.Views.Controls
                 new MenuItem()
                 {
                     Header = "-"
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.CheckNewMods,
+                    Command = ViewModel.CheckNewModsCommand
                 },
                 new MenuItem()
                 {

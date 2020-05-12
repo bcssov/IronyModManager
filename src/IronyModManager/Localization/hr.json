@@ -38,6 +38,7 @@
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
         "Supported_Version": "Podržana verzija",
+        "RefreshingModList": "Pričekajte dok se popis modova osvježava ...",
         "InvalidMods": {
             "Title": "Otkriveni su nevažeći modovi",
             "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
@@ -165,6 +166,10 @@
         "DescriptorsUnlocked": {
             "Title": "Deskriptori otključani",
             "Message": "Deskriptori su otključani."
+        },
+        "NewDescriptorsChecked": {
+            "Title": "Provjereni su novi modovi",
+            "Message": "Provjera novih modova je dovršena."
         }
     },
     "Mod_App_Actions": {
@@ -174,6 +179,7 @@
         "OpenInAssociatedApp": "Otvorite u pridruženoj aplikaciji"
     },
     "Descriptor_Actions": {
+        "CheckNew": "Provjerite nove modove",
         "Delete": "Obriši i ponovno učitaj",
         "Delete_All": "Izbriši sve i ponovno učitaj",
         "Lock": "Zaključaj",

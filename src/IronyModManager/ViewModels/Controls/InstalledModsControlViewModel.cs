@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -157,6 +157,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
         public virtual bool AllModsEnabled { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check new mods.
+        /// </summary>
+        /// <value>The check new mods.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.CheckNew)]
+        public virtual string CheckNewMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check new mods command.
+        /// </summary>
+        /// <value>The check new mods command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CheckNewModsCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -542,6 +555,20 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// check new mods as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task CheckNewModsAsync()
+        {
+            await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+            await modService.InstallModsAsync();
+            RefreshMods();
+            var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
+            var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
+            notificationAction.ShowNotification(title, message, NotificationType.Info);
+            await TriggerOverlayAsync(false);
+        }
+
+        /// <summary>
         /// delete descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -549,12 +576,14 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (mods?.Count() > 0)
             {
+                await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
                 await modService.InstallModsAsync();
                 RefreshMods();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
                 notificationAction.ShowNotification(title, message, NotificationType.Info);
+                await TriggerOverlayAsync(false);
             }
         }
 
@@ -743,6 +772,11 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     LockDescriptorAsync(FilteredMods, false).ConfigureAwait(true);
                 }
+            }).DisposeWith(disposables);
+
+            CheckNewModsCommand = ReactiveCommand.Create(() =>
+            {
+                CheckNewModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

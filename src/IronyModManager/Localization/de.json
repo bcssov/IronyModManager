@@ -38,6 +38,7 @@
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version",
+        "RefreshingModList": "Bitte warten Sie, während die Mod-Liste aktualisiert wird...",
         "InvalidMods": {
             "Title": "Ungültige Mods erkannt",
             "Message": "Folgende Mods fehlen:{NewLine}{Mods}.{NewLine}{NewLine}Möchten Sie die Deskriptoren löschen?"
@@ -165,6 +166,10 @@
         "DescriptorsUnlocked": {
             "Title": "Descriptors unlocked",
             "Message": "Deskriptoren wurden freigeschaltet."
+        },
+        "NewDescriptorsChecked": {
+            "Title": "Neue Mods überprüft",
+            "Message": "Die Überprüfung auf neue Mods ist abgeschlossen."
         }
     },
     "Mod_App_Actions": {
@@ -174,6 +179,7 @@
         "OpenInAssociatedApp": "In zugehöriger App öffnen"
     },
     "Descriptor_Actions": {
+        "CheckNew": "Überprüfen Sie die neuen Mods",
         "Delete": "Löschen und neu laden",
         "Delete_All": "Alle löschen und neu laden",
         "Lock": "Sperren",
