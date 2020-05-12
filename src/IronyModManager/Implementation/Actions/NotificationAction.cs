@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -14,9 +14,6 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using IronyModManager.Shared;
 
@@ -93,19 +90,10 @@ namespace IronyModManager.Implementation.Actions
                 NotificationType.Error => MessageBox.Avalonia.Enums.Icon.Error,
                 _ => MessageBox.Avalonia.Enums.Icon.None,
             };
-            var mainWindow = GetMainWindow();
+            var mainWindow = Helpers.GetMainWindow();
             var prompt = MessageBoxes.GetYesNoWindow(title, header, message, icon);
             var result = await prompt.ShowDialog(mainWindow);
             return result == MessageBox.Avalonia.Enums.ButtonResult.Yes;
-        }
-
-        /// <summary>
-        /// Gets the main window.
-        /// </summary>
-        /// <returns>Window.</returns>
-        private Window GetMainWindow()
-        {
-            return ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow;
         }
 
         #endregion Methods

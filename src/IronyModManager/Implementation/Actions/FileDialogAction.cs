@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -15,9 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Implementation.Actions
@@ -52,7 +50,7 @@ namespace IronyModManager.Implementation.Actions
             {
                 dialog.InitialFileName = initialFileName;
             }
-            var result = await dialog.ShowAsync(GetMainWindow());
+            var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             var file = result?.FirstOrDefault();
             return file;
         }
@@ -76,7 +74,7 @@ namespace IronyModManager.Implementation.Actions
             {
                 dialog.InitialFileName = initialFileName;
             }
-            var result = await dialog.ShowAsync(GetMainWindow());
+            var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             return result;
         }
 
@@ -106,15 +104,6 @@ namespace IronyModManager.Implementation.Actions
         private string GetInitialDirectory()
         {
             return AppDomain.CurrentDomain.BaseDirectory;
-        }
-
-        /// <summary>
-        /// Gets the main window.
-        /// </summary>
-        /// <returns>Window.</returns>
-        private Window GetMainWindow()
-        {
-            return ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow;
         }
 
         #endregion Methods

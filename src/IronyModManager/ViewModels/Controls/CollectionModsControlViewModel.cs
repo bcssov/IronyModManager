@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -459,11 +459,11 @@ namespace IronyModManager.ViewModels.Controls
             switch (ModNameSortOrder.SortOrder)
             {
                 case SortOrder.Asc:
-                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name).ToObservableCollection());
+                    SetSelectedMods(SelectedMods.OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 
                 case SortOrder.Desc:
-                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name).ToObservableCollection());
+                    SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 
                 default:
@@ -808,8 +808,8 @@ namespace IronyModManager.ViewModels.Controls
                 var mods = Mods.Where(p => modCollection.Mods.Any(a => a.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase)));
                 if (mods.Count() > 0)
                 {
-                    var ascending = mods.OrderBy(p => p.Name).Select(p => p.DescriptorFile);
-                    var descending = mods.OrderByDescending(p => p.Name).Select(p => p.DescriptorFile);
+                    var ascending = mods.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase).Select(p => p.DescriptorFile);
+                    var descending = mods.OrderByDescending(p => p.Name, StringComparer.OrdinalIgnoreCase).Select(p => p.DescriptorFile);
                     if (ascending.SequenceEqual(modCollection.Mods))
                     {
                         ModNameSortOrder.SetSortOrder(SortOrder.Asc);

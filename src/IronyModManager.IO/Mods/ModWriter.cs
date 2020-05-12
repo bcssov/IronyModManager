@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.IO.Mods.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
+using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
 {
@@ -54,6 +55,11 @@ namespace IronyModManager.IO.Mods
         /// The ready to play
         /// </summary>
         private const string Ready_to_play = "ready_to_play";
+
+        /// <summary>
+        /// The write lock
+        /// </summary>
+        private static readonly AsyncLock writeLock = new AsyncLock();
 
         #endregion Fields
 
@@ -127,14 +133,17 @@ namespace IronyModManager.IO.Mods
                 }
             }
 
-            var tasks = new Task<bool>[]
+            Task<bool>[] tasks;
+            using (var mutex = await writeLock.LockAsync())
             {
-                WritePdxModelAsync(dLCLoad, dlcPath),
-                WritePdxModelAsync(gameData, gameDataPath),
-                WritePdxModelAsync(modRegistry, modRegistryPath),
-            };
-
-            await Task.WhenAll(tasks);
+                tasks = new Task<bool>[]
+                {
+                    WritePdxModelAsync(dLCLoad, dlcPath),
+                    WritePdxModelAsync(gameData, gameDataPath),
+                    WritePdxModelAsync(modRegistry, modRegistryPath),
+                };
+                await Task.WhenAll(tasks);
+            }
 
             return tasks.All(p => p.Result);
         }
@@ -265,44 +274,49 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
         {
-            // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
-            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-            using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-            using var sw = new StreamWriter(fs);
-            var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
-            foreach (var prop in props)
+            async Task<bool> writeDescriptor()
             {
-                var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
-                var val = prop.GetValue(parameters.Mod, null);
-                if (val is IEnumerable<string> col)
+                // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
+                var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+                using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+                using var sw = new StreamWriter(fs);
+                var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+                foreach (var prop in props)
                 {
-                    if (col.Count() > 0)
+                    var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
+                    var val = prop.GetValue(parameters.Mod, null);
+                    if (val is IEnumerable<string> col)
                     {
-                        await sw.WriteLineAsync($"{attr.PropertyName}={{");
-                        foreach (var item in col)
+                        if (col.Count() > 0)
                         {
-                            await sw.WriteLineAsync($"\t\"{item}\"");
-                        }
-                        await sw.WriteLineAsync("}");
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
-                    {
-                        if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
-                        {
-                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
-                        }
-                        else
-                        {
-                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                            await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                            foreach (var item in col)
+                            {
+                                await sw.WriteLineAsync($"\t\"{item}\"");
+                            }
+                            await sw.WriteLineAsync("}");
                         }
                     }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                        {
+                            if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
+                            {
+                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
+                            }
+                            else
+                            {
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                            }
+                        }
+                    }
                 }
+                await sw.FlushAsync();
+                return true;
             }
-            await sw.FlushAsync();
-            return true;
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(writeDescriptor);
         }
 
         /// <summary>
@@ -410,7 +424,7 @@ namespace IronyModManager.IO.Mods
                 pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
             }
             pdxMod.DisplayName = mod.Name;
-            pdxMod.Tags = mod.Tags != null ? mod.Tags.ToList() : null;
+            pdxMod.Tags = mod.Tags?.ToList();
             pdxMod.RequiredVersion = mod.Version;
             pdxMod.GameRegistryId = mod.DescriptorFile;
             pdxMod.Status = Ready_to_play;
@@ -438,16 +452,30 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
         {
-            var dirPath = Path.GetDirectoryName(path);
-            if (!Directory.Exists(dirPath))
+            async Task<bool> writeFile()
             {
-                Directory.CreateDirectory(dirPath);
+                var dirPath = Path.GetDirectoryName(path);
+                if (!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+
+                if (File.Exists(path))
+                {
+                    _ = new System.IO.FileInfo(path)
+                    {
+                        IsReadOnly = false
+                    };
+                }
+                await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }));
+                return true;
             }
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            }));
-            return true;
+
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(writeFile);
         }
 
         #endregion Methods

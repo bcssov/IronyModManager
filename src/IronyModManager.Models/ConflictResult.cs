@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
@@ -27,6 +27,15 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.Common.IConflictResult" />
     public class ConflictResult : BaseModel, IConflictResult
     {
+        #region Fields
+
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool disposed = false;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -72,5 +81,33 @@ namespace IronyModManager.Models
         public IIndexedDefinitions RuleIgnoredConflicts { get; set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (disposed)
+            {
+                return;
+            }
+            disposed = true;
+            AllConflicts?.Dispose();
+            Conflicts?.Dispose();
+            IgnoredConflicts?.Dispose();
+            OrphanConflicts?.Dispose();
+            ResolvedConflicts?.Dispose();
+            RuleIgnoredConflicts?.Dispose();
+            AllConflicts = null;
+            Conflicts = null;
+            IgnoredConflicts = null;
+            ResolvedConflicts = null;
+            OrphanConflicts = null;
+            RuleIgnoredConflicts = null;
+        }
+
+        #endregion Methods
     }
 }

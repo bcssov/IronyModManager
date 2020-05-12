@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -117,8 +117,8 @@ namespace IronyModManager.IO.Mods
                 if (Directory.Exists(parameters.ModDirectory))
                 {
                     Directory.Delete(parameters.ModDirectory, true);
-                    Directory.CreateDirectory(parameters.ModDirectory);
                 }
+                Directory.CreateDirectory(parameters.ModDirectory);
             }
             using var fileStream = File.OpenRead(parameters.File);
             using var reader = ReaderFactory.Open(fileStream);

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -170,14 +170,14 @@ namespace IronyModManager.Parser.Common
             public const string LanguagesId = "languages";
 
             /// <summary>
-            /// The namespace identifier
-            /// </summary>
-            public const string NamespaceId = Namespace + VariableSeparatorId;
-
-            /// <summary>
             /// The namespace
             /// </summary>
             public const string Namespace = "namespace";
+
+            /// <summary>
+            /// The namespace identifier
+            /// </summary>
+            public const string NamespaceId = Namespace + VariableSeparatorId;
 
             /// <summary>
             /// The object types
@@ -255,11 +255,6 @@ namespace IronyModManager.Parser.Common
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
 
             /// <summary>
-            /// The diplomatic actions
-            /// </summary>
-            public static readonly string DiplomaticActions = MergePath(CommonPath, "diplomatic_actions");
-
-            /// <summary>
             /// The diplo phrases
             /// </summary>
             public static readonly string DiploPhrases = MergePath(CommonPath, "diplo_phrases");
@@ -273,6 +268,11 @@ namespace IronyModManager.Parser.Common
             /// The name lists
             /// </summary>
             public static readonly string NameLists = MergePath(CommonPath, "name_lists");
+
+            /// <summary>
+            /// The pop jobs
+            /// </summary>
+            public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
 
             /// <summary>
             /// The portraits
@@ -298,6 +298,11 @@ namespace IronyModManager.Parser.Common
             /// The terraform
             /// </summary>
             public static readonly string Terraform = MergePath(CommonPath, "terraform");
+
+            /// <summary>
+            /// The traits
+            /// </summary>
+            public static readonly string Traits = MergePath(CommonPath, "traits");
 
             /// <summary>
             /// The weapon components

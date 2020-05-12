@@ -2,12 +2,21 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "Wiki": "Wiki",
+        "Logs": "Logs",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed..."
     },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
         "Title": "Error",
         "Header": "Fatal Error"
+    },
+    "SavingError": {
+        "Title": "Save Error",
+        "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    },
+    "Prompt": {
+        "Yes": "Yes",
+        "No": "No"
     },
     "Languages": {
         "Name": "Language"
@@ -33,6 +42,7 @@
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Supported Version",
+        "RefreshingModList": "Please wait while the mod list is being refreshed...",
         "InvalidMods": {
             "Title": "Invalid Mods Detected",
             "Message": "The following mods are missing:{NewLine}{Mods}.{NewLine}{NewLine}Do you want to delete the descriptors?"
@@ -160,6 +170,10 @@
         "DescriptorsUnlocked": {
             "Title": "Descriptors unlocked",
             "Message": "Descriptors have been unlocked."
+        },
+        "NewDescriptorsChecked": {
+            "Title": "New mods checked",
+            "Message": "Check for new mods is complete."
         }
     },
     "Mod_App_Actions": {
@@ -169,6 +183,7 @@
         "OpenInAssociatedApp": "Open In Associated App"
     },
     "Descriptor_Actions": {
+        "CheckNew": "Check New Mods",
         "Delete": "Delete And Reload",
         "Delete_All": "Delete All And Reload",
         "Lock": "Lock",

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 05-11-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
@@ -47,7 +48,7 @@ namespace IronyModManager.Parser
         public void RegisterServices(Container container)
         {
             container.Register<IDefinition, Definition>();
-            container.Register<IIndexedDefinitions, IndexedDefinitions>();
+            container.RegisterWithoutTransientWarning<IIndexedDefinitions, IndexedDefinitions>();
             container.Collection.Register(typeof(IDefaultParser), new List<Type>()
             {
                 typeof(DefaultParser), typeof(SimpleDefaultParser)

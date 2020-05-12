@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -89,6 +89,21 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The checking state
+        /// </summary>
+        private bool checkingState = false;
+
+        /// <summary>
+        /// The mod order changed
+        /// </summary>
+        private IDisposable modChanged;
+
+        /// <summary>
+        /// The showing prompt
+        /// </summary>
+        private bool showingPrompt = false;
+
+        /// <summary>
         /// The sort orders
         /// </summary>
         private Dictionary<string, SortOrderControlViewModel> sortOrders;
@@ -142,6 +157,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
         public virtual bool AllModsEnabled { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check new mods.
+        /// </summary>
+        /// <value>The check new mods.</value>
+        [StaticLocalization(LocalizationResources.Descriptor_Actions.CheckNew)]
+        public virtual string CheckNewMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check new mods command.
+        /// </summary>
+        /// <value>The check new mods command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CheckNewModsCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -437,6 +465,16 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void ApplyDefaultSort()
         {
             var sortModel = sortOrders.FirstOrDefault(p => p.Value.SortOrder != Implementation.SortOrder.None);
+            ApplySort(sortModel.Key);
+        }
+
+        /// <summary>
+        /// Applies the sort.
+        /// </summary>
+        /// <param name="sortBy">The sort by.</param>
+        protected virtual void ApplySort(string sortBy)
+        {
+            var sortModel = sortOrders.FirstOrDefault(p => p.Key == sortBy);
             switch (sortModel.Key)
             {
                 case ModNameKey:
@@ -480,6 +518,19 @@ namespace IronyModManager.ViewModels.Controls
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
                 AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
 
+                if (Disposables != null)
+                {
+                    modChanged?.Dispose();
+                    modChanged = null;
+                    modChanged = Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
+                    {
+                        if (!checkingState)
+                        {
+                            CheckModEnabledStateAsync().ConfigureAwait(false);
+                        }
+                    }).DisposeWith(Disposables);
+                }
+
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
 
@@ -493,6 +544,31 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// check mod enabled state as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task CheckModEnabledStateAsync()
+        {
+            checkingState = true;
+            await Task.Delay(50);
+            AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
+            checkingState = false;
+        }
+
+        /// <summary>
+        /// check new mods as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task CheckNewModsAsync()
+        {
+            await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+            await modService.InstallModsAsync();
+            RefreshMods();
+            var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
+            var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
+            notificationAction.ShowNotification(title, message, NotificationType.Info);
+            await TriggerOverlayAsync(false);
+        }
+
+        /// <summary>
         /// delete descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -500,12 +576,14 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (mods?.Count() > 0)
             {
+                await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
                 await modService.InstallModsAsync();
                 RefreshMods();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
                 notificationAction.ShowNotification(title, message, NotificationType.Info);
+                await TriggerOverlayAsync(false);
             }
         }
 
@@ -584,11 +662,11 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(v => v.ModNameSortOrder.IsActivated, v => v.ModVersionSortOrder.IsActivated, v => v.ModSelectedSortOrder.IsActivated).Where(s => s.Item1 && s.Item2 && s.Item3)
             .Subscribe(s =>
              {
-                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModNameKey, x => x.Name)),
-                     ModVersionSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModVersionKey, x => x.Version)),
-                     ModSelectedSortOrder.SortCommand.Select(_ => KeyValuePair.Create<string, Func<IMod, object>>(ModSelectedKey, x => x.IsSelected))).Subscribe(s =>
+                 Observable.Merge(ModNameSortOrder.SortCommand.Select(_ => ModNameKey),
+                     ModVersionSortOrder.SortCommand.Select(_ => ModVersionKey),
+                     ModSelectedSortOrder.SortCommand.Select(_ => ModSelectedKey)).Subscribe(s =>
                  {
-                     SortFunction(s.Value, s.Key);
+                     ApplySort(s);
                  }).DisposeWith(disposables);
              }).DisposeWith(disposables);
 
@@ -648,11 +726,6 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            Mods.ToSourceList().Connect().WhenPropertyChanged(s => s.IsSelected).Subscribe(s =>
-            {
-                AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
-            }).DisposeWith(disposables);
-
             DeleteDescriptorCommand = ReactiveCommand.Create(() =>
             {
                 if (HoveredMod != null)
@@ -701,6 +774,11 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            CheckNewModsCommand = ReactiveCommand.Create(() =>
+            {
+                CheckNewModsAsync().ConfigureAwait(true);
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -714,11 +792,6 @@ namespace IronyModManager.ViewModels.Controls
 
             base.OnSelectedGameChanged(game);
         }
-
-        /// <summary>
-        /// The showing prompt
-        /// </summary>
-        private bool showingPrompt = false;
 
         /// <summary>
         /// remove invalid mods prompt as an asynchronous operation.
@@ -750,6 +823,21 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Resolves the comparer.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dictKey">The dictionary key.</param>
+        /// <returns>IComparer&lt;T&gt;.</returns>
+        protected virtual IComparer<T> ResolveComparer<T>(string dictKey)
+        {
+            if (dictKey.Equals(ModNameKey))
+            {
+                return (IComparer<T>)StringComparer.OrdinalIgnoreCase;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Saves the state.
         /// </summary>
         protected virtual void SaveState()
@@ -765,21 +853,39 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Sorts the function.
         /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="sortProp">The sort property.</param>
         /// <param name="dictKey">The dictionary key.</param>
-        protected virtual void SortFunction(Func<IMod, object> sortProp, string dictKey)
+        protected virtual void SortFunction<T>(Func<IMod, T> sortProp, string dictKey)
         {
             var sortOrder = sortOrders[dictKey];
+            IComparer<T> comparer = ResolveComparer<T>(dictKey);
             switch (sortOrder.SortOrder)
             {
                 case Implementation.SortOrder.Asc:
-                    FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
-                    AllMods = AllMods.OrderBy(sortProp).ToHashSet();
+                    if (comparer != null)
+                    {
+                        FilteredMods = FilteredMods.OrderBy(sortProp, comparer).ToObservableCollection();
+                        AllMods = AllMods.OrderBy(sortProp, comparer).ToHashSet();
+                    }
+                    else
+                    {
+                        FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
+                        AllMods = AllMods.OrderBy(sortProp).ToHashSet();
+                    }
                     break;
 
                 case Implementation.SortOrder.Desc:
-                    FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
-                    AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
+                    if (comparer != null)
+                    {
+                        FilteredMods = FilteredMods.OrderByDescending(sortProp, comparer).ToObservableCollection();
+                        AllMods = AllMods.OrderByDescending(sortProp, comparer).ToHashSet();
+                    }
+                    else
+                    {
+                        FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
+                        AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
+                    }
                     break;
 
                 default:

@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
@@ -81,6 +82,19 @@ namespace IronyModManager.ViewModels
         public virtual LanguageControlViewModel LanguageSelector { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the logs.
+        /// </summary>
+        /// <value>The logs.</value>
+        [StaticLocalization(LocalizationResources.App.Logs)]
+        public virtual string Logs { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the logs command.
+        /// </summary>
+        /// <value>The logs command.</value>
+        public virtual ReactiveCommand<Unit, Unit> LogsCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the mod holder.
         /// </summary>
         /// <value>The mod holder.</value>
@@ -118,6 +132,14 @@ namespace IronyModManager.ViewModels
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 await appAction.OpenAsync(Constants.WikiUrl);
+            }).DisposeWith(disposables);
+
+            LogsCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (Directory.Exists(Constants.LogsLocation))
+                {
+                    await appAction.OpenAsync(Constants.LogsLocation);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

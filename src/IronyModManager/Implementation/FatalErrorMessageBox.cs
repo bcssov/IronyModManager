@@ -4,7 +4,7 @@
 // Created          : 04-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="FatalErrorMessageBox.cs" company="Mario">
 //     Mario
@@ -14,9 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using IronyModManager.Shared;
 
@@ -60,7 +58,7 @@ namespace IronyModManager.Implementation
         {
             if (Dispatcher.UIThread.CheckAccess())
             {
-                var mainWindow = GetMainWindow();
+                var mainWindow = Helpers.GetMainWindow();
                 if (mainWindow != null)
                 {
                     window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -71,7 +69,7 @@ namespace IronyModManager.Implementation
             {
                 await Dispatcher.UIThread.InvokeAsync(async () =>
                 {
-                    var mainWindow = GetMainWindow();
+                    var mainWindow = Helpers.GetMainWindow();
                     if (mainWindow != null)
                     {
                         window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -79,19 +77,6 @@ namespace IronyModManager.Implementation
                     }
                 });
             }
-        }
-
-        /// <summary>
-        /// Gets the main window.
-        /// </summary>
-        /// <returns>Window.</returns>
-        private Window GetMainWindow()
-        {
-            if (Application.Current?.ApplicationLifetime != null)
-            {
-                return ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow;
-            }
-            return null;
         }
 
         #endregion Methods

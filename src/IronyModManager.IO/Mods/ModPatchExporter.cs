@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -121,8 +121,8 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="System.ArgumentNullException">Game.</exception>
-        /// <exception cref="System.ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">Game.</exception>
+        /// <exception cref="ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
@@ -236,6 +236,15 @@ namespace IronyModManager.IO.Mods
         {
             var tasks = new List<Task>();
             var streams = new List<Stream>();
+
+            var retry = new RetryStrategy();
+
+            static async Task<bool> copyStream(Stream s, FileStream fs)
+            {
+                await s.CopyToAsync(fs);
+                return true;
+            }
+
             foreach (var def in definitions)
             {
                 var outPath = Path.Combine(patchRootPath, def.File);
@@ -248,12 +257,15 @@ namespace IronyModManager.IO.Mods
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                 }
-                var fs = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+                var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write, FileShare.Read);
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
-                tasks.Add(stream.CopyToAsync(fs));
+                tasks.Add(retry.RetryActionAsync(() =>
+                {
+                    return copyStream(stream, fs);
+                }));
                 streams.Add(stream);
                 streams.Add(fs);
             }
@@ -393,6 +405,7 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
             newInstance.IsFirstLevel = original.IsFirstLevel;
+            newInstance.FileNames = original.FileNames;
             return newInstance;
         }
 
@@ -461,6 +474,7 @@ namespace IronyModManager.IO.Mods
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
             var validDefinitions = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+            var retry = new RetryStrategy();
 
             foreach (var item in validDefinitions)
             {
@@ -479,7 +493,11 @@ namespace IronyModManager.IO.Mods
                     }
                     // Update filename
                     item.File = fileName;
-                    tasks.Add(File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item)));
+                    tasks.Add(retry.RetryActionAsync(async () =>
+                    {
+                        await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
+                        return true;
+                    }));
                     results.Add(true);
                 }
                 else
@@ -518,6 +536,7 @@ namespace IronyModManager.IO.Mods
             }
             await Task.Factory.StartNew(async () =>
             {
+                var retry = new RetryStrategy();
                 var patchState = DIResolver.Get<IPatchState>();
                 MapPatchState(model, patchState, true);
                 foreach (var item in patchState.ConflictHistory)
@@ -545,7 +564,11 @@ namespace IronyModManager.IO.Mods
                             existing.Code = null;
                         }
                     }
-                    await File.WriteAllTextAsync(historyPath, item.Code);
+                    await retry.RetryActionAsync(async () =>
+                    {
+                        await File.WriteAllTextAsync(historyPath, item.Code);
+                        return true;
+                    });
                 }
 
                 var dirPath = Path.GetDirectoryName(statePath);
@@ -555,7 +578,11 @@ namespace IronyModManager.IO.Mods
                 }
 
                 var serialized = JsonDISerializer.Serialize(patchState);
-                await File.WriteAllTextAsync(statePath, serialized);
+                await retry.RetryActionAsync(async () =>
+                {
+                    await File.WriteAllTextAsync(statePath, serialized);
+                    return true;
+                });
                 WriteOperationState?.Invoke(false);
                 mutex.Dispose();
             }).ConfigureAwait(false);

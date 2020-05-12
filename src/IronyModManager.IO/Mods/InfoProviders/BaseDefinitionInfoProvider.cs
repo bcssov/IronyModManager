@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-10-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public virtual Encoding GetEncoding(IDefinition definition)
         {
             EnsureValidType(definition);
-            if (!definition.ParentDirectory.StartsWith(Localization))
+            if (!definition.ParentDirectory.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
                 return new UTF8Encoding(false);
             }
@@ -107,26 +107,82 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             EnsureValidType(definition);
             var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
+            string proposedFileName = string.Empty;
             if (definition.ValueType == Parser.Common.ValueType.WholeTextFile)
             {
                 return definition.File;
             }
-            else if (FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase)))
+            else if (FIOSPaths.Any(p => definition.ParentDirectory.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
-                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
+                proposedFileName = Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
+                return EnsureRuleEnforced(definition, proposedFileName, true);
             }
             else if (definition.ParentDirectory.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
             {
                 if (definition.ParentDirectory.Contains(LocalizationReplace, StringComparison.OrdinalIgnoreCase))
                 {
-                    return Path.Combine(definition.ParentDirectory, fileName.GenerateValidFileName());
+                    proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                    return EnsureRuleEnforced(definition, proposedFileName, false);
                 }
                 else
                 {
-                    return Path.Combine(definition.ParentDirectory, LocalizationReplace, fileName.GenerateValidFileName());
+                    return Path.Combine(definition.ParentDirectory, LocalizationReplace, $"{LIOSName}{fileName.GenerateValidFileName()}");
                 }
             }
-            return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+            proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+            return EnsureRuleEnforced(definition, proposedFileName, false);
+        }
+
+        /// <summary>
+        /// Ensures the rule enforced.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="proposedFilename">The proposed filename.</param>
+        /// <param name="isFIOS">if set to <c>true</c> [is fios].</param>
+        /// <returns>System.String.</returns>
+        protected virtual string EnsureRuleEnforced(IDefinition definition, string proposedFilename, bool isFIOS)
+        {
+            var fileNames = new List<string>() { proposedFilename };
+            fileNames.AddRange(definition.FileNames);
+            int counter = 0;
+            if (isFIOS)
+            {
+                fileNames = fileNames.OrderBy(p => p).ToList();
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                string newFileName = proposedFilename;
+                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
+                {
+                    var fileName = Path.GetFileName(newFileName);
+                    newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
+                    fileNames.Add(newFileName);
+                    fileNames = fileNames.OrderBy(p => p).ToList();
+                    counter++;
+                    if (counter > 10)
+                    {
+                        return proposedFilename;
+                    }
+                }
+            }
+            else
+            {
+                fileNames = fileNames.OrderByDescending(p => p).ToList();
+                var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
+                string newFileName = proposedFilename;
+                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
+                {
+                    var fileName = Path.GetFileName(newFileName);
+                    newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
+                    fileNames.Add(newFileName);
+                    fileNames = fileNames.OrderByDescending(p => p).ToList();
+                    counter++;
+                    if (counter > 10)
+                    {
+                        return proposedFilename;
+                    }
+                }
+            }
+
+            return fileNames.FirstOrDefault();
         }
 
         /// <summary>

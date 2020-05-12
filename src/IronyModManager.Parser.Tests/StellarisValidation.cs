@@ -96,7 +96,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"gfx\particles\ships\lithoid_01_titan_weapon_core.asset"))
+                //if (relativePath.Contains(@"gfx\worldgfx\star_ed_class.txt"))
                 //{
                 //    Debugger.Break();
                 //}
