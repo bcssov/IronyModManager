@@ -237,8 +237,20 @@ namespace IronyModManager.IO.Mods
             var tasks = new List<Task>();
             var streams = new List<Stream>();
 
-            void copyStream(IDefinition def, string outPath)
+            var retry = new RetryStrategy();
+            Func<Stream, FileStream, Task<bool>> copyStream = async (s, fs) =>
             {
+                await s.CopyToAsync(fs);
+                return true;
+            };
+
+            foreach (var def in definitions)
+            {
+                var outPath = Path.Combine(patchRootPath, def.File);
+                if (checkIfExists && File.Exists(outPath))
+                {
+                    continue;
+                }
                 var stream = reader.GetStream(modRootPath, def.File);
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
@@ -249,19 +261,12 @@ namespace IronyModManager.IO.Mods
                 {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
-                tasks.Add(stream.CopyToAsync(fs));
+                tasks.Add(retry.RetryActionAsync(() =>
+                {
+                    return copyStream(stream, fs);
+                }));
                 streams.Add(stream);
                 streams.Add(fs);
-            }
-
-            foreach (var def in definitions)
-            {
-                var outPath = Path.Combine(patchRootPath, def.File);
-                if (checkIfExists && File.Exists(outPath))
-                {
-                    continue;
-                }
-                copyStream(def, outPath);
             }
             if (tasks.Count > 0)
             {
@@ -468,6 +473,7 @@ namespace IronyModManager.IO.Mods
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
             var validDefinitions = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
+            var retry = new RetryStrategy();
 
             foreach (var item in validDefinitions)
             {
@@ -486,7 +492,11 @@ namespace IronyModManager.IO.Mods
                     }
                     // Update filename
                     item.File = fileName;
-                    tasks.Add(File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item)));
+                    tasks.Add(retry.RetryActionAsync(async () =>
+                    {
+                        await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
+                        return true;
+                    }));
                     results.Add(true);
                 }
                 else
@@ -525,6 +535,7 @@ namespace IronyModManager.IO.Mods
             }
             await Task.Factory.StartNew(async () =>
             {
+                var retry = new RetryStrategy();
                 var patchState = DIResolver.Get<IPatchState>();
                 MapPatchState(model, patchState, true);
                 foreach (var item in patchState.ConflictHistory)
@@ -552,7 +563,11 @@ namespace IronyModManager.IO.Mods
                             existing.Code = null;
                         }
                     }
-                    await File.WriteAllTextAsync(historyPath, item.Code);
+                    await retry.RetryActionAsync(async () =>
+                    {
+                        await File.WriteAllTextAsync(historyPath, item.Code);
+                        return true;
+                    });
                 }
 
                 var dirPath = Path.GetDirectoryName(statePath);
@@ -562,7 +577,11 @@ namespace IronyModManager.IO.Mods
                 }
 
                 var serialized = JsonDISerializer.Serialize(patchState);
-                await File.WriteAllTextAsync(statePath, serialized);
+                await retry.RetryActionAsync(async () =>
+                {
+                    await File.WriteAllTextAsync(statePath, serialized);
+                    return true;
+                });
                 WriteOperationState?.Invoke(false);
                 mutex.Dispose();
             }).ConfigureAwait(false);

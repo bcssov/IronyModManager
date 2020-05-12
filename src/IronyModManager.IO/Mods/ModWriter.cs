@@ -274,44 +274,49 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
         {
-            // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
-            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-            using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
-            using var sw = new StreamWriter(fs);
-            var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
-            foreach (var prop in props)
+            async Task<bool> writeDescriptor()
             {
-                var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
-                var val = prop.GetValue(parameters.Mod, null);
-                if (val is IEnumerable<string> col)
+                // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
+                var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+                using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+                using var sw = new StreamWriter(fs);
+                var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+                foreach (var prop in props)
                 {
-                    if (col.Count() > 0)
+                    var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
+                    var val = prop.GetValue(parameters.Mod, null);
+                    if (val is IEnumerable<string> col)
                     {
-                        await sw.WriteLineAsync($"{attr.PropertyName}={{");
-                        foreach (var item in col)
+                        if (col.Count() > 0)
                         {
-                            await sw.WriteLineAsync($"\t\"{item}\"");
-                        }
-                        await sw.WriteLineAsync("}");
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
-                    {
-                        if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
-                        {
-                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
-                        }
-                        else
-                        {
-                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                            await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                            foreach (var item in col)
+                            {
+                                await sw.WriteLineAsync($"\t\"{item}\"");
+                            }
+                            await sw.WriteLineAsync("}");
                         }
                     }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                        {
+                            if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
+                            {
+                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
+                            }
+                            else
+                            {
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                            }
+                        }
+                    }
                 }
+                await sw.FlushAsync();
+                return true;
             }
-            await sw.FlushAsync();
-            return true;
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(writeDescriptor);
         }
 
         /// <summary>
@@ -447,24 +452,30 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
         {
-            var dirPath = Path.GetDirectoryName(path);
-            if (!Directory.Exists(dirPath))
+            async Task<bool> writeFile()
             {
-                Directory.CreateDirectory(dirPath);
+                var dirPath = Path.GetDirectoryName(path);
+                if (!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath);
+                }
+
+                if (File.Exists(path))
+                {
+                    _ = new System.IO.FileInfo(path)
+                    {
+                        IsReadOnly = false
+                    };
+                }
+                await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                }));
+                return true;
             }
 
-            if (File.Exists(path))
-            {
-                _ = new System.IO.FileInfo(path)
-                {
-                    IsReadOnly = false
-                };
-            }
-            await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            }));
-            return true;
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(writeFile);
         }
 
         #endregion Methods
