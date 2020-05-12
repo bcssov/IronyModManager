@@ -31,24 +31,25 @@
                              ConverterParameter=x/4.2}"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-              <RowDefinition Height="40"></RowDefinition>
+              <RowDefinition Height="30"></RowDefinition>
               <RowDefinition Height="50"></RowDefinition>
               <RowDefinition Height="30"></RowDefinition>
               <RowDefinition Height="30"></RowDefinition>
               <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
+            <Panel Grid.Column="0" Grid.Row="0" Margin="0,0,0,-10"
+                   Width="{Binding $parent[Window].Width, 
+                           Converter={StaticResource MathConverter} 
+                           ConverterParameter=(x/4.2)}">
+              <ContentControl Content="{Binding ExportCollection}" MaxHeight="30"></ContentControl>
+            </Panel>
             <Panel Grid.Column="1" Grid.Row="0" Margin="0,0,0,-10"
                    Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
                            ConverterParameter=(x/4.2)}">
-              <ContentControl Content="{Binding ExportCollection}"></ContentControl>
+              <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30"></ContentControl>
             </Panel>
-            <Panel Grid.Column="0" Grid.Row="1">
-              <DockPanel LastChildFill="True">
-                <ContentControl Content="{Binding SearchMods}" MaxHeight="30"></ContentControl>
-              </DockPanel>
-            </Panel>
-            <Panel Grid.Column="1" Grid.Row="1">
+            <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
               <DockPanel HorizontalAlignment="Right">
                 <Button Content="{Binding Remove}" MaxHeight="30"
                 Command="{Binding RemoveCommand}" Margin="5,0,0,0" Width="30"></Button>
@@ -57,7 +58,7 @@
                           MaxHeight="30" Margin="10"
                           Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
-                           ConverterParameter=(x/4.2)-90}">
+                           ConverterParameter=(x/2.1)-90}">
                   <ComboBox.ItemTemplate>
                     <DataTemplate>
                       <ComboBoxItem Content="{Binding Name}" IsSelected="{Binding IsSelected}"></ComboBoxItem>
@@ -68,11 +69,10 @@
                         Command="{Binding CreateCommand}" Margin="0,0,5,0" Width="30"></Button>
               </DockPanel>
             </Panel>
-            <Panel Grid.Column="1" Grid.Row="2"
-                   Width="{Binding $parent[Window].Width, 
-                           Converter={StaticResource MathConverter} 
-                           ConverterParameter=(x/4.2)}">
-              <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30"></ContentControl>
+            <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+              <DockPanel LastChildFill="True">
+                <ContentControl Content="{Binding SearchMods}" MaxHeight="30"></ContentControl>
+              </DockPanel>
             </Panel>
             <Grid ColumnDefinitions="1*,2*,2*,5*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
               <Border BorderThickness="1,1,0,1" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
