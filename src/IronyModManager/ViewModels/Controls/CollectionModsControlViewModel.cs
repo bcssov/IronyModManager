@@ -587,6 +587,7 @@ namespace IronyModManager.ViewModels.Controls
             }
         }
 
+
         /// <summary>
         /// Called when [activated].
         /// </summary>
@@ -606,6 +607,8 @@ namespace IronyModManager.ViewModels.Controls
                 if (gameService.GetSelected() != null)
                 {
                     EnteringNewCollection = true;
+                    AddNewCollection.NewCollectionName = string.Empty;
+                    AddNewCollection.RenamingCollection = null;
                 }
             }).DisposeWith(disposables);
 
@@ -619,6 +622,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
+                ModifyCollection.ActiveCollection = o;
                 HandleModCollectionChange();
             }).DisposeWith(disposables);
 
@@ -680,6 +684,42 @@ namespace IronyModManager.ViewModels.Controls
                         else
                         {
                             ImportCollectionAsync(s.Value.Result).ConfigureAwait(true);
+                        }
+                    }
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
+            {
+                Observable.Merge(ModifyCollection.RenameCommand.Select(p => KeyValuePair.Create(true, p)), ModifyCollection.DuplicateCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                {
+                    if (SelectedModCollection == null)
+                    {
+                        return;
+                    }
+                    if (s.Value.Result)
+                    {
+                        EnteringNewCollection = true;
+                        AddNewCollection.RenamingCollection = SelectedModCollection;
+                        AddNewCollection.NewCollectionName = SelectedModCollection.Name;
+                    }
+                    else
+                    {
+                        if (s.Value.State == CommandState.Success)
+                        {
+                            skipModCollectionSave = true;
+                            if (Mods != null)
+                            {
+                                foreach (var mod in Mods)
+                                {
+                                    mod.IsSelected = false;
+                                }
+                            }
+                            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
+                            AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                            LoadModCollections();
+                            SaveState();
+                            skipModCollectionSave = EnteringNewCollection = false;
                         }
                     }
                 }).DisposeWith(disposables);

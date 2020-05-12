@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-09-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,11 +13,13 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -57,6 +59,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the active collection.
+        /// </summary>
+        /// <value>The active collection.</value>
+        public virtual IModCollection ActiveCollection { get; set; }
+
+        /// <summary>
         /// Gets or sets the duplicate.
         /// </summary>
         /// <value>The duplicate.</value>
@@ -94,11 +102,34 @@ namespace IronyModManager.ViewModels.Controls
         {
             RenameCommand = ReactiveCommand.Create(() =>
             {
-                return new CommandResult<bool>(false, CommandState.NotExecuted);
+                return new CommandResult<bool>(true, CommandState.Success);
             }).DisposeWith(disposables);
 
             DuplicateCommand = ReactiveCommand.Create(() =>
             {
+                if (ActiveCollection != null)
+                {
+                    var collections = modCollectionService.GetAll();
+                    var count = collections.Where(p => p.Name.Equals(ActiveCollection.Name)).Count();
+                    var name = $"{ActiveCollection.Name} ({count})";
+                    while (collections.Any(p => p.Name.Equals(name)))
+                    {
+                        count++;
+                        name = $"{ActiveCollection.Name} ({count})";
+                    }
+                    var copied = modCollectionService.Create();
+                    copied.IsSelected = true;
+                    copied.Mods = ActiveCollection.Mods;
+                    copied.Name = name;
+                    if (modCollectionService.Save(copied))
+                    {
+                        return new CommandResult<bool>(false, CommandState.Success);
+                    }
+                    else
+                    {
+                        return new CommandResult<bool>(false, CommandState.Failed);
+                    }
+                }
                 return new CommandResult<bool>(false, CommandState.NotExecuted);
             }).DisposeWith(disposables);
 
