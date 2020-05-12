@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -276,7 +276,7 @@ namespace IronyModManager.IO.Mods
         {
             // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
             var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-            using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+            using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
             using var sw = new StreamWriter(fs);
             var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
             foreach (var prop in props)

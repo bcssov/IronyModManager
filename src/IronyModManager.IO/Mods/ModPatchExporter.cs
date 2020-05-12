@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -236,19 +236,15 @@ namespace IronyModManager.IO.Mods
         {
             var tasks = new List<Task>();
             var streams = new List<Stream>();
-            foreach (var def in definitions)
+
+            void copyStream(IDefinition def, string outPath)
             {
-                var outPath = Path.Combine(patchRootPath, def.File);
-                if (checkIfExists && File.Exists(outPath))
-                {
-                    continue;
-                }
                 var stream = reader.GetStream(modRootPath, def.File);
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                 }
-                var fs = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
+                var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write, FileShare.Read);
                 if (stream.CanSeek)
                 {
                     stream.Seek(0, SeekOrigin.Begin);
@@ -256,6 +252,16 @@ namespace IronyModManager.IO.Mods
                 tasks.Add(stream.CopyToAsync(fs));
                 streams.Add(stream);
                 streams.Add(fs);
+            }
+
+            foreach (var def in definitions)
+            {
+                var outPath = Path.Combine(patchRootPath, def.File);
+                if (checkIfExists && File.Exists(outPath))
+                {
+                    continue;
+                }
+                copyStream(def, outPath);
             }
             if (tasks.Count > 0)
             {
