@@ -60,6 +60,7 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\NumericUpDown.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\StandardMessageBox.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\ThemeOverride.xaml" />
@@ -130,6 +131,7 @@
     <None Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\NumericUpDown.xaml" />
+    <None Remove="Controls\Themes\StandardMessageBox.xaml" />
     <None Remove="Controls\Themes\Theme.xaml" />
     <None Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\Light\ThemeOverride.xaml" />
@@ -421,6 +423,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\ManagedDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Themes\StandardMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

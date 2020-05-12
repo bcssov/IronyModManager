@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 05-12-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
@@ -46,12 +47,14 @@ namespace IronyModManager.Implementation
                 ContentHeader = header,
                 ContentMessage = message,
                 Icon = MsgBox.Enums.Icon.Error,
-                WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             if (Dispatcher.UIThread.CheckAccess())
             {
-                var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
-                window.Icon = StaticResources.GetAppIcon();
+                var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
+                {
+                    Icon = StaticResources.GetAppIcon()
+                };
                 parameters.Window = window;
                 window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
                 return new FatalErrorMessageBox(window);
@@ -60,8 +63,10 @@ namespace IronyModManager.Implementation
             {
                 var task = Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style);
-                    window.Icon = StaticResources.GetAppIcon();
+                    var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
+                    {
+                        Icon = StaticResources.GetAppIcon()
+                    };
                     parameters.Window = window;
                     window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
                     return new FatalErrorMessageBox(window);
@@ -90,13 +95,13 @@ namespace IronyModManager.Implementation
                 ContentMessage = message,
                 Icon = icon,
                 ButtonDefinitions = MsgBox.Enums.ButtonEnum.YesNo,
-                WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
-            var window = new MsgBox.Views.MsBoxStandardWindow(parameters.Style);
+            var window = new Controls.Themes.StandardMessageBox(parameters.Style);
             parameters.Window = window;
             window.Icon = StaticResources.GetAppIcon();
             window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
-            return new MsgBox.BaseWindows.MsBoxStandardWindow(window);
+            return new StandardMessageBox(window);
         }
 
         #endregion Methods

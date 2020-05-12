@@ -14,6 +14,10 @@
         "Title": "Greška prilikom snimanja",
         "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
     },
+    "Prompt": {
+        "Yes": "Da",
+        "No": "Ne"
+    },
     "Languages": {
         "Name": "Jezik"
     },

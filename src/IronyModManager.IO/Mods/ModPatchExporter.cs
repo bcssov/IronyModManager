@@ -238,11 +238,12 @@ namespace IronyModManager.IO.Mods
             var streams = new List<Stream>();
 
             var retry = new RetryStrategy();
-            Func<Stream, FileStream, Task<bool>> copyStream = async (s, fs) =>
+
+            static async Task<bool> copyStream(Stream s, FileStream fs)
             {
                 await s.CopyToAsync(fs);
                 return true;
-            };
+            }
 
             foreach (var def in definitions)
             {

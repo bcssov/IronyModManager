@@ -1,0 +1,91 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
+        x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
+        xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+        SizeToContent="WidthAndHeight"
+        MinWidth="200"
+        MaxWidth="{Binding MaxWidth}"
+        WindowStartupLocation="{Binding LocationOfMyWindow}"
+        MinHeight="100"
+        CanResize="{Binding CanResize}"
+        Title="{Binding ContentTitle}">
+  <Window.Resources>
+    <converter:MathConverter x:Key="MathConverter" />
+  </Window.Resources>
+
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
+  </Window.KeyBindings>
+  <Design.DataContext>
+
+  </Design.DataContext>
+
+  <Window.Styles>
+    <Style Selector="TextBox">
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="AcceptsReturn" Value="True" />
+      <Setter Property="IsReadOnly" Value="True" />
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+    <Style Selector="TextBox.header">
+      <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Margin" Value="15 0 0 0" />
+      <Setter Property="MinHeight" Value="24" />
+      <Setter Property="MinWidth" Value="75" />
+    </Style>
+
+  </Window.Styles>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="15" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="15" />
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="15" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="15" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="15" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="15" />
+    </Grid.RowDefinitions>
+    <!--Icon-->
+    <Image Grid.Row="1" Grid.Column="1" MaxHeight="50" MaxWidth="50" VerticalAlignment="Top"
+           IsVisible="{Binding Icon}"
+           Source="{Binding ImagePath}" />
+    <Grid Grid.Row="1" Grid.Column="3">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="15" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <!--Bold text-->
+      <TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" IsVisible="{Binding HasHeader}" />
+      <!--Content text-->
+      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" MaxHeight="400"/>
+    </Grid>
+    <!--Buttons-->
+    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                HorizontalAlignment="Right">
+      <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
+      <Button Content="Ok" Tag="Colored" Command="{Binding ButtonClick}"
+              CommandParameter="Ok" IsVisible="{Binding IsOkShowed}" />
+      <Button Content="Yes" Command="{Binding ButtonClick}" CommandParameter="Yes"
+              IsVisible="{Binding IsYesShowed}" x:Name="yes" />
+      <Button Content="No" Command="{Binding ButtonClick}" CommandParameter="No"
+              IsVisible="{Binding IsNoShowed}" x:Name="no" />
+      <Button Content="Abort" Command="{Binding ButtonClick}" CommandParameter="Abort"
+              IsVisible="{Binding IsAbortShowed}" />
+      <Button Content="Cancel" Command="{Binding ButtonClick}" CommandParameter="Cancel"
+              IsVisible="{Binding IsCancelShowed}" />
+    </StackPanel>
+  </Grid>
+</Window>

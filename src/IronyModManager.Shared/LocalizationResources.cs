@@ -29,6 +29,12 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string Message = Prefix + "Message";
         }
+        public static class Prompt
+        {
+            public const string Prefix = nameof(Prompt) + ".";
+            public const string Yes = Prefix + "Yes";
+            public const string No = Prefix + "No";
+        }
         public static class Languages
         {
             public const string Prefix = nameof(Languages) + ".";
