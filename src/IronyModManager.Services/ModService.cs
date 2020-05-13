@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 05-13-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -799,7 +799,7 @@ namespace IronyModManager.Services
                         var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
                         if (validConflictsGroup.Count() > 1)
                         {
-                            var filteredConflicts = validConflictsGroup.Select(p => p.OrderBy(p => p.ModName).First());
+                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p).Definition);
                             foreach (var item in filteredConflicts)
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
