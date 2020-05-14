@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-14-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public virtual bool DefinitionUsesFIOSRules(IDefinition definition)
         {
             EnsureValidType(definition);
-            return FIOSPaths.Any(p => p.EndsWith(definition.ParentDirectory, StringComparison.OrdinalIgnoreCase));
+            return FIOSPaths.Any(p => definition.ParentDirectory.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
