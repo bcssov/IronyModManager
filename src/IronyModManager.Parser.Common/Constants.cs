@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-14-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -273,6 +273,11 @@ namespace IronyModManager.Parser.Common
             /// The pop jobs
             /// </summary>
             public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
+
+            /// <summary>
+            /// The districts
+            /// </summary>
+            public static readonly string Districts = MergePath(CommonPath, "districts");
 
             /// <summary>
             /// The portraits
