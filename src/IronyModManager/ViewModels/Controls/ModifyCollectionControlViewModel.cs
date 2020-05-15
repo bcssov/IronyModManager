@@ -41,6 +41,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModCollectionService modCollectionService;
 
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModService modService;
+
         #endregion Fields
 
         #region Constructors
@@ -49,9 +54,11 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
-        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService)
+        /// <param name="modService">The mod service.</param>
+        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModService modService)
         {
             this.modCollectionService = modCollectionService;
+            this.modService = modService;
         }
 
         #endregion Constructors
@@ -123,6 +130,7 @@ namespace IronyModManager.ViewModels.Controls
                     copied.Name = name;
                     if (modCollectionService.Save(copied))
                     {
+                        modService.CopyPatchCollectionAsync(ActiveCollection.Name, name).ConfigureAwait(false);
                         return new CommandResult<bool>(false, CommandState.Success);
                     }
                     else

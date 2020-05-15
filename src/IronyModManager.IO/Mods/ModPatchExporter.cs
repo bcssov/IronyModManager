@@ -325,7 +325,7 @@ namespace IronyModManager.IO.Mods
                 foreach (var item in files)
                 {
                     var info = new System.IO.FileInfo(item);
-                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase));
+                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase).TrimStart(Path.DirectorySeparatorChar));
                     if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));

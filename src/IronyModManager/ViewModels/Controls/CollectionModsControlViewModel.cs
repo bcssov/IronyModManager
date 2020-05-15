@@ -653,6 +653,7 @@ namespace IronyModManager.ViewModels.Controls
                             string successMessage;
                             if (AddNewCollection.RenamingCollection != null)
                             {
+                                modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
                                 successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
                                 successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                             }
