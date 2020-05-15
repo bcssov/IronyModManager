@@ -72,6 +72,7 @@
     <AvaloniaResource Remove="Views\Controls\MergeViewerControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ModCompareSelectorControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ModConflictIgnoreControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ModifyCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\MainConflictSolverControlView.xaml" />
     <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -151,6 +152,7 @@
     <None Remove="Views\Controls\ModCompareSelectorControlView.xaml" />
     <None Remove="Views\Controls\ModConflictIgnoreControlView.xaml" />
     <None Remove="Views\Controls\ModHolderControlView.xaml" />
+    <None Remove="Views\Controls\ModifyCollectionControlView.xaml" />
     <None Remove="Views\Controls\SearchModsControlView.xaml" />
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
@@ -428,6 +430,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\StandardMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\ModifyCollectionControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

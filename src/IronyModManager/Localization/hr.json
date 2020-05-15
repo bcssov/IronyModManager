@@ -67,7 +67,9 @@
         "Filter": "Traži modove",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
-        "Order": "Redoslijed"
+        "Order": "Redoslijed",
+        "Rename": "Preimenuj",
+        "Duplicate": "Dupliciraj"
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
@@ -174,6 +176,14 @@
         "NewDescriptorsChecked": {
             "Title": "Provjereni su novi modovi",
             "Message": "Provjera novih modova je dovršena."
+        },
+        "CollectionRenamed": {
+            "Title": "Kolekcija preimenovana",
+            "Message": "Kolekcija je preimenovana."
+        },
+        "CollectionDuplicated": {
+            "Title": "Kolekcija duplicirana",
+            "Message": "Kolekcija je duplicirana."
         }
     },
     "Mod_App_Actions": {

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -128,6 +128,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="gameService">The game service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
         /// <param name="exportCollection">The export collection.</param>
+        /// <param name="modifyCollection">The modify collection.</param>
         /// <param name="searchMods">The search mods.</param>
         /// <param name="modNameSort">The mod name sort.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -135,7 +136,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="appAction">The application action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, IModService modService, IGameService gameService,
-            AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection,
+            AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
         {
@@ -145,6 +146,7 @@ namespace IronyModManager.ViewModels.Controls
             ExportCollection = exportCollection;
             SearchMods = searchMods;
             ModNameSortOrder = modNameSort;
+            ModifyCollection = modifyCollection;
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
@@ -249,6 +251,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The mod collections.</value>
         public virtual IEnumerable<IModCollection> ModCollections { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the modify collection.
+        /// </summary>
+        /// <value>The modify collection.</value>
+        public virtual ModifyCollectionControlViewModel ModifyCollection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -598,6 +606,8 @@ namespace IronyModManager.ViewModels.Controls
                 if (gameService.GetSelected() != null)
                 {
                     EnteringNewCollection = true;
+                    AddNewCollection.NewCollectionName = string.Empty;
+                    AddNewCollection.RenamingCollection = null;
                 }
             }).DisposeWith(disposables);
 
@@ -611,6 +621,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
+                ModifyCollection.ActiveCollection = o;
                 HandleModCollectionChange();
             }).DisposeWith(disposables);
 
@@ -638,8 +649,19 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
-                            var successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                            var successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            string successTitle;
+                            string successMessage;
+                            if (AddNewCollection.RenamingCollection != null)
+                            {
+                                modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
+                                successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
+                            }
+                            else
+                            {
+                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                                successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            }
                             notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             break;
 
@@ -672,6 +694,45 @@ namespace IronyModManager.ViewModels.Controls
                         else
                         {
                             ImportCollectionAsync(s.Value.Result).ConfigureAwait(true);
+                        }
+                    }
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
+            {
+                Observable.Merge(ModifyCollection.RenameCommand.Select(p => KeyValuePair.Create(true, p)), ModifyCollection.DuplicateCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                {
+                    if (SelectedModCollection == null)
+                    {
+                        return;
+                    }
+                    if (s.Value.Result)
+                    {
+                        EnteringNewCollection = true;
+                        AddNewCollection.RenamingCollection = SelectedModCollection;
+                        AddNewCollection.NewCollectionName = SelectedModCollection.Name;
+                    }
+                    else
+                    {
+                        if (s.Value.State == CommandState.Success)
+                        {
+                            skipModCollectionSave = true;
+                            if (Mods != null)
+                            {
+                                foreach (var mod in Mods)
+                                {
+                                    mod.IsSelected = false;
+                                }
+                            }
+                            SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
+                            AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                            LoadModCollections();
+                            SaveState();
+                            skipModCollectionSave = EnteringNewCollection = false;
+                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Title);
+                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Message);
+                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
                         }
                     }
                 }).DisposeWith(disposables);

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-09-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -53,6 +53,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ModCompareSelectorControlViewModel>();
             container.RegisterLocalization<MergeViewerBinaryControlViewModel>();
             container.RegisterLocalization<ModConflictIgnoreControlViewModel>();
+            container.RegisterLocalization<ModifyCollectionControlViewModel>();
         }
 
         #endregion Methods

@@ -67,7 +67,9 @@
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
-        "Order": "Order"
+        "Order": "Order",
+        "Rename": "Rename",
+        "Duplicate": "Duplicate"
     },
     "Mod_Actions": {
         "Apply": "Apply",
@@ -160,20 +162,28 @@
             "Message": "{CollectionName} has not been applied."
         },
         "DescriptorsRefreshed": {
-            "Title": "Descriptors refreshed",
+            "Title": "Descriptors Refreshed",
             "Message": "Descriptors have been refreshed."
         },
         "DescriptorsLocked": {
-            "Title": "Descriptors locked",
+            "Title": "Descriptors Locked",
             "Message": "Descriptors have been locked."
         },
         "DescriptorsUnlocked": {
-            "Title": "Descriptors unlocked",
+            "Title": "Descriptors Unlocked",
             "Message": "Descriptors have been unlocked."
         },
         "NewDescriptorsChecked": {
-            "Title": "New mods checked",
+            "Title": "New Mods Checked",
             "Message": "Check for new mods is complete."
+        },
+        "CollectionRenamed": {
+            "Title": "Collection Renamed",
+            "Message": "Collection has been renamed."
+        },
+        "CollectionDuplicated": {
+            "Title": "Collection Duplicated",
+            "Message": "Collection has been duplicated."
         }
     },
     "Mod_App_Actions": {

@@ -97,6 +97,8 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Order = Prefix + "Order";
+            public const string Rename = Prefix + "Rename";
+            public const string Duplicate = Prefix + "Duplicate";
         }
         public static class Mod_Actions
         {
@@ -239,6 +241,18 @@ namespace IronyModManager.Shared
             public static class NewDescriptorsChecked
             {
                 public const string Prefix = "Notifications." + nameof(NewDescriptorsChecked) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionRenamed
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionRenamed) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionDuplicated
+            {
+                public const string Prefix = "Notifications." + nameof(CollectionDuplicated) + ".";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

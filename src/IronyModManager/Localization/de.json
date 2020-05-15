@@ -67,7 +67,9 @@
         "Filter": "Suchmods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Order": "Bestellen"
+        "Order": "Bestellen",
+        "Rename": "Umbenennen",
+        "Duplicate": "Duplizieren"
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
@@ -174,6 +176,14 @@
         "NewDescriptorsChecked": {
             "Title": "Neue Mods überprüft",
             "Message": "Die Überprüfung auf neue Mods ist abgeschlossen."
+        },
+        "CollectionRenamed": {
+            "Title": "Sammlung umbenannt",
+            "Message": "Sammlung wurde umbenannt."
+        },
+        "CollectionDuplicated": {
+            "Title": "Sammlung dupliziert",
+            "Message": "Sammlung wurde dupliziert."
         }
     },
     "Mod_App_Actions": {

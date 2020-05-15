@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-13-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -208,6 +208,29 @@ namespace IronyModManager.Services
                 RootDirectory = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName)
             }, true);
             return true;
+        }
+
+        /// <summary>
+        /// Copies the patch collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="newCollectionName">New name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> CopyPatchCollectionAsync(string collectionName, string newCollectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            var oldPatchName = GenerateCollectionPatchName(collectionName);
+            var newPathName = GenerateCollectionPatchName(newCollectionName);
+            return modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters()
+            {
+                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                ModPath = oldPatchName,
+                PatchName = newPathName
+            });
         }
 
         /// <summary>
@@ -722,6 +745,29 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Renames the patch collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="newCollectionName">New name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            var oldPatchName = GenerateCollectionPatchName(collectionName);
+            var newPathName = GenerateCollectionPatchName(newCollectionName);
+            return modPatchExporter.RenamePatchModAsync(new ModPatchExporterParameters()
+            {
+                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                ModPath = oldPatchName,
+                PatchName = newPathName
+            });
         }
 
         /// <summary>
