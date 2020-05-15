@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -76,6 +76,14 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> CleanPatchCollectionAsync(string collectionName);
+
+        /// <summary>
+        /// Copies the patch collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="newCollectionName">New name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CopyPatchCollectionAsync(string collectionName, string newCollectionName);
 
         /// <summary>
         /// Creates the patch definition asynchronous.
@@ -174,6 +182,14 @@ namespace IronyModManager.Services.Common
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
+
+        /// <summary>
+        /// Renames the patch collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="newCollectionName">New name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
 
         /// <summary>
         /// Saves the ignored paths asynchronous.

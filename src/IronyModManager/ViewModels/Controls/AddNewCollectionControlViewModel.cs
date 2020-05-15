@@ -4,7 +4,7 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -123,9 +123,9 @@ namespace IronyModManager.ViewModels.Controls
                     var collections = modCollectionService.GetAll();
                     if (collections != null)
                     {
-                        if (collections.Any(s => s.Name.Equals(NewCollectionName)))
+                        if (collections.Any(s => s.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase)))
                         {
-                            if (RenamingCollection != null && RenamingCollection.Name == NewCollectionName)
+                            if (RenamingCollection != null && RenamingCollection.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase))
                             {
                                 return new CommandResult<string>(colName, CommandState.NotExecuted);
                             }

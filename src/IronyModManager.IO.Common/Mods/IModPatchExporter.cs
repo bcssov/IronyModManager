@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
@@ -36,6 +36,13 @@ namespace IronyModManager.IO.Common.Mods
         #region Methods
 
         /// <summary>
+        /// Copies the patch mod asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CopyPatchModAsync(ModPatchExporterParameters parameters);
+
+        /// <summary>
         /// Exports the definition asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -48,6 +55,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;IPatchState&gt;.</returns>
         Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters);
+
+        /// <summary>
+        /// Renames the patch mod asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters);
 
         /// <summary>
         /// Saves the state asynchronous.

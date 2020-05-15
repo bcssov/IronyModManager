@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -117,6 +117,16 @@ namespace IronyModManager.IO.Mods
         #region Methods
 
         /// <summary>
+        /// Copies the patch mod asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> CopyPatchModAsync(ModPatchExporterParameters parameters)
+        {
+            return CopyPathModInternalAsync(parameters);
+        }
+
+        /// <summary>
         /// export definition as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -167,6 +177,25 @@ namespace IronyModManager.IO.Mods
         public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters)
         {
             return await GetPatchStateInternalAsync(parameters);
+        }
+
+        /// <summary>
+        /// rename patch mod as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters)
+        {
+            var result = await CopyPathModInternalAsync(parameters);
+            if (result)
+            {
+                var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+                if (Directory.Exists(oldPath))
+                {
+                    Directory.Delete(oldPath, true);
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -279,6 +308,43 @@ namespace IronyModManager.IO.Mods
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// copy path mod internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
+        {
+            var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+            var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
+            if (Directory.Exists(oldPath))
+            {
+                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
+                foreach (var item in files)
+                {
+                    var info = new System.IO.FileInfo(item);
+                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase));
+                    if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                    }
+                    info.CopyTo(destinationPath, true);
+                }
+                var backups = new List<string>() { Path.Combine(newPath, StateName), Path.Combine(newPath, StateBackup) };
+                foreach (var item in backups)
+                {
+                    if (File.Exists(item))
+                    {
+                        var text = await File.ReadAllTextAsync(item);
+                        text = text.Replace($"\"{parameters.ModPath}\"", $"\"{parameters.PatchName}\"");
+                        await File.WriteAllTextAsync(item, text);
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

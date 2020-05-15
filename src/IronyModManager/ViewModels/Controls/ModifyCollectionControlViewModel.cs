@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -110,9 +110,9 @@ namespace IronyModManager.ViewModels.Controls
                 if (ActiveCollection != null)
                 {
                     var collections = modCollectionService.GetAll();
-                    var count = collections.Where(p => p.Name.Equals(ActiveCollection.Name)).Count();
+                    var count = collections.Where(p => p.Name.Equals(ActiveCollection.Name, StringComparison.OrdinalIgnoreCase)).Count();
                     var name = $"{ActiveCollection.Name} ({count})";
-                    while (collections.Any(p => p.Name.Equals(name)))
+                    while (collections.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
                     {
                         count++;
                         name = $"{ActiveCollection.Name} ({count})";
