@@ -176,6 +176,14 @@
         "NewDescriptorsChecked": {
             "Title": "Provjereni su novi modovi",
             "Message": "Provjera novih modova je dovršena."
+        },
+        "CollectionRenamed": {
+            "Title": "Kolekcija preimenovana",
+            "Message": "Kolekcija je preimenovana."
+        },
+        "CollectionDuplicated": {
+            "Title": "Kolekcija duplicirana",
+            "Message": "Kolekcija je duplicirana."
         }
     },
     "Mod_App_Actions": {

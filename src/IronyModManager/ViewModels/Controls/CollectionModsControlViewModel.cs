@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -587,7 +587,6 @@ namespace IronyModManager.ViewModels.Controls
             }
         }
 
-
         /// <summary>
         /// Called when [activated].
         /// </summary>
@@ -650,8 +649,18 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
-                            var successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
-                            var successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            string successTitle;
+                            string successMessage;
+                            if (AddNewCollection.RenamingCollection != null)
+                            {
+                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
+                                successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
+                            }
+                            else
+                            {
+                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
+                                successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                            }
                             notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             break;
 
@@ -720,6 +729,9 @@ namespace IronyModManager.ViewModels.Controls
                             LoadModCollections();
                             SaveState();
                             skipModCollectionSave = EnteringNewCollection = false;
+                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Title);
+                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDuplicated.Message);
+                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
                         }
                     }
                 }).DisposeWith(disposables);
