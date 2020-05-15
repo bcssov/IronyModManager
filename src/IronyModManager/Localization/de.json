@@ -71,7 +71,11 @@
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
-        "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen..."
+        "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
+        "ImportPrompt": {
+            "Title": "Sammlung existiert",
+            "Message": "Die Sammlung ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
+        }
     },
     "Mod_Actions": {
         "Apply": "Anwenden",

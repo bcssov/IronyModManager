@@ -71,7 +71,11 @@
         "Rename": "Rename",
         "Duplicate": "Duplicate",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
-        "Overlay_Duplicate_Message": "Please wait while performing duplicate operation..."
+        "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
+        "ImportPrompt": {
+            "Title": "Collection Exists",
+            "Message": "Collection already exists and will be overwritten, do you want to proceed?"
+        }
     },
     "Mod_Actions": {
         "Apply": "Apply",

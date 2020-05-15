@@ -71,7 +71,11 @@
         "Rename": "Preimenuj",
         "Duplicate": "Dupliciraj",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
-        "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje..."
+        "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+        "ImportPrompt": {
+            "Title": "Kolekcija postoji",
+            "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
+        }
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
