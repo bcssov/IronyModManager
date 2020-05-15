@@ -69,7 +69,9 @@
         "Mod_Name": "Mod Name",
         "Order": "Bestellen",
         "Rename": "Umbenennen",
-        "Duplicate": "Duplizieren"
+        "Duplicate": "Duplizieren",
+        "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
+        "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen..."
     },
     "Mod_Actions": {
         "Apply": "Anwenden",

@@ -20,6 +20,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
@@ -653,16 +654,26 @@ namespace IronyModManager.ViewModels.Controls
                             string successMessage;
                             if (AddNewCollection.RenamingCollection != null)
                             {
-                                modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
-                                successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
-                                successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
+                                async Task handleRenamePatchCollection()
+                                {
+                                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                                    await modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                    successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
+                                    successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);                                    
+                                    await TriggerOverlayAsync(false);
+                                    await Dispatcher.UIThread.InvokeAsync(() =>
+                                    {
+                                        notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
+                                    });
+                                }
+                                handleRenamePatchCollection().ConfigureAwait(true);
                             }
                             else
                             {
                                 successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
                                 successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
+                                notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             }
-                            notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                             break;
 
                         case CommandState.Exists:

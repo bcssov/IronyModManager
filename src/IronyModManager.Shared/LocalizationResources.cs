@@ -99,6 +99,8 @@ namespace IronyModManager.Shared
             public const string Order = Prefix + "Order";
             public const string Rename = Prefix + "Rename";
             public const string Duplicate = Prefix + "Duplicate";
+            public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
+            public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
         }
         public static class Mod_Actions
         {

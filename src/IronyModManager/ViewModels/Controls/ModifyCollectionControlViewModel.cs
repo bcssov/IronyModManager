@@ -18,6 +18,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -35,6 +36,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModifyCollectionControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
 
         /// <summary>
         /// The mod collection service
@@ -55,10 +61,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="modService">The mod service.</param>
-        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModService modService)
+        /// <param name="localizationManager">The localization manager.</param>
+        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModService modService, ILocalizationManager localizationManager)
         {
             this.modCollectionService = modCollectionService;
             this.modService = modService;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -112,7 +120,7 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<bool>(true, CommandState.Success);
             }).DisposeWith(disposables);
 
-            DuplicateCommand = ReactiveCommand.Create(() =>
+            DuplicateCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (ActiveCollection != null)
                 {
@@ -130,7 +138,9 @@ namespace IronyModManager.ViewModels.Controls
                     copied.Name = name;
                     if (modCollectionService.Save(copied))
                     {
-                        modService.CopyPatchCollectionAsync(ActiveCollection.Name, name).ConfigureAwait(false);
+                        await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                        await modService.CopyPatchCollectionAsync(ActiveCollection.Name, name);
+                        await TriggerOverlayAsync(false);
                         return new CommandResult<bool>(false, CommandState.Success);
                     }
                     else

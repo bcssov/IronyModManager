@@ -69,7 +69,9 @@
         "Mod_Name": "Ime moda",
         "Order": "Redoslijed",
         "Rename": "Preimenuj",
-        "Duplicate": "Dupliciraj"
+        "Duplicate": "Dupliciraj",
+        "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
+        "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje..."
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
