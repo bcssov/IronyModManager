@@ -111,6 +111,17 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Existses the specified name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool Exists(string name)
+        {
+            var all = GetAll();
+            return all.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>

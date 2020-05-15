@@ -101,6 +101,12 @@ namespace IronyModManager.Shared
             public const string Duplicate = Prefix + "Duplicate";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
+            public static class ImportPrompt
+            {
+                public const string Prefix = "Collection_Mods." + nameof(ImportPrompt) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
         }
         public static class Mod_Actions
         {

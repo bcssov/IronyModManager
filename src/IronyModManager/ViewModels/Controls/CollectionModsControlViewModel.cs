@@ -541,15 +541,35 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ImportCollectionAsync(string path)
         {
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
-            var collection = await modCollectionService.ImportAsync(path);
-            if (collection != null)
+            var importData = await modCollectionService.GetImportedCollectionDetailsAsync(path);
+            if (importData == null)
             {
-                collection.IsSelected = true;
-                modCollectionService.Save(collection);
-                LoadModCollections();
-                var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
-                notificationAction.ShowNotification(title, message, NotificationType.Success);
+                await TriggerOverlayAsync(false);
+                return;
+            }
+            bool proceed;
+            if (modCollectionService.Exists(importData.Name))
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportPrompt.Title);
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportPrompt.Message);
+                proceed = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+            }
+            else
+            {
+                proceed = true;
+            }
+            if (proceed)
+            {
+                var collection = await modCollectionService.ImportAsync(path);
+                if (collection != null)
+                {
+                    collection.IsSelected = true;
+                    modCollectionService.Save(collection);
+                    LoadModCollections();
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                    var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
+                    notificationAction.ShowNotification(title, message, NotificationType.Success);
+                }
             }
             await TriggerOverlayAsync(false);
         }
@@ -659,7 +679,7 @@ namespace IronyModManager.ViewModels.Controls
                                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                                     await modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
                                     successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
-                                    successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);                                    
+                                    successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                                     await TriggerOverlayAsync(false);
                                     await Dispatcher.UIThread.InvokeAsync(() =>
                                     {

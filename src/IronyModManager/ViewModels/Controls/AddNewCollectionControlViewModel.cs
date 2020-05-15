@@ -120,37 +120,29 @@ namespace IronyModManager.ViewModels.Controls
                 if (!string.IsNullOrWhiteSpace(NewCollectionName))
                 {
                     var colName = NewCollectionName.Trim();
-                    var collections = modCollectionService.GetAll();
-                    if (collections != null)
+                    if (modCollectionService.Exists(NewCollectionName))
                     {
-                        if (collections.Any(s => s.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase)))
+                        if (RenamingCollection != null && RenamingCollection.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase))
                         {
-                            if (RenamingCollection != null && RenamingCollection.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase))
-                            {
-                                return new CommandResult<string>(colName, CommandState.NotExecuted);
-                            }
-                            else
-                            {
-                                return new CommandResult<string>(colName, CommandState.Exists);
-                            }
+                            return new CommandResult<string>(colName, CommandState.NotExecuted);
                         }
-                        var collection = modCollectionService.Create();
-                        collection.Name = colName;
-                        collection.IsSelected = true;
-                        if (RenamingCollection != null)
+                        else
                         {
-                            collection.Mods = RenamingCollection.Mods;
-                            modCollectionService.Delete(RenamingCollection.Name);
-                        }
-                        if (modCollectionService.Save(collection))
-                        {
-                            NewCollectionName = string.Empty;
-                            return new CommandResult<string>(collection.Name, CommandState.Success);
+                            return new CommandResult<string>(colName, CommandState.Exists);
                         }
                     }
-                    else
+                    var collection = modCollectionService.Create();
+                    collection.Name = colName;
+                    collection.IsSelected = true;
+                    if (RenamingCollection != null)
                     {
-                        return new CommandResult<string>(colName, CommandState.Exists);
+                        collection.Mods = RenamingCollection.Mods;
+                        modCollectionService.Delete(RenamingCollection.Name);
+                    }
+                    if (modCollectionService.Save(collection))
+                    {
+                        NewCollectionName = string.Empty;
+                        return new CommandResult<string>(collection.Name, CommandState.Success);
                     }
                 }
                 return new CommandResult<string>(!string.IsNullOrEmpty(NewCollectionName) ? NewCollectionName.Trim() : string.Empty, CommandState.Failed);

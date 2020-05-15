@@ -41,6 +41,13 @@ namespace IronyModManager.Services.Common
         bool Delete(string name);
 
         /// <summary>
+        /// Existses the specified name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool Exists(string name);
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>

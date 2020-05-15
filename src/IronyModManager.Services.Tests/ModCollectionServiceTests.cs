@@ -601,5 +601,39 @@ namespace IronyModManager.Services.Tests
             var result = await service.GetImportedCollectionDetailsAsync("file");
             result.Should().NotBeNull();
         }
+
+        /// <summary>
+        /// Defines the test method Should_return_true_when_collection_exists.
+        /// </summary>
+        [Fact]
+        public void Should_return_true_when_collection_exists()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            SetupMockCase(storageProvider, gameService);
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = service.Exists("test");
+            result.Should().BeTrue();            
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_true_when_collection_exists.
+        /// </summary>
+        [Fact]
+        public void Should_not_return_true_when_collection_exists()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            SetupMockCase(storageProvider, gameService);
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = service.Exists("test101");
+            result.Should().BeFalse();
+        }
     }
 }
