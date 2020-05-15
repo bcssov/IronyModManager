@@ -173,11 +173,11 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// import as an asynchronous operation.
+        /// get imported collection details as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
-        public async Task<IModCollection> ImportAsync(string file)
+        public async Task<IModCollection> GetImportedCollectionDetailsAsync(string file)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -191,6 +191,26 @@ namespace IronyModManager.Services
                 Mod = instance
             });
             if (result)
+            {
+                return instance;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import as an asynchronous operation.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public async Task<IModCollection> ImportAsync(string file)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = await GetImportedCollectionDetailsAsync(file);
+            if (instance != null)
             {
                 var path = GetPatchDirectory(game, instance);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()

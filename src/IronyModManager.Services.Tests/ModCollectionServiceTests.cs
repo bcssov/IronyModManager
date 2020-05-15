@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -546,6 +546,60 @@ namespace IronyModManager.Services.Tests
             var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportAsync("file");
             result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_mod_collection_details.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_return_mod_collection_details()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                p.Mod.Name = "fake";
+                return Task.FromResult(false);
+            });
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.GetImportedCollectionDetailsAsync("file");
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_mod_collection_details.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_mod_collection_details()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            DISetup.SetupContainer();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ImportAsync(It.IsAny<ModCollectionExporterParams>())).Returns((ModCollectionExporterParams p) =>
+            {
+                p.Mod.Name = "fake";
+                return Task.FromResult(true);
+            });
+
+            var service = new ModCollectionService(gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.GetImportedCollectionDetailsAsync("file");
+            result.Should().NotBeNull();
         }
     }
 }
