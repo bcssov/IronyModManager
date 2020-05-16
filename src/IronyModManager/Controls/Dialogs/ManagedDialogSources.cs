@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-16-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -21,6 +21,8 @@ using System.IO;
 using System.Linq;
 using Avalonia.Controls.Platform;
 using Avalonia.Dialogs;
+using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls.Dialogs
@@ -50,6 +52,11 @@ namespace IronyModManager.Controls.Dialogs
             Environment.SpecialFolder.MyPictures,
             Environment.SpecialFolder.MyVideos
         };
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private static ILocalizationManager localizationManager;
 
         #endregion Fields
 
@@ -139,7 +146,7 @@ namespace IronyModManager.Controls.Dialogs
                 {
                     ItemType = ManagedFileChooserItemType.Folder,
                     Path = d,
-                    DisplayName = Path.GetFileName(d)
+                    DisplayName = LocalizeFolder(Path.GetFileName(d))
                 }).ToArray();
         }
 
@@ -148,6 +155,25 @@ namespace IronyModManager.Controls.Dialogs
         /// </summary>
         /// <returns>ManagedDialogNavigationItem[].</returns>
         public ManagedDialogNavigationItem[] GetAllItems() => GetAllItemsDelegate(this);
+
+        /// <summary>
+        /// Localizes the folder.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private static string LocalizeFolder(string path)
+        {
+            if (localizationManager == null)
+            {
+                localizationManager = DIResolver.Get<ILocalizationManager>();
+            }
+            var localized = localizationManager.GetResource("FileDialog.Folders." + path);
+            if (!string.IsNullOrWhiteSpace(localized))
+            {
+                return localized;
+            }
+            return path;
+        }
 
         #endregion Methods
     }

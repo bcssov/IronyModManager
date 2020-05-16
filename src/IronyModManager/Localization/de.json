@@ -22,7 +22,14 @@
         "FileName": "Dateiname",
         "ShowHiddenFiles": "Zeige versteckte Dateien",
         "OK": "OK",
-        "Cancel": "Stornieren"
+        "Cancel": "Stornieren",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Unterlagen",
+            "Music": "Musik",
+            "Videos": "Videos",
+            "Pictures": "Bilder"
+        }
     },
     "Languages": {
         "Name": "Sprache"

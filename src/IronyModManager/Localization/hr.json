@@ -22,7 +22,14 @@
         "FileName": "Naziv datoteke",
         "ShowHiddenFiles": "Pokaži skrivene datoteke",
         "OK": "U redu",
-        "Cancel": "Otkaži"
+        "Cancel": "Otkaži",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Dokumenti",
+            "Music": "Glazba",
+            "Videos": "Video",
+            "Pictures": "Slike"
+        }
     },
     "Languages": {
         "Name": "Jezik"

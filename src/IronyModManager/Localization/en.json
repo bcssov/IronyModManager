@@ -22,7 +22,14 @@
         "FileName": "File name",
         "ShowHiddenFiles": "Show hidden files",
         "OK": "OK",
-        "Cancel": "Cancel"
+        "Cancel": "Cancel",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Documents",
+            "Music": "Music",
+            "Videos": "Videos",
+            "Pictures": "Pictures"
+        }
     },
     "Languages": {
         "Name": "Language"

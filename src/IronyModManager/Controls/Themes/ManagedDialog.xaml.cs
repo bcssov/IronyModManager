@@ -52,11 +52,6 @@ namespace IronyModManager.Controls.Themes
         /// </summary>
         private readonly Control _quickLinksRoot;
 
-        /// <summary>
-        /// The loc manager
-        /// </summary>
-        private readonly ILocalizationManager locManager;
-
         #endregion Fields
 
         #region Constructors
@@ -70,7 +65,7 @@ namespace IronyModManager.Controls.Themes
             AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
             _quickLinksRoot = this.FindControl<Control>("QuickLinks");
             _filesView = this.FindControl<ListBox>("Files");
-            locManager = DIResolver.Get<ILocalizationManager>();
+            var locManager = DIResolver.Get<ILocalizationManager>();
             var fileName = this.FindControl<TextBox>("fileName");
             fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
             var correctingInput = false;
