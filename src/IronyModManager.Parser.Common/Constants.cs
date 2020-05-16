@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2020
+// Last Modified On : 05-16-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -278,6 +278,11 @@ namespace IronyModManager.Parser.Common
             /// The districts
             /// </summary>
             public static readonly string Districts = MergePath(CommonPath, "districts");
+
+            /// <summary>
+            /// The planet classes
+            /// </summary>
+            public static readonly string PlanetClasses = MergePath(CommonPath, "planet_classes");
 
             /// <summary>
             /// The portraits
