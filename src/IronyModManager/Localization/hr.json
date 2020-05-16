@@ -18,6 +18,12 @@
         "Yes": "Da",
         "No": "Ne"
     },
+    "FileDialog": {
+        "FileName": "Naziv datoteke",
+        "ShowHiddenFiles": "Pokaži skrivene datoteke",
+        "OK": "U redu",
+        "Cancel": "Otkaži"
+    },
     "Languages": {
         "Name": "Jezik"
     },

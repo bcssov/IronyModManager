@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-16-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -72,7 +72,7 @@ namespace IronyModManager.Implementation.Actions
             };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
-                dialog.InitialFileName = initialFileName;
+                dialog.InitialFileName = initialFileName.GenerateValidFileName();
             }
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             return result;

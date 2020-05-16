@@ -18,6 +18,12 @@
         "Yes": "Yes",
         "No": "No"
     },
+    "FileDialog": {
+        "FileName": "File name",
+        "ShowHiddenFiles": "Show hidden files",
+        "OK": "OK",
+        "Cancel": "Cancel"
+    },
     "Languages": {
         "Name": "Language"
     },

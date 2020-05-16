@@ -35,6 +35,14 @@ namespace IronyModManager.Shared
             public const string Yes = Prefix + "Yes";
             public const string No = Prefix + "No";
         }
+        public static class FileDialog
+        {
+            public const string Prefix = nameof(FileDialog) + ".";
+            public const string FileName = Prefix + "FileName";
+            public const string ShowHiddenFiles = Prefix + "ShowHiddenFiles";
+            public const string OK = Prefix + "OK";
+            public const string Cancel = Prefix + "Cancel";
+        }
         public static class Languages
         {
             public const string Prefix = nameof(Languages) + ".";
