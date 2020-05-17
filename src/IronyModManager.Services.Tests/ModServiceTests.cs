@@ -2621,7 +2621,7 @@ namespace IronyModManager.Services.Tests
             modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
-            var result = await service.CopyPatchCollectionAsync("t1", "t2");
+            var result = await service.RenamePatchCollectionAsync("t1", "t2");
             result.Should().BeTrue();
         }
 

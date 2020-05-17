@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 05-17-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -139,14 +139,14 @@ namespace IronyModManager.Controls.Dialogs
         /// <returns>ManagedDialogNavigationItem[].</returns>
         public static ManagedDialogNavigationItem[] DefaultGetUserDirectories()
         {
-            return s_folders.Select(Environment.GetFolderPath).Distinct()
-                .Where(d => !string.IsNullOrWhiteSpace(d))
-                .Where(Directory.Exists)
+            return s_folders.Select(s => KeyValuePair.Create(s, Environment.GetFolderPath(s))).GroupBy(p => p.Value).Select(p => p.First())
+                .Where(d => !string.IsNullOrWhiteSpace(d.Value))
+                .Where(d => Directory.Exists(d.Value))
                 .Select(d => new ManagedDialogNavigationItem
                 {
                     ItemType = ManagedFileChooserItemType.Folder,
-                    Path = d,
-                    DisplayName = LocalizeFolder(Path.GetFileName(d))
+                    Path = d.Value,
+                    DisplayName = LocalizeFolder(d.Key, Path.GetFileName(d.Value))
                 }).ToArray();
         }
 
@@ -159,15 +159,41 @@ namespace IronyModManager.Controls.Dialogs
         /// <summary>
         /// Localizes the folder.
         /// </summary>
+        /// <param name="folder">The folder.</param>
         /// <param name="path">The path.</param>
         /// <returns>System.String.</returns>
-        private static string LocalizeFolder(string path)
+        private static string LocalizeFolder(Environment.SpecialFolder folder, string path)
         {
             if (localizationManager == null)
             {
                 localizationManager = DIResolver.Get<ILocalizationManager>();
             }
-            var localized = localizationManager.GetResource("FileDialog.Folders." + path);
+            string localized = string.Empty;
+            switch (folder)
+            {
+                case Environment.SpecialFolder.Desktop:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Desktop);
+                    break;
+
+                case Environment.SpecialFolder.MyDocuments:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Documents);
+                    break;
+
+                case Environment.SpecialFolder.MyMusic:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Music);
+                    break;
+
+                case Environment.SpecialFolder.MyPictures:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Pictures);
+                    break;
+
+                case Environment.SpecialFolder.MyVideos:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Videos);
+                    break;
+
+                default:
+                    break;
+            }
             if (!string.IsNullOrWhiteSpace(localized))
             {
                 return localized;
