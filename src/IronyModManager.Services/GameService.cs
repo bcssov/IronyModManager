@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -149,6 +149,7 @@ namespace IronyModManager.Services
             game.UserDirectory = gameType.UserDirectory;
             game.SteamAppId = gameType.SteamAppId;
             game.WorkshopDirectory = gameType.WorkshopDirectory;
+            game.LogLocation = gameType.LogLocation;
             return game;
         }
 

@@ -1,9 +1,13 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
-        "Wiki": "Wiki",
-        "Logs": "Logs",
-        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed..."
+        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
+        "Shortcuts": {
+            "Name": "Shortcuts",
+            "Wiki": "Wiki",
+            "Logs": "Logs",
+            "ErrorLog": "Error.log"
+        }
     },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",

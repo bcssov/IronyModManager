@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -39,7 +39,8 @@ namespace IronyModManager.Services.Registrations
             storage.RegisterGame(Shared.Constants.GamesTypes.Stellaris.Name,
                 Shared.Constants.GamesTypes.Stellaris.SteamAppId,
                 Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name),
-                WorkshopDirectory.GetDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId));
+                WorkshopDirectory.GetDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId),
+                Path.Combine(Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name), Shared.Constants.GamesTypes.Stellaris.LogLocation));
         }
 
         #endregion Methods
