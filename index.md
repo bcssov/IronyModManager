@@ -16,7 +16,8 @@ Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues)
 * Be sure to provide logs if you report crashes. Logs can be found in the logs directory of your Irony install.
 
 ### Notes
-Feedback on how Irony performs on OSX\Linux would be welcome. Just open a new issue on the [issue tracker](https://github.com/bcssov/IronyModManager/issues) and I'm sure we can sort something out to ensure max compatibility with these operating systems in case something does not work as expected.
+**OSX:**
+Extract the .7z file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
 
-* OSX is untested and should be considered experimental (I have no testers and no machine to test on).
-* Linux x64 was briefly tested and should be considered experimental (incase the Stellaris folder is not detected check the Wiki FAQ).
+**Linux:**
+Extract the 7z file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
