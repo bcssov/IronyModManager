@@ -2559,7 +2559,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
-            modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
+            modPatchExporter.Setup(p => p.RenamePatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
             var result = await service.RenamePatchCollectionAsync("t1", "t2");
@@ -2589,7 +2589,7 @@ namespace IronyModManager.Services.Tests
                 Type = "Fake",
                 UserDirectory = "C:\\Users\\Fake"
             });
-            modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
+            modPatchExporter.Setup(p => p.RenamePatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
             var result = await service.RenamePatchCollectionAsync("t1", "t2");
@@ -2618,7 +2618,7 @@ namespace IronyModManager.Services.Tests
                 Type = "Fake",
                 UserDirectory = "C:\\Users\\Fake"
             });
-            modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
+            modPatchExporter.Setup(p => p.RenamePatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
             var result = await service.RenamePatchCollectionAsync("t1", "t2");

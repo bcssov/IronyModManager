@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -220,12 +220,13 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log");
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
             dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
         }
 
         /// <summary>
@@ -373,13 +374,14 @@ namespace IronyModManager.Storage.Tests
                return dbMock.Games.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log");
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             result.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             result.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
             result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
         }
 
         /// <summary>

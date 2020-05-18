@@ -12,9 +12,15 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(App) + ".";
             public const string Title = Prefix + "Title";
-            public const string Wiki = Prefix + "Wiki";
-            public const string Logs = Prefix + "Logs";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
+            public static class Shortcuts
+            {
+                public const string Prefix = "App." + nameof(Shortcuts) + ".";
+                public const string Name = Prefix + "Name";
+                public const string Wiki = Prefix + "Wiki";
+                public const string Logs = Prefix + "Logs";
+                public const string ErrorLog = Prefix + "ErrorLog";
+            }
         }
         public static class FatalError
         {

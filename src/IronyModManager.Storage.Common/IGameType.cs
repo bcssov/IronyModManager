@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Storage.Common
     public interface IGameType
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the log location.
+        /// </summary>
+        /// <value>The log location.</value>
+        string LogLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

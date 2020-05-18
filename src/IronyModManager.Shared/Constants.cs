@@ -4,15 +4,16 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace IronyModManager.Shared
 {
@@ -90,6 +91,11 @@ namespace IronyModManager.Shared
                 /// The steam application identifier
                 /// </summary>
                 public const int SteamAppId = 281990;
+
+                /// <summary>
+                /// The log location
+                /// </summary>
+                public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
 
                 #endregion Fields
             }

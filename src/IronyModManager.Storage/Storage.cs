@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 05-18-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -156,9 +156,10 @@ namespace IronyModManager.Storage
         /// <param name="appId">The application identifier.</param>
         /// <param name="userDirectory">The user directory.</param>
         /// <param name="workshopDirectory">The workshop directory.</param>
+        /// <param name="logLocation">The log location.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory)
+        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation)
         {
             lock (dbLock)
             {
@@ -171,6 +172,7 @@ namespace IronyModManager.Storage
                 game.UserDirectory = userDirectory ?? string.Empty;
                 game.SteamAppId = appId;
                 game.WorkshopDirectory = workshopDirectory ?? string.Empty;
+                game.LogLocation = logLocation;
                 Database.Games.Add(game);
                 return true;
             }
@@ -184,7 +186,7 @@ namespace IronyModManager.Storage
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException">Theme is already registered</exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
