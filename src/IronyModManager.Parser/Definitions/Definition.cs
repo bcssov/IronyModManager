@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-25-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -198,9 +198,14 @@ namespace IronyModManager.Parser.Definitions
             }
             set
             {
+                var old = file;
                 var val = value ?? string.Empty;
                 file = val;
                 FileCI = val.ToLowerInvariant();
+                if (fileNames.Contains(old))
+                {
+                    fileNames.Remove(old);
+                }
             }
         }
 

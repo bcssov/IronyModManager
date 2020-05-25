@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-25-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -139,7 +139,9 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException("Game.");
             }
-            var definitionsInvalid = (parameters.Definitions == null || parameters.Definitions.Count() == 0) && (parameters.OrphanConflicts == null || parameters.OrphanConflicts.Count() == 0);
+            var definitionsInvalid = (parameters.Definitions == null || parameters.Definitions.Count() == 0) &&
+                (parameters.OrphanConflicts == null || parameters.OrphanConflicts.Count() == 0) &&
+                (parameters.OverwrittenConflicts == null || parameters.OverwrittenConflicts.Count() == 0);
             if (definitionsInvalid)
             {
                 throw new ArgumentNullException("Definitions.");
@@ -154,7 +156,7 @@ namespace IronyModManager.IO.Mods
                     results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                         Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
                     results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, false));
                 }
 
                 if (parameters.OrphanConflicts?.Count() > 0)
@@ -162,7 +164,15 @@ namespace IronyModManager.IO.Mods
                     results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                         Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
                     results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, false));
+                }
+
+                if (parameters.OverwrittenConflicts?.Count() > 0)
+                {
+                    results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
+                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                    results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, true));
                 }
                 return results.All(p => p);
             }
@@ -217,6 +227,7 @@ namespace IronyModManager.IO.Mods
             state.Conflicts = MapDefinitions(parameters.Conflicts, false);
             state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
             state.IgnoredConflicts = MapDefinitions(parameters.IgnoredConflicts, false);
+            state.OverwrittenConflicts = MapDefinitions(parameters.OverwrittenConflicts, false);
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);
@@ -413,6 +424,10 @@ namespace IronyModManager.IO.Mods
                     {
                         cached.ResolvedConflicts = new List<IDefinition>();
                     }
+                    if (cached.OverwrittenConflicts == null)
+                    {
+                        cached.OverwrittenConflicts = new List<IDefinition>();
+                    }
                     externallyLoadedCode.Clear();
                     cachedState = cached;
                     lastCachedStatePath = statePath;
@@ -508,6 +523,7 @@ namespace IronyModManager.IO.Mods
             destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
             destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
             destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
+            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
         }
 
         /// <summary>
@@ -528,14 +544,15 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// write merged content as an asynchronous operation.
+        /// Writes the merged content asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="patchRootPath">The patch root path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="checkIfExists">if set to <c>true</c> [check if exists].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists)
+        /// <param name="checkIfExists">The check if exists.</param>
+        /// <param name="writeEmptyFile">The write empty file.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
+        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists, bool writeEmptyFile)
         {
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
@@ -564,6 +581,19 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                         return true;
                     }));
+                    if (writeEmptyFile)
+                    {
+                        var emptyFileNames = item.FileNames.Where(p => p != fileName);
+                        foreach (var emptyFile in emptyFileNames)
+                        {
+                            var emptyPath = Path.Combine(patchRootPath, emptyFile);
+                            await retry.RetryActionAsync(async () =>
+                            {
+                                await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(item));
+                                return true;
+                            });
+                        }
+                    }
                     results.Add(true);
                 }
                 else

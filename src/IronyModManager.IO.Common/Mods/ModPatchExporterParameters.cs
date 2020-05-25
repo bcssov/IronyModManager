@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-25-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -67,6 +67,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The orphan conflicts.</value>
         public IEnumerable<IDefinition> OrphanConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten conflicts.
+        /// </summary>
+        /// <value>The overwritten conflicts.</value>
+        public IEnumerable<IDefinition> OverwrittenConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the patch.
