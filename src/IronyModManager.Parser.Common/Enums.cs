@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 05-25-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -54,6 +54,11 @@ namespace IronyModManager.Parser.Common
         /// <summary>
         /// The invalid
         /// </summary>
-        Invalid
+        Invalid,
+
+        /// <summary>
+        /// The overwritten object
+        /// </summary>
+        OverwrittenObject
     }
 }
