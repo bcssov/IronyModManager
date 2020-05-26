@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
@@ -62,6 +62,11 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters);
+
+        /// <summary>
+        /// Resets the cache.
+        /// </summary>
+        void ResetCache();
 
         /// <summary>
         /// Saves the state asynchronous.

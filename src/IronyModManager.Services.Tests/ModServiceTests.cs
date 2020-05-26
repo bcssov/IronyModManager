@@ -1491,7 +1491,8 @@ namespace IronyModManager.Services.Tests
                     AllConflicts = o.Conflicts,
                     Conflicts = o.Conflicts,
                     OrphanConflicts = o.OrphanConflicts,
-                    ResolvedConflicts = o.ResolvedConflicts
+                    ResolvedConflicts = o.ResolvedConflicts,
+                    OverwrittenConflicts = o.OverwrittenConflicts
                 };
             });
             var definitions = new List<IDefinition>()
@@ -1521,7 +1522,8 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = definitions,
                     ResolvedConflicts = definitions,
-                    OrphanConflicts = new List<IDefinition>()
+                    OrphanConflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>()
                 };
                 return res;
             });
@@ -1541,6 +1543,7 @@ namespace IronyModManager.Services.Tests
                 AllConflicts = all,
                 Conflicts = all,
                 OrphanConflicts = orphan,
+                OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.LoadPatchStateAsync(c, "fake");
@@ -1576,7 +1579,8 @@ namespace IronyModManager.Services.Tests
                     AllConflicts = o.Conflicts,
                     Conflicts = o.Conflicts,
                     OrphanConflicts = o.OrphanConflicts,
-                    ResolvedConflicts = o.ResolvedConflicts
+                    ResolvedConflicts = o.ResolvedConflicts,
+                    OverwrittenConflicts = o.OverwrittenConflicts
                 };
             });
             var definitions = new List<IDefinition>()
@@ -1627,7 +1631,8 @@ namespace IronyModManager.Services.Tests
                 {
                     Conflicts = definitions2,
                     ResolvedConflicts = definitions2,
-                    OrphanConflicts = new List<IDefinition>()
+                    OrphanConflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>()
                 };
                 return res;
             });
@@ -1647,6 +1652,7 @@ namespace IronyModManager.Services.Tests
                 AllConflicts = all,
                 Conflicts = all,
                 OrphanConflicts = orphan,
+                OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.LoadPatchStateAsync(c, "fake");
