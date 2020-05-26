@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -544,7 +544,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
-                        definition.ValueType = Common.ValueType.Object;
+                        definition.ValueType = ValueType.Object;
                         bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline, isFirstLevel: isFirstLevel);
                         OnSimpleParseReadObjectLine(parsingArgs);

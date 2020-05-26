@@ -423,7 +423,7 @@ namespace IronyModManager.Services
                 var conflicted = conflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
                 IEnumerable<IDefinition> definitions = item.Select(p => p);
                 IDefinition definition = EvalDefinitionPriority(item.Select(p => p)).Definition;
-                if (conflicted?.Count() > 0)
+                if (conflicted.Count() > 0)
                 {
                     definition = EvalDefinitionPriority(conflicted).Definition;
                     definitions = conflicted;
