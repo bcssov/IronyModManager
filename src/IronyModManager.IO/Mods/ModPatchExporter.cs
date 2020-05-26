@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -206,6 +206,15 @@ namespace IronyModManager.IO.Mods
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Resets the cache.
+        /// </summary>
+        public void ResetCache()
+        {
+            lastCachedStatePath = string.Empty;
+            cachedState = null;
         }
 
         /// <summary>
@@ -550,9 +559,9 @@ namespace IronyModManager.IO.Mods
         /// <param name="patchRootPath">The patch root path.</param>
         /// <param name="game">The game.</param>
         /// <param name="checkIfExists">The check if exists.</param>
-        /// <param name="writeEmptyFile">The write empty file.</param>
+        /// <param name="overwrittenFiles">The overwritten files.</param>
         /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
-        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists, bool writeEmptyFile)
+        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists, bool overwrittenFiles)
         {
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
@@ -564,7 +573,15 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
-                    var fileName = infoProvider.GetFileName(item);
+                    string fileName = infoProvider.GetFileName(item);
+                    if (!overwrittenFiles)
+                    {
+                        fileName = infoProvider.GetFileName(item);
+                    }
+                    else
+                    {
+                        fileName = item.File;
+                    }
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (checkIfExists && File.Exists(outPath))
                     {
@@ -581,7 +598,7 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                         return true;
                     }));
-                    if (writeEmptyFile)
+                    if (overwrittenFiles)
                     {
                         var emptyFileNames = item.FileNames.Where(p => p != fileName);
                         foreach (var emptyFile in emptyFileNames)

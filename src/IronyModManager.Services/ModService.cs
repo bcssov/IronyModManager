@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -438,6 +438,7 @@ namespace IronyModManager.Services
                     newDefinition.ErrorColumn = definition.ErrorColumn;
                     newDefinition.ErrorLine = definition.ErrorLine;
                     newDefinition.ErrorMessage = definition.ErrorMessage;
+                    var provider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
                     newDefinition.FileNames = definition.FileNames;
                     foreach (var file in definitions.SelectMany(p => p.FileNames))
@@ -450,6 +451,7 @@ namespace IronyModManager.Services
                     newDefinition.Type = definition.Type;
                     newDefinition.UsedParser = definition.UsedParser;
                     newDefinition.ValueType = definition.ValueType;
+                    newDefinition.File = provider.GetFileName(newDefinition);
                     overwrittenDefs.Add(definition.TypeAndId, newDefinition);
                 }
                 processed++;
@@ -637,6 +639,7 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
+                modPatchExporter.ResetCache();
                 var patchName = GenerateCollectionPatchName(collectionName);
                 ModDefinitionPatchLoad?.Invoke(0);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
@@ -734,6 +737,7 @@ namespace IronyModManager.Services
                     ignoredIndex.InitMap(ignoredConflicts, true);
                     conflicts.IgnoredConflicts = ignoredIndex;
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
+                    conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
                     EvalModIgnoreDefinitions(conflicts);
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
