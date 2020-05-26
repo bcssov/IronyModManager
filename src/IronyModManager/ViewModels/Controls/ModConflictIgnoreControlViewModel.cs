@@ -4,7 +4,7 @@
 // Created          : 05-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-05-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModConflictIgnoreControlViewModel.cs" company="Mario">
 //     Mario
@@ -38,7 +38,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The mod service
         /// </summary>
-        private readonly IModService modService;
+        private readonly IModPatchCollectionService modPatchCollectionService;
 
         #endregion Fields
 
@@ -47,10 +47,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModConflictIgnoreControlViewModel" /> class.
         /// </summary>
-        /// <param name="modService">The mod service.</param>
-        public ModConflictIgnoreControlViewModel(IModService modService)
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
+        public ModConflictIgnoreControlViewModel(IModPatchCollectionService modPatchCollectionService)
         {
-            this.modService = modService;
+            this.modPatchCollectionService = modPatchCollectionService;
         }
 
         #endregion Constructors
@@ -114,7 +114,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var result = await modService.SaveIgnoredPathsAsync(ConflictResult, CollectionName);
+                var result = await modPatchCollectionService.SaveIgnoredPathsAsync(ConflictResult, CollectionName);
                 return new CommandResult<bool>(result, result ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 

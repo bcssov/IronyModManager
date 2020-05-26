@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -13,12 +13,13 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
 
@@ -52,12 +53,15 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="modWriter">The mod writer.</param>
+        /// <param name="modParser">The mod parser.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IGameService gameService, IModCollectionExporter modCollectionExporter,
-            IStorageProvider storageProvider, IMapper mapper) : base(gameService, storageProvider, mapper)
+        public ModCollectionService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.modCollectionExporter = modCollectionExporter;
         }
@@ -275,18 +279,6 @@ namespace IronyModManager.Services
                 collections.Add(collection);
                 return StorageProvider.SetModCollections(collections);
             }
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="modCollection">The mod collection.</param>
-        /// <returns>System.String.</returns>
-        private string GetPatchDirectory(IGame game, IModCollection modCollection)
-        {
-            var path = Path.Combine(game.UserDirectory, Constants.ModDirectory, GenerateCollectionPatchName(modCollection.Name));
-            return path;
         }
 
         #endregion Methods

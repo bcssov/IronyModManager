@@ -4,9 +4,9 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
-// <copyright file="StellarisOverwrittenParser.cs" company="Mario">
+// <copyright file="StellarisOverwrittenParserTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -27,7 +27,7 @@ namespace IronyModManager.Parser.Tests
     /// <summary>
     /// Class StellarisWholeTextParserTests.
     /// </summary>
-    public class StellarisOverwrittenParser
+    public class StellarisOverwrittenParserTests
     {
         #region Methods
 

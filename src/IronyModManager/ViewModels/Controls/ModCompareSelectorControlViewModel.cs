@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -39,7 +39,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The mod service
         /// </summary>
-        private readonly IModService modService;
+        private readonly IModPatchCollectionService modPatchCollectionService;
 
         #endregion Fields
 
@@ -48,10 +48,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCompareSelectorControlViewModel" /> class.
         /// </summary>
-        /// <param name="modService">The mod service.</param>
-        public ModCompareSelectorControlViewModel(IModService modService)
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
+        public ModCompareSelectorControlViewModel(IModPatchCollectionService modPatchCollectionService)
         {
-            this.modService = modService;
+            this.modPatchCollectionService = modPatchCollectionService;
         }
 
         #endregion Constructors
@@ -123,12 +123,12 @@ namespace IronyModManager.ViewModels.Controls
             if (!IsBinaryConflict)
             {
                 var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                var priorityDefinition = modService.EvalDefinitionPriority(col);
+                var priorityDefinition = modPatchCollectionService.EvalDefinitionPriority(col);
                 if (priorityDefinition?.Definition == null)
                 {
                     priorityDefinition.Definition = col.First();
                 }
-                var newDefinition = await modService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
+                var newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
                 if (newDefinition != null)
                 {
                     col.Add(newDefinition);

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -52,6 +52,16 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ILocalizationManager localizationManager;
 
         /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
@@ -69,16 +79,18 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
         /// <param name="modService">The mod service.</param>
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IModService modService, IGameService gameService, INotificationAction notificationAction, ILocalizationManager localizationManager,
+        public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService, INotificationAction notificationAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel, ILogger logger)
         {
             this.modService = modService;
+            this.modPatchCollectionService = modPatchCollectionService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
             this.gameService = gameService;
@@ -88,11 +100,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Constructors
-
-        /// <summary>
-        /// The logger
-        /// </summary>
-        private readonly ILogger logger;
 
         #region Properties
 
@@ -163,19 +170,19 @@ namespace IronyModManager.ViewModels.Controls
                 await TriggerOverlayAsync(true, message, overlayProgress);
                 var definitions = await Task.Run(() =>
                 {
-                    return modService.GetModObjects(game, CollectionMods.SelectedMods);
+                    return modPatchCollectionService.GetModObjects(game, CollectionMods.SelectedMods);
                 });
                 var conflicts = await Task.Run(() =>
                 {
                     if (definitions != null)
                     {
-                        return modService.FindConflicts(definitions);
+                        return modPatchCollectionService.FindConflicts(definitions);
                     }
                     return null;
                 });
                 var syncedConflicts = await Task.Run(async () =>
                 {
-                    return await modService.LoadPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+                    return await modPatchCollectionService.LoadPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
                 });
                 if (syncedConflicts != null)
                 {
@@ -226,7 +233,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationAction.ShowNotification(title, message, notificationType, 5);
                 }
                 catch (Exception ex)
-                {                    
+                {
                     var title = localizationManager.GetResource(LocalizationResources.SavingError.Title);
                     var message = localizationManager.GetResource(LocalizationResources.SavingError.Message);
                     logger.Error(ex);
@@ -284,7 +291,7 @@ namespace IronyModManager.ViewModels.Controls
                 AnalyzeModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
-            modService.ModDefinitionLoad += (percentage) =>
+            modPatchCollectionService.ModDefinitionLoad += (percentage) =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -296,7 +303,7 @@ namespace IronyModManager.ViewModels.Controls
                 TriggerOverlay(true, message, overlayProgress);
             };
 
-            modService.ModDefinitionAnalyze += (percentage) =>
+            modPatchCollectionService.ModDefinitionAnalyze += (percentage) =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -308,7 +315,7 @@ namespace IronyModManager.ViewModels.Controls
                 TriggerOverlay(true, message, overlayProgress);
             };
 
-            modService.ModDefinitionPatchLoad += (percentage) =>
+            modPatchCollectionService.ModDefinitionPatchLoad += (percentage) =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
