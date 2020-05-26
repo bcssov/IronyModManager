@@ -97,12 +97,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            IEnumerable<IDefinition> results;
+            keyType = false;
             if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
             {
                 keyType = true;
             }
-            results = ParseComplexRoot(args);
+            var results = ParseComplexRoot(args);
             if (results?.Count() > 0)
             {
                 foreach (var item in results)
