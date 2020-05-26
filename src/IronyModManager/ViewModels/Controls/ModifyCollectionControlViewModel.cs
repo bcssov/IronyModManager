@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -50,7 +50,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The mod service
         /// </summary>
-        private readonly IModService modService;
+        private readonly IModPatchCollectionService modPatchCollectionService;
 
         #endregion Fields
 
@@ -60,12 +60,12 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
-        /// <param name="modService">The mod service.</param>
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModService modService, ILocalizationManager localizationManager)
+        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager)
         {
             this.modCollectionService = modCollectionService;
-            this.modService = modService;
+            this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
         }
 
@@ -139,7 +139,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (modCollectionService.Save(copied))
                     {
                         await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
-                        await modService.CopyPatchCollectionAsync(ActiveCollection.Name, name);
+                        await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, name);
                         await TriggerOverlayAsync(false);
                         return new CommandResult<bool>(false, CommandState.Success);
                     }

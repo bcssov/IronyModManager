@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityClassConverterTests.cs" company="Mario">
 //     Mario
@@ -39,7 +39,7 @@ namespace IronyModManager.Tests
         {
             DISetup.SetupContainer();
             var converter = new DefinitionPriorityClassConverter();
-            var service = new Mock<IModService>();
+            var service = new Mock<IModPatchCollectionService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(true);
             DISetup.Container.RegisterInstance(service.Object);
             var def = new Definition() { ModName = "IronyModManager_fake" };
@@ -55,7 +55,7 @@ namespace IronyModManager.Tests
         {
             DISetup.SetupContainer();
             var converter = new DefinitionPriorityClassConverter();
-            var service = new Mock<IModService>();
+            var service = new Mock<IModPatchCollectionService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns((string p) =>
             {
                 if (p == "IronyModManager_fake3")
@@ -80,7 +80,7 @@ namespace IronyModManager.Tests
         public void Class_should_be_empty()
         {
             DISetup.SetupContainer();
-            var service = new Mock<IModService>();
+            var service = new Mock<IModPatchCollectionService>();
             service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns(false);
             DISetup.Container.RegisterInstance(service.Object);
             var converter = new DefinitionPriorityClassConverter();

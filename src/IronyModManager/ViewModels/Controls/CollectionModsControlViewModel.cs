@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -77,6 +77,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModCollectionService modCollectionService;
 
         /// <summary>
+        /// The mod patch collection service
+        /// </summary>
+        private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
@@ -125,6 +130,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="appStateService">The application state service.</param>
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="addNewCollection">The add new collection.</param>
@@ -136,7 +142,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
-            IAppStateService appStateService, IModService modService, IGameService gameService,
+            IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction)
@@ -153,6 +159,7 @@ namespace IronyModManager.ViewModels.Controls
             this.appAction = appAction;
             this.modService = modService;
             this.gameService = gameService;
+            this.modPatchCollectionService = modPatchCollectionService;
             SearchMods.ShowArrows = true;
         }
 
@@ -677,7 +684,7 @@ namespace IronyModManager.ViewModels.Controls
                                 async Task handleRenamePatchCollection()
                                 {
                                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
-                                    await modService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                    await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
                                     successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                                     await TriggerOverlayAsync(false);
@@ -932,7 +939,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (modCollectionService.Delete(collectionName))
                 {
-                    await modService.CleanPatchCollectionAsync(collectionName);
+                    await modPatchCollectionService.CleanPatchCollectionAsync(collectionName);
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
                     notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);

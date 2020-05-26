@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverter.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.Converters
             {
                 if (values[0] is IEnumerable<IDefinition> col && values[1] is IDefinition definition)
                 {
-                    var service = DIResolver.Get<IModService>();
+                    var service = DIResolver.Get<IModPatchCollectionService>();
                     if (!service.IsPatchMod(definition.ModName))
                     {
                         var locManager = DIResolver.Get<ILocalizationManager>();
