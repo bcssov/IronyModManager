@@ -17,6 +17,7 @@ using System.Linq;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Games.Stellaris
@@ -40,6 +41,11 @@ namespace IronyModManager.Parser.Games.Stellaris
             Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
             Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses
         };
+
+        /// <summary>
+        /// The key type
+        /// </summary>
+        private bool keyType = false;
 
         #endregion Fields
 
@@ -91,7 +97,12 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            IEnumerable<IDefinition> results = ParseComplexRoot(args);
+            IEnumerable<IDefinition> results;
+            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
+            {
+                keyType = true;
+            }
+            results = ParseComplexRoot(args);
             if (results?.Count() > 0)
             {
                 foreach (var item in results)
@@ -113,6 +124,23 @@ namespace IronyModManager.Parser.Games.Stellaris
         protected virtual bool CanParseStartsWith(CanParseArgs args)
         {
             return startsWithChecks.Any(s => args.File.StartsWith(s, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Evals the complex parse key value for identifier.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
+        {
+            if (keyType)
+            {
+                if (Common.Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return value.Value;
+                }
+            }
+            return base.EvalComplexParseKeyValueForId(value);
         }
 
         #endregion Methods
