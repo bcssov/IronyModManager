@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -91,15 +91,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            IEnumerable<IDefinition> results;
-            if (args.File.StartsWith(Common.Constants.Stellaris.PlanetClasses))
-            {
-                results = ParseComplexSecondLevel(args);
-            }
-            else
-            {
-                results = ParseComplexRoot(args);
-            }
+            IEnumerable<IDefinition> results = ParseComplexRoot(args);
             if (results?.Count() > 0)
             {
                 foreach (var item in results)
