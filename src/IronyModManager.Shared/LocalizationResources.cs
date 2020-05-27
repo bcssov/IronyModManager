@@ -130,6 +130,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class ImportOther
+            {
+                public const string Prefix = "Collection_Mods." + nameof(ImportOther) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Paradoxos = Prefix + "Paradoxos";
+            }
         }
         public static class Mod_Actions
         {

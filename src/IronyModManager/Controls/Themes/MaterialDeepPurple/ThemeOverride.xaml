@@ -8,6 +8,7 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBox.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBoxItem.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MenuItem.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
 
   <!--Individual styles-->
@@ -72,9 +73,15 @@
   <Styles.Resources>
     <Color x:Key="IronyForegroundColor">#FF000000</Color>
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
-    <Color x:Key="IronyThemeSortArrowColor">#FF0000</Color>
-    <SolidColorBrush x:Key="IronyThemeSortArrowBrush" Color="{DynamicResource IronyThemeSortArrowColor}" />
+    <Color x:Key="IronyAccentColor">#FF0000</Color>
+    <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
     <Color x:Key="IronyBackgroundColor">#FFFFFFFF</Color>
     <SolidColorBrush x:Key="IronyBackgroundBrush" Color="{DynamicResource IronyBackgroundColor}" />
+    <Color x:Key="IronyMidBackgroundColor">#673AB7</Color>
+    <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
+    <Color x:Key="IronyButtonBorderColor">#673AB7</Color>
+    <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
+    <Color x:Key="IronyForegroundMenuColor">#FFFFFF</Color>
+    <SolidColorBrush x:Key="IronyForegroundMenuBrush" Color="{DynamicResource IronyForegroundMenuColor}" />
   </Styles.Resources>
 </Styles>

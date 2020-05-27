@@ -92,6 +92,10 @@
         "ImportPrompt": {
             "Title": "Kolekcija postoji",
             "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Uvezi Paradoxos"
         }
     },
     "Mod_Actions": {

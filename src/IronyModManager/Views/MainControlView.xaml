@@ -17,7 +17,7 @@
           <Panel>
             <Menu Margin="20,0">
               <MenuItem Header="{Binding Shortcuts}" 
-                        Foreground="{DynamicResource IronyThemeSortArrowBrush}" VerticalAlignment="Center">
+                        Foreground="{DynamicResource IronyAccentBrush}" VerticalAlignment="Center">
                 <MenuItem Header="{Binding Wiki}" Command="{Binding WikiCommand}"
                           Foreground="{DynamicResource IronyForegroundBrush}"></MenuItem>
                 <MenuItem Header="{Binding Logs}" Command="{Binding LogsCommand}"

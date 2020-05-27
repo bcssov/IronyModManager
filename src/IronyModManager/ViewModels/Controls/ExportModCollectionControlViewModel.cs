@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 05-27-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -108,6 +108,26 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Collection_Mods.Import_Dialog_Title)]
         public virtual string ImportDialogTitle { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the import other paradoxos.
+        /// </summary>
+        /// <value>The import other paradoxos.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Paradoxos)]
+        public virtual string ImportOtherParadoxos { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradoxos command.
+        /// </summary>
+        /// <value>The import other paradoxos command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportOtherParadoxosCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other title.
+        /// </summary>
+        /// <value>The import other title.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Title)]
+        public virtual string ImportOtherTitle { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -132,6 +152,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, Shared.Constants.ZipExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }).DisposeWith(disposables);
+
+            ImportOtherParadoxosCommand = ReactiveCommand.Create(() =>
+            {
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
