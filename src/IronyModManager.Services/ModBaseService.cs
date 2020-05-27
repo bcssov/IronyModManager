@@ -246,7 +246,7 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         protected virtual string GetPatchDirectory(IGame game, IModCollection modCollection)
         {
-            return GetPatchDirectory(game, modCollection.Name);
+            return GetPatchDirectory(game, GenerateCollectionPatchName(modCollection.Name));
         }
 
         /// <summary>
