@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -37,7 +37,12 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The json extension
         /// </summary>
-        public const string JsonExtension = ".json";
+        public const string JsonExtension = "." + JsonExtensionWithoutDot;
+
+        /// <summary>
+        /// The json extension without dot
+        /// </summary>
+        public const string JsonExtensionWithoutDot = "json";
 
         /// <summary>
         /// The plugins path and name
@@ -48,6 +53,16 @@ namespace IronyModManager.Shared
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";
+
+        /// <summary>
+        /// The XML extension
+        /// </summary>
+        public const string XMLExtension = "." + XMLExtensionWithoutDot;
+
+        /// <summary>
+        /// The XML extension without dot
+        /// </summary>
+        public const string XMLExtensionWithoutDot = "xml";
 
         /// <summary>
         /// The zip extension

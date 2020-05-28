@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -18,7 +18,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Models;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using SharpCompress.Archives;
@@ -38,11 +41,34 @@ namespace IronyModManager.IO.Mods
         #region Fields
 
         /// <summary>
+        /// The mod directory
+        /// </summary>
+        private const string modDirectory = "mod/{0}";
+
+        /// <summary>
         /// The extraction options
         /// </summary>
         private static ExtractionOptions extractionOptions;
 
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModCollectionExporter" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public ModCollectionExporter(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -87,6 +113,77 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// import paradoxos as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> ImportParadoxosAsync(ModCollectionExporterParams parameters)
+        {
+            if (File.Exists(parameters.File))
+            {
+                void map(ParadoxosExportedList model)
+                {
+                    parameters.Mod.Name = model.ExportedList.Name;
+                    parameters.Mod.Mods = model.ExportedList.Mod.OrderBy(p => p.Order).Select(p =>
+                    {
+                        if (!p.FileName.StartsWith("mod", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return string.Format(modDirectory, p.FileName);
+                        }
+                        return p.FileName;
+                    }).ToList();
+                }
+                bool parseXML(string content)
+                {
+                    try
+                    {
+                        var model = ParseParadoxosAsXML(content);
+                        map(model);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                    }
+                    return false;
+                }
+                bool parseJson(string content)
+                {
+                    try
+                    {
+                        var model = ParseParadoxosAsJSON(content);
+                        map(model);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                    }
+                    return false;
+                }
+
+                var content = await File.ReadAllTextAsync(parameters.File);
+                if (!string.IsNullOrWhiteSpace(content))
+                {
+                    if (parameters.File.EndsWith(Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return parseXML(content);
+                    }
+                    else if (parameters.File.EndsWith(Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return parseJson(content);
+                    }
+                    else
+                    {
+                        // Try to guess and parse as both
+                        return parseXML(content) || parseJson(content);
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Gets the extraction options.
         /// </summary>
         /// <returns>ExtractionOptions.</returns>
@@ -118,7 +215,6 @@ namespace IronyModManager.IO.Mods
                 {
                     Directory.Delete(parameters.ModDirectory, true);
                 }
-                Directory.CreateDirectory(parameters.ModDirectory);
             }
             using var fileStream = File.OpenRead(parameters.File);
             using var reader = ReaderFactory.Open(fileStream);
@@ -151,6 +247,28 @@ namespace IronyModManager.IO.Mods
                 }
             }
             return importInstance ? result : true;
+        }
+
+        /// <summary>
+        /// Parses the paradoxos as json.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns>ParadoxosExportedList.</returns>
+        private ParadoxosExportedList ParseParadoxosAsJSON(string content)
+        {
+            return JsonDISerializer.Deserialize<ParadoxosExportedList>(content);
+        }
+
+        /// <summary>
+        /// Parses the paradoxos as XML.
+        /// </summary>
+        /// <param name="content">The content.</param>
+        /// <returns>ParadoxosExportedList.</returns>
+        private ParadoxosExportedList ParseParadoxosAsXML(string content)
+        {
+            var serializer = new XmlSerializer(typeof(ParadoxosExportedList));
+            var reader = new StringReader(content);
+            return serializer.Deserialize(reader) as ParadoxosExportedList;
         }
 
         #endregion Methods

@@ -92,6 +92,10 @@
         "ImportPrompt": {
             "Title": "Sammlung existiert",
             "Message": "Die Sammlung ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Importieren Paradoxos"
         }
     },
     "Mod_Actions": {

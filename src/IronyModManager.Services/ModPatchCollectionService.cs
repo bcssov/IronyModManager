@@ -598,6 +598,7 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Count() > 0)
                     {
+                        exportedConflicts = true;
                         ModDefinitionPatchLoad?.Invoke(98);
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {

@@ -92,6 +92,10 @@
         "ImportPrompt": {
             "Title": "Collection Exists",
             "Message": "Collection already exists and will be overwritten, do you want to proceed?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Import Paradoxos"
         }
     },
     "Mod_Actions": {
