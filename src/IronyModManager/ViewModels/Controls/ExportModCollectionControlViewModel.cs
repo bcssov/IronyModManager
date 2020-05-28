@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -119,7 +119,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the import other paradoxos command.
         /// </summary>
         /// <value>The import other paradoxos command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ImportOtherParadoxosCommand { get; protected set; }
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxosCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import other title.
@@ -154,8 +154,11 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 
-            ImportOtherParadoxosCommand = ReactiveCommand.Create(() =>
+            ImportOtherParadoxosCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, $"{Shared.Constants.JsonExtensionWithoutDot}, {Shared.Constants.XMLExtensionWithoutDot}",
+                    Shared.Constants.JsonExtensionWithoutDot, Shared.Constants.XMLExtensionWithoutDot);
+                return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

@@ -37,7 +37,12 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The json extension
         /// </summary>
-        public const string JsonExtension = ".json";
+        public const string JsonExtension = "." + JsonExtensionWithoutDot;
+
+        /// <summary>
+        /// The json extension without dot
+        /// </summary>
+        public const string JsonExtensionWithoutDot = "json";
 
         /// <summary>
         /// The plugins path and name
@@ -52,7 +57,12 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The XML extension
         /// </summary>
-        public const string XMLExtension = ".xml";
+        public const string XMLExtension = "." + XMLExtensionWithoutDot;
+
+        /// <summary>
+        /// The XML extension without dot
+        /// </summary>
+        public const string XMLExtensionWithoutDot = "xml";
 
         /// <summary>
         /// The zip extension

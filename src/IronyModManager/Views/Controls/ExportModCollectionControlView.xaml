@@ -15,7 +15,7 @@
                     Background="{DynamicResource IronyMidBackgroundBrush}"
                     Foreground="{DynamicResource IronyForegroundMenuBrush}" 
                     MaxHeight="30">
-            <MenuItem Header="{Binding ImportOtherParadoxos}"></MenuItem>
+            <MenuItem Header="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"></MenuItem>
           </MenuItem>
         </Menu>
       </Border>

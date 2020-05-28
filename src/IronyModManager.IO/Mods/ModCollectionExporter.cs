@@ -41,6 +41,11 @@ namespace IronyModManager.IO.Mods
         #region Fields
 
         /// <summary>
+        /// The mod directory
+        /// </summary>
+        private const string modDirectory = "mod/{0}";
+
+        /// <summary>
         /// The extraction options
         /// </summary>
         private static ExtractionOptions extractionOptions;
@@ -119,7 +124,14 @@ namespace IronyModManager.IO.Mods
                 void map(ParadoxosExportedList model)
                 {
                     parameters.Mod.Name = model.ExportedList.Name;
-                    parameters.Mod.Mods = model.ExportedList.Mod.OrderBy(p => p.Order).Select(p => p.FileName);
+                    parameters.Mod.Mods = model.ExportedList.Mod.OrderBy(p => p.Order).Select(p =>
+                    {
+                        if (!p.FileName.StartsWith("mod", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return string.Format(modDirectory, p.FileName);
+                        }
+                        return p.FileName;
+                    }).ToList();
                 }
                 bool parseXML(string content)
                 {

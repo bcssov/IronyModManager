@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -183,6 +183,42 @@ namespace IronyModManager.ViewModels.Controls
         public event ModReorderedDelegate ModReordered;
 
         #endregion Events
+
+        #region Enums
+
+        /// <summary>
+        /// Enum ImportActionType
+        /// </summary>
+        public enum ImportActionType
+        {
+            /// <summary>
+            /// The import
+            /// </summary>
+            Import,
+
+            /// <summary>
+            /// The export
+            /// </summary>
+            Export
+        }
+
+        /// <summary>
+        /// Enum ImportProviderType
+        /// </summary>
+        public enum ImportProviderType
+        {
+            /// <summary>
+            /// The default
+            /// </summary>
+            Default,
+
+            /// <summary>
+            /// The paradoxos
+            /// </summary>
+            Paradoxos
+        }
+
+        #endregion Enums
 
         #region Properties
 
@@ -545,10 +581,42 @@ namespace IronyModManager.ViewModels.Controls
         /// import collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
-        protected virtual async Task ImportCollectionAsync(string path)
+        /// <param name="type">The type.</param>
+        protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
+            async Task<IModCollection> importDefault()
+            {
+                var collection = await modCollectionService.ImportAsync(path);
+                if (collection != null)
+                {
+                    collection.IsSelected = true;
+                    if (modCollectionService.Save(collection))
+                    {
+                        return collection;
+                    }
+                }
+                return null;
+            }
+
+            Task<IModCollection> importParadoxos(IModCollection importData)
+            {
+                if (importData != null)
+                {
+                    importData.IsSelected = true;
+                    if (modCollectionService.Save(importData))
+                    {
+                        return Task.FromResult(importData);
+                    }
+                }
+                return Task.FromResult((IModCollection)null);
+            }
+
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
-            var importData = await modCollectionService.GetImportedCollectionDetailsAsync(path);
+            var importData = type switch
+            {
+                ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
+                _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
+            };
             if (importData == null)
             {
                 await TriggerOverlayAsync(false);
@@ -567,14 +635,16 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (proceed)
             {
-                var collection = await modCollectionService.ImportAsync(path);
-                if (collection != null)
+                var result = type switch
                 {
-                    collection.IsSelected = true;
-                    modCollectionService.Save(collection);
+                    ImportProviderType.Paradoxos => await importParadoxos(importData),
+                    _ => await importDefault(),
+                };
+                if (result != null)
+                {
                     LoadModCollections();
                     var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                    var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = collection.Name });
+                    var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
                     notificationAction.ShowNotification(title, message, NotificationType.Success);
                 }
             }
@@ -721,17 +791,20 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ExportCollection.ExportCommand.Select(p => KeyValuePair.Create(true, p)), ExportCollection.ImportCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
+                    ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
+                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)))
+                .Subscribe(s =>
                 {
-                    if (s.Value.State == CommandState.Success)
+                    if (s.Item2.State == CommandState.Success)
                     {
-                        if (s.Key)
+                        if (s.Item1 == ImportActionType.Export)
                         {
-                            ExportCollectionAsync(s.Value.Result).ConfigureAwait(true);
+                            ExportCollectionAsync(s.Item2.Result).ConfigureAwait(true);
                         }
                         else
                         {
-                            ImportCollectionAsync(s.Value.Result).ConfigureAwait(true);
+                            ImportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
                         }
                     }
                 }).DisposeWith(disposables);

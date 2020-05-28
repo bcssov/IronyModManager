@@ -9,7 +9,7 @@
 // <copyright file="Paradoxos.cs" company="Mario">
 //     Mario
 // </copyright>
-// <summary></summary>
+// <summary>Public because well... XML serializer.</summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,8 @@ namespace IronyModManager.IO.Mods.Models
     /// <summary>
     /// Class ParadoxosExportedList.
     /// </summary>
-    internal class ParadoxosExportedList
+    [Serializable, XmlRoot("exportedlist")]
+    public class ParadoxosExportedList
     {
         #region Properties
 
@@ -47,7 +48,7 @@ namespace IronyModManager.IO.Mods.Models
     /// <summary>
     /// Class ParadoxosList.
     /// </summary>
-    internal class ParadoxosList
+    public class ParadoxosList
     {
         #region Properties
 
@@ -105,7 +106,7 @@ namespace IronyModManager.IO.Mods.Models
     /// <summary>
     /// Class ParadoxosMod.
     /// </summary>
-    internal class ParadoxosMod
+    public class ParadoxosMod
     {
         #region Properties
 
