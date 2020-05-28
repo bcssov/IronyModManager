@@ -281,7 +281,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache, modOrder);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -290,7 +290,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache, modOrder);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -705,7 +705,8 @@ namespace IronyModManager.Services
         /// <param name="conflicts">The conflicts.</param>
         /// <param name="definitions">The definitions.</param>
         /// <param name="fileConflictCache">The file conflict cache.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, Dictionary<string, bool> fileConflictCache)
+        /// <param name="modOrder">The mod order.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, Dictionary<string, bool> fileConflictCache, IList<string> modOrder)
         {
             var validDefinitions = new HashSet<IDefinition>();
             foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
@@ -746,7 +747,7 @@ namespace IronyModManager.Services
                         var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
                         if (validConflictsGroup.Count() > 1)
                         {
-                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p).Definition);
+                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
                             foreach (var item in filteredConflicts)
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
