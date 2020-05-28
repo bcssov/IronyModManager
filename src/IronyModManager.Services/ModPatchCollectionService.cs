@@ -264,8 +264,9 @@ namespace IronyModManager.Services
         /// Finds the conflicts.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <param name="modOrder">The mod order.</param>
         /// <returns>IIndexedDefinitions.</returns>
-        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions)
+        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder)
         {
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
@@ -280,7 +281,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -289,7 +290,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions, fileConflictCache);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -303,7 +304,7 @@ namespace IronyModManager.Services
                 IDefinition definition;
                 if (conflicted.Count() > 0)
                 {
-                    definition = EvalDefinitionPriority(conflicted).Definition;
+                    definition = EvalDefinitionPriority(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                     definitions = conflicted;
                 }
                 else
@@ -319,7 +320,7 @@ namespace IronyModManager.Services
                         }
                     }
                     definitions = valid;
-                    definition = EvalDefinitionPriority(item.Select(p => p)).Definition;
+                    definition = EvalDefinitionPriority(valid.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                 }
                 if (!overwrittenDefs.ContainsKey(definition.TypeAndId))
                 {

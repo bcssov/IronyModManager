@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -90,8 +90,9 @@ namespace IronyModManager.Services.Common
         /// Finds the conflicts.
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
+        /// <param name="modOrder">The mod order.</param>
         /// <returns>IConflictResult.</returns>
-        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions);
+        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder);
 
         /// <summary>
         /// Gets the mod objects.

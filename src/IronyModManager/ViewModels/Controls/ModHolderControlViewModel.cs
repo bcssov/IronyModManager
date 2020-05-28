@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -176,7 +176,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (definitions != null)
                     {
-                        return modPatchCollectionService.FindConflicts(definitions);
+                        return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList());
                     }
                     return null;
                 });
