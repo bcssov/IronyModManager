@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -299,12 +299,27 @@ namespace IronyModManager.Services
             foreach (var item in overwritten.GroupBy(p => p.TypeAndId))
             {
                 var conflicted = conflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                IEnumerable<IDefinition> definitions = item.Select(p => p);
-                IDefinition definition = EvalDefinitionPriority(item.Select(p => p)).Definition;
+                IEnumerable<IDefinition> definitions;
+                IDefinition definition;
                 if (conflicted.Count() > 0)
                 {
                     definition = EvalDefinitionPriority(conflicted).Definition;
                     definitions = conflicted;
+                }
+                else
+                {
+                    var valid = new List<IDefinition>();
+                    var all = item.Select(p => p);
+                    foreach (var def in all)
+                    {
+                        var hasOverrides = all.Any(p => (p.Dependencies?.Any(p => p.Equals(def.ModName))).GetValueOrDefault());
+                        if (!hasOverrides)
+                        {
+                            valid.Add(def);
+                        }
+                    }
+                    definitions = valid;
+                    definition = EvalDefinitionPriority(item.Select(p => p)).Definition;
                 }
                 if (!overwrittenDefs.ContainsKey(definition.TypeAndId))
                 {
