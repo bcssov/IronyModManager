@@ -1,26 +1,27 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Services
+// Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 05-27-2020
+// Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-27-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
-// <copyright file="ParadoxosJSON.cs" company="Mario">
+// <copyright file="Paradoxos.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace IronyModManager.Services.Schema
+namespace IronyModManager.IO.Mods.Models
 {
     /// <summary>
-    /// Class ParadoxosJSONExportedList.
+    /// Class ParadoxosExportedList.
     /// </summary>
-    internal class ParadoxosJSONExportedList
+    internal class ParadoxosExportedList
     {
         #region Properties
 
@@ -29,22 +30,24 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The exported list.</value>
         [JsonProperty("exportedlist")]
-        public ParadoxosJSONList ExportedList { get; set; }
+        [XmlElement(ElementName = "list")]
+        public ParadoxosList ExportedList { get; set; }
 
         /// <summary>
         /// Gets or sets the game identifier.
         /// </summary>
         /// <value>The game identifier.</value>
         [JsonProperty("gameID")]
+        [XmlAttribute(AttributeName = "gameID")]
         public int GameID { get; set; }
 
         #endregion Properties
     }
 
     /// <summary>
-    /// Class ParadoxosJSONList.
+    /// Class ParadoxosList.
     /// </summary>
-    internal class ParadoxosJSONList
+    internal class ParadoxosList
     {
         #region Properties
 
@@ -53,6 +56,7 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value><c>true</c> if [custom order]; otherwise, <c>false</c>.</value>
         [JsonProperty("customOrder")]
+        [XmlAttribute(AttributeName = "customOrder")]
         public bool CustomOrder { get; set; }
 
         /// <summary>
@@ -60,43 +64,48 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The description.</value>
         [JsonProperty("descr")]
-        public string Descr { get; set; }
+        [XmlElement(ElementName = "descr")]
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
         /// </summary>
         /// <value>The language.</value>
         [JsonProperty("lang")]
-        public string Lang { get; set; }
+        [XmlElement(ElementName = "lang")]
+        public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the launchargs.
+        /// Gets or sets the launch arguments.
         /// </summary>
-        /// <value>The launchargs.</value>
+        /// <value>The launch arguments.</value>
         [JsonProperty("launchargs")]
-        public string Launchargs { get; set; }
+        [XmlElement(ElementName = "launchargs")]
+        public string LaunchArgs { get; set; }
 
         /// <summary>
         /// Gets or sets the mod.
         /// </summary>
         /// <value>The mod.</value>
         [JsonProperty("mod")]
-        public IList<ParadoxosJSONMod> Mod { get; set; }
+        [XmlElement(ElementName = "mod")]
+        public List<ParadoxosMod> Mod { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
         [JsonProperty("name")]
+        [XmlAttribute(AttributeName = "name")]
         public string Name { get; set; }
 
         #endregion Properties
     }
 
     /// <summary>
-    /// Class ParadoxosJSONMod.
+    /// Class ParadoxosMod.
     /// </summary>
-    internal class ParadoxosJSONMod
+    internal class ParadoxosMod
     {
         #region Properties
 
@@ -105,6 +114,7 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The name of the file.</value>
         [JsonProperty("fileName")]
+        [XmlAttribute(AttributeName = "fileName")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -112,6 +122,7 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The name of the mod.</value>
         [JsonProperty("modName")]
+        [XmlAttribute(AttributeName = "modName")]
         public string ModName { get; set; }
 
         /// <summary>
@@ -119,6 +130,7 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The order.</value>
         [JsonProperty("order")]
+        [XmlAttribute(AttributeName = "order")]
         public int Order { get; set; }
 
         /// <summary>
@@ -126,6 +138,7 @@ namespace IronyModManager.Services.Schema
         /// </summary>
         /// <value>The remote identifier.</value>
         [JsonProperty("remoteID")]
+        [XmlAttribute(AttributeName = "remoteID")]
         public string RemoteID { get; set; }
 
         #endregion Properties

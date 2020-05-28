@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -81,6 +81,13 @@ namespace IronyModManager.Services.Common
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
         Task<IModCollection> ImportAsync(string file);
+
+        /// <summary>
+        /// Imports the paradoxos asynchronous.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        Task<IModCollection> ImportParadoxosAsync(string file);
 
         /// <summary>
         /// Saves the specified collection.

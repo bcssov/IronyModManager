@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -119,7 +119,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Exists(string name)
+        public virtual bool Exists(string name)
         {
             var all = GetAll();
             return all.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
@@ -131,7 +131,7 @@ namespace IronyModManager.Services
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ExportAsync(string file, IModCollection modCollection)
+        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection)
         {
             var game = GameService.GetSelected();
             if (game == null || modCollection == null)
@@ -192,7 +192,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
-        public async Task<IModCollection> GetImportedCollectionDetailsAsync(string file)
+        public virtual async Task<IModCollection> GetImportedCollectionDetailsAsync(string file)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -237,6 +237,30 @@ namespace IronyModManager.Services
                 {
                     return instance;
                 }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import paradoxos as an asynchronous operation.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual async Task<IModCollection> ImportParadoxosAsync(string file)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = Create();
+            if (await modCollectionExporter.ImportParadoxosAsync(new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = instance
+            }))
+            {
+                return instance;
             }
             return null;
         }

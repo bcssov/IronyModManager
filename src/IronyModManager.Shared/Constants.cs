@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -48,6 +48,11 @@ namespace IronyModManager.Shared
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";
+
+        /// <summary>
+        /// The XML extension
+        /// </summary>
+        public const string XMLExtension = ".xml";
 
         /// <summary>
         /// The zip extension
