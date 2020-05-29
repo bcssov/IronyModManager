@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -35,6 +35,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <returns>IEnumerable&lt;IGameType&gt;.</returns>
         IEnumerable<IGameType> GetGames();
+
+        /// <summary>
+        /// Gets the game settings.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IGameSettings&gt;.</returns>
+        IEnumerable<IGameSettings> GetGameSettings();
 
         /// <summary>
         /// Gets the mod collections.
@@ -86,6 +92,13 @@ namespace IronyModManager.Storage.Common
         /// <param name="appState">State of the application.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool SetAppState(IAppState appState);
+
+        /// <summary>
+        /// Sets the game settings.
+        /// </summary>
+        /// <param name="gameSettings">The game settings.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool SetGameSettings(IEnumerable<IGameSettings> gameSettings);
 
         /// <summary>
         /// Sets the mod collections.
