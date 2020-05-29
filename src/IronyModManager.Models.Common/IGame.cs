@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -29,10 +29,22 @@ namespace IronyModManager.Models.Common
         #region Properties
 
         /// <summary>
+        /// Gets or sets the executable location.
+        /// </summary>
+        /// <value>The executable location.</value>
+        string ExecutableLocation { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the launch arguments.
+        /// </summary>
+        /// <value>The launch arguments.</value>
+        string LaunchArguments { get; set; }
 
         /// <summary>
         /// Gets or sets the log location.
@@ -51,6 +63,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The steam application identifier.</value>
         int SteamAppId { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether [steam install exists].
+        /// </summary>
+        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
+        bool SteamInstallExists { get; }
 
         /// <summary>
         /// Gets or sets the type.
