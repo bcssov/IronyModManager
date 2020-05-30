@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -31,16 +31,28 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets the executable location.
+        /// </summary>
+        /// <value>The executable location.</value>
+        public virtual string ExecutableLocation { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         public virtual bool IsSelected { get; set; }
 
         /// <summary>
+        /// Gets or sets the launch arguments.
+        /// </summary>
+        /// <value>The launch arguments.</value>
+        public virtual string LaunchArguments { get; set; }
+
+        /// <summary>
         /// Gets or sets the log location.
         /// </summary>
         /// <value>The log location.</value>
-        public string LogLocation { get; set; }
+        public virtual string LogLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -54,6 +66,18 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The steam application identifier.</value>
         public virtual int SteamAppId { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether [steam install exists].
+        /// </summary>
+        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
+        public virtual bool SteamInstallExists
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(WorkshopDirectory);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type.

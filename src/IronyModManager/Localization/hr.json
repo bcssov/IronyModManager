@@ -100,6 +100,7 @@
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
+        "LaunchGame": "Pokreni igru",
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "Conflict": "Rješavanje sukoba",
         "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
@@ -158,6 +159,17 @@
         "Save": "Spremi",
         "Cancel": "Otkaži",
         "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
+    },
+    "Options": {
+        "Name": "Opcije",
+        "Close": "Zatvori",
+        "NavigateToExe": "...",
+        "ClearExe": "X",
+        "GameExecutable": "Izvršna datoteka",
+        "GameArgs": "Argumenti",
+        "Dialog": {
+            "Title": "Nađi izvršnu datoteku igre"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

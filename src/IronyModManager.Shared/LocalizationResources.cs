@@ -141,6 +141,7 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Mod_Actions) + ".";
             public const string Apply = Prefix + "Apply";
+            public const string LaunchGame = Prefix + "LaunchGame";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
             public const string Conflict = Prefix + "Conflict";
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
@@ -211,6 +212,21 @@ namespace IronyModManager.Shared
             public const string Save = Prefix + "Save";
             public const string Cancel = Prefix + "Cancel";
             public const string Watermark = Prefix + "Watermark";
+        }
+        public static class Options
+        {
+            public const string Prefix = nameof(Options) + ".";
+            public const string Name = Prefix + "Name";
+            public const string Close = Prefix + "Close";
+            public const string NavigateToExe = Prefix + "NavigateToExe";
+            public const string ClearExe = Prefix + "ClearExe";
+            public const string GameExecutable = Prefix + "GameExecutable";
+            public const string GameArgs = Prefix + "GameArgs";
+            public static class Dialog
+            {
+                public const string Prefix = "Options." + nameof(Dialog) + ".";
+                public const string Title = Prefix + "Title";
+            }
         }
         public static class Notifications
         {

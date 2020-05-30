@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -31,6 +31,11 @@ namespace IronyModManager.Services
     public class GameService : BaseService, IGameService
     {
         #region Fields
+
+        /// <summary>
+        /// The steam launch arguments
+        /// </summary>
+        private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
         /// The preferences service
@@ -65,15 +70,63 @@ namespace IronyModManager.Services
             var prefs = preferencesService.Get();
 
             var registeredGames = StorageProvider.GetGames();
+            var gameSettings = StorageProvider.GetGameSettings();
             var games = new List<IGame>();
 
             foreach (var item in registeredGames)
             {
-                var game = InitModel(item, prefs.Game);
+                var game = InitModel(item, gameSettings.FirstOrDefault(p => p.Type.Equals(item.Name)), prefs.Game);
                 games.Add(game);
             }
 
             return games;
+        }
+
+        /// <summary>
+        /// Gets the default executable location.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GetDefaultExecutableLocation(IGame game)
+        {
+            if (game.SteamInstallExists)
+            {
+                return $"{SteamLaunchArgs}{game.SteamAppId}";
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the launch arguments.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GetLaunchArguments(IGame game)
+        {
+            var exeLoc = game.ExecutableLocation ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(exeLoc))
+            {
+                return string.Empty;
+            }
+            if (exeLoc.StartsWith(SteamLaunchArgs, StringComparison.OrdinalIgnoreCase))
+            {
+                if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
+                {
+                    return $"{exeLoc.Trim('/')}//{game.LaunchArguments}";
+                }
+                else
+                {
+                    return $"{exeLoc.Trim('/')}";
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
+                {
+                    return $"\"{exeLoc}\" \"{game.LaunchArguments}\"";
+                }
+            }
+            return exeLoc;
         }
 
         /// <summary>
@@ -90,7 +143,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">Game not selected</exception>
+        /// <exception cref="System.InvalidOperationException">Game not selected</exception>
         public virtual bool Save(IGame game)
         {
             if (!game.IsSelected)
@@ -98,6 +151,8 @@ namespace IronyModManager.Services
                 throw new InvalidOperationException("Game not selected");
             }
             var prefs = preferencesService.Get();
+
+            SaveGameSettings(game);
 
             return preferencesService.Save(Mapper.Map(game, prefs));
         }
@@ -108,12 +163,12 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">games or selectedTheme.</exception>
+        /// <exception cref="System.ArgumentNullException">games or selectedGame.</exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
             if (games == null || games.Count() == 0 || selectedGame == null)
             {
-                throw new ArgumentNullException("games or selectedTheme.");
+                throw new ArgumentNullException("games or selectedGame.");
             }
 
             var currentSelection = GetSelected();
@@ -131,16 +186,19 @@ namespace IronyModManager.Services
                 }
             }
             selectedGame.IsSelected = true;
-            return Save(selectedGame);
+            var storedSelectedGame = Get().FirstOrDefault(p => p.Type.Equals(selectedGame.Type));
+            storedSelectedGame.IsSelected = true;
+            return Save(storedSelectedGame);
         }
 
         /// <summary>
         /// Initializes the model.
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
+        /// <param name="gameSettings">The game settings.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns>IGame.</returns>
-        protected virtual IGame InitModel(IGameType gameType, string selectedGame)
+        protected virtual IGame InitModel(IGameType gameType, IGameSettings gameSettings, string selectedGame)
         {
             var game = GetModelInstance<IGame>();
             game.Type = gameType.Name;
@@ -150,7 +208,43 @@ namespace IronyModManager.Services
             game.SteamAppId = gameType.SteamAppId;
             game.WorkshopDirectory = gameType.WorkshopDirectory;
             game.LogLocation = gameType.LogLocation;
+            bool setExeLocation = true;
+            if (gameSettings != null)
+            {
+                if (!string.IsNullOrWhiteSpace(gameSettings.LaunchArguments))
+                {
+                    game.LaunchArguments = gameSettings.LaunchArguments;
+                }
+                if (!string.IsNullOrWhiteSpace(gameSettings.ExecutableLocation))
+                {
+                    setExeLocation = false;
+                    game.ExecutableLocation = gameSettings.ExecutableLocation;
+                }
+            }
+            if (setExeLocation)
+            {
+                game.ExecutableLocation = GetDefaultExecutableLocation(game);
+            }
             return game;
+        }
+
+        /// <summary>
+        /// Saves the game settings.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void SaveGameSettings(IGame game)
+        {
+            var gameSettings = StorageProvider.GetGameSettings().ToList();
+            var settings = gameSettings.FirstOrDefault(p => p.Type.Equals(game.Type));
+            if (settings == null)
+            {
+                settings = GetModelInstance<IGameSettings>();
+                settings.Type = game.Type;
+                gameSettings.Add(settings);
+            }
+            settings.ExecutableLocation = game.ExecutableLocation;
+            settings.LaunchArguments = game.LaunchArguments;
+            StorageProvider.SetGameSettings(gameSettings);
         }
 
         #endregion Methods

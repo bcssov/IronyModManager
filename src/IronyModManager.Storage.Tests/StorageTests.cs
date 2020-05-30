@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -119,6 +119,25 @@ namespace IronyModManager.Storage.Tests
             var result = storage.GetModCollections();
             result.Count().Should().Be(1);
             result.FirstOrDefault().Name.Should().Be("fake");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_same_game_settings_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_game_settings_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<IGameSettings>>(It.IsAny<IEnumerable<IGameSettings>>())).Returns(() =>
+            {
+                return dbMock.GameSettings.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetGameSettings();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Type.Should().Be("fake");
         }
 
         /// <summary>
@@ -336,6 +355,27 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_overwrite_and_return_same_game_settings_objects.
+        /// </summary>
+        [Fact]
+        public void Should_overwrite_and_return_same_game_settings_objects()
+        {
+            DISetup.SetupContainer();
+            var col = new List<IGameSettings>()
+            {
+                new GameSettings()
+                {
+                    Type = "fake2"
+                }
+            };
+            var storage = new Storage(GetDbMock(), DIResolver.Get<IMapper>());
+            storage.SetGameSettings(col);
+            var result = storage.GetGameSettings();
+            result.Count().Should().Be(1);
+            result.First().Type.Should().Be(col.First().Type);
+        }
+
+        /// <summary>
         /// Defines the test method Should_add_and_return_added_theme.
         /// </summary>
         [Fact]
@@ -434,6 +474,13 @@ namespace IronyModManager.Storage.Tests
                     new ModCollection()
                     {
                         Name = "fake"
+                    }
+                },
+                GameSettings = new List<IGameSettings>()
+                {
+                    new GameSettings()
+                    {
+                        Type = "fake"
                     }
                 }
             };

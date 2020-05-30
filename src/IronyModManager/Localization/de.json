@@ -84,7 +84,7 @@
         "Filter": "Suchmods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Order": "Bestellen",
+        "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
@@ -100,6 +100,7 @@
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
+        "LaunchGame": "Spiel startet",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
@@ -158,6 +159,17 @@
         "Save": "Speichern",
         "Cancel": "Stornieren",
         "Watermark": "Verwenden Sie # für Kommentare. Neue Zeile ist eine neue Regel."
+    },
+    "Options": {
+        "Name": "Optionen",
+        "Close": "Schließen",
+        "NavigateToExe": "...",
+        "ClearExe": "X",
+        "GameExecutable": "Spiel ausführbar",
+        "GameArgs": "Spiel Args",
+        "Dialog": {
+            "Title": "Finde eine ausführbare Spieldatei"
+        }
     },
     "Notifications": {
         "CollectionCreated": {

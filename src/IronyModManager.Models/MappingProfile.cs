@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -47,6 +47,7 @@ namespace IronyModManager.Models
             CreateMap<IModCollection, ModCollection>().ReverseMap();
             CreateMap<IConflictResult, ConflictResult>().ReverseMap();
             CreateMap<IPriorityDefinitionResult, PriorityDefinitionResult>().ReverseMap();
+            CreateMap<IGameSettings, GameSettings>().ReverseMap();
         }
 
         #endregion Constructors

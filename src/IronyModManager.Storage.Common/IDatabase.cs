@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-04-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
@@ -38,6 +38,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The games.</value>
         IList<IGameType> Games { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game settings.
+        /// </summary>
+        /// <value>The game settings.</value>
+        IEnumerable<IGameSettings> GameSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the mod collection.

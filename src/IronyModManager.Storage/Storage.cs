@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-29-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -93,6 +93,19 @@ namespace IronyModManager.Storage
             lock (dbLock)
             {
                 var result = Mapper.Map<List<IGameType>>(Database.Games);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the game settings.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IGameSettings&gt;.</returns>
+        public virtual IEnumerable<IGameSettings> GetGameSettings()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<List<IGameSettings>>(Database.GameSettings);
                 return result;
             }
         }
@@ -187,6 +200,7 @@ namespace IronyModManager.Storage
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
@@ -218,6 +232,20 @@ namespace IronyModManager.Storage
             lock (dbLock)
             {
                 Database.AppState = Mapper.Map<IAppState>(appState);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Sets the game settings.
+        /// </summary>
+        /// <param name="gameSettings">The game settings.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetGameSettings(IEnumerable<IGameSettings> gameSettings)
+        {
+            lock (dbLock)
+            {
+                Database.GameSettings = Mapper.Map<List<IGameSettings>>(gameSettings);
                 return true;
             }
         }

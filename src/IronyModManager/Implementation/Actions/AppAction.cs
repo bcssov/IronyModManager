@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -18,7 +18,9 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using IronyModManager.Shared;
+using Avalonia.Threading;
 
 namespace IronyModManager.Implementation.Actions
 {
@@ -33,13 +35,26 @@ namespace IronyModManager.Implementation.Actions
         #region Methods
 
         /// <summary>
-        /// Copies the specified URL.
+        /// copy as an asynchronous operation.
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="text">The URL.</param>
         /// <returns>Task.</returns>
-        public async Task CopyAsync(string url)
+        public async Task CopyAsync(string text)
         {
-            await Application.Current.Clipboard.SetTextAsync(url);
+            await Application.Current.Clipboard.SetTextAsync(text);
+        }
+
+        /// <summary>
+        /// Exits the application asynchronous.
+        /// </summary>
+        /// <returns>Task.</returns>
+        public async Task ExitAppAsync()
+        {
+            await Task.Delay(50);
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Shutdown();
+            });
         }
 
         // Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
@@ -47,20 +62,20 @@ namespace IronyModManager.Implementation.Actions
         /// Opens the specified URL.
         /// Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
         /// </summary>
-        /// <param name="url">The URL.</param>
+        /// <param name="command">The URL.</param>
         /// <returns>Task.</returns>
-        public Task OpenAsync(string url)
+        public Task OpenAsync(string command)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                ShellExec($"xdg-open {url}");
+                ShellExec($"xdg-open {command}");
             }
             else
             {
                 using var process = Process.Start(new ProcessStartInfo
                 {
-                    FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? url : "open",
-                    Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"-e {url}" : "",
+                    FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? command : "open",
+                    Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"-e {command}" : "",
                     CreateNoWindow = true,
                     UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 });

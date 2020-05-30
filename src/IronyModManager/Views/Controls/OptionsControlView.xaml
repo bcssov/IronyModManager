@@ -1,0 +1,34 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="IronyModManager.Views.Controls.OptionsControlView">
+  <Panel>
+    <Button Content="{Binding Options}" Command="{Binding OptionsCommand}"
+            BorderThickness="0,0,0,0" Background="Transparent"
+            Foreground="{DynamicResource IronyAccentBrush}"></Button>
+    <Popup PlacementMode="Bottom" StaysOpen="True" IsOpen="{Binding IsOpen}"
+           Topmost="True" ObeyScreenEdges="True" HorizontalOffset="-60">
+      <Grid RowDefinitions="1*,1*,1*">
+        <Panel Grid.Row="0">
+          <Grid ColumnDefinitions="2*,2*,1*,1*">
+            <TextBlock Text="{Binding GameExecutable}" Grid.Column="0" VerticalAlignment="Center"></TextBlock>
+            <TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Grid.Column="1" MaxWidth="120"></TextBox>
+            <Button Content="{Binding Navigate}" Command="{Binding NavigateCommand}" Grid.Column="2"></Button>
+            <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" Grid.Column="3"></Button>
+          </Grid>
+        </Panel>
+        <Panel Grid.Row="1">
+          <Grid ColumnDefinitions="2*,4*">
+            <TextBlock Text="{Binding GameArgs}" Grid.Column="0" VerticalAlignment="Center"></TextBlock>
+            <TextBox Text="{Binding Game.LaunchArguments}" Grid.Column="1" MaxWidth="120"></TextBox>
+          </Grid>
+        </Panel>
+        <Panel Grid.Row="2">
+          <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
+        </Panel>
+      </Grid>
+    </Popup>
+  </Panel>
+</UserControl>
