@@ -164,7 +164,7 @@
         "Name": "Opcije",
         "Close": "Zatvori",
         "NavigateToExe": "...",
-        "ClearExe": "X",
+        "Reset": "X",
         "GameExecutable": "Izvršna datoteka",
         "GameArgs": "Argumenti",
         "Dialog": {

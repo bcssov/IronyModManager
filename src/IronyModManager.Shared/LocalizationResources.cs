@@ -219,7 +219,7 @@ namespace IronyModManager.Shared
             public const string Name = Prefix + "Name";
             public const string Close = Prefix + "Close";
             public const string NavigateToExe = Prefix + "NavigateToExe";
-            public const string ClearExe = Prefix + "ClearExe";
+            public const string Reset = Prefix + "Reset";
             public const string GameExecutable = Prefix + "GameExecutable";
             public const string GameArgs = Prefix + "GameArgs";
             public static class Dialog

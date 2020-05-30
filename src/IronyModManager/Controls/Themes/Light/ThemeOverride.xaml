@@ -71,13 +71,15 @@
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyAccentColor">#FF0000</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
-    <Color x:Key="IronyBackgroundColor">#FF000000</Color>
-    <SolidColorBrush x:Key="IronyBackgroundBrush" Color="{DynamicResource IronyBackgroundColor}" />
+    <Color x:Key="IronyEditorBackgroundColor">#FF000000</Color>
+    <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
     <Color x:Key="IronyMidBackgroundColor">#FFF5F5F5</Color>
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#FFAAAAAA</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
     <Color x:Key="IronyForegroundMenuColor">#FF000000</Color>
     <SolidColorBrush x:Key="IronyForegroundMenuBrush" Color="{DynamicResource IronyForegroundMenuColor}" />
+    <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
+    <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>
 </Styles>

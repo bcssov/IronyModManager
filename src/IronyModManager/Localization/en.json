@@ -164,7 +164,7 @@
         "Name": "Options",
         "Close": "Close",
         "NavigateToExe": "...",
-        "ClearExe": "X",
+        "Reset": "X",
         "GameExecutable": "Game Executable",
         "GameArgs": "Game Args",
         "Dialog": {

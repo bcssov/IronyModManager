@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -85,9 +85,9 @@ namespace IronyModManager
         /// <param name="e">The <see cref="UnhandledExceptionEventArgs" /> instance containing the event data.</param>
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            if (e.ExceptionObject is Exception)
+            if (e.ExceptionObject is Exception exception)
             {
-                LogError((Exception)e.ExceptionObject);
+                LogError(exception);
             }
         }
 

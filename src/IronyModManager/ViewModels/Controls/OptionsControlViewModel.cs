@@ -12,9 +12,10 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
-using System.Reactive;
 using System;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
@@ -44,6 +45,16 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The arguments changed
+        /// </summary>
+        private IDisposable argsChanged;
+
+        /// <summary>
+        /// The is reloading
+        /// </summary>
+        private bool isReloading = false;
 
         #endregion Fields
 
@@ -140,14 +151,20 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
-        [StaticLocalization(LocalizationResources.Options.ClearExe)]
+        [StaticLocalization(LocalizationResources.Options.Reset)]
         public virtual string Reset { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset arguments command.
+        /// </summary>
+        /// <value>The reset arguments command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetArgsCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset command.
         /// </summary>
         /// <value>The reset command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ResetCommand { get; protected set; }
+        public virtual ReactiveCommand<Unit, Unit> ResetExeCommand { get; protected set; }
 
         #endregion Properties
 
@@ -175,21 +192,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            Game = gameService.GetSelected();
+            SetGame(gameService.GetSelected());
 
             OptionsCommand = ReactiveCommand.Create(() =>
             {
                 ToggleOpen();
-                if (!IsOpen)
-                {
-                    Save();
-                }
             }).DisposeWith(disposables);
 
             CloseCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = false;
-                Save();
             }).DisposeWith(disposables);
 
             NavigateCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -204,9 +216,15 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            ResetCommand = ReactiveCommand.Create(() =>
+            ResetExeCommand = ReactiveCommand.Create(() =>
             {
                 Game.ExecutableLocation = gameService.GetDefaultExecutableLocation(Game);
+                Save();
+            }).DisposeWith(disposables);
+
+            ResetArgsCommand = ReactiveCommand.Create(() =>
+            {
+                Game.LaunchArguments = string.Empty;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -218,7 +236,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
-            Game = game;
+            SetGame(game);
             base.OnSelectedGameChanged(game);
         }
 
@@ -231,7 +249,23 @@ namespace IronyModManager.ViewModels.Controls
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             gameService.Save(game);
+            SetGame(game);
+        }
+
+        /// <summary>
+        /// Sets the game.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void SetGame(IGame game)
+        {
+            isReloading = true;
+            argsChanged?.Dispose();
             Game = game;
+            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isReloading).Subscribe(s =>
+            {
+                Save();
+            }).DisposeWith(Disposables);
+            isReloading = false;
         }
 
         #endregion Methods

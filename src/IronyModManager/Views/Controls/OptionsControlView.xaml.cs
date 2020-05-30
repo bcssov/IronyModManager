@@ -13,9 +13,12 @@
 // ***********************************************************************
 using System.Reactive.Disposables;
 using Avalonia.Markup.Xaml;
+using IronyModManager.Common;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
+using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
@@ -47,10 +50,11 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            LayoutUpdated += (sender, args) =>
-            {
-                ViewModel.ForceClose();
-            };
+            MessageBus.Current.Listen<WindowSizeChangedEventArgs>()
+                .SubscribeObservable(x =>
+                {
+                    ViewModel.ForceClose();
+                }).DisposeWith(disposables);
             base.OnActivated(disposables);
         }
 
