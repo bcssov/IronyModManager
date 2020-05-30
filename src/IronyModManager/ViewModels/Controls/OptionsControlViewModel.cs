@@ -95,7 +95,7 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IGame Game { get; protected set; }
 
         /// <summary>
-        /// [ERROR: Unknown property access] the game arguments.
+        /// Gets or sets the game arguments.
         /// </summary>
         /// <value>The game arguments.</value>
         [StaticLocalization(LocalizationResources.Options.GameArgs)]
