@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -437,6 +437,49 @@ namespace IronyModManager.Services.Tests
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchArguments(game);
             args.Should().Be("\"test.exe\" \"args\"");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_default_exe_location.
+        /// </summary>
+        [Fact]
+        public void Should_return_default_exe_location()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                WorkshopDirectory = "test",
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultExecutableLocation(game);
+            args.Should().Be("steam://run/1");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_empty_default_exe_location.
+        /// </summary>
+        [Fact]
+        public void Should_return_empty_default_exe_location()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",         
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultExecutableLocation(game);
+            args.Should().BeNullOrEmpty();
         }
     }
 }

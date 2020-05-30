@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-18-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -57,18 +57,21 @@ namespace IronyModManager.ViewModels
         /// <param name="languageControl">The language control.</param>
         /// <param name="gameControl">The game control.</param>
         /// <param name="modControl">The mod control.</param>
+        /// <param name="options">The options.</param>
         /// <param name="appAction">The URL action.</param>
         /// <param name="gameService">The game service.</param>
         public MainControlViewModel(ThemeControlViewModel themeControl,
             LanguageControlViewModel languageControl,
             GameControlViewModel gameControl,
             ModHolderControlViewModel modControl,
+            OptionsControlViewModel options,
             IAppAction appAction, IGameService gameService)
         {
             ThemeSelector = themeControl;
             LanguageSelector = languageControl;
             GameSelector = gameControl;
             ModHolder = modControl;
+            Options = options;
             this.appAction = appAction;
             this.gameService = gameService;
         }
@@ -120,6 +123,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The mod holder.</value>
         public virtual ModHolderControlViewModel ModHolder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>The options.</value>
+        public virtual OptionsControlViewModel Options { get; protected set; }
 
         /// <summary>
         /// Gets or sets the shortcuts.

@@ -159,6 +159,17 @@
         "Cancel": "Stornieren",
         "Watermark": "Verwenden Sie # für Kommentare. Neue Zeile ist eine neue Regel."
     },
+    "Options": {
+        "Name": "Optionen",
+        "Close": "Schließen",
+        "NavigateToExe": "...",
+        "ClearExe": "X",
+        "GameExecutable": "Spiel ausführbar",
+        "GameArgs": "Spiel Args",
+        "Dialog": {
+            "Title": "Finde eine ausführbare Spieldatei"
+        }
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Sammlung erstellt",

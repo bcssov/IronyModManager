@@ -159,6 +159,17 @@
         "Cancel": "Otkaži",
         "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
     },
+    "Options": {
+        "Name": "Opcije",
+        "Close": "Zatvori",
+        "NavigateToExe": "...",
+        "ClearExe": "X",
+        "GameExecutable": "Izvršna datoteka",
+        "GameArgs": "Argumenti",
+        "Dialog": {
+            "Title": "Nađi izvršnu datoteku igre"
+        }
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Kolekcija kreirana",

@@ -9,6 +9,7 @@
     <StackPanel Orientation="Vertical">
       <Panel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+          <ContentControl Margin="20,0" Content="{Binding Options}"></ContentControl>
           <ContentControl Content="{Binding ThemeSelector}"></ContentControl>
         </StackPanel>
         <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
@@ -16,7 +17,7 @@
           <ContentControl Content="{Binding LanguageSelector}"></ContentControl>
           <Panel>
             <Menu Margin="20,0">
-              <MenuItem Header="{Binding Shortcuts}" 
+              <MenuItem Header="{Binding Shortcuts}"
                         Foreground="{DynamicResource IronyAccentBrush}" VerticalAlignment="Center">
                 <MenuItem Header="{Binding Wiki}" Command="{Binding WikiCommand}"
                           Foreground="{DynamicResource IronyForegroundBrush}"></MenuItem>

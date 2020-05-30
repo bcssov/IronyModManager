@@ -159,6 +159,17 @@
         "Cancel": "Cancel",
         "Watermark": "Use # for comments. New line is a new rule."
     },
+    "Options": {
+        "Name": "Options",
+        "Close": "Close",
+        "NavigateToExe": "...",
+        "ClearExe": "X",
+        "GameExecutable": "Game Executable",
+        "GameArgs": "Game Args",
+        "Dialog": {
+            "Title": "Find game executable"
+        }
+    },
     "Notifications": {
         "CollectionCreated": {
             "Title": "Collection Created",

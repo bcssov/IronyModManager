@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -83,6 +83,20 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the default executable location.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GetDefaultExecutableLocation(IGame game)
+        {
+            if (game.SteamInstallExists)
+            {
+                return $"{SteamLaunchArgs}{game.SteamAppId}";
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
         /// Gets the launch arguments.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -125,7 +139,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">Game not selected</exception>
+        /// <exception cref="System.InvalidOperationException">Game not selected</exception>
         public virtual bool Save(IGame game)
         {
             if (!game.IsSelected)
@@ -145,12 +159,12 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">games or selectedTheme.</exception>
+        /// <exception cref="System.ArgumentNullException">games or selectedGame.</exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
             if (games == null || games.Count() == 0 || selectedGame == null)
             {
-                throw new ArgumentNullException("games or selectedTheme.");
+                throw new ArgumentNullException("games or selectedGame.");
             }
 
             var currentSelection = GetSelected();
@@ -168,7 +182,9 @@ namespace IronyModManager.Services
                 }
             }
             selectedGame.IsSelected = true;
-            return Save(selectedGame);
+            var storedSelectedGame = Get().FirstOrDefault(p => p.Type.Equals(selectedGame.Type));
+            storedSelectedGame.IsSelected = true;
+            return Save(storedSelectedGame);
         }
 
         /// <summary>
@@ -201,9 +217,9 @@ namespace IronyModManager.Services
                     game.ExecutableLocation = gameSettings.ExecutableLocation;
                 }
             }
-            if (setExeLocation && game.SteamInstallExists)
+            if (setExeLocation)
             {
-                game.ExecutableLocation = $"{SteamLaunchArgs}{game.SteamAppId}";
+                game.ExecutableLocation = GetDefaultExecutableLocation(game);
             }
             return game;
         }
@@ -215,7 +231,7 @@ namespace IronyModManager.Services
         protected virtual void SaveGameSettings(IGame game)
         {
             var gameSettings = StorageProvider.GetGameSettings().ToList();
-            var settings = gameSettings.FirstOrDefault(p => p.Type.Equals(game.Name));
+            var settings = gameSettings.FirstOrDefault(p => p.Type.Equals(game.Type));
             if (settings == null)
             {
                 settings = GetModelInstance<IGameSettings>();

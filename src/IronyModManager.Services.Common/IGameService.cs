@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IEnumerable&lt;IGame&gt;.</returns>
         IEnumerable<IGame> Get();
+
+        /// <summary>
+        /// Gets the default executable location.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>System.String.</returns>
+        string GetDefaultExecutableLocation(IGame game);
 
         /// <summary>
         /// Gets the launch arguments.
