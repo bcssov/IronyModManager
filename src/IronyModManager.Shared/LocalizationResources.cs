@@ -141,6 +141,7 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = nameof(Mod_Actions) + ".";
             public const string Apply = Prefix + "Apply";
+            public const string LaunchGame = Prefix + "LaunchGame";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
             public const string Conflict = Prefix + "Conflict";
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";

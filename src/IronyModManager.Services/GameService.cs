@@ -104,6 +104,10 @@ namespace IronyModManager.Services
         public virtual string GetLaunchArguments(IGame game)
         {
             var exeLoc = game.ExecutableLocation ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(exeLoc))
+            {
+                return string.Empty;
+            }
             if (exeLoc.StartsWith(SteamLaunchArgs, StringComparison.OrdinalIgnoreCase))
             {
                 if (!string.IsNullOrWhiteSpace(game.LaunchArguments))

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -40,6 +40,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModHolderControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
 
         /// <summary>
         /// The game service
@@ -82,11 +87,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="notificationAction">The notification action.</param>
+        /// <param name="appAction">The application action.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService, INotificationAction notificationAction, ILocalizationManager localizationManager,
+        public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
+            INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel, ILogger logger)
         {
             this.modService = modService;
@@ -95,6 +102,7 @@ namespace IronyModManager.ViewModels.Controls
             this.localizationManager = localizationManager;
             this.gameService = gameService;
             this.logger = logger;
+            this.appAction = appAction;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -146,6 +154,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The installed mods.</value>
         public virtual InstalledModsControlViewModel InstalledMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the launch game.
+        /// </summary>
+        /// <value>The launch game.</value>
+        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame)]
+        public virtual string LaunchGame { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the launch game command.
+        /// </summary>
+        /// <value>The launch game command.</value>
+        public virtual ReactiveCommand<Unit, Unit> LaunchGameCommand { get; protected set; }
 
         #endregion Properties
 
@@ -289,6 +310,20 @@ namespace IronyModManager.ViewModels.Controls
             AnalyzeCommand = ReactiveCommand.Create(() =>
             {
                 AnalyzeModsAsync().ConfigureAwait(true);
+            }).DisposeWith(disposables);
+
+            LaunchGameCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var game = gameService.GetSelected();
+                if (game != null)
+                {
+                    var cmd = gameService.GetLaunchArguments(game);
+                    if (!string.IsNullOrWhiteSpace(cmd))
+                    {
+                        await appAction.OpenAsync(cmd);
+                        await appAction.ExitAppAsync();
+                    }
+                }
             }).DisposeWith(disposables);
 
             modPatchCollectionService.ModDefinitionLoad += (percentage) =>

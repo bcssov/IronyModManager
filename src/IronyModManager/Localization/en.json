@@ -100,6 +100,7 @@
     },
     "Mod_Actions": {
         "Apply": "Apply",
+        "LaunchGame": "Launch Game",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",

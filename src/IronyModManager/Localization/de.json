@@ -100,6 +100,7 @@
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
+        "LaunchGame": "Spiel startet",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
