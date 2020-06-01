@@ -167,6 +167,7 @@
         "Reset": "X",
         "GameExecutable": "Game Executable",
         "GameArgs": "Game Args",
+        "RefreshMods": "Refresh Descriptors Before Playing",
         "Dialog": {
             "Title": "Find game executable"
         }

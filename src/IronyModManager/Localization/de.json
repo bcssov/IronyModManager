@@ -167,6 +167,7 @@
         "Reset": "X",
         "GameExecutable": "Spiel ausführbar",
         "GameArgs": "Spiel Args",
+        "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
         "Dialog": {
             "Title": "Finde eine ausführbare Spieldatei"
         }

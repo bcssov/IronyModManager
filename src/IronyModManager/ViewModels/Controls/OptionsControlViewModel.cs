@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -55,6 +55,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The is reloading
         /// </summary>
         private bool isReloading = false;
+
+        /// <summary>
+        /// The refresh descriptors changed
+        /// </summary>
+        private IDisposable refreshDescriptorsChanged;
 
         #endregion Fields
 
@@ -146,6 +151,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The options command.</value>
         public virtual ReactiveCommand<Unit, Unit> OptionsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the refresh descriptors.
+        /// </summary>
+        /// <value>The refresh descriptors.</value>
+        [StaticLocalization(LocalizationResources.Options.RefreshMods)]
+        public virtual string RefreshDescriptors { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset.
@@ -248,6 +260,7 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected();
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
+            game.RefreshDescriptors = Game.RefreshDescriptors;
             gameService.Save(game);
             SetGame(game);
         }
@@ -260,8 +273,13 @@ namespace IronyModManager.ViewModels.Controls
         {
             isReloading = true;
             argsChanged?.Dispose();
+            refreshDescriptorsChanged?.Dispose();
             Game = game;
             argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isReloading).Subscribe(s =>
+            {
+                Save();
+            }).DisposeWith(Disposables);
+            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isReloading).Subscribe(s =>
             {
                 Save();
             }).DisposeWith(Disposables);

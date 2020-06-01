@@ -222,6 +222,7 @@ namespace IronyModManager.Shared
             public const string Reset = Prefix + "Reset";
             public const string GameExecutable = Prefix + "GameExecutable";
             public const string GameArgs = Prefix + "GameArgs";
+            public const string RefreshMods = Prefix + "RefreshMods";
             public static class Dialog
             {
                 public const string Prefix = "Options." + nameof(Dialog) + ".";
