@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -39,6 +40,11 @@ namespace IronyModManager.Storage
         /// The root path
         /// </summary>
         private static string _rootPath = string.Empty;
+
+        /// <summary>
+        /// The storage item
+        /// </summary>
+        private static StorageItem storageItem;
 
         #endregion Fields
 
@@ -71,7 +77,7 @@ namespace IronyModManager.Storage
         /// <returns>IDictionary&lt;System.String, System.Object&gt;.</returns>
         public IDictionary<string, object> GetData(string id)
         {
-            string filePath = GetfilePath(id);
+            string filePath = GetFilePath(id, true);
             List<StoreItem> storeItems = null;
             if (File.Exists(filePath))
             {
@@ -96,7 +102,7 @@ namespace IronyModManager.Storage
         /// <param name="values">The values.</param>
         public void SetData(string id, IDictionary<string, object> values)
         {
-            string filePath = GetfilePath(id);
+            string filePath = GetFilePath(id);
             var list = values.Select(kvp => new StoreItem() { Name = kvp.Key, Value = kvp.Value, Type = FormatTypeName(kvp.Value) });
             string serialized = JsonConvert.SerializeObject(list, new JsonSerializerSettings() { Formatting = Formatting.None, TypeNameHandling = TypeNameHandling.None });
 
@@ -161,15 +167,77 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
-        /// Getfiles the path.
+        /// Gets the file path.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="lookForOlderVersion">if set to <c>true</c> [look for older version].</param>
         /// <returns>System.String.</returns>
-        private string GetfilePath(string id)
+        private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
-            return Path.Combine(RootPath, $"{id}{Shared.Constants.JsonExtension}");
+            var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
+            var path = Path.Combine(RootPath, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
+            if (File.Exists(path))
+            {
+                return path;
+            }
+            if (lookForOlderVersion)
+            {
+                if (storageItem == null)
+                {
+                    var dbs = new List<StorageItem>();
+                    foreach (var item in Directory.EnumerateFiles(RootPath, $"*{Shared.Constants.JsonExtension}"))
+                    {
+                        if (item.Contains("_"))
+                        {
+                            var versionData = item.Split("_")[1].Replace(Shared.Constants.JsonExtension, string.Empty);
+                            dbs.Add(new StorageItem()
+                            {
+                                FileName = item,
+                                Version = new Version(versionData)
+                            });
+                        }
+                        else
+                        {
+                            dbs.Add(new StorageItem()
+                            {
+                                FileName = item,
+                                Version = new Version(0, 0, 0, 0)
+                            });
+                        }
+                    }
+                    storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
+                }
+                return storageItem.FileName;
+            }
+            return path;
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class StorageItem.
+        /// </summary>
+        private class StorageItem
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the name of the file.
+            /// </summary>
+            /// <value>The name of the file.</value>
+            public string FileName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the version.
+            /// </summary>
+            /// <value>The version.</value>
+            public Version Version { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
