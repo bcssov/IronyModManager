@@ -167,6 +167,7 @@
         "Reset": "X",
         "GameExecutable": "Izvršna datoteka",
         "GameArgs": "Argumenti",
+        "RefreshMods": "Osvježite deskriptore prije startanja igre",
         "Dialog": {
             "Title": "Nađi izvršnu datoteku igre"
         }

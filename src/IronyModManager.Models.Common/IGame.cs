@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -57,6 +57,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The name.</value>
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [refresh descriptors].
+        /// </summary>
+        /// <value><c>true</c> if [refresh descriptors]; otherwise, <c>false</c>.</value>
+        bool RefreshDescriptors { get; set; }
 
         /// <summary>
         /// Gets or sets the steam application identifier.

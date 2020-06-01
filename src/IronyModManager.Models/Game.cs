@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -60,6 +60,12 @@ namespace IronyModManager.Models
         /// <value>The name.</value>
         [DynamicLocalization(LocalizationResources.Games.Prefix, nameof(Type))]
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [refresh descriptors].
+        /// </summary>
+        /// <value><c>true</c> if [refresh descriptors]; otherwise, <c>false</c>.</value>
+        public virtual bool RefreshDescriptors { get; set; }
 
         /// <summary>
         /// Gets or sets the steam application identifier.

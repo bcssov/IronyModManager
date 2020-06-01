@@ -4,7 +4,7 @@
 // Created          : 05-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="GameSettings.cs" company="Mario">
 //     Mario
@@ -39,6 +39,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The launch arguments.</value>
         public virtual string LaunchArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [refresh descriptors].
+        /// </summary>
+        /// <value><c>true</c> if [refresh descriptors]; otherwise, <c>false</c>.</value>
+        public virtual bool RefreshDescriptors { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
