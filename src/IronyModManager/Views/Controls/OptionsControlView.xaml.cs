@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 06-01-2020
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -51,6 +51,11 @@ namespace IronyModManager.Views.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             MessageBus.Current.Listen<WindowSizeChangedEventArgs>()
+                .SubscribeObservable(x =>
+                {
+                    ViewModel.ForceClose();
+                }).DisposeWith(disposables);
+            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
                 .SubscribeObservable(x =>
                 {
                     ViewModel.ForceClose();
