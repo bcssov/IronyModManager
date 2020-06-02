@@ -812,29 +812,16 @@ namespace IronyModManager.Services
                 }
                 else if (allConflicts.Count() == 1)
                 {
-                    if (fileConflictCache.TryGetValue(def.FileCI, out var result))
+                    if (allConflicts.FirstOrDefault().ValueType == Parser.Common.ValueType.Binary)
                     {
-                        if (result)
-                        {
-                            if (!conflicts.Contains(def) && IsValidDefinitionType(def))
-                            {
-                                conflicts.Add(def);
-                            }
-                        }
+                        fileConflictCache.TryAdd(def.FileCI, false);
                     }
                     else
                     {
-                        var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
-                        if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                        if (fileConflictCache.TryGetValue(def.FileCI, out var result))
                         {
-                            var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                            if (hasOverrides.GetValueOrDefault())
+                            if (result)
                             {
-                                fileConflictCache.TryAdd(def.FileCI, false);
-                            }
-                            else
-                            {
-                                fileConflictCache.TryAdd(def.FileCI, true);
                                 if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
                                     conflicts.Add(def);
@@ -843,7 +830,27 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            fileConflictCache.TryAdd(def.FileCI, false);
+                            var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
+                            if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                            {
+                                var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
+                                if (hasOverrides.GetValueOrDefault())
+                                {
+                                    fileConflictCache.TryAdd(def.FileCI, false);
+                                }
+                                else
+                                {
+                                    fileConflictCache.TryAdd(def.FileCI, true);
+                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    {
+                                        conflicts.Add(def);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                fileConflictCache.TryAdd(def.FileCI, false);
+                            }
                         }
                     }
                 }
