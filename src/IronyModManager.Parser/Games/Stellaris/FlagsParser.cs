@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser.Games.Stellaris
 
             var def = GetDefinitionInstance();
             def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
-            def.Id = Path.GetFileName(args.File);
+            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             def.ValueType = valType;
             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType));
             return new List<IDefinition> { def };

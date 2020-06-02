@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -113,7 +113,7 @@ namespace IronyModManager.Parser.Generic
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
             def.Code = string.Join(Environment.NewLine, args.Lines);
-            def.Id = Path.GetFileName(args.File);
+            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             def.ValueType = Common.ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
