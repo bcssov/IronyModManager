@@ -83,7 +83,7 @@ namespace IronyModManager.Parser.Generic
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: Common.Constants.BinaryType));
             def.Code = string.Empty;
-            def.Id = Path.GetFileName(args.File);
+            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             def.ValueType = Common.ValueType.Binary;
             return new List<IDefinition> { def };
         }
