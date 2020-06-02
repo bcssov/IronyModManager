@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CodexMicroORM.Core.Collections;
 
 namespace IronyModManager.Parser.Common.Definitions
@@ -103,6 +104,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The name of the mod.</value>
         string ModName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod path.
+        /// </summary>
+        /// <value>The mod path.</value>
+        [JsonIgnore]
+        string ModPath { get; set; }
 
         /// <summary>
         /// Gets the parent directory.

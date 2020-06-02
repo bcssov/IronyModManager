@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -154,7 +154,7 @@ namespace IronyModManager.IO.Mods
                 if (parameters.Definitions?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
                     results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
                         GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, false));
                 }
@@ -162,7 +162,7 @@ namespace IronyModManager.IO.Mods
                 if (parameters.OrphanConflicts?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
                     results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
                         GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, false));
                 }
@@ -170,7 +170,7 @@ namespace IronyModManager.IO.Mods
                 if (parameters.OverwrittenConflicts?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
                     results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
                         GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, true));
                 }
@@ -274,14 +274,13 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// copy binaries as an asynchronous operation.
+        /// Copies the binaries asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="modRootPath">The mod root path.</param>
         /// <param name="patchRootPath">The patch root path.</param>
-        /// <param name="checkIfExists">if set to <c>true</c> [check if exists].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string modRootPath, string patchRootPath, bool checkIfExists)
+        /// <param name="checkIfExists">The check if exists.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
+        private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string patchRootPath, bool checkIfExists)
         {
             var tasks = new List<Task>();
             var streams = new List<Stream>();
@@ -301,7 +300,7 @@ namespace IronyModManager.IO.Mods
                 {
                     continue;
                 }
-                var stream = reader.GetStream(modRootPath, def.File);
+                var stream = reader.GetStream(def.ModPath, def.File);
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));

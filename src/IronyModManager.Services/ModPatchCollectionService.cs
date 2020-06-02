@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -457,7 +457,7 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Loads the patch state asynchronous.
+        /// load patch state as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="collectionName">Name of the collection.</param>
@@ -523,9 +523,8 @@ namespace IronyModManager.Services
                         if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
+                            OrphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
                             PatchName = patchName
                         }))
                         {
@@ -546,9 +545,8 @@ namespace IronyModManager.Services
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OverwrittenConflicts = conflictResult.OverwrittenConflicts.GetAll(),
+                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
                             PatchName = patchName
                         });
                     }
@@ -593,9 +591,8 @@ namespace IronyModManager.Services
                         if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OrphanConflicts = conflictResult.OrphanConflicts.GetAll(),
+                            OrphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
                             PatchName = patchName
                         }))
                         {
@@ -619,9 +616,8 @@ namespace IronyModManager.Services
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OverwrittenConflicts = conflictResult.OverwrittenConflicts.GetAll(),
+                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                            ModPath = Path.Combine(Constants.ModDirectory, patchName),
                             PatchName = patchName
                         });
                         ModDefinitionPatchLoad?.Invoke(99);
@@ -760,29 +756,16 @@ namespace IronyModManager.Services
                 }
                 else if (allConflicts.Count() == 1)
                 {
-                    if (fileConflictCache.TryGetValue(def.FileCI, out var result))
+                    if (allConflicts.FirstOrDefault().ValueType == Parser.Common.ValueType.Binary)
                     {
-                        if (result)
-                        {
-                            if (!conflicts.Contains(def) && IsValidDefinitionType(def))
-                            {
-                                conflicts.Add(def);
-                            }
-                        }
+                        fileConflictCache.TryAdd(def.FileCI, false);
                     }
                     else
                     {
-                        var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
-                        if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                        if (fileConflictCache.TryGetValue(def.FileCI, out var result))
                         {
-                            var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                            if (hasOverrides.GetValueOrDefault())
+                            if (result)
                             {
-                                fileConflictCache.TryAdd(def.FileCI, false);
-                            }
-                            else
-                            {
-                                fileConflictCache.TryAdd(def.FileCI, true);
                                 if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
                                     conflicts.Add(def);
@@ -791,7 +774,27 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            fileConflictCache.TryAdd(def.FileCI, false);
+                            var fileDefs = indexedDefinitions.GetByFile(def.FileCI);
+                            if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
+                            {
+                                var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
+                                if (hasOverrides.GetValueOrDefault())
+                                {
+                                    fileConflictCache.TryAdd(def.FileCI, false);
+                                }
+                                else
+                                {
+                                    fileConflictCache.TryAdd(def.FileCI, true);
+                                    if (!conflicts.Contains(def) && IsValidDefinitionType(def))
+                                    {
+                                        conflicts.Add(def);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                fileConflictCache.TryAdd(def.FileCI, false);
+                            }
                         }
                     }
                 }
@@ -913,9 +916,8 @@ namespace IronyModManager.Services
                         exportResult = await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            Definitions = exportPatches,
+                            Definitions = PopulateModPath(exportPatches, GetCollectionMods(allMods)),
                             RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                            ModPath = definitionMod.FileName,
                             PatchName = patchName
                         });
                     }
@@ -1104,6 +1106,24 @@ namespace IronyModManager.Services
                 });
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
+            }
+            return definitions;
+        }
+
+        /// <summary>
+        /// Populates the mod path.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
+        {
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName)).FullPath;
+                }
             }
             return definitions;
         }

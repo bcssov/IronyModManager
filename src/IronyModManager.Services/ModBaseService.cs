@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -154,6 +154,53 @@ namespace IronyModManager.Services
             mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
             mod.Tags = new List<string>() { "Fixes" };
             return mod;
+        }
+
+        /// <summary>
+        /// Gets all mod collections internal.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
+        protected virtual IEnumerable<IModCollection> GetAllModCollectionsInternal()
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return new List<IModCollection>();
+            }
+            var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
+            if (collections.Count() > 0)
+            {
+                return collections.OrderBy(p => p.Name);
+            }
+            return new List<IModCollection>();
+        }
+
+        /// <summary>
+        /// Gets the collection mods.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null)
+        {
+            if (mods == null)
+            {
+                mods = GetInstalledModsInternal(GameService.GetSelected(), false);
+            }
+            var collectionMods = new List<IMod>();
+            var collections = GetAllModCollectionsInternal();
+            if (collections?.Count() > 0)
+            {
+                var collection = collections.FirstOrDefault(p => p.IsSelected);
+                foreach (var item in collection.Mods)
+                {
+                    var mod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
+                    if (mod != null)
+                    {
+                        collectionMods.Add(mod);
+                    }
+                }
+            }
+            return collectionMods;
         }
 
         /// <summary>

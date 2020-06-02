@@ -174,17 +174,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
         public virtual IEnumerable<IModCollection> GetAll()
         {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return new List<IModCollection>();
-            }
-            var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
-            if (collections.Count() > 0)
-            {
-                return collections.OrderBy(p => p.Name);
-            }
-            return new List<IModCollection>();
+            return GetAllModCollectionsInternal();
         }
 
         /// <summary>

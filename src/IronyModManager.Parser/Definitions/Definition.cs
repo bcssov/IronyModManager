@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 06-02-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
@@ -275,6 +276,13 @@ namespace IronyModManager.Parser.Definitions
         public string ModName { get; set; }
 
         /// <summary>
+        /// Gets or sets the mod path.
+        /// </summary>
+        /// <value>The mod path.</value>
+        [JsonIgnore]
+        public string ModPath { get; set; }
+
+        /// <summary>
         /// Gets the parent directory.
         /// </summary>
         /// <value>The parent directory.</value>
@@ -383,6 +391,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(FileCI) => FileCI,
                 nameof(ParentDirectoryCI) => ParentDirectoryCI,
                 nameof(FileNames) => FileNames,
+                nameof(ModPath) => ModPath,
                 _ => Id,
             };
         }
