@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 06-05-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -92,6 +92,97 @@ namespace IronyModManager.Parser
         /// <returns>IIndexedDefinitions.</returns>
         public IEnumerable<IDefinition> Parse(ParserManagerArgs args)
         {
+            static bool isValidLine(string line)
+            {
+                string text = line ?? string.Empty;
+                return !string.IsNullOrWhiteSpace(text) && !text.Trim().StartsWith(Constants.Scripts.ScriptCommentId);
+            }
+            // Check if empty text file
+            if (Shared.Constants.TextExtensions.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)) &&
+                (args.Lines == null || args.Lines.Count() == 0 || args.Lines.Count(p => isValidLine(p)) == 0))
+            {
+                var definition = DIResolver.Get<IDefinition>();
+                definition.Code = "# This mod contains empty code. Possibly to overwrite other mods.";
+                definition.ContentSHA = args.ContentSHA;
+                definition.Dependencies = args.ModDependencies;
+                definition.File = args.File;
+                definition.Id = Path.GetFileName(args.File).ToLowerInvariant();
+                definition.Type = GetType(args.File);
+                definition.ModName = args.ModName;
+                definition.UsedParser = string.Empty;
+                definition.ValueType = Common.ValueType.EmptyFile;
+                return new List<IDefinition>() { definition };
+            }
+            return InvokeParsers(args);
+        }
+
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetType(string file)
+        {
+            var formatted = Path.GetDirectoryName(file);
+            var type = Path.GetExtension(file).Trim('.');
+            if (!Shared.Constants.TextExtensions.Any(s => s.EndsWith(type, StringComparison.OrdinalIgnoreCase)))
+            {
+                type = Constants.TxtType;
+            }
+            return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
+        }
+
+        /// <summary>
+        /// Gets the preferred parser.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="location">The location.</param>
+        /// <returns>System.String.</returns>
+        private IEnumerable<string> GetPreferredParsers(string game, string location)
+        {
+            location = location.ToLowerInvariant();
+            IEnumerable<string> parser = null;
+            if (parserMaps.TryGetValue(game, out var maps))
+            {
+                if (maps.TryGetValue(location, out var value))
+                {
+                    parser = value.Select(p => p.PreferredParser);
+                }
+            }
+            else
+            {
+                var path = string.Format(Constants.ParserMapPath, game);
+                if (File.Exists(path))
+                {
+                    var content = File.ReadAllText(path);
+                    if (!string.IsNullOrWhiteSpace(content))
+                    {
+                        var cachedMap = JsonDISerializer.Deserialize<List<IParserMap>>(content);
+                        var grouped = cachedMap.GroupBy(p => p.DirectoryPath);
+                        var newMaps = new ConcurrentDictionary<string, List<IParserMap>>();
+                        foreach (var item in grouped)
+                        {
+                            var id = item.First().DirectoryPath.ToLowerInvariant();
+                            newMaps.TryAdd(id, item.Select(p => p).ToList());
+                            if (id.Equals(location))
+                            {
+                                parser = item.Select(p => p.PreferredParser);
+                            }
+                        }
+                        parserMaps.TryAdd(game, newMaps);
+                    }
+                }
+            }
+            return parser;
+        }
+
+        /// <summary>
+        /// Invokes the parsers.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        private IEnumerable<IDefinition> InvokeParsers(ParserManagerArgs args)
+        {
             var canParseArgs = new CanParseArgs()
             {
                 File = args.File,
@@ -158,50 +249,6 @@ namespace IronyModManager.Parser
                 }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Gets the preferred parser.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="location">The location.</param>
-        /// <returns>System.String.</returns>
-        private IEnumerable<string> GetPreferredParsers(string game, string location)
-        {
-            location = location.ToLowerInvariant();
-            IEnumerable<string> parser = null;
-            if (parserMaps.TryGetValue(game, out var maps))
-            {
-                if (maps.TryGetValue(location, out var value))
-                {
-                    parser = value.Select(p => p.PreferredParser);
-                }
-            }
-            else
-            {
-                var path = string.Format(Constants.ParserMapPath, game);
-                if (File.Exists(path))
-                {
-                    var content = File.ReadAllText(path);
-                    if (!string.IsNullOrWhiteSpace(content))
-                    {
-                        var cachedMap = JsonDISerializer.Deserialize<List<IParserMap>>(content);
-                        var grouped = cachedMap.GroupBy(p => p.DirectoryPath);
-                        var newMaps = new ConcurrentDictionary<string, List<IParserMap>>();
-                        foreach (var item in grouped)
-                        {
-                            var id = item.First().DirectoryPath.ToLowerInvariant();
-                            newMaps.TryAdd(id, item.Select(p => p).ToList());
-                            if (id.Equals(location))
-                            {
-                                parser = item.Select(p => p.PreferredParser);
-                            }
-                        }
-                        parserMaps.TryAdd(game, newMaps);
-                    }
-                }
-            }
-            return parser;
         }
 
         /// <summary>

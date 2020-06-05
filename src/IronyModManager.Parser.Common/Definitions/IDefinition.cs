@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-02-2020
+// Last Modified On : 06-05-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -26,6 +26,12 @@ namespace IronyModManager.Parser.Common.Definitions
     public interface IDefinition : ICEFIndexedListItem
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional file names.
+        /// </summary>
+        /// <value>The additional file names.</value>
+        IList<string> AdditionalFileNames { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
@@ -82,10 +88,11 @@ namespace IronyModManager.Parser.Common.Definitions
         string FileCI { get; }
 
         /// <summary>
-        /// Gets or sets the additional file names.
+        /// Gets or sets the generated file names.
         /// </summary>
-        /// <value>The additional file names.</value>
-        IList<string> FileNames { get; set; }
+        /// <value>The generated file names.</value>
+        [JsonIgnore]
+        IList<string> GeneratedFileNames { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -111,6 +118,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The mod path.</value>
         [JsonIgnore]
         string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten file names.
+        /// </summary>
+        /// <value>The overwritten file names.</value>
+        IList<string> OverwrittenFileNames { get; set; }
 
         /// <summary>
         /// Gets the parent directory.

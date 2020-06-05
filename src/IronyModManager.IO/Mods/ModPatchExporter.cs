@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-02-2020
+// Last Modified On : 06-05-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -494,7 +494,9 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
             newInstance.IsFirstLevel = original.IsFirstLevel;
-            newInstance.FileNames = original.FileNames;
+            newInstance.GeneratedFileNames = original.GeneratedFileNames;
+            newInstance.AdditionalFileNames = original.AdditionalFileNames;
+            newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
             return newInstance;
         }
 
@@ -599,7 +601,7 @@ namespace IronyModManager.IO.Mods
                     }));
                     if (overwrittenFiles)
                     {
-                        var emptyFileNames = item.FileNames.Where(p => p != fileName);
+                        var emptyFileNames = item.OverwrittenFileNames.Where(p => p != fileName);
                         foreach (var emptyFile in emptyFileNames)
                         {
                             var emptyPath = Path.Combine(patchRootPath, emptyFile);
