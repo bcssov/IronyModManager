@@ -674,11 +674,11 @@ namespace IronyModManager.ViewModels
                 }
                 if (patchDefinition != null)
                 {
-                    foreach (var fileNames in ModCompareSelector.Definitions.Select(p => p.FileNames))
+                    foreach (var fileNames in ModCompareSelector.Definitions.Select(p => p.GeneratedFileNames))
                     {
                         foreach (var item in fileNames)
                         {
-                            patchDefinition.FileNames.Add(item);
+                            patchDefinition.GeneratedFileNames.Add(item);
                         }
                     }
                     SyncCode(patchDefinition);
