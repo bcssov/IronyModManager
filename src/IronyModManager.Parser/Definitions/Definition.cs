@@ -247,6 +247,14 @@ namespace IronyModManager.Parser.Definitions
                 {
                     generatedFileNames.Remove(old);
                 }
+                if (overwrittenFileNames.Contains(old))
+                {
+                    overwrittenFileNames.Remove(old);
+                }
+                if (additionalFileNames.Contains(old))
+                {
+                    additionalFileNames.Remove(old);
+                }
             }
         }
 
