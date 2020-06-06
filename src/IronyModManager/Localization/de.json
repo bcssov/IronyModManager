@@ -153,6 +153,11 @@
             "Undo": "Rückgängig machen",
             "Redo": "Wiederholen",
             "SelectAll": "Wählen Sie Alle"
+        },
+        "Modes": {
+            "Title": "Auswahlmodus",
+            "Default": "Standard",
+            "Advanced": "Erweitert"
         }
     },
     "ConflictIgnore": {

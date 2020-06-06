@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1075,7 +1075,7 @@ namespace IronyModManager.Services.Tests
                     Type = o.Type
                 };
             });
-            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
             {
                 var res = new PatchState()
                 {
@@ -1094,10 +1094,10 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_not_load_patch_state_when_no_selected_game.
+        /// Defines the test method Should_not_sync_patch_state_when_no_selected_game.
         /// </summary>
         [Fact]
-        public async Task Should_not_load_patch_state_when_no_selected_game()
+        public async Task Should_not_sync_patch_state_when_no_selected_game()
         {
             DISetup.SetupContainer();
 
@@ -1121,15 +1121,15 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.LoadPatchStateAsync(c, "fake");
+            var result = await service.SyncPatchStateAsync(c, "fake");
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Defines the test method Should_not_load_patch_state.
+        /// Defines the test method Should_not_sync_patch_state.
         /// </summary>
         [Fact]
-        public async Task Should_not_load_patch_state()
+        public async Task Should_not_sync_patch_state()
         {
             DISetup.SetupContainer();
 
@@ -1153,18 +1153,18 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.LoadPatchStateAsync(c, null);
+            var result = await service.SyncPatchStateAsync(c, null);
             result.Should().BeNull();
 
-            result = await service.LoadPatchStateAsync(null, "fake");
+            result = await service.SyncPatchStateAsync(null, "fake");
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Defines the test method Should_load_patch_state.
+        /// Defines the test method Should_sync_patch_state.
         /// </summary>
         [Fact]
-        public async Task Should_load_patch_state()
+        public async Task Should_sync_patch_state()
         {
             DISetup.SetupContainer();
 
@@ -1213,7 +1213,7 @@ namespace IronyModManager.Services.Tests
                     ValueType = Parser.Common.ValueType.Object
                 },
             };
-            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
             {
                 var res = new PatchState()
                 {
@@ -1243,16 +1243,16 @@ namespace IronyModManager.Services.Tests
                 OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.LoadPatchStateAsync(c, "fake");
+            var result = await service.SyncPatchStateAsync(c, "fake");
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.ResolvedConflicts.GetAll().Count().Should().Be(2);
         }
 
         /// <summary>
-        /// Defines the test method Should_load_patch_state_and_remove_different.
+        /// Defines the test method Should_sync_patch_state_and_remove_different.
         /// </summary>
         [Fact]
-        public async Task Should_load_patch_state_and_remove_different()
+        public async Task Should_sync_patch_state_and_remove_different()
         {
             DISetup.SetupContainer();
 
@@ -1322,7 +1322,7 @@ namespace IronyModManager.Services.Tests
                     ValueType = Parser.Common.ValueType.Object
                 }
             };
-            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
             {
                 var res = new PatchState()
                 {
@@ -1352,7 +1352,7 @@ namespace IronyModManager.Services.Tests
                 OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.LoadPatchStateAsync(c, "fake");
+            var result = await service.SyncPatchStateAsync(c, "fake");
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.ResolvedConflicts.GetAll().Count().Should().Be(0);
         }
@@ -2043,6 +2043,120 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.RenamePatchCollectionAsync("t1", "t2");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method ResetCache_should_be_true.
+        /// </summary>
+        [Fact]
+        public void ResetCache_should_be_true()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            modPatchExporter.Setup(p => p.ResetCache());
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = service.ResetPatchStateCache();
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_get_patch_state_when_no_selected_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_get_patch_state_when_no_selected_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetPatchStateModeAsync("fake");
+            result.Should().Be(PatchStateMode.None);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_get_patch_state_when_no_collection.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_get_patch_state_when_no_collection()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetPatchStateModeAsync(null);
+            result.Should().Be(PatchStateMode.None);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_get_patch_state.
+        /// </summary>
+        [Fact]
+        public async Task Should_get_patch_state()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
+            {
+                var res = new PatchState()
+                {
+                    Conflicts = new List<IDefinition>(),
+                    ResolvedConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    Mode = PatchStateMode.Basic
+                };
+                return res;
+            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.GetPatchStateModeAsync("fake");
+            result.Should().Be(PatchStateMode.Basic);
         }
 
 

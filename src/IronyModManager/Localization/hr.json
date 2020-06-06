@@ -153,6 +153,11 @@
             "Undo": "Poništi",
             "Redo": "Ponovi",
             "SelectAll": "Odaberi sve"
+        },
+        "Modes": {
+            "Title": "Odaberi način rada",
+            "Default": "Zadano",
+            "Advanced": "Napredno"
         }
     },
     "ConflictIgnore": {

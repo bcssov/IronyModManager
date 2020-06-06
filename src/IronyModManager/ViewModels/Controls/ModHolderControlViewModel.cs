@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -190,6 +190,7 @@ namespace IronyModManager.ViewModels.Controls
                 });
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 await TriggerOverlayAsync(true, message, overlayProgress);
+                modPatchCollectionService.ResetPatchStateCache();
                 var definitions = await Task.Run(() =>
                 {
                     return modPatchCollectionService.GetModObjects(game, CollectionMods.SelectedMods);
@@ -204,7 +205,7 @@ namespace IronyModManager.ViewModels.Controls
                 });
                 var syncedConflicts = await Task.Run(async () =>
                 {
-                    return await modPatchCollectionService.LoadPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+                    return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
                 });
                 if (syncedConflicts != null)
                 {

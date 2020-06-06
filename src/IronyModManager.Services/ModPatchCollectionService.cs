@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-05-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
@@ -486,6 +487,30 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// get patch state mode as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;PatchStateMode&gt;.</returns>
+        public virtual async Task<PatchStateMode> GetPatchStateModeAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                    PatchName = patchName
+                }, false);
+                if (state != null)
+                {
+                    return state.Mode;
+                }
+            }
+            return PatchStateMode.None;
+        }
+
+        /// <summary>
         /// Ignores the mod patch asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -518,17 +543,77 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// load patch state as an asynchronous operation.
+        /// Renames the patch collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="newCollectionName">New name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            var oldPatchName = GenerateCollectionPatchName(collectionName);
+            var newPathName = GenerateCollectionPatchName(newCollectionName);
+            return modPatchExporter.RenamePatchModAsync(new ModPatchExporterParameters()
+            {
+                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                ModPath = oldPatchName,
+                PatchName = newPathName
+            });
+        }
+
+        /// <summary>
+        /// Resets the patch state cache.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool ResetPatchStateCache()
+        {
+            modPatchExporter.ResetCache();
+            return true;
+        }
+
+        /// <summary>
+        /// Saves the ignored paths asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            EvalModIgnoreDefinitions(conflictResult);
+            var patchName = GenerateCollectionPatchName(collectionName);
+            return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+            {
+                IgnoreConflictPaths = conflictResult.IgnoredPaths,
+                Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
+                IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
+                OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
+                PatchName = patchName
+            });
+        }
+
+        /// <summary>
+        /// synchronize patch state as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IConflictResult&gt;.</returns>
-        public virtual async Task<IConflictResult> LoadPatchStateAsync(IConflictResult conflictResult, string collectionName)
+        public virtual async Task<IConflictResult> SyncPatchStateAsync(IConflictResult conflictResult, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
-                modPatchExporter.ResetCache();
                 var patchName = GenerateCollectionPatchName(collectionName);
                 ModDefinitionPatchLoad?.Invoke(0);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
@@ -702,57 +787,6 @@ namespace IronyModManager.Services
                 }
             };
             return null;
-        }
-
-        /// <summary>
-        /// Renames the patch collection asynchronous.
-        /// </summary>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <param name="newCollectionName">New name of the collection.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName)
-        {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return Task.FromResult(false);
-            }
-            var oldPatchName = GenerateCollectionPatchName(collectionName);
-            var newPathName = GenerateCollectionPatchName(newCollectionName);
-            return modPatchExporter.RenamePatchModAsync(new ModPatchExporterParameters()
-            {
-                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                ModPath = oldPatchName,
-                PatchName = newPathName
-            });
-        }
-
-        /// <summary>
-        /// Saves the ignored paths asynchronous.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName)
-        {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return Task.FromResult(false);
-            }
-            EvalModIgnoreDefinitions(conflictResult);
-            var patchName = GenerateCollectionPatchName(collectionName);
-            return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
-            {
-                IgnoreConflictPaths = conflictResult.IgnoredPaths,
-                Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
-                ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                RootPath = Path.Combine(game.UserDirectory, Constants.ModDirectory),
-                PatchName = patchName
-            });
         }
 
         /// <summary>

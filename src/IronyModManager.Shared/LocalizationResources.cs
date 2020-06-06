@@ -205,6 +205,13 @@ namespace IronyModManager.Shared
                 public const string Redo = Prefix + "Redo";
                 public const string SelectAll = Prefix + "SelectAll";
             }
+            public static class Modes
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(Modes) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Default = Prefix + "Default";
+                public const string Advanced = Prefix + "Advanced";
+            }
         }
         public static class ConflictIgnore
         {

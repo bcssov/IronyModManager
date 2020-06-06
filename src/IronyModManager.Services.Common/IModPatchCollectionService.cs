@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 
@@ -103,6 +104,13 @@ namespace IronyModManager.Services.Common
         IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
 
         /// <summary>
+        /// Gets the patch state mode asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;PatchStateMode&gt;.</returns>
+        Task<PatchStateMode> GetPatchStateModeAsync(string collectionName);
+
+        /// <summary>
         /// Ignores the mod patch asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -126,14 +134,6 @@ namespace IronyModManager.Services.Common
         bool IsPatchMod(string modName);
 
         /// <summary>
-        /// Loads the patch state asynchronous.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;IConflictResult&gt;.</returns>
-        Task<IConflictResult> LoadPatchStateAsync(IConflictResult conflictResult, string collectionName);
-
-        /// <summary>
         /// Renames the patch collection asynchronous.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -142,12 +142,26 @@ namespace IronyModManager.Services.Common
         Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
 
         /// <summary>
+        /// Resets the patch state cache.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ResetPatchStateCache();
+
+        /// <summary>
         /// Saves the ignored paths asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
+
+        /// <summary>
+        /// Synchronizes the patch state asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IConflictResult&gt;.</returns>
+        Task<IConflictResult> SyncPatchStateAsync(IConflictResult conflictResult, string collectionName);
 
         #endregion Methods
     }

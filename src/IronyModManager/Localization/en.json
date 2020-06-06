@@ -153,6 +153,11 @@
             "Undo": "Undo",
             "Redo": "Redo",
             "SelectAll": "Select All"
+        },
+        "Modes": {
+            "Title": "Select Mode",
+            "Default": "Default",
+            "Advanced": "Advanced"
         }
     },
     "ConflictIgnore": {

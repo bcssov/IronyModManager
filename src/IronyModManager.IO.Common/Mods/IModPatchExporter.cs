@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
@@ -53,8 +53,9 @@ namespace IronyModManager.IO.Common.Mods
         /// Gets the patch state asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="loadExternalCode">if set to <c>true</c> [load external code].</param>
         /// <returns>Task&lt;IPatchState&gt;.</returns>
-        Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters);
+        Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true);
 
         /// <summary>
         /// Renames the patch mod asynchronous.
