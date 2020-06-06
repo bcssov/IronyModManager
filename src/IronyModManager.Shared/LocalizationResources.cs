@@ -211,6 +211,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Default = Prefix + "Default";
                 public const string Advanced = Prefix + "Advanced";
+                public const string Close = Prefix + "Close";
             }
         }
         public static class ConflictIgnore

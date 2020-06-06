@@ -157,7 +157,8 @@
         "Modes": {
             "Title": "Select Mode",
             "Default": "Default",
-            "Advanced": "Advanced"
+            "Advanced": "Advanced",
+            "Close": "Close"
         }
     },
     "ConflictIgnore": {

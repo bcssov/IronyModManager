@@ -27,9 +27,9 @@ namespace IronyModManager.IO.Common
         None,
 
         /// <summary>
-        /// The basic
+        /// The default
         /// </summary>
-        Basic,
+        Default,
 
         /// <summary>
         /// The advanced

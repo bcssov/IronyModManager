@@ -2094,7 +2094,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(PatchStateMode.None);
+            result.Should().Be(Models.Common.PatchStateMode.None);
         }
 
         /// <summary>
@@ -2117,7 +2117,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync(null);
-            result.Should().Be(PatchStateMode.None);
+            result.Should().Be(Models.Common.PatchStateMode.None);
         }
 
         /// <summary>
@@ -2144,7 +2144,7 @@ namespace IronyModManager.Services.Tests
                     ResolvedConflicts = new List<IDefinition>(),
                     OrphanConflicts = new List<IDefinition>(),
                     OverwrittenConflicts = new List<IDefinition>(),
-                    Mode = PatchStateMode.Basic
+                    Mode = IO.Common.PatchStateMode.Default
                 };
                 return res;
             });
@@ -2156,7 +2156,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(PatchStateMode.Basic);
+            result.Should().Be(Models.Common.PatchStateMode.Default);
         }
 
 

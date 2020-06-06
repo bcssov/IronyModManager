@@ -14,7 +14,6 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 
@@ -108,7 +107,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;PatchStateMode&gt;.</returns>
-        Task<PatchStateMode> GetPatchStateModeAsync(string collectionName);
+        Task<Models.Common.PatchStateMode> GetPatchStateModeAsync(string collectionName);
 
         /// <summary>
         /// Ignores the mod patch asynchronous.

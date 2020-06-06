@@ -157,7 +157,8 @@
         "Modes": {
             "Title": "Odaberi način rada",
             "Default": "Zadano",
-            "Advanced": "Napredno"
+            "Advanced": "Napredno",
+            "Close": "Zatvori"
         }
     },
     "ConflictIgnore": {

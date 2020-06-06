@@ -541,6 +541,7 @@ namespace IronyModManager.IO.Mods
             destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
             destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
             destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
+            destination.Mode = source.Mode;
         }
 
         /// <summary>
