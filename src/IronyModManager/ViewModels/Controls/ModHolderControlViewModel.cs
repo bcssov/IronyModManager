@@ -181,7 +181,6 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected();
             if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
             {
-                MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = 0,

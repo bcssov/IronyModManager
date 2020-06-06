@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -181,6 +181,7 @@ namespace IronyModManager.Common.ViewModels
             };
             return Task.Run(() =>
             {
+                MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                 MessageBus.Current.SendMessage(args);
             });
         }
