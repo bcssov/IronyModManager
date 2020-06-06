@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -77,6 +77,9 @@ namespace IronyModManager.DI
         private static void ConfigureOptions(Container container)
         {
             container.Options.AllowOverridingRegistrations = true;
+            // Restore default 4.x settings
+            container.Options.EnableAutoVerification = false;
+            container.Options.ResolveUnregisteredConcreteTypes = true;
         }
 
         /// <summary>
