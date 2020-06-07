@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -108,7 +108,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;PatchStateMode&gt;.</returns>
-        Task<Models.Common.PatchStateMode> GetPatchStateModeAsync(string collectionName);
+        Task<PatchStateMode> GetPatchStateModeAsync(string collectionName);
 
         /// <summary>
         /// Ignores the mod patch asynchronous.
@@ -146,6 +146,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool ResetPatchStateCache();
+
+        /// <summary>
+        /// Resolves the full definition path.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        string ResolveFullDefinitionPath(IDefinition definition);
 
         /// <summary>
         /// Saves the ignored paths asynchronous.

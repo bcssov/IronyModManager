@@ -2193,6 +2193,123 @@ namespace IronyModManager.Services.Tests
             result.Should().Be(Models.Common.PatchStateMode.Default);
         }
 
+        /// <summary>
+        /// Defines the test method Should_not_resolve_full_definition_path_when_no_game_or_definition_null.
+        /// </summary>
+        [Fact]
+        public void Should_not_resolve_full_definition_path_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ResolveFullDefinitionPath(new Definition()
+            {
+                File = "events\\test.txt",
+                ModName = "test"
+            });
+            result.Should().Be(string.Empty);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_resolve_full_definition_path_when_definition_null.
+        /// </summary>
+        [Fact]
+        public void Should_not_resolve_full_definition_path_when_definition_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
+            });
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ResolveFullDefinitionPath(null);
+            result.Should().Be(string.Empty);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_resolve_full_definition_path.
+        /// </summary>
+        [Fact]
+        public void Should_resolve_full_definition_path()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            SetupMockCase(reader, parserManager, modParser);
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ResolveFullDefinitionPath(new Definition()
+            {
+                File = "events\\test.txt",
+                ModName = "1"
+            });
+            result.Should().Be(string.Empty);
+
+            result = service.ResolveFullDefinitionPath(null);
+            result.Should().Be(string.Empty);
+        }
+
+
 
         /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.

@@ -501,7 +501,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;PatchStateMode&gt;.</returns>
-        public virtual async Task<Models.Common.PatchStateMode> GetPatchStateModeAsync(string collectionName)
+        public virtual async Task<PatchStateMode> GetPatchStateModeAsync(string collectionName)
         {
             var game = GameService.GetSelected();
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
@@ -517,7 +517,7 @@ namespace IronyModManager.Services
                     return MapPatchStateMode(state.Mode);
                 }
             }
-            return Models.Common.PatchStateMode.None;
+            return PatchStateMode.None;
         }
 
         /// <summary>
@@ -583,6 +583,29 @@ namespace IronyModManager.Services
         {
             modPatchExporter.ResetCache();
             return true;
+        }
+
+        /// <summary>
+        /// Resolves the full definition path.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        public virtual string ResolveFullDefinitionPath(IDefinition definition)
+        {
+            if (definition == null || GameService.GetSelected() == null)
+            {
+                return string.Empty;
+            }
+            var mods = GetCollectionMods();
+            if (mods?.Count() > 0)
+            {
+                var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                if (mod != null && !string.IsNullOrWhiteSpace(mod.FullPath))
+                {
+                    return Path.Combine(mod.FullPath, definition.File);
+                }
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -1134,13 +1157,13 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mode">The mode.</param>
         /// <returns>Models.Common.PatchStateMode.</returns>
-        protected virtual Models.Common.PatchStateMode MapPatchStateMode(IO.Common.PatchStateMode mode)
+        protected virtual PatchStateMode MapPatchStateMode(IO.Common.PatchStateMode mode)
         {
             return mode switch
             {
-                IO.Common.PatchStateMode.Default => Models.Common.PatchStateMode.Default,
-                IO.Common.PatchStateMode.Advanced => Models.Common.PatchStateMode.Advanced,
-                _ => Models.Common.PatchStateMode.None,
+                IO.Common.PatchStateMode.Default => PatchStateMode.Default,
+                IO.Common.PatchStateMode.Advanced => PatchStateMode.Advanced,
+                _ => PatchStateMode.None,
             };
         }
 
@@ -1149,12 +1172,12 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mode">The mode.</param>
         /// <returns>IO.Common.PatchStateMode.</returns>
-        protected virtual IO.Common.PatchStateMode MapPatchStateMode(Models.Common.PatchStateMode mode)
+        protected virtual IO.Common.PatchStateMode MapPatchStateMode(PatchStateMode mode)
         {
             return mode switch
             {
-                Models.Common.PatchStateMode.Default => IO.Common.PatchStateMode.Default,
-                Models.Common.PatchStateMode.Advanced => IO.Common.PatchStateMode.Advanced,
+                PatchStateMode.Default => IO.Common.PatchStateMode.Default,
+                PatchStateMode.Advanced => IO.Common.PatchStateMode.Advanced,
                 _ => IO.Common.PatchStateMode.None,
             };
         }
