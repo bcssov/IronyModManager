@@ -294,7 +294,7 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
-            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns((ModWriterParameters p, bool isPath) =>
             {
                 return Task.FromResult(true);
             });
@@ -339,7 +339,7 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
-            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns((ModWriterParameters p, bool isPatch) =>
             {
                 return Task.FromResult(true);
             });
@@ -384,7 +384,7 @@ namespace IronyModManager.Services.Tests
             {
                 return Task.FromResult(true);
             });
-            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns((ModWriterParameters p, bool isPatch) =>
             {
                 return Task.FromResult(true);
             });
@@ -492,7 +492,7 @@ namespace IronyModManager.Services.Tests
                     FileName = o.FileName
                 };
             });
-            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns((string root, string path) =>
              {
                  var sb = new System.Text.StringBuilder(115);

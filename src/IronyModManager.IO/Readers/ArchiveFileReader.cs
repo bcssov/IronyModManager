@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -58,7 +58,20 @@ namespace IronyModManager.IO.Readers
                 {
                     var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                     var filePath = file.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                    // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+                    if (file.StartsWith("*"))
+                    {
+                        var endsWith = file.Replace("*", string.Empty);
+                        if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
+                        {
+                            using var entryStream = reader.OpenEntryStream();
+                            var memoryStream = new MemoryStream();
+                            entryStream.CopyTo(memoryStream);
+                            memoryStream.Seek(0, SeekOrigin.Begin);
+                            return memoryStream;
+                        }
+                    }
+                    else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
                     {
                         using var entryStream = reader.OpenEntryStream();
                         var memoryStream = new MemoryStream();

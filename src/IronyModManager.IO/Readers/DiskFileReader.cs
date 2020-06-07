@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -49,11 +49,24 @@ namespace IronyModManager.IO
         /// <returns>Stream.</returns>
         public virtual Stream GetStream(string rootPath, string file)
         {
-            var fullPath = Path.Combine(rootPath, file);
-            if (File.Exists(fullPath))
+            // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+            if (file.StartsWith("*"))
             {
-                var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
-                return fs;
+                var files = Directory.EnumerateFiles(rootPath, file, SearchOption.TopDirectoryOnly);
+                if (files.Count() > 0)
+                {
+                    var fs = new FileStream(files.First(), FileMode.Open, FileAccess.Read);
+                    return fs;
+                }
+            }
+            else
+            {
+                var fullPath = Path.Combine(rootPath, file);
+                if (File.Exists(fullPath))
+                {
+                    var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                    return fs;
+                }
             }
             return null;
         }

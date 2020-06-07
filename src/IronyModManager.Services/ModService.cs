@@ -136,7 +136,7 @@ namespace IronyModManager.Services
                     Mod = mod,
                     RootDirectory = game.UserDirectory,
                     Path = mod.DescriptorFile
-                }))
+                }, IsPatchModInternal(mod)))
                 {
                     applyModParams.TopPriorityMods = new List<IMod>() { mod };
                 }
@@ -188,12 +188,16 @@ namespace IronyModManager.Services
                 var tasks = new List<Task>();
                 foreach (var diff in diffs)
                 {
+                    if (IsPatchModInternal(diff))
+                    {
+                        continue;
+                    }
                     tasks.Add(ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = diff,
                         RootDirectory = game.UserDirectory,
                         Path = diff.DescriptorFile
-                    }));
+                    }, IsPatchModInternal(diff)));
                 }
                 await Task.WhenAll(tasks);
                 return true;
@@ -266,7 +270,11 @@ namespace IronyModManager.Services
                 var fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
                 if (fileInfo == null)
                 {
-                    return;
+                    fileInfo = Reader.GetFileInfo(path, $"*{Shared.Constants.ModExtension}");
+                    if (fileInfo == null)
+                    {
+                        return;
+                    }
                 }
                 var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
                 mod.FileName = path.Replace("\\", "/");

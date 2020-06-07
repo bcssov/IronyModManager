@@ -1017,7 +1017,7 @@ namespace IronyModManager.Services
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
                         Path = mod.DescriptorFile
-                    });
+                    }, IsPatchMod(mod));
                     allMods.Add(mod);
                 }
                 else
