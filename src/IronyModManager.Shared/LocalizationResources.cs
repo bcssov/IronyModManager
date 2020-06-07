@@ -173,6 +173,7 @@ namespace IronyModManager.Shared
                 public const string FIOS = Prefix + "FIOS";
                 public const string LIOS = Prefix + "LIOS";
                 public const string Order = Prefix + "Order";
+                public const string Override = Prefix + "Override";
             }
             public static class InvalidConflicts
             {
@@ -204,6 +205,14 @@ namespace IronyModManager.Shared
                 public const string Undo = Prefix + "Undo";
                 public const string Redo = Prefix + "Redo";
                 public const string SelectAll = Prefix + "SelectAll";
+            }
+            public static class Modes
+            {
+                public const string Prefix = "Conflict_Solver." + nameof(Modes) + ".";
+                public const string Title = Prefix + "Title";
+                public const string Default = Prefix + "Default";
+                public const string Advanced = Prefix + "Advanced";
+                public const string Close = Prefix + "Close";
             }
         }
         public static class ConflictIgnore

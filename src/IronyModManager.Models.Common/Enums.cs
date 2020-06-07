@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -39,7 +39,12 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The lios
         /// </summary>
-        LIOS
+        LIOS,
+
+        /// <summary>
+        /// The mod override
+        /// </summary>
+        ModOverride
     }
 
     /// <summary>
@@ -61,5 +66,26 @@ namespace IronyModManager.Models.Common
         /// The paradox
         /// </summary>
         Paradox
+    }
+
+    /// <summary>
+    /// Enum PatchStateMode
+    /// </summary>
+    public enum PatchStateMode
+    {
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// The default
+        /// </summary>
+        Default,
+
+        /// <summary>
+        /// The advanced
+        /// </summary>
+        Advanced
     }
 }

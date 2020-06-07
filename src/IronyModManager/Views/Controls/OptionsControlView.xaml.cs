@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Reactive.Disposables;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
@@ -58,7 +59,10 @@ namespace IronyModManager.Views.Controls
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
                 .SubscribeObservable(x =>
                 {
-                    ViewModel.ForceClose();
+                    Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        ViewModel.ForceClose();
+                    });
                 }).DisposeWith(disposables);
             base.OnActivated(disposables);
         }

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-05-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -183,10 +183,11 @@ namespace IronyModManager.IO.Mods
         /// get patch state as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;IPatchState&gt;.</returns>
-        public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters)
+        /// <param name="loadExternalCode">if set to <c>true</c> [load external code].</param>
+        /// <returns>IPatchState.</returns>
+        public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true)
         {
-            return await GetPatchStateInternalAsync(parameters);
+            return await GetPatchStateInternalAsync(parameters, loadExternalCode);
         }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> SaveStateAsync(ModPatchExporterParameters parameters)
         {
-            var state = await GetPatchStateInternalAsync(parameters);
+            var state = await GetPatchStateInternalAsync(parameters, true);
             if (state == null)
             {
                 state = DIResolver.Get<IPatchState>();
@@ -237,6 +238,7 @@ namespace IronyModManager.IO.Mods
             state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
             state.IgnoredConflicts = MapDefinitions(parameters.IgnoredConflicts, false);
             state.OverwrittenConflicts = MapDefinitions(parameters.OverwrittenConflicts, false);
+            state.Mode = parameters.Mode;
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);
@@ -393,11 +395,12 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// get patch state internal as an asynchronous operation.
+        /// Gets the patch state internal asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>IPatchState.</returns>
-        private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters)
+        /// <param name="loadExternalCode">The load external code.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;IronyModManager.IO.Common.Mods.Models.IPatchState&gt;.</returns>
+        private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters, bool loadExternalCode)
         {
             var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
             var cached = GetPatchState(statePath);
@@ -436,25 +439,29 @@ namespace IronyModManager.IO.Mods
                     {
                         cached.OverwrittenConflicts = new List<IDefinition>();
                     }
-                    externallyLoadedCode.Clear();
-                    cachedState = cached;
-                    lastCachedStatePath = statePath;
-                    async Task loadCode(IDefinition definition)
+                    // If not allowing full load don't cache anything
+                    if (loadExternalCode)
                     {
-                        var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
-                        if (File.Exists(historyPath))
+                        externallyLoadedCode.Clear();
+                        cachedState = cached;
+                        lastCachedStatePath = statePath;
+                        async Task loadCode(IDefinition definition)
                         {
-                            var code = await File.ReadAllTextAsync(historyPath);
-                            definition.Code = string.Join(Environment.NewLine, code.SplitOnNewLine());
-                            externallyLoadedCode.Add(definition.TypeAndId);
+                            var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
+                            if (File.Exists(historyPath))
+                            {
+                                var code = await File.ReadAllTextAsync(historyPath);
+                                definition.Code = string.Join(Environment.NewLine, code.SplitOnNewLine());
+                                externallyLoadedCode.Add(definition.TypeAndId);
+                            }
                         }
+                        var tasks = new List<Task>();
+                        foreach (var item in cached.ConflictHistory)
+                        {
+                            tasks.Add(loadCode(item));
+                        }
+                        await Task.WhenAll(tasks);
                     }
-                    var tasks = new List<Task>();
-                    foreach (var item in cached.ConflictHistory)
-                    {
-                        tasks.Add(loadCode(item));
-                    }
-                    await Task.WhenAll(tasks);
                 }
                 mutex.Dispose();
             }
@@ -534,6 +541,7 @@ namespace IronyModManager.IO.Mods
             destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
             destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
             destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
+            destination.Mode = source.Mode;
         }
 
         /// <summary>

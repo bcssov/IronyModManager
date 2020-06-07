@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -112,6 +113,19 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the advanced mode.
+        /// </summary>
+        /// <value>The advanced mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Advanced)]
+        public virtual string AdvancedMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the advanced mode command.
+        /// </summary>
+        /// <value>The advanced mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AdvancedModeCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the analyze.
         /// </summary>
         /// <value>The analyze.</value>
@@ -144,16 +158,48 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool ApplyingCollection { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the close mode.
+        /// </summary>
+        /// <value>The close mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Close)]
+        public virtual string CloseMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the close mode command.
+        /// </summary>
+        /// <value>The close mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CloseModeCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the collection mods.
         /// </summary>
         /// <value>The collection mods.</value>
         public virtual CollectionModsControlViewModel CollectionMods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the default mode.
+        /// </summary>
+        /// <value>The default mode.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Default)]
+        public virtual string DefaultMode { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the default mode command.
+        /// </summary>
+        /// <value>The default mode command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DefaultModeCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the installed mods.
         /// </summary>
         /// <value>The installed mods.</value>
         public virtual InstalledModsControlViewModel InstalledMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is mode open.
+        /// </summary>
+        /// <value><c>true</c> if this instance is mode open; otherwise, <c>false</c>.</value>
+        public virtual bool IsModeOpen { get; protected set; }
 
         /// <summary>
         /// Gets or sets the launch game.
@@ -168,58 +214,70 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The launch game command.</value>
         public virtual ReactiveCommand<Unit, Unit> LaunchGameCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the mode title.
+        /// </summary>
+        /// <value>The mode title.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Title)]
+        public virtual string ModeTitle { get; protected set; }
+
         #endregion Properties
 
         #region Methods
 
         /// <summary>
+        /// Forces the close poups.
+        /// </summary>
+        public void ForceClosePoups()
+        {
+            IsModeOpen = false;
+        }
+
+        /// <summary>
         /// Analyzes the mods asynchronous.
         /// </summary>
+        /// <param name="mode">The mode.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task AnalyzeModsAsync()
+        protected virtual async Task AnalyzeModsAsync(PatchStateMode mode)
         {
-            var game = gameService.GetSelected();
-            if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
+            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
             {
-                MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                PercentDone = 0,
+                Count = 1,
+                TotalCount = 3
+            });
+            var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
+            await TriggerOverlayAsync(true, message, overlayProgress);
+            modPatchCollectionService.ResetPatchStateCache();
+            var definitions = await Task.Run(() =>
+            {
+                return modPatchCollectionService.GetModObjects(gameService.GetSelected(), CollectionMods.SelectedMods);
+            });
+            var conflicts = await Task.Run(() =>
+            {
+                if (definitions != null)
                 {
-                    PercentDone = 0,
-                    Count = 1,
-                    TotalCount = 3
-                });
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
-                await TriggerOverlayAsync(true, message, overlayProgress);
-                var definitions = await Task.Run(() =>
-                {
-                    return modPatchCollectionService.GetModObjects(game, CollectionMods.SelectedMods);
-                });
-                var conflicts = await Task.Run(() =>
-                {
-                    if (definitions != null)
-                    {
-                        return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList());
-                    }
-                    return null;
-                });
-                var syncedConflicts = await Task.Run(async () =>
-                {
-                    return await modPatchCollectionService.LoadPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
-                });
-                if (syncedConflicts != null)
-                {
-                    conflicts = syncedConflicts;
+                    return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList(), mode);
                 }
-                await TriggerOverlayAsync(false);
-                var args = new NavigationEventArgs()
-                {
-                    SelectedCollection = CollectionMods.SelectedModCollection,
-                    Results = conflicts,
-                    State = NavigationState.ConflictSolver,
-                    SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
-                };
-                MessageBus.Current.SendMessage(args);
+                return null;
+            });
+            var syncedConflicts = await Task.Run(async () =>
+            {
+                return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
+            });
+            if (syncedConflicts != null)
+            {
+                conflicts = syncedConflicts;
             }
+            await TriggerOverlayAsync(false);
+            var args = new NavigationEventArgs()
+            {
+                SelectedCollection = CollectionMods.SelectedModCollection,
+                Results = conflicts,
+                State = NavigationState.ConflictSolver,
+                SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
+            };
+            MessageBus.Current.SendMessage(args);
         }
 
         /// <summary>
@@ -308,9 +366,24 @@ namespace IronyModManager.ViewModels.Controls
                 ApplyCollectionAsync().ConfigureAwait(true);
             }, applyEnabled).DisposeWith(disposables);
 
-            AnalyzeCommand = ReactiveCommand.Create(() =>
+            AnalyzeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                AnalyzeModsAsync().ConfigureAwait(true);
+                var game = gameService.GetSelected();
+                if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
+                {
+                    await TriggerOverlayAsync(true);
+                    var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
+                    if (mode == PatchStateMode.None)
+                    {
+                        await TriggerOverlayAsync(false);
+                        await Task.Delay(50);
+                        IsModeOpen = true;
+                    }
+                    else
+                    {
+                        await AnalyzeModsAsync(mode);
+                    }
+                }
             }).DisposeWith(disposables);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -327,6 +400,21 @@ namespace IronyModManager.ViewModels.Controls
                         await appAction.ExitAppAsync();
                     }
                 }
+            }).DisposeWith(disposables);
+
+            AdvancedModeCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await AnalyzeModsAsync(PatchStateMode.Advanced);
+            }).DisposeWith(disposables);
+
+            DefaultModeCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await AnalyzeModsAsync(PatchStateMode.Default);
+            }).DisposeWith(disposables);
+
+            CloseModeCommand = ReactiveCommand.Create(() =>
+            {
+                ForceClosePoups();
             }).DisposeWith(disposables);
 
             modPatchCollectionService.ModDefinitionLoad += (percentage) =>
