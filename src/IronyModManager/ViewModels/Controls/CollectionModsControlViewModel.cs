@@ -791,8 +791,8 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
-                    ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
+                Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
+                    ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)))
                 .Subscribe(s =>
                 {
