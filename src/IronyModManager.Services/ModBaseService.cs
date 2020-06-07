@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-02-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -147,7 +147,7 @@ namespace IronyModManager.Services
             {
                 mod.Dependencies = dependencies;
             }
-            mod.DescriptorFile = $"{Constants.ModDirectory}/{patchName}{Constants.ModExtension}";
+            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
             mod.FileName = GetPatchDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
@@ -217,7 +217,7 @@ namespace IronyModManager.Services
                 throw new ArgumentNullException("game");
             }
             var result = new List<IMod>();
-            var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Constants.ModDirectory));
+            var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
             if (installedMods?.Count() > 0)
             {
                 foreach (var installedMod in installedMods.Where(p => p.Content.Count() > 0))
@@ -227,7 +227,7 @@ namespace IronyModManager.Services
                     {
                         continue;
                     }
-                    mod.DescriptorFile = $"{Constants.ModDirectory}/{installedMod.FileName}";
+                    mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
                     mod.Source = GetModSource(installedMod);
                     if (mod.Source == ModSource.Paradox)
                     {
@@ -304,7 +304,7 @@ namespace IronyModManager.Services
         /// <returns>System.String.</returns>
         protected virtual string GetPatchDirectory(IGame game, string patchName)
         {
-            var path = Path.Combine(game.UserDirectory, Constants.ModDirectory, patchName);
+            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
             return path;
         }
 

@@ -274,10 +274,17 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
         {
-            async Task<bool> writeDescriptor()
+            async Task<bool> writeDescriptors()
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+                var modPath = Path.Combine(parameters.Mod.FileName, Constants.DescriptorFile);
+                await writeDescriptor(fullPath);
+                await writeDescriptor(modPath);
+                return true;
+            }
+            async Task<bool> writeDescriptor(string fullPath)
+            {
                 using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
                 using var sw = new StreamWriter(fs);
                 var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
@@ -315,8 +322,9 @@ namespace IronyModManager.IO.Mods
                 await sw.FlushAsync();
                 return true;
             }
+
             var retry = new RetryStrategy();
-            return await retry.RetryActionAsync(writeDescriptor);
+            return await retry.RetryActionAsync(writeDescriptors);
         }
 
         /// <summary>

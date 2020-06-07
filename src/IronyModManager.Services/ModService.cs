@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -167,7 +167,7 @@ namespace IronyModManager.Services
             }
             var mods = GetInstalledModsInternal(game, false);
             var descriptors = new List<IMod>();
-            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Constants.ModDirectory), ModSource.Local);
+            var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local);
             if (userDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(userDirectoryMods);
@@ -183,7 +183,7 @@ namespace IronyModManager.Services
                 await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
                 {
                     RootDirectory = game.UserDirectory,
-                    Path = Constants.ModDirectory
+                    Path = Shared.Constants.ModDirectory
                 });
                 var tasks = new List<Task>();
                 foreach (var diff in diffs)
@@ -263,7 +263,7 @@ namespace IronyModManager.Services
 
             void parseModFiles(string path, ModSource source, bool isDirectory)
             {
-                var fileInfo = Reader.GetFileInfo(path, Constants.DescriptorFile);
+                var fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
                 if (fileInfo == null)
                 {
                     return;
@@ -277,7 +277,7 @@ namespace IronyModManager.Services
                     cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
                 }
 
-                var localPath = $"{Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Constants.ModExtension}";
+                var localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
                 switch (mod.Source)
                 {
                     case ModSource.Local:
@@ -297,7 +297,7 @@ namespace IronyModManager.Services
                                 mod.RemoteId = GetSteamModId(path, isDirectory);
                             }
                         }
-                        setDescriptorPath(mod, $"{Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Constants.ModExtension}", localPath);
+                        setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
                         break;
 
                     case ModSource.Paradox:
@@ -310,7 +310,7 @@ namespace IronyModManager.Services
                         {
                             mod.RemoteId = GetPdxModId(path, isDirectory);
                         }
-                        setDescriptorPath(mod, $"{Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Constants.ModExtension}", localPath);
+                        setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
                         break;
 
                     default:

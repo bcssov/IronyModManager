@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -22,21 +22,6 @@ namespace IronyModManager.Services
     public static class Constants
     {
         #region Fields
-
-        /// <summary>
-        /// The descriptor file
-        /// </summary>
-        public const string DescriptorFile = "descriptor" + ModExtension;
-
-        /// <summary>
-        /// The mod directory
-        /// </summary>
-        public const string ModDirectory = "mod";
-
-        /// <summary>
-        /// The mod extension
-        /// </summary>
-        public const string ModExtension = "." + ModDirectory;
 
         /// <summary>
         /// The paradox mod identifier
