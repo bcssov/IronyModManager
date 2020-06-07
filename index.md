@@ -4,7 +4,7 @@ Irony Mod Manager is a new mod manager for Paradox Games which at the moment sup
 * Latest stable version: [v1.0.133](https://github.com/bcssov/IronyModManager/releases/tag/v1.0.133).
 * Latest prerelease version: [v1.1.83-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.1.83-alpha).
 
-# 1.1 migration notes
+### 1.1 migration notes
 * The 1.1 version holds significant changes over 1.0 and is still a work in progress. 1.1 version will migrate database.json (file which holds all of your settings, collections and so on) of 1.0 and will switch to using its own database.json file called database_1.1.json. If you keep using 1.0 and 1.1 in sync please be aware that any changes in 1.1 will not be reflected in 1.0 and vice-versa. You can export\import your collections though into and from 1.0\1.1. If you'd like to reset Irony 1.1 you can always delete database_1.1.json file and Irony will reimport the 1.0 version file again.
 * Collection patch mods are not backwards compatible, if you run Irony conflict solver it will not be backwards compatible with 1.0 version. While 1.0 version will know how to import it, running conflict solver over a collection modified by 1.1 will result in 1.0 rejecting some incompatible exports made by 1.1 version
 
