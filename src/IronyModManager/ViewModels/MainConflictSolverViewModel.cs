@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -56,6 +57,11 @@ namespace IronyModManager.ViewModels
         private const string Localization = "localisation";
 
         /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
@@ -95,15 +101,17 @@ namespace IronyModManager.ViewModels
         /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
+        /// <param name="appAction">The application action.</param>
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ILogger logger, INotificationAction notificationAction)
+            ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
             this.logger = logger;
             this.notificationAction = notificationAction;
+            this.appAction = appAction;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -202,6 +210,38 @@ namespace IronyModManager.ViewModels
         /// <value>The invalid.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.Name)]
         public virtual string Invalid { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid conflict path.
+        /// </summary>
+        /// <value>The invalid conflict path.</value>
+        public virtual string InvalidConflictPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid open directory.
+        /// </summary>
+        /// <value>The invalid open directory.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.ContextMenu.OpenDirectory)]
+        public virtual string InvalidOpenDirectory { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid open directory command.
+        /// </summary>
+        /// <value>The invalid open directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InvalidOpenDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid open file.
+        /// </summary>
+        /// <value>The invalid open file.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.ContextMenu.OpenFile)]
+        public virtual string InvalidOpenFile { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid open file command.
+        /// </summary>
+        /// <value>The invalid open file command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InvalidOpenFileCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is binary conflict.
@@ -313,6 +353,22 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
+        /// Evals the invalid conflict path.
+        /// </summary>
+        /// <param name="hierarchicalDefinition">The hierarchical definition.</param>
+        public virtual void EvalInvalidConflictPath(IHierarchicalDefinitions hierarchicalDefinition)
+        {
+            InvalidConflictPath = string.Empty;
+            if (!IsConflictSolverAvailable && hierarchicalDefinition != null)
+            {
+                if (hierarchicalDefinition.AdditionalData is IDefinition definition)
+                {
+                    InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+                }
+            }
+        }
+
+        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -416,6 +472,7 @@ namespace IronyModManager.ViewModels
                             Message = item.ErrorMessage,
                             item.File
                         });
+                        invalidChild.AdditionalData = item;
                         children.Add(invalidChild);
                     }
                     invalidDef.Children = children;
@@ -479,6 +536,22 @@ namespace IronyModManager.ViewModels
             {
                 ResolveConflictAsync(false).ConfigureAwait(true);
             }, resolvingEnabled).DisposeWith(disposables);
+
+            InvalidOpenDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (!string.IsNullOrWhiteSpace(InvalidConflictPath))
+                {
+                    await appAction.OpenAsync(Path.GetDirectoryName(InvalidConflictPath));
+                }
+            }).DisposeWith(disposables);
+
+            InvalidOpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (!string.IsNullOrWhiteSpace(InvalidConflictPath))
+                {
+                    await appAction.OpenAsync(InvalidConflictPath);
+                }
+            }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.Conflicts).Subscribe(s =>
             {

@@ -128,12 +128,16 @@
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
             "Order": "(Load Order)",
-            "Override":  "(Override)"
+            "Override": "(Override)"
         },
         "InvalidConflicts": {
             "Name": "Invalid",
             "Error": "Error at line: {Line} column: {Column} file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}"
+            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Open File",
+                "OpenDirectory": "Open Directory"
+            }
         },
         "ContextMenu": {
             "CopyAll": "Copy All",

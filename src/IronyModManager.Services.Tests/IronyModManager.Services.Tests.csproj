@@ -73,6 +73,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="mod\fakemod.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="mod\fakemod.mod">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="mod\fakemod\descriptor.mod">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

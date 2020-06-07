@@ -32,7 +32,13 @@
                      ConverterParameter=x-75}">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                <Grid ColumnDefinitions="*" Background="Transparent">
+                  <Grid.ContextMenu>
+                    <ContextMenu>
+                    </ContextMenu>
+                  </Grid.ContextMenu>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                </Grid>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>

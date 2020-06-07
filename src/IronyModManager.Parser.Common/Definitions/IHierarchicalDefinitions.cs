@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.Parser.Common.Definitions
     public interface IHierarchicalDefinitions : ICEFIndexedListItem
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional data.
+        /// </summary>
+        /// <value>The additional data.</value>
+        object AdditionalData { get; set; }
 
         /// <summary>
         /// Gets or sets the children.
