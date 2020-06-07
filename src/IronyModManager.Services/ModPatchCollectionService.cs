@@ -225,12 +225,14 @@ namespace IronyModManager.Services
                 bool isFios = false;
                 if (provider != null)
                 {
+                    bool overrideSkipped = false;
                     isFios = provider.DefinitionUsesFIOSRules(definitions.First());
                     foreach (var item in definitions)
                     {
                         var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
                         if (hasOverrides)
                         {
+                            overrideSkipped = true;
                             continue;
                         }
                         if (isFios)
@@ -251,7 +253,7 @@ namespace IronyModManager.Services
                         }
                     }
                     var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
-                    if (uniqueDefinitions.Count() == 1)
+                    if (uniqueDefinitions.Count() == 1 && overrideSkipped)
                     {
                         result.Definition = definitionEvals.First().Definition;
                         result.PriorityType = DefinitionPriorityType.ModOverride;
@@ -278,6 +280,10 @@ namespace IronyModManager.Services
                                 result.PriorityType = DefinitionPriorityType.LIOS;
                             }
                         }
+                    }
+                    else
+                    {
+                        result.Definition = definitions.FirstOrDefault();
                     }
                 }
                 else
