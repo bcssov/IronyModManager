@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -13,11 +13,14 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;
 using ReactiveUI;
@@ -78,6 +81,48 @@ namespace IronyModManager.Views
                     }
                 }
             }).DisposeWith(disposables);
+
+            conflictList.PointerMoved += (sender, args) =>
+            {
+                var hoveredItem = conflictList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
+                if (hoveredItem != null)
+                {
+                    var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                    if (grid != null)
+                    {
+                        ViewModel.EvalInvalidConflictPath(hoveredItem.Content as IHierarchicalDefinitions);
+                        if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
+                        {
+                            var menuItems = new List<MenuItem>()
+                            {
+                                new MenuItem()
+                                {
+                                    Header = ViewModel.InvalidOpenFile,
+                                    Command = ViewModel.InvalidOpenFileCommand
+                                }
+                            };
+                            if (!ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                            {
+                                menuItems.Add(new MenuItem()
+                                {
+                                    Header = ViewModel.InvalidOpenDirectory,
+                                    Command = ViewModel.InvalidOpenDirectoryCommand
+                                });
+                            }
+                            if (grid.ContextMenu == null)
+                            {
+                                grid.ContextMenu = new ContextMenu();
+                            }
+                            grid.ContextMenu.Items = menuItems;
+                        }
+                        else
+                        {
+                            grid.ContextMenu = null;
+                        }
+                    }
+                }
+            };
+
             base.OnActivated(disposables);
         }
 

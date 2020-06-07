@@ -2284,7 +2284,7 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
@@ -2296,6 +2296,38 @@ namespace IronyModManager.Services.Tests
                 };
             });
             SetupMockCase(reader, parserManager, modParser);
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Fake"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "1" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = "fakemod",
+                    Name = "1"
+                };
+            });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.ResolveFullDefinitionPath(new Definition()
@@ -2303,10 +2335,77 @@ namespace IronyModManager.Services.Tests
                 File = "events\\test.txt",
                 ModName = "1"
             });
-            result.Should().Be(string.Empty);
+            result.Should().Be(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod\\fakemod\\events\\test.txt"));
+        }
 
-            result = service.ResolveFullDefinitionPath(null);
-            result.Should().Be(string.Empty);
+        [Fact]
+        public void Should_resolve_full_definition_archive_path()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            SetupMockCase(reader, parserManager, modParser);
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Fake"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "1" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = "fakemod.zip",
+                    Name = "1"
+                };
+            });
+
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.ResolveFullDefinitionPath(new Definition()
+            {
+                File = "events\\test.txt",
+                ModName = "1"
+            });
+            result.Should().Be(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod\\fakemod.zip"));
         }
 
 

@@ -9,4 +9,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.2.7-beta" />
+  </ItemGroup>
+
 </Project>

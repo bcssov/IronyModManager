@@ -133,7 +133,11 @@
         "InvalidConflicts": {
             "Name": "Nevažeći",
             "Error": "Pogreška u retku: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}"
+            "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Otvori datoteku",
+                "OpenDirectory": "Otvori direktorij"
+            }
         },
         "ContextMenu": {
             "CopyAll": "Kopiraj sve",

@@ -97,7 +97,7 @@ namespace LocalizationResourceGenerator
 
             var obj = JObject.Parse(File.ReadAllText(LocalizationResourcePath));
 
-            static void ParseLocalization(StringBuilder sb, short indent, JProperty property, List<string> additionalPrefix)
+            static void ParseLocalization(StringBuilder sb, short indent, JProperty property, List<string> prefixes, short prevIndent)
             {
                 var origIndent = indent;
                 indent++;
@@ -107,27 +107,13 @@ namespace LocalizationResourceGenerator
                 if (property.Value.Type == JTokenType.Object)
                 {
                     short propIndent = (short)(indent + 1);
-                    if (additionalPrefix?.Count > 0)
-                    {                        
-                        sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = \"{string.Join(".", additionalPrefix)}.\" + nameof({property.Name}) + \".\";"));
-                    }
-                    else
-                    {
-                        sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = nameof({property.Name}) + \".\";"));
-                    }
-                    if (additionalPrefix == null)
-                    {
-                        additionalPrefix = new List<string>();
-                    }
-                    if (origIndent == 1)
-                    {
-                        additionalPrefix.Add(property.Name);
-                    }                    
+                    prefixes.Add(property.Name);
+                    sb.AppendLine(FormatIndentation(propIndent, $"public const string Prefix = \"{string.Join(".", prefixes)}.\";"));
                     foreach (var item in property.Value.Children<JProperty>())
                     {
                         if (item.Value.Type == JTokenType.Object)
                         {
-                            ParseLocalization(sb, indent, item, additionalPrefix);
+                            ParseLocalization(sb, indent, item, new List<string>(prefixes), origIndent);
                         }
                         else
                         {
@@ -146,7 +132,7 @@ namespace LocalizationResourceGenerator
 
             foreach (var o in obj.Children<JProperty>())
             {
-                ParseLocalization(sb, indent, o, null);
+                ParseLocalization(sb, indent, o, new List<string>(), indent);
             }
             sb.AppendLine(FormatIndentation(indent, "}"));
             sb.AppendLine("}");

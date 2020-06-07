@@ -602,6 +602,10 @@ namespace IronyModManager.Services
                 var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
                 if (mod != null && !string.IsNullOrWhiteSpace(mod.FullPath))
                 {
+                    if (mod.FullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return mod.FullPath;
+                    }
                     return Path.Combine(mod.FullPath, definition.File);
                 }
             }

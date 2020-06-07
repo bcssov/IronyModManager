@@ -226,9 +226,9 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Forces the close poups.
+        /// Forces the close popups.
         /// </summary>
-        public void ForceClosePoups()
+        public virtual void ForceClosePopups()
         {
             IsModeOpen = false;
         }
@@ -414,7 +414,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CloseModeCommand = ReactiveCommand.Create(() =>
             {
-                ForceClosePoups();
+                ForceClosePopups();
             }).DisposeWith(disposables);
 
             modPatchCollectionService.ModDefinitionLoad += (percentage) =>

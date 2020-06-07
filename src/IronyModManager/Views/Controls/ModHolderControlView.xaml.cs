@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlView.xaml.cs" company="Mario">
 //     Mario
@@ -54,14 +54,14 @@ namespace IronyModManager.Views.Controls
             MessageBus.Current.Listen<WindowSizeChangedEventArgs>()
                 .SubscribeObservable(x =>
                 {
-                    ViewModel.ForceClosePoups();
+                    ViewModel.ForceClosePopups();
                 }).DisposeWith(disposables);
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
                 .SubscribeObservable(x =>
                 {
                     Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        ViewModel.ForceClosePoups();
+                        ViewModel.ForceClosePopups();
                     });
                 }).DisposeWith(disposables);
             base.OnActivated(disposables);
