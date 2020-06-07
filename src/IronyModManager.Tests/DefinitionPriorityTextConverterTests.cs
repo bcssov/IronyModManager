@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverterTests.cs" company="Mario">
 //     Mario
@@ -108,6 +108,38 @@ namespace IronyModManager.Tests
             service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.FIOS });
             var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
             result.Should().Be("IronyModManager_fake1 - t1 FIOS");
+        }
+
+        /// <summary>
+        /// Defines the test method Text_should_be_override.
+        /// </summary>
+        [Fact]
+        public void Text_should_be_override()
+        {
+            DISetup.SetupContainer();
+            var converter = new DefinitionPriorityTextConverter();
+            var service = new Mock<IModPatchCollectionService>();
+            service.Setup(p => p.IsPatchMod(It.IsAny<string>())).Returns((string p) =>
+            {
+                if (p == "IronyModManager_fake3")
+                {
+                    return true;
+                }
+                return false;
+            });
+            DISetup.Container.RegisterInstance(service.Object);
+            var locManager = new Mock<ILocalizationManager>();
+            locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("Order")))).Returns("Order");
+            locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("FIOS")))).Returns("FIOS");
+            locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("LIOS")))).Returns("LIOS");
+            locManager.Setup(s => s.GetResource(It.Is<string>(s => s.EndsWith("Override")))).Returns("Override");
+            DISetup.Container.RegisterInstance(locManager.Object);
+            var def = new Definition() { ModName = "IronyModManager_fake1", File = "test1.txt", Id = "t1", Dependencies = new List<string>() { "IronyModManager_fake2", "IronyModManager_fake3" } };
+            var def2 = new Definition() { ModName = "IronyModManager_fake2", File = "test1.txt,", Id = "t1" };
+            var def3 = new Definition() { ModName = "IronyModManager_fake3", File = "test.txt", Id = "t1" };
+            service.Setup(p => p.EvalDefinitionPriority(It.IsAny<IEnumerable<IDefinition>>())).Returns(new PriorityDefinitionResult() { Definition = def, PriorityType = Models.Common.DefinitionPriorityType.ModOverride });
+            var result = converter.Convert(new List<object>() { new List<IDefinition>() { def, def2, def3 }, def }, null, null, null);
+            result.Should().Be("IronyModManager_fake1 - t1 Override");
         }
 
         /// <summary>

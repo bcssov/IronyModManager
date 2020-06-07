@@ -91,8 +91,9 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
+        /// <param name="patchStateMode">The patch state mode.</param>
         /// <returns>IConflictResult.</returns>
-        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder);
+        IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
 
         /// <summary>
         /// Gets the mod objects.

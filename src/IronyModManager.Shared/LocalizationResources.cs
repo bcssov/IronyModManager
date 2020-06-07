@@ -173,6 +173,7 @@ namespace IronyModManager.Shared
                 public const string FIOS = Prefix + "FIOS";
                 public const string LIOS = Prefix + "LIOS";
                 public const string Order = Prefix + "Order";
+                public const string Override = Prefix + "Override";
             }
             public static class InvalidConflicts
             {

@@ -24,14 +24,8 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The none
         /// </summary>
-        /// <summary>
-        /// The none
-        /// </summary>
         None,
 
-        /// <summary>
-        /// The mod order
-        /// </summary>
         /// <summary>
         /// The mod order
         /// </summary>
@@ -40,18 +34,17 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The fios
         /// </summary>
-        /// <summary>
-        /// The fios
-        /// </summary>
         FIOS,
 
         /// <summary>
         /// The lios
         /// </summary>
+        LIOS,
+
         /// <summary>
-        /// The lios
+        /// The mod override
         /// </summary>
-        LIOS
+        ModOverride
     }
 
     /// <summary>
@@ -62,22 +55,13 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The local
         /// </summary>
-        /// <summary>
-        /// The local
-        /// </summary>
         Local,
 
         /// <summary>
         /// The steam
         /// </summary>
-        /// <summary>
-        /// The steam
-        /// </summary>
         Steam,
 
-        /// <summary>
-        /// The paradox
-        /// </summary>
         /// <summary>
         /// The paradox
         /// </summary>
@@ -92,22 +76,13 @@ namespace IronyModManager.Models.Common
         /// <summary>
         /// The none
         /// </summary>
-        /// <summary>
-        /// The none
-        /// </summary>
         None,
 
         /// <summary>
         /// The default
         /// </summary>
-        /// <summary>
-        /// The default
-        /// </summary>
         Default,
 
-        /// <summary>
-        /// The advanced
-        /// </summary>
         /// <summary>
         /// The advanced
         /// </summary>

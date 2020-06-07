@@ -287,7 +287,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -346,7 +346,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(1);
@@ -396,7 +396,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -456,7 +456,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -515,7 +515,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -574,7 +574,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -643,7 +643,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -711,7 +711,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -760,7 +760,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>());
+            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
             result.AllConflicts.GetAll().Count().Should().Be(2);
         }
 
@@ -1758,6 +1758,40 @@ namespace IronyModManager.Services.Tests
             var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
             result.Definition.Should().Be(def);
             result.PriorityType.Should().Be(DefinitionPriorityType.FIOS);
+        }
+
+        /// <summary>
+        /// Defines the test method EvalDefinitionPriority_should_return_object_due_to_Override.
+        /// </summary>
+        [Fact]
+        public void EvalDefinitionPriority_should_return_object_due_to_Override()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
+            infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, new List<IDefinitionInfoProvider>() { infoProvider.Object });
+
+            var def = new Definition() { File = "test1.txt", ModName = "1", Dependencies = new List<string>() { "2" } };
+            var def2 = new Definition() { File = "test2.txt", ModName = "2" };
+            var result = service.EvalDefinitionPriority(new List<IDefinition>() { def, def2 });
+            result.Definition.Should().Be(def);
+            result.PriorityType.Should().Be(DefinitionPriorityType.ModOverride);
         }
 
         /// <summary>

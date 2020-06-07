@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -228,6 +228,11 @@ namespace IronyModManager.Services
                     isFios = provider.DefinitionUsesFIOSRules(definitions.First());
                     foreach (var item in definitions)
                     {
+                        var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                        if (hasOverrides)
+                        {
+                            continue;
+                        }
                         if (isFios)
                         {
                             definitionEvals.Add(new DefinitionEval()
@@ -245,9 +250,13 @@ namespace IronyModManager.Services
                             });
                         }
                     }
-
                     var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
-                    if (uniqueDefinitions.Count() > 1)
+                    if (uniqueDefinitions.Count() == 1)
+                    {
+                        result.Definition = definitionEvals.First().Definition;
+                        result.PriorityType = DefinitionPriorityType.ModOverride;
+                    }
+                    else if (uniqueDefinitions.Count() > 1)
                     {
                         // Has same filenames?
                         if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
@@ -288,8 +297,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="modOrder">The mod order.</param>
-        /// <returns>IIndexedDefinitions.</returns>
-        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder)
+        /// <param name="patchStateMode">The patch state mode.</param>
+        /// <returns>IConflictResult.</returns>
+        public virtual IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode)
         {
             var conflicts = new HashSet<IDefinition>();
             var fileConflictCache = new Dictionary<string, bool>();
@@ -356,7 +366,7 @@ namespace IronyModManager.Services
             foreach (var item in fileKeys)
             {
                 var definitions = indexedDefinitions.GetByFile(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache, modOrder);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -365,7 +375,7 @@ namespace IronyModManager.Services
             foreach (var item in typeAndIdKeys)
             {
                 var definitions = indexedDefinitions.GetByTypeAndId(item);
-                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), fileConflictCache, modOrder);
+                EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
                 ModDefinitionAnalyze?.Invoke(perc);
@@ -389,7 +399,7 @@ namespace IronyModManager.Services
                     foreach (var def in all)
                     {
                         var hasOverrides = all.Any(p => (p.Dependencies?.Any(p => p.Equals(def.ModName))).GetValueOrDefault());
-                        if (!hasOverrides)
+                        if (!hasOverrides || patchStateMode == PatchStateMode.Advanced)
                         {
                             valid.Add(def);
                         }
@@ -417,6 +427,7 @@ namespace IronyModManager.Services
             ModDefinitionAnalyze?.Invoke(99);
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
             var result = GetModelInstance<IConflictResult>();
+            result.Mode = patchStateMode;
             var conflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
             conflictsIndexed.InitMap(groupedConflicts.Where(p => p.Count() > 1).SelectMany(p => p), true);
             var orphanedConflictsIndexed = DIResolver.Get<IIndexedDefinitions>();
@@ -798,9 +809,10 @@ namespace IronyModManager.Services
         /// <param name="indexedDefinitions">The indexed definitions.</param>
         /// <param name="conflicts">The conflicts.</param>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="fileConflictCache">The file conflict cache.</param>
         /// <param name="modOrder">The mod order.</param>
-        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, Dictionary<string, bool> fileConflictCache, IList<string> modOrder)
+        /// <param name="patchStateMode">The patch state mode.</param>
+        /// <param name="fileConflictCache">The file conflict cache.</param>
+        protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, IList<string> modOrder, PatchStateMode patchStateMode, Dictionary<string, bool> fileConflictCache)
         {
             var validDefinitions = new HashSet<IDefinition>();
             foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
@@ -831,7 +843,7 @@ namespace IronyModManager.Services
                                 continue;
                             }
                             var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
-                            if (hasOverrides)
+                            if (hasOverrides && patchStateMode == PatchStateMode.Default)
                             {
                                 continue;
                             }
@@ -876,7 +888,7 @@ namespace IronyModManager.Services
                             if (fileDefs.GroupBy(p => p.ModName).Count() > 1)
                             {
                                 var hasOverrides = def.Dependencies?.Any(p => fileDefs.Any(s => s.ModName.Equals(p)));
-                                if (hasOverrides.GetValueOrDefault())
+                                if (hasOverrides.GetValueOrDefault() && patchStateMode == PatchStateMode.Default)
                                 {
                                     fileConflictCache.TryAdd(def.FileCI, false);
                                 }

@@ -257,14 +257,10 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (definitions != null)
                 {
-                    return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList());
+                    return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList(), mode);
                 }
                 return null;
             });
-            if (conflicts != null)
-            {
-                conflicts.Mode = mode;
-            }
             var syncedConflicts = await Task.Run(async () =>
             {
                 return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);

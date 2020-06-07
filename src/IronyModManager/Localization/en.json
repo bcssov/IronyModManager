@@ -127,7 +127,8 @@
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
-            "Order": "(Load Order)"
+            "Order": "(Load Order)",
+            "Override":  "(Override)"
         },
         "InvalidConflicts": {
             "Name": "Invalid",

@@ -127,7 +127,8 @@
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
-            "Order": "(Redoslijed učitavanja)"
+            "Order": "(Redoslijed učitavanja)",
+            "Override": "(Nadjačavanje)"
         },
         "InvalidConflicts": {
             "Name": "Nevažeći",
