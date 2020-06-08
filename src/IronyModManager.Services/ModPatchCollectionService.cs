@@ -123,6 +123,35 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Adds the mods to ignore list.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="mods">The mods.</param>
+        /// <returns>IConflictResult.</returns>
+        public virtual IConflictResult AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods)
+        {
+            if (conflictResult != null && mods.Count() > 0)
+            {
+                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var sb = new StringBuilder();
+                foreach (var line in lines)
+                {
+                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    if (!parsed.StartsWith(ModNameIgnoreId))
+                    {
+                        sb.AppendLine(line);
+                    }
+                }
+                foreach (var item in mods)
+                {
+                    sb.AppendLine($"{ModNameIgnoreId}{item}");
+                }
+                conflictResult.IgnoredPaths = sb.ToString().Trim(Environment.NewLine.ToCharArray());
+            }
+            return conflictResult;
+        }
+
+        /// <summary>
         /// apply mod patch as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -461,6 +490,30 @@ namespace IronyModManager.Services
             ModDefinitionAnalyze?.Invoke(100);
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the ignored mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns>IReadOnlyList&lt;System.String&gt;.</returns>
+        public virtual IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult)
+        {
+            var mods = new List<string>();
+            if (conflictResult != null)
+            {
+                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                foreach (var line in lines)
+                {
+                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    if (parsed.StartsWith(ModNameIgnoreId))
+                    {
+                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        mods.Add(ignoredModName);
+                    }
+                }
+            }
+            return mods;
         }
 
         /// <summary>

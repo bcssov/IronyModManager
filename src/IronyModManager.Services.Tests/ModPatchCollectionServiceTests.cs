@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -2338,6 +2338,9 @@ namespace IronyModManager.Services.Tests
             result.Should().Be(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod\\fakemod\\events\\test.txt"));
         }
 
+        /// <summary>
+        /// Defines the test method Should_resolve_full_definition_archive_path.
+        /// </summary>
         [Fact]
         public void Should_resolve_full_definition_archive_path()
         {
@@ -2408,7 +2411,51 @@ namespace IronyModManager.Services.Tests
             result.Should().Be(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod\\fakemod.zip"));
         }
 
+        /// <summary>
+        /// Defines the test method Should_add_mods_to_ignore_list.
+        /// </summary>
+        [Fact]
+        public void Should_add_mods_to_ignore_list()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.AddModsToIgnoreList(new ConflictResult()
+            {
+                IgnoredPaths = "modName:a"
+            }, new List<string>() { "a", "b" });
+            result.IgnoredPaths.Should().Be("modName:a" + Environment.NewLine + "modName:b");
+        }
 
+        /// <summary>
+        /// Defines the test method Should_get_ignored_mods.
+        /// </summary>
+        [Fact]
+        public void Should_get_ignored_mods()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = service.GetIgnoredMods(new ConflictResult()
+            {
+                IgnoredPaths = "modName:a" + Environment.NewLine + "modName:b"
+            });
+            result.Count.Should().Be(2);
+            result.First().Should().Be("a");
+            result.Last().Should().Be("b");
+        }
 
         /// <summary>
         /// Defines the test method Stellaris_Performance_profiling.
