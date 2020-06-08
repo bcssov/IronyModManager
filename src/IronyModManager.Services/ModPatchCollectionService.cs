@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.Services
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
         #region Fields
+
+        /// <summary>
+        /// The mod name ignore identifier
+        /// </summary>
+        private const string ModNameIgnoreId = "modName:";
 
         /// <summary>
         /// The service lock
@@ -954,33 +959,57 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
+                var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
                     var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
-                    if (!parsed.StartsWith("!"))
+                    if (parsed.StartsWith(ModNameIgnoreId))
                     {
-                        ignoreRules.Add(parsed);
+                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        allowedMods.Remove(ignoredModName);
                     }
                     else
                     {
-                        includeRules.Add(parsed.TrimStart('!'));
+                        if (!parsed.StartsWith("!"))
+                        {
+                            ignoreRules.Add(parsed);
+                        }
+                        else
+                        {
+                            includeRules.Add(parsed.TrimStart('!'));
+                        }
                     }
                 }
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
-                    var name = topConflict.Name;
-                    if (!name.EndsWith(Path.DirectorySeparatorChar))
+                    if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
                     {
-                        name = $"{name}{Path.DirectorySeparatorChar}";
-                    }
-                    if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
-                    {
+                        var alreadyIgnored = new HashSet<string>();
                         foreach (var item in topConflict.Children)
                         {
-                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            if (!item.Mods.Any(x => allowedMods.Contains(x)))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
+                        }
+                        var name = topConflict.Name;
+                        if (!name.EndsWith(Path.DirectorySeparatorChar))
+                        {
+                            name = $"{name}{Path.DirectorySeparatorChar}";
+                        }
+                        if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            foreach (var item in topConflict.Children)
+                            {
+                                if (!alreadyIgnored.Contains(item.Key))
+                                {
+                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                }
+                            }
                         }
                     }
                 }
