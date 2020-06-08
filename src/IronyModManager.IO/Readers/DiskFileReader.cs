@@ -60,7 +60,7 @@ namespace IronyModManager.IO
                 var files = Directory.EnumerateFiles(rootPath, file, SearchOption.TopDirectoryOnly);
                 if (files.Count() > 0)
                 {
-                    readStream(files.First());
+                    return readStream(files.First());
                 }
             }
             else
@@ -68,7 +68,7 @@ namespace IronyModManager.IO
                 var fullPath = Path.Combine(rootPath, file);
                 if (File.Exists(fullPath))
                 {
-                    readStream(fullPath);
+                    return readStream(fullPath);
                 }
             }
             return null;
