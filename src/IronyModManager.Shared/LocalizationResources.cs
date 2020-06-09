@@ -220,6 +220,12 @@ namespace IronyModManager.Shared
                 public const string Advanced = Prefix + "Advanced";
                 public const string Close = Prefix + "Close";
             }
+            public static class ModFilter
+            {
+                public const string Prefix = "Conflict_Solver.ModFilter.";
+                public const string Title = Prefix + "Title";
+                public const string Close = Prefix + "Close";
+            }
         }
         public static class ConflictIgnore
         {

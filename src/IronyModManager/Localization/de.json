@@ -164,6 +164,10 @@
             "Default": "Standard",
             "Advanced": "Erweitert",
             "Close": "Schließen"
+        },
+        "ModFilter": {
+            "Title": "Mod Filter",
+            "Close": "Schließen"
         }
     },
     "ConflictIgnore": {

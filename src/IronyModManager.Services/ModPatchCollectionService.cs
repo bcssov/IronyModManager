@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -128,11 +128,12 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="mods">The mods.</param>
         /// <returns>IConflictResult.</returns>
-        public virtual IConflictResult AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods)
+        public virtual void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods)
         {
-            if (conflictResult != null && mods.Count() > 0)
+            if (conflictResult != null)
             {
-                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 var sb = new StringBuilder();
                 foreach (var line in lines)
                 {
@@ -142,13 +143,15 @@ namespace IronyModManager.Services
                         sb.AppendLine(line);
                     }
                 }
-                foreach (var item in mods)
+                if (mods != null)
                 {
-                    sb.AppendLine($"{ModNameIgnoreId}{item}");
+                    foreach (var item in mods)
+                    {
+                        sb.AppendLine($"{ModNameIgnoreId}{item}");
+                    }
                 }
                 conflictResult.IgnoredPaths = sb.ToString().Trim(Environment.NewLine.ToCharArray());
             }
-            return conflictResult;
         }
 
         /// <summary>
@@ -502,7 +505,8 @@ namespace IronyModManager.Services
             var mods = new List<string>();
             if (conflictResult != null)
             {
-                var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
                     var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
@@ -1036,17 +1040,20 @@ namespace IronyModManager.Services
                         }
                     }
                 }
+                var alreadyIgnored = new HashSet<string>();
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
                     if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
                     {
-                        var alreadyIgnored = new HashSet<string>();
                         foreach (var item in topConflict.Children)
                         {
                             if (!item.Mods.Any(x => allowedMods.Contains(x)))
                             {
-                                alreadyIgnored.Add(item.Key);
-                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                if (!alreadyIgnored.Contains(item.Key))
+                                {
+                                    alreadyIgnored.Add(item.Key);
+                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                }
                             }
                         }
                         var name = topConflict.Name;
@@ -1060,8 +1067,20 @@ namespace IronyModManager.Services
                             {
                                 if (!alreadyIgnored.Contains(item.Key))
                                 {
+                                    alreadyIgnored.Add(item.Key);
                                     ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                                 }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in topConflict.Children)
+                        {
+                            if (!alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                             }
                         }
                     }

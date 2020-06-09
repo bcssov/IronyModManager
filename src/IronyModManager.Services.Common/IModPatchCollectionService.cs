@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -52,8 +52,7 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="mods">The mods.</param>
-        /// <returns>IConflictResult.</returns>
-        IConflictResult AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods);
+        void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods);
 
         /// <summary>
         /// Applies the mod patch asynchronous.

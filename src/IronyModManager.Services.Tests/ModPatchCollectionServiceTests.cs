@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -2426,11 +2426,12 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.AddModsToIgnoreList(new ConflictResult()
+            var c = (new ConflictResult()
             {
                 IgnoredPaths = "modName:a"
-            }, new List<string>() { "a", "b" });
-            result.IgnoredPaths.Should().Be("modName:a" + Environment.NewLine + "modName:b");
+            });
+            service.AddModsToIgnoreList(c, new List<string>() { "a", "b" });
+            c.IgnoredPaths.Should().Be("modName:a" + Environment.NewLine + "modName:b");
         }
 
         /// <summary>
