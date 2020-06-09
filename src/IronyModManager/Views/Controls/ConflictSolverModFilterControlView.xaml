@@ -1,0 +1,30 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="IronyModManager.Views.Controls.ConflictSolverModFilterControlView">
+  <Panel>
+    <Button Content="{Binding ModFilter}" Command="{Binding ModFilterCommand}"
+            BorderThickness="0,0,0,0" Background="Transparent"
+            Foreground="{DynamicResource IronyAccentBrush}"></Button>
+    <Popup PlacementMode="Bottom" IsOpen="{Binding IsOpen}"
+       Topmost="True" ObeyScreenEdges="True">
+      <Border BorderThickness="2,2,2,2" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+        <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+          <ListBox Items="{Binding Mods}" SelectedItems="{Binding SelectedMods}" SelectionMode="Multiple"
+                   Height="400" Width="300" Grid.Row="0">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" TextWrapping="Wrap"></TextBlock>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <Panel Grid.Row="1" Margin="0,5">
+            <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
+          </Panel>
+        </Grid>
+      </Border>
+    </Popup>
+  </Panel>
+</UserControl>

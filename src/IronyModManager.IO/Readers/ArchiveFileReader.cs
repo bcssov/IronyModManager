@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -50,6 +50,15 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public virtual Stream GetStream(string rootPath, string file)
         {
+            static MemoryStream readStream(SharpCompress.Readers.IReader reader)
+            {
+                using var entryStream = reader.OpenEntryStream();
+                var memoryStream = new MemoryStream();
+                entryStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return memoryStream;
+            }
+
             using var fileStream = File.OpenRead(rootPath);
             using var reader = ReaderFactory.Open(fileStream);
             while (reader.MoveToNextEntry())
@@ -64,20 +73,12 @@ namespace IronyModManager.IO.Readers
                         var endsWith = file.Replace("*", string.Empty);
                         if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
                         {
-                            using var entryStream = reader.OpenEntryStream();
-                            var memoryStream = new MemoryStream();
-                            entryStream.CopyTo(memoryStream);
-                            memoryStream.Seek(0, SeekOrigin.Begin);
-                            return memoryStream;
+                            return readStream(reader);
                         }
                     }
                     else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
                     {
-                        using var entryStream = reader.OpenEntryStream();
-                        var memoryStream = new MemoryStream();
-                        entryStream.CopyTo(memoryStream);
-                        memoryStream.Seek(0, SeekOrigin.Begin);
-                        return memoryStream;
+                        return readStream(reader);
                     }
                 }
             }

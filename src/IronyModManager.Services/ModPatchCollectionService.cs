@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.Services
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
         #region Fields
+
+        /// <summary>
+        /// The mod name ignore identifier
+        /// </summary>
+        private const string ModNameIgnoreId = "modName:";
 
         /// <summary>
         /// The service lock
@@ -116,6 +121,38 @@ namespace IronyModManager.Services
         #endregion Events
 
         #region Methods
+
+        /// <summary>
+        /// Adds the mods to ignore list.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="mods">The mods.</param>
+        /// <returns>IConflictResult.</returns>
+        public virtual void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods)
+        {
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                var sb = new StringBuilder();
+                foreach (var line in lines)
+                {
+                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    if (!parsed.StartsWith(ModNameIgnoreId))
+                    {
+                        sb.AppendLine(line);
+                    }
+                }
+                if (mods != null)
+                {
+                    foreach (var item in mods)
+                    {
+                        sb.AppendLine($"{ModNameIgnoreId}{item}");
+                    }
+                }
+                conflictResult.IgnoredPaths = sb.ToString().Trim(Environment.NewLine.ToCharArray());
+            }
+        }
 
         /// <summary>
         /// apply mod patch as an asynchronous operation.
@@ -456,6 +493,31 @@ namespace IronyModManager.Services
             ModDefinitionAnalyze?.Invoke(100);
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the ignored mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns>IReadOnlyList&lt;System.String&gt;.</returns>
+        public virtual IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult)
+        {
+            var mods = new List<string>();
+            if (conflictResult != null)
+            {
+                var ignoredPaths = conflictResult.IgnoredPaths ?? string.Empty;
+                var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
+                foreach (var line in lines)
+                {
+                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    if (parsed.StartsWith(ModNameIgnoreId))
+                    {
+                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        mods.Add(ignoredModName);
+                    }
+                }
+            }
+            return mods;
         }
 
         /// <summary>
@@ -954,33 +1016,72 @@ namespace IronyModManager.Services
             ruleIgnoredDefinitions.InitMap(null, true);
             if (!string.IsNullOrEmpty(conflictResult.IgnoredPaths))
             {
+                var allowedMods = GetCollectionMods().Select(p => p.Name).ToList();
                 var ignoreRules = new List<string>();
                 var includeRules = new List<string>();
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
                     var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
-                    if (!parsed.StartsWith("!"))
+                    if (parsed.StartsWith(ModNameIgnoreId))
                     {
-                        ignoreRules.Add(parsed);
+                        var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
+                        allowedMods.Remove(ignoredModName);
                     }
                     else
                     {
-                        includeRules.Add(parsed.TrimStart('!'));
+                        if (!parsed.StartsWith("!"))
+                        {
+                            ignoreRules.Add(parsed);
+                        }
+                        else
+                        {
+                            includeRules.Add(parsed.TrimStart('!'));
+                        }
                     }
                 }
+                var alreadyIgnored = new HashSet<string>();
                 foreach (var topConflict in conflictResult.Conflicts.GetHierarchicalDefinitions())
                 {
-                    var name = topConflict.Name;
-                    if (!name.EndsWith(Path.DirectorySeparatorChar))
-                    {
-                        name = $"{name}{Path.DirectorySeparatorChar}";
-                    }
-                    if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                    if (topConflict.Mods.Any(x => allowedMods.Contains(x)))
                     {
                         foreach (var item in topConflict.Children)
                         {
-                            ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            if (!item.Mods.Any(x => allowedMods.Contains(x)))
+                            {
+                                if (!alreadyIgnored.Contains(item.Key))
+                                {
+                                    alreadyIgnored.Add(item.Key);
+                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                }
+                            }
+                        }
+                        var name = topConflict.Name;
+                        if (!name.EndsWith(Path.DirectorySeparatorChar))
+                        {
+                            name = $"{name}{Path.DirectorySeparatorChar}";
+                        }
+                        if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            foreach (var item in topConflict.Children)
+                            {
+                                if (!alreadyIgnored.Contains(item.Key))
+                                {
+                                    alreadyIgnored.Add(item.Key);
+                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in topConflict.Children)
+                        {
+                            if (!alreadyIgnored.Contains(item.Key))
+                            {
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
+                            }
                         }
                     }
                 }

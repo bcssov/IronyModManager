@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -99,12 +99,14 @@ namespace IronyModManager.ViewModels
         /// <param name="binaryMergeViewer">The binary merge viewer.</param>
         /// <param name="modCompareSelector">The mod compare selector.</param>
         /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
+        /// <param name="modFilter">The mod filter.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
+            ConflictSolverModFilterControlViewModel modFilter,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
@@ -116,6 +118,7 @@ namespace IronyModManager.ViewModels
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
             IgnoreConflictsRules = ignoreConflictsRules;
+            ModFilter = modFilter;
         }
 
         #endregion Constructors
@@ -285,6 +288,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The mod compare selector.</value>
         public virtual ModCompareSelectorControlViewModel ModCompareSelector { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod filter.
+        /// </summary>
+        /// <value>The mod filter.</value>
+        public virtual ConflictSolverModFilterControlViewModel ModFilter { get; protected set; }
 
         /// <summary>
         /// Gets or sets the index of the previous conflict.
@@ -705,6 +714,15 @@ namespace IronyModManager.ViewModels
             IgnoreRulesCommand = ReactiveCommand.Create(() =>
             {
                 EditingIgnoreConflictsRules = true;
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.ModFilter.IsActivated).Where(p => p).Subscribe(s =>
+            {
+                ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
+                this.WhenAnyValue(p => p.ModFilter.HasSavedState).Where(p => p).Subscribe(s =>
+                {
+                    FilterHierarchalConflicts(Conflicts);
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

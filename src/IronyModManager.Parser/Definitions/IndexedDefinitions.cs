@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -124,6 +124,8 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = null;
             typeAndIdKeys.Clear();
             typeAndIdKeys = null;
+            typeKeys.Clear();
+            typeKeys = null;
             childHierarchicalDefinitions.Clear();
             childHierarchicalDefinitions = null;
             mainHierarchalDefinitions.Clear();
@@ -286,14 +288,15 @@ namespace IronyModManager.Parser.Definitions
                 shouldAdd = true;
             }
             bool exists = false;
+            IHierarchicalDefinitions child = null;
             if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
             {
-                var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
                 exists = child != null;
             }
             if (!exists)
             {
-                var child = DIResolver.Get<IHierarchicalDefinitions>();
+                child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
                 children.Add(child);
@@ -301,6 +304,22 @@ namespace IronyModManager.Parser.Definitions
                 {
                     mainHierarchalDefinitions.Add(hierarchicalDefinition);
                 }
+            }
+            if (child.Mods == null)
+            {
+                child.Mods = new List<string>();
+            }
+            if (!child.Mods.Contains(definition.ModName))
+            {
+                child.Mods.Add(definition.ModName);
+            }
+            if (hierarchicalDefinition.Mods == null)
+            {
+                hierarchicalDefinition.Mods = new List<string>();
+            }
+            if (!hierarchicalDefinition.Mods.Contains(definition.ModName))
+            {
+                hierarchicalDefinition.Mods.Add(definition.ModName);
             }
         }
 

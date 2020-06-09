@@ -15,8 +15,9 @@
     </Panel>
     <Grid RowDefinitions="4*,9*,1.1*" ColumnDefinitions="3*,7*" IsVisible="{Binding !EditingIgnoreConflictsRules}">
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
-        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
+        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">          
           <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <ContentControl Content="{Binding ModFilter}"></ContentControl>
           <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                    HorizontalAlignment="Stretch" MinHeight="30">
             <ComboBox.ItemTemplate>
@@ -29,7 +30,7 @@
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
-                     ConverterParameter=x-75}">
+                     ConverterParameter=x-100}">
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <Grid ColumnDefinitions="*" Background="Transparent">

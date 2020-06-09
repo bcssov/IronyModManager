@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-09-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -46,6 +46,13 @@ namespace IronyModManager.Services.Common
         #endregion Events
 
         #region Methods
+
+        /// <summary>
+        /// Adds the mods to ignore list.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="mods">The mods.</param>
+        void AddModsToIgnoreList(IConflictResult conflictResult, IEnumerable<string> mods);
 
         /// <summary>
         /// Applies the mod patch asynchronous.
@@ -94,6 +101,13 @@ namespace IronyModManager.Services.Common
         /// <param name="patchStateMode">The patch state mode.</param>
         /// <returns>IConflictResult.</returns>
         IConflictResult FindConflicts(IIndexedDefinitions indexedDefinitions, IList<string> modOrder, PatchStateMode patchStateMode);
+
+        /// <summary>
+        /// Gets the ignored mods.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <returns>IReadOnlyList&lt;System.String&gt;.</returns>
+        IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult);
 
         /// <summary>
         /// Gets the mod objects.

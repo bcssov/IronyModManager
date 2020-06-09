@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -207,7 +207,10 @@ namespace IronyModManager.Storage
                     }
                     storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
                 }
-                return storageItem.FileName;
+                if (storageItem != null)
+                {
+                    return storageItem.FileName;
+                }
             }
             return path;
         }
