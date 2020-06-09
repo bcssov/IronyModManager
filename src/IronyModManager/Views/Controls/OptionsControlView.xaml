@@ -10,7 +10,7 @@
             Foreground="{DynamicResource IronyAccentBrush}"></Button>
     <Popup PlacementMode="Bottom" IsOpen="{Binding IsOpen}"
            Topmost="True" ObeyScreenEdges="True">
-      <Border BorderThickness="2,2,2,2" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+      <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <Grid ColumnDefinitions="3*,3*,1*,1*" RowDefinitions="1*,1*,1*" Grid.Row="0">
             <TextBlock Text="{Binding GameExecutable}" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
