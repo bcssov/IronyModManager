@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-10-2020
 // ***********************************************************************
 // <copyright file="Bootstrap.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
@@ -19,6 +19,7 @@ using System.Reflection;
 using IronyModManager.DI.Assemblies;
 using IronyModManager.DI.Extensions;
 using IronyModManager.DI.Mappers;
+using IronyModManager.DI.MessageBus;
 using IronyModManager.DI.PostStartup;
 using SimpleInjector;
 
@@ -56,6 +57,7 @@ namespace IronyModManager.DI
             ConfigureOptions(opts.Container);
             ConfigureExtensions(opts.Container);
 
+            RegisterOwnServices();
             RegisterAssemblies();
         }
 
@@ -162,6 +164,14 @@ namespace IronyModManager.DI
             }
 
             DIContainer.Container.RegisterPackages(assemblies);
+        }
+
+        /// <summary>
+        /// Registers the own services.
+        /// </summary>
+        private static void RegisterOwnServices()
+        {
+            MessageBusRegistration.Register();
         }
 
         #endregion Methods
