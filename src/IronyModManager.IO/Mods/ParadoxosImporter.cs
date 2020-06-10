@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-10-2020
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The mod directory
         /// </summary>
-        private const string modDirectory = "mod/{0}";
+        private const string ModDirectory = "mod/{0}";
 
         /// <summary>
         /// The logger
@@ -46,7 +46,7 @@ namespace IronyModManager.IO.Mods
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParadoxosImporter"/> class.
+        /// Initializes a new instance of the <see cref="ParadoxosImporter" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public ParadoxosImporter(ILogger logger)
@@ -84,7 +84,7 @@ namespace IronyModManager.IO.Mods
                     {
                         if (!p.FileName.StartsWith("mod/", StringComparison.OrdinalIgnoreCase))
                         {
-                            return string.Format(modDirectory, p.FileName);
+                            return string.Format(ModDirectory, p.FileName);
                         }
                         return p.FileName;
                     }).ToList();

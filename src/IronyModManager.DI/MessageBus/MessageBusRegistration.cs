@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Reflection;
-using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using SlimMessageBus.Host.Config;
 using SlimMessageBus.Host.Memory;
 

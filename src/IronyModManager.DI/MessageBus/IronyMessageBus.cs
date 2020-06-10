@@ -15,16 +15,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using SlimMessageBus;
 
 namespace IronyModManager.DI.MessageBus
 {
     /// <summary>
     /// Class IronyMessageBus.
-    /// Implements the <see cref="IronyModManager.Shared.IIronyMessageBus" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IIronyMessageBus" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.IIronyMessageBus" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.IIronyMessageBus" />
     public class IronyMessageBus : IIronyMessageBus
     {
         #region Fields
@@ -39,7 +39,7 @@ namespace IronyModManager.DI.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IronyMessageBus"/> class.
+        /// Initializes a new instance of the <see cref="IronyMessageBus" /> class.
         /// </summary>
         /// <param name="messageBus">The message bus.</param>
         public IronyMessageBus(IMessageBus messageBus)

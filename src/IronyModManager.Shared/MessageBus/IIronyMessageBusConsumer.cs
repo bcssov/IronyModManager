@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Shared
+// Assembly         : IronyModManager.Shared.MessageBus
 // Author           : Mario
 // Created          : 06-10-2020
 //
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System;
 using SlimMessageBus;
 
-namespace IronyModManager.Shared
+namespace IronyModManager.Shared.MessageBus
 {
     /// <summary>
     /// Interface IIronyMessageBusConsumer
@@ -23,7 +23,15 @@ namespace IronyModManager.Shared
     /// </summary>
     /// <typeparam name="TMessage">The type of the t message.</typeparam>
     /// <seealso cref="SlimMessageBus.IConsumer{TMessage}" />
-    public interface IIronyMessageBusConsumer<in TMessage> : IConsumer<TMessage>
+    public interface IIronyMessageBusConsumer<TMessage> : IConsumer<TMessage>
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when [on message received].
+        /// </summary>
+        event EventHandler<TMessage> OnMessageReceived;
+
+        #endregion Events
     }
 }

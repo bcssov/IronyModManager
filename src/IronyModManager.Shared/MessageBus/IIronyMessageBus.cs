@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Shared
+// Assembly         : IronyModManager.Shared.MessageBus
 // Author           : Mario
 // Created          : 06-10-2020
 //
@@ -17,7 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SlimMessageBus;
 
-namespace IronyModManager.Shared
+namespace IronyModManager.Shared.MessageBus
 {
     /// <summary>
     /// Interface IIronyMessageBus
