@@ -57,7 +57,6 @@ namespace IronyModManager.DI
             ConfigureOptions(opts.Container);
             ConfigureExtensions(opts.Container);
 
-            RegisterOwnServices();
             RegisterAssemblies();
         }
 
@@ -130,6 +129,7 @@ namespace IronyModManager.DI
 
             RegisterDIAssemblies(appParams, pluginParams);
             RegisterAutomapperProfiles(appParams, pluginParams);
+            RegisterMessageBus(appParams, pluginParams);
         }
 
         /// <summary>
@@ -167,11 +167,17 @@ namespace IronyModManager.DI
         }
 
         /// <summary>
-        /// Registers the own services.
+        /// Registers the message bus.
         /// </summary>
-        private static void RegisterOwnServices()
+        /// <param name="assemblyFinderParams">The assembly finder parameters.</param>
+        private static void RegisterMessageBus(params AssemblyFinderParams[] assemblyFinderParams)
         {
-            MessageBusRegistration.Register();
+            var assemblies = new List<Assembly>() { };
+            foreach (var assemblyFinderParam in assemblyFinderParams)
+            {
+                assemblies.AddRange(AssemblyFinder.Find(assemblyFinderParam));
+            }
+            MessageBusRegistration.Register(assemblies);
         }
 
         #endregion Methods
