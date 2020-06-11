@@ -112,6 +112,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
         void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
+        /// <summary>
+        /// Removes the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        void Remove(IDefinition definition);
+
         #endregion Methods
     }
 }

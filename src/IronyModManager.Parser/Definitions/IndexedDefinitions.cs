@@ -264,6 +264,32 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Removes the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        public void Remove(IDefinition definition)
+        {
+            definitions.Remove(definition);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectoryCI);
+            if (hierarchicalDefinition != null)
+            {
+                if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
+                {
+                    var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                    if (child != null)
+                    {
+                        children.Remove(child);
+                    }
+                    if (children.Count == 0)
+                    {
+                        childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
+                        mainHierarchalDefinitions.Remove(hierarchicalDefinition);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Constructs the key.
         /// </summary>
         /// <param name="keys">The keys.</param>
