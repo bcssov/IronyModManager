@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -18,12 +18,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
@@ -56,7 +57,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The state name
         /// </summary>
-        private const string StateName = "state" + Shared.Constants.JsonExtension;
+        private const string StateName = "state" + Constants.JsonExtension;
 
         /// <summary>
         /// The externally loaded code
@@ -84,9 +85,19 @@ namespace IronyModManager.IO.Mods
         private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The write counter
+        /// </summary>
+        private int writeCounter = 0;
 
         #endregion Fields
 
@@ -97,22 +108,15 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders)
+        /// <param name="messageBus">The message bus.</param>
+        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
         {
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
-
-        #region Events
-
-        /// <summary>
-        /// Occurs when [mod definition analyze].
-        /// </summary>
-        public event Delegates.WriteOperationStateDelegate WriteOperationState;
-
-        #endregion Events
 
         #region Methods
 
@@ -642,10 +646,12 @@ namespace IronyModManager.IO.Mods
         /// <param name="modifiedHistory">The modified history.</param>
         /// <param name="externalCode">The external code.</param>
         /// <param name="path">The path.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
+            writeCounter++;
             var mutex = await writeLock.LockAsync();
-            WriteOperationState?.Invoke(true);
+            await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
             if (File.Exists(backupPath))
@@ -705,7 +711,8 @@ namespace IronyModManager.IO.Mods
                     await File.WriteAllTextAsync(statePath, serialized);
                     return true;
                 });
-                WriteOperationState?.Invoke(false);
+                writeCounter--;
+                await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
             }).ConfigureAwait(false);
         }

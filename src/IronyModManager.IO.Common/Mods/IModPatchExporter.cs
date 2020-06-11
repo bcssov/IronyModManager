@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods.Models;
-using static IronyModManager.IO.Common.Delegates;
 
 namespace IronyModManager.IO.Common.Mods
 {
@@ -24,15 +23,6 @@ namespace IronyModManager.IO.Common.Mods
     /// </summary>
     public interface IModPatchExporter
     {
-        #region Events
-
-        /// <summary>
-        /// Occurs when [mod definition analyze].
-        /// </summary>
-        event WriteOperationStateDelegate WriteOperationState;
-
-        #endregion Events
-
         #region Methods
 
         /// <summary>

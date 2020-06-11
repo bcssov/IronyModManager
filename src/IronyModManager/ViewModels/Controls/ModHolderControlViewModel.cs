@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -63,6 +64,21 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ILogger logger;
 
         /// <summary>
+        /// The mod definition analyze handler
+        /// </summary>
+        private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
+
+        /// <summary>
+        /// The mod definition load handler
+        /// </summary>
+        private readonly ModDefinitionLoadHandler modDefinitionLoadHandler;
+
+        /// <summary>
+        /// The mod definition patch load handler
+        /// </summary>
+        private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -92,10 +108,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="installedModsControlViewModel">The installed mods control view model.</param>
         /// <param name="collectionModsControlViewModel">The collection mods control view model.</param>
+        /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
+        /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
+        /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
-            InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel, ILogger logger)
+            InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
+            ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
+            ILogger logger)
         {
             this.modService = modService;
             this.modPatchCollectionService = modPatchCollectionService;
@@ -104,6 +125,9 @@ namespace IronyModManager.ViewModels.Controls
             this.gameService = gameService;
             this.logger = logger;
             this.appAction = appAction;
+            this.modDefinitionLoadHandler = modDefinitionLoadHandler;
+            this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
+            this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -417,41 +441,41 @@ namespace IronyModManager.ViewModels.Controls
                 ForceClosePopups();
             }).DisposeWith(disposables);
 
-            modPatchCollectionService.ModDefinitionLoad += (percentage) =>
+            modDefinitionLoadHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = percentage,
+                    PercentDone = s.Percentage,
                     Count = 1,
                     TotalCount = 3
                 });
                 TriggerOverlay(true, message, overlayProgress);
-            };
+            }).DisposeWith(disposables);
 
-            modPatchCollectionService.ModDefinitionAnalyze += (percentage) =>
+            modDefinitionAnalyzeHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = percentage,
+                    PercentDone = s.Percentage,
                     Count = 2,
                     TotalCount = 3
                 });
                 TriggerOverlay(true, message, overlayProgress);
-            };
+            }).DisposeWith(disposables);
 
-            modPatchCollectionService.ModDefinitionPatchLoad += (percentage) =>
+            modDefinitionPatchLoadHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = percentage,
+                    PercentDone = s.Percentage,
                     Count = 3,
                     TotalCount = 3
                 });
                 TriggerOverlay(true, message, overlayProgress);
-            };
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

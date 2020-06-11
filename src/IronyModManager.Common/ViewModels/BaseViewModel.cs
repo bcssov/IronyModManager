@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -158,10 +158,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="progress">The progress.</param>
         protected virtual void TriggerOverlay(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            Task.Run(() =>
-            {
-                TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
-            });
+            TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
         }
 
         /// <summary>

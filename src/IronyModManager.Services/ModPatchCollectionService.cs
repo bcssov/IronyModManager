@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -29,7 +29,9 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -61,6 +63,11 @@ namespace IronyModManager.Services
         private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The mod patch exporter
         /// </summary>
         private readonly IModPatchExporter modPatchExporter;
@@ -77,6 +84,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
@@ -86,39 +94,17 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModPatchCollectionService(IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModPatchCollectionService(IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.messageBus = messageBus;
             this.parserManager = parserManager;
             this.definitionInfoProviders = definitionInfoProviders;
             this.modPatchExporter = modPatchExporter;
-            this.modPatchExporter.WriteOperationState += (args) =>
-            {
-                OnShutdownState(args);
-            };
         }
 
         #endregion Constructors
-
-        #region Events
-
-        /// <summary>
-        /// Occurs when [mod definition analyze].
-        /// </summary>
-        public event ModDefinitionAnalyzeDelegate ModDefinitionAnalyze;
-
-        /// <summary>
-        /// Occurs when [mod analyze].
-        /// </summary>
-        public event ModDefinitionLoadDelegate ModDefinitionLoad;
-
-        /// <summary>
-        /// Occurs when [mod definition patch load].
-        /// </summary>
-        public event ModDefinitionPatchLoadDelegate ModDefinitionPatchLoad;
-
-        #endregion Events
 
         #region Methods
 
@@ -353,7 +339,7 @@ namespace IronyModManager.Services
 
             double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count();
             double processed = 0;
-            ModDefinitionAnalyze?.Invoke(0);
+            messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
 
             static IDefinition copyDefinition(IDefinition definition)
             {
@@ -412,7 +398,7 @@ namespace IronyModManager.Services
                 EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                ModDefinitionAnalyze?.Invoke(perc);
+                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
             }
 
             foreach (var item in typeAndIdKeys)
@@ -421,7 +407,7 @@ namespace IronyModManager.Services
                 EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                ModDefinitionAnalyze?.Invoke(perc);
+                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
             }
 
             var overwrittenDefs = new Dictionary<string, IDefinition>();
@@ -464,10 +450,10 @@ namespace IronyModManager.Services
                 }
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                ModDefinitionAnalyze?.Invoke(perc);
+                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
             }
 
-            ModDefinitionAnalyze?.Invoke(99);
+            messageBus.Publish(new ModDefinitionAnalyzeEvent(99));
             var groupedConflicts = conflicts.GroupBy(p => p.TypeAndId);
             var result = GetModelInstance<IConflictResult>();
             result.Mode = patchStateMode;
@@ -490,7 +476,7 @@ namespace IronyModManager.Services
             var overwrittenDefinitions = DIResolver.Get<IIndexedDefinitions>();
             overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value));
             result.OverwrittenConflicts = overwrittenDefinitions;
-            ModDefinitionAnalyze?.Invoke(100);
+            messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
             return result;
         }
@@ -536,7 +522,7 @@ namespace IronyModManager.Services
 
             double processed = 0;
             double total = mods.Count();
-            ModDefinitionLoad?.Invoke(0);
+            messageBus.Publish(new ModDefinitionLoadEvent(0));
 
             mods.AsParallel().ForAll((m) =>
             {
@@ -553,14 +539,14 @@ namespace IronyModManager.Services
                 {
                     processed++;
                     var perc = GetProgressPercentage(total, processed);
-                    ModDefinitionLoad?.Invoke(perc);
+                    messageBus.Publish(new ModDefinitionLoadEvent(perc));
                 }
             });
 
-            ModDefinitionLoad?.Invoke(99);
+            messageBus.Publish(new ModDefinitionLoadEvent(99));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
-            ModDefinitionLoad?.Invoke(100);
+            messageBus.Publish(new ModDefinitionLoadEvent(100));
             return indexed;
         }
 
@@ -721,7 +707,7 @@ namespace IronyModManager.Services
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                ModDefinitionPatchLoad?.Invoke(0);
+                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(0));
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
@@ -739,7 +725,7 @@ namespace IronyModManager.Services
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 96);
-                        ModDefinitionPatchLoad?.Invoke(perc);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
@@ -747,7 +733,7 @@ namespace IronyModManager.Services
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 96);
-                        ModDefinitionPatchLoad?.Invoke(perc);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
                     }
                     foreach (var item in state.OverwrittenConflicts.GroupBy(p => p.TypeAndId))
                     {
@@ -766,12 +752,12 @@ namespace IronyModManager.Services
                         var matchedConflicts = conflictResult.OverwrittenConflicts.GetByTypeAndId(item.First().TypeAndId);
                         await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
                         var perc = GetProgressPercentage(total, processed, 96);
-                        ModDefinitionPatchLoad?.Invoke(perc);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
                     }
 
                     if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
                     {
-                        ModDefinitionPatchLoad?.Invoke(97);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(97));
                         if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -793,7 +779,7 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Count() > 0)
                     {
-                        ModDefinitionPatchLoad?.Invoke(98);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(98));
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -803,7 +789,7 @@ namespace IronyModManager.Services
                         });
                     }
 
-                    ModDefinitionPatchLoad?.Invoke(99);
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(99));
                     var conflicts = GetModelInstance<IConflictResult>();
                     conflicts.AllConflicts = conflictResult.AllConflicts;
                     conflicts.Conflicts = conflictResult.Conflicts;
@@ -831,8 +817,7 @@ namespace IronyModManager.Services
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
-
-                    ModDefinitionPatchLoad?.Invoke(100);
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
 
                     return conflicts;
                 }
@@ -841,7 +826,7 @@ namespace IronyModManager.Services
                     var exportedConflicts = false;
                     if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
                     {
-                        ModDefinitionPatchLoad?.Invoke(96);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(96));
                         if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -860,13 +845,13 @@ namespace IronyModManager.Services
                             }
                             exportedConflicts = true;
                         }
-                        ModDefinitionPatchLoad?.Invoke(97);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(97));
                     }
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Count() > 0)
                     {
                         exportedConflicts = true;
-                        ModDefinitionPatchLoad?.Invoke(98);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(98));
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -874,10 +859,10 @@ namespace IronyModManager.Services
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
-                        ModDefinitionPatchLoad?.Invoke(99);
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(99));
                     }
 
-                    ModDefinitionPatchLoad?.Invoke(100);
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
                     if (exportedConflicts)
                     {
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
