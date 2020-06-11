@@ -706,6 +706,53 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Resets the resolved conflict.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool ResetResolvedConflict(IConflictResult conflictResult, string typeAndId)
+        {
+            return UnResolveConflict(conflictResult, typeAndId, true);
+        }
+
+        /// <summary>
+        /// Resets the ignored conflict.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool ResetIgnoredConflict(IConflictResult conflictResult, string typeAndId)
+        {
+            return UnResolveConflict(conflictResult, typeAndId, false);
+        }
+
+        /// <summary>
+        /// Uns the resolve conflict.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="isResolvedConflict">if set to <c>true</c> [is resolved conflict].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool UnResolveConflict(IConflictResult conflictResult, string typeAndId, bool isResolvedConflict)
+        {
+            if (conflictResult != null)
+            {
+                var indexed = isResolvedConflict ? conflictResult.ResolvedConflicts : conflictResult.IgnoredConflicts;
+                var result = indexed.GetByTypeAndId(typeAndId);
+                if (result.Count() > 0)
+                {
+                    foreach (var item in result)
+                    {
+                        indexed.Remove(item);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// synchronize patch state as an asynchronous operation.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>

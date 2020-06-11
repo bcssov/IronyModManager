@@ -137,10 +137,26 @@ namespace IronyModManager.Services.Common
         Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
 
         /// <summary>
+        /// Resets the ignored conflict.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ResetIgnoredConflict(IConflictResult conflictResult, string typeAndId);
+
+        /// <summary>
         /// Resets the patch state cache.
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool ResetPatchStateCache();
+
+        /// <summary>
+        /// Resets the resolved conflict.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ResetResolvedConflict(IConflictResult conflictResult, string typeAndId);
 
         /// <summary>
         /// Resolves the full definition path.

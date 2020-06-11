@@ -2430,10 +2430,10 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var c = (new ConflictResult()
+            var c = new ConflictResult()
             {
                 IgnoredPaths = "modName:a"
-            });
+            };
             service.AddModsToIgnoreList(c, new List<string>() { "a", "b" });
             c.IgnoredPaths.Should().Be("modName:a" + Environment.NewLine + "modName:b");
         }
@@ -2460,6 +2460,143 @@ namespace IronyModManager.Services.Tests
             result.Count.Should().Be(2);
             result.First().Should().Be("a");
             result.Last().Should().Be("b");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_reset_resolved_conflict.
+        /// </summary>
+        [Fact]
+        public void Should_reset_resolved_conflict()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    Type = "test",
+                    Id = "1"
+                }
+            });
+
+            var c = new ConflictResult()
+            {
+                ResolvedConflicts = resolved
+            };
+            var result = service.ResetResolvedConflict(c, "test-1");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_reset_resolved_conflict.
+        /// </summary>
+        [Fact]
+        public void Should_not_reset_resolved_conflict()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var resolved = new IndexedDefinitions();
+            resolved.InitMap(new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    Type = "test",
+                    Id = "1"
+                }
+            });
+
+            var c = new ConflictResult()
+            {
+                ResolvedConflicts = resolved
+            };
+            var result = service.ResetResolvedConflict(c, "test-2");
+            result.Should().BeFalse();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_reset_ignored_conflict.
+        /// </summary>
+        [Fact]
+        public void Should_reset_ignored_conflict()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var ignored = new IndexedDefinitions();
+            ignored.InitMap(new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    Type = "test",
+                    Id = "1"
+                }
+            });
+
+            var c = new ConflictResult()
+            {
+                IgnoredConflicts = ignored
+            };
+            var result = service.ResetIgnoredConflict(c, "test-1");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_reset_ignored_conflict.
+        /// </summary>
+        [Fact]
+        public void Should_not_reset_ignored_conflict()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+
+            var ignored = new IndexedDefinitions();
+            ignored.InitMap(new List<IDefinition>()
+            {
+                new Definition()
+                {
+                    Type = "test",
+                    Id = "1"
+                }
+            });
+
+            var c = new ConflictResult()
+            {
+                IgnoredConflicts = ignored
+            };
+            var result = service.ResetIgnoredConflict(c, "test-2");
+            result.Should().BeFalse();
         }
 
         /// <summary>
