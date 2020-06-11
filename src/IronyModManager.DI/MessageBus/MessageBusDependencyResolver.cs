@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="MessageBusDependencyResolver.cs" company="Mario">
 //     Mario
@@ -22,7 +22,7 @@ namespace IronyModManager.DI.MessageBus
     /// Implements the <see cref="SlimMessageBus.Host.DependencyResolver.IDependencyResolver" />
     /// </summary>
     /// <seealso cref="SlimMessageBus.Host.DependencyResolver.IDependencyResolver" />
-    public class MessageBusDependencyResolver : IDependencyResolver
+    internal class MessageBusDependencyResolver : IDependencyResolver
     {
         #region Methods
 

@@ -25,7 +25,7 @@ namespace IronyModManager.DI.MessageBus
     /// <summary>
     /// Class MessageBusRegistration.
     /// </summary>
-    public static class MessageBusRegistration
+    internal static class MessageBusRegistration
     {
         #region Methods
 

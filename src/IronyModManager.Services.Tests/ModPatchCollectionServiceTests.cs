@@ -2466,7 +2466,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_reset_resolved_conflict.
         /// </summary>
         [Fact]
-        public void Should_reset_resolved_conflict()
+        public async Task Should_reset_resolved_conflict()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -2476,6 +2476,12 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var resolved = new IndexedDefinitions();
@@ -2484,7 +2490,8 @@ namespace IronyModManager.Services.Tests
                 new Definition()
                 {
                     Type = "test",
-                    Id = "1"
+                    Id = "1",
+                    ModName = "test"
                 }
             });
 
@@ -2492,7 +2499,7 @@ namespace IronyModManager.Services.Tests
             {
                 ResolvedConflicts = resolved
             };
-            var result = service.ResetResolvedConflict(c, "test-1");
+            var result = await service.ResetResolvedConflictAsync(c, "test-1", "fake");
             result.Should().BeTrue();
         }
 
@@ -2500,7 +2507,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_reset_resolved_conflict.
         /// </summary>
         [Fact]
-        public void Should_not_reset_resolved_conflict()
+        public async Task Should_not_reset_resolved_conflict()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -2510,15 +2517,21 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-
             var resolved = new IndexedDefinitions();
             resolved.InitMap(new List<IDefinition>()
             {
                 new Definition()
                 {
                     Type = "test",
-                    Id = "1"
+                    Id = "1",
+                    ModName = "test"
                 }
             });
 
@@ -2526,7 +2539,7 @@ namespace IronyModManager.Services.Tests
             {
                 ResolvedConflicts = resolved
             };
-            var result = service.ResetResolvedConflict(c, "test-2");
+            var result = await service.ResetResolvedConflictAsync(c, "test-2", "fake");
             result.Should().BeFalse();
         }
 
@@ -2535,7 +2548,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_reset_ignored_conflict.
         /// </summary>
         [Fact]
-        public void Should_reset_ignored_conflict()
+        public async Task Should_reset_ignored_conflict()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -2545,6 +2558,12 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var ignored = new IndexedDefinitions();
@@ -2553,7 +2572,8 @@ namespace IronyModManager.Services.Tests
                 new Definition()
                 {
                     Type = "test",
-                    Id = "1"
+                    Id = "1",
+                    ModName = "test"
                 }
             });
 
@@ -2561,7 +2581,7 @@ namespace IronyModManager.Services.Tests
             {
                 IgnoredConflicts = ignored
             };
-            var result = service.ResetIgnoredConflict(c, "test-1");
+            var result = await service.ResetIgnoredConflictAsync(c, "test-1", "fake");
             result.Should().BeTrue();
         }
 
@@ -2569,7 +2589,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_reset_ignored_conflict.
         /// </summary>
         [Fact]
-        public void Should_not_reset_ignored_conflict()
+        public async Task Should_not_reset_ignored_conflict()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -2579,6 +2599,12 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
             var ignored = new IndexedDefinitions();
@@ -2587,7 +2613,8 @@ namespace IronyModManager.Services.Tests
                 new Definition()
                 {
                     Type = "test",
-                    Id = "1"
+                    Id = "1",
+                    ModName = "test"
                 }
             });
 
@@ -2595,7 +2622,7 @@ namespace IronyModManager.Services.Tests
             {
                 IgnoredConflicts = ignored
             };
-            var result = service.ResetIgnoredConflict(c, "test-2");
+            var result = await service.ResetIgnoredConflictAsync(c, "test-2", "fake");
             result.Should().BeFalse();
         }
 

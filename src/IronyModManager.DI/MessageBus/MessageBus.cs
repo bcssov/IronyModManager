@@ -13,7 +13,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Shared.MessageBus;
@@ -25,7 +24,7 @@ namespace IronyModManager.DI.MessageBus
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBus" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBus" />
-    public class MessageBus : IMessageBus
+    internal class MessageBus : IMessageBus
     {
         #region Fields
 
