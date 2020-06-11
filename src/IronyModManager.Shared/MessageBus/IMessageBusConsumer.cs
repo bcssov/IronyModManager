@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 06-11-2020
 // ***********************************************************************
-// <copyright file="IIronyMessageBusConsumer.cs" company="Mario">
+// <copyright file="IMessageBusConsumer.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -23,7 +23,7 @@ namespace IronyModManager.Shared.MessageBus
     /// </summary>
     /// <typeparam name="TMessage">The type of the t message.</typeparam>
     /// <seealso cref="SlimMessageBus.IConsumer{TMessage}" />
-    public interface IIronyMessageBusConsumer<TMessage> : IConsumer<TMessage> where TMessage : IMessageBusEvent
+    public interface IMessageBusConsumer<TMessage> : IConsumer<TMessage> where TMessage : IMessageBusEvent
     {
         #region Properties
 

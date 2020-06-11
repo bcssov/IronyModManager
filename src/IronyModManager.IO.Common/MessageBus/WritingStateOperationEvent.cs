@@ -27,10 +27,16 @@ namespace IronyModManager.IO.Common.MessageBus
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether [started writing].
+        /// Gets or sets a value indicating whether this instance can shutdown.
         /// </summary>
-        /// <value><c>true</c> if [started writing]; otherwise, <c>false</c>.</value>
-        public bool StartedWriting { get; set; }
+        /// <value><c>true</c> if this instance can shutdown; otherwise, <c>false</c>.</value>
+        public bool CanShutdown { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is fire and forget.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
+        public bool IsFireAndForget => true;
 
         #endregion Properties
     }

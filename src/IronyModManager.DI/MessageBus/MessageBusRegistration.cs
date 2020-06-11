@@ -30,7 +30,7 @@ namespace IronyModManager.DI.MessageBus
         #region Methods
 
         /// <summary>
-        /// Registers this instance.
+        /// Registers the specified assemblies.
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         public static void Register(IEnumerable<Assembly> assemblies)
@@ -47,7 +47,7 @@ namespace IronyModManager.DI.MessageBus
                     {
                         assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract)
                             .SelectMany(t => t.GetInterfaces(), (t, i) => new { Type = t, Interface = i })
-                            .Where(x => x.Interface.IsGenericType && x.Interface.GetGenericTypeDefinition() == typeof(IIronyMessageBusConsumer<>))
+                            .Where(x => x.Interface.IsGenericType && x.Interface.GetGenericTypeDefinition() == typeof(IMessageBusConsumer<>))
                             .Select(x => new { HandlerType = x.Type, EventType = x.Interface.GetGenericArguments()[0] })
                             .ToList()
                             .ForEach(find =>
@@ -58,8 +58,8 @@ namespace IronyModManager.DI.MessageBus
                             });
                     });
                 });
-            var mbus = new IronyMessageBus(builder.Build());
-            DIContainer.Container.RegisterInstance<IIronyMessageBus>(mbus);
+            var mbus = new MessageBus(builder.Build());
+            DIContainer.Container.RegisterInstance<IMessageBus>(mbus);
         }
 
         #endregion Methods

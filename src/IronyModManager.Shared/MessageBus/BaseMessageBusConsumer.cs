@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 06-11-2020
 // ***********************************************************************
-// <copyright file="BaseIronyMessageBusConsumer.cs" company="Mario">
+// <copyright file="BaseMessageBusConsumer.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,12 +19,12 @@ using System.Threading.Tasks;
 namespace IronyModManager.Shared.MessageBus
 {
     /// <summary>
-    /// Class BaseIronyMessageBusConsumer.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IIronyMessageBusConsumer{TMessage}" />
+    /// Class BaseMessageBusConsumer.
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusConsumer{TMessage}" />
     /// </summary>
     /// <typeparam name="TMessage">The type of the t message.</typeparam>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.IIronyMessageBusConsumer{TMessage}" />
-    public abstract class BaseIronyMessageBusConsumer<TMessage> : IIronyMessageBusConsumer<TMessage> where TMessage : IMessageBusEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusConsumer{TMessage}" />
+    public abstract class BaseMessageBusConsumer<TMessage> : IMessageBusConsumer<TMessage> where TMessage : IMessageBusEvent
     {
         #region Fields
 
@@ -38,9 +38,9 @@ namespace IronyModManager.Shared.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseIronyMessageBusConsumer{TMessage}" /> class.
+        /// Initializes a new instance of the <see cref="BaseMessageBusConsumer{TMessage}" /> class.
         /// </summary>
-        public BaseIronyMessageBusConsumer()
+        public BaseMessageBusConsumer()
         {
             messageSubject = new Subject<TMessage>();
         }

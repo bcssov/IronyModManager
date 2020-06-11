@@ -20,10 +20,10 @@ namespace IronyModManager.Implementation.MessageBus
 {
     /// <summary>
     /// Class WritingStateOperationHandler.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseIronyMessageBusConsumer{IronyModManager.IO.Common.MessageBus.WritingStateOperationEvent}" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.IO.Common.MessageBus.WritingStateOperationEvent}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseIronyMessageBusConsumer{IronyModManager.IO.Common.MessageBus.WritingStateOperationEvent}" />
-    public class WritingStateOperationHandler : BaseIronyMessageBusConsumer<WritingStateOperationEvent>
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.IO.Common.MessageBus.WritingStateOperationEvent}" />
+    public class WritingStateOperationHandler : BaseMessageBusConsumer<WritingStateOperationEvent>
     {
     }
 }

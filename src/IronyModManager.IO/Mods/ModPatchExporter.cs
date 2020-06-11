@@ -18,7 +18,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
@@ -58,7 +57,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The state name
         /// </summary>
-        private const string StateName = "state" + Shared.Constants.JsonExtension;
+        private const string StateName = "state" + Constants.JsonExtension;
 
         /// <summary>
         /// The externally loaded code
@@ -88,12 +87,17 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The message bus
         /// </summary>
-        private readonly IIronyMessageBus messageBus;
+        private readonly IMessageBus messageBus;
 
         /// <summary>
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The write counter
+        /// </summary>
+        private int writeCounter = 0;
 
         #endregion Fields
 
@@ -105,7 +109,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="messageBus">The message bus.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IIronyMessageBus messageBus)
+        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
         {
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
@@ -113,15 +117,6 @@ namespace IronyModManager.IO.Mods
         }
 
         #endregion Constructors
-
-        #region Events
-
-        /// <summary>
-        /// Occurs when [mod definition analyze].
-        /// </summary>
-        public event Delegates.WriteOperationStateDelegate WriteOperationState;
-
-        #endregion Events
 
         #region Methods
 
@@ -654,9 +649,9 @@ namespace IronyModManager.IO.Mods
         /// <returns>System.Threading.Tasks.Task.</returns>
         private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
+            writeCounter++;
             var mutex = await writeLock.LockAsync();
-            await messageBus.Publish(new WritingStateOperationEvent() { StartedWriting = true });
-            WriteOperationState?.Invoke(true);
+            await messageBus.PublishAsync(new WritingStateOperationEvent() { CanShutdown = writeCounter <= 0 });
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
             if (File.Exists(backupPath))
@@ -716,8 +711,8 @@ namespace IronyModManager.IO.Mods
                     await File.WriteAllTextAsync(statePath, serialized);
                     return true;
                 });
-                await messageBus.Publish(new WritingStateOperationEvent() { StartedWriting = false });
-                WriteOperationState?.Invoke(false);
+                writeCounter--;
+                await messageBus.PublishAsync(new WritingStateOperationEvent() { CanShutdown = writeCounter <= 0 });
                 mutex.Dispose();
             }).ConfigureAwait(false);
         }

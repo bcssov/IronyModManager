@@ -4,7 +4,7 @@
 // Created          : 03-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="Delegates.cs" company="Mario">
 //     Mario
@@ -33,10 +33,4 @@ namespace IronyModManager.Services.Common
     /// </summary>
     /// <param name="percent">The percent.</param>
     public delegate void ModDefinitionPatchLoadDelegate(int percent);
-
-    /// <summary>
-    /// Delegate ShutdownStateDelegate
-    /// </summary>
-    /// <param name="preventShutdown">if set to <c>true</c> [prevent shutdown].</param>
-    public delegate void ShutdownStateDelegate(bool preventShutdown);
 }

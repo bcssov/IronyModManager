@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -93,10 +93,6 @@ namespace IronyModManager.Services
             this.parserManager = parserManager;
             this.definitionInfoProviders = definitionInfoProviders;
             this.modPatchExporter = modPatchExporter;
-            this.modPatchExporter.WriteOperationState += (args) =>
-            {
-                OnShutdownState(args);
-            };
         }
 
         #endregion Constructors

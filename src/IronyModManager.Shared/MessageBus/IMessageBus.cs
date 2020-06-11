@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 06-11-2020
 // ***********************************************************************
-// <copyright file="IIronyMessageBus.cs" company="Mario">
+// <copyright file="IMessageBus.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,17 +22,17 @@ namespace IronyModManager.Shared.MessageBus
     /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public interface IIronyMessageBus : IDisposable
+    public interface IMessageBus : IDisposable
     {
         #region Methods
 
         /// <summary>
-        /// Publishes the specified message.
+        /// Publishes the asynchronous.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TMessage">The type of the t message.</typeparam>
         /// <param name="message">The message.</param>
         /// <returns>Task.</returns>
-        Task Publish<T>(T message) where T : IMessageBusEvent;
+        Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessageBusEvent;
 
         #endregion Methods
     }

@@ -528,7 +528,7 @@ namespace IronyModManager.ViewModels
 
             writingStateOperationHandler.Message.Subscribe(s =>
             {
-                TriggerPreventShutdown(s.StartedWriting);
+                TriggerPreventShutdown(!s.CanShutdown);
             }).DisposeWith(disposables);
 
             BackCommand = ReactiveCommand.Create(() =>
