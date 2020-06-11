@@ -339,6 +339,7 @@ namespace IronyModManager.Services
 
             double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count();
             double processed = 0;
+            var previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
 
             static IDefinition copyDefinition(IDefinition definition)
@@ -398,7 +399,11 @@ namespace IronyModManager.Services
                 EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                if (perc != previousProgress)
+                {
+                    messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                    previousProgress = perc;
+                }
             }
 
             foreach (var item in typeAndIdKeys)
@@ -407,7 +412,11 @@ namespace IronyModManager.Services
                 EvalDefinitions(indexedDefinitions, conflicts, definitions.OrderBy(p => modOrder.IndexOf(p.ModName)), modOrder, patchStateMode, fileConflictCache);
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                if (perc != previousProgress)
+                {
+                    messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                    previousProgress = perc;
+                }
             }
 
             var overwrittenDefs = new Dictionary<string, IDefinition>();
@@ -450,7 +459,11 @@ namespace IronyModManager.Services
                 }
                 processed++;
                 var perc = GetProgressPercentage(total, processed);
-                messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                if (perc != previousProgress)
+                {
+                    messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                    previousProgress = perc;
+                }
             }
 
             messageBus.Publish(new ModDefinitionAnalyzeEvent(99));
@@ -522,6 +535,7 @@ namespace IronyModManager.Services
 
             double processed = 0;
             double total = mods.Count();
+            var previousProgress = 0;
             messageBus.Publish(new ModDefinitionLoadEvent(0));
 
             mods.AsParallel().ForAll((m) =>
@@ -539,7 +553,11 @@ namespace IronyModManager.Services
                 {
                     processed++;
                     var perc = GetProgressPercentage(total, processed);
-                    messageBus.Publish(new ModDefinitionLoadEvent(perc));
+                    if (perc != previousProgress)
+                    {
+                        messageBus.Publish(new ModDefinitionLoadEvent(perc));
+                        previousProgress = perc;
+                    }
                 }
             });
 
@@ -704,6 +722,7 @@ namespace IronyModManager.Services
         public virtual async Task<IConflictResult> SyncPatchStateAsync(IConflictResult conflictResult, string collectionName)
         {
             var game = GameService.GetSelected();
+            var previousProgress = 0;
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
@@ -725,7 +744,11 @@ namespace IronyModManager.Services
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 96);
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }                        
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
@@ -733,7 +756,11 @@ namespace IronyModManager.Services
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
                         var perc = GetProgressPercentage(total, processed, 96);
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
                     }
                     foreach (var item in state.OverwrittenConflicts.GroupBy(p => p.TypeAndId))
                     {
@@ -752,7 +779,11 @@ namespace IronyModManager.Services
                         var matchedConflicts = conflictResult.OverwrittenConflicts.GetByTypeAndId(item.First().TypeAndId);
                         await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
                         var perc = GetProgressPercentage(total, processed, 96);
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
                     }
 
                     if (conflictResult.OrphanConflicts.GetAll().Count() > 0)

@@ -284,7 +284,7 @@ namespace IronyModManager.ViewModels.Controls
             var definitions = await Task.Run(() =>
             {
                 return modPatchCollectionService.GetModObjects(gameService.GetSelected(), CollectionMods.SelectedMods);
-            });
+            }).ConfigureAwait(false);
             var conflicts = await Task.Run(() =>
             {
                 if (definitions != null)
@@ -292,16 +292,15 @@ namespace IronyModManager.ViewModels.Controls
                     return modPatchCollectionService.FindConflicts(definitions, CollectionMods.SelectedModCollection.Mods.ToList(), mode);
                 }
                 return null;
-            });
+            }).ConfigureAwait(false);
             var syncedConflicts = await Task.Run(async () =>
             {
-                return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name);
-            });
+                return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+            }).ConfigureAwait(false);
             if (syncedConflicts != null)
             {
                 conflicts = syncedConflicts;
-            }
-            await TriggerOverlayAsync(false);
+            }            
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
@@ -310,6 +309,7 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
             MessageBus.Current.SendMessage(args);
+            await TriggerOverlayAsync(false);
         }
 
         /// <summary>
