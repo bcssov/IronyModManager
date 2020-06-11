@@ -4,16 +4,15 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IronyMessageBus.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
-using System.Threading;
+using System;
 using System.Threading.Tasks;
 using IronyModManager.Shared.MessageBus;
 using SlimMessageBus;
@@ -62,52 +61,12 @@ namespace IronyModManager.DI.MessageBus
         /// <summary>
         /// Publishes the specified message.
         /// </summary>
-        /// <typeparam name="TMessage">The type of the t message.</typeparam>
+        /// <typeparam name="T"></typeparam>
         /// <param name="message">The message.</param>
-        /// <param name="name">The name.</param>
         /// <returns>Task.</returns>
-        public Task Publish<TMessage>(TMessage message, string name = null)
+        public Task Publish<T>(T message) where T : IMessageBusEvent
         {
-            return messageBus.Publish(message, name);
-        }
-
-        /// <summary>
-        /// Sends the specified request.
-        /// </summary>
-        /// <typeparam name="TResponseMessage">The type of the t response message.</typeparam>
-        /// <param name="request">The request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task&lt;TResponseMessage&gt;.</returns>
-        public Task<TResponseMessage> Send<TResponseMessage>(IRequestMessage<TResponseMessage> request, CancellationToken cancellationToken)
-        {
-            return messageBus.Send(request, cancellationToken);
-        }
-
-        /// <summary>
-        /// Sends the specified request.
-        /// </summary>
-        /// <typeparam name="TResponseMessage">The type of the t response message.</typeparam>
-        /// <param name="request">The request.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task&lt;TResponseMessage&gt;.</returns>
-        public Task<TResponseMessage> Send<TResponseMessage>(IRequestMessage<TResponseMessage> request, string name = null, CancellationToken cancellationToken = default)
-        {
-            return messageBus.Send(request, name, cancellationToken);
-        }
-
-        /// <summary>
-        /// Sends the specified request.
-        /// </summary>
-        /// <typeparam name="TResponseMessage">The type of the t response message.</typeparam>
-        /// <param name="request">The request.</param>
-        /// <param name="timeout">The timeout.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task&lt;TResponseMessage&gt;.</returns>
-        public Task<TResponseMessage> Send<TResponseMessage>(IRequestMessage<TResponseMessage> request, TimeSpan timeout, string name = null, CancellationToken cancellationToken = default)
-        {
-            return messageBus.Send(request, timeout, name, cancellationToken);
+            return messageBus.Publish(message);
         }
 
         #endregion Methods

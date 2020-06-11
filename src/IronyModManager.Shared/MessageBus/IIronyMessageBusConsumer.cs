@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IIronyMessageBusConsumer.cs" company="Mario">
 //     Mario
@@ -23,15 +23,16 @@ namespace IronyModManager.Shared.MessageBus
     /// </summary>
     /// <typeparam name="TMessage">The type of the t message.</typeparam>
     /// <seealso cref="SlimMessageBus.IConsumer{TMessage}" />
-    public interface IIronyMessageBusConsumer<TMessage> : IConsumer<TMessage>
+    public interface IIronyMessageBusConsumer<TMessage> : IConsumer<TMessage> where TMessage : IMessageBusEvent
     {
-        #region Events
+        #region Properties
 
         /// <summary>
-        /// Occurs when [on message received].
+        /// Gets the message.
         /// </summary>
-        event EventHandler<TMessage> OnMessageReceived;
+        /// <value>The message.</value>
+        IObservable<TMessage> Message { get; }
 
-        #endregion Events
+        #endregion Properties
     }
 }

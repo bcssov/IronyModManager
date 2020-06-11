@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -82,6 +83,11 @@ namespace IronyModManager.ViewModels
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The writing state operation handler
+        /// </summary>
+        private readonly WritingStateOperationHandler writingStateOperationHandler;
+
+        /// <summary>
         /// The take left binary
         /// </summary>
         private bool takeLeftBinary = false;
@@ -100,13 +106,14 @@ namespace IronyModManager.ViewModels
         /// <param name="modCompareSelector">The mod compare selector.</param>
         /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
         /// <param name="modFilter">The mod filter.</param>
+        /// <param name="writingStateOperationHandler">The writing state operation handler.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ConflictSolverModFilterControlViewModel modFilter,
+            ConflictSolverModFilterControlViewModel modFilter, WritingStateOperationHandler writingStateOperationHandler,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
@@ -114,6 +121,7 @@ namespace IronyModManager.ViewModels
             this.logger = logger;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
+            this.writingStateOperationHandler = writingStateOperationHandler;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -518,10 +526,10 @@ namespace IronyModManager.ViewModels
         {
             var resolvingEnabled = this.WhenAnyValue(v => v.ResolvingConflict, v => !v);
 
-            modPatchCollectionService.ShutdownState += (args) =>
+            writingStateOperationHandler.Message.Subscribe(s =>
             {
-                TriggerPreventShutdown(args);
-            };
+                TriggerPreventShutdown(s.StartedWriting);
+            }).DisposeWith(disposables);
 
             BackCommand = ReactiveCommand.Create(() =>
             {

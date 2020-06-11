@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="BaseIronyMessageBusConsumer.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.MessageBus
@@ -23,16 +24,38 @@ namespace IronyModManager.Shared.MessageBus
     /// </summary>
     /// <typeparam name="TMessage">The type of the t message.</typeparam>
     /// <seealso cref="IronyModManager.Shared.MessageBus.IIronyMessageBusConsumer{TMessage}" />
-    public class BaseIronyMessageBusConsumer<TMessage> : IIronyMessageBusConsumer<TMessage>
+    public abstract class BaseIronyMessageBusConsumer<TMessage> : IIronyMessageBusConsumer<TMessage> where TMessage : IMessageBusEvent
     {
-        #region Events
+        #region Fields
 
         /// <summary>
-        /// Occurs when [message processed].
+        /// The message subject
         /// </summary>
-        public event EventHandler<TMessage> OnMessageReceived;
+        private readonly Subject<TMessage> messageSubject;
 
-        #endregion Events
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseIronyMessageBusConsumer{TMessage}" /> class.
+        /// </summary>
+        public BaseIronyMessageBusConsumer()
+        {
+            messageSubject = new Subject<TMessage>();
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the message.
+        /// </summary>
+        /// <value>The message.</value>
+        public virtual IObservable<TMessage> Message => messageSubject;
+
+        #endregion Properties
 
         #region Methods
 
@@ -44,17 +67,8 @@ namespace IronyModManager.Shared.MessageBus
         /// <returns>Task.</returns>
         public virtual Task OnHandle(TMessage message, string name)
         {
-            RaiseEvent(message);
+            messageSubject.OnNext(message);
             return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// Invokes the event.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        protected virtual void RaiseEvent(TMessage message)
-        {
-            OnMessageReceived?.Invoke(this, message);
         }
 
         #endregion Methods

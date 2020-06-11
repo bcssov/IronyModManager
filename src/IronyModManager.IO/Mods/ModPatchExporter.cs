@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -19,11 +19,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
@@ -84,6 +86,11 @@ namespace IronyModManager.IO.Mods
         private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IIronyMessageBus messageBus;
+
+        /// <summary>
         /// The reader
         /// </summary>
         private readonly IReader reader;
@@ -97,10 +104,12 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders)
+        /// <param name="messageBus">The message bus.</param>
+        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IIronyMessageBus messageBus)
         {
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
@@ -642,9 +651,11 @@ namespace IronyModManager.IO.Mods
         /// <param name="modifiedHistory">The modified history.</param>
         /// <param name="externalCode">The external code.</param>
         /// <param name="path">The path.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
             var mutex = await writeLock.LockAsync();
+            await messageBus.Publish(new WritingStateOperationEvent() { StartedWriting = true });
             WriteOperationState?.Invoke(true);
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
@@ -705,6 +716,7 @@ namespace IronyModManager.IO.Mods
                     await File.WriteAllTextAsync(statePath, serialized);
                     return true;
                 });
+                await messageBus.Publish(new WritingStateOperationEvent() { StartedWriting = false });
                 WriteOperationState?.Invoke(false);
                 mutex.Dispose();
             }).ConfigureAwait(false);

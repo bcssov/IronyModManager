@@ -4,15 +4,16 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IronyModManager.Shared.MessageBus;
@@ -51,12 +52,14 @@ namespace IronyModManager.DI.MessageBus
                             .ToList()
                             .ForEach(find =>
                             {
+                                // Yeah, samples are really generic. I could not be more sarcastic about this.
+                                builder.Produce(find.EventType, x => x.DefaultTopic(x.Settings.MessageType.Name));
                                 builder.Consume(find.EventType, x => x.Topic(x.MessageType.Name).WithConsumer(find.HandlerType));
                             });
                     });
                 });
             var mbus = new IronyMessageBus(builder.Build());
-            DIContainer.Container.RegisterInstance(mbus);
+            DIContainer.Container.RegisterInstance<IIronyMessageBus>(mbus);
         }
 
         #endregion Methods

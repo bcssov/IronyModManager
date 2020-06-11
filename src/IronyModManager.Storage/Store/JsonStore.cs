@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -182,7 +182,7 @@ namespace IronyModManager.Storage
             }
             if (lookForOlderVersion)
             {
-                if (storageItem == null)
+                if (storageItem == null && Directory.Exists(RootPath))
                 {
                     var dbs = new List<StorageItem>();
                     foreach (var item in Directory.EnumerateFiles(RootPath, $"*{Shared.Constants.JsonExtension}"))

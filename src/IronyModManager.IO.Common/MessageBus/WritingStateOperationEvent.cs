@@ -1,33 +1,36 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.IO.Common
+// Assembly         : IronyModManager.IO.Common.MessageBus
 // Author           : Mario
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="WritingStateOperationEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using IronyModManager.Shared.MessageBus;
 
-namespace IronyModManager.IO.Common
+namespace IronyModManager.IO.Common.MessageBus
 {
     /// <summary>
     /// Class WritingStateOperationEvent.
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     /// </summary>
-    public class WritingStateOperationEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    public class WritingStateOperationEvent : IMessageBusEvent
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is writting.
+        /// Gets or sets a value indicating whether [started writing].
         /// </summary>
-        /// <value><c>true</c> if this instance is writting; otherwise, <c>false</c>.</value>
-        public bool IsWritting { get; set; }
+        /// <value><c>true</c> if [started writing]; otherwise, <c>false</c>.</value>
+        public bool StartedWriting { get; set; }
 
         #endregion Properties
     }
