@@ -794,7 +794,7 @@ namespace IronyModManager.Services
                                 var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                                 if (existing.Count() == 0)
                                 {
-                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
                                 }
                             }
                         }
@@ -863,7 +863,7 @@ namespace IronyModManager.Services
                                 var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                                 if (existing.Count() == 0)
                                 {
-                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
                                 }
                             }
                             exportedConflicts = true;
