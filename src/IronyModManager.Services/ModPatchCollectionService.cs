@@ -304,17 +304,9 @@ namespace IronyModManager.Services
                             }
                         }
                     }
-                    else
-                    {
-                        result.Definition = definitions.FirstOrDefault();
-                    }
-                }
-                else
-                {
-                    result.Definition = definitions.FirstOrDefault();
                 }
             }
-            else
+            if (result.Definition == null)
             {
                 result.Definition = definitions?.FirstOrDefault();
             }
@@ -748,7 +740,7 @@ namespace IronyModManager.Services
                         {
                             await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
                             previousProgress = perc;
-                        }                        
+                        }
                     }
                     foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
                     {
