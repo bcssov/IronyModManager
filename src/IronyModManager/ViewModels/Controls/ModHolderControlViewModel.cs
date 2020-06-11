@@ -28,6 +28,7 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus.Events;
 using ReactiveUI;
 using SmartFormat;
 
@@ -62,6 +63,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The mod definition analyze handler
@@ -111,12 +117,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
-            ILogger logger)
+            Shared.MessageBus.IMessageBus messageBus, ILogger logger)
         {
             this.modService = modService;
             this.modPatchCollectionService = modPatchCollectionService;
@@ -128,6 +135,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionLoadHandler = modDefinitionLoadHandler;
             this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
+            this.messageBus = messageBus;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -418,8 +426,12 @@ namespace IronyModManager.ViewModels.Controls
                     var cmd = gameService.GetLaunchArguments(game);
                     if (!string.IsNullOrWhiteSpace(cmd))
                     {
-                        await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
-                        await modService.InstallModsAsync();
+                        if (game.RefreshDescriptors)
+                        {
+                            await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
+                            await modService.InstallModsAsync();
+                        }
+                        await messageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         await appAction.OpenAsync(cmd);
                         await appAction.ExitAppAsync();
                     }

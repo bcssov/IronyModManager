@@ -11,8 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Shared.MessageBus;
 
@@ -32,6 +34,11 @@ namespace IronyModManager.DI.MessageBus
         /// </summary>
         private readonly SlimMessageBus.IMessageBus messageBus;
 
+        /// <summary>
+        /// The registered types
+        /// </summary>
+        private readonly HashSet<Type> registeredTypes;
+
         #endregion Fields
 
         #region Constructors
@@ -40,9 +47,12 @@ namespace IronyModManager.DI.MessageBus
         /// Initializes a new instance of the <see cref="MessageBus" /> class.
         /// </summary>
         /// <param name="messageBus">The message bus.</param>
-        public MessageBus(SlimMessageBus.IMessageBus messageBus)
+        /// <param name="registeredTypes">The registered types.</param>
+        public MessageBus(SlimMessageBus.IMessageBus messageBus, HashSet<Type> registeredTypes)
         {
             this.messageBus = messageBus;
+            // For crying out loud this is something that SlimMessageBus should handle internally
+            this.registeredTypes = registeredTypes;
         }
 
         #endregion Constructors
@@ -75,6 +85,10 @@ namespace IronyModManager.DI.MessageBus
         /// <returns>Task.</returns>
         public Task PublishAsync<TMessage>(TMessage message) where TMessage : IMessageBusEvent
         {
+            if (!registeredTypes.Contains(typeof(TMessage)))
+            {
+                return Task.FromResult(false);
+            }
             if (!message.IsFireAndForget)
             {
                 return PublishAwaitableAsync(message);

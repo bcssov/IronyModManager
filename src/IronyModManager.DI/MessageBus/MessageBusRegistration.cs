@@ -63,7 +63,7 @@ namespace IronyModManager.DI.MessageBus
                             });
                     });
                 });
-            var mbus = new MessageBus(builder.Build());
+            var mbus = new MessageBus(builder.Build(), registeredTypes);
             DIContainer.Container.RegisterInstance<IMessageBus>(mbus);
         }
 
