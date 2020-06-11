@@ -35,6 +35,7 @@ namespace IronyModManager.DI.MessageBus
         /// <param name="assemblies">The assemblies.</param>
         public static void Register(IEnumerable<Assembly> assemblies)
         {
+            var registeredTypes = new HashSet<Type>();
             var builder = MessageBusBuilder.Create()
                 .WithDependencyResolver(new MessageBusDependencyResolver())
                 .WithProviderMemory(new MemoryMessageBusSettings()
@@ -53,7 +54,11 @@ namespace IronyModManager.DI.MessageBus
                             .ForEach(find =>
                             {
                                 // Yeah, samples are really generic. I could not be more sarcastic about this.
-                                builder.Produce(find.EventType, x => x.DefaultTopic(x.Settings.MessageType.Name));
+                                if (!registeredTypes.Contains(find.EventType))
+                                {
+                                    registeredTypes.Add(find.EventType);
+                                    builder.Produce(find.EventType, x => x.DefaultTopic(x.Settings.MessageType.Name));
+                                }
                                 builder.Consume(find.EventType, x => x.Topic(x.MessageType.Name).WithConsumer(find.HandlerType));
                             });
                     });
