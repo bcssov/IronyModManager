@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -26,25 +26,6 @@ namespace IronyModManager.Services.Common
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
     public interface IModPatchCollectionService : IBaseService
     {
-        #region Events
-
-        /// <summary>
-        /// Occurs when [mod definition analyze].
-        /// </summary>
-        event ModDefinitionAnalyzeDelegate ModDefinitionAnalyze;
-
-        /// <summary>
-        /// Occurs when [mod analyze].
-        /// </summary>
-        event ModDefinitionLoadDelegate ModDefinitionLoad;
-
-        /// <summary>
-        /// Occurs when [mod definition patch load].
-        /// </summary>
-        event ModDefinitionPatchLoadDelegate ModDefinitionPatchLoad;
-
-        #endregion Events
-
         #region Methods
 
         /// <summary>

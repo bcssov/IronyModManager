@@ -58,6 +58,16 @@ namespace IronyModManager.DI.MessageBus
         }
 
         /// <summary>
+        /// Publishes the specified message.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the t message.</typeparam>
+        /// <param name="message">The message.</param>
+        public void Publish<TMessage>(TMessage message) where TMessage : IMessageBusEvent
+        {
+            PublishAsync(message).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Publishes the asynchronous.
         /// </summary>
         /// <typeparam name="TMessage">The type of the t message.</typeparam>

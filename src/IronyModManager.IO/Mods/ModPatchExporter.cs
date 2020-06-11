@@ -651,7 +651,7 @@ namespace IronyModManager.IO.Mods
         {
             writeCounter++;
             var mutex = await writeLock.LockAsync();
-            await messageBus.PublishAsync(new WritingStateOperationEvent() { CanShutdown = writeCounter <= 0 });
+            await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
             if (File.Exists(backupPath))
@@ -712,7 +712,7 @@ namespace IronyModManager.IO.Mods
                     return true;
                 });
                 writeCounter--;
-                await messageBus.PublishAsync(new WritingStateOperationEvent() { CanShutdown = writeCounter <= 0 });
+                await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
             }).ConfigureAwait(false);
         }

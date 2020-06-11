@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -35,6 +35,7 @@ using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -65,7 +66,10 @@ namespace IronyModManager.Services.Tests
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
         {
-            return new ModPatchCollectionService(parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            return new ModPatchCollectionService(messageBus.Object, parserManager.Object, definitionInfoProviders, modPatchExporter.Object, reader.Object, modWriter.Object, modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>

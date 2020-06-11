@@ -48,6 +48,9 @@ namespace IronyModManager.DI
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
             container.Register<WritingStateOperationHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModDefinitionAnalyzeHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModDefinitionLoadHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModDefinitionPatchLoadHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

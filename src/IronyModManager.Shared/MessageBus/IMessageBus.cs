@@ -27,6 +27,13 @@ namespace IronyModManager.Shared.MessageBus
         #region Methods
 
         /// <summary>
+        /// Publishes the specified message.
+        /// </summary>
+        /// <typeparam name="TMessage">The type of the t message.</typeparam>
+        /// <param name="message">The message.</param>
+        void Publish<TMessage>(TMessage message) where TMessage : IMessageBusEvent;
+
+        /// <summary>
         /// Publishes the asynchronous.
         /// </summary>
         /// <typeparam name="TMessage">The type of the t message.</typeparam>
