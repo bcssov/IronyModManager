@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-05-2020
+// Last Modified On : 06-12-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -113,8 +113,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     additionalFileNames.Add(File);
                 }
-                additionalFileNames = additionalFileNames.Distinct().ToList();
-                return additionalFileNames;
+                return additionalFileNames.Distinct().ToList();
             }
             set
             {
@@ -277,8 +276,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     generatedFileNames.Add(File);
                 }
-                generatedFileNames = generatedFileNames.Distinct().ToList();
-                return generatedFileNames;
+                return generatedFileNames.Distinct().ToList();
             }
             set
             {
@@ -343,8 +341,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     overwrittenFileNames.Add(File);
                 }
-                overwrittenFileNames = overwrittenFileNames.Distinct().ToList();
-                return overwrittenFileNames;
+                return overwrittenFileNames.Distinct().ToList();
             }
             set
             {

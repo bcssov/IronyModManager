@@ -447,6 +447,7 @@ namespace IronyModManager.Services
                     {
                         newDefinition.OverwrittenFileNames.Add(file);
                     }
+                    newDefinition.File = provider.GetFileName(newDefinition);
                     overwrittenDefs.Add(definition.TypeAndId, newDefinition);
                 }
                 processed++;
