@@ -1567,6 +1567,18 @@ namespace IronyModManager.Services
                             }
                         }
                     }
+                    await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+                    {
+                        Mode = MapPatchStateMode(conflictResult.Mode),
+                        IgnoreConflictPaths = conflictResult.IgnoredPaths,
+                        Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                        OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                        ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
+                        IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
+                        OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                        PatchName = patchName
+                    });
                     return true;
                 }
             }

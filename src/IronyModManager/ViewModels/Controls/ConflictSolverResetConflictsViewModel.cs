@@ -262,13 +262,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>IEnumerable&lt;IHierarchicalDefinitions&gt;.</returns>
         protected IEnumerable<IHierarchicalDefinitions> GetHierarchicalDefinitions(Mode mode)
         {
-            if (mode?.Value == IgnoredValue)
+            if (Conflicts != null && Conflicts.IgnoredConflicts != null && Conflicts.ResolvedConflicts != null)
             {
-                return Conflicts.IgnoredConflicts.GetHierarchicalDefinitions();
-            }
-            else if (mode?.Value == ResolvedValue)
-            {
-                return Conflicts.ResolvedConflicts.GetHierarchicalDefinitions();
+                if (mode?.Value == IgnoredValue)
+                {
+                    return Conflicts.IgnoredConflicts.GetHierarchicalDefinitions();
+                }
+                else if (mode?.Value == ResolvedValue)
+                {
+                    return Conflicts.ResolvedConflicts.GetHierarchicalDefinitions();
+                }
             }
             return null;
         }
