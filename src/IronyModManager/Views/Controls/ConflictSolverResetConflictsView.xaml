@@ -12,6 +12,39 @@
        Topmost="True" ObeyScreenEdges="True">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+          <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
+            <ComboBox SelectedItem="{Binding SelectedMode}" Items="{Binding Modes}"
+                      HorizontalAlignment="Stretch" MinHeight="30">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Items="{Binding HierarchicalDefinitions}"
+                      SelectedItem="{Binding SelectedParentHierarchicalDefinition}"
+                      HorizontalAlignment="Stretch" MinHeight="30">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
+                     SelectedItem="SelectedHierarchicalDefinition"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     SelectionMode="Single" x:Name="conflictList" Height="350" Width="300">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
+          <Panel Grid.Row="1" Margin="0,5">
+            <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" HorizontalAlignment="Left"></Button>
+            <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
+          </Panel>
         </Grid>
       </Border>
     </Popup>

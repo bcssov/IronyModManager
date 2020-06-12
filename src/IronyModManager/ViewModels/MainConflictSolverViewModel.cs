@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-12-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -106,6 +106,7 @@ namespace IronyModManager.ViewModels
         /// <param name="modCompareSelector">The mod compare selector.</param>
         /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
         /// <param name="modFilter">The mod filter.</param>
+        /// <param name="resetConflicts">The reset conflicts.</param>
         /// <param name="writingStateOperationHandler">The writing state operation handler.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
@@ -113,7 +114,8 @@ namespace IronyModManager.ViewModels
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ConflictSolverModFilterControlViewModel modFilter, WritingStateOperationHandler writingStateOperationHandler,
+            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
+            WritingStateOperationHandler writingStateOperationHandler,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
@@ -127,11 +129,18 @@ namespace IronyModManager.ViewModels
             BinaryMergeViewer = binaryMergeViewer;
             IgnoreConflictsRules = ignoreConflictsRules;
             ModFilter = modFilter;
+            ResetConflicts = resetConflicts;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the reset conflicts.
+        /// </summary>
+        /// <value>The reset conflicts.</value>
+        public virtual ConflictSolverResetConflictsViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the back.
@@ -575,6 +584,7 @@ namespace IronyModManager.ViewModels
                 FilterHierarchalConflicts(s);
                 IgnoreConflictsRules.CollectionName = SelectedModCollection.Name;
                 IgnoreConflictsRules.ConflictResult = s;
+                ResetConflicts.SetParameters(s, SelectedModCollection.Name);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
@@ -733,6 +743,17 @@ namespace IronyModManager.ViewModels
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.ResetConflicts.IsActivated).Where(p => p).Subscribe(s =>
+            {
+                ResetConflicts.ResetCommand.Subscribe(s =>
+                {
+                    if (s.State == Implementation.CommandState.Success)
+                    {
+                        FilterHierarchalConflicts(Conflicts);
+                    }
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -809,6 +830,7 @@ namespace IronyModManager.ViewModels
                                 }
                             }
                             SelectedConflict = selectedConflict;
+                            ResetConflicts.Refresh();
                         }
                     }
                     catch (Exception ex)

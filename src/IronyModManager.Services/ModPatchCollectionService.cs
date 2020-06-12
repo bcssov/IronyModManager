@@ -1145,6 +1145,11 @@ namespace IronyModManager.Services
                         RootDirectory = game.UserDirectory,
                         Path = Shared.Constants.ModDirectory
                     });
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = Path.Combine(Shared.Constants.ModDirectory, patchName)
+                    });
                     await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
@@ -1168,11 +1173,6 @@ namespace IronyModManager.Services
                     {
                         conflictResult.IgnoredConflicts.AddToMap(definition);
                     }
-                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
-                    {
-                        RootDirectory = game.UserDirectory,
-                        Path = Path.Combine(Shared.Constants.ModDirectory, patchName)
-                    });
                     var exportPatches = new HashSet<IDefinition>();
                     if (resolve)
                     {

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-12-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -153,6 +153,7 @@ namespace IronyModManager.ViewModels
             MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>
                 {
+                    MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:

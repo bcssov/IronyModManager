@@ -280,7 +280,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
-                    if (children.Count == 0)
+                    if (children.Select(p => p).Count() == 0)
                     {
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
                         mainHierarchalDefinitions.Remove(hierarchicalDefinition);
