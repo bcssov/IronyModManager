@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-12-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -137,10 +137,28 @@ namespace IronyModManager.Services.Common
         Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
 
         /// <summary>
+        /// Resets the ignored conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ResetIgnoredConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName);
+
+        /// <summary>
         /// Resets the patch state cache.
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool ResetPatchStateCache();
+
+        /// <summary>
+        /// Resets the resolved conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ResetResolvedConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName);
 
         /// <summary>
         /// Resolves the full definition path.

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -29,7 +29,8 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Adds to map.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        void AddToMap(IDefinition definition);
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
 
         /// <summary>
         /// Gets all.
@@ -110,6 +111,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="definitions">The definitions.</param>
         /// <param name="mapHierarchicalDefinitions">if set to <c>true</c> [map hierarchical definitions].</param>
         void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
+
+        /// <summary>
+        /// Removes the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        void Remove(IDefinition definition);
 
         #endregion Methods
     }

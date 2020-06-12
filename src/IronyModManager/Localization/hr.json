@@ -168,6 +168,13 @@
         "ModFilter": {
             "Title": "Mod Filter",
             "Close": "Zatvori"
+        },
+        "ResetConflicts": {
+            "Title": "Poništi sukobe",
+            "Resolved": "Riješeni",
+            "Ignored": "Zanemareni",
+            "Close": "Zatvori",
+            "Reset": "Poništi"
         }
     },
     "ConflictIgnore": {

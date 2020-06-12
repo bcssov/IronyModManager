@@ -404,5 +404,38 @@ namespace IronyModManager.Parser.Tests
             var results = service.GetAllTypeAndIdKeys();
             results.Count().Should().Be(defs.Count);
         }
+
+        /// <summary>
+        /// Defines the test method Deletes_specified_definition.
+        /// </summary>
+        [Fact]
+        public void Deletes_specified_definition()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs, true);
+            service.Remove(defs.First());
+            var result = service.GetAll();
+            result.Count().Should().Be(defs.Count - 1);
+            result.FirstOrDefault(p => p.Id == "0").Should().BeNull();
+            var hierarchalResult = service.GetHierarchicalDefinitions();
+            hierarchalResult.First().Children.Count.Should().Be(defs.Count - 1);
+            hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();
+            service.GetByTypeAndId(defs.First().TypeAndId).Count().Should().Be(0);
+        }
     }
 }

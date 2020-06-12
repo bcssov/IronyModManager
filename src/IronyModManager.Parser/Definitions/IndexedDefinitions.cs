@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -96,12 +96,13 @@ namespace IronyModManager.Parser.Definitions
         /// Adds to map.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        public void AddToMap(IDefinition definition)
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        public void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
             MapKeys(fileKeys, definition.FileCI);
             MapKeys(typeKeys, definition.Type);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
-            if (useHierarchalMap)
+            if (useHierarchalMap && !forceIgnoreHierarchical)
             {
                 MapHierarchicalDefinition(definition);
             }
@@ -258,6 +259,32 @@ namespace IronyModManager.Parser.Definitions
                 foreach (var item in definitions)
                 {
                     AddToMap(item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        public void Remove(IDefinition definition)
+        {
+            definitions.Remove(definition);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectoryCI);
+            if (hierarchicalDefinition != null)
+            {
+                if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
+                {
+                    var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                    if (child != null)
+                    {
+                        children.Remove(child);
+                    }
+                    if (children.Select(p => p).Count() == 0)
+                    {
+                        childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
+                        mainHierarchalDefinitions.Remove(hierarchicalDefinition);
+                    }
                 }
             }
         }

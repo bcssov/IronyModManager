@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-12-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -640,6 +640,18 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Resets the ignored conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ResetIgnoredConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
+        {
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), false);
+        }
+
+        /// <summary>
         /// Resets the patch state cache.
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
@@ -647,6 +659,18 @@ namespace IronyModManager.Services
         {
             modPatchExporter.ResetCache();
             return true;
+        }
+
+        /// <summary>
+        /// Resets the resolved conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ResetResolvedConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
+        {
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), true);
         }
 
         /// <summary>
@@ -794,7 +818,7 @@ namespace IronyModManager.Services
                                 var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                                 if (existing.Count() == 0)
                                 {
-                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
                                 }
                             }
                         }
@@ -863,7 +887,7 @@ namespace IronyModManager.Services
                                 var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
                                 if (existing.Count() == 0)
                                 {
-                                    conflictResult.ResolvedConflicts.AddToMap(item);
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
                                 }
                             }
                             exportedConflicts = true;
@@ -1121,6 +1145,11 @@ namespace IronyModManager.Services
                         RootDirectory = game.UserDirectory,
                         Path = Shared.Constants.ModDirectory
                     });
+                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = Path.Combine(Shared.Constants.ModDirectory, patchName)
+                    });
                     await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {
                         Mod = mod,
@@ -1144,11 +1173,6 @@ namespace IronyModManager.Services
                     {
                         conflictResult.IgnoredConflicts.AddToMap(definition);
                     }
-                    await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
-                    {
-                        RootDirectory = game.UserDirectory,
-                        Path = Path.Combine(Shared.Constants.ModDirectory, patchName)
-                    });
                     var exportPatches = new HashSet<IDefinition>();
                     if (resolve)
                     {
@@ -1491,6 +1515,60 @@ namespace IronyModManager.Services
                     });
                 }
                 return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// un resolve conflict as an asynchronous operation.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <param name="isResolvedConflict">if set to <c>true</c> [is resolved conflict].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, bool isResolvedConflict)
+        {
+            var game = GameService.GetSelected();
+            if (conflictResult != null && game != null)
+            {
+                var indexed = isResolvedConflict ? conflictResult.ResolvedConflicts : conflictResult.IgnoredConflicts;
+                var result = indexed.GetByTypeAndId(typeAndId);
+                if (result.Count() > 0)
+                {
+                    IEnumerable<IMod> collectionMods = null;
+                    foreach (var item in result)
+                    {
+                        indexed.Remove(item);
+                        if (isResolvedConflict)
+                        {
+                            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                            {
+                                RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                                Path = item.File
+                            });
+                            if (item.ValueType == Parser.Common.ValueType.OverwrittenObject)
+                            {
+                                if (collectionMods == null)
+                                {
+                                    collectionMods = GetCollectionMods();
+                                }
+                                var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(typeAndId);
+                                if (overwritten.Count() > 0)
+                                {
+                                    await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                                    {
+                                        Game = game.Type,
+                                        OverwrittenConflicts = PopulateModPath(overwritten, collectionMods),
+                                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                                        PatchName = patchName
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    return true;
+                }
             }
             return false;
         }

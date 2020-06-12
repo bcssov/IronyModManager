@@ -168,6 +168,13 @@
         "ModFilter": {
             "Title": "Mod Filter",
             "Close": "Close"
+        },
+        "ResetConflicts": {
+            "Title": "Reset Conflicts",
+            "Resolved": "Resolved",
+            "Ignored": "Ignored",
+            "Close": "Close",
+            "Reset": "Reset"
         }
     },
     "ConflictIgnore": {

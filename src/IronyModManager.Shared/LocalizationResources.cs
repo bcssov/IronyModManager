@@ -226,6 +226,15 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Close = Prefix + "Close";
             }
+            public static class ResetConflicts
+            {
+                public const string Prefix = "Conflict_Solver.ResetConflicts.";
+                public const string Title = Prefix + "Title";
+                public const string Resolved = Prefix + "Resolved";
+                public const string Ignored = Prefix + "Ignored";
+                public const string Close = Prefix + "Close";
+                public const string Reset = Prefix + "Reset";
+            }
         }
         public static class ConflictIgnore
         {
