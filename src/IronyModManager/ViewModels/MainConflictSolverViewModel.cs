@@ -790,7 +790,14 @@ namespace IronyModManager.ViewModels
                 }
                 else
                 {
-                    patchDefinition = takeLeftBinary ? ModCompareSelector.LeftSelectedDefinition : ModCompareSelector.RightSelectedDefinition;
+                    if (resolve)
+                    {
+                        patchDefinition = takeLeftBinary ? ModCompareSelector.LeftSelectedDefinition : ModCompareSelector.RightSelectedDefinition;
+                    }
+                    else
+                    {
+                        patchDefinition = ModCompareSelector.Definitions.FirstOrDefault();
+                    }
                 }
                 if (patchDefinition != null)
                 {
