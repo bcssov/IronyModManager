@@ -269,9 +269,9 @@ namespace IronyModManager.Parser.Definitions
         public void InitSearch()
         {
             trie = new Trie<IDefinition>();
-            foreach (var item in definitions)
+            foreach (var item in definitions.Where(p => p.Tags?.Count > 0))
             {
-                trie.Add(item, new List<string>() { item.Id });
+                trie.Add(item, item.Tags);
             }
         }
 

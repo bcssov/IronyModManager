@@ -484,7 +484,8 @@ namespace IronyModManager.Parser.Tests
                     File = i.ToString(),
                     Id = i.ToString(),
                     ModName = i.ToString(),
-                    Type = i.ToString()
+                    Type = i.ToString(),
+                    Tags = new List<string>() { i.ToString() }
                 });
             }
             var service = new IndexedDefinitions();
