@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -300,7 +300,7 @@ namespace IronyModManager.ViewModels.Controls
             if (syncedConflicts != null)
             {
                 conflicts = syncedConflicts;
-            }            
+            }
             var args = new NavigationEventArgs()
             {
                 SelectedCollection = CollectionMods.SelectedModCollection,
@@ -404,6 +404,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
                 {
                     await TriggerOverlayAsync(true);
+                    modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
                     if (mode == PatchStateMode.None)
                     {
