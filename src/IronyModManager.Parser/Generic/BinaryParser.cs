@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -85,6 +85,7 @@ namespace IronyModManager.Parser.Generic
             def.Code = string.Empty;
             def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             def.ValueType = Common.ValueType.Binary;
+            def.Tags.Add(def.Id);
             return new List<IDefinition> { def };
         }
 

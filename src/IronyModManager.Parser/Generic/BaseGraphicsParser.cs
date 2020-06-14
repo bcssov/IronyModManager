@@ -4,7 +4,7 @@
 // Created          : 04-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-06-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="BaseGraphicsParser.cs" company="Mario">
 //     Mario
@@ -72,6 +72,7 @@ namespace IronyModManager.Parser.Generic
                 return error;
             }
 
+            SimpleParserTags = new List<string>();
             var result = new List<IDefinition>();
             IDefinition definition = null;
             var sb = new StringBuilder();
@@ -114,6 +115,7 @@ namespace IronyModManager.Parser.Generic
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
+                            SimpleParserTags.Add(id);
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
@@ -150,6 +152,7 @@ namespace IronyModManager.Parser.Generic
                             definition.ValueType = Common.ValueType.Object;
                             var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
                             definition.Id = initialKey;
+                            SimpleParserTags.Add(initialKey);
                         }
                         var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         foreach (var item in Common.Constants.Localization.Locales)
@@ -162,6 +165,7 @@ namespace IronyModManager.Parser.Generic
                         if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
                         {
                             definition.Id = id;
+                            SimpleParserTags.Add(id);
                         }
                         var trimEnding = line.TrimEnd();
                         if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
@@ -174,7 +178,12 @@ namespace IronyModManager.Parser.Generic
                         {
                             if (langs.Count > 0)
                             {
+                                if (SimpleParserTags.Contains(definition.Id))
+                                {
+                                    SimpleParserTags.Remove(definition.Id);
+                                }
                                 definition.Id = definition.Id.Insert(0, $"{string.Join("-", langs.OrderBy(p => p))}-");
+                                SimpleParserTags.Add(definition.Id);
                             }
                             sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
                             definition.Code = sb.ToString();
@@ -205,6 +214,7 @@ namespace IronyModManager.Parser.Generic
                 return error;
             }
 
+            SimpleParserTags = new List<string>();
             var result = new List<IDefinition>();
             IDefinition definition = null;
             var sb = new StringBuilder();
@@ -231,6 +241,7 @@ namespace IronyModManager.Parser.Generic
                         if (!string.IsNullOrWhiteSpace(id))
                         {
                             definition.Id = id;
+                            SimpleParserTags.Add(id);
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
@@ -266,11 +277,13 @@ namespace IronyModManager.Parser.Generic
                             definition.ValueType = Common.ValueType.Object;
                             var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
                             definition.Id = initialKey;
+                            SimpleParserTags.Add(initialKey);
                         }
                         var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
                         if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
                         {
                             definition.Id = id;
+                            SimpleParserTags.Add(id);
                         }
                         var trimEnding = line.TrimEnd();
                         if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
