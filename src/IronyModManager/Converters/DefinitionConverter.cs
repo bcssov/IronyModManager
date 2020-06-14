@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 03-20-2020
+// Created          : 06-14-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 06-14-2020
 // ***********************************************************************
-// <copyright file="CollectionNullOrEmptyConverter.cs" company="Mario">
+// <copyright file="DefinitionConverter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,18 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Avalonia.Data.Converters;
-using IronyModManager.Shared;
+using IronyModManager.Parser.Common.Definitions;
 
 namespace IronyModManager.Converters
 {
     /// <summary>
-    /// Class CollectionNullOrEmptyConverter.
+    /// Class DefinitionConverter.
     /// Implements the <see cref="Avalonia.Data.Converters.IValueConverter" />
     /// </summary>
     /// <seealso cref="Avalonia.Data.Converters.IValueConverter" />
-    public class CollectionNullOrEmptyConverter : IValueConverter
+    public class DefinitionConverter : IValueConverter
     {
         #region Methods
 
@@ -39,13 +38,11 @@ namespace IronyModManager.Converters
         /// <returns>System.Object.</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool.TryParse(parameter != null ? parameter.ToString() : bool.FalseString, out var invert);
-            if (value is IEnumerable<object> col)
+            if (value is IDefinition definition)
             {
-                var result = col == null || col.Count() == 0;
-                return invert ? !result : result;
+                return $"{definition.Id} - {definition.File} - {definition.ModName}";
             }
-            return !invert;
+            return string.Empty;
         }
 
         /// <summary>
@@ -56,11 +53,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
-        [ExcludeFromCoverage("Not being used.")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool.TryParse(parameter != null ? parameter.ToString() : bool.FalseString, out var invert);
-            return !invert;
+            return value;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -131,6 +131,7 @@ namespace IronyModManager.Parser.Generic
                             {
                                 var key = codeParser.GetKey(content, Common.Constants.Scripts.VariableSeparatorId);
                                 definition.Id = key;
+                                definition.Tags.Add(key.ToLowerInvariant());
                             }
                         }
                         if (openBrackets.GetValueOrDefault() > 0 && openBrackets - closeBrackets <= 1)
@@ -189,6 +190,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             var key = codeParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
                             definition.Id = key;
+                            definition.Tags.Add(key.ToLowerInvariant());
                         }
                     }
                     if (openBrackets.GetValueOrDefault() > 0 && openBrackets - closeBrackets <= 1)

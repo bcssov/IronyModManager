@@ -158,7 +158,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.InitMap(defs);
             var results = service.GetByValueType(Common.ValueType.Object);
-            results.Count().Should().Be(10);            
+            results.Count().Should().Be(10);
         }
 
         /// <summary>
@@ -437,5 +437,64 @@ namespace IronyModManager.Parser.Tests
             hierarchalResult.First().Children.FirstOrDefault(p => p.Key.StartsWith("0")).Should().BeNull();
             service.GetByTypeAndId(defs.First().TypeAndId).Count().Should().Be(0);
         }
+
+        /// <summary>
+        /// Defines the test method Should_not_find_definition.
+        /// </summary>
+        [Fact]
+        public void Should_not_find_definition()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.SearchDefinitions("1");
+            results.Should().BeNull();
+        }
+
+
+        /// <summary>
+        /// Defines the test method Should_find_definition.
+        /// </summary>
+        [Fact]
+        public void Should_find_definition()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString(),
+                    Tags = new List<string>() { i.ToString() }
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            service.InitSearch();
+            var results = service.SearchDefinitions("1");
+            results.Count().Should().Be(1);
+            results.First().Id.Should().Be("1");
+        }
+
     }
 }

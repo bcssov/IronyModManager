@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -391,6 +391,13 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets the tags.
+        /// </summary>
+        /// <value>The tags.</value>
+        [JsonIgnore]
+        public IList<string> Tags { get; set; } = new List<string>();
+
+        /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
@@ -470,6 +477,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(AdditionalFileNames) => AdditionalFileNames,
                 nameof(OverwrittenFileNames) => OverwrittenFileNames,
                 nameof(ModPath) => ModPath,
+                nameof(Tags) => Tags,
                 _ => Id,
             };
         }

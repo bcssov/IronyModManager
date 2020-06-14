@@ -175,6 +175,11 @@
             "Ignored": "Zanemareni",
             "Close": "Zatvori",
             "Reset": "Poništi"
+        },
+        "DBSearch": {
+            "Title": "Pretraživanje baze podataka",
+            "Watermark": "Unesi pojam",
+            "Close": "Zatvori"
         }
     },
     "ConflictIgnore": {
