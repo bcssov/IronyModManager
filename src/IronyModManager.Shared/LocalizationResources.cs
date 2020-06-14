@@ -235,6 +235,13 @@ namespace IronyModManager.Shared
                 public const string Close = Prefix + "Close";
                 public const string Reset = Prefix + "Reset";
             }
+            public static class DBSearch
+            {
+                public const string Prefix = "Conflict_Solver.DBSearch.";
+                public const string Title = Prefix + "Title";
+                public const string Watermark = Prefix + "Watermark";
+                public const string Close = Prefix + "Close";
+            }
         }
         public static class ConflictIgnore
         {

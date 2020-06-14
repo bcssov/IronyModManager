@@ -464,7 +464,7 @@ namespace IronyModManager.Parser.Common.Parsers
                             if (!definition.Tags.Contains(lower))
                             {
                                 definition.Tags.Add(lower);
-                            }                            
+                            }
                         }
                     }
                     result.Add(definition);
@@ -481,8 +481,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         protected virtual IEnumerable<string> ParseComplexScriptTags(IEnumerable<IScriptKeyValue> values, string defaultId)
         {
-            var tags = new List<string>();
-            tags.Add(defaultId);
+            var tags = new List<string>
+            {
+                defaultId
+            };
             foreach (var item in values)
             {
                 string id = EvalComplexParseKeyValueForId(item);

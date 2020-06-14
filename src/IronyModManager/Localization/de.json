@@ -175,6 +175,11 @@
             "Ignored": "Ignoriert",
             "Close": "Schließen",
             "Reset": "Zurücksetzen"
+        },
+        "DBSearch": {
+            "Title": "Datenbanksuche",
+            "Watermark": "Suchbegriff eingeben",
+            "Close": "Schließen"
         }
     },
     "ConflictIgnore": {

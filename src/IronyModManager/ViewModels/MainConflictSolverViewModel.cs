@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -107,6 +107,7 @@ namespace IronyModManager.ViewModels
         /// <param name="ignoreConflictsRules">The ignore conflicts rules.</param>
         /// <param name="modFilter">The mod filter.</param>
         /// <param name="resetConflicts">The reset conflicts.</param>
+        /// <param name="dbSearch">The database search.</param>
         /// <param name="writingStateOperationHandler">The writing state operation handler.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
@@ -115,7 +116,7 @@ namespace IronyModManager.ViewModels
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
-            WritingStateOperationHandler writingStateOperationHandler,
+            ConflictSolverDBSearchViewModel dbSearch, WritingStateOperationHandler writingStateOperationHandler,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
@@ -130,17 +131,12 @@ namespace IronyModManager.ViewModels
             IgnoreConflictsRules = ignoreConflictsRules;
             ModFilter = modFilter;
             ResetConflicts = resetConflicts;
+            DatabaseSearch = dbSearch;
         }
 
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the reset conflicts.
-        /// </summary>
-        /// <value>The reset conflicts.</value>
-        public virtual ConflictSolverResetConflictsViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the back.
@@ -173,6 +169,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The conflicts.</value>
         public virtual IConflictResult Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database search.
+        /// </summary>
+        /// <value>The database search.</value>
+        public virtual ConflictSolverDBSearchViewModel DatabaseSearch { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing ignore conflicts rules].
@@ -317,6 +319,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The index of the previous conflict.</value>
         public virtual int? PreviousConflictIndex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the reset conflicts.
+        /// </summary>
+        /// <value>The reset conflicts.</value>
+        public virtual ConflictSolverResetConflictsViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the resolve.
@@ -585,6 +593,7 @@ namespace IronyModManager.ViewModels
                 IgnoreConflictsRules.CollectionName = SelectedModCollection.Name;
                 IgnoreConflictsRules.ConflictResult = s;
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
+                DatabaseSearch.SetParameters(s);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>

@@ -175,6 +175,11 @@
             "Ignored": "Ignored",
             "Close": "Close",
             "Reset": "Reset"
+        },
+        "DBSearch": {
+            "Title": "Database Search",
+            "Watermark": "Enter search term",
+            "Close": "Close"
         }
     },
     "ConflictIgnore": {
