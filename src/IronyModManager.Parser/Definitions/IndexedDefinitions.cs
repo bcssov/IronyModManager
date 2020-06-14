@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Trie;
 
 namespace IronyModManager.Parser.Definitions
 {
@@ -54,6 +55,11 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+
+        /// <summary>
+        /// The trie
+        /// </summary>
+        private Trie<IDefinition> trie;
 
         /// <summary>
         /// The type and identifier keys
@@ -99,14 +105,7 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         public void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
-            MapKeys(fileKeys, definition.FileCI);
-            MapKeys(typeKeys, definition.Type);
-            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
-            if (useHierarchalMap && !forceIgnoreHierarchical)
-            {
-                MapHierarchicalDefinition(definition);
-            }
-            definitions.Add(definition);
+            AddToMapInternal(definition, forceIgnoreHierarchical, true);
         }
 
         /// <summary>
@@ -131,6 +130,7 @@ namespace IronyModManager.Parser.Definitions
             childHierarchicalDefinitions = null;
             mainHierarchalDefinitions.Clear();
             mainHierarchalDefinitions = null;
+            trie = null;
         }
 
         /// <summary>
@@ -264,6 +264,18 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Initializes the search.
+        /// </summary>
+        public void InitSearch()
+        {
+            trie = new Trie<IDefinition>();
+            foreach (var item in definitions)
+            {
+                trie.Add(item, new List<string>() { item.Id });
+            }
+        }
+
+        /// <summary>
         /// Removes the specified definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -286,6 +298,46 @@ namespace IronyModManager.Parser.Definitions
                         mainHierarchalDefinitions.Remove(hierarchicalDefinition);
                     }
                 }
+            }
+            if (trie != null)
+            {
+                InitSearch();
+            }
+        }
+
+        /// <summary>
+        /// Searches the definitions.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> SearchDefinitions(string searchTerm)
+        {
+            if (trie != null)
+            {
+                return trie.Get(searchTerm);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Adds to map internal.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        /// <param name="directCall">if set to <c>true</c> [direct call].</param>
+        private void AddToMapInternal(IDefinition definition, bool forceIgnoreHierarchical = false, bool directCall = false)
+        {
+            MapKeys(fileKeys, definition.FileCI);
+            MapKeys(typeKeys, definition.Type);
+            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            if (useHierarchalMap && !forceIgnoreHierarchical)
+            {
+                MapHierarchicalDefinition(definition);
+            }
+            definitions.Add(definition);
+            if (directCall && trie != null)
+            {
+                InitSearch();
             }
         }
 

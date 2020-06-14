@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -113,10 +113,22 @@ namespace IronyModManager.Parser.Common.Definitions
         void InitMap(IEnumerable<IDefinition> definitions, bool mapHierarchicalDefinitions = false);
 
         /// <summary>
+        /// Initializes the search.
+        /// </summary>
+        void InitSearch();
+
+        /// <summary>
         /// Removes the specified definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
         void Remove(IDefinition definition);
+
+        /// <summary>
+        /// Searches the definitions.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> SearchDefinitions(string searchTerm);
 
         #endregion Methods
     }

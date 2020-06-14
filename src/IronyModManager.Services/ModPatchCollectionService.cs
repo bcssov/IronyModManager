@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -557,6 +557,7 @@ namespace IronyModManager.Services
             messageBus.Publish(new ModDefinitionLoadEvent(99));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(definitions);
+            indexed.InitSearch();
             messageBus.Publish(new ModDefinitionLoadEvent(100));
             return indexed;
         }
