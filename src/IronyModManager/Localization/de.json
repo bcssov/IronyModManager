@@ -257,7 +257,7 @@
         "OpenInSteam": "In Steam öffnen",
         "Open": "Öffnen Sie die Mod-URL",
         "Copy": "Kopieren Sie die Mod-URL",
-        "OpenInAssociatedApp": "In zugehöriger App öffnen"
+        "OpenInAssociatedApp": "Öffnen Sie den Mod-Ordner/die Mod-Datei"
     },
     "Descriptor_Actions": {
         "CheckNew": "Überprüfen Sie die neuen Mods",

@@ -257,7 +257,7 @@
         "OpenInSteam": "Open In Steam",
         "Open": "Open Mod Url",
         "Copy": "Copy Mod Url",
-        "OpenInAssociatedApp": "Open In Associated App"
+        "OpenInAssociatedApp": "Open Mod Folder/File"
     },
     "Descriptor_Actions": {
         "CheckNew": "Check New Mods",
