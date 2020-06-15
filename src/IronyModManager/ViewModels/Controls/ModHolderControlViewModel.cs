@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -156,6 +156,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The advanced mode command.</value>
         public virtual ReactiveCommand<Unit, Unit> AdvancedModeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow mod selection].
+        /// </summary>
+        /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowModSelection { get; protected set; }
 
         /// <summary>
         /// Gets or sets the analyze.
@@ -376,11 +382,24 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var applyEnabled = this.WhenAnyValue(v => v.ApplyingCollection, v => !v);
+            var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
+            var applyEnabled = Observable.Merge(this.WhenAnyValue(v => v.ApplyingCollection, v => !v), allowModSelectionEnabled);
 
-            this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Where(v => v != null).Subscribe(s =>
+            this.WhenAnyValue(v => v.CollectionMods.SelectedModCollection).Subscribe(s =>
             {
-                InstallModsAsync().ConfigureAwait(true);
+                if (s != null)
+                {
+                    AllowModSelection = true;
+                    InstalledMods.AllowModSelection = true;
+                    CollectionMods.AllowModSelection = true;
+                    InstallModsAsync().ConfigureAwait(true);
+                }
+                else
+                {
+                    AllowModSelection = false;
+                    InstalledMods.AllowModSelection = false;
+                    CollectionMods.AllowModSelection = false;
+                }
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
@@ -417,7 +436,7 @@ namespace IronyModManager.ViewModels.Controls
                         await AnalyzeModsAsync(mode);
                     }
                 }
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -437,7 +456,7 @@ namespace IronyModManager.ViewModels.Controls
                         await appAction.ExitAppAsync();
                     }
                 }
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             AdvancedModeCommand = ReactiveCommand.CreateFromTask(async () =>
             {

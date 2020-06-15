@@ -5,9 +5,11 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              MinWidth="200"
              x:Class="IronyModManager.Views.Controls.InstalledModsControlView"
-             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager">
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             x:Name="installedMods">
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
+    <converter:BoolAndConverter x:Key="BoolAndConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
@@ -21,7 +23,7 @@
         <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0" MaxHeight="30"></ContentControl>
         <Grid DockPanel.Dock="Top" ColumnDefinitions="1*,2*,5*,3*" Margin="0,10,0,0">
           <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
-            <CheckBox IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}" HorizontalAlignment="Center"></CheckBox>
+            <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}" Command="{Binding EnableAllCommand}" HorizontalAlignment="Center"></CheckBox>
           </Border>
           <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
@@ -41,7 +43,15 @@
                   <ContextMenu>
                   </ContextMenu>
                 </Grid.ContextMenu>
-                <CheckBox IsEnabled="{Binding IsValid}" IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
+                <CheckBox IsChecked="{Binding IsSelected}"
+                          Grid.Column="0" Grid.ColumnSpan="2">
+                  <CheckBox.IsEnabled>
+                    <MultiBinding Converter="{StaticResource BoolAndConverter}" Mode="OneWay">
+                      <Binding Path="DataContext.AllowModSelection" ElementName="installedMods" />
+                      <Binding Path="DataContext.IsValid" RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                  </CheckBox.IsEnabled>
+                </CheckBox>
                 <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
                 <TextBlock Text="{Binding Version}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>

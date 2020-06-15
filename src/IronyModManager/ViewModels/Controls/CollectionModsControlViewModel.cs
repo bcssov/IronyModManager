@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -233,6 +233,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
         public virtual bool AllModsEnabled { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow mod selection].
+        /// </summary>
+        /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -544,7 +550,6 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void HandleModCollectionChange()
         {
             skipModCollectionSave = true;
-            ExportCollection.CanExport = SelectedModCollection != null;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState();
             if (Mods != null)
@@ -699,6 +704,8 @@ namespace IronyModManager.ViewModels.Controls
             LoadModCollections(false);
             ApplySort();
 
+            var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
+
             CreateCommand = ReactiveCommand.Create(() =>
             {
                 if (gameService.GetSelected() != null)
@@ -715,7 +722,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     RemoveCollectionAsync(SelectedModCollection.Name).ConfigureAwait(true);
                 }
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
@@ -953,6 +960,12 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
                 }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.AllowModSelection).Subscribe(s =>
+            {
+                ExportCollection.AllowModSelection = s;
+                ModifyCollection.AllowModSelection = s;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
