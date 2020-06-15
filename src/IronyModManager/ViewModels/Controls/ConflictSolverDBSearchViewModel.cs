@@ -4,7 +4,7 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverDBSearchViewModel.cs" company="Mario">
 //     Mario
@@ -36,6 +36,19 @@ namespace IronyModManager.ViewModels.Controls
     public class ConflictSolverDBSearchViewModel : BaseViewModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the clear.
+        /// </summary>
+        /// <value>The clear.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.DBSearch.Clear)]
+        public virtual string Clear { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the clear command.
+        /// </summary>
+        /// <value>The clear command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ClearCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the close.
@@ -129,6 +142,12 @@ namespace IronyModManager.ViewModels.Controls
             DatabaseSearchCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = true;
+            }).DisposeWith(disposables);
+
+            ClearCommand = ReactiveCommand.Create(() =>
+            {
+                SearchTerm = string.Empty;
+                Definitions = null;
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.SearchTerm).Where(s => !string.IsNullOrWhiteSpace(s) && s.Length >= 2).Subscribe(s =>

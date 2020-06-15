@@ -241,6 +241,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Watermark = Prefix + "Watermark";
                 public const string Close = Prefix + "Close";
+                public const string Clear = Prefix + "Clear";
             }
         }
         public static class ConflictIgnore

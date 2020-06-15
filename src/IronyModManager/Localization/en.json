@@ -179,7 +179,8 @@
         "DBSearch": {
             "Title": "Database Search",
             "Watermark": "Enter search term",
-            "Close": "Close"
+            "Close": "Close",
+            "Clear": "X"
         }
     },
     "ConflictIgnore": {

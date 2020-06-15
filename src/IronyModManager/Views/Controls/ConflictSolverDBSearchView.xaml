@@ -6,7 +6,7 @@
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverDBSearchView">
   <UserControl.Resources>
-    <converter:DefinitionConverter x:Key="DefinitionConverter" />
+    <converter:DefinitionSearchTextConverter x:Key="DefinitionSearchTextConverter" />
   </UserControl.Resources>
   <Panel>
     <Button Content="{Binding DatabaseSearch}" Command="{Binding DatabaseSearchCommand}"
@@ -16,12 +16,17 @@
            Topmost="True" ObeyScreenEdges="True">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-          <TextBox Watermark="{Binding Watermark}" Text="{Binding SearchTerm}" Grid.Row="0"></TextBox>
-          <ListBox Items="{Binding Definitions}" Height="400" Width="300" Grid.Row="1" 
+          <Panel Grid.Row="0">
+            <Grid ColumnDefinitions="10*,1*">
+              <TextBox Watermark="{Binding Watermark}" Text="{Binding SearchTerm}" Grid.Column="0"></TextBox>
+              <Button Content="{Binding Clear}" Command="{Binding ClearCommand}" Grid.Column="1"></Button>
+            </Grid>
+          </Panel>
+          <ListBox Items="{Binding Definitions}" Height="400" Width="300" Grid.Row="1"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding, Converter={StaticResource DefinitionConverter}}" TextWrapping="Wrap">
+                <TextBlock Text="{Binding, Converter={StaticResource DefinitionSearchTextConverter}}" TextWrapping="Wrap">
                 </TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>

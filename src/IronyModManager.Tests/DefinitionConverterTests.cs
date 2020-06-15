@@ -4,9 +4,9 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
-// <copyright file="DefinitionConverterTests.cs" company="Mario">
+// <copyright file="DefinitionSearchTextConverterTests.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -22,9 +22,9 @@ using Xunit;
 namespace IronyModManager.Tests
 {
     /// <summary>
-    /// Class DefinitionConverterTests.
+    /// Class DefinitionSearchTextConverterTests.
     /// </summary>
-    public class DefinitionConverterTests
+    public class DefinitionSearchTextConverterTests
     {
         /// <summary>
         /// Defines the test method Definition_text_should_be_empty.
@@ -32,7 +32,7 @@ namespace IronyModManager.Tests
         [Fact]
         public void Definition_text_should_be_empty()
         {
-            var converter = new DefinitionConverter();
+            var converter = new DefinitionSearchTextConverter();
             var result = converter.Convert(null, null, null, null);
             result.ToString().Should().BeNullOrWhiteSpace();
         }
@@ -44,7 +44,7 @@ namespace IronyModManager.Tests
         [Fact]
         public void Definition_text_should_not_be_empty()
         {
-            var converter = new DefinitionConverter();
+            var converter = new DefinitionSearchTextConverter();
             var result = converter.Convert(new Definition() { Id = "test", File = "test.txt", ModName = "test" }, null, null, null);
             result.ToString().Should().NotBeNullOrWhiteSpace();
         }

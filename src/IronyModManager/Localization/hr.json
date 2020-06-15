@@ -179,7 +179,8 @@
         "DBSearch": {
             "Title": "Pretraživanje baze podataka",
             "Watermark": "Unesi pojam",
-            "Close": "Zatvori"
+            "Close": "Zatvori",
+            "Clear": "X"
         }
     },
     "ConflictIgnore": {

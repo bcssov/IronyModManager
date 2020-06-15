@@ -4,9 +4,9 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
-// <copyright file="DefinitionConverter.cs" company="Mario">
+// <copyright file="DefinitionSearchTextConverter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -20,11 +20,11 @@ using IronyModManager.Parser.Common.Definitions;
 namespace IronyModManager.Converters
 {
     /// <summary>
-    /// Class DefinitionConverter.
+    /// Class DefinitionSearchTextConverter.
     /// Implements the <see cref="Avalonia.Data.Converters.IValueConverter" />
     /// </summary>
     /// <seealso cref="Avalonia.Data.Converters.IValueConverter" />
-    public class DefinitionConverter : IValueConverter
+    public class DefinitionSearchTextConverter : IValueConverter
     {
         #region Methods
 
