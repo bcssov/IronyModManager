@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -80,6 +80,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IModCollection ActiveCollection { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [allow mod selection].
+        /// </summary>
+        /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowModSelection { get; set; }
+
+        /// <summary>
         /// Gets or sets the duplicate.
         /// </summary>
         /// <value>The duplicate.</value>
@@ -115,10 +121,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
+
             RenameCommand = ReactiveCommand.Create(() =>
             {
                 return new CommandResult<bool>(true, CommandState.Success);
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             DuplicateCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -149,7 +157,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
                 return new CommandResult<bool>(false, CommandState.NotExecuted);
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

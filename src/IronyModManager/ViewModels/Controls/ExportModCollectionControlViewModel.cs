@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-15-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -57,10 +57,10 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance can export.
+        /// Gets or sets a value indicating whether [allow mod selection].
         /// </summary>
-        /// <value><c>true</c> if this instance can export; otherwise, <c>false</c>.</value>
-        public virtual bool CanExport { get; set; }
+        /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the collection.
@@ -138,15 +138,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
+
             ExportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (!CanExport)
-                {
-                    return new CommandResult<string>(string.Empty, CommandState.NotExecuted);
-                }
                 var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
-            }).DisposeWith(disposables);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             ImportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
