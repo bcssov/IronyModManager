@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Reactive.Disposables;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using IronyModManager.Common;
@@ -51,19 +53,20 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            MessageBus.Current.Listen<WindowSizeChangedEventArgs>()
-                .SubscribeObservable(x =>
+            var popup = this.FindControl<Popup>("popup");
+            popup.Closed += (sender, args) =>
+            {
+                ViewModel.ForceClose();
+            };
+            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
+            .SubscribeObservable(x =>
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     ViewModel.ForceClose();
-                }).DisposeWith(disposables);
-            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
-                .SubscribeObservable(x =>
-                {
-                    Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        ViewModel.ForceClose();
-                    });
-                }).DisposeWith(disposables);
+                });
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 

@@ -25,7 +25,7 @@
           <Panel  VerticalAlignment="Bottom" HorizontalAlignment="Right">
             <Button Content="{Binding Analyze}" Command="{Binding AnalyzeCommand}"></Button>
             <Popup PlacementMode="Top" IsOpen="{Binding IsModeOpen}"
-             Topmost="True" ObeyScreenEdges="True">
+             Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
               <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
                 <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
                   <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"

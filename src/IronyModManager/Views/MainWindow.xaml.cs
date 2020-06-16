@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -132,15 +132,6 @@ namespace IronyModManager.Views
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            this.WhenAnyValue(p => p.ClientSize).Subscribe(s =>
-            {
-                MessageBus.Current.SendMessage(new WindowSizeChangedEventArgs()
-                {
-                    Height = s.Height,
-                    Width = s.Width
-                });
-            }).DisposeWith(disposables);
-
             MessageBus.Current.Listen<ShutdownStateEventArgs>()
                 .Subscribe(x =>
                 {

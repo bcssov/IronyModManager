@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Reactive.Disposables;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using IronyModManager.Common;
@@ -51,19 +53,20 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            MessageBus.Current.Listen<WindowSizeChangedEventArgs>()
-                .SubscribeObservable(x =>
+            var popup = this.FindControl<Popup>("popup");
+            popup.Closed += (sender, args) =>
+            {
+                ViewModel.ForceClosePopup();
+            };
+            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
+            .SubscribeObservable(x =>
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     ViewModel.ForceClosePopup();
-                }).DisposeWith(disposables);
-            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
-                .SubscribeObservable(x =>
-                {
-                    Dispatcher.UIThread.InvokeAsync(() =>
-                    {
-                        ViewModel.ForceClosePopup();
-                    });
-                }).DisposeWith(disposables);
+                });
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
