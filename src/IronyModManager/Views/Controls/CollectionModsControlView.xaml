@@ -9,6 +9,8 @@
              xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
+    <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
+    <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
@@ -103,7 +105,15 @@
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
                                             Grid.Column="2" MaxHeight="40"></controls:MinMaxNumericUpDown>
-                    <TextBlock Text="{Binding Name}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                    <Grid Grid.Column="3" ColumnDefinitions="9*,1*">
+                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" Grid.Column="0"></TextBlock>
+                      <Panel Grid.Column="1" Margin="2,0">
+                        <DrawingPresenter VerticalAlignment="Center" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}"
+                                          Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsUp}" />
+                        <DrawingPresenter VerticalAlignment="Center" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
+                                          Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsDown}" />
+                      </Panel>
+                    </Grid>
                   </Grid>
                 </DataTemplate>
               </controls:DragDropListBox.ItemTemplate>

@@ -10,6 +10,8 @@
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
     <converter:BoolAndConverter x:Key="BoolAndConverter" />
+    <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
+    <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
@@ -52,7 +54,15 @@
                     </MultiBinding>
                   </CheckBox.IsEnabled>
                 </CheckBox>
-                <TextBlock Text="{Binding Name}" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
+                <Grid Grid.Column="2" ColumnDefinitions="9*,1*">
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0"></TextBlock>
+                  <Panel Grid.Column="1" Margin="2,0">
+                    <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}" 
+                                      Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsUp}" />
+                    <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
+                                      Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsDown}" />
+                  </Panel>
+                </Grid>
                 <TextBlock Text="{Binding Version}" Grid.Column="3" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
