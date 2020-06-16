@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -208,6 +208,7 @@ namespace IronyModManager.Services
             game.SteamAppId = gameType.SteamAppId;
             game.WorkshopDirectory = gameType.WorkshopDirectory;
             game.LogLocation = gameType.LogLocation;
+            game.ChecksumFolders = gameType.ChecksumFolders;
             bool setExeLocation = true;
             if (gameSettings != null)
             {
