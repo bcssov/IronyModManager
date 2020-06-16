@@ -111,7 +111,7 @@ namespace IronyModManager.Services
         public virtual bool EvalAchievementCompatibility(IEnumerable<IMod> mods)
         {
             var game = GameService.GetSelected();
-            if (game != null)
+            if (game != null && mods?.Count() > 0)
             {
                 foreach (var item in mods.Where(p => p.IsValid))
                 {

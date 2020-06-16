@@ -48,7 +48,13 @@ namespace IronyModManager.IO
         /// <returns>IList&lt;System.String&gt;.</returns>
         public virtual IEnumerable<string> GetFiles(string path)
         {
-            return Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories).ToList();
+            var files = new List<string>();
+            foreach (var item in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                var relativePath = item.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
+                files.Add(relativePath);
+            }
+            return files;
         }
 
         /// <summary>
