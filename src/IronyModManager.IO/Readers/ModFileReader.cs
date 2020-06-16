@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ModFileReader.cs" company="Mario">
 //     Mario
@@ -39,6 +39,17 @@ namespace IronyModManager.IO.Readers
         public virtual bool CanRead(string path)
         {
             return Directory.Exists(path) && path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public IEnumerable<string> GetFiles(string path)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>

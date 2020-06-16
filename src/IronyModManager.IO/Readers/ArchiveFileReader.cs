@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -40,6 +40,27 @@ namespace IronyModManager.IO.Readers
         public virtual bool CanRead(string path)
         {
             return File.Exists(path) && path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> GetFiles(string path)
+        {
+            using var fileStream = File.OpenRead(path);
+            using var reader = ReaderFactory.Open(fileStream);
+            var files = new List<string>();
+            while (reader.MoveToNextEntry())
+            {
+                if (!reader.Entry.IsDirectory)
+                {
+                    var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                    files.Add(relativePath);
+                }
+            }
+            return files;
         }
 
         /// <summary>

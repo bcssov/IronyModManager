@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="IFileReader.cs" company="Mario">
 //     Mario
@@ -30,6 +30,13 @@ namespace IronyModManager.IO.Common.Readers
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         bool CanRead(string path);
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetFiles(string path);
 
         /// <summary>
         /// Gets the stream.
