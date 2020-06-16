@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -70,7 +70,7 @@ namespace IronyModManager.IO.Tests
 
             var reader = DIResolver.Get<IReader>();
             var result = reader.GetFileInfo(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace IronyModManager.IO.Tests
 
             var reader = DIResolver.Get<IReader>();
             var result = reader.GetStream(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
         }
 
         /// <summary>
@@ -147,6 +147,40 @@ namespace IronyModManager.IO.Tests
         [Fact]
 #else
         /// <summary>
+        /// Defines the test method Archive_return_file_list.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Archive_return_file_list()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetFiles(ArchiveTestPath);
+            result.Count().Should().BeGreaterThan(0);
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Disk_return_file_list.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public void Disk_return_file_list()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = reader.GetFiles(TestPath);
+            result.Count().Should().BeGreaterThan(0);
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
         /// Defines the test method Mod_file_read_test.
         /// </summary>
         [Fact(Skip = "This is for functional testing only")]
@@ -179,6 +213,16 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake1");
+            }
+
+            /// <summary>
+            /// Gets the files.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns>IList&lt;System.String&gt;.</returns>
+            public IEnumerable<string> GetFiles(string path)
+            {
+                return new List<string>() { "fake1.txt" };
             }
 
             /// <summary>
@@ -226,6 +270,16 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake2");
+            }
+
+            /// <summary>
+            /// Gets the files.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns>IList&lt;System.String&gt;.</returns>
+            public IEnumerable<string> GetFiles(string path)
+            {
+                return new List<string>() { "fake12.txt" };
             }
 
             /// <summary>

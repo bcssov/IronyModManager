@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -501,6 +501,16 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// eval achievement compatibility as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual async Task EvalAchievementCompatibilityAsync(IEnumerable<IMod> mods)
+        {
+            await modService.PopulateModFilesAsync(mods);
+            modService.EvalAchievementCompatibility(mods);
+        }
+
+        /// <summary>
         /// Binds the specified game.
         /// </summary>
         /// <param name="game">The game.</param>
@@ -512,7 +522,9 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (game != null)
             {
-                Mods = modService.GetInstalledMods(game).ToObservableCollection();
+                var mods = modService.GetInstalledMods(game);
+                EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
+                Mods = mods.ToObservableCollection();                
                 AllMods = Mods.ToHashSet();
                 var invalidMods = AllMods.Where(p => !p.IsValid);
                 if (invalidMods.Count() > 0)

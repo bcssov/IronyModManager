@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -668,6 +668,135 @@ namespace IronyModManager.Services.Tests
 
             var result = await service.DeleteDescriptorsAsync(new List<IMod>() { new Mod() });
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_load_file_lists.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_load_file_lists()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var mod = new Mod();
+            var result = await service.PopulateModFilesAsync(new List<IMod>() { mod });
+            result.Should().Be(true);
+            mod.Files.Count().Should().Be(0);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_load_file_lists.
+        /// </summary>
+        [Fact]
+        public async Task Should_load_file_lists()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var mod = new Mod()
+            {
+                IsValid = true
+            };
+            var result = await service.PopulateModFilesAsync(new List<IMod>() { mod });
+            result.Should().Be(true);
+            mod.Files.Count().Should().Be(1);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_be_achievement_compatible.
+        /// </summary>
+        [Fact]
+        public void Should_not_be_achievement_compatible()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop",
+                ChecksumFolders = new List<string>() { "common", "events" }
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var mod = new Mod()
+            {
+                IsValid = true,
+                Files = new List<string>() { "common\\pop_jobs\\file.txt", "localisation\\yml.yml" }
+            };
+            var result = service.EvalAchievementCompatibility(new List<IMod>() { mod });
+            result.Should().Be(true);
+            mod.AchievementStatus.Should().Be(AchievementStatus.NotCompatible);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_be_achievement_compatible.
+        /// </summary>
+        [Fact]
+        public void Should_be_achievement_compatible()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Fake",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop",
+                ChecksumFolders = new List<string>() { "common", "events" }
+            });
+            reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var mod = new Mod()
+            {
+                IsValid = true,
+                Files = new List<string>() { "gfx\\pop_jobs\\file.txt", "localisation\\yml.yml" }
+            };
+            var result = service.EvalAchievementCompatibility(new List<IMod>() { mod });
+            result.Should().Be(true);
+            mod.AchievementStatus.Should().Be(AchievementStatus.Compatible);
         }
     }
 }

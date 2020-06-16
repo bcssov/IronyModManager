@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -101,6 +101,26 @@ namespace IronyModManager.Services
         public virtual Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods)
         {
             return DeleteDescriptorsInternalAsync(mods);
+        }
+
+        /// <summary>
+        /// Evals the achievement compatibility.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool EvalAchievementCompatibility(IEnumerable<IMod> mods)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && mods?.Count() > 0)
+            {
+                foreach (var item in mods.Where(p => p.IsValid))
+                {
+                    var isAchievementCompatible = !item.Files.Any(p => game.ChecksumFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)));
+                    item.AchievementStatus = isAchievementCompatible ? AchievementStatus.Compatible : AchievementStatus.NotCompatible;
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -226,6 +246,39 @@ namespace IronyModManager.Services
                         RootDirectory = game.UserDirectory
                     }, isLocked);
                     tasks.Add(task);
+                }
+                await Task.WhenAll(tasks);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// populate mod files as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods)
+        {
+            if (mods?.Count() > 0)
+            {
+                var tasks = new List<Task>();
+                foreach (var mod in mods)
+                {
+                    if (mod.IsValid)
+                    {
+                        var task = Task.Run(() =>
+                        {
+                            var localMod = mod;
+                            var files = Reader.GetFiles(mod.FullPath);
+                            localMod.Files = files ?? new List<string>();
+                        });
+                        tasks.Add(task);
+                    }
+                    else
+                    {
+                        mod.Files = new List<string>();
+                    }
                 }
                 await Task.WhenAll(tasks);
                 return true;

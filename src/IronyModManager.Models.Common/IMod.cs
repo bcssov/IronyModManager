@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -30,10 +30,22 @@ namespace IronyModManager.Models.Common
         #region Properties
 
         /// <summary>
+        /// Gets or sets the achievement status.
+        /// </summary>
+        /// <value>The achievement status.</value>
+        AchievementStatus AchievementStatus { get; set; }
+
+        /// <summary>
         /// Gets or sets the descriptor file.
         /// </summary>
         /// <value>The descriptor file.</value>
         string DescriptorFile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the files.
+        /// </summary>
+        /// <value>The files.</value>
+        IEnumerable<string> Files { get; set; }
 
         /// <summary>
         /// Gets or sets the full path.

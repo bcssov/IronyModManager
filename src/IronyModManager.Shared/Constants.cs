@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -121,6 +121,11 @@ namespace IronyModManager.Shared
                 /// The steam application identifier
                 /// </summary>
                 public const int SteamAppId = 281990;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "map", "localisation_synced" };
 
                 /// <summary>
                 /// The log location

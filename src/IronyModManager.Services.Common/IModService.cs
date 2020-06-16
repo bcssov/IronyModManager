@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -49,6 +49,13 @@ namespace IronyModManager.Services.Common
         Task<bool> DeleteDescriptorsAsync(IEnumerable<IMod> mods);
 
         /// <summary>
+        /// Evals the achievement compatibility.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool EvalAchievementCompatibility(IEnumerable<IMod> mods);
+
+        /// <summary>
         /// Exports the mods asynchronous.
         /// </summary>
         /// <param name="enabledMods">The enabled mods.</param>
@@ -77,6 +84,13 @@ namespace IronyModManager.Services.Common
         /// <param name="isLocked">if set to <c>true</c> [is locked].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
+
+        /// <summary>
+        /// Populates the mod files asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods);
 
         #endregion Methods
     }

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-30-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -30,6 +30,12 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets the achievement status.
+        /// </summary>
+        /// <value>The achievement status.</value>
+        public virtual AchievementStatus AchievementStatus { get; set; }
+
+        /// <summary>
         /// Gets or sets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
@@ -48,6 +54,12 @@ namespace IronyModManager.Models
         /// <value>The name of the file.</value>
         [DescriptorProperty("path", "archive", ".zip")]
         public virtual string FileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the files.
+        /// </summary>
+        /// <value>The files.</value>
+        public virtual IEnumerable<string> Files { get; set; }
 
         /// <summary>
         /// Gets or sets the full path.

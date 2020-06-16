@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -170,9 +170,10 @@ namespace IronyModManager.Storage
         /// <param name="userDirectory">The user directory.</param>
         /// <param name="workshopDirectory">The workshop directory.</param>
         /// <param name="logLocation">The log location.</param>
+        /// <param name="checkSumFolders">The check sum folders.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation)
+        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation, IEnumerable<string> checkSumFolders)
         {
             lock (dbLock)
             {
@@ -186,6 +187,7 @@ namespace IronyModManager.Storage
                 game.SteamAppId = appId;
                 game.WorkshopDirectory = workshopDirectory ?? string.Empty;
                 game.LogLocation = logLocation;
+                game.ChecksumFolders = checkSumFolders ?? new List<string>();
                 Database.Games.Add(game);
                 return true;
             }

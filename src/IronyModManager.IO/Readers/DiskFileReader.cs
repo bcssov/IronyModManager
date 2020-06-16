@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -39,6 +39,22 @@ namespace IronyModManager.IO
         public virtual bool CanRead(string path)
         {
             return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> GetFiles(string path)
+        {
+            var files = new List<string>();
+            foreach (var item in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                var relativePath = item.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
+                files.Add(relativePath);
+            }
+            return files;
         }
 
         /// <summary>

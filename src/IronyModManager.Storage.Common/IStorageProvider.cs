@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -74,8 +74,9 @@ namespace IronyModManager.Storage.Common
         /// <param name="userDirectory">The user directory.</param>
         /// <param name="workshopDirectory">The workshop directory.</param>
         /// <param name="logLocation">The log location.</param>
+        /// <param name="checkSumFolders">The check sum folders.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation);
+        bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation, IEnumerable<string> checkSumFolders);
 
         /// <summary>
         /// Registers the theme.

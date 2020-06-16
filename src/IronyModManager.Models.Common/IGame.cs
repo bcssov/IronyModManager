@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -27,6 +27,12 @@ namespace IronyModManager.Models.Common
     public interface IGame : IModel, ILocalizableModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the checksum folders.
+        /// </summary>
+        /// <value>The checksum folders.</value>
+        IEnumerable<string> ChecksumFolders { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.

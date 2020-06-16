@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-29-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -204,7 +204,7 @@ namespace IronyModManager.Storage.Tests
                     CollectionModsSearchTerm = s.CollectionModsSearchTerm
                 };
             });
-            var storage = new Storage(dbMock, mapper.Object);            
+            var storage = new Storage(dbMock, mapper.Object);
             var result = storage.SetAppState(state);
             dbMock.AppState.CollectionModsSearchTerm.Should().Be(state.CollectionModsSearchTerm);
         }
@@ -239,13 +239,14 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" });
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
             dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
         }
 
         /// <summary>
@@ -388,7 +389,7 @@ namespace IronyModManager.Storage.Tests
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
             {
-               return dbMock.Themes.ToList();
+                return dbMock.Themes.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
             storage.RegisterTheme(newThemeKey, newThemeUris);
@@ -411,10 +412,10 @@ namespace IronyModManager.Storage.Tests
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<List<IGameType>>(It.IsAny<IEnumerable<IGameType>>())).Returns(() =>
             {
-               return dbMock.Games.ToList();
+                return dbMock.Games.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log");
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" });
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
@@ -422,6 +423,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
             result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
+            result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
         }
 
         /// <summary>

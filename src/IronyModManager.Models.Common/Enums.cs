@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -16,6 +16,27 @@ using System.Collections.Generic;
 
 namespace IronyModManager.Models.Common
 {
+    /// <summary>
+    /// Enum AchievementStatus
+    /// </summary>
+    public enum AchievementStatus
+    {
+        /// <summary>
+        /// The not evaluated
+        /// </summary>
+        NotEvaluated,
+
+        /// <summary>
+        /// The compatible
+        /// </summary>
+        Compatible,
+
+        /// <summary>
+        /// The not compatible
+        /// </summary>
+        NotCompatible
+    }
+
     /// <summary>
     /// Enum DefinitionPriorityType
     /// </summary>
