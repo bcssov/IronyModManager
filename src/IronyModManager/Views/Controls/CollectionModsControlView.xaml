@@ -76,7 +76,14 @@
                 <ContentControl Content="{Binding SearchMods}" MaxHeight="30"></ContentControl>
               </DockPanel>
             </Panel>
-            <Grid ColumnDefinitions="1*,2*,2*,5*" Margin="0,10,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+            <Grid Margin="0,10,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="40" Width="1*" />
+                <ColumnDefinition MaxWidth="100" Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="5*" />
+              </Grid.ColumnDefinitions>
               <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}"
                           Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,0"></CheckBox>
@@ -87,7 +94,9 @@
               <Border BorderThickness="1,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center"></TextBlock>
               </Border>
-              <Border BorderThickness="1,1,1,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+              <Border BorderThickness="0,1,0,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+              </Border>
+              <Border BorderThickness="1,1,1,0" Grid.Column="4" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
                 <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
               </Border>
             </Grid>
@@ -98,17 +107,24 @@
                        ConverterParameter=x-260}" SelectedItem="{Binding SelectedMod}">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="1*,2*,2*,5*" Background="Transparent">
+                  <Grid Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition MaxWidth="40" Width="1*" />
+                      <ColumnDefinition MaxWidth="100" Width="2*" />
+                      <ColumnDefinition Width="2*" />
+                      <ColumnDefinition Width="5" />
+                      <ColumnDefinition Width="5*" />
+                    </Grid.ColumnDefinitions>
                     <Grid.ContextMenu>
                       <ContextMenu>
                       </ContextMenu>
                     </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
-                                            Grid.Column="2" MaxHeight="40"></controls:MinMaxNumericUpDown>
-                    <Grid Grid.Column="3" ColumnDefinitions="9*,1*">
-                      <TextBlock Margin="5,0" Text="{Binding Name}" VerticalAlignment="Center" TextWrapping="Wrap" Grid.Column="0"></TextBlock>
-                      <Panel Grid.Column="1" Margin="5,0">
+                                            Grid.Column="2" MaxHeight="40" HorizontalAlignment="Stretch"></controls:MinMaxNumericUpDown>
+                    <Grid Grid.Column="4" ColumnDefinitions="9*,1*">
+                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Grid.Column="0"></TextBlock>
+                      <Panel Grid.Column="1" HorizontalAlignment="Right">
                         <DrawingPresenter VerticalAlignment="Center" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}"
                                           Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsUp}" />
                         <DrawingPresenter VerticalAlignment="Center" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
