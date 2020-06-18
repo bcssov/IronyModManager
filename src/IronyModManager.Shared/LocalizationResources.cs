@@ -368,6 +368,12 @@ namespace IronyModManager.Shared
             public const string Unlock = Prefix + "Unlock";
             public const string Unlock_All = Prefix + "Unlock_All";
         }
+        public static class Achievements
+        {
+            public const string Prefix = "Achievements.";
+            public const string AchievementCompatible = Prefix + "AchievementCompatible";
+            public const string NotAchievementCompatible = Prefix + "NotAchievementCompatible";
+        }
         public static class Sorting
         {
             public const string Prefix = "Sorting.";

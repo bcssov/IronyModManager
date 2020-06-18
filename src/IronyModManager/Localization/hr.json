@@ -269,6 +269,10 @@
         "Unlock": "Otključaj",
         "Unlock_All": "Otključaj sve"
     },
+    "Achievements": {
+        "AchievementCompatible": "Mod je kompatibilan s achievementima.",
+        "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

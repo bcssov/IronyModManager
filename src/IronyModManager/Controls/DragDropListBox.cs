@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 06-18-2020
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -238,7 +238,7 @@ namespace IronyModManager.Controls
             var visuals = this.GetVisualsAt(position);
             if (visuals?.Count() > 0)
             {
-                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault();
+                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault(p => (p.TemplatedParent as ListBoxItem) != null);
                 return contentPresenter?.TemplatedParent as ListBoxItem;
             }
             return null;
