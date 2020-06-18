@@ -135,6 +135,11 @@ namespace IronyModManager.Views.Controls
                         if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
                         {
                             var menuItems = new List<MenuItem>();
+                            menuItems.Add(new MenuItem()
+                            {
+                                Header = ViewModel.CollectionJumpOnPositionChangeLabel,
+                                Command = ViewModel.CollectionJumpOnPositionChangeCommand
+                            });
                             if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                             {
                                 menuItems.Add(new MenuItem()
@@ -161,7 +166,7 @@ namespace IronyModManager.Views.Controls
                                 }
                                 else
                                 {
-                                    menuItems.Insert(1, menuItem);
+                                    menuItems.Insert(2, menuItem);
                                 }
                             }
                             if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
@@ -177,7 +182,7 @@ namespace IronyModManager.Views.Controls
                                 }
                                 else
                                 {
-                                    menuItems.Insert(0, menuItem);
+                                    menuItems.Insert(1, menuItem);
                                 }
                             }
                             grid.ContextMenu.Items = menuItems;

@@ -89,6 +89,11 @@
         "Duplicate": "Duplizieren",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
+        "JumpOnDragAndDrop": {
+            "Title": "Autofokus: {State}",
+            "On": "Auf",
+            "Off": "Aus"
+        },
         "ImportPrompt": {
             "Title": "Sammlung existiert",
             "Message": "Die Sammlung ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"

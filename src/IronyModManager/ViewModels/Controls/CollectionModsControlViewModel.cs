@@ -254,6 +254,24 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [collection jump on position change].
+        /// </summary>
+        /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
+        public virtual bool CollectionJumpOnPositionChange { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the collection jump on position change command.
+        /// </summary>
+        /// <value>The collection jump on position change command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CollectionJumpOnPositionChangeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the collection jump on position change label.
+        /// </summary>
+        /// <value>The collection jump on position change label.</value>
+        public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
@@ -528,6 +546,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="oldLocale">The old locale.</param>
         public override void OnLocaleChanged(string newLocale, string oldLocale)
         {
+            SetAutoFocusLabel();
             SearchMods.WatermarkText = SearchModsWatermark;
             ModNameSortOrder.Text = ModName;
             base.OnLocaleChanged(newLocale, oldLocale);
@@ -701,6 +720,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="state">The state.</param>
         protected virtual void InitSortersAndFilters(IAppState state)
         {
+            CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
             SearchMods.WatermarkText = SearchModsWatermark;
             SearchMods.Text = state?.CollectionModsSearchTerm;
             ModNameSortOrder.Text = ModName;
@@ -1007,6 +1027,17 @@ namespace IronyModManager.ViewModels.Controls
                 ModifyCollection.AllowModSelection = s;
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.CollectionJumpOnPositionChange).Subscribe(s =>
+            {
+                SetAutoFocusLabel();
+            }).DisposeWith(disposables);
+
+            CollectionJumpOnPositionChangeCommand = ReactiveCommand.Create(() =>
+            {
+                CollectionJumpOnPositionChange = !CollectionJumpOnPositionChange;
+                SaveState();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1039,7 +1070,10 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }
                 SetSelectedMods(SelectedMods);
-                SelectedMod = mods.Last();
+                if (CollectionJumpOnPositionChange)
+                {
+                    SelectedMod = mods.Last();
+                }
                 if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
                 {
                     SaveSelectedCollection();
@@ -1145,6 +1179,7 @@ namespace IronyModManager.ViewModels.Controls
             state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
             state.CollectionModsSearchTerm = SearchMods.Text;
             state.CollectionModsSortColumn = ModNameKey;
+            state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
             appStateService.Save(state);
         }
 
@@ -1250,6 +1285,17 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }).DisposeWith(Disposables);
             }
+        }
+
+        /// <summary>
+        /// Sets the automatic focus label.
+        /// </summary>
+        private void SetAutoFocusLabel()
+        {
+            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
+            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
+            var label = Smart.Format(focusLabel, new { State = focusState });
+            CollectionJumpOnPositionChangeLabel = label;
         }
 
         #endregion Methods

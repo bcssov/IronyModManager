@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-18-2020
 // ***********************************************************************
 // <copyright file="IAppState.cs" company="Mario">
 //     Mario
@@ -24,6 +24,12 @@ namespace IronyModManager.Models.Common
     public interface IAppState : IModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [collection jump on position change].
+        /// </summary>
+        /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
+        bool CollectionJumpOnPositionChange { get; set; }
 
         /// <summary>
         /// Gets or sets the collection mods search term.
