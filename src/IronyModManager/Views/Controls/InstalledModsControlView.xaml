@@ -28,7 +28,7 @@
           <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="40" Width="1*" />
             <ColumnDefinition MaxWidth="100" Width="2*" />
-            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="8" />
             <ColumnDefinition Width="5*" />
             <ColumnDefinition Width="3*" />
           </Grid.ColumnDefinitions>
@@ -55,7 +55,7 @@
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition MaxWidth="40" Width="1*" />
                   <ColumnDefinition MaxWidth="100" Width="2*" />
-                  <ColumnDefinition Width="5" />
+                  <ColumnDefinition Width="8" />
                   <ColumnDefinition Width="5*" />
                   <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
@@ -74,17 +74,15 @@
                 </CheckBox>
                 <Grid Grid.Column="3" ColumnDefinitions="9*,1*">
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" HorizontalAlignment="Left"></TextBlock>
-                  <Panel Grid.Column="1" HorizontalAlignment="Right" Width="20" Height="20">
+                  <Panel Grid.Column="1" HorizontalAlignment="Right">
                     <!-- Because Avalonia sucks in this regard, that's why -->
-                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0">
-                      <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}"
-                                        Width="15" Height="15" Drawing="{DynamicResource Icons.ThumbsUp}"
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
+                      <DrawingPresenter Width="13" Height="13" Drawing="{DynamicResource Icons.Achievements}"
                                         controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=installedMods}"
                                         controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
                     </controls:IronyToolTip>
-                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0">
-                      <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
-                                        Width="15" Height="15" Drawing="{DynamicResource Icons.ThumbsDown}"
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}">
+                      <DrawingPresenter Width="13" Height="13" Drawing="{DynamicResource Icons.NoAchievements}"
                                         controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=installedMods}"
                                         controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
                     </controls:IronyToolTip>
