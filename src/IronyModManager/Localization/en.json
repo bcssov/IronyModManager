@@ -269,6 +269,10 @@
         "Unlock": "Unlock",
         "Unlock_All": "Unlock All"
     },
+    "Achievements": {
+        "AchievementCompatible": "Mod is achievement compatible.",
+        "NotAchievementCompatible": "Mod is not achievement compatible."
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

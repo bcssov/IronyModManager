@@ -269,6 +269,10 @@
         "Unlock": "Freischalten",
         "Unlock_All": "Alle freischalten"
     },
+    "Achievements": {
+        "AchievementCompatible": "Mod ist leistungskompatibel.",
+        "NotAchievementCompatible": "Mod ist nicht leistungskompatibel."
+    },
     "Sorting": {
         "Sort_A_Z": "↑",
         "Sort_Z_A": "↓"

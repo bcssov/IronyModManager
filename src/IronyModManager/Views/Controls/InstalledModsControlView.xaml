@@ -6,6 +6,7 @@
              MinWidth="200"
              x:Class="IronyModManager.Views.Controls.InstalledModsControlView"
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Name="installedMods">
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
@@ -37,7 +38,7 @@
           </Border>
           <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
-          </Border>          
+          </Border>
           <Border BorderThickness="0,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
           </Border>
           <Border BorderThickness="1,1,0,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
@@ -73,11 +74,20 @@
                 </CheckBox>
                 <Grid Grid.Column="3" ColumnDefinitions="9*,1*">
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" HorizontalAlignment="Left"></TextBlock>
-                  <Panel Grid.Column="1" HorizontalAlignment="Right">
-                    <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}"
-                                      Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsUp}" />
-                    <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
-                                      Width="12" Height="12" Drawing="{DynamicResource Icons.ThumbsDown}" />
+                  <Panel Grid.Column="1" HorizontalAlignment="Right" Width="20" Height="20">
+                    <!-- Because Avalonia sucks in this regard, that's why -->
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0">
+                      <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}"
+                                        Width="15" Height="15" Drawing="{DynamicResource Icons.ThumbsUp}"
+                                        controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=installedMods}"
+                                        controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                    </controls:IronyToolTip>
+                    <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0">
+                      <DrawingPresenter IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}"
+                                        Width="15" Height="15" Drawing="{DynamicResource Icons.ThumbsDown}"
+                                        controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=installedMods}"
+                                        controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
+                    </controls:IronyToolTip>
                   </Panel>
                 </Grid>
                 <TextBlock Text="{Binding Version}" Grid.Column="4" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>

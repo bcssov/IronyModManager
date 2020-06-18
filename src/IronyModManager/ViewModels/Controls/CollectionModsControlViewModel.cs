@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2020
+// Last Modified On : 06-18-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -100,6 +100,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod selected changed
         /// </summary>
         private IDisposable modSelectedChanged;
+
+        /// <summary>
+        /// The performing instant reorder
+        /// </summary>
+        private bool performingInstantReorder = false;
 
         /// <summary>
         /// The refresh in progress
@@ -223,6 +228,13 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the achievement compatible.
+        /// </summary>
+        /// <value>The achievement compatible.</value>
+        [StaticLocalization(LocalizationResources.Achievements.AchievementCompatible)]
+        public virtual string AchievementCompatible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the add new collection.
         /// </summary>
         /// <value>The add new collection.</value>
@@ -340,6 +352,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod selected.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Selected)]
         public virtual string ModSelected { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the not achievement compatible.
+        /// </summary>
+        /// <value>The not achievement compatible.</value>
+        [StaticLocalization(LocalizationResources.Achievements.NotAchievementCompatible)]
+        public virtual string NotAchievementCompatible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the open in associated application.
@@ -480,6 +499,39 @@ namespace IronyModManager.ViewModels.Controls
                 HandleModCollectionChange();
                 refreshInProgress = false;
             }
+        }
+
+        /// <summary>
+        /// Instants the reorder selected items.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="newOrder">The new order.</param>
+        public virtual void InstantReorderSelectedItems(IMod mod, int newOrder)
+        {
+            performingInstantReorder = true;
+            mod.Order = newOrder;
+            if (SelectedMods != null)
+            {
+                var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
+                if (swapItem != null)
+                {
+                    var index = SelectedMods.IndexOf(swapItem);
+                    SelectedMods.Remove(mod);
+                    SelectedMods.Insert(index, mod);
+                    SetSelectedMods(SelectedMods);
+                    SelectedMod = mod;
+                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                    {
+                        SaveSelectedCollection();
+                    }
+                    SaveState();
+                    RecognizeSortOrder(SelectedModCollection);
+                }
+                ModReordered?.Invoke(mod);
+            }
+            reorderToken?.Cancel();
+            reorderToken = null;
+            performingInstantReorder = false;
         }
 
         /// <summary>
@@ -1042,7 +1094,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ReorderSelectedItemsAsync(IMod mod, CancellationToken cancellationToken)
         {
             // Allow task to be canceled
-            await Task.Delay(500, cancellationToken);
+            await Task.Delay(350, cancellationToken);
             if (SelectedMods != null)
             {
                 var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
@@ -1183,7 +1235,7 @@ namespace IronyModManager.ViewModels.Controls
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
-                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => !refreshInProgress && !skipReorder && s.Value > 0).Subscribe(s =>
+                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => !performingInstantReorder && !refreshInProgress && !skipReorder && s.Value > 0).Subscribe(s =>
                 {
                     if (reorderToken == null)
                     {
@@ -1194,7 +1246,7 @@ namespace IronyModManager.ViewModels.Controls
                         reorderToken.Cancel();
                         reorderToken = new CancellationTokenSource();
                     }
-                    ReorderSelectedItemsAsync(s.Sender, reorderToken.Token).ConfigureAwait(true);
+                    ReorderSelectedItemsAsync(s.Sender, reorderToken.Token).ConfigureAwait(false);
                 }).DisposeWith(Disposables);
             }
         }
