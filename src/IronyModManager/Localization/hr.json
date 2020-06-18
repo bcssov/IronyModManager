@@ -89,6 +89,11 @@
         "Duplicate": "Dupliciraj",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+        "JumpOnDragAndDrop": {
+            "Title": "Auto fokus: {State}",
+            "On": "Uključen",
+            "Off": "Isključen"
+        },
         "ImportPrompt": {
             "Title": "Kolekcija postoji",
             "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"

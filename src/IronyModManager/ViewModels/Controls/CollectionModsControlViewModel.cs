@@ -12,13 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DynamicData;
@@ -102,19 +102,19 @@ namespace IronyModManager.ViewModels.Controls
         private IDisposable modSelectedChanged;
 
         /// <summary>
-        /// The performing instant reorder
-        /// </summary>
-        private bool performingInstantReorder = false;
-
-        /// <summary>
         /// The refresh in progress
         /// </summary>
         private bool refreshInProgress = false;
 
         /// <summary>
-        /// The reorder token
+        /// The reorder counter
         /// </summary>
-        private CancellationTokenSource reorderToken;
+        private int reorderCounter = 0;
+
+        /// <summary>
+        /// The reorder queue
+        /// </summary>
+        private ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
         /// The skip mod collection save
@@ -166,6 +166,7 @@ namespace IronyModManager.ViewModels.Controls
             this.gameService = gameService;
             this.modPatchCollectionService = modPatchCollectionService;
             SearchMods.ShowArrows = true;
+            reorderQueue = new ConcurrentBag<IMod>();
         }
 
         #endregion Constructors
@@ -251,6 +252,24 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
         public virtual bool AllowModSelection { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [collection jump on position change].
+        /// </summary>
+        /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
+        public virtual bool CollectionJumpOnPositionChange { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the collection jump on position change command.
+        /// </summary>
+        /// <value>The collection jump on position change command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CollectionJumpOnPositionChangeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the collection jump on position change label.
+        /// </summary>
+        /// <value>The collection jump on position change label.</value>
+        public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -508,30 +527,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="newOrder">The new order.</param>
         public virtual void InstantReorderSelectedItems(IMod mod, int newOrder)
         {
-            performingInstantReorder = true;
-            mod.Order = newOrder;
-            if (SelectedMods != null)
+            async Task waitForQueue()
             {
-                var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
-                if (swapItem != null)
+                while (reorderCounter != 0)
                 {
-                    var index = SelectedMods.IndexOf(swapItem);
-                    SelectedMods.Remove(mod);
-                    SelectedMods.Insert(index, mod);
-                    SetSelectedMods(SelectedMods);
-                    SelectedMod = mod;
-                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
-                    {
-                        SaveSelectedCollection();
-                    }
-                    SaveState();
-                    RecognizeSortOrder(SelectedModCollection);
+                    await Task.Delay(50);
                 }
-                ModReordered?.Invoke(mod);
+                mod.Order = newOrder;
+                PerformModReorder(mod);
             }
-            reorderToken?.Cancel();
-            reorderToken = null;
-            performingInstantReorder = false;
+            waitForQueue().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -541,6 +546,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="oldLocale">The old locale.</param>
         public override void OnLocaleChanged(string newLocale, string oldLocale)
         {
+            SetAutoFocusLabel();
             SearchMods.WatermarkText = SearchModsWatermark;
             ModNameSortOrder.Text = ModName;
             base.OnLocaleChanged(newLocale, oldLocale);
@@ -714,6 +720,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="state">The state.</param>
         protected virtual void InitSortersAndFilters(IAppState state)
         {
+            CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
             SearchMods.WatermarkText = SearchModsWatermark;
             SearchMods.Text = state?.CollectionModsSearchTerm;
             ModNameSortOrder.Text = ModName;
@@ -1020,6 +1027,17 @@ namespace IronyModManager.ViewModels.Controls
                 ModifyCollection.AllowModSelection = s;
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.CollectionJumpOnPositionChange).Subscribe(s =>
+            {
+                SetAutoFocusLabel();
+            }).DisposeWith(disposables);
+
+            CollectionJumpOnPositionChangeCommand = ReactiveCommand.Create(() =>
+            {
+                CollectionJumpOnPositionChange = !CollectionJumpOnPositionChange;
+                SaveState();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1031,6 +1049,39 @@ namespace IronyModManager.ViewModels.Controls
         {
             base.OnSelectedGameChanged(game);
             LoadModCollections();
+        }
+
+        /// <summary>
+        /// Performs the mod reorder.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual void PerformModReorder(params IMod[] mods)
+        {
+            if (SelectedMods != null && mods.Count() > 0)
+            {
+                foreach (var mod in mods)
+                {
+                    var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
+                    if (swapItem != null)
+                    {
+                        var index = SelectedMods.IndexOf(swapItem);
+                        SelectedMods.Remove(mod);
+                        SelectedMods.Insert(index, mod);
+                    }
+                }
+                SetSelectedMods(SelectedMods);
+                if (CollectionJumpOnPositionChange)
+                {
+                    SelectedMod = mods.Last();
+                }
+                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                {
+                    SaveSelectedCollection();
+                }
+                SaveState();
+                RecognizeSortOrder(SelectedModCollection);
+                ModReordered?.Invoke(mods.Last());
+            }
         }
 
         /// <summary>
@@ -1089,32 +1140,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// reorder selected items as an asynchronous operation.
         /// </summary>
-        /// <param name="mod">The mod.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        protected virtual async Task ReorderSelectedItemsAsync(IMod mod, CancellationToken cancellationToken)
+        /// <param name="queueNumber">The queue number.</param>
+        protected virtual async Task ReorderQueuedItemsAsync(int queueNumber)
         {
-            // Allow task to be canceled
-            await Task.Delay(350, cancellationToken);
-            if (SelectedMods != null)
+            await Task.Delay(300);
+            if (reorderCounter == queueNumber)
             {
-                var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
-                if (swapItem != null)
-                {
-                    var index = SelectedMods.IndexOf(swapItem);
-                    SelectedMods.Remove(mod);
-                    SelectedMods.Insert(index, mod);
-                    SetSelectedMods(SelectedMods);
-                    SelectedMod = mod;
-                    if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
-                    {
-                        SaveSelectedCollection();
-                    }
-                    SaveState();
-                    RecognizeSortOrder(SelectedModCollection);
-                }
-                ModReordered?.Invoke(mod);
+                PerformModReorder(reorderQueue.ToArray());
+                reorderCounter = 0;
+                reorderQueue.Clear();
             }
-            reorderToken = null;
         }
 
         /// <summary>
@@ -1144,6 +1179,7 @@ namespace IronyModManager.ViewModels.Controls
             state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
             state.CollectionModsSearchTerm = SearchMods.Text;
             state.CollectionModsSortColumn = ModNameKey;
+            state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
             appStateService.Save(state);
         }
 
@@ -1235,20 +1271,31 @@ namespace IronyModManager.ViewModels.Controls
                     skipReorder = false;
                 }).DisposeWith(Disposables);
 
-                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => !performingInstantReorder && !refreshInProgress && !skipReorder && s.Value > 0).Subscribe(s =>
+                modOrderChanged = sourceList.Connect().WhenPropertyChanged(s => s.Order).Where(s => s.Value > 0).Subscribe(s =>
                 {
-                    if (reorderToken == null)
+                    if (!refreshInProgress && !skipReorder)
                     {
-                        reorderToken = new CancellationTokenSource();
+                        reorderCounter++;
+                        var queue = reorderCounter;
+                        if (!reorderQueue.Contains(s.Sender))
+                        {
+                            reorderQueue.Add(s.Sender);
+                        }
+                        ReorderQueuedItemsAsync(queue).ConfigureAwait(false);
                     }
-                    else
-                    {
-                        reorderToken.Cancel();
-                        reorderToken = new CancellationTokenSource();
-                    }
-                    ReorderSelectedItemsAsync(s.Sender, reorderToken.Token).ConfigureAwait(false);
                 }).DisposeWith(Disposables);
             }
+        }
+
+        /// <summary>
+        /// Sets the automatic focus label.
+        /// </summary>
+        private void SetAutoFocusLabel()
+        {
+            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
+            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
+            var label = Smart.Format(focusLabel, new { State = focusState });
+            CollectionJumpOnPositionChangeLabel = label;
         }
 
         #endregion Methods
