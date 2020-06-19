@@ -4,7 +4,7 @@
 // Created          : 04-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="BaseKeyParser.cs" company="Mario">
 //     Mario
@@ -164,6 +164,7 @@ namespace IronyModManager.Parser.Generic
                 if (idLoc < bracketLocation || bracketLocation == -1 || (args.Inline && cleaned.Substring(0, idLoc).Count(s => s == Common.Constants.Scripts.OpeningBracket) == 1))
                 {
                     key = codeParser.GetValue(cleaned, sep);
+                    SimpleParserTags.Add(key);
                 }
             }
             base.OnSimpleParseReadObjectLine(args);

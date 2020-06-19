@@ -9,15 +9,25 @@
     <StackPanel Orientation="Vertical">
       <Panel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-          <Button Content="{Binding Logs}" Command="{Binding LogsCommand}" Margin="20,0"
-                BorderThickness="0,0,0,0" Background="Transparent" Foreground="{DynamicResource IronyThemeSortArrowBrush}"></Button>
+          <ContentControl Margin="20,0" Content="{Binding Options}"></ContentControl>
           <ContentControl Content="{Binding ThemeSelector}"></ContentControl>
         </StackPanel>
         <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
           <ContentControl Content="{Binding LanguageSelector}"></ContentControl>
-          <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}" Margin="20,0"
-                BorderThickness="0,0,0,0" Background="Transparent" Foreground="{DynamicResource IronyThemeSortArrowBrush}"></Button>
+          <Panel>
+            <Menu Margin="20,0">
+              <MenuItem Header="{Binding Shortcuts}"
+                        Foreground="{DynamicResource IronyAccentBrush}" VerticalAlignment="Center">
+                <MenuItem Header="{Binding Wiki}" Command="{Binding WikiCommand}"
+                          Foreground="{DynamicResource IronyForegroundBrush}"></MenuItem>
+                <MenuItem Header="{Binding Logs}" Command="{Binding LogsCommand}"
+                          Foreground="{DynamicResource IronyForegroundBrush}"></MenuItem>
+                <MenuItem Header="{Binding ErrorLog}" Command="{Binding ErrorLogCommand}"
+                          Foreground="{DynamicResource IronyForegroundBrush}"></MenuItem>
+              </MenuItem>
+            </Menu>
+          </Panel>
         </StackPanel>
       </Panel>
       <Panel>

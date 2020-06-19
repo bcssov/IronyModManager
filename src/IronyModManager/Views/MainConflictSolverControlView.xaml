@@ -17,6 +17,11 @@
       <Panel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
           <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
+          <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
+            <ContentControl Content="{Binding DatabaseSearch}" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0"></ContentControl>
+            <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="1"></ContentControl>
+            <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
+          </Grid>
           <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                    HorizontalAlignment="Stretch" MinHeight="30">
             <ComboBox.ItemTemplate>
@@ -29,10 +34,16 @@
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
-                     ConverterParameter=x-75}">
+                     ConverterParameter=x-125}">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                <Grid ColumnDefinitions="*" Background="Transparent">
+                  <Grid.ContextMenu>
+                    <ContextMenu>
+                    </ContextMenu>
+                  </Grid.ContextMenu>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                </Grid>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>

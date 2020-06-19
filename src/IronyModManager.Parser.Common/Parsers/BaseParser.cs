@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -47,6 +47,11 @@ namespace IronyModManager.Parser.Common.Parsers
         /// The logger
         /// </summary>
         protected readonly ILogger logger;
+
+        /// <summary>
+        /// The simple parser tags
+        /// </summary>
+        protected List<string> SimpleParserTags;
 
         #endregion Fields
 
@@ -222,6 +227,19 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual IDefinition FinalizeSimpleParseObjectDefinition(ParsingArgs args)
         {
             MapDefinitionFromArgs(args);
+            var tags = ParseSimpleScriptTags(args);
+            if (tags.Count() > 0)
+            {
+                foreach (var tag in tags)
+                {
+                    var lower = tag.ToLowerInvariant();
+                    if (!args.Definition.Tags.Contains(lower))
+                    {
+                        args.Definition.Tags.Add(lower);
+                    }
+                }
+            }
+            SimpleParserTags = new List<string>();
             return args.Definition;
         }
 
@@ -437,10 +455,45 @@ namespace IronyModManager.Parser.Common.Parsers
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
                     definition.Code = FormatCode(item.Code, parent);
+                    var tags = ParseComplexScriptTags(item.KeyValues, item.Key);
+                    if (tags.Count() > 0)
+                    {
+                        foreach (var tag in tags)
+                        {
+                            var lower = tag.ToLowerInvariant();
+                            if (!definition.Tags.Contains(lower))
+                            {
+                                definition.Tags.Add(lower);
+                            }
+                        }
+                    }
                     result.Add(definition);
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Parses the complex script tags.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        protected virtual IEnumerable<string> ParseComplexScriptTags(IEnumerable<IScriptKeyValue> values, string defaultId)
+        {
+            var tags = new List<string>
+            {
+                defaultId
+            };
+            foreach (var item in values)
+            {
+                string id = EvalComplexParseKeyValueForId(item);
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    tags.Add(id);
+                }
+            }
+            return tags;
         }
 
         /// <summary>
@@ -522,6 +575,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> ParseSimple(ParserArgs args, bool isFirstLevel = true)
         {
+            SimpleParserTags = new List<string>();
             var result = new List<IDefinition>();
             IDefinition definition = null;
             var sb = new StringBuilder();
@@ -544,7 +598,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition = GetDefinitionInstance();
                         definition.Id = id;
-                        definition.ValueType = Common.ValueType.Object;
+                        definition.ValueType = ValueType.Object;
                         bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline, isFirstLevel: isFirstLevel);
                         OnSimpleParseReadObjectLine(parsingArgs);
@@ -598,6 +652,21 @@ namespace IronyModManager.Parser.Common.Parsers
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Parses the simple script tags.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        protected virtual IEnumerable<string> ParseSimpleScriptTags(ParsingArgs args)
+        {
+            if (SimpleParserTags == null)
+            {
+                SimpleParserTags = new List<string>();
+            }
+            SimpleParserTags.Add(args.Definition.Id);
+            return SimpleParserTags;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -18,12 +18,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.DI;
-using IronyModManager.IO.Common;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
@@ -56,7 +57,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The state name
         /// </summary>
-        private const string StateName = "state" + Shared.Constants.JsonExtension;
+        private const string StateName = "state" + Constants.JsonExtension;
 
         /// <summary>
         /// The externally loaded code
@@ -84,9 +85,19 @@ namespace IronyModManager.IO.Mods
         private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The reader
         /// </summary>
         private readonly IReader reader;
+
+        /// <summary>
+        /// The write counter
+        /// </summary>
+        private int writeCounter = 0;
 
         #endregion Fields
 
@@ -97,24 +108,27 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders)
+        /// <param name="messageBus">The message bus.</param>
+        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
         {
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
 
-        #region Events
+        #region Methods
 
         /// <summary>
-        /// Occurs when [mod definition analyze].
+        /// Copies the patch mod asynchronous.
         /// </summary>
-        public event Delegates.WriteOperationStateDelegate WriteOperationState;
-
-        #endregion Events
-
-        #region Methods
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> CopyPatchModAsync(ModPatchExporterParameters parameters)
+        {
+            return CopyPathModInternalAsync(parameters);
+        }
 
         /// <summary>
         /// export definition as an asynchronous operation.
@@ -129,7 +143,9 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException("Game.");
             }
-            var definitionsInvalid = (parameters.Definitions == null || parameters.Definitions.Count() == 0) && (parameters.OrphanConflicts == null || parameters.OrphanConflicts.Count() == 0);
+            var definitionsInvalid = (parameters.Definitions == null || parameters.Definitions.Count() == 0) &&
+                (parameters.OrphanConflicts == null || parameters.OrphanConflicts.Count() == 0) &&
+                (parameters.OverwrittenConflicts == null || parameters.OverwrittenConflicts.Count() == 0);
             if (definitionsInvalid)
             {
                 throw new ArgumentNullException("Definitions.");
@@ -142,17 +158,25 @@ namespace IronyModManager.IO.Mods
                 if (parameters.Definitions?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
                     results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, false));
                 }
 
                 if (parameters.OrphanConflicts?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        Path.Combine(parameters.RootPath, parameters.ModPath), GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
                     results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, false));
+                }
+
+                if (parameters.OverwrittenConflicts?.Count() > 0)
+                {
+                    results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                    results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, true));
                 }
                 return results.All(p => p);
             }
@@ -163,10 +187,39 @@ namespace IronyModManager.IO.Mods
         /// get patch state as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;IPatchState&gt;.</returns>
-        public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters)
+        /// <param name="loadExternalCode">if set to <c>true</c> [load external code].</param>
+        /// <returns>IPatchState.</returns>
+        public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true)
         {
-            return await GetPatchStateInternalAsync(parameters);
+            return await GetPatchStateInternalAsync(parameters, loadExternalCode);
+        }
+
+        /// <summary>
+        /// rename patch mod as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters)
+        {
+            var result = await CopyPathModInternalAsync(parameters);
+            if (result)
+            {
+                var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+                if (Directory.Exists(oldPath))
+                {
+                    Directory.Delete(oldPath, true);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Resets the cache.
+        /// </summary>
+        public void ResetCache()
+        {
+            lastCachedStatePath = string.Empty;
+            cachedState = null;
         }
 
         /// <summary>
@@ -176,7 +229,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> SaveStateAsync(ModPatchExporterParameters parameters)
         {
-            var state = await GetPatchStateInternalAsync(parameters);
+            var state = await GetPatchStateInternalAsync(parameters, true);
             if (state == null)
             {
                 state = DIResolver.Get<IPatchState>();
@@ -188,6 +241,8 @@ namespace IronyModManager.IO.Mods
             state.Conflicts = MapDefinitions(parameters.Conflicts, false);
             state.OrphanConflicts = MapDefinitions(parameters.OrphanConflicts, false);
             state.IgnoredConflicts = MapDefinitions(parameters.IgnoredConflicts, false);
+            state.OverwrittenConflicts = MapDefinitions(parameters.OverwrittenConflicts, false);
+            state.Mode = parameters.Mode;
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);
@@ -225,14 +280,13 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// copy binaries as an asynchronous operation.
+        /// Copies the binaries asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="modRootPath">The mod root path.</param>
         /// <param name="patchRootPath">The patch root path.</param>
-        /// <param name="checkIfExists">if set to <c>true</c> [check if exists].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string modRootPath, string patchRootPath, bool checkIfExists)
+        /// <param name="checkIfExists">The check if exists.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
+        private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string patchRootPath, bool checkIfExists)
         {
             var tasks = new List<Task>();
             var streams = new List<Stream>();
@@ -252,7 +306,7 @@ namespace IronyModManager.IO.Mods
                 {
                     continue;
                 }
-                var stream = reader.GetStream(modRootPath, def.File);
+                var stream = reader.GetStream(def.ModPath, def.File);
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
@@ -282,6 +336,43 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// copy path mod internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
+        {
+            var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+            var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
+            if (Directory.Exists(oldPath))
+            {
+                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
+                foreach (var item in files)
+                {
+                    var info = new System.IO.FileInfo(item);
+                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase).TrimStart(Path.DirectorySeparatorChar));
+                    if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                    }
+                    info.CopyTo(destinationPath, true);
+                }
+                var backups = new List<string>() { Path.Combine(newPath, StateName), Path.Combine(newPath, StateBackup) };
+                foreach (var item in backups)
+                {
+                    if (File.Exists(item))
+                    {
+                        var text = await File.ReadAllTextAsync(item);
+                        text = text.Replace($"\"{parameters.ModPath}\"", $"\"{parameters.PatchName}\"");
+                        await File.WriteAllTextAsync(item, text);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Gets the patch root path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -308,11 +399,12 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// get patch state internal as an asynchronous operation.
+        /// Gets the patch state internal asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>IPatchState.</returns>
-        private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters)
+        /// <param name="loadExternalCode">The load external code.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;IronyModManager.IO.Common.Mods.Models.IPatchState&gt;.</returns>
+        private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters, bool loadExternalCode)
         {
             var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
             var cached = GetPatchState(statePath);
@@ -347,25 +439,33 @@ namespace IronyModManager.IO.Mods
                     {
                         cached.ResolvedConflicts = new List<IDefinition>();
                     }
-                    externallyLoadedCode.Clear();
-                    cachedState = cached;
-                    lastCachedStatePath = statePath;
-                    async Task loadCode(IDefinition definition)
+                    if (cached.OverwrittenConflicts == null)
                     {
-                        var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
-                        if (File.Exists(historyPath))
+                        cached.OverwrittenConflicts = new List<IDefinition>();
+                    }
+                    // If not allowing full load don't cache anything
+                    if (loadExternalCode)
+                    {
+                        externallyLoadedCode.Clear();
+                        cachedState = cached;
+                        lastCachedStatePath = statePath;
+                        async Task loadCode(IDefinition definition)
                         {
-                            var code = await File.ReadAllTextAsync(historyPath);
-                            definition.Code = string.Join(Environment.NewLine, code.SplitOnNewLine());
-                            externallyLoadedCode.Add(definition.TypeAndId);
+                            var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
+                            if (File.Exists(historyPath))
+                            {
+                                var code = await File.ReadAllTextAsync(historyPath);
+                                definition.Code = string.Join(Environment.NewLine, code.SplitOnNewLine());
+                                externallyLoadedCode.Add(definition.TypeAndId);
+                            }
                         }
+                        var tasks = new List<Task>();
+                        foreach (var item in cached.ConflictHistory)
+                        {
+                            tasks.Add(loadCode(item));
+                        }
+                        await Task.WhenAll(tasks);
                     }
-                    var tasks = new List<Task>();
-                    foreach (var item in cached.ConflictHistory)
-                    {
-                        tasks.Add(loadCode(item));
-                    }
-                    await Task.WhenAll(tasks);
                 }
                 mutex.Dispose();
             }
@@ -405,7 +505,9 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
             newInstance.IsFirstLevel = original.IsFirstLevel;
-            newInstance.FileNames = original.FileNames;
+            newInstance.GeneratedFileNames = original.GeneratedFileNames;
+            newInstance.AdditionalFileNames = original.AdditionalFileNames;
+            newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
             return newInstance;
         }
 
@@ -442,6 +544,8 @@ namespace IronyModManager.IO.Mods
             destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
             destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
             destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
+            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
+            destination.Mode = source.Mode;
         }
 
         /// <summary>
@@ -462,14 +566,15 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// write merged content as an asynchronous operation.
+        /// Writes the merged content asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="patchRootPath">The patch root path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="checkIfExists">if set to <c>true</c> [check if exists].</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists)
+        /// <param name="checkIfExists">The check if exists.</param>
+        /// <param name="overwrittenFiles">The overwritten files.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
+        private async Task<bool> WriteMergedContentAsync(IEnumerable<IDefinition> definitions, string patchRootPath, string game, bool checkIfExists, bool overwrittenFiles)
         {
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
@@ -481,7 +586,15 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
-                    var fileName = infoProvider.GetFileName(item);
+                    string fileName = infoProvider.GetFileName(item);
+                    if (!overwrittenFiles)
+                    {
+                        fileName = infoProvider.GetFileName(item);
+                    }
+                    else
+                    {
+                        fileName = item.File;
+                    }
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (checkIfExists && File.Exists(outPath))
                     {
@@ -498,6 +611,19 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                         return true;
                     }));
+                    if (overwrittenFiles)
+                    {
+                        var emptyFileNames = item.OverwrittenFileNames.Where(p => p != fileName);
+                        foreach (var emptyFile in emptyFileNames)
+                        {
+                            var emptyPath = Path.Combine(patchRootPath, emptyFile);
+                            await retry.RetryActionAsync(async () =>
+                            {
+                                await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(item));
+                                return true;
+                            });
+                        }
+                    }
                     results.Add(true);
                 }
                 else
@@ -520,10 +646,12 @@ namespace IronyModManager.IO.Mods
         /// <param name="modifiedHistory">The modified history.</param>
         /// <param name="externalCode">The external code.</param>
         /// <param name="path">The path.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         private async Task WriteStateInBackground(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
+            writeCounter++;
             var mutex = await writeLock.LockAsync();
-            WriteOperationState?.Invoke(true);
+            await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
             var statePath = Path.Combine(path, StateName);
             var backupPath = Path.Combine(path, StateBackup);
             if (File.Exists(backupPath))
@@ -583,7 +711,8 @@ namespace IronyModManager.IO.Mods
                     await File.WriteAllTextAsync(statePath, serialized);
                     return true;
                 });
-                WriteOperationState?.Invoke(false);
+                writeCounter--;
+                await messageBus.PublishAsync(new WritingStateOperationEvent(writeCounter <= 0));
                 mutex.Dispose();
             }).ConfigureAwait(false);
         }

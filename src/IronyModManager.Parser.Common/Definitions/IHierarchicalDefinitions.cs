@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 06-08-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -27,6 +27,12 @@ namespace IronyModManager.Parser.Common.Definitions
         #region Properties
 
         /// <summary>
+        /// Gets or sets the additional data.
+        /// </summary>
+        /// <value>The additional data.</value>
+        object AdditionalData { get; set; }
+
+        /// <summary>
         /// Gets or sets the children.
         /// </summary>
         /// <value>The children.</value>
@@ -37,6 +43,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The key.</value>
         string Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mods.
+        /// </summary>
+        /// <value>The mods.</value>
+        IList<string> Mods { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

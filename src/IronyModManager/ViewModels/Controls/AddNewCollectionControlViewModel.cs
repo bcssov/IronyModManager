@@ -4,7 +4,7 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-15-2020
+// Last Modified On : 05-15-2020
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -96,6 +97,12 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Collection_Mods.Watermark)]
         public virtual string NewCollectionWatermark { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the renaming collection.
+        /// </summary>
+        /// <value>The renaming collection.</value>
+        public virtual IModCollection RenamingCollection { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -113,21 +120,29 @@ namespace IronyModManager.ViewModels.Controls
                 if (!string.IsNullOrWhiteSpace(NewCollectionName))
                 {
                     var colName = NewCollectionName.Trim();
-                    var collections = modCollectionService.GetAll();
-                    if (collections != null && !collections.Any(s => s.Name.Equals(NewCollectionName)))
+                    if (modCollectionService.Exists(NewCollectionName))
                     {
-                        var collection = modCollectionService.Create();
-                        collection.Name = colName;
-                        collection.IsSelected = true;
-                        if (modCollectionService.Save(collection))
+                        if (RenamingCollection != null && RenamingCollection.Name.Equals(NewCollectionName, StringComparison.OrdinalIgnoreCase))
                         {
-                            NewCollectionName = string.Empty;
-                            return new CommandResult<string>(collection.Name, CommandState.Success);
+                            return new CommandResult<string>(colName, CommandState.NotExecuted);
+                        }
+                        else
+                        {
+                            return new CommandResult<string>(colName, CommandState.Exists);
                         }
                     }
-                    else
+                    var collection = modCollectionService.Create();
+                    collection.Name = colName;
+                    collection.IsSelected = true;
+                    if (RenamingCollection != null)
                     {
-                        return new CommandResult<string>(colName, CommandState.Exists);
+                        collection.Mods = RenamingCollection.Mods;
+                        modCollectionService.Delete(RenamingCollection.Name);
+                    }
+                    if (modCollectionService.Save(collection))
+                    {
+                        NewCollectionName = string.Empty;
+                        return new CommandResult<string>(collection.Name, CommandState.Success);
                     }
                 }
                 return new CommandResult<string>(!string.IsNullOrEmpty(NewCollectionName) ? NewCollectionName.Trim() : string.Empty, CommandState.Failed);

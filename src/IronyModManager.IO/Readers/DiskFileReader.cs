@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -42,6 +42,22 @@ namespace IronyModManager.IO
         }
 
         /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> GetFiles(string path)
+        {
+            var files = new List<string>();
+            foreach (var item in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+            {
+                var relativePath = item.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
+                files.Add(relativePath);
+            }
+            return files;
+        }
+
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -49,11 +65,27 @@ namespace IronyModManager.IO
         /// <returns>Stream.</returns>
         public virtual Stream GetStream(string rootPath, string file)
         {
-            var fullPath = Path.Combine(rootPath, file);
-            if (File.Exists(fullPath))
+            static FileStream readStream(string path)
             {
-                var fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
                 return fs;
+            }
+            // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+            if (file.StartsWith("*"))
+            {
+                var files = Directory.EnumerateFiles(rootPath, file, SearchOption.TopDirectoryOnly);
+                if (files.Count() > 0)
+                {
+                    return readStream(files.First());
+                }
+            }
+            else
+            {
+                var fullPath = Path.Combine(rootPath, file);
+                if (File.Exists(fullPath))
+                {
+                    return readStream(fullPath);
+                }
             }
             return null;
         }

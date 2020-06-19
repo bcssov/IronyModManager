@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -13,12 +13,13 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
 
@@ -52,12 +53,15 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <param name="modWriter">The mod writer.</param>
+        /// <param name="modParser">The mod parser.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IGameService gameService, IModCollectionExporter modCollectionExporter,
-            IStorageProvider storageProvider, IMapper mapper) : base(gameService, storageProvider, mapper)
+        public ModCollectionService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.modCollectionExporter = modCollectionExporter;
         }
@@ -99,7 +103,7 @@ namespace IronyModManager.Services
                 var collections = StorageProvider.GetModCollections().ToList();
                 if (collections.Count() > 0)
                 {
-                    var existing = collections.FirstOrDefault(p => p.Name.Equals(name));
+                    var existing = collections.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (existing != null)
                     {
                         collections.Remove(existing);
@@ -111,12 +115,23 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Existses the specified name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool Exists(string name)
+        {
+            var all = GetAll();
+            return all.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
         /// Exports the asynchronous.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ExportAsync(string file, IModCollection modCollection)
+        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection)
         {
             var game = GameService.GetSelected();
             if (game == null || modCollection == null)
@@ -147,7 +162,7 @@ namespace IronyModManager.Services
             var collections = StorageProvider.GetModCollections();
             if (collections?.Count() > 0)
             {
-                var collection = collections.FirstOrDefault(c => c.Name.Equals(name) && c.Game.Equals(game.Type));
+                var collection = collections.FirstOrDefault(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && c.Game.Equals(game.Type));
                 return collection;
             }
             return null;
@@ -159,25 +174,15 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
         public virtual IEnumerable<IModCollection> GetAll()
         {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return new List<IModCollection>();
-            }
-            var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
-            if (collections.Count() > 0)
-            {
-                return collections.OrderBy(p => p.Name);
-            }
-            return new List<IModCollection>();
+            return GetAllModCollectionsInternal();
         }
 
         /// <summary>
-        /// import as an asynchronous operation.
+        /// get imported collection details as an asynchronous operation.
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
-        public async Task<IModCollection> ImportAsync(string file)
+        public virtual async Task<IModCollection> GetImportedCollectionDetailsAsync(string file)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -192,6 +197,26 @@ namespace IronyModManager.Services
             });
             if (result)
             {
+                return instance;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import as an asynchronous operation.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public async Task<IModCollection> ImportAsync(string file)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = await GetImportedCollectionDetailsAsync(file);
+            if (instance != null)
+            {
                 var path = GetPatchDirectory(game, instance);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
@@ -202,6 +227,30 @@ namespace IronyModManager.Services
                 {
                     return instance;
                 }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import paradoxos as an asynchronous operation.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual async Task<IModCollection> ImportParadoxosAsync(string file)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = Create();
+            if (await modCollectionExporter.ImportParadoxosAsync(new ModCollectionExporterParams()
+            {
+                File = file,
+                Mod = instance
+            }))
+            {
+                return instance;
             }
             return null;
         }
@@ -228,7 +277,7 @@ namespace IronyModManager.Services
                 var collections = StorageProvider.GetModCollections().ToList();
                 if (collections.Count() > 0)
                 {
-                    var existing = collections.FirstOrDefault(p => p.Name.Equals(collection.Name) && p.Game.Equals(game.Type));
+                    var existing = collections.FirstOrDefault(p => p.Name.Equals(collection.Name, StringComparison.OrdinalIgnoreCase) && p.Game.Equals(game.Type));
                     if (existing != null)
                     {
                         collections.Remove(existing);
@@ -244,18 +293,6 @@ namespace IronyModManager.Services
                 collections.Add(collection);
                 return StorageProvider.SetModCollections(collections);
             }
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="modCollection">The mod collection.</param>
-        /// <returns>System.String.</returns>
-        private string GetPatchDirectory(IGame game, IModCollection modCollection)
-        {
-            var path = Path.Combine(game.UserDirectory, Constants.ModDirectory, GenerateCollectionPatchName(modCollection.Name));
-            return path;
         }
 
         #endregion Methods

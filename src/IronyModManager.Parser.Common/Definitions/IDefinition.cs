@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using CodexMicroORM.Core.Collections;
 
 namespace IronyModManager.Parser.Common.Definitions
@@ -25,6 +26,12 @@ namespace IronyModManager.Parser.Common.Definitions
     public interface IDefinition : ICEFIndexedListItem
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional file names.
+        /// </summary>
+        /// <value>The additional file names.</value>
+        IList<string> AdditionalFileNames { get; set; }
 
         /// <summary>
         /// Gets or sets the code.
@@ -81,10 +88,11 @@ namespace IronyModManager.Parser.Common.Definitions
         string FileCI { get; }
 
         /// <summary>
-        /// Gets or sets the additional file names.
+        /// Gets or sets the generated file names.
         /// </summary>
-        /// <value>The additional file names.</value>
-        IList<string> FileNames { get; set; }
+        /// <value>The generated file names.</value>
+        [JsonIgnore]
+        IList<string> GeneratedFileNames { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
@@ -105,6 +113,19 @@ namespace IronyModManager.Parser.Common.Definitions
         string ModName { get; set; }
 
         /// <summary>
+        /// Gets or sets the mod path.
+        /// </summary>
+        /// <value>The mod path.</value>
+        [JsonIgnore]
+        string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten file names.
+        /// </summary>
+        /// <value>The overwritten file names.</value>
+        IList<string> OverwrittenFileNames { get; set; }
+
+        /// <summary>
         /// Gets the parent directory.
         /// </summary>
         /// <value>The parent directory.</value>
@@ -115,6 +136,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The parent directory ci.</value>
         string ParentDirectoryCI { get; }
+
+        /// <summary>
+        /// Gets or sets the tags.
+        /// </summary>
+        /// <value>The tags.</value>
+        [JsonIgnore]
+        IList<string> Tags { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

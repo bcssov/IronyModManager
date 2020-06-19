@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 05-28-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -28,6 +28,15 @@ namespace IronyModManager.Implementation.Actions
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class FileDialogAction : IFileDialogAction
     {
+        #region Fields
+
+        /// <summary>
+        /// The extension separator
+        /// </summary>
+        private const string ExtensionSeparator = ",";
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -72,7 +81,7 @@ namespace IronyModManager.Implementation.Actions
             };
             if (!string.IsNullOrWhiteSpace(initialFileName))
             {
-                dialog.InitialFileName = initialFileName;
+                dialog.InitialFileName = initialFileName.GenerateValidFileName();
             }
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             return result;
@@ -91,7 +100,7 @@ namespace IronyModManager.Implementation.Actions
                 filter.Add(new FileDialogFilter()
                 {
                     Name = item,
-                    Extensions = new List<string>() { item }
+                    Extensions = item.Split(ExtensionSeparator, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList() // magic string
                 });
             }
             return filter;

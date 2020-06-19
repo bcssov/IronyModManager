@@ -1,9 +1,13 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
-        "Wiki": "Wiki",
-        "Logs": "Logovi",
-        "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi."
+        "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
+        "Shortcuts": {
+            "Name": "Prečaci",
+            "Wiki": "Wiki",
+            "Logs": "Logovi",
+            "ErrorLog": "Error.log"
+        }
     },
     "FatalError": {
         "Message": "Došlo je do greške. Aplikacija će se automatski zatvoriti.",
@@ -17,6 +21,19 @@
     "Prompt": {
         "Yes": "Da",
         "No": "Ne"
+    },
+    "FileDialog": {
+        "FileName": "Naziv datoteke",
+        "ShowHiddenFiles": "Pokaži skrivene datoteke",
+        "OK": "U redu",
+        "Cancel": "Otkaži",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Dokumenti",
+            "Music": "Glazba",
+            "Videos": "Video",
+            "Pictures": "Slike"
+        }
     },
     "Languages": {
         "Name": "Jezik"
@@ -67,10 +84,28 @@
         "Filter": "Traži modove",
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
-        "Order": "Redoslijed"
+        "Order": "Redoslijed",
+        "Rename": "Preimenuj",
+        "Duplicate": "Dupliciraj",
+        "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
+        "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+        "JumpOnDragAndDrop": {
+            "Title": "Auto fokus: {State}",
+            "On": "Uključen",
+            "Off": "Isključen"
+        },
+        "ImportPrompt": {
+            "Title": "Kolekcija postoji",
+            "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Uvezi Paradoxos"
+        }
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
+        "LaunchGame": "Pokreni igru",
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "Conflict": "Rješavanje sukoba",
         "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
@@ -97,12 +132,17 @@
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
-            "Order": "(Redoslijed učitavanja)"
+            "Order": "(Redoslijed učitavanja)",
+            "Override": "(Nadjačavanje)"
         },
         "InvalidConflicts": {
             "Name": "Nevažeći",
             "Error": "Pogreška u retku: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}"
+            "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Otvori datoteku",
+                "OpenDirectory": "Otvori direktorij"
+            }
         },
         "ContextMenu": {
             "CopyAll": "Kopiraj sve",
@@ -123,12 +163,47 @@
             "Undo": "Poništi",
             "Redo": "Ponovi",
             "SelectAll": "Odaberi sve"
+        },
+        "Modes": {
+            "Title": "Odaberi način rada",
+            "Default": "Zadano",
+            "Advanced": "Napredno",
+            "Close": "Zatvori"
+        },
+        "ModFilter": {
+            "Title": "Mod Filter",
+            "Close": "Zatvori"
+        },
+        "ResetConflicts": {
+            "Title": "Poništi sukobe",
+            "Resolved": "Riješeni",
+            "Ignored": "Zanemareni",
+            "Close": "Zatvori",
+            "Reset": "Poništi"
+        },
+        "DBSearch": {
+            "Title": "Pretraživanje baze podataka",
+            "Watermark": "Unesi pojam",
+            "Close": "Zatvori",
+            "Clear": "X"
         }
     },
     "ConflictIgnore": {
         "Save": "Spremi",
         "Cancel": "Otkaži",
         "Watermark": "Koristite # za komentare. Novi redak je novo pravilo."
+    },
+    "Options": {
+        "Name": "Opcije",
+        "Close": "Zatvori",
+        "NavigateToExe": "...",
+        "Reset": "X",
+        "GameExecutable": "Izvršna datoteka",
+        "GameArgs": "Argumenti",
+        "RefreshMods": "Osvježite deskriptore prije startanja igre",
+        "Dialog": {
+            "Title": "Nađi izvršnu datoteku igre"
+        }
     },
     "Notifications": {
         "CollectionCreated": {
@@ -174,13 +249,21 @@
         "NewDescriptorsChecked": {
             "Title": "Provjereni su novi modovi",
             "Message": "Provjera novih modova je dovršena."
+        },
+        "CollectionRenamed": {
+            "Title": "Kolekcija preimenovana",
+            "Message": "Kolekcija je preimenovana."
+        },
+        "CollectionDuplicated": {
+            "Title": "Kolekcija duplicirana",
+            "Message": "Kolekcija je duplicirana."
         }
     },
     "Mod_App_Actions": {
         "OpenInSteam": "Otvori u steamu",
         "Open": "Otvori adresu moda",
         "Copy": "Kopiraj adresu moda",
-        "OpenInAssociatedApp": "Otvorite u pridruženoj aplikaciji"
+        "OpenInAssociatedApp": "Otvorite Mod mapu/datoteku"
     },
     "Descriptor_Actions": {
         "CheckNew": "Provjerite nove modove",
@@ -190,6 +273,10 @@
         "Lock_All": "Zaključaj sve",
         "Unlock": "Otključaj",
         "Unlock_All": "Otključaj sve"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod je kompatibilan s achievementima.",
+        "NotAchievementCompatible": "Mod nije kompatibilan s achievementima."
     },
     "Sorting": {
         "Sort_A_Z": "↑",

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Serialization;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
@@ -30,6 +31,11 @@ namespace IronyModManager.Parser.Definitions
     public class Definition : IDefinition
     {
         #region Fields
+
+        /// <summary>
+        /// The additional file names
+        /// </summary>
+        private IList<string> additionalFileNames = new List<string>();
 
         /// <summary>
         /// The code
@@ -52,14 +58,19 @@ namespace IronyModManager.Parser.Definitions
         private string file = string.Empty;
 
         /// <summary>
-        /// The file names
+        /// The generated file names
         /// </summary>
-        private IList<string> fileNames = new List<string>();
+        private IList<string> generatedFileNames = new List<string>();
 
         /// <summary>
         /// The identifier
         /// </summary>
         private string id = string.Empty;
+
+        /// <summary>
+        /// The overwritten file names
+        /// </summary>
+        private IList<string> overwrittenFileNames = new List<string>();
 
         /// <summary>
         /// The parent directory
@@ -89,6 +100,35 @@ namespace IronyModManager.Parser.Definitions
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the additional file names.
+        /// </summary>
+        /// <value>The additional file names.</value>
+        public IList<string> AdditionalFileNames
+        {
+            get
+            {
+                if (!additionalFileNames.Contains(File))
+                {
+                    additionalFileNames.Add(File);
+                }
+                return additionalFileNames.Distinct().ToList();
+            }
+            set
+            {
+                IList<string> val;
+                if (value == null)
+                {
+                    val = new List<string>();
+                }
+                else
+                {
+                    val = value;
+                }
+                additionalFileNames = val;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the code.
@@ -198,9 +238,22 @@ namespace IronyModManager.Parser.Definitions
             }
             set
             {
+                var old = file;
                 var val = value ?? string.Empty;
                 file = val;
                 FileCI = val.ToLowerInvariant();
+                if (generatedFileNames.Contains(old))
+                {
+                    generatedFileNames.Remove(old);
+                }
+                if (overwrittenFileNames.Contains(old))
+                {
+                    overwrittenFileNames.Remove(old);
+                }
+                if (additionalFileNames.Contains(old))
+                {
+                    additionalFileNames.Remove(old);
+                }
             }
         }
 
@@ -211,19 +264,19 @@ namespace IronyModManager.Parser.Definitions
         public string FileCI { get; private set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the additional file names.
+        /// Gets or sets the generated file names.
         /// </summary>
-        /// <value>The additional file names.</value>
-        public IList<string> FileNames
+        /// <value>The generated file names.</value>
+        [JsonIgnore]
+        public IList<string> GeneratedFileNames
         {
             get
             {
-                if (!fileNames.Contains(File))
+                if (!generatedFileNames.Contains(File))
                 {
-                    fileNames.Add(File);
+                    generatedFileNames.Add(File);
                 }
-                fileNames = fileNames.Distinct().ToList();
-                return fileNames;
+                return generatedFileNames.Distinct().ToList();
             }
             set
             {
@@ -236,7 +289,7 @@ namespace IronyModManager.Parser.Definitions
                 {
                     val = value;
                 }
-                fileNames = val;
+                generatedFileNames = val;
             }
         }
 
@@ -270,6 +323,42 @@ namespace IronyModManager.Parser.Definitions
         public string ModName { get; set; }
 
         /// <summary>
+        /// Gets or sets the mod path.
+        /// </summary>
+        /// <value>The mod path.</value>
+        [JsonIgnore]
+        public string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten file names.
+        /// </summary>
+        /// <value>The overwritten file names.</value>
+        public IList<string> OverwrittenFileNames
+        {
+            get
+            {
+                if (!overwrittenFileNames.Contains(File))
+                {
+                    overwrittenFileNames.Add(File);
+                }
+                return overwrittenFileNames.Distinct().ToList();
+            }
+            set
+            {
+                IList<string> val;
+                if (value == null)
+                {
+                    val = new List<string>();
+                }
+                else
+                {
+                    val = value;
+                }
+                overwrittenFileNames = val;
+            }
+        }
+
+        /// <summary>
         /// Gets the parent directory.
         /// </summary>
         /// <value>The parent directory.</value>
@@ -300,6 +389,13 @@ namespace IronyModManager.Parser.Definitions
                 return parentDirectoryCI;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the tags.
+        /// </summary>
+        /// <value>The tags.</value>
+        [JsonIgnore]
+        public IList<string> Tags { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets or sets the type.
@@ -377,7 +473,11 @@ namespace IronyModManager.Parser.Definitions
                 nameof(IsFirstLevel) => IsFirstLevel,
                 nameof(FileCI) => FileCI,
                 nameof(ParentDirectoryCI) => ParentDirectoryCI,
-                nameof(FileNames) => FileNames,
+                nameof(GeneratedFileNames) => GeneratedFileNames,
+                nameof(AdditionalFileNames) => AdditionalFileNames,
+                nameof(OverwrittenFileNames) => OverwrittenFileNames,
+                nameof(ModPath) => ModPath,
+                nameof(Tags) => Tags,
                 _ => Id,
             };
         }

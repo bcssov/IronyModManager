@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 06-07-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -268,16 +268,27 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// Writes the descriptor asynchronous.
+        /// write descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
+        /// <param name="isPatchMod">if set to <c>true</c> [is patch mod].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters)
+        public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool isPatchMod)
         {
-            async Task<bool> writeDescriptor()
+            async Task<bool> writeDescriptors()
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+                await writeDescriptor(fullPath);
+                if (isPatchMod)
+                {
+                    var modPath = Path.Combine(parameters.Mod.FileName, Constants.DescriptorFile);
+                    await writeDescriptor(modPath);
+                }
+                return true;
+            }
+            async Task<bool> writeDescriptor(string fullPath)
+            {
                 using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
                 using var sw = new StreamWriter(fs);
                 var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
@@ -315,8 +326,9 @@ namespace IronyModManager.IO.Mods
                 await sw.FlushAsync();
                 return true;
             }
+
             var retry = new RetryStrategy();
-            return await retry.RetryActionAsync(writeDescriptor);
+            return await retry.RetryActionAsync(writeDescriptors);
         }
 
         /// <summary>

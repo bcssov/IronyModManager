@@ -17,12 +17,12 @@
         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource ThemeBorderMidBrush}"
                 Grid.Column="0" Grid.Row="0">
           <Panel>
-            <controls:TextEditor x:Name="editorLeft" Background="{DynamicResource IronyBackgroundColor}"
+            <controls:TextEditor x:Name="editorLeft" Background="{DynamicResource IronyEditorBackgroundColor}"
                                    Foreground="{DynamicResource IronyForegroundBrush}"
                                    HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
                                    TextBlock.FontSize="14" Document="{Binding LeftDocument}"
                                    IsVisible="{Binding EditingLeft}" ShowLineNumbers="True" />
-            <controls:TextEditor x:Name="editorRight" Background="{DynamicResource IronyBackgroundColor}"
+            <controls:TextEditor x:Name="editorRight" Background="{DynamicResource IronyEditorBackgroundColor}"
                                    Foreground="{DynamicResource IronyForegroundBrush}"
                                    HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
                                    TextBlock.FontSize="14" Document="{Binding RightDocument}"

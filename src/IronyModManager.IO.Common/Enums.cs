@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
-// Created          : 04-19-2020
+// Created          : 06-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
-// <copyright file="Delegates.cs" company="Mario">
+// <copyright file="Enums.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -17,18 +17,23 @@ using System.Collections.Generic;
 namespace IronyModManager.IO.Common
 {
     /// <summary>
-    /// Class Delegates.
+    /// Enum PatchStateMode
     /// </summary>
-    public class Delegates
+    public enum PatchStateMode
     {
-        #region Delegates
+        /// <summary>
+        /// The none
+        /// </summary>
+        None,
 
         /// <summary>
-        /// Delegate WriteOperationStateDelegate
+        /// The default
         /// </summary>
-        /// <param name="started">if set to <c>true</c> [started].</param>
-        public delegate void WriteOperationStateDelegate(bool started);
+        Default,
 
-        #endregion Delegates
+        /// <summary>
+        /// The advanced
+        /// </summary>
+        Advanced
     }
 }

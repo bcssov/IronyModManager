@@ -8,7 +8,7 @@
         Icon="/Assets/logo.ico"
         Title="Irony Mod Manager"
         MinWidth="800"
-        MinHeight="450"
+        MinHeight="480"
         SizeToContent="Manual"
         WindowStartupLocation="Manual"
         ShowInTaskbar="True">

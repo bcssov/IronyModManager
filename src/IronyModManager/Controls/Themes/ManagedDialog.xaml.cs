@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 05-16-2020
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -26,6 +26,8 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Controls.Dialogs;
+using IronyModManager.DI;
+using IronyModManager.Localization;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls.Themes
@@ -63,6 +65,35 @@ namespace IronyModManager.Controls.Themes
             AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
             _quickLinksRoot = this.FindControl<Control>("QuickLinks");
             _filesView = this.FindControl<ListBox>("Files");
+            var locManager = DIResolver.Get<ILocalizationManager>();
+            var fileName = this.FindControl<TextBox>("fileName");
+            fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
+            var correctingInput = false;
+            fileName.PropertyChanged += (sender, args) =>
+            {
+                if (args.Property != TextBox.TextProperty)
+                {
+                    return;
+                }
+                if (correctingInput)
+                {
+                    return;
+                }
+                correctingInput = true;
+                async Task updateText()
+                {
+                    await Task.Delay(1);
+                    Model.FileName = Model.FileName.GenerateValidFileName();
+                    correctingInput = false;
+                }
+                updateText().ConfigureAwait(false);
+            };
+            var showHiddenFiles = this.FindControl<TextBlock>("showHiddenFiles");
+            showHiddenFiles.Text = locManager.GetResource(LocalizationResources.FileDialog.ShowHiddenFiles);
+            var ok = this.FindControl<Button>("ok");
+            ok.Content = locManager.GetResource(LocalizationResources.FileDialog.OK);
+            var cancel = this.FindControl<Button>("cancel");
+            cancel.Content = locManager.GetResource(LocalizationResources.FileDialog.Cancel);
         }
 
         #endregion Constructors

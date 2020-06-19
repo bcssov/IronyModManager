@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 06-18-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -147,6 +147,13 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets the achievement compatible.
+        /// </summary>
+        /// <value>The achievement compatible.</value>
+        [StaticLocalization(LocalizationResources.Achievements.AchievementCompatible)]
+        public virtual string AchievementCompatible { get; protected set; }
+
+        /// <summary>
         /// Gets or sets all mods.
         /// </summary>
         /// <value>All mods.</value>
@@ -157,6 +164,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [all mods enabled]; otherwise, <c>false</c>.</value>
         public virtual bool AllModsEnabled { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow mod selection].
+        /// </summary>
+        /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
         /// Gets or sets the check new mods.
@@ -311,6 +324,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The mod version sort order.</value>
         public virtual SortOrderControlViewModel ModVersionSortOrder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the not achievement compatible.
+        /// </summary>
+        /// <value>The not achievement compatible.</value>
+        [StaticLocalization(LocalizationResources.Achievements.NotAchievementCompatible)]
+        public virtual string NotAchievementCompatible { get; protected set; }
 
         /// <summary>
         /// Gets or sets the open in associated application.
@@ -506,7 +526,9 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (game != null)
             {
-                Mods = modService.GetInstalledMods(game).ToObservableCollection();
+                var mods = modService.GetInstalledMods(game);
+                EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
+                Mods = mods.ToObservableCollection();
                 AllMods = Mods.ToHashSet();
                 var invalidMods = AllMods.Where(p => !p.IsValid);
                 if (invalidMods.Count() > 0)
@@ -585,6 +607,16 @@ namespace IronyModManager.ViewModels.Controls
                 notificationAction.ShowNotification(title, message, NotificationType.Info);
                 await TriggerOverlayAsync(false);
             }
+        }
+
+        /// <summary>
+        /// eval achievement compatibility as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual async Task EvalAchievementCompatibilityAsync(IEnumerable<IMod> mods)
+        {
+            await modService.PopulateModFilesAsync(mods);
+            modService.EvalAchievementCompatibility(mods);
         }
 
         /// <summary>

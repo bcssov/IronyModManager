@@ -20,8 +20,27 @@
          ConverterParameter=x/2.1}">
           <Button Content="{Binding Apply}" Command="{Binding ApplyCommand}"
                   VerticalAlignment="Bottom" HorizontalAlignment="Left"></Button>
-          <Button Content="{Binding Analyze}" Command="{Binding AnalyzeCommand}"
-                  VerticalAlignment="Bottom" HorizontalAlignment="Right"></Button>
+          <Button Content="{Binding LaunchGame}" Command="{Binding LaunchGameCommand}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center"></Button>
+          <Panel  VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Content="{Binding Analyze}" Command="{Binding AnalyzeCommand}"></Button>
+            <Popup PlacementMode="Top" IsOpen="{Binding IsModeOpen}"
+             Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+              <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+                <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+                  <TextBlock Text="{Binding ModeTitle}" Grid.Column="0"
+                             Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                             MinHeight="20" Margin="0,5"></TextBlock>
+                  <Button Content="{Binding DefaultMode}" Command="{Binding DefaultModeCommand}"
+                          Grid.Row="1" Grid.Column="0"></Button>
+                  <Button Content="{Binding AdvancedMode}" Command="{Binding AdvancedModeCommand}"
+                          Grid.Row="2" Grid.Column="0"></Button>
+                  <Button Content="{Binding CloseMode}" Command="{Binding CloseModeCommand}"
+                          Grid.Row="3" Grid.Column="0"></Button>
+                </Grid>
+              </Border>
+            </Popup>
+          </Panel>
         </Panel>
       </Panel>
     </Grid>

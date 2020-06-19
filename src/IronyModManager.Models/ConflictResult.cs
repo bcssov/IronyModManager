@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
@@ -63,10 +63,22 @@ namespace IronyModManager.Models
         public string IgnoredPaths { get; set; }
 
         /// <summary>
+        /// Gets or sets the mode.
+        /// </summary>
+        /// <value>The mode.</value>
+        public PatchStateMode Mode { get; set; }
+
+        /// <summary>
         /// Gets or sets the orphan conflicts.
         /// </summary>
         /// <value>The orphan conflicts.</value>
         public IIndexedDefinitions OrphanConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten conflicts.
+        /// </summary>
+        /// <value>The overwritten conflicts.</value>
+        public IIndexedDefinitions OverwrittenConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the resolved conflicts.
@@ -100,12 +112,14 @@ namespace IronyModManager.Models
             OrphanConflicts?.Dispose();
             ResolvedConflicts?.Dispose();
             RuleIgnoredConflicts?.Dispose();
+            OverwrittenConflicts?.Dispose();
             AllConflicts = null;
             Conflicts = null;
             IgnoredConflicts = null;
             ResolvedConflicts = null;
             OrphanConflicts = null;
             RuleIgnoredConflicts = null;
+            OverwrittenConflicts = null;
         }
 
         #endregion Methods

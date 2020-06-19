@@ -4,15 +4,16 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
+using System.IO;
 
 namespace IronyModManager.Shared
 {
@@ -29,6 +30,11 @@ namespace IronyModManager.Shared
         public const string DefaultAppCulture = "en";
 
         /// <summary>
+        /// The descriptor file
+        /// </summary>
+        public const string DescriptorFile = "descriptor" + ModExtension;
+
+        /// <summary>
         /// The empty parameter
         /// </summary>
         public const string EmptyParam = "";
@@ -36,7 +42,22 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The json extension
         /// </summary>
-        public const string JsonExtension = ".json";
+        public const string JsonExtension = "." + JsonExtensionWithoutDot;
+
+        /// <summary>
+        /// The json extension without dot
+        /// </summary>
+        public const string JsonExtensionWithoutDot = "json";
+
+        /// <summary>
+        /// The mod directory
+        /// </summary>
+        public const string ModDirectory = "mod";
+
+        /// <summary>
+        /// The mod extension
+        /// </summary>
+        public const string ModExtension = "." + ModDirectory;
 
         /// <summary>
         /// The plugins path and name
@@ -47,6 +68,16 @@ namespace IronyModManager.Shared
         /// The proxy namespace
         /// </summary>
         public const string ProxyNamespace = "Castle.Proxies";
+
+        /// <summary>
+        /// The XML extension
+        /// </summary>
+        public const string XMLExtension = "." + XMLExtensionWithoutDot;
+
+        /// <summary>
+        /// The XML extension without dot
+        /// </summary>
+        public const string XMLExtensionWithoutDot = "xml";
 
         /// <summary>
         /// The zip extension
@@ -90,6 +121,16 @@ namespace IronyModManager.Shared
                 /// The steam application identifier
                 /// </summary>
                 public const int SteamAppId = 281990;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "map", "localisation_synced" };
+
+                /// <summary>
+                /// The log location
+                /// </summary>
+                public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
 
                 #endregion Fields
             }

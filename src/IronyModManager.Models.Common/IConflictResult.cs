@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
@@ -53,10 +53,22 @@ namespace IronyModManager.Models.Common
         string IgnoredPaths { get; set; }
 
         /// <summary>
+        /// Gets or sets the mode.
+        /// </summary>
+        /// <value>The mode.</value>
+        PatchStateMode Mode { get; set; }
+
+        /// <summary>
         /// Gets or sets the orphan conflicts.
         /// </summary>
         /// <value>The orphan conflicts.</value>
         IIndexedDefinitions OrphanConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the overwritten conflicts.
+        /// </summary>
+        /// <value>The overwritten conflicts.</value>
+        IIndexedDefinitions OverwrittenConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the resolved conflicts.

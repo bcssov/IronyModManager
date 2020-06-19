@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-04-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -43,6 +43,27 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IList&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> GetFiles(string path)
+        {
+            using var fileStream = File.OpenRead(path);
+            using var reader = ReaderFactory.Open(fileStream);
+            var files = new List<string>();
+            while (reader.MoveToNextEntry())
+            {
+                if (!reader.Entry.IsDirectory)
+                {
+                    var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
+                    files.Add(relativePath);
+                }
+            }
+            return files;
+        }
+
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -50,6 +71,15 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public virtual Stream GetStream(string rootPath, string file)
         {
+            static MemoryStream readStream(SharpCompress.Readers.IReader reader)
+            {
+                using var entryStream = reader.OpenEntryStream();
+                var memoryStream = new MemoryStream();
+                entryStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return memoryStream;
+            }
+
             using var fileStream = File.OpenRead(rootPath);
             using var reader = ReaderFactory.Open(fileStream);
             while (reader.MoveToNextEntry())
@@ -58,13 +88,18 @@ namespace IronyModManager.IO.Readers
                 {
                     var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
                     var filePath = file.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                    // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+                    if (file.StartsWith("*"))
                     {
-                        using var entryStream = reader.OpenEntryStream();
-                        var memoryStream = new MemoryStream();
-                        entryStream.CopyTo(memoryStream);
-                        memoryStream.Seek(0, SeekOrigin.Begin);
-                        return memoryStream;
+                        var endsWith = file.Replace("*", string.Empty);
+                        if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return readStream(reader);
+                        }
+                    }
+                    else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return readStream(reader);
                     }
                 }
             }

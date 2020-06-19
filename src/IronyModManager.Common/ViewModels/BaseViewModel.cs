@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -158,10 +158,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="progress">The progress.</param>
         protected virtual void TriggerOverlay(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            Task.Run(() =>
-            {
-                TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
-            });
+            TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -171,7 +168,7 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="message">The message.</param>
         /// <param name="progress">The progress.</param>
         /// <returns>Task.</returns>
-        protected virtual Task TriggerOverlayAsync(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
+        protected virtual async Task TriggerOverlayAsync(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
             var args = new OverlayEventArgs()
             {
@@ -179,10 +176,11 @@ namespace IronyModManager.Common.ViewModels
                 Message = message,
                 MessageProgress = progress
             };
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
+                MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                 MessageBus.Current.SendMessage(args);
-            });
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -198,7 +196,7 @@ namespace IronyModManager.Common.ViewModels
                     PreventShutdown = cannotShutdown
                 };
                 MessageBus.Current.SendMessage(args);
-            });
+            }).ConfigureAwait(false);
         }
 
         #endregion Methods

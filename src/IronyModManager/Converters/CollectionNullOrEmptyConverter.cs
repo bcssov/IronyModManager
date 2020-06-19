@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-23-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="CollectionNullOrEmptyConverter.cs" company="Mario">
 //     Mario
@@ -45,7 +45,7 @@ namespace IronyModManager.Converters
                 var result = col == null || col.Count() == 0;
                 return invert ? !result : result;
             }
-            return invert ? false : true;
+            return !invert;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace IronyModManager.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool.TryParse(parameter != null ? parameter.ToString() : bool.FalseString, out var invert);
-            return invert ? false : true;
+            return !invert;
         }
 
         #endregion Methods

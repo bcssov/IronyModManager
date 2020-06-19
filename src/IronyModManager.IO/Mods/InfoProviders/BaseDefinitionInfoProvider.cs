@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-14-2020
+// Last Modified On : 05-26-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -143,19 +143,19 @@ namespace IronyModManager.IO.Mods.InfoProviders
         protected virtual string EnsureRuleEnforced(IDefinition definition, string proposedFilename, bool isFIOS)
         {
             var fileNames = new List<string>() { proposedFilename };
-            fileNames.AddRange(definition.FileNames);
+            fileNames.AddRange(definition.GeneratedFileNames);
             int counter = 0;
             if (isFIOS)
             {
-                fileNames = fileNames.OrderBy(p => p).ToList();
+                fileNames = fileNames.OrderBy(p => p, StringComparer.Ordinal).ToList();
                 var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
                 string newFileName = proposedFilename;
-                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
+                while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
                     var fileName = Path.GetFileName(newFileName);
                     newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
                     fileNames.Add(newFileName);
-                    fileNames = fileNames.OrderBy(p => p).ToList();
+                    fileNames = fileNames.OrderBy(p => p, StringComparer.Ordinal).ToList();
                     counter++;
                     if (counter > 10)
                     {
@@ -165,15 +165,15 @@ namespace IronyModManager.IO.Mods.InfoProviders
             }
             else
             {
-                fileNames = fileNames.OrderByDescending(p => p).ToList();
+                fileNames = fileNames.OrderByDescending(p => p, StringComparer.Ordinal).ToList();
                 var characterPrefix = Path.GetFileName(fileNames.FirstOrDefault()).First();
                 string newFileName = proposedFilename;
-                while (definition.FileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
+                while (definition.GeneratedFileNames.Any(f => f.Equals(fileNames.FirstOrDefault())))
                 {
                     var fileName = Path.GetFileName(newFileName);
                     newFileName = newFileName.Replace(fileName, $"{characterPrefix}{fileName}");
                     fileNames.Add(newFileName);
-                    fileNames = fileNames.OrderByDescending(p => p).ToList();
+                    fileNames = fileNames.OrderByDescending(p => p, StringComparer.Ordinal).ToList();
                     counter++;
                     if (counter > 10)
                     {

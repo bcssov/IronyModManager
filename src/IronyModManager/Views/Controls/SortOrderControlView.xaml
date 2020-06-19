@@ -9,7 +9,7 @@
     <Button Command="{Binding SortCommand}" Background="Transparent" BorderThickness="0" Margin="0,-5,0,0">
       <DockPanel LastChildFill="False">
         <TextBlock Text="{Binding SortOrderText}"
-                   Foreground="{DynamicResource IronyThemeSortArrowBrush}" TextWrapping="Wrap"
+                   Foreground="{DynamicResource IronyAccentBrush}" TextWrapping="Wrap"
                    DockPanel.Dock="Left" VerticalAlignment="Center" FontWeight="UltraBold"></TextBlock>
         <TextBlock Text="{Binding Text}" Foreground="{DynamicResource IronyForegroundBrush}" Margin="5,0,0,0"
                    TextWrapping="Wrap" DockPanel.Dock="Right" VerticalAlignment="Center"></TextBlock>

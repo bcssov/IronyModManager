@@ -54,7 +54,7 @@
     <DockPanel Margin="0 5 0 0"  DockPanel.Dock="Bottom">
       <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
         <CheckBox IsChecked="{Binding ShowHiddenFiles}">
-          <TextBlock>Show hidden files</TextBlock>
+          <TextBlock x:Name="showHiddenFiles">Show hidden files</TextBlock>
         </CheckBox>
       </StackPanel>
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
@@ -63,8 +63,8 @@
             <Setter Property="Margin" Value="4"/>
           </Style>
         </StackPanel.Styles>
-        <Button Command="{Binding Ok}">OK</Button>
-        <Button Command="{Binding Cancel}">Cancel</Button>
+        <Button Command="{Binding Ok}" Content="OK" x:Name="ok"></Button>
+        <Button Command="{Binding Cancel}" Content="Cancel" x:Name="cancel"></Button>
       </StackPanel>
     </DockPanel>
 
@@ -74,11 +74,11 @@
               SelectedItem="{Binding SelectedFilter}"
               Margin="0 5 0 0" />
 
-    <TextBox Text="{Binding FileName}" Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />
+    <TextBox x:Name="fileName" Text="{Binding FileName}" Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />
 
     <ListBox Margin="0 0 5 5" BorderBrush="Transparent" x:Name="QuickLinks" Items="{Binding QuickLinks}"
              SelectedIndex="{Binding QuickLinksSelectedIndex}"
-             DockPanel.Dock="Left" Background="{DynamicResource ThemeControlMidBrush}" Focusable="False">
+             DockPanel.Dock="Left" Background="{DynamicResource IronyMidBackgroundBrush}" Focusable="False">
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Spacing="4" Orientation="Horizontal" Background="Transparent">

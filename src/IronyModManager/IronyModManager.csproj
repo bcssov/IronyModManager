@@ -42,22 +42,27 @@
   <ItemGroup>
     <AvaloniaResource Remove="Controls\Themes\Dark\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\IconsDark.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\IconsLight.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\ManagedDialog.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ComboBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDark\MenuItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ComboBox.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ComboBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\MenuItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ComboBox.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ComboBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\MenuItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\NumericUpDown.xaml" />
     <AvaloniaResource Remove="Controls\Themes\StandardMessageBox.xaml" />
@@ -67,12 +72,21 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
+    <AvaloniaResource Remove="Controls\Themes\IronyToolTip.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ConflictSolverDBSearchView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ConflictSolverModFilterControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ConflictSolverResetConflictsView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\MergeViewerBinaryControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\MergeViewerControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ModCompareSelectorControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ModConflictIgnoreControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\ModifyCollectionControlView.xaml" />
+    <AvaloniaResource Remove="Views\Controls\OptionsControlView.xaml" />
     <AvaloniaResource Remove="Views\MainConflictSolverControlView.xaml" />
+    <AvaloniaResource Include="Controls\Themes\IronyToolTip.xaml" />
+    <AvaloniaResource Include="Controls\Themes\IconsLight.xaml" />
+    <AvaloniaResource Include="Controls\Themes\IconsDark.xaml" />
     <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\Light\ThemeOverride.xaml" />
@@ -98,6 +112,9 @@
     <AvaloniaResource Include="Controls\Themes\MaterialDeepPurple\ComboBoxItem.xaml" />
     <AvaloniaResource Include="Controls\Themes\MaterialLightGreen\ComboBoxItem.xaml" />
     <AvaloniaResource Include="Controls\Themes\MaterialDark\ComboBoxItem.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDeepPurple\MenuItem.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialLightGreen\MenuItem.xaml" />
+    <AvaloniaResource Include="Controls\Themes\MaterialDark\MenuItem.xaml" />
     <AvaloniaResource Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\CollectionModsControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\GameControlView.xaml" />
@@ -113,22 +130,27 @@
     <None Remove="Assets\logo.ico" />
     <None Remove="Controls\Themes\Dark\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Dark\MinMaxButtonSpinner.xaml" />
+    <None Remove="Controls\Themes\IconsDark.xaml" />
+    <None Remove="Controls\Themes\IconsLight.xaml" />
     <None Remove="Controls\Themes\Light\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\Light\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\ManagedDialog.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ComboBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ListBoxItem.xaml" />
+    <None Remove="Controls\Themes\MaterialDark\MenuItem.xaml" />
     <None Remove="Controls\Themes\MaterialDark\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ComboBox.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ComboBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml" />
+    <None Remove="Controls\Themes\MaterialDeepPurple\MenuItem.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ButtonSpinner.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ComboBox.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ComboBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
+    <None Remove="Controls\Themes\MaterialLightGreen\MenuItem.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\NumericUpDown.xaml" />
     <None Remove="Controls\Themes\StandardMessageBox.xaml" />
@@ -138,10 +160,14 @@
     <None Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
+    <None Remove="Controls\Themes\IronyToolTip.xaml" />
     <None Remove="Implementation\AvaloniaEdit\Resources\PDXScript.xshd" />
     <None Remove="Implementation\AvaloniaEdit\Resources\YAML.xshd" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
     <None Remove="Views\Controls\CollectionModsControlView.xaml" />
+    <None Remove="Views\Controls\ConflictSolverDBSearchView.xaml" />
+    <None Remove="Views\Controls\ConflictSolverModFilterControlView.xaml" />
+    <None Remove="Views\Controls\ConflictSolverResetConflictsView.xaml" />
     <None Remove="Views\Controls\ExportModCollectionControlView.xaml" />
     <None Remove="Views\Controls\GameControlView.xaml" />
     <None Remove="Views\Controls\InstalledModsControlView.xaml" />
@@ -151,6 +177,8 @@
     <None Remove="Views\Controls\ModCompareSelectorControlView.xaml" />
     <None Remove="Views\Controls\ModConflictIgnoreControlView.xaml" />
     <None Remove="Views\Controls\ModHolderControlView.xaml" />
+    <None Remove="Views\Controls\ModifyCollectionControlView.xaml" />
+    <None Remove="Views\Controls\OptionsControlView.xaml" />
     <None Remove="Views\Controls\SearchModsControlView.xaml" />
     <None Remove="Views\Controls\SortOrderControlView.xaml" />
     <None Remove="Views\Controls\ThemeControlView.xaml" />
@@ -167,10 +195,11 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.9.0-preview1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.10" />
-    <PackageReference Include="DiffPlex" Version="1.6.1" />
+    <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
     <PackageReference Include="Material.Avalonia" Version="0.9.0" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.6.1" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="$(MicrosoftExtensionsDependencyModelVersion)" allowedVersions="$(MicrosoftExtensionsDependencyModelVersion)" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsVersion)" allowedVersions="$(MicrosoftNETCorePlatformsVersion)" />
@@ -178,15 +207,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.1.91">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.7-beta">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NLog" Version="4.7.0" />
-    <PackageReference Include="ReactiveUI" Version="11.4.1" />
-    <PackageReference Include="SimpleInjector" Version="4.10.2" />
-    <PackageReference Include="SimpleInjector.Packaging" Version="4.10.2" />
-    <PackageReference Include="SmartFormat.NET" Version="2.5.0" />
+    <PackageReference Include="NLog" Version="4.7.2" />
+    <PackageReference Include="ReactiveUI" Version="11.4.17" />
+    <PackageReference Include="SimpleInjector" Version="5.0.1" />
+    <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
+    <PackageReference Include="SmartFormat.NET" Version="2.5.1" />
     <PackageReference Include="Splat.NLog" Version="9.4.5" />
     <PackageReference Include="Splat.SimpleInjector" Version="9.4.5" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
@@ -213,10 +242,19 @@
     <EmbeddedResource Include="Controls\Themes\Dark\ButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\IronyToolTip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\IconsLight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\Light\ButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\Light\MinMaxButtonSpinner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialDark\MenuItem.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\MaterialDark\ComboBoxItem.xaml">
@@ -243,6 +281,9 @@
     <EmbeddedResource Include="Controls\Themes\MaterialDeepPurple\ListBoxItem.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialDeepPurple\MenuItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\MaterialDeepPurple\MinMaxButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -258,6 +299,9 @@
     <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\MenuItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -271,6 +315,9 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\Dark\ThemeOverride.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Themes\IconsDark.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Implementation\AvaloniaEdit\Resources\YAML.xshd" />
@@ -428,6 +475,31 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\StandardMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\ModifyCollectionControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\OptionsControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\ConflictSolverModFilterControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\ConflictSolverResetConflictsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Controls\ConflictSolverDBSearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

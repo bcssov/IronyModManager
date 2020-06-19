@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-10-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -80,6 +80,21 @@ namespace IronyModManager.IO.Readers
                     info.ContentSHA = stream.CalculateSHA();
                 }
                 return info;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public virtual IEnumerable<string> GetFiles(string path)
+        {
+            var reader = readers.FirstOrDefault(p => p.CanRead(path));
+            if (reader != null)
+            {
+                return reader.GetFiles(path);
             }
             return null;
         }

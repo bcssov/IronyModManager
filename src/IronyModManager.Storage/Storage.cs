@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -98,6 +98,19 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the game settings.
+        /// </summary>
+        /// <returns>IEnumerable&lt;IGameSettings&gt;.</returns>
+        public virtual IEnumerable<IGameSettings> GetGameSettings()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<List<IGameSettings>>(Database.GameSettings);
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Gets the mod collections.
         /// </summary>
         /// <returns>IEnumerable&lt;IModCollection&gt;.</returns>
@@ -156,9 +169,11 @@ namespace IronyModManager.Storage
         /// <param name="appId">The application identifier.</param>
         /// <param name="userDirectory">The user directory.</param>
         /// <param name="workshopDirectory">The workshop directory.</param>
+        /// <param name="logLocation">The log location.</param>
+        /// <param name="checkSumFolders">The check sum folders.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory)
+        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation, IEnumerable<string> checkSumFolders)
         {
             lock (dbLock)
             {
@@ -171,6 +186,8 @@ namespace IronyModManager.Storage
                 game.UserDirectory = userDirectory ?? string.Empty;
                 game.SteamAppId = appId;
                 game.WorkshopDirectory = workshopDirectory ?? string.Empty;
+                game.LogLocation = logLocation;
+                game.ChecksumFolders = checkSumFolders ?? new List<string>();
                 Database.Games.Add(game);
                 return true;
             }
@@ -184,7 +201,7 @@ namespace IronyModManager.Storage
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException">Theme is already registered</exception>
+        /// <exception cref="InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
@@ -216,6 +233,20 @@ namespace IronyModManager.Storage
             lock (dbLock)
             {
                 Database.AppState = Mapper.Map<IAppState>(appState);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Sets the game settings.
+        /// </summary>
+        /// <param name="gameSettings">The game settings.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool SetGameSettings(IEnumerable<IGameSettings> gameSettings)
+        {
+            lock (dbLock)
+            {
+                Database.GameSettings = Mapper.Map<List<IGameSettings>>(gameSettings);
                 return true;
             }
         }

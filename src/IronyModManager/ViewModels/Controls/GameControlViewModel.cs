@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 05-30-2020
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -104,7 +104,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var args = new SelectedGameChangedEventArgs()
                     {
-                        Game = s
+                        Game = gameService.GetSelected()
                     };
                     MessageBus.Current.SendMessage(args);
                     previousGame = s;

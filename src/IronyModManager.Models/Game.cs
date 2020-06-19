@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 06-16-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -31,10 +31,34 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets the checksum folders.
+        /// </summary>
+        /// <value>The checksum folders.</value>
+        public virtual IEnumerable<string> ChecksumFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the executable location.
+        /// </summary>
+        /// <value>The executable location.</value>
+        public virtual string ExecutableLocation { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         public virtual bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the launch arguments.
+        /// </summary>
+        /// <value>The launch arguments.</value>
+        public virtual string LaunchArguments { get; set; }
+
+        /// <summary>
+        /// Gets or sets the log location.
+        /// </summary>
+        /// <value>The log location.</value>
+        public virtual string LogLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -44,10 +68,28 @@ namespace IronyModManager.Models
         public virtual string Name { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [refresh descriptors].
+        /// </summary>
+        /// <value><c>true</c> if [refresh descriptors]; otherwise, <c>false</c>.</value>
+        public virtual bool RefreshDescriptors { get; set; }
+
+        /// <summary>
         /// Gets or sets the steam application identifier.
         /// </summary>
         /// <value>The steam application identifier.</value>
         public virtual int SteamAppId { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether [steam install exists].
+        /// </summary>
+        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
+        public virtual bool SteamInstallExists
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(WorkshopDirectory);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type.

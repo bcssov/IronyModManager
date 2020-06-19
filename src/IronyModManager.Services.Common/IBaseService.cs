@@ -4,7 +4,7 @@
 // Created          : 04-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-11-2020
 // ***********************************************************************
 // <copyright file="IBaseService.cs" company="Mario">
 //     Mario
@@ -21,13 +21,5 @@ namespace IronyModManager.Services.Common
     /// </summary>
     public interface IBaseService
     {
-        #region Events
-
-        /// <summary>
-        /// Occurs when [shutdown state].
-        /// </summary>
-        event ShutdownStateDelegate ShutdownState;
-
-        #endregion Events
     }
 }

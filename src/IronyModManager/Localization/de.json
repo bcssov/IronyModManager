@@ -1,9 +1,13 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
-        "Wiki": "Wiki",
-        "Logs": "Protokolle",
-        "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist..."
+        "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
+        "Shortcuts": {
+            "Name": "Verknüpfungen",
+            "Wiki": "Wiki",
+            "Logs": "Protokolle",
+            "ErrorLog": "Error.log"
+        }
     },
     "FatalError": {
         "Message": "Ein nicht behandelter Fehler ist aufgetreten. App wird automatisch geschlossen.",
@@ -17,6 +21,19 @@
     "Prompt": {
         "Yes": "Ja",
         "No": "Nein"
+    },
+    "FileDialog": {
+        "FileName": "Dateiname",
+        "ShowHiddenFiles": "Zeige versteckte Dateien",
+        "OK": "OK",
+        "Cancel": "Stornieren",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Unterlagen",
+            "Music": "Musik",
+            "Videos": "Videos",
+            "Pictures": "Bilder"
+        }
     },
     "Languages": {
         "Name": "Sprache"
@@ -67,10 +84,28 @@
         "Filter": "Suchmods",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
-        "Order": "Bestellen"
+        "Order": "Reihenfolge",
+        "Rename": "Umbenennen",
+        "Duplicate": "Duplizieren",
+        "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
+        "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
+        "JumpOnDragAndDrop": {
+            "Title": "Autofokus: {State}",
+            "On": "Auf",
+            "Off": "Aus"
+        },
+        "ImportPrompt": {
+            "Title": "Sammlung existiert",
+            "Message": "Die Sammlung ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Importieren Paradoxos"
+        }
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
+        "LaunchGame": "Spiel startet",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
@@ -97,12 +132,17 @@
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
-            "Order": "(Ladereihenfolge)"
+            "Order": "(Ladereihenfolge)",
+            "Override": "(Überschreiben)"
         },
         "InvalidConflicts": {
             "Name": "Ungültig",
             "Error": "Fehler in Zeile: {Line} Spalte: {Column} Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}"
+            "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Datei öffnen",
+                "OpenDirectory": "Verzeichnis öffnen"
+            }
         },
         "ContextMenu": {
             "CopyAll": "Kopiere alles",
@@ -123,12 +163,47 @@
             "Undo": "Rückgängig machen",
             "Redo": "Wiederholen",
             "SelectAll": "Wählen Sie Alle"
+        },
+        "Modes": {
+            "Title": "Auswahlmodus",
+            "Default": "Standard",
+            "Advanced": "Erweitert",
+            "Close": "Schließen"
+        },
+        "ModFilter": {
+            "Title": "Mod Filter",
+            "Close": "Schließen"
+        },
+        "ResetConflicts": {
+            "Title": "Konflikte zurücksetzen",
+            "Resolved": "Aufgelöst",
+            "Ignored": "Ignoriert",
+            "Close": "Schließen",
+            "Reset": "Zurücksetzen"
+        },
+        "DBSearch": {
+            "Title": "Datenbanksuche",
+            "Watermark": "Suchbegriff eingeben",
+            "Close": "Schließen",
+            "Clear": "X"
         }
     },
     "ConflictIgnore": {
         "Save": "Speichern",
         "Cancel": "Stornieren",
         "Watermark": "Verwenden Sie # für Kommentare. Neue Zeile ist eine neue Regel."
+    },
+    "Options": {
+        "Name": "Optionen",
+        "Close": "Schließen",
+        "NavigateToExe": "...",
+        "Reset": "X",
+        "GameExecutable": "Spiel ausführbar",
+        "GameArgs": "Spiel Args",
+        "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+        "Dialog": {
+            "Title": "Finde eine ausführbare Spieldatei"
+        }
     },
     "Notifications": {
         "CollectionCreated": {
@@ -174,13 +249,21 @@
         "NewDescriptorsChecked": {
             "Title": "Neue Mods überprüft",
             "Message": "Die Überprüfung auf neue Mods ist abgeschlossen."
+        },
+        "CollectionRenamed": {
+            "Title": "Sammlung umbenannt",
+            "Message": "Sammlung wurde umbenannt."
+        },
+        "CollectionDuplicated": {
+            "Title": "Sammlung dupliziert",
+            "Message": "Sammlung wurde dupliziert."
         }
     },
     "Mod_App_Actions": {
         "OpenInSteam": "In Steam öffnen",
         "Open": "Öffnen Sie die Mod-URL",
         "Copy": "Kopieren Sie die Mod-URL",
-        "OpenInAssociatedApp": "In zugehöriger App öffnen"
+        "OpenInAssociatedApp": "Öffnen Sie den Mod-Ordner/die Mod-Datei"
     },
     "Descriptor_Actions": {
         "CheckNew": "Überprüfen Sie die neuen Mods",
@@ -190,6 +273,10 @@
         "Lock_All": "Sperre Alle",
         "Unlock": "Freischalten",
         "Unlock_All": "Alle freischalten"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod ist leistungskompatibel.",
+        "NotAchievementCompatible": "Mod ist nicht leistungskompatibel."
     },
     "Sorting": {
         "Sort_A_Z": "↑",

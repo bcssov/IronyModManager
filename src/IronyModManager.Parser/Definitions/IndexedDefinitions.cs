@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Trie;
 
 namespace IronyModManager.Parser.Definitions
 {
@@ -54,6 +55,11 @@ namespace IronyModManager.Parser.Definitions
         /// The main hierarchal definitions
         /// </summary>
         private ConcurrentIndexedList<IHierarchicalDefinitions> mainHierarchalDefinitions;
+
+        /// <summary>
+        /// The trie
+        /// </summary>
+        private Trie<IDefinition> trie;
 
         /// <summary>
         /// The type and identifier keys
@@ -96,16 +102,10 @@ namespace IronyModManager.Parser.Definitions
         /// Adds to map.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        public void AddToMap(IDefinition definition)
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        public void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
-            MapKeys(fileKeys, definition.FileCI);
-            MapKeys(typeKeys, definition.Type);
-            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
-            if (useHierarchalMap)
-            {
-                MapHierarchicalDefinition(definition);
-            }
-            definitions.Add(definition);
+            AddToMapInternal(definition, forceIgnoreHierarchical, true);
         }
 
         /// <summary>
@@ -124,10 +124,13 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = null;
             typeAndIdKeys.Clear();
             typeAndIdKeys = null;
+            typeKeys.Clear();
+            typeKeys = null;
             childHierarchicalDefinitions.Clear();
             childHierarchicalDefinitions = null;
             mainHierarchalDefinitions.Clear();
             mainHierarchalDefinitions = null;
+            trie = null;
         }
 
         /// <summary>
@@ -261,6 +264,84 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Initializes the search.
+        /// </summary>
+        public void InitSearch()
+        {
+            trie = new Trie<IDefinition>();
+            foreach (var item in definitions.Where(p => p.Tags?.Count > 0))
+            {
+                trie.Add(item, item.Tags);
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        public void Remove(IDefinition definition)
+        {
+            definitions.Remove(definition);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectoryCI);
+            if (hierarchicalDefinition != null)
+            {
+                if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
+                {
+                    var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                    if (child != null)
+                    {
+                        children.Remove(child);
+                    }
+                    if (children.Select(p => p).Count() == 0)
+                    {
+                        childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
+                        mainHierarchalDefinitions.Remove(hierarchicalDefinition);
+                    }
+                }
+            }
+            if (trie != null)
+            {
+                InitSearch();
+            }
+        }
+
+        /// <summary>
+        /// Searches the definitions.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> SearchDefinitions(string searchTerm)
+        {
+            if (trie != null)
+            {
+                return trie.Get(searchTerm);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Adds to map internal.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
+        /// <param name="directCall">if set to <c>true</c> [direct call].</param>
+        private void AddToMapInternal(IDefinition definition, bool forceIgnoreHierarchical = false, bool directCall = false)
+        {
+            MapKeys(fileKeys, definition.FileCI);
+            MapKeys(typeKeys, definition.Type);
+            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            if (useHierarchalMap && !forceIgnoreHierarchical)
+            {
+                MapHierarchicalDefinition(definition);
+            }
+            definitions.Add(definition);
+            if (directCall && trie != null)
+            {
+                InitSearch();
+            }
+        }
+
+        /// <summary>
         /// Constructs the key.
         /// </summary>
         /// <param name="keys">The keys.</param>
@@ -286,14 +367,15 @@ namespace IronyModManager.Parser.Definitions
                 shouldAdd = true;
             }
             bool exists = false;
+            IHierarchicalDefinitions child = null;
             if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
             {
-                var child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
+                child = children.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.Id);
                 exists = child != null;
             }
             if (!exists)
             {
-                var child = DIResolver.Get<IHierarchicalDefinitions>();
+                child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
                 children.Add(child);
@@ -301,6 +383,22 @@ namespace IronyModManager.Parser.Definitions
                 {
                     mainHierarchalDefinitions.Add(hierarchicalDefinition);
                 }
+            }
+            if (child.Mods == null)
+            {
+                child.Mods = new List<string>();
+            }
+            if (!child.Mods.Contains(definition.ModName))
+            {
+                child.Mods.Add(definition.ModName);
+            }
+            if (hierarchicalDefinition.Mods == null)
+            {
+                hierarchicalDefinition.Mods = new List<string>();
+            }
+            if (!hierarchicalDefinition.Mods.Contains(definition.ModName))
+            {
+                hierarchicalDefinition.Mods.Add(definition.ModName);
             }
         }
 

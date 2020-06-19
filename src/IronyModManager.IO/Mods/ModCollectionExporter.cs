@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 06-10-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -42,7 +42,25 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         private static ExtractionOptions extractionOptions;
 
+        /// <summary>
+        /// The paradoxos importer
+        /// </summary>
+        private readonly ParadoxosImporter paradoxosImporter;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModCollectionExporter" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public ModCollectionExporter(ILogger logger)
+        {
+            paradoxosImporter = new ParadoxosImporter(logger);
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -87,6 +105,16 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// import paradoxos as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportParadoxosAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxosImporter.ImportAsync(parameters);
+        }
+
+        /// <summary>
         /// Gets the extraction options.
         /// </summary>
         /// <returns>ExtractionOptions.</returns>
@@ -118,7 +146,6 @@ namespace IronyModManager.IO.Mods
                 {
                     Directory.Delete(parameters.ModDirectory, true);
                 }
-                Directory.CreateDirectory(parameters.ModDirectory);
             }
             using var fileStream = File.OpenRead(parameters.File);
             using var reader = ReaderFactory.Open(fileStream);
@@ -150,7 +177,7 @@ namespace IronyModManager.IO.Mods
                     }
                 }
             }
-            return importInstance ? result : true;
+            return !importInstance || result;
         }
 
         #endregion Methods

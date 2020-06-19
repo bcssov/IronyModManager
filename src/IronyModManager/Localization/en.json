@@ -1,9 +1,13 @@
 ﻿{
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
-        "Wiki": "Wiki",
-        "Logs": "Logs",
-        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed..."
+        "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
+        "Shortcuts": {
+            "Name": "Shortcuts",
+            "Wiki": "Wiki",
+            "Logs": "Logs",
+            "ErrorLog": "Error.log"
+        }
     },
     "FatalError": {
         "Message": "Unhandled error occurred. App will close automatically.",
@@ -17,6 +21,19 @@
     "Prompt": {
         "Yes": "Yes",
         "No": "No"
+    },
+    "FileDialog": {
+        "FileName": "File name",
+        "ShowHiddenFiles": "Show hidden files",
+        "OK": "OK",
+        "Cancel": "Cancel",
+        "Folders": {
+            "Desktop": "Desktop",
+            "Documents": "Documents",
+            "Music": "Music",
+            "Videos": "Videos",
+            "Pictures": "Pictures"
+        }
     },
     "Languages": {
         "Name": "Language"
@@ -67,10 +84,28 @@
         "Filter": "Search Mods",
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
-        "Order": "Order"
+        "Order": "Order",
+        "Rename": "Rename",
+        "Duplicate": "Duplicate",
+        "Overlay_Rename_Message": "Please wait while performing rename operation...",
+        "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
+        "JumpOnDragAndDrop": {
+            "Title": "Auto Focus: {State}",
+            "On": "On",
+            "Off": "Off"
+        },
+        "ImportPrompt": {
+            "Title": "Collection Exists",
+            "Message": "Collection already exists and will be overwritten, do you want to proceed?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Import Paradoxos"
+        }
     },
     "Mod_Actions": {
         "Apply": "Apply",
+        "LaunchGame": "Launch Game",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
@@ -97,12 +132,17 @@
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
-            "Order": "(Load Order)"
+            "Order": "(Load Order)",
+            "Override": "(Override)"
         },
         "InvalidConflicts": {
             "Name": "Invalid",
             "Error": "Error at line: {Line} column: {Column} file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
-            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}"
+            "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "Open File",
+                "OpenDirectory": "Open Directory"
+            }
         },
         "ContextMenu": {
             "CopyAll": "Copy All",
@@ -123,12 +163,47 @@
             "Undo": "Undo",
             "Redo": "Redo",
             "SelectAll": "Select All"
+        },
+        "Modes": {
+            "Title": "Select Mode",
+            "Default": "Default",
+            "Advanced": "Advanced",
+            "Close": "Close"
+        },
+        "ModFilter": {
+            "Title": "Mod Filter",
+            "Close": "Close"
+        },
+        "ResetConflicts": {
+            "Title": "Reset Conflicts",
+            "Resolved": "Resolved",
+            "Ignored": "Ignored",
+            "Close": "Close",
+            "Reset": "Reset"
+        },
+        "DBSearch": {
+            "Title": "Database Search",
+            "Watermark": "Enter search term",
+            "Close": "Close",
+            "Clear": "X"
         }
     },
     "ConflictIgnore": {
         "Save": "Save",
         "Cancel": "Cancel",
         "Watermark": "Use # for comments. New line is a new rule."
+    },
+    "Options": {
+        "Name": "Options",
+        "Close": "Close",
+        "NavigateToExe": "...",
+        "Reset": "X",
+        "GameExecutable": "Game Executable",
+        "GameArgs": "Game Args",
+        "RefreshMods": "Refresh Descriptors Before Playing",
+        "Dialog": {
+            "Title": "Find game executable"
+        }
     },
     "Notifications": {
         "CollectionCreated": {
@@ -160,27 +235,35 @@
             "Message": "{CollectionName} has not been applied."
         },
         "DescriptorsRefreshed": {
-            "Title": "Descriptors refreshed",
+            "Title": "Descriptors Refreshed",
             "Message": "Descriptors have been refreshed."
         },
         "DescriptorsLocked": {
-            "Title": "Descriptors locked",
+            "Title": "Descriptors Locked",
             "Message": "Descriptors have been locked."
         },
         "DescriptorsUnlocked": {
-            "Title": "Descriptors unlocked",
+            "Title": "Descriptors Unlocked",
             "Message": "Descriptors have been unlocked."
         },
         "NewDescriptorsChecked": {
-            "Title": "New mods checked",
+            "Title": "New Mods Checked",
             "Message": "Check for new mods is complete."
+        },
+        "CollectionRenamed": {
+            "Title": "Collection Renamed",
+            "Message": "Collection has been renamed."
+        },
+        "CollectionDuplicated": {
+            "Title": "Collection Duplicated",
+            "Message": "Collection has been duplicated."
         }
     },
     "Mod_App_Actions": {
         "OpenInSteam": "Open In Steam",
         "Open": "Open Mod Url",
         "Copy": "Copy Mod Url",
-        "OpenInAssociatedApp": "Open In Associated App"
+        "OpenInAssociatedApp": "Open Mod Folder/File"
     },
     "Descriptor_Actions": {
         "CheckNew": "Check New Mods",
@@ -190,6 +273,10 @@
         "Lock_All": "Lock All",
         "Unlock": "Unlock",
         "Unlock_All": "Unlock All"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod is achievement compatible.",
+        "NotAchievementCompatible": "Mod is not achievement compatible."
     },
     "Sorting": {
         "Sort_A_Z": "↑",

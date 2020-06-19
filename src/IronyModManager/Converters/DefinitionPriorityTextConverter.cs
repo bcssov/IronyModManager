@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 06-06-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverter.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.Converters
             {
                 if (values[0] is IEnumerable<IDefinition> col && values[1] is IDefinition definition)
                 {
-                    var service = DIResolver.Get<IModService>();
+                    var service = DIResolver.Get<IModPatchCollectionService>();
                     if (!service.IsPatchMod(definition.ModName))
                     {
                         var locManager = DIResolver.Get<ILocalizationManager>();
@@ -74,6 +74,7 @@ namespace IronyModManager.Converters
                                     DefinitionPriorityType.FIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.FIOS),
                                     DefinitionPriorityType.LIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.LIOS),
                                     DefinitionPriorityType.ModOrder => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Order),
+                                    DefinitionPriorityType.ModOverride => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Override),
                                     _ => string.Empty
                                 };
                                 if (!string.IsNullOrWhiteSpace(type))

@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-14-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -99,6 +99,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
+            bool fileNameTag = false;
             // Doesn't seem to like fxh and or shader file extensions
             if (!endsWithCheck.Any(p => args.File.EndsWith(p)))
             {
@@ -108,12 +109,36 @@ namespace IronyModManager.Parser.Generic
                     return errors;
                 }
             }
+            else
+            {
+                fileNameTag = true;
+            }
 
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
             def.Code = string.Join(Environment.NewLine, args.Lines);
-            def.Id = Path.GetFileName(args.File);
+            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
+            if (fileNameTag)
+            {
+                def.Tags.Add(def.Id.ToLowerInvariant());
+            }
+            else
+            {
+                // Get tags only
+                var definitions = ParseComplexRoot(args);
+                foreach (var item in definitions)
+                {
+                    foreach (var tag in item.Tags)
+                    {
+                        var lower = tag.ToLowerInvariant();
+                        if (!def.Tags.Contains(lower))
+                        {
+                            def.Tags.Add(lower);
+                        }
+                    }
+                }
+            }
             def.ValueType = Common.ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
@@ -145,7 +170,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance [can parse sound file] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseSoundFile(CanParseArgs args)
         {
-            return args.File.StartsWith(Common.Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Shared.Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return args.File.StartsWith(Common.Constants.Stellaris.Sound, StringComparison.OrdinalIgnoreCase) && Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
