@@ -44,6 +44,12 @@ namespace IronyModManager.IO.Common.Mods
         /// <value>The game.</value>
         public string Game { get; set; }
 
+        /// <summary>
+        /// Gets or sets the patch definitions.
+        /// </summary>
+        /// <value>The patch definitions.</value>
+        public IEnumerable<IDefinition> PatchDefinitions { get; set; }
+
         #endregion Properties
     }
 }

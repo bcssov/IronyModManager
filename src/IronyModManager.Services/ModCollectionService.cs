@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-19-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -53,6 +53,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="modParser">The mod parser.</param>
@@ -60,8 +61,8 @@ namespace IronyModManager.Services
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
-            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
+        public ModCollectionService(IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.modCollectionExporter = modCollectionExporter;
         }

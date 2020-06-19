@@ -69,15 +69,15 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="ArgumentNullException">ExportPath.</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
-        /// <exception cref="ArgumentNullException">ExportPath.</exception>
-        /// <exception cref="ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionsAsync(ModMergeExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.ExportPath))
             {
                 throw new ArgumentNullException("ExportPath.");
             }
-            if (parameters.Definitions == null || parameters.Definitions.Count() == 0)
+            var invalidDefs = (parameters.Definitions == null || parameters.Definitions.Count() == 0) &&
+                (parameters.PatchDefinitions == null || parameters.PatchDefinitions.Count() == 0);
+            if (invalidDefs)
             {
                 throw new ArgumentNullException("Definitions.");
             }
@@ -88,7 +88,7 @@ namespace IronyModManager.IO.Mods
                 results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                     parameters.ExportPath));
                 results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                    parameters.ExportPath, parameters.Game));
+                    parameters.ExportPath, parameters.Game, true));
             }
             return results.All(p => p);
         }
@@ -155,8 +155,9 @@ namespace IronyModManager.IO.Mods
         /// <param name="definitions">The definitions.</param>
         /// <param name="exportPath">The export path.</param>
         /// <param name="game">The game.</param>
+        /// <param name="useGivenFileName">Name of the use given file.</param>
         /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
-        private async Task<bool> WriteTextContentAsync(IEnumerable<IDefinition> definitions, string exportPath, string game)
+        private async Task<bool> WriteTextContentAsync(IEnumerable<IDefinition> definitions, string exportPath, string game, bool useGivenFileName)
         {
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
@@ -167,7 +168,23 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
-                    var fileName = item.File;
+                    bool overwrittenFiles = item.OverwrittenFileNames.Count(p => p != item.File) > 0;
+                    string fileName = string.Empty;
+                    if (useGivenFileName)
+                    {
+                        fileName = item.File;
+                    }
+                    else
+                    {
+                        if (!overwrittenFiles)
+                        {
+                            fileName = infoProvider.GetFileName(item);
+                        }
+                        else
+                        {
+                            fileName = item.File;
+                        }
+                    }
                     var outPath = Path.Combine(exportPath, fileName);
                     if (File.Exists(outPath))
                     {
@@ -182,6 +199,19 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                         return true;
                     }));
+                    if (overwrittenFiles)
+                    {
+                        var emptyFileNames = item.OverwrittenFileNames.Where(p => p != fileName);
+                        foreach (var emptyFile in emptyFileNames)
+                        {
+                            var emptyPath = Path.Combine(exportPath, emptyFile);
+                            await retry.RetryActionAsync(async () =>
+                            {
+                                await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(item));
+                                return true;
+                            });
+                        }
+                    }
                     results.Add(true);
                 }
                 else

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-19-2020
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Create();
             result.Name.Should().BeNullOrEmpty();
             result.Mods.Should().NotBeNull();
@@ -112,7 +112,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeTrue();
             service.GetAll().Count().Should().Be(1);
@@ -130,7 +130,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test3");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(2);
@@ -149,7 +149,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -168,7 +168,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -191,7 +191,7 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items"
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Delete("test");
             result.Should().BeFalse();
             service.GetAll().Count().Should().Be(0);
@@ -209,7 +209,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test");
             result.Should().NotBeNull();
             result.Name.Should().Be("test");
@@ -228,7 +228,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test3");
             result.Should().BeNull();
         }
@@ -246,7 +246,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -264,7 +264,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -286,7 +286,7 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items"
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Get("test2");
             result.Should().BeNull();
         }
@@ -302,7 +302,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             Exception exception = null;
             try
             {
@@ -326,7 +326,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             Exception exception = null;
             try
             {
@@ -351,7 +351,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Save(new ModCollection()
             {
                 Name = "fake",
@@ -373,7 +373,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Save(new ModCollection()
             {
                 Name = "test",
@@ -395,7 +395,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(2);
         }
 
@@ -412,7 +412,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             storageProvider.Setup(s => s.GetModCollections()).Returns(new List<IModCollection>());
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
         }
 
@@ -429,7 +429,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(storageProvider, gameService);
             gameService.Setup(s => s.GetSelected()).Returns((IGame)null);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
         }
 
@@ -450,7 +450,7 @@ namespace IronyModManager.Services.Tests
             });
 
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             service.GetAll().Count().Should().Be(0);
         }
 
@@ -478,7 +478,7 @@ namespace IronyModManager.Services.Tests
                 }
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             await service.ExportAsync("file", new ModCollection()
             {
                 Name = "fake"
@@ -512,7 +512,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportAsync("file");
             result.Name.Should().Be("fake");
         }
@@ -543,7 +543,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(false);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportAsync("file");
             result.Should().BeNull();
         }
@@ -570,7 +570,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(false);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.GetImportedCollectionDetailsAsync("file");
             result.Should().BeNull();
         }
@@ -597,7 +597,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.GetImportedCollectionDetailsAsync("file");
             result.Should().NotBeNull();
         }
@@ -614,7 +614,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Exists("test");
             result.Should().BeTrue();
         }
@@ -631,7 +631,7 @@ namespace IronyModManager.Services.Tests
             var modExport = new Mock<IModCollectionExporter>();
             SetupMockCase(storageProvider, gameService);
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = service.Exists("test101");
             result.Should().BeFalse();
         }
@@ -658,7 +658,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(true);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxosAsync("file");
             result.Name.Should().Be("fake");
         }
@@ -685,7 +685,7 @@ namespace IronyModManager.Services.Tests
                 return Task.FromResult(false);
             });
 
-            var service = new ModCollectionService(null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportParadoxosAsync("file");
             result.Should().BeNull();
         }

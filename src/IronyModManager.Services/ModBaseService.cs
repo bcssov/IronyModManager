@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-19-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -49,14 +50,18 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModBaseService" /> class.
         /// </summary>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="modParser">The mod parser.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModBaseService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ModBaseService(IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+            IModParser modParser, IGameService gameService,
+            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
+            DefinitionInfoProviders = definitionInfoProviders;
             GameService = gameService;
             Reader = reader;
             ModParser = modParser;
@@ -66,6 +71,12 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the definition information providers.
+        /// </summary>
+        /// <value>The definition information providers.</value>
+        protected IEnumerable<IDefinitionInfoProvider> DefinitionInfoProviders { get; private set; }
 
         /// <summary>
         /// Gets the game service.
@@ -96,6 +107,35 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Copies the definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition CopyDefinition(IDefinition definition)
+        {
+            var newDefinition = DIResolver.Get<IDefinition>();
+            newDefinition.Code = definition.Code;
+            newDefinition.ContentSHA = definition.ContentSHA;
+            newDefinition.DefinitionSHA = definition.DefinitionSHA;
+            newDefinition.Dependencies = definition.Dependencies;
+            newDefinition.ErrorColumn = definition.ErrorColumn;
+            newDefinition.ErrorLine = definition.ErrorLine;
+            newDefinition.ErrorMessage = definition.ErrorMessage;
+            newDefinition.File = definition.File;
+            newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
+            newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
+            newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
+            newDefinition.Id = definition.Id;
+            newDefinition.IsFirstLevel = definition.IsFirstLevel;
+            newDefinition.ModName = definition.ModName;
+            newDefinition.Type = definition.Type;
+            newDefinition.UsedParser = definition.UsedParser;
+            newDefinition.ValueType = definition.ValueType;
+            newDefinition.Tags = definition.Tags;
+            return newDefinition;
+        }
+
+        /// <summary>
         /// delete descriptors internal as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -119,6 +159,87 @@ namespace IronyModManager.Services
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Evals the definition priority internal.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IPriorityDefinitionResult.</returns>
+        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions)
+        {
+            var game = GameService.GetSelected();
+            var result = GetModelInstance<IPriorityDefinitionResult>();
+            if (game != null && definitions?.Count() > 1)
+            {
+                var definitionEvals = new List<DefinitionEval>();
+                var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                bool isFios = false;
+                if (provider != null)
+                {
+                    bool overrideSkipped = false;
+                    isFios = provider.DefinitionUsesFIOSRules(definitions.First());
+                    foreach (var item in definitions)
+                    {
+                        var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                        if (hasOverrides)
+                        {
+                            overrideSkipped = true;
+                            continue;
+                        }
+                        if (isFios)
+                        {
+                            definitionEvals.Add(new DefinitionEval()
+                            {
+                                Definition = item,
+                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
+                            });
+                        }
+                        else
+                        {
+                            definitionEvals.Add(new DefinitionEval()
+                            {
+                                Definition = item,
+                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
+                            });
+                        }
+                    }
+                    var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
+                    if (uniqueDefinitions.Count() == 1 && overrideSkipped)
+                    {
+                        result.Definition = definitionEvals.First().Definition;
+                        result.PriorityType = DefinitionPriorityType.ModOverride;
+                    }
+                    else if (uniqueDefinitions.Count() > 1)
+                    {
+                        // Has same filenames?
+                        if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
+                        {
+                            result.Definition = uniqueDefinitions.Last().Definition;
+                            result.PriorityType = DefinitionPriorityType.ModOrder;
+                        }
+                        else
+                        {
+                            // Using FIOS or LIOS?
+                            if (isFios)
+                            {
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
+                                result.PriorityType = DefinitionPriorityType.FIOS;
+                            }
+                            else
+                            {
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
+                                result.PriorityType = DefinitionPriorityType.LIOS;
+                            }
+                        }
+                    }
+                }
+            }
+            if (result.Definition == null)
+            {
+                result.Definition = definitions?.FirstOrDefault();
+            }
+            return result;
         }
 
         /// <summary>
@@ -350,5 +471,43 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class DefinitionEval.
+        /// </summary>
+        protected class DefinitionEval
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the definition.
+            /// </summary>
+            /// <value>The definition.</value>
+            public IDefinition Definition { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the file.
+            /// </summary>
+            /// <value>The name of the file.</value>
+            public string FileName { get; set; }
+
+            /// <summary>
+            /// Gets the file name ci.
+            /// </summary>
+            /// <value>The file name ci.</value>
+            public string FileNameCI
+            {
+                get
+                {
+                    return FileName.ToLowerInvariant();
+                }
+            }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

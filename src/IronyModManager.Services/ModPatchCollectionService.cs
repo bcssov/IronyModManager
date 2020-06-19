@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-19-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -58,11 +58,6 @@ namespace IronyModManager.Services
         private static readonly object serviceLock = new { };
 
         /// <summary>
-        /// The definition information providers
-        /// </summary>
-        private readonly IEnumerable<IDefinitionInfoProvider> definitionInfoProviders;
-
-        /// <summary>
         /// The message bus
         /// </summary>
         private readonly IMessageBus messageBus;
@@ -96,11 +91,10 @@ namespace IronyModManager.Services
         /// <param name="mapper">The mapper.</param>
         public ModPatchCollectionService(IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper) : base(definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
             this.parserManager = parserManager;
-            this.definitionInfoProviders = definitionInfoProviders;
             this.modPatchExporter = modPatchExporter;
         }
 
@@ -237,80 +231,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <returns>IPriorityDefinitionResult.</returns>
-        public IPriorityDefinitionResult EvalDefinitionPriority(IEnumerable<IDefinition> definitions)
+        public virtual IPriorityDefinitionResult EvalDefinitionPriority(IEnumerable<IDefinition> definitions)
         {
-            var game = GameService.GetSelected();
-            var result = GetModelInstance<IPriorityDefinitionResult>();
-            if (game != null && definitions?.Count() > 1)
-            {
-                var definitionEvals = new List<DefinitionEval>();
-                var provider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
-                bool isFios = false;
-                if (provider != null)
-                {
-                    bool overrideSkipped = false;
-                    isFios = provider.DefinitionUsesFIOSRules(definitions.First());
-                    foreach (var item in definitions)
-                    {
-                        var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
-                        if (hasOverrides)
-                        {
-                            overrideSkipped = true;
-                            continue;
-                        }
-                        if (isFios)
-                        {
-                            definitionEvals.Add(new DefinitionEval()
-                            {
-                                Definition = item,
-                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
-                            });
-                        }
-                        else
-                        {
-                            definitionEvals.Add(new DefinitionEval()
-                            {
-                                Definition = item,
-                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
-                            });
-                        }
-                    }
-                    var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
-                    if (uniqueDefinitions.Count() == 1 && overrideSkipped)
-                    {
-                        result.Definition = definitionEvals.First().Definition;
-                        result.PriorityType = DefinitionPriorityType.ModOverride;
-                    }
-                    else if (uniqueDefinitions.Count() > 1)
-                    {
-                        // Has same filenames?
-                        if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
-                        {
-                            result.Definition = uniqueDefinitions.Last().Definition;
-                            result.PriorityType = DefinitionPriorityType.ModOrder;
-                        }
-                        else
-                        {
-                            // Using FIOS or LIOS?
-                            if (isFios)
-                            {
-                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
-                                result.PriorityType = DefinitionPriorityType.FIOS;
-                            }
-                            else
-                            {
-                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
-                                result.PriorityType = DefinitionPriorityType.LIOS;
-                            }
-                        }
-                    }
-                }
-            }
-            if (result.Definition == null)
-            {
-                result.Definition = definitions?.FirstOrDefault();
-            }
-            return result;
+            return EvalDefinitionPriorityInternal(definitions);
         }
 
         /// <summary>
@@ -334,29 +257,6 @@ namespace IronyModManager.Services
             var previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
 
-            static IDefinition copyDefinition(IDefinition definition)
-            {
-                var newDefinition = DIResolver.Get<IDefinition>();
-                newDefinition.Code = definition.Code;
-                newDefinition.ContentSHA = definition.ContentSHA;
-                newDefinition.DefinitionSHA = definition.DefinitionSHA;
-                newDefinition.Dependencies = definition.Dependencies;
-                newDefinition.ErrorColumn = definition.ErrorColumn;
-                newDefinition.ErrorLine = definition.ErrorLine;
-                newDefinition.ErrorMessage = definition.ErrorMessage;
-                newDefinition.File = definition.File;
-                newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
-                newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
-                newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
-                newDefinition.Id = definition.Id;
-                newDefinition.IsFirstLevel = definition.IsFirstLevel;
-                newDefinition.ModName = definition.ModName;
-                newDefinition.Type = definition.Type;
-                newDefinition.UsedParser = definition.UsedParser;
-                newDefinition.ValueType = definition.ValueType;
-                return newDefinition;
-            }
-
             // Create virtual empty objects from an empty file
             foreach (var item in empty)
             {
@@ -368,7 +268,7 @@ namespace IronyModManager.Services
                         var copy = indexedDefinitions.GetByTypeAndId(emptyConflict.TypeAndId).FirstOrDefault(p => p.ModName.Equals(item.ModName));
                         if (copy == null)
                         {
-                            copy = copyDefinition(emptyConflict);
+                            copy = CopyDefinition(emptyConflict);
                             copy.DefinitionSHA = item.DefinitionSHA;
                             copy.Dependencies = item.Dependencies;
                             copy.ModName = item.ModName;
@@ -439,8 +339,8 @@ namespace IronyModManager.Services
                 }
                 if (!overwrittenDefs.ContainsKey(definition.TypeAndId))
                 {
-                    var newDefinition = copyDefinition(definition);
-                    var provider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
+                    var newDefinition = CopyDefinition(definition);
+                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
                     newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
                     foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
@@ -1592,43 +1492,5 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class DefinitionEval.
-        /// </summary>
-        private class DefinitionEval
-        {
-            #region Properties
-
-            /// <summary>
-            /// Gets or sets the definition.
-            /// </summary>
-            /// <value>The definition.</value>
-            public IDefinition Definition { get; set; }
-
-            /// <summary>
-            /// Gets or sets the name of the file.
-            /// </summary>
-            /// <value>The name of the file.</value>
-            public string FileName { get; set; }
-
-            /// <summary>
-            /// Gets the file name ci.
-            /// </summary>
-            /// <value>The file name ci.</value>
-            public string FileNameCI
-            {
-                get
-                {
-                    return FileName.ToLowerInvariant();
-                }
-            }
-
-            #endregion Properties
-        }
-
-        #endregion Classes
     }
 }
