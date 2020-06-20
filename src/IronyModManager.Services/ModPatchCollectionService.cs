@@ -1280,6 +1280,10 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is cached definition different] [the specified current conflicts]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsCachedDefinitionDifferent(IEnumerable<IDefinition> currentConflicts, IEnumerable<IDefinition> cachedConflicts)
         {
+            if (currentConflicts.Count() != cachedConflicts.Count())
+            {
+                return true;
+            }
             var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             return cachedDiffs.Count() != cachedConflicts.Count();
         }
