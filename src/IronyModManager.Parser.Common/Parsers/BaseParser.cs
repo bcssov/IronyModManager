@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -563,6 +563,7 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.ErrorMessage = error.Message;
             definition.Id = Constants.Scripts.Invalid;
             definition.ValueType = ValueType.Invalid;
+            definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
             return definition;
         }
