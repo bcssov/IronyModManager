@@ -87,6 +87,7 @@
         "Order": "Order",
         "Rename": "Rename",
         "Duplicate": "Duplicate",
+        "Merge": "Merge",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "JumpOnDragAndDrop": {
@@ -101,6 +102,9 @@
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Import Paradoxos"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Merged)"
         }
     },
     "Mod_Actions": {

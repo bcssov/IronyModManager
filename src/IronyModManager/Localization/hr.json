@@ -87,6 +87,7 @@
         "Order": "Redoslijed",
         "Rename": "Preimenuj",
         "Duplicate": "Dupliciraj",
+        "Merge": "Spoji",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "JumpOnDragAndDrop": {
@@ -101,6 +102,9 @@
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Uvezi Paradoxos"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Spojeno)"
         }
     },
     "Mod_Actions": {

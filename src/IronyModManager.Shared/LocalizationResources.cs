@@ -122,6 +122,7 @@ namespace IronyModManager.Shared
             public const string Order = Prefix + "Order";
             public const string Rename = Prefix + "Rename";
             public const string Duplicate = Prefix + "Duplicate";
+            public const string Merge = Prefix + "Merge";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public static class JumpOnDragAndDrop
@@ -142,6 +143,11 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Collection_Mods.ImportOther.";
                 public const string Title = Prefix + "Title";
                 public const string Paradoxos = Prefix + "Paradoxos";
+            }
+            public static class MergeCollection
+            {
+                public const string Prefix = "Collection_Mods.MergeCollection.";
+                public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
             }
         }
         public static class Mod_Actions

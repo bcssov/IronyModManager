@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -71,6 +71,31 @@ namespace IronyModManager.ViewModels.Controls
 
         #endregion Constructors
 
+        #region Enums
+
+        /// <summary>
+        /// Enum ModifyAction
+        /// </summary>
+        public enum ModifyAction
+        {
+            /// <summary>
+            /// The rename
+            /// </summary>
+            Rename,
+
+            /// <summary>
+            /// The merge
+            /// </summary>
+            Merge,
+
+            /// <summary>
+            /// The duplicate
+            /// </summary>
+            Duplicate
+        }
+
+        #endregion Enums
+
         #region Properties
 
         /// <summary>
@@ -96,7 +121,20 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the duplicate command.
         /// </summary>
         /// <value>The duplicate command.</value>
-        public virtual ReactiveCommand<Unit, CommandResult<bool>> DuplicateCommand { get; protected set; }
+        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> DuplicateCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge.
+        /// </summary>
+        /// <value>The merge.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.Merge)]
+        public virtual string Merge { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge command.
+        /// </summary>
+        /// <value>The merge command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> MergeCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the rename.
@@ -109,7 +147,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the rename command.
         /// </summary>
         /// <value>The rename command.</value>
-        public virtual ReactiveCommand<Unit, CommandResult<bool>> RenameCommand { get; protected set; }
+        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> RenameCommand { get; protected set; }
 
         #endregion Properties
 
@@ -121,42 +159,74 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            IModCollection copyCollection(string requestedName)
+            {
+                var collections = modCollectionService.GetAll();
+                var count = collections.Where(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase)).Count();
+                string name = string.Empty;
+                if (count == 0)
+                {
+                    name = requestedName;
+                }
+                else
+                {
+                    name = $"{requestedName} ({count})";
+                }
+                while (collections.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    count++;
+                    name = $"{requestedName} ({count})";
+                }
+                var copied = modCollectionService.Create();
+                copied.IsSelected = true;
+                copied.Mods = ActiveCollection.Mods;
+                copied.Name = name;
+                return copied;
+            }
+
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
             RenameCommand = ReactiveCommand.Create(() =>
             {
-                return new CommandResult<bool>(true, CommandState.Success);
+                return new CommandResult<ModifyAction>(ModifyAction.Rename, CommandState.Success);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             DuplicateCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (ActiveCollection != null)
                 {
-                    var collections = modCollectionService.GetAll();
-                    var count = collections.Where(p => p.Name.Equals(ActiveCollection.Name, StringComparison.OrdinalIgnoreCase)).Count();
-                    var name = $"{ActiveCollection.Name} ({count})";
-                    while (collections.Any(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        count++;
-                        name = $"{ActiveCollection.Name} ({count})";
-                    }
-                    var copied = modCollectionService.Create();
-                    copied.IsSelected = true;
-                    copied.Mods = ActiveCollection.Mods;
-                    copied.Name = name;
-                    if (modCollectionService.Save(copied))
+                    var copy = copyCollection(ActiveCollection.Name);
+                    if (modCollectionService.Save(copy))
                     {
                         await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
-                        await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, name);
+                        await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, copy.Name);
                         await TriggerOverlayAsync(false);
-                        return new CommandResult<bool>(false, CommandState.Success);
+                        return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.Success);
                     }
                     else
                     {
-                        return new CommandResult<bool>(false, CommandState.Failed);
+                        return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.Failed);
                     }
                 }
-                return new CommandResult<bool>(false, CommandState.NotExecuted);
+                return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.NotExecuted);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
+
+            MergeCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (ActiveCollection != null)
+                {
+                    var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
+                    var copy = copyCollection($"{ActiveCollection.Name} {suffix}");
+                    if (modCollectionService.Save(copy))
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
+                    }
+                    else
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
+                }
+                return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);

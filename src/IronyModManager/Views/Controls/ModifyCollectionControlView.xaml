@@ -8,6 +8,8 @@
     <Button Content="{Binding Rename}" Command="{Binding RenameCommand}"
             HorizontalAlignment="Left" MaxHeight="30" Margin="10,0,0,0"></Button>
     <Button Content="{Binding Duplicate}" Command="{Binding DuplicateCommand}"
-            HorizontalAlignment="Right" MaxHeight="30"  Margin="0,0,10,0"></Button>
+            HorizontalAlignment="Center" MaxHeight="30"  Margin="0,0,10,0"></Button>
+    <Button Content="{Binding Merge}" Command="{Binding MergeCommand}"
+                HorizontalAlignment="Right" MaxHeight="30"  Margin="0,0,10,0"></Button>
   </Panel>
 </UserControl>

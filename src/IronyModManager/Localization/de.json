@@ -87,6 +87,7 @@
         "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
+        "Merge": "Verschmelzen",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "JumpOnDragAndDrop": {
@@ -101,6 +102,9 @@
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Importieren Paradoxos"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Zusammengeführt)"
         }
     },
     "Mod_Actions": {

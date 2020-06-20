@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -33,6 +33,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
+using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -878,21 +879,21 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand.Select(p => KeyValuePair.Create(true, p)), ModifyCollection.DuplicateCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
                         return;
                     }
-                    if (s.Value.Result)
+                    if (s.Result == ModifyAction.Rename)
                     {
                         EnteringNewCollection = true;
                         AddNewCollection.RenamingCollection = SelectedModCollection;
                         AddNewCollection.NewCollectionName = SelectedModCollection.Name;
                     }
-                    else
+                    else if (s.Result == ModifyAction.Duplicate)
                     {
-                        if (s.Value.State == CommandState.Success)
+                        if (s.State == CommandState.Success)
                         {
                             skipModCollectionSave = true;
                             if (Mods != null)
