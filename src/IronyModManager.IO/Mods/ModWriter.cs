@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -271,16 +271,16 @@ namespace IronyModManager.IO.Mods
         /// write descriptor as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="isPatchMod">if set to <c>true</c> [is patch mod].</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool isPatchMod)
+        /// <param name="writeDescriptorInModDirectory">if set to <c>true</c> [write descriptor in mod directory].</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public async Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool writeDescriptorInModDirectory)
         {
             async Task<bool> writeDescriptors()
             {
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
                 await writeDescriptor(fullPath);
-                if (isPatchMod)
+                if (writeDescriptorInModDirectory)
                 {
                     var modPath = Path.Combine(parameters.Mod.FileName, Constants.DescriptorFile);
                     await writeDescriptor(modPath);

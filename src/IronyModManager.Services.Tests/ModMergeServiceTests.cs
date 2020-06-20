@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using IronyModManager.IO;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
@@ -28,6 +29,7 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
+using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
@@ -88,7 +90,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = empty
             }, new List<string>(), "fake copy");
 
-            result.Should().BeFalse();
+            result.Should().BeNull();
         }
 
 
@@ -127,7 +129,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
             });
             var collections = new List<IModCollection>()
             {
@@ -142,6 +145,32 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
             });
 
             var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -179,7 +208,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = empty
             }, new List<string>() { "a" }, "fake copy");
 
-            result.Should().BeTrue();
+            result.Should().NotBeNull();
             definition.Code.Should().Be("test = {test}" + Environment.NewLine + "test = {test2}");
         }
 
@@ -218,7 +247,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
             });
             var collections = new List<IModCollection>()
             {
@@ -233,6 +263,32 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
             });
 
             var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -270,7 +326,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = empty
             }, new List<string>() { "a" }, "fake copy");
 
-            result.Should().BeTrue();
+            result.Should().NotBeNull();
             definition.Code.Should().Be("test = {" + Environment.NewLine + "test" + Environment.NewLine + "test2" + Environment.NewLine + "}");
         }
 
@@ -304,6 +360,17 @@ namespace IronyModManager.Services.Tests
                         Id = "test1",
                         IsFirstLevel = true
                     }
+                },
+                ResolvedConflicts = new List<IDefinition>()
+                {
+                    new Definition()
+                    {
+                        Code = "test = {testfakeresolved}",
+                        File = "events\\fake.txt",
+                        ModName = "a",
+                        Id = "test1",
+                        IsFirstLevel = true
+                    }
                 }
             }));
             IDefinition definition = null;
@@ -319,7 +386,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
             });
             var collections = new List<IModCollection>()
             {
@@ -334,6 +402,32 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
             });
 
             var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -353,19 +447,6 @@ namespace IronyModManager.Services.Tests
                 }
             });
 
-            var resolved = new IndexedDefinitions();
-            resolved.InitMap(new List<IDefinition>()
-            {
-                new Definition()
-                {
-                    Code = "test = {testfakeresolved}",
-                    File = "events\\fake.txt",
-                    ModName = "a",
-                    Id = "test1",
-                    IsFirstLevel = true
-                }
-            });
-
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
@@ -374,10 +455,10 @@ namespace IronyModManager.Services.Tests
                 AllConflicts = indexed,
                 Conflicts = empty,
                 OverwrittenConflicts = empty,
-                ResolvedConflicts = resolved
+                ResolvedConflicts = empty
             }, new List<string>() { "a" }, "fake copy");
 
-            result.Should().BeTrue();
+            result.Should().NotBeNull();
             definition.Code.Should().Be("test = {testfakestate}");
         }
 
@@ -413,7 +494,8 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Fake",
-                UserDirectory = "C:\\Users\\Fake"
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
             });
             var collections = new List<IModCollection>()
             {
@@ -428,6 +510,32 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
             });
 
             var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -471,7 +579,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = empty
             }, new List<string>() { "a" }, "fake copy");
 
-            result.Should().BeTrue();
+            result.Should().NotBeNull();
             definition.Code.Should().Be("test = {testfakeoverwritten}");
         }
     }

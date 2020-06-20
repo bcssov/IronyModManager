@@ -139,7 +139,7 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
-            var path = GetPatchDirectory(game, modCollection);
+            var path = GetModDirectory(game, modCollection);
             return modCollectionExporter.ExportAsync(new ModCollectionExporterParams()
             {
                 File = file,
@@ -218,7 +218,7 @@ namespace IronyModManager.Services
             var instance = await GetImportedCollectionDetailsAsync(file);
             if (instance != null)
             {
-                var path = GetPatchDirectory(game, instance);
+                var path = GetModDirectory(game, instance);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,

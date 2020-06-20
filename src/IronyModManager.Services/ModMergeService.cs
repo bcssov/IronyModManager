@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -94,18 +95,51 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
+        /// <returns>Task&lt;IMod&gt;.</returns>
+        public virtual async Task<IMod> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
         {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return false;
+                return null;
             }
             var total = conflictResult.AllConflicts.GetAll().Count();
             if (total > 0)
             {
-                var exportPath = Path.Combine(game.UserDirectory, collectionName.GenerateValidFileName());
+                var allMods = GetInstalledModsInternal(game, false).ToList();
+                var mergeCollectionPath = collectionName.GenerateValidFileName();
+                var collectionMods = GetCollectionMods(allMods);
+
+                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                }, true);
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Shared.Constants.ModDirectory
+                });
+                await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                });
+
+                var mod = DIResolver.Get<IMod>();
+                mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+                mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
+                mod.Name = collectionName;
+                mod.Source = ModSource.Local;
+                mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+                await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                {
+                    Mod = mod,
+                    RootDirectory = game.UserDirectory,
+                    Path = mod.DescriptorFile
+                }, true);
+
+                var exportPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath);
 
                 var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
                 var patchName = GenerateCollectionPatchName(collection.Name);
@@ -115,13 +149,23 @@ namespace IronyModManager.Services
                     PatchName = patchName
                 }, true);
 
+                var resolvedConflicts = state?.ResolvedConflicts ?? new List<IDefinition>();
+                var ignoredConflicts = state?.IgnoredConflicts ?? new List<IDefinition>();
+                var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
+                resolvedIndex.InitMap(resolvedConflicts, true);
+                conflictResult.ResolvedConflicts = resolvedIndex;
+                var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
+                ignoredIndex.InitMap(ignoredConflicts, true);
+                conflictResult.IgnoredConflicts = ignoredIndex;
+
+                var lastPercentage = 0;
+                int processed = 0;
+
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
                 {
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.Variable &&
                                                                                             p.ValueType != Parser.Common.ValueType.Namespace &&
                                                                                             p.ValueType != Parser.Common.ValueType.EmptyFile);
-                    var lastPercentage = 0;
-                    int processed = 0;
                     if (definitions.Count() > 0)
                     {
                         var exportDefinitions = new List<IDefinition>();
@@ -171,11 +215,11 @@ namespace IronyModManager.Services
                         await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                         {
                             ExportPath = exportPath,
-                            Definitions = exportDefinitions.Count > 0 ? new List<IDefinition>() { MergeDefinitions(exportDefinitions) } : null,
-                            PatchDefinitions = exportSingleDefinitions,
+                            Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase)) }, collectionMods) : null,
+                            PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
                             Game = game.Type
                         });
-                        processed = exportDefinitions.Count + exportSingleDefinitions.Count;
+                        processed += exportDefinitions.Count + exportSingleDefinitions.Count;
                         var percentage = GetProgressPercentage(total, processed, 100);
                         if (lastPercentage != percentage)
                         {
@@ -184,9 +228,9 @@ namespace IronyModManager.Services
                         lastPercentage = percentage;
                     }
                 }
-                return true;
+                return mod;
             }
-            return false;
+            return null;
         }
 
         /// <summary>

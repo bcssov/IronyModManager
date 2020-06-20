@@ -93,6 +93,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The reorder queue
+        /// </summary>
+        private readonly ConcurrentBag<IMod> reorderQueue;
+
+        /// <summary>
         /// The mod order changed
         /// </summary>
         private IDisposable modOrderChanged;
@@ -111,11 +116,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The reorder counter
         /// </summary>
         private int reorderCounter = 0;
-
-        /// <summary>
-        /// The reorder queue
-        /// </summary>
-        private ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
         /// The skip mod collection save
@@ -374,6 +374,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ModSelected { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [needs mod list refresh].
+        /// </summary>
+        /// <value><c>true</c> if [needs mod list refresh]; otherwise, <c>false</c>.</value>
+        public virtual bool NeedsModListRefresh { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the not achievement compatible.
         /// </summary>
         /// <value>The not achievement compatible.</value>
@@ -608,6 +614,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void HandleModCollectionChange()
         {
+            if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
+            {
+                if (ModCollections?.Count() > 0)
+                {
+                    var restored = ModCollections.FirstOrDefault(p => p.Name.Equals(restoreCollectionSelection));
+                    if (restored != null)
+                    {
+                        SelectedModCollection = restored;
+                    }
+                }                
+                restoreCollectionSelection = string.Empty;
+            }
             skipModCollectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState();
@@ -751,6 +769,11 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// The restore collection selection
+        /// </summary>
+        private string restoreCollectionSelection = string.Empty;
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -879,7 +902,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
@@ -890,6 +913,20 @@ namespace IronyModManager.ViewModels.Controls
                         EnteringNewCollection = true;
                         AddNewCollection.RenamingCollection = SelectedModCollection;
                         AddNewCollection.NewCollectionName = SelectedModCollection.Name;
+                    }
+                    else if (s.Result == ModifyAction.Merge)
+                    {
+                        if (s.State == CommandState.Success)
+                        {
+                            ModCollections = modCollectionService.GetAll();
+                            var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
+                            restoreCollectionSelection = selected.Name;
+                            NeedsModListRefresh = true;                            
+                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Title);
+                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Message);
+                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
+                            NeedsModListRefresh = false;
+                        }
                     }
                     else if (s.Result == ModifyAction.Duplicate)
                     {
@@ -1205,6 +1242,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }
             SelectedMods = selectedMods;
+            ModifyCollection.SelectedMods = selectedMods;
             var order = 1;
             if (SelectedMods?.Count > 0)
             {

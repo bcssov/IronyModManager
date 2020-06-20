@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="IModMergeService.cs" company="Mario">
 //     Mario
@@ -31,8 +31,8 @@ namespace IronyModManager.Services.Common
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="modOrder">The mod order.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName);
+        /// <returns>Task&lt;IMod&gt;.</returns>
+        Task<IMod> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName);
 
         #endregion Methods
     }

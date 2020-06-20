@@ -167,7 +167,7 @@ namespace IronyModManager.Services
             }
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = GetPatchDirectory(game, patchName)
+                RootDirectory = GetModDirectory(game, patchName)
             }, true);
             return true;
         }
@@ -1322,31 +1322,6 @@ namespace IronyModManager.Services
                 });
                 MergeDefinitions(fileDefs);
                 definitions.AddRange(fileDefs);
-            }
-            return definitions;
-        }
-
-        /// <summary>
-        /// Populates the mod path.
-        /// </summary>
-        /// <param name="definitions">The definitions.</param>
-        /// <param name="collectionMods">The collection mods.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
-        {
-            if (definitions?.Count() > 0)
-            {
-                foreach (var item in definitions)
-                {
-                    if (IsPatchMod(item.ModName))
-                    {
-                        item.ModPath = GetPatchDirectory(GameService.GetSelected(), item.ModName);
-                    }
-                    else
-                    {
-                        item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName)).FullPath;
-                    }
-                }
             }
             return definitions;
         }

@@ -104,7 +104,11 @@
             "Paradoxos": "Uvezi Paradoxos"
         },
         "MergeCollection": {
-            "MergedCollectionSuffix": "(Spojeno)"
+            "MergedCollectionSuffix": "(Spojeno)",
+            "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+            "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
+            "Overlay_Merging_Collection": "Pričekajte dok spajate kolekcija...",
+            "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
         }
     },
     "Mod_Actions": {
@@ -261,6 +265,10 @@
         "CollectionDuplicated": {
             "Title": "Kolekcija duplicirana",
             "Message": "Kolekcija je duplicirana."
+        },
+        "CollectionMerged": {
+            "Title": "Kolekcija spojena",
+            "Message": "Kolekcija je spojena."
         }
     },
     "Mod_App_Actions": {

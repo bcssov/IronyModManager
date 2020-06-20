@@ -11,19 +11,23 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -38,6 +42,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The game service
+        /// </summary>
+        private readonly IGameService gameService;
+
+        /// <summary>
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
@@ -46,6 +55,26 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod collection service
         /// </summary>
         private readonly IModCollectionService modCollectionService;
+
+        /// <summary>
+        /// The mod definition analyze handler
+        /// </summary>
+        private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
+
+        /// <summary>
+        /// The mod definition load handler
+        /// </summary>
+        private readonly ModDefinitionLoadHandler modDefinitionLoadHandler;
+
+        /// <summary>
+        /// The mod merge progress handler
+        /// </summary>
+        private readonly ModMergeProgressHandler modMergeProgressHandler;
+
+        /// <summary>
+        /// The mod merge service
+        /// </summary>
+        private readonly IModMergeService modMergeService;
 
         /// <summary>
         /// The mod service
@@ -59,14 +88,27 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
+        /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
+        /// <param name="modMergeProgressHandler">The mod merge progress handler.</param>
+        /// <param name="gameService">The game service.</param>
+        /// <param name="modMergeService">The mod merge service.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public ModifyCollectionControlViewModel(IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager)
+        public ModifyCollectionControlViewModel(ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
+            ModDefinitionLoadHandler modDefinitionLoadHandler, ModMergeProgressHandler modMergeProgressHandler,
+            IGameService gameService, IModMergeService modMergeService,
+            IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager)
         {
             this.modCollectionService = modCollectionService;
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
+            this.gameService = gameService;
+            this.modMergeService = modMergeService;
+            this.modDefinitionLoadHandler = modDefinitionLoadHandler;
+            this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
+            this.modMergeProgressHandler = modMergeProgressHandler;
         }
 
         #endregion Constructors
@@ -149,6 +191,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The rename command.</value>
         public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> RenameCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the selected mods.
+        /// </summary>
+        /// <value>The selected mods.</value>
+        public virtual IEnumerable<IMod> SelectedMods { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -184,6 +232,42 @@ namespace IronyModManager.ViewModels.Controls
                 return copied;
             }
 
+            modDefinitionLoadHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 1,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            modDefinitionAnalyzeHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Analyzing_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 2,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            modMergeProgressHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Merging_Collection);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 3,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
             RenameCommand = ReactiveCommand.Create(() =>
@@ -217,6 +301,46 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
                     var copy = copyCollection($"{ActiveCollection.Name} {suffix}");
+
+                    var mode = await modPatchCollectionService.GetPatchStateModeAsync(ActiveCollection.Name);
+                    if (mode == PatchStateMode.None)
+                    {
+                        // fallback to default mod if no patch collection specified
+                        mode = PatchStateMode.Default;
+                    }
+
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    {
+                        PercentDone = 0,
+                        Count = 1,
+                        TotalCount = 3
+                    });
+                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
+                    await TriggerOverlayAsync(true, message, overlayProgress);
+
+                    modPatchCollectionService.ResetPatchStateCache();
+                    var definitions = await Task.Run(() =>
+                    {
+                        return modPatchCollectionService.GetModObjects(gameService.GetSelected(), SelectedMods);
+                    }).ConfigureAwait(false);
+
+                    var conflicts = await Task.Run(() =>
+                    {
+                        if (definitions != null)
+                        {
+                            return modPatchCollectionService.FindConflicts(definitions, ActiveCollection.Mods.ToList(), mode);
+                        }
+                        return null;
+                    }).ConfigureAwait(false);
+
+                    var mergeMod = await Task.Run(async () =>
+                    {
+                        return await modMergeService.MergeCollectionAsync(conflicts, SelectedMods.Select(p => p.Name).ToList(), copy.Name).ConfigureAwait(false);
+                    }).ConfigureAwait(false);
+                    copy.Mods = new List<string>() { mergeMod.DescriptorFile };
+
+                    await TriggerOverlayAsync(false);
+
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);

@@ -148,6 +148,10 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Collection_Mods.MergeCollection.";
                 public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
+                public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
+                public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
+                public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
+                public const string Overlay_Progress = Prefix + "Overlay_Progress";
             }
         }
         public static class Mod_Actions
@@ -358,6 +362,12 @@ namespace IronyModManager.Shared
             public static class CollectionDuplicated
             {
                 public const string Prefix = "Notifications.CollectionDuplicated.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionMerged
+            {
+                public const string Prefix = "Notifications.CollectionMerged.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

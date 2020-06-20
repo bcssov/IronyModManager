@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -269,7 +269,7 @@ namespace IronyModManager.Services
                 mod.Dependencies = dependencies;
             }
             mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
-            mod.FileName = GetPatchDirectory(game, patchName).Replace("\\", "/");
+            mod.FileName = GetModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
@@ -389,6 +389,29 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetModDirectory(IGame game, IModCollection modCollection)
+        {
+            return GetModDirectory(game, GenerateCollectionPatchName(modCollection.Name));
+        }
+
+        /// <summary>
+        /// Gets the mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetModDirectory(IGame game, string patchName)
+        {
+            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
+            return path;
+        }
+
+        /// <summary>
         /// Gets the mod source.
         /// </summary>
         /// <param name="fileInfo">The file information.</param>
@@ -404,29 +427,6 @@ namespace IronyModManager.Services
                 return ModSource.Steam;
             }
             return ModSource.Local;
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="modCollection">The mod collection.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetPatchDirectory(IGame game, IModCollection modCollection)
-        {
-            return GetPatchDirectory(game, GenerateCollectionPatchName(modCollection.Name));
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="patchName">Name of the patch.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetPatchDirectory(IGame game, string patchName)
-        {
-            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
-            return path;
         }
 
         /// <summary>
@@ -468,6 +468,31 @@ namespace IronyModManager.Services
                 return modName.StartsWith(PatchCollectionName);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Populates the mod path.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
+        {
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    if (IsPatchModInternal(item.ModName))
+                    {
+                        item.ModPath = GetModDirectory(GameService.GetSelected(), item.ModName);
+                    }
+                    else
+                    {
+                        item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName)).FullPath;
+                    }
+                }
+            }
+            return definitions;
         }
 
         #endregion Methods
