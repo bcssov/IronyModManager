@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -88,6 +88,13 @@ namespace IronyModManager.IO.Mods
                 results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                     parameters.ExportPath));
                 results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
+                    parameters.ExportPath, parameters.Game, true));
+            }
+            if (parameters.PatchDefinitions?.Count() > 0)
+            {
+                results.Add(await CopyBinariesAsync(parameters.PatchDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
+                    parameters.ExportPath));
+                results.Add(await WriteTextContentAsync(parameters.PatchDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
                     parameters.ExportPath, parameters.Game, true));
             }
             return results.All(p => p);
