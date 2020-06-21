@@ -4,7 +4,7 @@
 // Created          : 04-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="BaseGraphicsParser.cs" company="Mario">
 //     Mario
@@ -119,7 +119,10 @@ namespace IronyModManager.Parser.Generic
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
-                        definition.OriginalCode = definition.Code = sb.ToString();
+                        definition.Code = sb.ToString();
+                        definition.CodeTag = typeId.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                        definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                        definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                         definition = null;
                         openBrackets = null;
@@ -186,7 +189,10 @@ namespace IronyModManager.Parser.Generic
                                 SimpleParserTags.Add(definition.Id);
                             }
                             sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                            definition.OriginalCode = definition.Code = sb.ToString();
+                            definition.Code = sb.ToString();
+                            definition.CodeTag = typeId.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                             result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                             definition = null;
                         }
@@ -245,7 +251,10 @@ namespace IronyModManager.Parser.Generic
                         }
                         var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: false);
                         OnSimpleParseReadObjectLine(parsingArgs);
-                        definition.OriginalCode = definition.Code = sb.ToString();
+                        definition.Code = sb.ToString();
+                        definition.CodeTag = Common.Constants.Scripts.GuiTypes;
+                        definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                        definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                         definition = null;
                         openBrackets = null;
@@ -295,7 +304,10 @@ namespace IronyModManager.Parser.Generic
                         if (openBrackets - closeBrackets <= 1)
                         {
                             sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                            definition.OriginalCode = definition.Code = sb.ToString();
+                            definition.Code = sb.ToString();
+                            definition.CodeTag = Common.Constants.Scripts.GuiTypes;
+                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                             result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                             definition = null;
                         }

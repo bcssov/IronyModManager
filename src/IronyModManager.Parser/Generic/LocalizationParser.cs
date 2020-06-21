@@ -114,7 +114,10 @@ namespace IronyModManager.Parser.Generic
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            def.OriginalCode = def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
+                            def.OriginalCode = line;
+                            def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
+                            def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
                             def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
                             prevId = def.Id;
                             def.ValueType = Common.ValueType.SpecialVariable;

@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -139,7 +139,10 @@ namespace IronyModManager.Parser.Generic
                             if (definition != null)
                             {
                                 sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                                definition.OriginalCode = definition.Code = sb.ToString();
+                                definition.Code = sb.ToString();
+                                definition.CodeTag = type.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                                definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                                 result.Add(definition);
                             }
                             definition = null;
@@ -198,7 +201,10 @@ namespace IronyModManager.Parser.Generic
                         if (definition != null)
                         {
                             sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                            definition.OriginalCode = definition.Code = sb.ToString();
+                            definition.Code = sb.ToString();
+                            definition.CodeTag = type.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
                             result.Add(definition);
                         }
                         definition = null;

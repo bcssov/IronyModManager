@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -22,10 +22,12 @@ using IronyModManager.Storage.Common;
 namespace IronyModManager.Services
 {
     /// <summary>
-    /// Class ThemeService. Implements the <see cref="IronyModManager.Services.IThemeService" /> Implements the <see cref="IronyModManager.Services.BaseService" />
+    /// Class ThemeService.
+    /// Implements the <see cref="IronyModManager.Services.BaseService" />
+    /// Implements the <see cref="IronyModManager.Services.Common.IThemeService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.BaseService" />
-    /// <seealso cref="IronyModManager.Services.IThemeService" />
+    /// <seealso cref="IronyModManager.Services.Common.IThemeService" />
     public class ThemeService : BaseService, IThemeService
     {
         #region Constructors
@@ -38,7 +40,7 @@ namespace IronyModManager.Services
         /// <param name="mapper">The mapper.</param>
         public ThemeService(IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
         {
-            PreferencesService = preferencesService; ;
+            PreferencesService = preferencesService;
         }
 
         #endregion Constructors

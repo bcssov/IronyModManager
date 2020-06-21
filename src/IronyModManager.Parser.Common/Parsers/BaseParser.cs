@@ -255,6 +255,18 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
+        /// Finds the code between curly braces.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string FindCodeBetweenCurlyBraces(string code)
+        {
+            var filtered = code.Substring(code.IndexOf("{") + 1);
+            filtered = filtered.Substring(0, filtered.LastIndexOf("}")).Trim();
+            return filtered;
+        }
+
+        /// <summary>
         /// Formats the code.
         /// </summary>
         /// <param name="code">The code.</param>
@@ -401,6 +413,12 @@ namespace IronyModManager.Parser.Common.Parsers
                     var definition = GetDefinitionInstance();
                     MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
                     definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
+                    if (!isFirstLevel)
+                    {
+                        definition.OriginalCode = item.Code;
+                        definition.CodeTag = parent;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.NonClosingSeparators.EqualsSign;
+                    }
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
                         definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
@@ -455,6 +473,12 @@ namespace IronyModManager.Parser.Common.Parsers
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
                     definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
+                    if (!isFirstLevel)
+                    {
+                        definition.OriginalCode = item.Code;
+                        definition.CodeTag = parent;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                    }
                     var tags = ParseComplexScriptTags(item.KeyValues, item.Key);
                     if (tags.Count() > 0)
                     {
@@ -609,6 +633,12 @@ namespace IronyModManager.Parser.Common.Parsers
                             openBrackets = null;
                             closeBrackets = 0;
                             definition.OriginalCode = definition.Code = sb.ToString();
+                            if (!isFirstLevel)
+                            {
+                                definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                                definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                            }
                             result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                         }
                     }
@@ -617,6 +647,12 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition = GetDefinitionInstance();
                         var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
                         definition.OriginalCode = definition.Code = line;
+                        if (!isFirstLevel)
+                        {
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                            definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0]; 
+                            definition.CodeSeparator = Shared.Constants.CodeSeparators.NonClosingSeparators.EqualsSign;
+                        }
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
                             definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
@@ -648,6 +684,12 @@ namespace IronyModManager.Parser.Common.Parsers
                         openBrackets = null;
                         closeBrackets = 0;
                         definition.OriginalCode = definition.Code = sb.ToString();
+                        if (!isFirstLevel)
+                        {
+                            definition.CodeTag = definition.Id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                        }
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                     }
                 }
