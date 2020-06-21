@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -98,6 +98,21 @@ namespace IronyModManager.ViewModels.Controls
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The definition analyze load handler
+        /// </summary>
+        private IDisposable definitionAnalyzeLoadHandler = null;
+
+        /// <summary>
+        /// The definition load handler
+        /// </summary>
+        private IDisposable definitionLoadHandler = null;
+
+        /// <summary>
+        /// The definition synchronize handler
+        /// </summary>
+        private IDisposable definitionSyncHandler = null;
 
         #endregion Fields
 
@@ -278,6 +293,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task AnalyzeModsAsync(PatchStateMode mode)
         {
+            SubscribeToProgressReport(Disposables);
+
             var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
             {
                 PercentDone = 0,
@@ -316,6 +333,10 @@ namespace IronyModManager.ViewModels.Controls
             };
             MessageBus.Current.SendMessage(args);
             await TriggerOverlayAsync(false);
+
+            definitionAnalyzeLoadHandler?.Dispose();
+            definitionLoadHandler?.Dispose();
+            definitionSyncHandler?.Dispose();
         }
 
         /// <summary>
@@ -478,7 +499,17 @@ namespace IronyModManager.ViewModels.Controls
                 ForceClosePopups();
             }).DisposeWith(disposables);
 
-            modDefinitionLoadHandler.Message.Subscribe(s =>
+            base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Subscribes to progress report.
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        private void SubscribeToProgressReport(CompositeDisposable disposables)
+        {
+            definitionLoadHandler?.Dispose();
+            definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -490,7 +521,8 @@ namespace IronyModManager.ViewModels.Controls
                 TriggerOverlay(true, message, overlayProgress);
             }).DisposeWith(disposables);
 
-            modDefinitionAnalyzeHandler.Message.Subscribe(s =>
+            definitionAnalyzeLoadHandler?.Dispose();
+            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -502,7 +534,8 @@ namespace IronyModManager.ViewModels.Controls
                 TriggerOverlay(true, message, overlayProgress);
             }).DisposeWith(disposables);
 
-            modDefinitionPatchLoadHandler.Message.Subscribe(s =>
+            definitionSyncHandler?.Dispose();
+            definitionSyncHandler = modDefinitionPatchLoadHandler.Message.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -513,8 +546,6 @@ namespace IronyModManager.ViewModels.Controls
                 });
                 TriggerOverlay(true, message, overlayProgress);
             }).DisposeWith(disposables);
-
-            base.OnActivated(disposables);
         }
 
         #endregion Methods

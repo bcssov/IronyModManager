@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -80,6 +80,21 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The definition analyze load handler
+        /// </summary>
+        private IDisposable definitionAnalyzeLoadHandler = null;
+
+        /// <summary>
+        /// The definition load handler
+        /// </summary>
+        private IDisposable definitionLoadHandler = null;
+
+        /// <summary>
+        /// The definition progress handler
+        /// </summary>
+        private IDisposable definitionProgressHandler = null;
 
         #endregion Fields
 
@@ -232,42 +247,6 @@ namespace IronyModManager.ViewModels.Controls
                 return copied;
             }
 
-            modDefinitionLoadHandler.Message.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                {
-                    PercentDone = s.Percentage,
-                    Count = 1,
-                    TotalCount = 3
-                });
-                TriggerOverlay(true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            modDefinitionAnalyzeHandler.Message.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Analyzing_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                {
-                    PercentDone = s.Percentage,
-                    Count = 2,
-                    TotalCount = 3
-                });
-                TriggerOverlay(true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
-            modMergeProgressHandler.Message.Subscribe(s =>
-            {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Merging_Collection);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
-                {
-                    PercentDone = s.Percentage,
-                    Count = 3,
-                    TotalCount = 3
-                });
-                TriggerOverlay(true, message, overlayProgress);
-            }).DisposeWith(disposables);
-
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
             RenameCommand = ReactiveCommand.Create(() =>
@@ -299,6 +278,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null)
                 {
+                    SubscribeToProgressReports(disposables);
+
                     var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
                     var copy = copyCollection($"{ActiveCollection.Name} {suffix}");
 
@@ -341,6 +322,10 @@ namespace IronyModManager.ViewModels.Controls
 
                     await TriggerOverlayAsync(false);
 
+                    definitionAnalyzeLoadHandler?.Dispose();
+                    definitionLoadHandler?.Dispose();
+                    definitionProgressHandler?.Dispose();
+
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
@@ -354,6 +339,52 @@ namespace IronyModManager.ViewModels.Controls
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Subscribes to progress reports.
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected virtual void SubscribeToProgressReports(CompositeDisposable disposables)
+        {
+            definitionLoadHandler?.Dispose();
+            definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 1,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            definitionAnalyzeLoadHandler?.Dispose();
+            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Analyzing_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 2,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            definitionProgressHandler?.Dispose();
+            definitionProgressHandler = modMergeProgressHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Merging_Collection);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                {
+                    PercentDone = s.Percentage,
+                    Count = 3,
+                    TotalCount = 3
+                });
+                TriggerOverlay(true, message, overlayProgress);
+            }).DisposeWith(disposables);
         }
 
         #endregion Methods
