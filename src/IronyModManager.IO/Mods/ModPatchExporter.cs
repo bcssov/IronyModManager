@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -508,6 +508,7 @@ namespace IronyModManager.IO.Mods
             newInstance.GeneratedFileNames = original.GeneratedFileNames;
             newInstance.AdditionalFileNames = original.AdditionalFileNames;
             newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
+            newInstance.OriginalCode = original.OriginalCode;
             return newInstance;
         }
 

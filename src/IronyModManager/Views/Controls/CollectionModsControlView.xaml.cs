@@ -134,16 +134,18 @@ namespace IronyModManager.Views.Controls
                         ViewModel.HoveredMod = hoveredItem.Content as IMod;
                         if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
                         {
-                            var menuItems = new List<MenuItem>();
-                            menuItems.Add(new MenuItem()
+                            var menuItems = new List<MenuItem>
                             {
-                                Header = ViewModel.CollectionJumpOnPositionChangeLabel,
-                                Command = ViewModel.CollectionJumpOnPositionChangeCommand
-                            });
-                            menuItems.Add(new MenuItem()
-                            {
-                                Header = "-"
-                            });
+                                new MenuItem()
+                                {
+                                    Header = ViewModel.CollectionJumpOnPositionChangeLabel,
+                                    Command = ViewModel.CollectionJumpOnPositionChangeCommand
+                                },
+                                new MenuItem()
+                                {
+                                    Header = "-"
+                                }
+                            };
                             if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                             {
                                 menuItems.Add(new MenuItem()

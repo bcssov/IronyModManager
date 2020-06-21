@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -38,6 +38,18 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The code.</value>
         string Code { get; set; }
+
+        /// <summary>
+        /// Gets the code separator.
+        /// </summary>
+        /// <value>The code separator.</value>
+        string CodeSeparator { get; }
+
+        /// <summary>
+        /// Gets the code tag.
+        /// </summary>
+        /// <value>The code tag.</value>
+        string CodeTag { get; }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -118,6 +130,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The mod path.</value>
         [JsonIgnore]
         string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original code.
+        /// </summary>
+        /// <value>The original code.</value>
+        string OriginalCode { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten file names.

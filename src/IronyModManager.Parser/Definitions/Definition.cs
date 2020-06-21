@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -66,6 +66,11 @@ namespace IronyModManager.Parser.Definitions
         /// The identifier
         /// </summary>
         private string id = string.Empty;
+
+        /// <summary>
+        /// The original code
+        /// </summary>
+        private string originalCode = string.Empty;
 
         /// <summary>
         /// The overwritten file names
@@ -164,6 +169,18 @@ namespace IronyModManager.Parser.Definitions
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the code separator.
+        /// </summary>
+        /// <value>The code separator.</value>
+        public string CodeSeparator { get; } = string.Empty;
+
+        /// <summary>
+        /// Gets the code tag.
+        /// </summary>
+        /// <value>The code tag.</value>
+        public string CodeTag { get; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -330,6 +347,22 @@ namespace IronyModManager.Parser.Definitions
         public string ModPath { get; set; }
 
         /// <summary>
+        /// Gets or sets the original code.
+        /// </summary>
+        /// <value>The original code.</value>
+        public string OriginalCode
+        {
+            get
+            {
+                return originalCode ?? string.Empty;
+            }
+            set
+            {
+                originalCode = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the overwritten file names.
         /// </summary>
         /// <value>The overwritten file names.</value>
@@ -477,6 +510,9 @@ namespace IronyModManager.Parser.Definitions
                 nameof(AdditionalFileNames) => AdditionalFileNames,
                 nameof(OverwrittenFileNames) => OverwrittenFileNames,
                 nameof(ModPath) => ModPath,
+                nameof(CodeSeparator) => CodeSeparator,
+                nameof(CodeTag) => CodeTag,
+                nameof(OriginalCode) => originalCode,
                 nameof(Tags) => Tags,
                 _ => Id,
             };

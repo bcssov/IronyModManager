@@ -400,7 +400,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     var definition = GetDefinitionInstance();
                     MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
-                    definition.Code = FormatCode(item.Code, parent);
+                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
                         definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
@@ -454,7 +454,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
-                    definition.Code = FormatCode(item.Code, parent);
+                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
                     var tags = ParseComplexScriptTags(item.KeyValues, item.Key);
                     if (tags.Count() > 0)
                     {
@@ -563,7 +563,7 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.ErrorMessage = error.Message;
             definition.Id = Constants.Scripts.Invalid;
             definition.ValueType = ValueType.Invalid;
-            definition.Code = string.Join(Environment.NewLine, args.Lines);
+            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
             return definition;
         }
@@ -608,7 +608,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         {
                             openBrackets = null;
                             closeBrackets = 0;
-                            definition.Code = sb.ToString();
+                            definition.OriginalCode = definition.Code = sb.ToString();
                             result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                         }
                     }
@@ -616,7 +616,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition = GetDefinitionInstance();
                         var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Code = line;
+                        definition.OriginalCode = definition.Code = line;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
                             definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
@@ -647,7 +647,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         openBrackets = null;
                         closeBrackets = 0;
-                        definition.Code = sb.ToString();
+                        definition.OriginalCode = definition.Code = sb.ToString();
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                     }
                 }
