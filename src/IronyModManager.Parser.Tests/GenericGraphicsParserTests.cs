@@ -520,5 +520,121 @@ namespace IronyModManager.Parser.Tests
                 result[i].Type.Should().Be("gfx\\gfx");
             }
         }
+
+        /// <summary>
+        /// Defines the test method Parse_variable_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_gfx_variable_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"@test1 = 0");
+            sb.AppendLine(@"spriteTypes = {");
+            sb.AppendLine(@"	@test2 = 1");
+            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"		name = ""GFX_dmm_mod_1""");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "gfx\\gfx.gfx",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new GraphicsParser(new CodeParser(), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(3);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("gfx\\gfx.gfx");
+                switch (i)
+                {
+
+                    case 0:
+                        result[i].Id.Should().Be("@test1");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("@test2");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 2:
+                        result[i].Id.Should().Be("GFX_dmm_mod_1");
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("gfx\\gfx");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_variable_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_variable_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"@sort_button_height = 80");
+            sb.AppendLine(@"guiTypes = {");
+            sb.AppendLine(@"	@entry_info_height = 17");
+            sb.AppendLine(@"	# Button in the lower right of the main view, opening the Alliance View.");
+            sb.AppendLine(@"	containerWindowType = {");
+            sb.AppendLine(@"		name = ""alliance_button_window""");
+            sb.AppendLine(@"		position = { x = -458 y = 43 }");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "gui\\gui.gui",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new GraphicsParser(new CodeParser(), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(3);
+            for (int i = 0; i < 3; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("gui\\gui.gui");
+                switch (i)
+                {
+                    case 0:
+                        result[i].Id.Should().Be("@sort_button_height");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("@entry_info_height");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 2:
+                        result[i].Id.Should().Be("alliance_button_window");
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("gui\\gui");
+            }
+        }
     }
 }

@@ -537,6 +537,10 @@ namespace IronyModManager.Parser.Common.Parsers
                 }
                 else
                 {
+                    if (value.Value.KeyValues?.Count() > 0)
+                    {
+                        result.AddRange(ParseComplexScriptKeyValues(value.Value.KeyValues, args));
+                    }
                     if (value.Value.Nodes?.Count() > 0)
                     {
                         foreach (var item in value.Value.Nodes)

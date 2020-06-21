@@ -131,76 +131,94 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    int currentOpenBrackets = 0;
-                    int currentCloseBrackets = 0;
-                    var previousCloseBrackets = closeBrackets;
-                    if (line.Contains(Common.Constants.Scripts.OpeningBracket))
+                    if (line.Trim().StartsWith("@"))
                     {
-                        currentOpenBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
-                        openBrackets += currentOpenBrackets;
-                    }
-                    if (line.Contains(Common.Constants.Scripts.ClosingBracket))
-                    {
-                        currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
-                        closeBrackets += currentCloseBrackets;
-                    }
-                    if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
-                    {
-                        if (definition == null)
+                        var def = GetDefinitionInstance();
+                        var id = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                        def.OriginalCode = def.Code = line;
+                        def.Id = id;
+                        def.ValueType = Common.ValueType.Variable;
+                        if (!string.IsNullOrWhiteSpace(typeId))
                         {
-                            sb.Clear();
-                            langs.Clear();
-                            sb.AppendLine(codeParser.PrettifyLine($"{typeId}{Common.Constants.Scripts.OpeningBracket}"));
-                            definition = GetDefinitionInstance();
-                            definition.ValueType = Common.ValueType.Object;
-                            var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
-                            definition.Id = initialKey;
-                            SimpleParserTags.Add(initialKey);
+                            def.CodeTag = typeId.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            def.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                         }
-                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
-                        foreach (var item in Common.Constants.Localization.Locales)
+                        var parsingArgs = ConstructArgs(args, def, sb, openBrackets, closeBrackets, line, true, isFirstLevel: true);
+                        result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
+                    }
+                    else
+                    {
+                        int currentOpenBrackets = 0;
+                        int currentCloseBrackets = 0;
+                        var previousCloseBrackets = closeBrackets;
+                        if (line.Contains(Common.Constants.Scripts.OpeningBracket))
                         {
-                            if (line.Contains(item, StringComparison.OrdinalIgnoreCase))
+                            currentOpenBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
+                            openBrackets += currentOpenBrackets;
+                        }
+                        if (line.Contains(Common.Constants.Scripts.ClosingBracket))
+                        {
+                            currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
+                            closeBrackets += currentCloseBrackets;
+                        }
+                        if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
+                        {
+                            if (definition == null)
                             {
-                                langs.Add(item);
+                                sb.Clear();
+                                langs.Clear();
+                                sb.AppendLine(codeParser.PrettifyLine($"{typeId}{Common.Constants.Scripts.OpeningBracket}"));
+                                definition = GetDefinitionInstance();
+                                definition.ValueType = Common.ValueType.Object;
+                                var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                                definition.Id = initialKey;
+                                SimpleParserTags.Add(initialKey);
                             }
-                        }
-                        if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
-                        {
-                            definition.Id = id;
-                            SimpleParserTags.Add(id);
-                        }
-                        var trimEnding = line.TrimEnd();
-                        if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                        {
-                            trimEnding = trimEnding[0..^1].TrimEnd();
-                        }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
-                        OnSimpleParseReadObjectLine(parsingArgs);
-                        if (openBrackets - closeBrackets <= 1)
-                        {
-                            if (langs.Count > 0)
+                            var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                            foreach (var item in Common.Constants.Localization.Locales)
                             {
-                                if (SimpleParserTags.Contains(definition.Id))
+                                if (line.Contains(item, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    SimpleParserTags.Remove(definition.Id);
+                                    langs.Add(item);
                                 }
-                                definition.Id = definition.Id.Insert(0, $"{string.Join("-", langs.OrderBy(p => p))}-");
-                                SimpleParserTags.Add(definition.Id);
                             }
-                            sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                            definition.Code = sb.ToString();
-                            definition.CodeTag = typeId.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
-                            result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
-                            definition = null;
+                            if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
+                            {
+                                definition.Id = id;
+                                SimpleParserTags.Add(id);
+                            }
+                            var trimEnding = line.TrimEnd();
+                            if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                            {
+                                trimEnding = trimEnding[0..^1].TrimEnd();
+                            }
+                            var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
+                            OnSimpleParseReadObjectLine(parsingArgs);
+                            if (openBrackets - closeBrackets <= 1)
+                            {
+                                if (langs.Count > 0)
+                                {
+                                    if (SimpleParserTags.Contains(definition.Id))
+                                    {
+                                        SimpleParserTags.Remove(definition.Id);
+                                    }
+                                    definition.Id = definition.Id.Insert(0, $"{string.Join("-", langs.OrderBy(p => p))}-");
+                                    SimpleParserTags.Add(definition.Id);
+                                }
+                                sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
+                                definition.Code = sb.ToString();
+                                definition.CodeTag = typeId.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                                definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
+                                result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
+                                definition = null;
+                            }
                         }
-                    }
-                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                    {
-                        openBrackets = null;
-                        closeBrackets = 0;
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                        {
+                            openBrackets = null;
+                            closeBrackets = 0;
+                        }
                     }
                 }
             }
@@ -226,6 +244,7 @@ namespace IronyModManager.Parser.Generic
             var sb = new StringBuilder();
             int? openBrackets = null;
             int closeBrackets = 0;
+            bool tagIdentified = false;
             foreach (var line in args.Lines)
             {
                 if (line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
@@ -235,6 +254,7 @@ namespace IronyModManager.Parser.Generic
                 var cleaned = codeParser.CleanWhitespace(line);
                 if (cleaned.StartsWith(Common.Constants.Scripts.GuiTypesId, StringComparison.OrdinalIgnoreCase))
                 {
+                    tagIdentified = true;
                     openBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
                     closeBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
                     // incase some wise ass opened and closed an object definition in the same line
@@ -263,59 +283,77 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    int currentOpenBrackets = 0;
-                    int currentCloseBrackets = 0;
-                    var previousCloseBrackets = closeBrackets;
-                    if (line.Contains(Common.Constants.Scripts.OpeningBracket))
+                    if (line.Trim().StartsWith("@"))
                     {
-                        currentOpenBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
-                        openBrackets += currentOpenBrackets;
+                        var def = GetDefinitionInstance();
+                        var id = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                        def.OriginalCode = def.Code = line;
+                        def.Id = id;
+                        def.ValueType = Common.ValueType.Variable;
+                        if (tagIdentified)
+                        {
+                            def.CodeTag = Common.Constants.Scripts.GuiTypes;
+                            def.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                        }
+                        var parsingArgs = ConstructArgs(args, def, sb, openBrackets, closeBrackets, line, true, isFirstLevel: true);
+                        result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
                     }
-                    if (line.Contains(Common.Constants.Scripts.ClosingBracket))
+                    else
                     {
-                        currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
-                        closeBrackets += currentCloseBrackets;
-                    }
-                    if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
-                    {
-                        if (definition == null)
+                        int currentOpenBrackets = 0;
+                        int currentCloseBrackets = 0;
+                        var previousCloseBrackets = closeBrackets;
+                        if (line.Contains(Common.Constants.Scripts.OpeningBracket))
                         {
-                            sb.Clear();
-                            sb.AppendLine($"{Common.Constants.Scripts.GuiTypes} {Common.Constants.Scripts.VariableSeparatorId} {Common.Constants.Scripts.OpeningBracket}");
-                            definition = GetDefinitionInstance();
-                            definition.ValueType = Common.ValueType.Object;
-                            var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
-                            definition.Id = initialKey;
-                            SimpleParserTags.Add(initialKey);
+                            currentOpenBrackets = line.Count(s => s == Common.Constants.Scripts.OpeningBracket);
+                            openBrackets += currentOpenBrackets;
                         }
-                        var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
-                        if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
+                        if (line.Contains(Common.Constants.Scripts.ClosingBracket))
                         {
-                            definition.Id = id;
-                            SimpleParserTags.Add(id);
+                            currentCloseBrackets = line.Count(s => s == Common.Constants.Scripts.ClosingBracket);
+                            closeBrackets += currentCloseBrackets;
                         }
-                        var trimEnding = line.TrimEnd();
-                        if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                        if (openBrackets - closeBrackets >= 2 || openBrackets - previousCloseBrackets >= 2 || (currentOpenBrackets > 0 && currentOpenBrackets == currentCloseBrackets))
                         {
-                            trimEnding = trimEnding[0..^1].TrimEnd();
+                            if (definition == null)
+                            {
+                                sb.Clear();
+                                sb.AppendLine($"{Common.Constants.Scripts.GuiTypes} {Common.Constants.Scripts.VariableSeparatorId} {Common.Constants.Scripts.OpeningBracket}");
+                                definition = GetDefinitionInstance();
+                                definition.ValueType = Common.ValueType.Object;
+                                var initialKey = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
+                                definition.Id = initialKey;
+                                SimpleParserTags.Add(initialKey);
+                            }
+                            var id = codeParser.GetValue(line, $"{Common.Constants.Scripts.GraphicsTypeName}{Common.Constants.Scripts.VariableSeparatorId}");
+                            if (!string.IsNullOrWhiteSpace(id) && (openBrackets - closeBrackets <= 2 || openBrackets - previousCloseBrackets <= 2))
+                            {
+                                definition.Id = id;
+                                SimpleParserTags.Add(id);
+                            }
+                            var trimEnding = line.TrimEnd();
+                            if (trimEnding.EndsWith(Common.Constants.Scripts.ClosingBracket) && openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                            {
+                                trimEnding = trimEnding[0..^1].TrimEnd();
+                            }
+                            var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
+                            OnSimpleParseReadObjectLine(parsingArgs);
+                            if (openBrackets - closeBrackets <= 1)
+                            {
+                                sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
+                                definition.Code = sb.ToString();
+                                definition.CodeTag = Common.Constants.Scripts.GuiTypes;
+                                definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
+                                result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
+                                definition = null;
+                            }
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, trimEnding, false, isFirstLevel: false);
-                        OnSimpleParseReadObjectLine(parsingArgs);
-                        if (openBrackets - closeBrackets <= 1)
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
                         {
-                            sb.AppendLine(Common.Constants.Scripts.ClosingBracket.ToString());
-                            definition.Code = sb.ToString();
-                            definition.CodeTag = Common.Constants.Scripts.GuiTypes;
-                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.Code);
-                            result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
-                            definition = null;
+                            openBrackets = null;
+                            closeBrackets = 0;
                         }
-                    }
-                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                    {
-                        openBrackets = null;
-                        closeBrackets = 0;
                     }
                 }
             }

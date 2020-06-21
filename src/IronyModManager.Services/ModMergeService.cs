@@ -303,7 +303,7 @@ namespace IronyModManager.Services
                 copy.ValueType = Parser.Common.ValueType.Object;
             }
             var groups = definitions.GroupBy(p => p.CodeTag, StringComparer.OrdinalIgnoreCase);
-            foreach (var group in groups)
+            foreach (var group in groups.OrderBy(p => p.FirstOrDefault().CodeTag, StringComparer.OrdinalIgnoreCase))
             {
                 var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                 var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
