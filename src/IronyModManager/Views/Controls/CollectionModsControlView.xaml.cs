@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -140,6 +140,10 @@ namespace IronyModManager.Views.Controls
                                 Header = ViewModel.CollectionJumpOnPositionChangeLabel,
                                 Command = ViewModel.CollectionJumpOnPositionChangeCommand
                             });
+                            menuItems.Add(new MenuItem()
+                            {
+                                Header = "-"
+                            });
                             if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                             {
                                 menuItems.Add(new MenuItem()
@@ -166,7 +170,7 @@ namespace IronyModManager.Views.Controls
                                 }
                                 else
                                 {
-                                    menuItems.Insert(2, menuItem);
+                                    menuItems.Insert(3, menuItem);
                                 }
                             }
                             if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
@@ -182,7 +186,7 @@ namespace IronyModManager.Views.Controls
                                 }
                                 else
                                 {
-                                    menuItems.Insert(1, menuItem);
+                                    menuItems.Insert(2, menuItem);
                                 }
                             }
                             grid.ContextMenu.Items = menuItems;
