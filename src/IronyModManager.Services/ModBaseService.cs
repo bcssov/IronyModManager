@@ -133,6 +133,8 @@ namespace IronyModManager.Services
             newDefinition.ValueType = definition.ValueType;
             newDefinition.Tags = definition.Tags;
             newDefinition.OriginalCode = definition.OriginalCode;
+            newDefinition.CodeSeparator = definition.CodeSeparator;
+            newDefinition.CodeTag = definition.CodeTag;
             return newDefinition;
         }
 

@@ -40,16 +40,18 @@ namespace IronyModManager.Parser.Common.Definitions
         string Code { get; set; }
 
         /// <summary>
-        /// Gets the code separator.
+        /// Gets or sets the code separator.
         /// </summary>
         /// <value>The code separator.</value>
-        string CodeSeparator { get; }
+        [JsonIgnore]
+        string CodeSeparator { get; set; }
 
         /// <summary>
-        /// Gets the code tag.
+        /// Gets or sets the code tag.
         /// </summary>
         /// <value>The code tag.</value>
-        string CodeTag { get; }
+        [JsonIgnore]
+        string CodeTag { get; set; }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -135,6 +137,7 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Gets or sets the original code.
         /// </summary>
         /// <value>The original code.</value>
+        [JsonIgnore]
         string OriginalCode { get; set; }
 
         /// <summary>

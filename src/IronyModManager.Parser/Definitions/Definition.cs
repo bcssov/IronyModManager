@@ -43,6 +43,16 @@ namespace IronyModManager.Parser.Definitions
         private string code = string.Empty;
 
         /// <summary>
+        /// The code separator
+        /// </summary>
+        private string codeSeparator = string.Empty;
+
+        /// <summary>
+        /// The code tag
+        /// </summary>
+        private string codeTag = string.Empty;
+
+        /// <summary>
         /// The definition sha
         /// </summary>
         private string definitionSHA = string.Empty;
@@ -174,13 +184,35 @@ namespace IronyModManager.Parser.Definitions
         /// Gets the code separator.
         /// </summary>
         /// <value>The code separator.</value>
-        public string CodeSeparator { get; } = string.Empty;
+        [JsonIgnore]
+        public string CodeSeparator
+        {
+            get
+            {
+                return codeSeparator ?? string.Empty;
+            }
+            set
+            {
+                codeSeparator = value;
+            }
+        }
 
         /// <summary>
         /// Gets the code tag.
         /// </summary>
         /// <value>The code tag.</value>
-        public string CodeTag { get; } = string.Empty;
+        [JsonIgnore]
+        public string CodeTag
+        {
+            get
+            {
+                return codeTag ?? string.Empty;
+            }
+            set
+            {
+                codeTag = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -350,6 +382,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the original code.
         /// </summary>
         /// <value>The original code.</value>
+        [JsonIgnore]
         public string OriginalCode
         {
             get

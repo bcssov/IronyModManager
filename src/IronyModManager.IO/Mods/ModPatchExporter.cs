@@ -509,6 +509,8 @@ namespace IronyModManager.IO.Mods
             newInstance.AdditionalFileNames = original.AdditionalFileNames;
             newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
             newInstance.OriginalCode = original.OriginalCode;
+            newInstance.CodeSeparator = original.CodeSeparator;
+            newInstance.CodeTag = original.CodeTag;
             return newInstance;
         }
 
