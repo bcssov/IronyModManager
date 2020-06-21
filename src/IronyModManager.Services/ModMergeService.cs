@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -163,18 +163,16 @@ namespace IronyModManager.Services
 
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
                 {
-                    var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.Variable &&
-                                                                                            p.ValueType != Parser.Common.ValueType.Namespace &&
-                                                                                            p.ValueType != Parser.Common.ValueType.EmptyFile);
+                    var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
                     if (definitions.Count() > 0)
                     {
                         var exportDefinitions = new List<IDefinition>();
                         var exportSingleDefinitions = new List<IDefinition>();
-                        foreach (var definition in definitions)
+                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId))
                         {
                             // Orphans are placed under resolved items during analysis so no need to check them
-                            var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definition.TypeAndId);
-                            var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definition.TypeAndId);
+                            var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
+                            var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             if (resolved.Count() > 0 || overwritten.Count() > 0)
                             {
                                 // Resolved takes priority, since if an item was resolved no need to use the overwritten code
@@ -200,14 +198,14 @@ namespace IronyModManager.Services
                             else
                             {
                                 // Check if this is a conflict so we can then perform evaluation of which definition would win based on current order
-                                var conflicted = conflictResult.Conflicts.GetByTypeAndId(definition.TypeAndId);
+                                var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 if (conflicted.Count() > 0)
                                 {
                                     exportDefinitions.Add(EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
                                 }
                                 else
                                 {
-                                    exportDefinitions.Add(definition);
+                                    exportDefinitions.Add(definitionGroup.FirstOrDefault());
                                 }
                             }
                         }
@@ -261,44 +259,70 @@ namespace IronyModManager.Services
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
-            static void appendLine(StringBuilder sb, string code)
+            static void appendLine(StringBuilder sb, IEnumerable<string> lines)
             {
-                if (!string.IsNullOrWhiteSpace(code))
+                foreach (var item in lines)
                 {
-                    sb.AppendLine(code);
+                    sb.AppendLine(item);
                 }
             }
-            static void mergeCode(StringBuilder sb, string code)
+            static void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> lines)
             {
-                if (!string.IsNullOrWhiteSpace(code))
+                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
                 {
-                    var filtered = code.Substring(code.IndexOf("{") + 1);
-                    filtered = filtered.Substring(0, filtered.LastIndexOf("}")).Trim();
-                    sb.AppendLine(filtered);
+                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                    sb.AppendLine($"{codeTag} = {separator}");
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
+                    }
+                    sb.AppendLine(closingTag);
+                }
+                else
+                {
+                    sb.AppendLine($"{codeTag}{separator}");
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
+                    }
                 }
             }
 
             var sb = new StringBuilder();
             var copy = CopyDefinition(definitions.FirstOrDefault());
-            if (!copy.IsFirstLevel)
+            if (copy.ValueType == Parser.Common.ValueType.Namespace || copy.ValueType == Parser.Common.ValueType.Variable)
             {
-                sb.AppendLine(copy.Code.Substring(0, copy.Code.IndexOf("{") + 1));
+                copy.ValueType = Parser.Common.ValueType.Object;
             }
-            foreach (var definition in definitions)
+            var groups = definitions.GroupBy(p => p.CodeTag, StringComparer.OrdinalIgnoreCase);
+            foreach (var group in groups)
             {
-                if (definition.IsFirstLevel)
+                var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+
+                bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
+
+                var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
+
+                if (hasCodeTag)
                 {
-                    appendLine(sb, definition.Code);
+                    mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, code);
                 }
                 else
                 {
-                    mergeCode(sb, definition.Code);
+                    appendLine(sb, code);
                 }
             }
-            if (!copy.IsFirstLevel)
-            {
-                sb.Append("}");
-            }
+
             copy.Code = sb.ToString();
             return copy;
         }

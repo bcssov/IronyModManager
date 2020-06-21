@@ -138,14 +138,9 @@ namespace IronyModManager.Shared
                 public const string ColonSign = ":";
 
                 /// <summary>
-                /// The equals
-                /// </summary>
-                public const string EqualsSign = "=";
-
-                /// <summary>
                 /// The map
                 /// </summary>
-                public static string[] Map = new string[] { ColonSign, EqualsSign };
+                public static string[] Map = new string[] { ColonSign };
 
                 #endregion Fields
             }

@@ -504,7 +504,6 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorColumn = original.ErrorColumn;
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
-            newInstance.IsFirstLevel = original.IsFirstLevel;
             newInstance.GeneratedFileNames = original.GeneratedFileNames;
             newInstance.AdditionalFileNames = original.AdditionalFileNames;
             newInstance.OverwrittenFileNames = original.OverwrittenFileNames;

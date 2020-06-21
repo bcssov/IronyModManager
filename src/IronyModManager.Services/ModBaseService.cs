@@ -126,7 +126,6 @@ namespace IronyModManager.Services
             newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
             newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
             newDefinition.Id = definition.Id;
-            newDefinition.IsFirstLevel = definition.IsFirstLevel;
             newDefinition.ModName = definition.ModName;
             newDefinition.Type = definition.Type;
             newDefinition.UsedParser = definition.UsedParser;

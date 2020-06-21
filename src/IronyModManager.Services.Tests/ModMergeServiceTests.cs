@@ -186,7 +186,7 @@ namespace IronyModManager.Services.Tests
                     File = "events\\fake.txt",
                     ModName = "a",
                     Id = "test1",
-                    IsFirstLevel = true
+                    OriginalCode = "test = {test}",
                 },
                 new Definition()
                 {
@@ -194,7 +194,7 @@ namespace IronyModManager.Services.Tests
                     File = "events\\fake.txt",
                     ModName = "a",
                     Id = "test2",
-                    IsFirstLevel = true
+                    OriginalCode = "test = {test2}",
                 }
             });
             var empty = new IndexedDefinitions();
@@ -304,7 +304,9 @@ namespace IronyModManager.Services.Tests
                     File = "events\\fake.txt",
                     ModName = "a",
                     Id = "test1",
-                    IsFirstLevel = false
+                    CodeSeparator = "{",
+                    CodeTag = "test",
+                    OriginalCode = "test"
                 },
                 new Definition()
                 {
@@ -312,7 +314,9 @@ namespace IronyModManager.Services.Tests
                     File = "events\\fake.txt",
                     ModName = "a",
                     Id = "test2",
-                    IsFirstLevel = false
+                    CodeSeparator = "{",
+                    CodeTag = "test",
+                    OriginalCode = "test2"
                 }
             });
             var empty = new IndexedDefinitions();
@@ -327,7 +331,7 @@ namespace IronyModManager.Services.Tests
             }, new List<string>() { "a" }, "fake copy");
 
             result.Should().NotBeNull();
-            definition.Code.Should().Be("test = {" + Environment.NewLine + "test" + Environment.NewLine + "test2" + Environment.NewLine + "}");
+            definition.Code.Should().Be("test = {" + Environment.NewLine + "    test" + Environment.NewLine + "    test2" + Environment.NewLine + "}");
         }
 
         /// <summary>
@@ -357,8 +361,7 @@ namespace IronyModManager.Services.Tests
                         Code = "test = {testfakestate}",
                         File = "events\\fake.txt",
                         ModName = "a",
-                        Id = "test1",
-                        IsFirstLevel = true
+                        Id = "test1"
                     }
                 },
                 ResolvedConflicts = new List<IDefinition>()
@@ -368,8 +371,7 @@ namespace IronyModManager.Services.Tests
                         Code = "test = {testfakeresolved}",
                         File = "events\\fake.txt",
                         ModName = "a",
-                        Id = "test1",
-                        IsFirstLevel = true
+                        Id = "test1"
                     }
                 }
             }));
@@ -442,8 +444,7 @@ namespace IronyModManager.Services.Tests
                     Code = "test = {test}",
                     File = "events\\fake.txt",
                     ModName = "a",
-                    Id = "test1",
-                    IsFirstLevel = true
+                    Id = "test1"
                 }
             });
 
@@ -550,8 +551,7 @@ namespace IronyModManager.Services.Tests
                     Code = "test = {test}",
                     File = "events\\fake.txt",
                     ModName = "a",
-                    Id = "test1",
-                    IsFirstLevel = true
+                    Id = "test1"
                 }
             });
 
@@ -563,8 +563,7 @@ namespace IronyModManager.Services.Tests
                     Code = "test = {testfakeoverwritten}",
                     File = "events\\fake.txt",
                     ModName = "a",
-                    Id = "test1",
-                    IsFirstLevel = true
+                    Id = "test1"
                 }
             });
 

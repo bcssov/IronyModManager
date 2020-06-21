@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-21-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1244,29 +1244,40 @@ namespace IronyModManager.Services
                     sb.AppendLine(string.Join(Environment.NewLine, lines));
                 }
             }
-            static string mergeCode(string code, IEnumerable<string> lines)
+            static string mergeCode(string codeTag, string separator, IEnumerable<string> lines)
             {
-                if (lines.Count() > 0)
+                if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
                 {
-                    var index = code.IndexOf("{") + 1;
-                    var result = code.Insert(index, Environment.NewLine + string.Join(Environment.NewLine, lines) + Environment.NewLine);
-                    return string.Join(Environment.NewLine, result.SplitOnNewLine());
-                }
-                return code;
-            }
-            static List<string> cleanCode(IEnumerable<IDefinition> defs)
-            {
-                var result = new List<string>();
-                if (defs.Count() > 0)
-                {
-                    foreach (var item in defs)
+                    var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"{codeTag} = {separator}");
+                    foreach (var item in lines)
                     {
-                        var filtered = item.Code.Substring(item.Code.IndexOf("{") + 1).Replace("\r", string.Empty).Replace("\n", string.Empty);
-                        result.Add(filtered.Substring(0, filtered.LastIndexOf("}")).Trim());
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
                     }
+                    sb.Append(closingTag);
+                    return sb.ToString();
                 }
-                return result;
+                else
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"{codeTag}{separator}");
+                    foreach (var item in lines)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        foreach (var split in splitLines)
+                        {
+                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                        }
+                    }
+                    return sb.ToString();
+                }
             }
+
             if (definitions?.Count() > 0)
             {
                 var otherDefinitions = definitions.Where(p => IsValidDefinitionType(p));
@@ -1277,7 +1288,7 @@ namespace IronyModManager.Services
                     {
                         var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                         var variables = variableDefinitions.Where(p => definition.Code.Contains(p.Id));
-                        if (definition.IsFirstLevel)
+                        if (string.IsNullOrWhiteSpace(definition.CodeTag))
                         {
                             StringBuilder sb = new StringBuilder();
                             appendLine(sb, namespaces.Select(p => p.Code));
@@ -1287,8 +1298,7 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            definition.Code = mergeCode(definition.Code, cleanCode(variables));
-                            definition.Code = mergeCode(definition.Code, cleanCode(namespaces));
+                            definition.Code = mergeCode(definition.CodeTag, definition.CodeSeparator, namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(new List<string>() { definition.OriginalCode }));
                         }
                     }
                 }

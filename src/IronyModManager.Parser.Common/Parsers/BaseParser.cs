@@ -331,7 +331,6 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="args">The arguments.</param>
         protected virtual void MapDefinitionFromArgs(ParsingArgs args)
         {
-            args.Definition.IsFirstLevel = args.IsFirstLevel;
             args.Definition.ContentSHA = args.Args.ContentSHA;
             args.Definition.Dependencies = args.Args.ModDependencies;
             args.Definition.ModName = args.Args.ModName;
@@ -417,7 +416,7 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition.OriginalCode = item.Code;
                         definition.CodeTag = parent;
-                        definition.CodeSeparator = Shared.Constants.CodeSeparators.NonClosingSeparators.EqualsSign;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
@@ -650,8 +649,8 @@ namespace IronyModManager.Parser.Common.Parsers
                         if (!isFirstLevel)
                         {
                             definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
-                            definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0]; 
-                            definition.CodeSeparator = Shared.Constants.CodeSeparators.NonClosingSeparators.EqualsSign;
+                            definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                         }
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {

@@ -115,12 +115,6 @@ namespace IronyModManager.Parser.Common.Definitions
         string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is first level.
-        /// </summary>
-        /// <value><c>true</c> if this instance is first level; otherwise, <c>false</c>.</value>
-        bool IsFirstLevel { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
