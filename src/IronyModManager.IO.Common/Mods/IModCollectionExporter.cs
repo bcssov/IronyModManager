@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="IModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -44,6 +44,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ImportModDirectoryAsync(ModCollectionExporterParams parameters);
+
+        /// <summary>
+        /// Imports the paradox asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ImportParadoxAsync(ModCollectionExporterParams parameters);
 
         /// <summary>
         /// Imports the paradoxos asynchronous.

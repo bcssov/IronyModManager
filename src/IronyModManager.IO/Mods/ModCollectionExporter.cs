@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.IO.Mods
         private static ExtractionOptions extractionOptions;
 
         /// <summary>
+        /// The paradox importer
+        /// </summary>
+        private readonly ParadoxImporter paradoxImporter;
+
+        /// <summary>
         /// The paradoxos importer
         /// </summary>
         private readonly ParadoxosImporter paradoxosImporter;
@@ -58,6 +63,7 @@ namespace IronyModManager.IO.Mods
         public ModCollectionExporter(ILogger logger)
         {
             paradoxosImporter = new ParadoxosImporter(logger);
+            paradoxImporter = new ParadoxImporter(logger);
         }
 
         #endregion Constructors
@@ -102,6 +108,16 @@ namespace IronyModManager.IO.Mods
         public Task<bool> ImportModDirectoryAsync(ModCollectionExporterParams parameters)
         {
             return Task.FromResult(ImportInternal(parameters, false));
+        }
+
+        /// <summary>
+        /// Imports the paradox asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportParadoxAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxImporter.ImportAsync(parameters);
         }
 
         /// <summary>

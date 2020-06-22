@@ -403,15 +403,15 @@ namespace IronyModManager.Controls
                 }
                 var control = (Control)e.Sender;
 
-                EventHandler<PointerEventArgs> parentControlLeave = (sender, args) =>
+                void parentControlLeave(object sender, PointerEventArgs args)
                 {
                     HandleControlPointerLeave(control, true);
-                };
+                }
 
-                EventHandler<PointerEventArgs> parentControlEnter = (sender, args) =>
+                void parentControlEnter(object sender, PointerEventArgs args)
                 {
                     HandleControlPointerEnter(control, true);
-                };
+                }
 
                 if (e.OldValue != null)
                 {
