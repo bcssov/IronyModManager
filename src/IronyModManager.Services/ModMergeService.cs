@@ -103,8 +103,8 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var total = conflictResult.AllConflicts.GetAll().Count();
-            if (total > 0)
+            var total = conflictResult.AllConflicts.GetAllFileKeys().Count();
+            if (conflictResult.AllConflicts.GetAll().Count() > 0)
             {
                 var allMods = GetInstalledModsInternal(game, false).ToList();
                 var mergeCollectionPath = collectionName.GenerateValidFileName();
@@ -213,7 +213,7 @@ namespace IronyModManager.Services
                         // Prevent exporting only namespaces
                         if (exportDefinitions.All(p => p.ValueType == Parser.Common.ValueType.Namespace))
                         {
-                            exportDefinitions.Clear();                            
+                            exportDefinitions.Clear();
                         }
                         await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                         {
@@ -222,7 +222,7 @@ namespace IronyModManager.Services
                             PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
                             Game = game.Type
                         });
-                        processed += exportDefinitions.Count + exportSingleDefinitions.Count;
+                        processed++;
                         var percentage = GetProgressPercentage(total, processed, 100);
                         if (lastPercentage != percentage)
                         {
