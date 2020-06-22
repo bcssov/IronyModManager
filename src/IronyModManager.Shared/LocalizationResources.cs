@@ -143,6 +143,7 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Collection_Mods.ImportOther.";
                 public const string Title = Prefix + "Title";
                 public const string Paradoxos = Prefix + "Paradoxos";
+                public const string Paradox = Prefix + "Paradox";
             }
             public static class MergeCollection
             {

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -228,6 +229,29 @@ namespace IronyModManager.Services
                 {
                     return instance;
                 }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import paradox as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual async Task<IModCollection> ImportParadoxAsync()
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = Create();
+            if (await modCollectionExporter.ImportParadoxAsync(new ModCollectionExporterParams()
+            {
+                ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                Mod = instance
+            }))
+            {
+                return instance;
             }
             return null;
         }
