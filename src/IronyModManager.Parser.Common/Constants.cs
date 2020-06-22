@@ -165,11 +165,6 @@ namespace IronyModManager.Parser.Common
             public const string GuiTypesId = GuiTypes + VariableSeparatorId;
 
             /// <summary>
-            /// The invalid
-            /// </summary>
-            public const string Invalid = "invalid";
-
-            /// <summary>
             /// The languages identifier
             /// </summary>
             public const string LanguagesId = "languages";

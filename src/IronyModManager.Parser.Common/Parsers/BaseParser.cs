@@ -659,7 +659,7 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.ErrorColumn = error.Column;
             definition.ErrorLine = error.Line;
             definition.ErrorMessage = error.Message;
-            definition.Id = Constants.Scripts.Invalid;
+            definition.Id = Path.GetFileName(args.File).ToLowerInvariant();
             definition.ValueType = ValueType.Invalid;
             definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
