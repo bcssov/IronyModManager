@@ -182,7 +182,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args, bool fallbackToSimpleParser = true)
         {
-            if (HasPassedComplexThreshold(args.Lines))
+            if (ShouldSwitchToSimpleParser(args.Lines))
             {
                 return EvalSimpleParseForErrorsOnly(args);
             }
@@ -339,16 +339,6 @@ namespace IronyModManager.Parser.Common.Parsers
         protected IDefinition GetDefinitionInstance()
         {
             return DIResolver.Get<IDefinition>();
-        }
-
-        /// <summary>
-        /// Determines whether [has passed complex threshold] [the specified lines].
-        /// </summary>
-        /// <param name="lines">The lines.</param>
-        /// <returns><c>true</c> if [has passed complex threshold] [the specified lines]; otherwise, <c>false</c>.</returns>
-        protected virtual bool HasPassedComplexThreshold(IEnumerable<string> lines)
-        {
-            return lines?.Count() > ComplexParseLinesThreshold;
         }
 
         /// <summary>
@@ -790,6 +780,20 @@ namespace IronyModManager.Parser.Common.Parsers
             }
             SimpleParserTags.Add(args.Definition.Id);
             return SimpleParserTags;
+        }
+
+        /// <summary>
+        /// Shoulds the switch to simple parser.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSwitchToSimpleParser(IEnumerable<string> lines)
+        {
+            if (lines != null)
+            {
+                return lines.Count() > ComplexParseLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
+            }
+            return false;
         }
 
         #endregion Methods

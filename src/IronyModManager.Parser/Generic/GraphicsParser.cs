@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !HasPassedComplexThreshold(args.Lines) && (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
+            return !ShouldSwitchToSimpleParser(args.Lines) && (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

@@ -130,11 +130,6 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
-            /// The variable prefix
-            /// </summary>
-            public const char VariablePrefix = '@';
-
-            /// <summary>
             /// The bitmap fonts identifier
             /// </summary>
             public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
@@ -148,6 +143,11 @@ namespace IronyModManager.Parser.Common
             /// The definition separator identifier
             /// </summary>
             public const string DefinitionSeparatorId = VariableSeparatorId + "{";
+
+            /// <summary>
+            /// The fallback to simple parser comment
+            /// </summary>
+            public const string FallbackToSimpleParserComment = "# Dear Irony please fallback to simple parser";
 
             /// <summary>
             /// The graphics type name
@@ -215,6 +215,11 @@ namespace IronyModManager.Parser.Common
             public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
 
             /// <summary>
+            /// The variable prefix
+            /// </summary>
+            public const char VariablePrefix = '@';
+
+            /// <summary>
             /// The variable separator identifier
             /// </summary>
             public const string VariableSeparatorId = "=";
@@ -260,6 +265,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string DiploPhrases = MergePath(CommonPath, "diplo_phrases");
 
             /// <summary>
+            /// The districts
+            /// </summary>
+            public static readonly string Districts = MergePath(CommonPath, "districts");
+
+            /// <summary>
             /// The map galaxy
             /// </summary>
             public static readonly string MapGalaxy = MergePath("map", "galaxy");
@@ -270,19 +280,14 @@ namespace IronyModManager.Parser.Common
             public static readonly string NameLists = MergePath(CommonPath, "name_lists");
 
             /// <summary>
-            /// The pop jobs
-            /// </summary>
-            public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
-
-            /// <summary>
-            /// The districts
-            /// </summary>
-            public static readonly string Districts = MergePath(CommonPath, "districts");
-
-            /// <summary>
             /// The planet classes
             /// </summary>
             public static readonly string PlanetClasses = MergePath(CommonPath, "planet_classes");
+
+            /// <summary>
+            /// The pop jobs
+            /// </summary>
+            public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
 
             /// <summary>
             /// The portraits

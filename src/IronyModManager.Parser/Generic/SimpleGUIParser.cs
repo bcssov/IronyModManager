@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="SimpleGUIParser.cs" company="Mario">
 //     Mario
@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) && HasPassedComplexThreshold(args.Lines);
+            return args.File.EndsWith(Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) && ShouldSwitchToSimpleParser(args.Lines);
         }
 
         /// <summary>
