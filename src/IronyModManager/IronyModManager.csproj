@@ -215,7 +215,7 @@
     <PackageReference Include="ReactiveUI" Version="11.4.17" />
     <PackageReference Include="SimpleInjector" Version="5.0.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="SmartFormat.NET" Version="2.5.1" />
+    <PackageReference Include="SmartFormat.NET" Version="2.5.2" />
     <PackageReference Include="Splat.NLog" Version="9.4.5" />
     <PackageReference Include="Splat.SimpleInjector" Version="9.4.5" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
