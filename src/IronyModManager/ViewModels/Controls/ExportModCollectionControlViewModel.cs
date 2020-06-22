@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -109,6 +109,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ImportDialogTitle { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other paradox.
+        /// </summary>
+        /// <value>The import other paradox.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Paradox)]
+        public virtual string ImportOtherParadox { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox command.
+        /// </summary>
+        /// <value>The import other paradox command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other paradoxos.
         /// </summary>
         /// <value>The import other paradoxos.</value>
@@ -157,6 +170,11 @@ namespace IronyModManager.ViewModels.Controls
                 var result = await fileDialogAction.OpenDialogAsync(ImportDialogTitle, string.Empty, $"{Shared.Constants.JsonExtensionWithoutDot}, {Shared.Constants.XMLExtensionWithoutDot}",
                     Shared.Constants.JsonExtensionWithoutDot, Shared.Constants.XMLExtensionWithoutDot);
                 return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }).DisposeWith(disposables);
+
+            ImportOtherParadoxCommand = ReactiveCommand.Create(() =>
+            {
+                return new CommandResult<string>(string.Empty, CommandState.Success);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

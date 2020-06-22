@@ -68,7 +68,7 @@ namespace IronyModManager.IO.Mods
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
         {
-            var path = Path.Combine(parameters.ModDirectory, DLC_load_path);
+            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), DLC_load_path);
             if (File.Exists(path))
             {
                 var content = await File.ReadAllTextAsync(path);
@@ -81,6 +81,7 @@ namespace IronyModManager.IO.Mods
                         {
                             parameters.Mod.Name = CollectionName;
                             parameters.Mod.Mods = model.EnabledMods;
+                            return true;
                         }
                     }
                     catch (Exception ex)

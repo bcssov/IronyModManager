@@ -101,7 +101,8 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Importieren Paradoxos"
+            "Paradoxos": "Importieren Paradoxos",
+            "Paradox": "Aus dem Spiel importieren"
         },
         "MergeCollection": {
             "MergedCollectionSuffix": "(Zusammengeführt)",

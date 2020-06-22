@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -118,6 +118,11 @@ namespace IronyModManager.ViewModels.Controls
         private int reorderCounter = 0;
 
         /// <summary>
+        /// The restore collection selection
+        /// </summary>
+        private string restoreCollectionSelection = string.Empty;
+
+        /// <summary>
         /// The skip mod collection save
         /// </summary>
         private bool skipModCollectionSave = false;
@@ -222,7 +227,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <summary>
             /// The paradoxos
             /// </summary>
-            Paradoxos
+            Paradoxos,
+
+            /// <summary>
+            /// The paradox
+            /// </summary>
+            Paradox
         }
 
         #endregion Enums
@@ -623,7 +633,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         SelectedModCollection = restored;
                     }
-                }                
+                }
                 restoreCollectionSelection = string.Empty;
             }
             skipModCollectionSave = true;
@@ -680,7 +690,7 @@ namespace IronyModManager.ViewModels.Controls
                 return null;
             }
 
-            Task<IModCollection> importParadoxos(IModCollection importData)
+            Task<IModCollection> importInstance(IModCollection importData)
             {
                 if (importData != null)
                 {
@@ -697,6 +707,7 @@ namespace IronyModManager.ViewModels.Controls
             var importData = type switch
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
+                ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
             if (importData == null)
@@ -717,11 +728,18 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (proceed)
             {
-                var result = type switch
+                IModCollection result;
+                switch (type)
                 {
-                    ImportProviderType.Paradoxos => await importParadoxos(importData),
-                    _ => await importDefault(),
-                };
+                    case ImportProviderType.Paradoxos:
+                    case ImportProviderType.Paradox:
+                        result = await importInstance(importData);
+                        break;
+
+                    default:
+                        result = await importDefault();
+                        break;
+                }
                 if (result != null)
                 {
                     LoadModCollections();
@@ -767,11 +785,6 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedModCollection = selected;
             }
         }
-
-        /// <summary>
-        /// The restore collection selection
-        /// </summary>
-        private string restoreCollectionSelection = string.Empty;
 
         /// <summary>
         /// Called when [activated].
@@ -883,7 +896,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
-                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)))
+                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
+                    ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)
@@ -921,7 +935,7 @@ namespace IronyModManager.ViewModels.Controls
                             ModCollections = modCollectionService.GetAll();
                             var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
                             restoreCollectionSelection = selected.Name;
-                            NeedsModListRefresh = true;                            
+                            NeedsModListRefresh = true;
                             var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Title);
                             var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Message);
                             notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);

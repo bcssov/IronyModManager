@@ -233,6 +233,10 @@ namespace IronyModManager.Services
             return null;
         }
 
+        /// <summary>
+        /// import paradox as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
         public virtual async Task<IModCollection> ImportParadoxAsync()
         {
             var game = GameService.GetSelected();
