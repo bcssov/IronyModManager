@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-04-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -47,6 +47,7 @@ namespace IronyModManager.DI
 
             RegisterAvaloniaServices(container);
             RegisterReactiveServices(container);
+            RegisterConfigurations(container);
             RegisterViews(container);
             RegisterViewModels(container);
             RegisterImplementations(container);
