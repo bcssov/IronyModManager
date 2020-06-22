@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -294,7 +294,7 @@ namespace IronyModManager.Controls
             if (_popup != null)
             {
                 _popup.SetChild(null);
-                _popup.Hide();
+                _popup.Dispose();
                 _popup = null;
             }
         }
