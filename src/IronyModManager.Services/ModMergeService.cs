@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -210,6 +210,11 @@ namespace IronyModManager.Services
                             }
                         }
 
+                        // Prevent exporting only namespaces
+                        if (exportDefinitions.All(p => p.ValueType == Parser.Common.ValueType.Namespace))
+                        {
+                            exportDefinitions.Clear();                            
+                        }
                         await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                         {
                             ExportPath = exportPath,
@@ -259,25 +264,54 @@ namespace IronyModManager.Services
         /// <returns>IDefinition.</returns>
         protected virtual IDefinition MergeDefinitions(IEnumerable<IDefinition> definitions)
         {
-            static void appendLine(StringBuilder sb, IEnumerable<string> lines)
+            static void appendLine(StringBuilder sb, IEnumerable<string> lines, int indent = 0)
             {
                 foreach (var item in lines)
                 {
-                    sb.AppendLine(item);
+                    if (indent == 0)
+                    {
+                        sb.AppendLine(item);
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{new string(' ', indent)}{item}");
+                    }
                 }
             }
-            static void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> lines)
+            static void mergeCode(StringBuilder sb, string codeTag, string separator, IEnumerable<string> variables, IEnumerable<string> lines)
             {
                 if (Shared.Constants.CodeSeparators.ClosingSeparators.Map.ContainsKey(separator))
                 {
                     var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
                     sb.AppendLine($"{codeTag} = {separator}");
-                    foreach (var item in lines)
+                    if (lines.Count() == 0)
                     {
-                        var splitLines = item.SplitOnNewLine();
-                        foreach (var split in splitLines)
+                        foreach (var item in variables)
                         {
-                            sb.AppendLine($"{new string(' ', 4)}{split}");
+                            var splitLines = item.SplitOnNewLine();
+                            appendLine(sb, splitLines, 4);
+                        }
+                    }
+                    else
+                    {
+                        bool varsInserted = false;
+                        foreach (var item in lines)
+                        {
+                            var splitLines = item.SplitOnNewLine();
+                            foreach (var split in splitLines)
+                            {
+                                sb.AppendLine($"{new string(' ', 4)}{split}");
+                                var key = split.Trim().Split("=:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0].ToLowerInvariant();
+                                if (!varsInserted && split.Contains(Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket))
+                                {
+                                    varsInserted = true;
+                                    foreach (var var in variables)
+                                    {
+                                        var splitVars = var.SplitOnNewLine();
+                                        appendLine(sb, splitVars, 8);
+                                    }
+                                }
+                            }
                         }
                     }
                     sb.AppendLine(closingTag);
@@ -285,13 +319,15 @@ namespace IronyModManager.Services
                 else
                 {
                     sb.AppendLine($"{codeTag}{separator}");
+                    foreach (var item in variables)
+                    {
+                        var splitLines = item.SplitOnNewLine();
+                        appendLine(sb, splitLines, 4);
+                    }
                     foreach (var item in lines)
                     {
                         var splitLines = item.SplitOnNewLine();
-                        foreach (var split in splitLines)
-                        {
-                            sb.AppendLine($"{new string(' ', 4)}{split}");
-                        }
+                        appendLine(sb, splitLines, 4);
                     }
                 }
             }
@@ -305,21 +341,23 @@ namespace IronyModManager.Services
             var groups = definitions.GroupBy(p => p.CodeTag, StringComparer.OrdinalIgnoreCase);
             foreach (var group in groups.OrderBy(p => p.FirstOrDefault().CodeTag, StringComparer.OrdinalIgnoreCase))
             {
-                var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
-
                 bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
-
-                var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
-
-                if (hasCodeTag)
+                if (!hasCodeTag)
                 {
-                    mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, code);
+                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                    var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                    var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
+                    appendLine(sb, code);
                 }
                 else
                 {
-                    appendLine(sb, code);
+                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
+                    var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                    var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
+                    var code = other.Select(p => p.OriginalCode);
+                    mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, vars, code);
                 }
             }
 

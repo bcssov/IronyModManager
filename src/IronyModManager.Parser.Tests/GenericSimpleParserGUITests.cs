@@ -301,6 +301,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"	@entry_info_height = 17");
             sb.AppendLine(@"	# Button in the lower right of the main view, opening the Alliance View.");
             sb.AppendLine(@"	containerWindowType = {");
+            sb.AppendLine(@"	    @why_am_i_here = 17");
             sb.AppendLine(@"		name = ""alliance_button_window""");
             sb.AppendLine(@"		position = { x = -458 y = 43 }");
             sb.AppendLine(@"	}");
@@ -318,7 +319,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new SimpleGUIParser(new CodeParser(), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count().Should().Be(4);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -328,13 +329,20 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("@sort_button_height");
+                        result[i].CodeTag.Should().BeNullOrWhiteSpace();
                         result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("@entry_info_height");
+                        result[i].CodeTag.Should().Be("guiTypes");
                         result[i].ValueType.Should().Be(Common.ValueType.Variable);
                         break;
                     case 2:
+                        result[i].Id.Should().Be("@why_am_i_here");
+                        result[i].CodeTag.Should().Be("guiTypes");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 3:
                         result[i].Id.Should().Be("alliance_button_window");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;

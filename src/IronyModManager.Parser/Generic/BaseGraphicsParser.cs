@@ -4,7 +4,7 @@
 // Created          : 04-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="BaseGraphicsParser.cs" company="Mario">
 //     Mario
@@ -131,7 +131,7 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    if (line.Trim().StartsWith("@"))
+                    if (line.Trim().StartsWith(Common.Constants.Scripts.VariablePrefix))
                     {
                         var def = GetDefinitionInstance();
                         var id = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);
@@ -283,7 +283,7 @@ namespace IronyModManager.Parser.Generic
                 }
                 else
                 {
-                    if (line.Trim().StartsWith("@"))
+                    if (line.Trim().StartsWith(Common.Constants.Scripts.VariablePrefix))
                     {
                         var def = GetDefinitionInstance();
                         var id = codeParser.GetKey(line, Common.Constants.Scripts.VariableSeparatorId);

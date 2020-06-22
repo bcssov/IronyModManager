@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1287,7 +1287,7 @@ namespace IronyModManager.Services
                     foreach (var definition in otherDefinitions)
                     {
                         var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                        var variables = variableDefinitions.Where(p => definition.Code.Contains(p.Id));
+                        var variables = variableDefinitions.Where(p => definition.Code.ReplaceTabs().Replace(" ", string.Empty).Contains($"={p.Id}"));
                         if (string.IsNullOrWhiteSpace(definition.CodeTag))
                         {
                             StringBuilder sb = new StringBuilder();

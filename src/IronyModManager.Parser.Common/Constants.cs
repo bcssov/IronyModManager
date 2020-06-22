@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -128,6 +128,11 @@ namespace IronyModManager.Parser.Common
         public static class Scripts
         {
             #region Fields
+
+            /// <summary>
+            /// The variable prefix
+            /// </summary>
+            public const char VariablePrefix = '@';
 
             /// <summary>
             /// The bitmap fonts identifier
