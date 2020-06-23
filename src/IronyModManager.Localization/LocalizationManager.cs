@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -12,9 +12,9 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using IronyModManager.Localization.ResourceProviders;
+using IronyModManager.Shared.Cache;
 using Newtonsoft.Json.Linq;
 
 namespace IronyModManager.Localization
@@ -29,9 +29,9 @@ namespace IronyModManager.Localization
         #region Fields
 
         /// <summary>
-        /// The cache
+        /// The cache prefix
         /// </summary>
-        private static readonly ConcurrentDictionary<string, JObject> cache = new ConcurrentDictionary<string, JObject>();
+        protected const string CachePrefix = "Localization";
 
         #endregion Fields
 
@@ -41,14 +41,22 @@ namespace IronyModManager.Localization
         /// Initializes a new instance of the <see cref="LocalizationManager" /> class.
         /// </summary>
         /// <param name="resourceProviders">The resource providers.</param>
-        public LocalizationManager(IEnumerable<ILocalizationResourceProvider> resourceProviders)
+        /// <param name="cache">The cache.</param>
+        public LocalizationManager(IEnumerable<ILocalizationResourceProvider> resourceProviders, ICache cache)
         {
             ResourceProviders = resourceProviders;
+            Cache = cache;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        /// <value>The cache.</value>
+        protected ICache Cache { get; private set; }
 
         /// <summary>
         /// Gets the resource providers.
@@ -98,7 +106,7 @@ namespace IronyModManager.Localization
                     });
                 }
             }
-            cache.TryAdd(locale, resource);
+            Cache.Set(CachePrefix, locale, resource);
         }
 
         /// <summary>
@@ -109,9 +117,10 @@ namespace IronyModManager.Localization
         /// <returns>System.String.</returns>
         protected virtual string GetCachedResource(string locale, string key)
         {
-            if (cache.TryGetValue(locale, out var value))
+            var resource = Cache.Get<JObject>(CachePrefix, locale);
+            if (resource != null)
             {
-                var token = value.SelectToken(key);
+                var token = resource.SelectToken(key);
                 if (token != null)
                 {
                     var content = token.Value<string>();
@@ -135,7 +144,7 @@ namespace IronyModManager.Localization
             var cached = GetCachedResource(locale, key);
             if (cached == null && CurrentLocale.CurrentCulture.TwoLetterISOLanguageName != CurrentLocale.CultureName)
             {
-                // fallback to iso language         
+                // fallback to iso language
                 cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName, key);
                 if (cached == null)
                 {

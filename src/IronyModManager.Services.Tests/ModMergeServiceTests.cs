@@ -31,6 +31,7 @@ using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
@@ -66,7 +67,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -173,7 +174,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -291,7 +292,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -432,7 +433,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -542,7 +543,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 

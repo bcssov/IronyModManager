@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -18,7 +18,6 @@ using IronyModManager.Common;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.MessageBus;
-using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Log;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
@@ -42,8 +41,6 @@ namespace IronyModManager.DI
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
-            container.Collection.Register<ILocalizationResourceProvider>(typeof(LocalizationResourceProvider));
-            container.Register<IDefaultLocalizationResourceProvider, LocalizationResourceProvider>();
             container.Register<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
