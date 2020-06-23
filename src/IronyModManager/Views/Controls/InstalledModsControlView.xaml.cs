@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -33,6 +34,15 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class InstalledModsControlView : BaseControl<InstalledModsControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The cached menu items
+        /// </summary>
+        private HashSet<object> cachedMenuItems = new HashSet<object>();
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -53,6 +63,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            IEnumerable lastDataSource = null;
             var modList = this.FindControl<ListBox>("modList");
             if (modList != null)
             {
@@ -65,13 +76,44 @@ namespace IronyModManager.Views.Controls
                         if (grid != null)
                         {
                             ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                            var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
-                            grid.ContextMenu.Items = menuItems;
+                            if (modList.Items != lastDataSource)
+                            {
+                                cachedMenuItems = new HashSet<object>();
+                                lastDataSource = modList.Items;
+                            }
+                            if (!cachedMenuItems.Contains(hoveredItem.Content))
+                            {
+                                cachedMenuItems.Add(hoveredItem.Content);
+                                var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
+                                if (grid.ContextMenu == null)
+                                {
+                                    grid.ContextMenu = new ContextMenu();
+                                }
+                                if (menuItems.Count == 0)
+                                {
+                                    grid.ContextMenu = null;
+                                }
+                                else
+                                {
+                                    grid.ContextMenu.Items = menuItems;
+                                }
+                            }
                         }
                     }
                 };
             }
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            cachedMenuItems = new HashSet<object>();
+            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-28-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -638,15 +638,25 @@ namespace IronyModManager.ViewModels.Controls
                                 idx = source.Count - 1;
                                 break;
                             }
-                            if (source[idx].Type == ChangeType.Unchanged)
+                            var prevIdx = idx - 1;
+                            if (prevIdx < 0)
+                            {
+                                prevIdx = 0;
+                            }
+                            var type = source[prevIdx].Type;
+                            if (source[idx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && source[idx].Type != ChangeType.Unchanged))
                             {
                                 break;
                             }
                         }
-                        var line = source.Skip(idx + 1).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
+                        var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            matchIdx = source.IndexOf(line);
+                            line = source.Skip(line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            if (line != null)
+                            {
+                                matchIdx = source.IndexOf(line);
+                            }
                         }
                     }
                     else
@@ -655,21 +665,31 @@ namespace IronyModManager.ViewModels.Controls
                         var reverseIdx = source.Count - idx;
                         while (true)
                         {
-                            reverseIdx++;
                             if (reverseIdx > (reverseSrc.Count - 1))
                             {
-                                reverseIdx = 0;
+                                reverseIdx = reverseSrc.Count - 1;
                                 break;
                             }
-                            if (reverseSrc[reverseIdx].Type == ChangeType.Unchanged)
+                            var prevIdx = reverseIdx - 1;
+                            if (prevIdx < 0)
+                            {
+                                prevIdx = 0;
+                            }
+                            var type = reverseSrc[prevIdx].Type;
+                            if (reverseSrc[reverseIdx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && reverseSrc[reverseIdx].Type != ChangeType.Unchanged))
                             {
                                 break;
                             }
+                            reverseIdx++;
                         }
                         var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            matchIdx = source.IndexOf(line);
+                            line = reverseSrc.Skip(reverseSrc.Count - line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            if (line != null)
+                            {
+                                matchIdx = source.IndexOf(line);
+                            }
                         }
                     }
                     if (matchIdx.HasValue)

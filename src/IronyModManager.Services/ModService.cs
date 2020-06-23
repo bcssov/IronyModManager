@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
 
@@ -160,6 +161,7 @@ namespace IronyModManager.Services
                 }, IsPatchModInternal(mod)))
                 {
                     applyModParams.TopPriorityMods = new List<IMod>() { mod };
+                    ModsCache.InvalidateCache(game);
                 }
             }
             return await ModWriter.ApplyModsAsync(applyModParams);
@@ -172,6 +174,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
+            ModsCache.InvalidateCache(game);
             return GetInstalledModsInternal(game, true);
         }
 
@@ -221,6 +224,7 @@ namespace IronyModManager.Services
                     }, IsPatchModInternal(diff)));
                 }
                 await Task.WhenAll(tasks);
+                ModsCache.InvalidateCache(game);
                 return true;
             }
 
