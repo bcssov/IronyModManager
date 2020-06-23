@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CodexMicroORM.Core.Collections;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Parser.Common.Definitions
 {
