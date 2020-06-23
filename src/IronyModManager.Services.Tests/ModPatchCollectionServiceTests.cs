@@ -820,7 +820,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_apply_mod_patch_when_nothing_to_merge",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\fake"
             });
@@ -868,7 +868,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_return_true_when_applying_patches",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\fake"
             });
@@ -887,7 +887,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_return_true_when_applying_patches"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -967,7 +967,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_create_patch_definition",
                 UserDirectory = "C:\\Users\\Fake"
             });
             mapper.Setup(s => s.Map<IDefinition>(It.IsAny<IDefinition>())).Returns((IDefinition o) =>
@@ -1033,7 +1033,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_create_patch_definition",
                 UserDirectory = "C:\\Users\\Fake"
             });
             mapper.Setup(s => s.Map<IDefinition>(It.IsAny<IDefinition>())).Returns((IDefinition o) =>
@@ -1067,7 +1067,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_create_patch_definition_and_overwrite_code_from_history",
                 UserDirectory = "C:\\Users\\Fake"
             });
             mapper.Setup(s => s.Map<IDefinition>(It.IsAny<IDefinition>())).Returns((IDefinition o) =>
@@ -1182,7 +1182,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_sync_patch_state",
                 UserDirectory = "C:\\Users\\Fake"
             });
             mapper.Setup(s => s.Map<IConflictResult>(It.IsAny<IConflictResult>())).Returns((IConflictResult o) =>
@@ -1270,7 +1270,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_sync_patch_state_and_remove_different",
                 UserDirectory = "C:\\Users\\Fake"
             });
             mapper.Setup(s => s.Map<IConflictResult>(It.IsAny<IConflictResult>())).Returns((IConflictResult o) =>
@@ -1452,7 +1452,7 @@ namespace IronyModManager.Services.Tests
 
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_clean_collection_patch",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -1515,7 +1515,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_ignore_mod_patch_when_nothing_to_merge",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\fake"
             });
@@ -1564,7 +1564,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_return_true_when_ignoring_patches",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\fake"
             });
@@ -1682,7 +1682,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "EvalDefinitionPriority_should_return_first_object",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1715,7 +1715,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "EvalDefinitionPriority_should_return_last_object",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1749,7 +1749,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "EvalDefinitionPriority_should_return_first_object_due_to_FIOS",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1783,7 +1783,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "EvalDefinitionPriority_should_return_object_due_to_Override",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1817,7 +1817,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "EvalDefinitionPriority_should_return_first_object_due_to_LIOS",
                 UserDirectory = "C:\\Users\\Fake"
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -1876,7 +1876,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "SaveIgnoredPathsAsync_should_be_false",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
@@ -1905,7 +1905,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "SaveIgnoredPathsAsync_should_be_true",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
@@ -1960,7 +1960,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "CopyPatchMod_should_be_false",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
@@ -1989,7 +1989,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "CopyPatchMod_should_be_true",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.CopyPatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
@@ -2044,7 +2044,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "RenamePatchMod_should_be_false",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.RenamePatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
@@ -2073,7 +2073,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "RenamePatchMod_should_be_true",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.RenamePatchModAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
@@ -2102,7 +2102,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "ResetCache_should_be_true",
                 UserDirectory = "C:\\Users\\Fake"
             });
             modPatchExporter.Setup(p => p.ResetCache());
@@ -2188,7 +2188,7 @@ namespace IronyModManager.Services.Tests
             });
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_get_patch_state",
                 UserDirectory = "C:\\Users\\Fake"
             });
 
@@ -2258,7 +2258,7 @@ namespace IronyModManager.Services.Tests
             });
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_resolve_full_definition_path_when_definition_null",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2287,7 +2287,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_resolve_full_definition_path",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2307,7 +2307,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_resolve_full_definition_path"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -2360,7 +2360,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_resolve_full_definition_archive_path",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2380,7 +2380,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_resolve_full_definition_archive_path"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -2478,7 +2478,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_reset_resolved_conflict",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2519,7 +2519,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_reset_resolved_conflict",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2560,7 +2560,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_reset_ignored_conflict",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -2601,7 +2601,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_reset_ignored_conflict",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });

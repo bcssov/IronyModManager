@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -128,7 +128,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_merge_same_file_content",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\Fake"
             });
@@ -139,7 +139,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_merge_same_file_content"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -246,7 +246,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_merge_same_file_non_first_level_content",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\Fake"
             });
@@ -257,7 +257,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_merge_same_file_non_first_level_content"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -387,7 +387,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_select_resolved_conflict_for_merge",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\Fake"
             });
@@ -398,7 +398,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_select_resolved_conflict_for_merge"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -463,6 +463,9 @@ namespace IronyModManager.Services.Tests
             definition.Code.Should().Be("test = {testfakestate}");
         }
 
+        /// <summary>
+        /// Defines the test method Should_select_overwritten_conflict_for_merge.
+        /// </summary>
         [Fact]
         public async Task Should_select_overwritten_conflict_for_merge()
         {
@@ -494,7 +497,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_select_overwritten_conflict_for_merge",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\Fake"
             });
@@ -505,7 +508,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Fake"
+                    Game = "Should_select_overwritten_conflict_for_merge"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
