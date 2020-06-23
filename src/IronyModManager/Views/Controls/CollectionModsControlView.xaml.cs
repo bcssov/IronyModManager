@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,9 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -42,6 +44,11 @@ namespace IronyModManager.Views.Controls
         /// The order name
         /// </summary>
         private const string OrderName = "order";
+
+        /// <summary>
+        /// The cached menu items
+        /// </summary>
+        private HashSet<object> cachedMenuItems = new HashSet<object>();
 
         /// <summary>
         /// The mod list
@@ -114,8 +121,26 @@ namespace IronyModManager.Views.Controls
                 SetContextMenus();
                 SetOrderParameters();
                 HandleItemDragged();
+                this.WhenAnyValue(p => p.IsActivated).Where(p => p).Subscribe(s =>
+                {
+                    ViewModel.CollectionJumpOnPositionChangeCommand.Subscribe(s =>
+                    {
+                        cachedMenuItems = new HashSet<object>();
+                    }).DisposeWith(disposables);
+                }).DisposeWith(disposables);
             }
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            cachedMenuItems = new HashSet<object>();
+            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>
@@ -123,6 +148,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetContextMenus()
         {
+            IEnumerable lastDataSource = null;
             modList.PointerMoved += (sender, args) =>
             {
                 var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
@@ -132,60 +158,80 @@ namespace IronyModManager.Views.Controls
                     if (grid != null)
                     {
                         ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                        if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
+                        if (modList.Items != lastDataSource)
                         {
-                            var menuItems = new List<MenuItem>();
-                            menuItems.Add(new MenuItem()
+                            cachedMenuItems = new HashSet<object>();
+                            lastDataSource = modList.Items;
+                        }
+                        if (!cachedMenuItems.Contains(hoveredItem.Content))
+                        {
+                            cachedMenuItems.Add(hoveredItem.Content);
+                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
                             {
-                                Header = ViewModel.CollectionJumpOnPositionChangeLabel,
-                                Command = ViewModel.CollectionJumpOnPositionChangeCommand
-                            });
-                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
-                            {
+                                var menuItems = new List<MenuItem>();
                                 menuItems.Add(new MenuItem()
                                 {
-                                    Header = ViewModel.OpenUrl,
-                                    Command = ViewModel.OpenUrlCommand
+                                    Header = ViewModel.CollectionJumpOnPositionChangeLabel,
+                                    Command = ViewModel.CollectionJumpOnPositionChangeCommand
                                 });
-                                menuItems.Add(new MenuItem()
+                                if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                                 {
-                                    Header = ViewModel.CopyUrl,
-                                    Command = ViewModel.CopyUrlCommand
-                                });
-                            }
-                            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
-                            {
-                                var menuItem = new MenuItem()
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.OpenUrl,
+                                        Command = ViewModel.OpenUrlCommand
+                                    });
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.CopyUrl,
+                                        Command = ViewModel.CopyUrlCommand
+                                    });
+                                }
+                                if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
                                 {
-                                    Header = ViewModel.OpenInSteam,
-                                    Command = ViewModel.OpenInSteamCommand
-                                };
+                                    var menuItem = new MenuItem()
+                                    {
+                                        Header = ViewModel.OpenInSteam,
+                                        Command = ViewModel.OpenInSteamCommand
+                                    };
+                                    if (menuItems.Count == 0)
+                                    {
+                                        menuItems.Add(menuItem);
+                                    }
+                                    else
+                                    {
+                                        menuItems.Insert(2, menuItem);
+                                    }
+                                }
+                                if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+                                {
+                                    var menuItem = new MenuItem()
+                                    {
+                                        Header = ViewModel.OpenInAssociatedApp,
+                                        Command = ViewModel.OpenInAssociatedAppCommand
+                                    };
+                                    if (menuItems.Count == 0)
+                                    {
+                                        menuItems.Add(menuItem);
+                                    }
+                                    else
+                                    {
+                                        menuItems.Insert(1, menuItem);
+                                    }
+                                }
+                                if (grid.ContextMenu == null)
+                                {
+                                    grid.ContextMenu = new ContextMenu();
+                                }
                                 if (menuItems.Count == 0)
                                 {
-                                    menuItems.Add(menuItem);
+                                    grid.ContextMenu = null;
                                 }
                                 else
                                 {
-                                    menuItems.Insert(2, menuItem);
+                                    grid.ContextMenu.Items = menuItems;
                                 }
                             }
-                            if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
-                            {
-                                var menuItem = new MenuItem()
-                                {
-                                    Header = ViewModel.OpenInAssociatedApp,
-                                    Command = ViewModel.OpenInAssociatedAppCommand
-                                };
-                                if (menuItems.Count == 0)
-                                {
-                                    menuItems.Add(menuItem);
-                                }
-                                else
-                                {
-                                    menuItems.Insert(1, menuItem);
-                                }
-                            }
-                            grid.ContextMenu.Items = menuItems;
                         }
                     }
                 }

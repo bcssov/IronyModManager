@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-14-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="BaseControl.cs" company="Mario">
 //     Mario
@@ -17,7 +17,9 @@ using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -88,6 +90,33 @@ namespace IronyModManager.Common.Views
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(CompositeDisposable disposables)
+        {
+            MessageBus.Current.Listen<LocaleChangedEventArgs>()
+                .Subscribe(x =>
+                {
+                    OnLocaleChanged(x.Locale, x.OldLocale);
+                }).DisposeWith(disposables);
+            MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
+                .Subscribe(t =>
+                {
+                    OnSelectedGameChanged(t.Game);
+                }).DisposeWith(disposables);
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected virtual void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void OnSelectedGameChanged(IGame game)
         {
         }
 
