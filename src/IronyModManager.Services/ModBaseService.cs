@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
@@ -116,6 +117,7 @@ namespace IronyModManager.Services
                     tasks.Add(task);
                 }
                 await Task.WhenAll(tasks);
+                ModsCache.InvalidateCache(game);
                 return true;
             }
             return false;
@@ -216,55 +218,71 @@ namespace IronyModManager.Services
             {
                 throw new ArgumentNullException("game");
             }
-            var result = new List<IMod>();
-            var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
-            if (installedMods?.Count() > 0)
+            var mods = ignorePatchMods ? ModsCache.GetRegularMods(game.Type) : ModsCache.GetAllMods(game.Type);
+            if (mods != null)
             {
-                foreach (var installedMod in installedMods.Where(p => p.Content.Count() > 0))
+                return mods;
+            }
+            else
+            {
+                var result = new List<IMod>();
+                var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
+                if (installedMods?.Count() > 0)
                 {
-                    var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content));
-                    if (ignorePatchMods && IsPatchModInternal(mod))
+                    foreach (var installedMod in installedMods.Where(p => p.Content.Count() > 0))
                     {
-                        continue;
-                    }
-                    mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
-                    mod.Source = GetModSource(installedMod);
-                    if (mod.Source == ModSource.Paradox)
-                    {
-                        mod.RemoteId = GetPdxModId(installedMod.FileName);
-                    }
-                    if (string.IsNullOrWhiteSpace(mod.FileName))
-                    {
-                        mod.FileName = string.Empty;
-                        mod.FullPath = string.Empty;
-                    }
-                    else
-                    {
-                        if (Path.IsPathFullyQualified(mod.FileName))
+                        var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content));
+                        if (ignorePatchMods && IsPatchModInternal(mod))
                         {
-                            mod.FullPath = mod.FileName;
+                            continue;
+                        }
+                        mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
+                        mod.Source = GetModSource(installedMod);
+                        if (mod.Source == ModSource.Paradox)
+                        {
+                            mod.RemoteId = GetPdxModId(installedMod.FileName);
+                        }
+                        if (string.IsNullOrWhiteSpace(mod.FileName))
+                        {
+                            mod.FileName = string.Empty;
+                            mod.FullPath = string.Empty;
                         }
                         else
                         {
-                            // Check user directory and workshop directory.
-                            var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
-                            var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
-                            if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
+                            if (Path.IsPathFullyQualified(mod.FileName))
                             {
-                                mod.FullPath = userDirectoryMod;
+                                mod.FullPath = mod.FileName;
                             }
-                            else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
+                            else
                             {
-                                mod.FullPath = workshopDirectoryMod;
+                                // Check user directory and workshop directory.
+                                var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
+                                var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
+                                if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
+                                {
+                                    mod.FullPath = userDirectoryMod;
+                                }
+                                else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
+                                {
+                                    mod.FullPath = workshopDirectoryMod;
+                                }
                             }
                         }
+                        // Validate if path exists
+                        mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
+                        result.Add(mod);
                     }
-                    // Validate if path exists
-                    mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
-                    result.Add(mod);
                 }
+                if (!ignorePatchMods)
+                {
+                    ModsCache.SetAllMods(game.Type, result);
+                }
+                else
+                {
+                    ModsCache.SetRegularMods(game.Type, result);
+                }
+                return result;
             }
-            return result;
         }
 
         /// <summary>

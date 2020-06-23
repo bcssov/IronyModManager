@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -35,6 +36,15 @@ namespace IronyModManager.Views
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainConflictSolverControlView : BaseControl<MainConflictSolverControlViewModel>
     {
+        #region Fields
+
+        /// <summary>
+        /// The cached menu items
+        /// </summary>
+        private HashSet<object> cachedMenuItems = new HashSet<object>();
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -82,6 +92,7 @@ namespace IronyModManager.Views
                 }
             }).DisposeWith(disposables);
 
+            IEnumerable lastDataSource = null;
             conflictList.PointerMoved += (sender, args) =>
             {
                 var hoveredItem = conflictList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
@@ -91,39 +102,59 @@ namespace IronyModManager.Views
                     if (grid != null)
                     {
                         ViewModel.EvalInvalidConflictPath(hoveredItem.Content as IHierarchicalDefinitions);
-                        if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
+                        if (conflictList.Items != lastDataSource)
                         {
-                            var menuItems = new List<MenuItem>()
-                            {
-                                new MenuItem()
-                                {
-                                    Header = ViewModel.InvalidOpenFile,
-                                    Command = ViewModel.InvalidOpenFileCommand
-                                }
-                            };
-                            if (!ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
-                            {
-                                menuItems.Add(new MenuItem()
-                                {
-                                    Header = ViewModel.InvalidOpenDirectory,
-                                    Command = ViewModel.InvalidOpenDirectoryCommand
-                                });
-                            }
-                            if (grid.ContextMenu == null)
-                            {
-                                grid.ContextMenu = new ContextMenu();
-                            }
-                            grid.ContextMenu.Items = menuItems;
+                            cachedMenuItems = new HashSet<object>();
+                            lastDataSource = conflictList.Items;
                         }
-                        else
+                        if (!cachedMenuItems.Contains(hoveredItem.Content))
                         {
-                            grid.ContextMenu = null;
+                            cachedMenuItems.Add(hoveredItem.Content);
+                            if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
+                            {
+                                var menuItems = new List<MenuItem>()
+                                {
+                                    new MenuItem()
+                                    {
+                                        Header = ViewModel.InvalidOpenFile,
+                                        Command = ViewModel.InvalidOpenFileCommand
+                                    }
+                                };
+                                if (!ViewModel.InvalidConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.InvalidOpenDirectory,
+                                        Command = ViewModel.InvalidOpenDirectoryCommand
+                                    });
+                                }
+                                if (grid.ContextMenu == null)
+                                {
+                                    grid.ContextMenu = new ContextMenu();
+                                }
+                                grid.ContextMenu.Items = menuItems;
+                            }
+                            else
+                            {
+                                grid.ContextMenu = null;
+                            }
                         }
                     }
                 }
             };
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            cachedMenuItems = new HashSet<object>();
+            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>

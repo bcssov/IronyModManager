@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
@@ -1159,6 +1160,7 @@ namespace IronyModManager.Services
                         Path = mod.DescriptorFile
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
+                    ModsCache.InvalidateCache(game);
                 }
                 else
                 {
