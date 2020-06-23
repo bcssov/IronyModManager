@@ -24,9 +24,9 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -40,9 +40,24 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// All mods cache key
+        /// </summary>
+        protected const string AllModsCacheKey = "AllMods";
+
+        /// <summary>
+        /// The mods cache prefix
+        /// </summary>
+        protected const string ModsCachePrefix = "Mods";
+
+        /// <summary>
         /// The patch collection name
         /// </summary>
         protected const string PatchCollectionName = nameof(IronyModManager) + "_";
+
+        /// <summary>
+        /// The regular mods cache key
+        /// </summary>
+        protected const string RegularModsCacheKey = "RegularMods";
 
         #endregion Fields
 
@@ -51,6 +66,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModBaseService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modWriter">The mod writer.</param>
@@ -58,10 +74,11 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModBaseService(IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+        public ModBaseService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
+            Cache = cache;
             DefinitionInfoProviders = definitionInfoProviders;
             GameService = gameService;
             Reader = reader;
@@ -72,6 +89,12 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        /// <value>The cache.</value>
+        protected ICache Cache { get; private set; }
 
         /// <summary>
         /// Gets the definition information providers.
@@ -106,6 +129,17 @@ namespace IronyModManager.Services
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Constructs the mods cache key.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="regularMods">if set to <c>true</c> [regular mods].</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ConstructModsCacheKey(IGame game, bool regularMods)
+        {
+            return $"{game.Type}-{(regularMods ? RegularModsCacheKey : AllModsCacheKey)}";
+        }
 
         /// <summary>
         /// Copies the definition.
@@ -159,7 +193,7 @@ namespace IronyModManager.Services
                     tasks.Add(task);
                 }
                 await Task.WhenAll(tasks);
-                ModsCache.InvalidateCache(game);
+                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 return true;
             }
             return false;
@@ -341,7 +375,7 @@ namespace IronyModManager.Services
             {
                 throw new ArgumentNullException("game");
             }
-            var mods = ignorePatchMods ? ModsCache.GetRegularMods(game.Type) : ModsCache.GetAllMods(game.Type);
+            var mods = Cache.Get<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods));
             if (mods != null)
             {
                 return mods;
@@ -396,14 +430,7 @@ namespace IronyModManager.Services
                         result.Add(mod);
                     }
                 }
-                if (!ignorePatchMods)
-                {
-                    ModsCache.SetAllMods(game.Type, result);
-                }
-                else
-                {
-                    ModsCache.SetRegularMods(game.Type, result);
-                }
+                Cache.Set<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods), result);
                 return result;
             }
         }

@@ -63,13 +63,32 @@ namespace IronyModManager.Shared.Cache
                 return default;
             }
             var item = cache[cacheKey];
-            var value = item.Value as T;
-            if ((item.Expiration != null && DateTimeOffset.Now - item.Created >= item.Expiration) || value == null)
+            if ((item.Expiration != null && DateTimeOffset.Now - item.Created >= item.Expiration) || !(item.Value is T value))
             {
-                cache.Remove(cacheKey);
+                Invalidate(prefix, key);
                 return default;
             }
             return value;
+        }
+
+        /// <summary>
+        /// Invalidates the specified prefix.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="keys">The keys.</param>
+        public void Invalidate(string prefix, params string[] keys)
+        {
+            lock (this)
+            {
+                foreach (var key in keys)
+                {
+                    var cacheKey = ConstructKey(prefix, key);
+                    if (cache.ContainsKey(cacheKey))
+                    {
+                        cache.Remove(cacheKey);
+                    }
+                }
+            }
         }
 
         /// <summary>

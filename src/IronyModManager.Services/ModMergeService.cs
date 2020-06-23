@@ -24,10 +24,10 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 
@@ -66,6 +66,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModMergeService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="modMergeExporter">The mod merge exporter.</param>
@@ -76,10 +77,11 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModMergeService(IMessageBus messageBus, IModPatchExporter modPatchExporter, IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModMergeService(ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
+            IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
             this.modMergeExporter = modMergeExporter;
@@ -139,7 +141,7 @@ namespace IronyModManager.Services
                     RootDirectory = game.UserDirectory,
                     Path = mod.DescriptorFile
                 }, true);
-                ModsCache.InvalidateCache(game);
+                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
 
                 var exportPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath);
 

@@ -28,10 +28,10 @@ using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 
@@ -80,6 +80,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModPatchCollectionService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
@@ -90,9 +91,9 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModPatchCollectionService(IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModPatchCollectionService(ICache cache, IMessageBus messageBus, IParserManager parserManager, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IModPatchExporter modPatchExporter, IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
+            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.messageBus = messageBus;
             this.parserManager = parserManager;
@@ -312,10 +313,13 @@ namespace IronyModManager.Services
                 }
             }
 
+            var indexedConflicts = DIResolver.Get<IIndexedDefinitions>();
+            indexedConflicts.InitMap(conflicts);
+
             var overwrittenDefs = new Dictionary<string, IDefinition>();
             foreach (var item in overwritten.GroupBy(p => p.TypeAndId))
             {
-                var conflicted = conflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                var conflicted = indexedConflicts.GetByTypeAndId(item.First().TypeAndId);
                 IEnumerable<IDefinition> definitions;
                 IDefinition definition;
                 if (conflicted.Count() > 0)
@@ -1060,7 +1064,7 @@ namespace IronyModManager.Services
                         Path = mod.DescriptorFile
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
-                    ModsCache.InvalidateCache(game);
+                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 }
                 else
                 {

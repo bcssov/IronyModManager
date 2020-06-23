@@ -32,6 +32,13 @@ namespace IronyModManager.Shared.Cache
         T Get<T>(string prefix, string key) where T : class;
 
         /// <summary>
+        /// Invalidates the specified prefix.
+        /// </summary>
+        /// <param name="prefix">The prefix.</param>
+        /// <param name="keys">The keys.</param>
+        void Invalidate(string prefix, params string[] keys);
+
+        /// <summary>
         /// Sets the specified prefix.
         /// </summary>
         /// <typeparam name="T"></typeparam>

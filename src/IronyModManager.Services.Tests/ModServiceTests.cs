@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -34,6 +34,7 @@ using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -61,7 +62,7 @@ namespace IronyModManager.Services.Tests
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService)
         {
-            return new ModService(null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(new Cache(),null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
