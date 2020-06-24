@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -412,10 +412,13 @@ namespace IronyModManager.Services
                 }
             }
 
+            var indexedConflicts = DIResolver.Get<IIndexedDefinitions>();
+            indexedConflicts.InitMap(conflicts);
+
             var overwrittenDefs = new Dictionary<string, IDefinition>();
             foreach (var item in overwritten.GroupBy(p => p.TypeAndId))
             {
-                var conflicted = conflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                var conflicted = indexedConflicts.GetByTypeAndId(item.First().TypeAndId);
                 IEnumerable<IDefinition> definitions;
                 IDefinition definition;
                 if (conflicted.Count() > 0)
