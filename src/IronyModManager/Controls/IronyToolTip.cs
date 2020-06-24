@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -477,10 +477,10 @@ namespace IronyModManager.Controls
                 var control = (Control)sender;
                 if (!skipParentCheck)
                 {
-                    var parentPointerOver = control.Parent.IsPointerOver;
+                    var parentPointerOver = (control.Parent?.IsPointerOver).GetValueOrDefault();
                     var pointerOver = control.IsPointerOver;
                     var reactToParent = GetReactToParent(control);
-                    if (reactToParent && control.Parent != null && (parentPointerOver || pointerOver))
+                    if (reactToParent && (parentPointerOver || pointerOver))
                     {
                         return;
                     }
@@ -510,12 +510,12 @@ namespace IronyModManager.Controls
             private void HandleControlPointerLeave(object sender, bool skipParentCheck)
             {
                 var control = (Control)sender;
-                var parentPointerOver = control.Parent.IsPointerOver;
+                var parentPointerOver = (control.Parent?.IsPointerOver).GetValueOrDefault();
                 var pointerOver = control.IsPointerOver;
                 if (!skipParentCheck)
                 {
                     var reactToParent = GetReactToParent(control);
-                    if (reactToParent && control.Parent != null && (parentPointerOver || pointerOver))
+                    if (reactToParent && (parentPointerOver || pointerOver))
                     {
                         return;
                     }

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -639,10 +639,6 @@ namespace IronyModManager.ViewModels.Controls
                                 break;
                             }
                             var prevIdx = idx - 1;
-                            if (prevIdx < 0)
-                            {
-                                prevIdx = 0;
-                            }
                             var type = source[prevIdx].Type;
                             if (source[idx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && source[idx].Type != ChangeType.Unchanged))
                             {

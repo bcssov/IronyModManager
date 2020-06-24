@@ -4,7 +4,7 @@
 // Created          : 06-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="Cache.cs" company="Mario">
 //     Mario
@@ -31,6 +31,11 @@ namespace IronyModManager.Shared.Cache
         /// The cache
         /// </summary>
         private readonly Dictionary<string, CacheItem> cache;
+
+        /// <summary>
+        /// The service lock
+        /// </summary>
+        private object serviceLock = new { };
 
         #endregion Fields
 
@@ -78,7 +83,7 @@ namespace IronyModManager.Shared.Cache
         /// <param name="keys">The keys.</param>
         public void Invalidate(string prefix, params string[] keys)
         {
-            lock (this)
+            lock (serviceLock)
             {
                 foreach (var key in keys)
                 {
@@ -113,7 +118,7 @@ namespace IronyModManager.Shared.Cache
         /// <param name="expiration">The expiration.</param>
         public void Set<T>(string prefix, string key, T value, TimeSpan? expiration) where T : class
         {
-            lock (this)
+            lock (serviceLock)
             {
                 var cacheKey = ConstructKey(prefix, key);
                 if (cache.ContainsKey(cacheKey))
