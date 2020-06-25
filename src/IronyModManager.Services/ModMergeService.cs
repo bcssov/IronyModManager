@@ -161,6 +161,8 @@ namespace IronyModManager.Services
                 var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                 ignoredIndex.InitMap(ignoredConflicts, true);
                 conflictResult.IgnoredConflicts = ignoredIndex;
+                var conflictHistoryIndex = DIResolver.Get<IIndexedDefinitions>();
+                conflictHistoryIndex.InitMap(state.ConflictHistory);
 
                 var lastPercentage = 0;
                 int processed = 0;
@@ -188,7 +190,7 @@ namespace IronyModManager.Services
                                         var copy = CopyDefinition(item);
                                         if (copy.ValueType != Parser.Common.ValueType.Binary)
                                         {
-                                            copy.Code = state.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId)).Code;
+                                            copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
                                         }
                                         exportSingleDefinitions.Add(copy);
                                     }
