@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -254,12 +254,13 @@ namespace IronyModManager.Services
             var overwritten = indexedDefinitions.GetByValueType(Parser.Common.ValueType.OverwrittenObject);
             var empty = indexedDefinitions.GetByValueType(Parser.Common.ValueType.EmptyFile);
 
-            double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count();
+            double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count() + empty.Count();
             double processed = 0;
             var previousProgress = 0;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
 
             // Create virtual empty objects from an empty file
+            bool searchNeedsRefresh = false;
             foreach (var item in empty)
             {
                 var emptyConflicts = indexedDefinitions.GetByFile(item.File);
@@ -278,6 +279,7 @@ namespace IronyModManager.Services
                             copy.ContentSHA = item.ContentSHA;
                             copy.UsedParser = item.UsedParser;
                             indexedDefinitions.AddToMap(copy);
+                            searchNeedsRefresh = true;
                         }
                         foreach (var fileName in item.AdditionalFileNames)
                         {
@@ -285,6 +287,17 @@ namespace IronyModManager.Services
                         }
                     }
                 }
+                processed++;
+                var perc = GetProgressPercentage(total, processed);
+                if (perc != previousProgress)
+                {
+                    messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
+                    previousProgress = perc;
+                }
+            }
+            if (searchNeedsRefresh)
+            {
+                indexedDefinitions.InitSearch();
             }
 
             foreach (var item in fileKeys)

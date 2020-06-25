@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -105,7 +105,14 @@ namespace IronyModManager.Parser.Definitions
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         public void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false)
         {
-            AddToMapInternal(definition, forceIgnoreHierarchical, true);
+            MapKeys(fileKeys, definition.FileCI);
+            MapKeys(typeKeys, definition.Type);
+            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            if (useHierarchalMap && !forceIgnoreHierarchical)
+            {
+                MapHierarchicalDefinition(definition);
+            }
+            definitions.Add(definition);
         }
 
         /// <summary>
@@ -299,10 +306,6 @@ namespace IronyModManager.Parser.Definitions
                     }
                 }
             }
-            if (trie != null)
-            {
-                InitSearch();
-            }
         }
 
         /// <summary>
@@ -317,28 +320,6 @@ namespace IronyModManager.Parser.Definitions
                 return trie.Get(searchTerm);
             }
             return null;
-        }
-
-        /// <summary>
-        /// Adds to map internal.
-        /// </summary>
-        /// <param name="definition">The definition.</param>
-        /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
-        /// <param name="directCall">if set to <c>true</c> [direct call].</param>
-        private void AddToMapInternal(IDefinition definition, bool forceIgnoreHierarchical = false, bool directCall = false)
-        {
-            MapKeys(fileKeys, definition.FileCI);
-            MapKeys(typeKeys, definition.Type);
-            MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
-            if (useHierarchalMap && !forceIgnoreHierarchical)
-            {
-                MapHierarchicalDefinition(definition);
-            }
-            definitions.Add(definition);
-            if (directCall && trie != null)
-            {
-                InitSearch();
-            }
         }
 
         /// <summary>
