@@ -186,7 +186,10 @@ namespace IronyModManager.Services
                                     foreach (var item in resolved)
                                     {
                                         var copy = CopyDefinition(item);
-                                        copy.Code = state.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId)).Code;
+                                        if (copy.ValueType != Parser.Common.ValueType.Binary)
+                                        {
+                                            copy.Code = state.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId)).Code;
+                                        }
                                         exportSingleDefinitions.Add(copy);
                                     }
                                 }
