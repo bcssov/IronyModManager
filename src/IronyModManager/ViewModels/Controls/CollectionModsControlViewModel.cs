@@ -626,7 +626,7 @@ namespace IronyModManager.ViewModels.Controls
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            await modCollectionService.ExportAsync(path, collection);
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection));
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -692,7 +692,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task<IModCollection> importDefault()
             {
-                var collection = await modCollectionService.ImportAsync(path);
+                var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
                 if (collection != null)
                 {
                     collection.IsSelected = true;
@@ -1194,7 +1194,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (modCollectionService.Delete(collectionName))
                 {
-                    await modPatchCollectionService.CleanPatchCollectionAsync(collectionName);
+                    await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName));
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
                     notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
