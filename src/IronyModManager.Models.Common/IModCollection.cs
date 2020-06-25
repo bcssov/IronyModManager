@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="IModCollection.cs" company="Mario">
 //     Mario
@@ -35,6 +35,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
         bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod names.
+        /// </summary>
+        /// <value>The mod names.</value>
+        IEnumerable<string> ModNames { get; set; }
 
         /// <summary>
         /// Gets or sets the mods.

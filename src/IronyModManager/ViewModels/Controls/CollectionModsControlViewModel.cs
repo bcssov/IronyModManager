@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -605,6 +605,19 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Assigns the mod collection names.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        protected virtual void AssignModCollectionNames(IModCollection collection)
+        {
+            if (collection == null)
+            {
+                collection = SelectedModCollection;
+            }
+            collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+        }
+
+        /// <summary>
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -612,6 +625,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
+            AssignModCollectionNames(collection);
             await modCollectionService.ExportAsync(path, collection);
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
@@ -1236,6 +1250,17 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets the automatic focus label.
+        /// </summary>
+        protected virtual void SetAutoFocusLabel()
+        {
+            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
+            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
+            var label = Smart.Format(focusLabel, new { State = focusState });
+            CollectionJumpOnPositionChangeLabel = label;
+        }
+
+        /// <summary>
         /// Sets the selected mods.
         /// </summary>
         /// <param name="selectedMods">The selected mods.</param>
@@ -1338,17 +1363,6 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }).DisposeWith(Disposables);
             }
-        }
-
-        /// <summary>
-        /// Sets the automatic focus label.
-        /// </summary>
-        private void SetAutoFocusLabel()
-        {
-            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
-            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
-            var label = Smart.Format(focusLabel, new { State = focusState });
-            CollectionJumpOnPositionChangeLabel = label;
         }
 
         #endregion Methods
