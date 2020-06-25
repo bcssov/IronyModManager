@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -219,13 +219,17 @@ namespace IronyModManager.Services
                         {
                             exportDefinitions.Clear();
                         }
-                        await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                        // Something to export?
+                        if (exportDefinitions.Count > 0 || exportSingleDefinitions.Count > 0)
                         {
-                            ExportPath = exportPath,
-                            Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase)) }, collectionMods) : null,
-                            PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
-                            Game = game.Type
-                        });
+                            await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                            {
+                                ExportPath = exportPath,
+                                Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase)) }, collectionMods) : null,
+                                PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
+                                Game = game.Type
+                            });
+                        }
                         processed++;
                         var percentage = GetProgressPercentage(total, processed, 100);
                         if (lastPercentage != percentage)
