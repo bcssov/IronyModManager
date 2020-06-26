@@ -4,7 +4,7 @@
 // Created          : 06-08-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-09-2020
+// Last Modified On : 06-26-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverModFilterControlViewModel.cs" company="Mario">
 //     Mario
@@ -52,7 +52,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The ignored paths
         /// </summary>
-        private IDisposable ignoredPaths;
+        private IDisposable isOpen;
 
         /// <summary>
         /// The previous ignored path
@@ -160,8 +160,8 @@ namespace IronyModManager.ViewModels.Controls
             this.collectionName = collectionName;
             ConflictResult = conflictResult;
             previousIgnoredPath = conflictResult.IgnoredPaths;
-            ignoredPaths?.Dispose();
-            ignoredPaths = this.WhenAnyValue(p => p.ConflictResult.IgnoredPaths).Where(p => !syncingSelectedMods).Subscribe(s =>
+            isOpen?.Dispose();
+            isOpen = this.WhenAnyValue(p => p.IsOpen).Where(p => p && !syncingSelectedMods).Subscribe(s =>
             {
                 Mods.Clear();
                 SelectedMods.Clear();
@@ -173,7 +173,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Ignores the mods.
         /// </summary>
-        /// <param name="mods">The mods.</param>
         protected async Task IgnoreModsAsync()
         {
             await Task.Delay(100);
