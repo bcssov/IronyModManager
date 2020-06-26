@@ -317,7 +317,7 @@ namespace IronyModManager.Parser.Definitions
         {
             if (trie != null)
             {
-                return trie.Get(searchTerm);
+                return trie.Get(searchTerm.ToLowerInvariant());
             }
             return null;
         }
