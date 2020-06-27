@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2020
+// Last Modified On : 06-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -648,7 +648,12 @@ namespace IronyModManager.ViewModels.Controls
                         var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            line = source.Skip(line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            var index = line.Index - 1;
+                            if (index < 0)
+                            {
+                                index = 0;
+                            }
+                            line = source.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
@@ -681,7 +686,12 @@ namespace IronyModManager.ViewModels.Controls
                         var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            line = reverseSrc.Skip(reverseSrc.Count - line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            var index = reverseSrc.Count - line.Index - 1;
+                            if (index < 0)
+                            {
+                                index = 0;
+                            }
+                            line = reverseSrc.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
