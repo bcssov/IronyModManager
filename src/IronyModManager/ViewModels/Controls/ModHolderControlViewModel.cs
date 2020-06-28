@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -100,6 +101,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The shut down state
+        /// </summary>
+        private readonly IShutDownState shutDownState;
+
+        /// <summary>
         /// The definition analyze load handler
         /// </summary>
         private IDisposable definitionAnalyzeLoadHandler = null;
@@ -121,6 +127,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="shutDownState">State of the shut down.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="gameService">The game service.</param>
@@ -134,12 +141,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
+        public ModHolderControlViewModel(IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
             Shared.MessageBus.IMessageBus messageBus, ILogger logger)
         {
+            this.shutDownState = shutDownState;
             this.modService = modService;
             this.modPatchCollectionService = modPatchCollectionService;
             this.notificationAction = notificationAction;
@@ -304,6 +312,7 @@ namespace IronyModManager.ViewModels.Controls
             var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(true, message, overlayProgress);
             modPatchCollectionService.ResetPatchStateCache();
+
             var definitions = await Task.Run(() =>
             {
                 return modPatchCollectionService.GetModObjects(gameService.GetSelected(), CollectionMods.SelectedMods);
@@ -448,7 +457,8 @@ namespace IronyModManager.ViewModels.Controls
                 var game = gameService.GetSelected();
                 if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
                 {
-                    await TriggerOverlayAsync(true);
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    await shutDownState.WaitUntilFree();
                     modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
                     if (mode == PatchStateMode.None)

@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -82,6 +83,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModPatchCollectionService modPatchCollectionService;
 
         /// <summary>
+        /// The shut down state
+        /// </summary>
+        private readonly IShutDownState shutDownState;
+
+        /// <summary>
         /// The definition analyze load handler
         /// </summary>
         private IDisposable definitionAnalyzeLoadHandler = null;
@@ -106,6 +112,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modMergeProgressHandler">The mod merge progress handler.</param>
+        /// <param name="shutDownState">State of the shut down.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="modMergeService">The mod merge service.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
@@ -113,7 +120,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         public ModifyCollectionControlViewModel(ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
             ModDefinitionLoadHandler modDefinitionLoadHandler, ModMergeProgressHandler modMergeProgressHandler,
-            IGameService gameService, IModMergeService modMergeService,
+            IShutDownState shutDownState, IGameService gameService, IModMergeService modMergeService,
             IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager)
         {
             this.modCollectionService = modCollectionService;
@@ -124,6 +131,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionLoadHandler = modDefinitionLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
             this.modMergeProgressHandler = modMergeProgressHandler;
+            this.shutDownState = shutDownState;
         }
 
         #endregion Constructors
@@ -278,6 +286,9 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null)
                 {
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    await shutDownState.WaitUntilFree();
+
                     SubscribeToProgressReports(disposables);
 
                     var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);

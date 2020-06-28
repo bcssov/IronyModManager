@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System;
 using IronyModManager.Common;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Log;
 using IronyModManager.Shared;
@@ -49,6 +50,7 @@ namespace IronyModManager.DI
             container.Register<ModDefinitionLoadHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModDefinitionPatchLoadHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IShutDownState, ShutdownState>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

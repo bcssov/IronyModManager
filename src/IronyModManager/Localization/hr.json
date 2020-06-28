@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
+        "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
         "Shortcuts": {
             "Name": "Prečaci",
             "Wiki": "Wiki",

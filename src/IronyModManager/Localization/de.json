@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
+        "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
         "Shortcuts": {
             "Name": "Verknüpfungen",
             "Wiki": "Wiki",

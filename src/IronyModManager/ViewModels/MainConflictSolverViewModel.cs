@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -24,7 +24,6 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
-using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -83,11 +82,6 @@ namespace IronyModManager.ViewModels
         private readonly INotificationAction notificationAction;
 
         /// <summary>
-        /// The writing state operation handler
-        /// </summary>
-        private readonly WritingStateOperationHandler writingStateOperationHandler;
-
-        /// <summary>
         /// The take left binary
         /// </summary>
         private bool takeLeftBinary = false;
@@ -108,7 +102,6 @@ namespace IronyModManager.ViewModels
         /// <param name="modFilter">The mod filter.</param>
         /// <param name="resetConflicts">The reset conflicts.</param>
         /// <param name="dbSearch">The database search.</param>
-        /// <param name="writingStateOperationHandler">The writing state operation handler.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
@@ -116,15 +109,13 @@ namespace IronyModManager.ViewModels
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
-            ConflictSolverDBSearchViewModel dbSearch, WritingStateOperationHandler writingStateOperationHandler,
-            ILogger logger, INotificationAction notificationAction, IAppAction appAction)
+            ConflictSolverDBSearchViewModel dbSearch, ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
             this.logger = logger;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
-            this.writingStateOperationHandler = writingStateOperationHandler;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -542,11 +533,6 @@ namespace IronyModManager.ViewModels
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var resolvingEnabled = this.WhenAnyValue(v => v.ResolvingConflict, v => !v);
-
-            writingStateOperationHandler.Message.Subscribe(s =>
-            {
-                TriggerPreventShutdown(!s.CanShutdown);
-            }).DisposeWith(disposables);
 
             BackCommand = ReactiveCommand.Create(() =>
             {

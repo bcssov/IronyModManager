@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using System.Linq;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -34,6 +35,15 @@ namespace IronyModManager.ViewModels
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainWindowViewModel : BaseViewModel
     {
+        #region Fields
+
+        /// <summary>
+        /// The writing state operation handler
+        /// </summary>
+        private readonly WritingStateOperationHandler writingStateOperationHandler;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -45,6 +55,7 @@ namespace IronyModManager.ViewModels
             MainVisible = true;
             MainOpacity = 1;
             ConflictSolver = DIResolver.Get<MainConflictSolverControlViewModel>();
+            writingStateOperationHandler = DIResolver.Get<WritingStateOperationHandler>();
         }
 
         #endregion Constructors
@@ -169,6 +180,11 @@ namespace IronyModManager.ViewModels
                             break;
                     }
                 }).DisposeWith(disposables);
+
+            writingStateOperationHandler.Message.Subscribe(s =>
+            {
+                TriggerPreventShutdown(!s.CanShutdown);
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
