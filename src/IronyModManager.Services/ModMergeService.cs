@@ -101,6 +101,13 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IMod&gt;.</returns>
         public virtual async Task<IMod> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
         {
+            string cleanString(string text)
+            {
+                text = text ?? string.Empty;
+                text = text.Replace(" ", string.Empty).Replace("\t", string.Empty).Trim();
+                return text;
+            }
+
             var game = GameService.GetSelected();
             if (game == null)
             {
@@ -220,13 +227,27 @@ namespace IronyModManager.Services
                                         var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
                                         var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
                                         var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                                        exportDefinitions.AddRange(variables);
-                                        exportDefinitions.AddRange(namespaces);
+                                        foreach (var name in namespaces)
+                                        {
+                                            if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                                            {
+                                                exportDefinitions.Add(name);
+                                            }
+                                        }
+                                        foreach (var variable in variables)
+                                        {
+                                            var hits = exportDefinitions.Where(p => p.Id == variable.Id && p.ValueType == Parser.Common.ValueType.Variable);
+                                            if (hits.Count() > 0)
+                                            {
+                                                exportDefinitions.RemoveAll(p => hits.Contains(p));
+                                            }
+                                            exportDefinitions.Add(variable);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    exportDefinitions.Add(CopyDefinition(definitionGroup.FirstOrDefault()));
+                                    exportDefinitions.Add(definitionGroup.FirstOrDefault());
                                 }
                             }
                         }
@@ -239,10 +260,16 @@ namespace IronyModManager.Services
                         // Something to export?
                         if (exportDefinitions.Count > 0 || exportSingleDefinitions.Count > 0)
                         {
+                            IDefinition merged = null;
+                            if (exportDefinitions.Count > 0)
+                            {
+                                merged = MergeDefinitions(exportDefinitions.OrderBy(p => p.Order));
+                                merged.File = file;
+                            }
                             await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                             {
                                 ExportPath = exportPath,
-                                Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Order)) }, collectionMods) : null,
+                                Definitions = merged != null ? PopulateModPath(new List<IDefinition>() { merged }, collectionMods) : null,
                                 PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
                                 Game = game.Type
                             });
@@ -369,16 +396,16 @@ namespace IronyModManager.Services
                 bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
                 if (!hasCodeTag)
                 {
-                    var namespaces = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
                     var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
                     var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
                     appendLine(sb, code);
                 }
                 else
                 {
-                    var namespaces = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = definitions.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
+                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
                     var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
                     var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
                     var code = other.Select(p => p.OriginalCode);
