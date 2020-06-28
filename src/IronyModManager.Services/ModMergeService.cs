@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -155,6 +155,7 @@ namespace IronyModManager.Services
 
                 var resolvedConflicts = state?.ResolvedConflicts ?? new List<IDefinition>();
                 var ignoredConflicts = state?.IgnoredConflicts ?? new List<IDefinition>();
+                var conflictHistory = state?.ConflictHistory ?? new List<IDefinition>();
                 var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
                 resolvedIndex.InitMap(resolvedConflicts, true);
                 conflictResult.ResolvedConflicts = resolvedIndex;
@@ -162,7 +163,7 @@ namespace IronyModManager.Services
                 ignoredIndex.InitMap(ignoredConflicts, true);
                 conflictResult.IgnoredConflicts = ignoredIndex;
                 var conflictHistoryIndex = DIResolver.Get<IIndexedDefinitions>();
-                conflictHistoryIndex.InitMap(state.ConflictHistory);
+                conflictHistoryIndex.InitMap(conflictHistory);
 
                 var lastPercentage = 0;
                 int processed = 0;
