@@ -211,15 +211,15 @@ namespace IronyModManager.Services
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 if (conflicted.Count() > 0)
                                 {
-                                    var priorityDef = CopyDefinition(EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
+                                    var priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                     exportDefinitions.Add(priorityDef);
                                     // grab variables from all files
                                     var files = conflicted.Where(p => p != priorityDef).Select(p => p.File);
                                     foreach (var item in files)
                                     {
                                         var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
-                                        var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable).Select(p => CopyDefinition(p));
-                                        var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace).Select(p => CopyDefinition(p));
+                                        var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                                        var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                                         exportDefinitions.AddRange(variables);
                                         exportDefinitions.AddRange(namespaces);
                                     }
