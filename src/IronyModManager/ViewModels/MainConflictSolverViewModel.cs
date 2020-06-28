@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-27-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -810,13 +810,15 @@ namespace IronyModManager.ViewModels
                 }
                 if (patchDefinition != null)
                 {
+                    var generatedFileNames = patchDefinition.GeneratedFileNames;
                     foreach (var fileNames in ModCompareSelector.Definitions.Select(p => p.GeneratedFileNames))
                     {
                         foreach (var item in fileNames)
                         {
-                            patchDefinition.GeneratedFileNames.Add(item);
+                            generatedFileNames.Add(item);
                         }
                     }
+                    patchDefinition.GeneratedFileNames = generatedFileNames;
                     SyncCode(patchDefinition);
                     try
                     {

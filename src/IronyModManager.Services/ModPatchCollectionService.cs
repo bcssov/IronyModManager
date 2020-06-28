@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2020
+// Last Modified On : 06-27-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -281,10 +281,12 @@ namespace IronyModManager.Services
                             indexedDefinitions.AddToMap(copy);
                             searchNeedsRefresh = true;
                         }
+                        var fileNames = copy.AdditionalFileNames;
                         foreach (var fileName in item.AdditionalFileNames)
                         {
-                            copy.AdditionalFileNames.Add(fileName);
+                            fileNames.Add(fileName);
                         }
+                        copy.AdditionalFileNames = fileNames;
                     }
                 }
                 processed++;
@@ -360,11 +362,12 @@ namespace IronyModManager.Services
                     var newDefinition = CopyDefinition(definition);
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
-                    newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
+                    var overwrittenFileNames = definition.OverwrittenFileNames;
                     foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
                     {
-                        newDefinition.OverwrittenFileNames.Add(file);
+                        overwrittenFileNames.Add(file);
                     }
+                    newDefinition.OverwrittenFileNames = overwrittenFileNames;
                     newDefinition.File = provider.GetFileName(newDefinition);
                     overwrittenDefs.Add(definition.TypeAndId, newDefinition);
                 }
