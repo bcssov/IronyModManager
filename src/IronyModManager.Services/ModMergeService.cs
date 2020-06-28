@@ -211,22 +211,22 @@ namespace IronyModManager.Services
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 if (conflicted.Count() > 0)
                                 {
-                                    var priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
+                                    var priorityDef = CopyDefinition(EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
                                     exportDefinitions.Add(priorityDef);
                                     // grab variables from all files
                                     var files = conflicted.Where(p => p != priorityDef).Select(p => p.File);
                                     foreach (var item in files)
                                     {
                                         var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
-                                        var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                                        var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                                        var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable).Select(p => CopyDefinition(p));
+                                        var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace).Select(p => CopyDefinition(p));
                                         exportDefinitions.AddRange(variables);
                                         exportDefinitions.AddRange(namespaces);
                                     }
                                 }
                                 else
                                 {
-                                    exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                    exportDefinitions.Add(CopyDefinition(definitionGroup.FirstOrDefault()));
                                 }
                             }
                         }
@@ -242,7 +242,7 @@ namespace IronyModManager.Services
                             await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                             {
                                 ExportPath = exportPath,
-                                Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Id, StringComparer.OrdinalIgnoreCase)) }, collectionMods) : null,
+                                Definitions = exportDefinitions.Count > 0 ? PopulateModPath(new List<IDefinition>() { MergeDefinitions(exportDefinitions.OrderBy(p => p.Order)) }, collectionMods) : null,
                                 PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
                                 Game = game.Type
                             });
@@ -369,16 +369,16 @@ namespace IronyModManager.Services
                 bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
                 if (!hasCodeTag)
                 {
-                    var namespaces = group.GroupBy(p => p.Id).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = group.GroupBy(p => p.Id).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                    var namespaces = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable);
                     var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
                     var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
                     appendLine(sb, code);
                 }
                 else
                 {
-                    var namespaces = group.GroupBy(p => p.Id).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = definitions.GroupBy(p => p.Id).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
+                    var namespaces = group.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                    var variables = definitions.GroupBy(p => p.Code).Select(p => p.First()).Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
                     var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
                     var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
                     var code = other.Select(p => p.OriginalCode);

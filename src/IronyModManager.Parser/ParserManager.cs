@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-05-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -222,7 +222,7 @@ namespace IronyModManager.Parser
             if (preferredParser != null)
             {
                 result = preferredParser.Parse(parseArgs);
-                SetParser(result, preferredParser.ParserName);
+                SetAdditionalData(result, preferredParser.ParserName);
             }
             else
             {
@@ -230,7 +230,7 @@ namespace IronyModManager.Parser
                 if (gameParser != null)
                 {
                     result = gameParser.Parse(parseArgs);
-                    SetParser(result, gameParser.ParserName);
+                    SetAdditionalData(result, gameParser.ParserName);
                 }
                 else
                 {
@@ -238,13 +238,13 @@ namespace IronyModManager.Parser
                     if (genericParser != null)
                     {
                         result = genericParser.Parse(parseArgs);
-                        SetParser(result, genericParser.ParserName);
+                        SetAdditionalData(result, genericParser.ParserName);
                     }
                     else
                     {
                         var parser = defaultParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                         result = parser.Parse(parseArgs);
-                        SetParser(result, parser.ParserName);
+                        SetAdditionalData(result, parser.ParserName);
                     }
                 }
             }
@@ -256,12 +256,15 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="definitions">The definitions.</param>
         /// <param name="parserName">Name of the parser.</param>
-        private void SetParser(IEnumerable<IDefinition> definitions, string parserName)
+        private void SetAdditionalData(IEnumerable<IDefinition> definitions, string parserName)
         {
             if (definitions?.Count() > 0)
             {
+                int order = 0;
                 foreach (var item in definitions)
                 {
+                    order++;
+                    item.Order = order;
                     item.UsedParser = parserName;
                 }
             }

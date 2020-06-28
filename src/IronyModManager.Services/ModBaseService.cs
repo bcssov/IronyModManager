@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -169,6 +169,7 @@ namespace IronyModManager.Services
             newDefinition.OriginalCode = definition.OriginalCode;
             newDefinition.CodeSeparator = definition.CodeSeparator;
             newDefinition.CodeTag = definition.CodeTag;
+            newDefinition.Order = definition.Order;
             return newDefinition;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -373,6 +373,13 @@ namespace IronyModManager.Parser.Definitions
         public string ModPath { get; set; }
 
         /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        [JsonIgnore]
+        public int Order { get; set; }
+
+        /// <summary>
         /// Gets or sets the original code.
         /// </summary>
         /// <value>The original code.</value>
@@ -540,6 +547,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(CodeTag) => CodeTag,
                 nameof(OriginalCode) => originalCode,
                 nameof(Tags) => Tags,
+                nameof(Order) => Order,
                 _ => Id,
             };
         }

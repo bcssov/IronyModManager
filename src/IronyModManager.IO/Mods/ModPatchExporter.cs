@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -534,6 +534,7 @@ namespace IronyModManager.IO.Mods
             newInstance.OriginalCode = original.OriginalCode;
             newInstance.CodeSeparator = original.CodeSeparator;
             newInstance.CodeTag = original.CodeTag;
+            newInstance.Order = original.Order;
             return newInstance;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -126,6 +126,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The mod path.</value>
         [JsonIgnore]
         string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        [JsonIgnore]
+        int Order { get; set; }
 
         /// <summary>
         /// Gets or sets the original code.
