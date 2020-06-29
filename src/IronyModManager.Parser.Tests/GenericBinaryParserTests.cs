@@ -73,7 +73,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Code.Trim().Should().BeNullOrEmpty();
-                        result[i].Id.Should().Be("test.png");
+                        result[i].Id.Should().Be("test");
                         result[i].ValueType.Should().Be(Common.ValueType.Binary);
                         break;
 
