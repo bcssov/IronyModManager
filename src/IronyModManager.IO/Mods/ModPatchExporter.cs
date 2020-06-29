@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -320,6 +320,20 @@ namespace IronyModManager.IO.Mods
                     continue;
                 }
                 var stream = reader.GetStream(def.ModPath, def.File);
+                // If image and no stream try switching extension
+                if (Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+                {
+                    var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
+                    var file = string.Join(".", segments.Take(segments.Count() - 1));
+                    foreach (var item in Constants.ImageExtensions)
+                    {
+                        stream = reader.GetStream(def.ModPath, file + item);
+                        if (stream != null)
+                        {
+                            break;
+                        }
+                    }
+                }
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));

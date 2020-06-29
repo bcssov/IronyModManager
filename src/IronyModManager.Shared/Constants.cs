@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -88,6 +88,11 @@ namespace IronyModManager.Shared
         /// The zip extension without dot
         /// </summary>
         public const string ZipExtensionWithoutDot = "zip";
+
+        /// <summary>
+        /// The image extensions
+        /// </summary>
+        public static readonly string[] ImageExtensions = new string[] { ".gif", ".jpg", ".jpeg", ".png", ".dds", ".tga", ".bmp", ".tiff", ".tif" };
 
         /// <summary>
         /// The text extensions
