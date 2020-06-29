@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -253,6 +253,11 @@ namespace IronyModManager.Parser.Common
             /// The sound
             /// </summary>
             public const string Sound = "sound";
+
+            /// <summary>
+            /// The scripted variables
+            /// </summary>
+            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
             /// The component tags

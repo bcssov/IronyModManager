@@ -355,8 +355,8 @@ namespace IronyModManager.Services
                             }
                         }
 
-                        // Prevent exporting only namespaces
-                        if (exportDefinitions.All(p => p.ValueType == Parser.Common.ValueType.Namespace))
+                        // Prevent exporting only namespaces or variables?
+                        if (exportDefinitions.All(p => p.ValueType == Parser.Common.ValueType.Namespace || p.ValueType == Parser.Common.ValueType.Variable))
                         {
                             exportDefinitions.Clear();
                         }
