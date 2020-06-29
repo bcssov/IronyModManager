@@ -366,8 +366,10 @@ namespace IronyModManager.Services
                             IDefinition merged = null;
                             if (exportDefinitions.Count > 0)
                             {
+                                var conflicts = conflictResult.AllConflicts.GetByFile(file);
                                 merged = MergeDefinitions(exportDefinitions.OrderBy(p => p.Order));
-                                merged.File = file;
+                                // Preserve proper file casing
+                                merged.File = conflicts.FirstOrDefault().File;
                             }
                             await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
                             {
