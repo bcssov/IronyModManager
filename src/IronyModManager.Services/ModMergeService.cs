@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -218,36 +218,87 @@ namespace IronyModManager.Services
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 if (conflicted.Count() > 0)
                                 {
-                                    var priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
+                                    IDefinition priorityDef;
+                                    // More then 1 per file in a mod?
+                                    var modGroups = conflicted.GroupBy(p => p.ModName);
+                                    if (modGroups.Any(p => p.GroupBy(p => p.FileCI).Count() > 1))
+                                    {
+                                        var validDefinitions = new List<IDefinition>();
+                                        foreach (var modGroup in modGroups)
+                                        {
+                                            if (modGroup.GroupBy(p => p.FileCI).Count() > 1)
+                                            {
+                                                foreach (var item in modGroup)
+                                                {
+                                                    if (item.FileCI.Equals(file.ToLowerInvariant()))
+                                                    {
+                                                        validDefinitions.Add(item);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                validDefinitions.AddRange(modGroup);
+                                            }
+                                        }
+                                        priorityDef = EvalDefinitionPriorityInternal(validDefinitions.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
+                                    }
+                                    else
+                                    {
+                                        priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
+                                    }
                                     exportDefinitions.Add(priorityDef);
                                     // grab variables from all files
-                                    var files = conflicted.Where(p => p != priorityDef).Select(p => p.File);
-                                    foreach (var item in files)
+                                    var files = conflicted.Select(p => p.File);
+                                    foreach (var item in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
                                     {
                                         var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
                                         var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
                                         var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                                        foreach (var name in namespaces)
+                                        foreach (var name in namespaces.Where(p => p.ModName.Equals(priorityDef.ModName)))
                                         {
                                             if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
                                             {
-                                                exportDefinitions.Add(name);
+                                                var copy = CopyDefinition(name);
+                                                copy.CodeTag = priorityDef.CodeTag;
+                                                copy.CodeSeparator = priorityDef.CodeSeparator;
+                                                exportDefinitions.Add(copy);
                                             }
                                         }
-                                        foreach (var variable in variables)
+                                        foreach (var variable in variables.Where(p => p.ModName.Equals(priorityDef.ModName)))
                                         {
                                             var hits = exportDefinitions.Where(p => p.Id == variable.Id && p.ValueType == Parser.Common.ValueType.Variable);
                                             if (hits.Count() > 0)
                                             {
                                                 exportDefinitions.RemoveAll(p => hits.Contains(p));
                                             }
-                                            exportDefinitions.Add(variable);
+                                            var copy = CopyDefinition(variable);
+                                            copy.CodeTag = priorityDef.CodeTag;
+                                            copy.CodeSeparator = priorityDef.CodeSeparator;
+                                            exportDefinitions.Add(copy);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                    if (definitionGroup.FirstOrDefault().ValueType == Parser.Common.ValueType.Namespace)
+                                    {
+                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(definitionGroup.FirstOrDefault().Code))))
+                                        {
+                                            exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                        }
+                                    }
+                                    else if (definitionGroup.FirstOrDefault().ValueType == Parser.Common.ValueType.Variable)
+                                    {
+                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Variable && p.Id.Equals(definitionGroup.FirstOrDefault().Id)))
+                                        {
+                                            exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                        }
+                                    }
+                                    else
+                                    {
+                                        exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                    }
                                 }
                             }
                         }
