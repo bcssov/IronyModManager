@@ -175,6 +175,7 @@ namespace IronyModManager.Services
                 var lastPercentage = 0;
                 int processed = 0;
 
+                var dumpedIds = new HashSet<string>();
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
                 {
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
@@ -200,7 +201,18 @@ namespace IronyModManager.Services
                                         {
                                             copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
                                         }
-                                        exportSingleDefinitions.Add(copy);
+                                        if (copy.ValueType != Parser.Common.ValueType.Namespace && copy.ValueType != Parser.Common.ValueType.Variable)
+                                        {
+                                            if (!dumpedIds.Contains(copy.TypeAndId))
+                                            {
+                                                exportSingleDefinitions.Add(copy);
+                                                dumpedIds.Add(copy.TypeAndId);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            exportSingleDefinitions.Add(copy);
+                                        }
                                     }
                                 }
                                 else
@@ -208,7 +220,18 @@ namespace IronyModManager.Services
                                     foreach (var item in overwritten)
                                     {
                                         var copy = CopyDefinition(item);
-                                        exportSingleDefinitions.Add(copy);
+                                        if (copy.ValueType != Parser.Common.ValueType.Namespace && copy.ValueType != Parser.Common.ValueType.Variable)
+                                        {
+                                            if (!dumpedIds.Contains(copy.TypeAndId))
+                                            {
+                                                exportSingleDefinitions.Add(copy);
+                                                dumpedIds.Add(copy.TypeAndId);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            exportSingleDefinitions.Add(copy);
+                                        }
                                     }
                                 }
                             }
@@ -221,8 +244,10 @@ namespace IronyModManager.Services
                                     IDefinition priorityDef;
                                     // More then 1 per file in a mod?
                                     var modGroups = conflicted.GroupBy(p => p.ModName);
+                                    bool allowDuplicate = false;
                                     if (modGroups.Any(p => p.GroupBy(p => p.FileCI).Count() > 1))
                                     {
+                                        allowDuplicate = true;
                                         var validDefinitions = new List<IDefinition>();
                                         foreach (var modGroup in modGroups)
                                         {
@@ -247,7 +272,26 @@ namespace IronyModManager.Services
                                     {
                                         priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                     }
-                                    exportDefinitions.Add(priorityDef);
+                                    if (allowDuplicate)
+                                    {
+                                        exportDefinitions.Add(priorityDef);
+                                        dumpedIds.Add(priorityDef.TypeAndId);
+                                    }
+                                    else
+                                    {
+                                        if (priorityDef.ValueType != Parser.Common.ValueType.Namespace && priorityDef.ValueType != Parser.Common.ValueType.Variable)
+                                        {
+                                            if (!dumpedIds.Contains(priorityDef.TypeAndId))
+                                            {
+                                                exportDefinitions.Add(priorityDef);
+                                                dumpedIds.Add(priorityDef.TypeAndId);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            exportDefinitions.Add(priorityDef);
+                                        }
+                                    }
                                     // grab variables from all files
                                     var files = conflicted.Select(p => p.File);
                                     foreach (var item in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
@@ -281,23 +325,28 @@ namespace IronyModManager.Services
                                 }
                                 else
                                 {
-                                    if (definitionGroup.FirstOrDefault().ValueType == Parser.Common.ValueType.Namespace)
+                                    var def = definitionGroup.FirstOrDefault();
+                                    if (def.ValueType == Parser.Common.ValueType.Namespace)
                                     {
-                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(definitionGroup.FirstOrDefault().Code))))
+                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(def.Code))))
                                         {
-                                            exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                            exportDefinitions.Add(def);
                                         }
                                     }
-                                    else if (definitionGroup.FirstOrDefault().ValueType == Parser.Common.ValueType.Variable)
+                                    else if (def.ValueType == Parser.Common.ValueType.Variable)
                                     {
-                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Variable && p.Id.Equals(definitionGroup.FirstOrDefault().Id)))
+                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Variable && p.Id.Equals(def.Id)))
                                         {
-                                            exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                            exportDefinitions.Add(def);
                                         }
                                     }
                                     else
                                     {
-                                        exportDefinitions.Add(definitionGroup.FirstOrDefault());
+                                        if (!dumpedIds.Contains(def.TypeAndId))
+                                        {
+                                            exportDefinitions.Add(def);
+                                            dumpedIds.Add(def.TypeAndId);
+                                        }
                                     }
                                 }
                             }
