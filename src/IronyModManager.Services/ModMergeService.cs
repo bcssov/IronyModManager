@@ -272,54 +272,57 @@ namespace IronyModManager.Services
                                     {
                                         priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                     }
-                                    if (allowDuplicate)
+                                    if (priorityDef != null)
                                     {
-                                        exportDefinitions.Add(priorityDef);
-                                        dumpedIds.Add(priorityDef.TypeAndId);
-                                    }
-                                    else
-                                    {
-                                        if (priorityDef.ValueType != Parser.Common.ValueType.Namespace && priorityDef.ValueType != Parser.Common.ValueType.Variable)
+                                        if (allowDuplicate)
                                         {
-                                            if (!dumpedIds.Contains(priorityDef.TypeAndId))
-                                            {
-                                                exportDefinitions.Add(priorityDef);
-                                                dumpedIds.Add(priorityDef.TypeAndId);
-                                            }
+                                            exportDefinitions.Add(priorityDef);
+                                            dumpedIds.Add(priorityDef.TypeAndId);
                                         }
                                         else
                                         {
-                                            exportDefinitions.Add(priorityDef);
-                                        }
-                                    }
-                                    // grab variables from all files
-                                    var files = conflicted.Select(p => p.File);
-                                    foreach (var item in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
-                                    {
-                                        var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
-                                        var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                                        var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                                        foreach (var name in namespaces.Where(p => p.ModName.Equals(priorityDef.ModName)))
-                                        {
-                                            if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                                            if (priorityDef.ValueType != Parser.Common.ValueType.Namespace && priorityDef.ValueType != Parser.Common.ValueType.Variable)
                                             {
-                                                var copy = CopyDefinition(name);
+                                                if (!dumpedIds.Contains(priorityDef.TypeAndId))
+                                                {
+                                                    exportDefinitions.Add(priorityDef);
+                                                    dumpedIds.Add(priorityDef.TypeAndId);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                exportDefinitions.Add(priorityDef);
+                                            }
+                                        }
+                                        // grab variables from all files
+                                        var files = conflicted.Select(p => p.File);
+                                        foreach (var item in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
+                                        {
+                                            var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
+                                            var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                                            var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                                            foreach (var name in namespaces.Where(p => p.ModName.Equals(priorityDef.ModName)))
+                                            {
+                                                if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                                                {
+                                                    var copy = CopyDefinition(name);
+                                                    copy.CodeTag = priorityDef.CodeTag;
+                                                    copy.CodeSeparator = priorityDef.CodeSeparator;
+                                                    exportDefinitions.Add(copy);
+                                                }
+                                            }
+                                            foreach (var variable in variables.Where(p => p.ModName.Equals(priorityDef.ModName)))
+                                            {
+                                                var hits = exportDefinitions.Where(p => p.Id == variable.Id && p.ValueType == Parser.Common.ValueType.Variable);
+                                                if (hits.Count() > 0)
+                                                {
+                                                    exportDefinitions.RemoveAll(p => hits.Contains(p));
+                                                }
+                                                var copy = CopyDefinition(variable);
                                                 copy.CodeTag = priorityDef.CodeTag;
                                                 copy.CodeSeparator = priorityDef.CodeSeparator;
                                                 exportDefinitions.Add(copy);
                                             }
-                                        }
-                                        foreach (var variable in variables.Where(p => p.ModName.Equals(priorityDef.ModName)))
-                                        {
-                                            var hits = exportDefinitions.Where(p => p.Id == variable.Id && p.ValueType == Parser.Common.ValueType.Variable);
-                                            if (hits.Count() > 0)
-                                            {
-                                                exportDefinitions.RemoveAll(p => hits.Contains(p));
-                                            }
-                                            var copy = CopyDefinition(variable);
-                                            copy.CodeTag = priorityDef.CodeTag;
-                                            copy.CodeSeparator = priorityDef.CodeSeparator;
-                                            exportDefinitions.Add(copy);
                                         }
                                     }
                                 }

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -121,7 +121,7 @@ namespace IronyModManager.IO.Readers
                 if (!reader.Entry.IsDirectory)
                 {
                     var relativePath = reader.Entry.Key.Trim("\\/".ToCharArray()).Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar);
-                    if (!relativePath.Contains(Path.DirectorySeparatorChar) || relativePath.StartsWith("."))
+                    if (!relativePath.Contains(Path.DirectorySeparatorChar) || relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".")))
                     {
                         continue;
                     }
