@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 06-30-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -101,9 +101,9 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IMod&gt;.</returns>
         public virtual async Task<IMod> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
         {
-            string cleanString(string text)
+            static string cleanString(string text)
             {
-                text = text ?? string.Empty;
+                text ??= string.Empty;
                 text = text.Replace(" ", string.Empty).Replace("\t", string.Empty).Trim();
                 return text;
             }
@@ -276,7 +276,7 @@ namespace IronyModManager.Services
                                     {
                                         if (allowDuplicate)
                                         {
-                                            exportDefinitions.Add(priorityDef);
+                                            exportDefinitions.Add(CopyDefinition(priorityDef));
                                             dumpedIds.Add(priorityDef.TypeAndId);
                                         }
                                         else
@@ -285,13 +285,13 @@ namespace IronyModManager.Services
                                             {
                                                 if (!dumpedIds.Contains(priorityDef.TypeAndId))
                                                 {
-                                                    exportDefinitions.Add(priorityDef);
+                                                    exportDefinitions.Add(CopyDefinition(priorityDef));
                                                     dumpedIds.Add(priorityDef.TypeAndId);
                                                 }
                                             }
                                             else
                                             {
-                                                exportDefinitions.Add(priorityDef);
+                                                exportDefinitions.Add(CopyDefinition(priorityDef));
                                             }
                                         }
                                         // grab variables from all files
@@ -333,21 +333,21 @@ namespace IronyModManager.Services
                                     {
                                         if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(def.Code))))
                                         {
-                                            exportDefinitions.Add(def);
+                                            exportDefinitions.Add(CopyDefinition(def));
                                         }
                                     }
                                     else if (def.ValueType == Parser.Common.ValueType.Variable)
                                     {
                                         if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Variable && p.Id.Equals(def.Id)))
                                         {
-                                            exportDefinitions.Add(def);
+                                            exportDefinitions.Add(CopyDefinition(def));
                                         }
                                     }
                                     else
                                     {
                                         if (!dumpedIds.Contains(def.TypeAndId))
                                         {
-                                            exportDefinitions.Add(def);
+                                            exportDefinitions.Add(CopyDefinition(def));
                                             dumpedIds.Add(def.TypeAndId);
                                         }
                                     }
@@ -366,9 +366,45 @@ namespace IronyModManager.Services
                             IDefinition merged = null;
                             if (exportDefinitions.Count > 0)
                             {
-                                var conflicts = conflictResult.AllConflicts.GetByFile(file);
+                                var groupedMods = exportDefinitions.GroupBy(p => p.ModName);
+                                if (groupedMods.Count() > 1)
+                                {
+                                    var topGroup = groupedMods.OrderByDescending(p => p.Count()).FirstOrDefault();
+                                    foreach (var groupedMod in groupedMods.Where(p => p.Key != topGroup.Key))
+                                    {
+                                        foreach (var item in groupedMod)
+                                        {
+                                            var allConflicts = conflictResult.AllConflicts.GetByTypeAndId(item.TypeAndId).Where(p => p.ModName.Equals(topGroup.Key));
+                                            if (allConflicts.Count() > 1)
+                                            {
+                                                var match = allConflicts.FirstOrDefault(p => p.FileCI.Equals(item.FileCI));
+                                                if (match != null)
+                                                {
+                                                    item.Order = match.Order;
+                                                }
+                                                else
+                                                {
+                                                    var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                                                    if (infoProvider.DefinitionUsesFIOSRules(item))
+                                                    {
+                                                        item.Order = allConflicts.OrderBy(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
+                                                    }
+                                                    else
+                                                    {
+                                                        item.Order = allConflicts.OrderByDescending(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
+                                                    }
+                                                }
+                                            }
+                                            else if (allConflicts.Count() == 1)
+                                            {
+                                                item.Order = allConflicts.FirstOrDefault().Order;
+                                            }
+                                        }
+                                    }
+                                }
                                 merged = MergeDefinitions(exportDefinitions.OrderBy(p => p.Order));
                                 // Preserve proper file casing
+                                var conflicts = conflictResult.AllConflicts.GetByFile(file);
                                 merged.File = conflicts.FirstOrDefault().File;
                             }
                             await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
