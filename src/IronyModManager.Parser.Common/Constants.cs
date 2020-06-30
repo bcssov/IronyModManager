@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 06-30-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -302,7 +302,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The random names
             /// </summary>
-            public static readonly string RandomNames = MergePath(CommonPath, "random_names");
+            public static readonly string RandomNamesBase = MergePath(CommonPath, "random_names", "base");
 
             /// <summary>
             /// The solar system initializers
