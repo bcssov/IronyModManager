@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2020
+// Last Modified On : 07-01-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -119,7 +119,7 @@ namespace IronyModManager.Services
                 var sb = new StringBuilder();
                 foreach (var line in lines)
                 {
-                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
                     if (!parsed.StartsWith(ModNameIgnoreId))
                     {
                         sb.AppendLine(line);
@@ -422,7 +422,7 @@ namespace IronyModManager.Services
                 var lines = ignoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
-                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
                     if (parsed.StartsWith(ModNameIgnoreId))
                     {
                         var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);
@@ -977,7 +977,7 @@ namespace IronyModManager.Services
                 var lines = conflictResult.IgnoredPaths.SplitOnNewLine().Where(p => !p.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
-                    var parsed = line.Replace('\\', Path.DirectorySeparatorChar).Replace('/', Path.DirectorySeparatorChar).Trim().TrimStart(Path.DirectorySeparatorChar);
+                    var parsed = line.StandardizeDirectorySeparator().Trim().TrimStart(Path.DirectorySeparatorChar);
                     if (parsed.StartsWith(ModNameIgnoreId))
                     {
                         var ignoredModName = parsed.Replace(ModNameIgnoreId, string.Empty);

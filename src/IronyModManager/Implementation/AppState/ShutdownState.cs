@@ -4,7 +4,7 @@
 // Created          : 06-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-01-2020
 // ***********************************************************************
 // <copyright file="ShutdownState.cs" company="Mario">
 //     Mario
@@ -29,7 +29,7 @@ namespace IronyModManager.Implementation.AppState
         /// <summary>
         /// The can shutdown
         /// </summary>
-        private bool canShutdown;
+        private volatile bool canShutdown;
 
         #endregion Fields
 

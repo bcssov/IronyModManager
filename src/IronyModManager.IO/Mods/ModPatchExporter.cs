@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 07-01-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -293,6 +293,40 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// Standardizes the definition paths.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        protected virtual void StandardizeDefinitionPaths(IEnumerable<IDefinition> definitions)
+        {
+            static IList<string> standardizeArray(IList<string> paths)
+            {
+                if (paths?.Count() > 0)
+                {
+                    var newPaths = new List<string>();
+                    foreach (var item in paths)
+                    {
+                        newPaths.Add(item.StandardizeDirectorySeparator());
+                    }
+                    return newPaths;
+                }
+                return paths;
+            }
+
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    item.AdditionalFileNames = standardizeArray(item.AdditionalFileNames);
+                    item.File = item.File.StandardizeDirectorySeparator();
+                    item.GeneratedFileNames = standardizeArray(item.GeneratedFileNames);
+                    item.ModPath = item.ModPath.StandardizeDirectorySeparator();
+                    item.OverwrittenFileNames = standardizeArray(item.OverwrittenFileNames);
+                    item.Type = item.Type.StandardizeDirectorySeparator();
+                }
+            }
+        }
+
+        /// <summary>
         /// Copies the binaries asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -456,25 +490,49 @@ namespace IronyModManager.IO.Mods
                     {
                         cached.ConflictHistory = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.ConflictHistory);
+                    }
                     if (cached.Conflicts == null)
                     {
                         cached.Conflicts = new List<IDefinition>();
+                    }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.Conflicts);
                     }
                     if (cached.IgnoredConflicts == null)
                     {
                         cached.IgnoredConflicts = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.IgnoredConflicts);
+                    }
                     if (cached.OrphanConflicts == null)
                     {
                         cached.OrphanConflicts = new List<IDefinition>();
+                    }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.OrphanConflicts);
                     }
                     if (cached.ResolvedConflicts == null)
                     {
                         cached.ResolvedConflicts = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.ResolvedConflicts);
+                    }
                     if (cached.OverwrittenConflicts == null)
                     {
                         cached.OverwrittenConflicts = new List<IDefinition>();
+                    }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.OverwrittenConflicts);
                     }
                     // If not allowing full load don't cache anything
                     if (loadExternalCode)
