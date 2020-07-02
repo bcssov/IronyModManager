@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-01-2020
+// Last Modified On : 07-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -278,6 +278,9 @@ namespace IronyModManager.Services
                             copy.Code = item.Code;
                             copy.ContentSHA = item.ContentSHA;
                             copy.UsedParser = item.UsedParser;
+                            copy.OriginalCode = item.OriginalCode;
+                            copy.CodeSeparator = item.CodeSeparator;
+                            copy.CodeTag = item.CodeTag;
                             indexedDefinitions.AddToMap(copy);
                             searchNeedsRefresh = true;
                         }

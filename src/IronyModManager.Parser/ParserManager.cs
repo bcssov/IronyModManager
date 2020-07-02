@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-02-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -102,7 +102,8 @@ namespace IronyModManager.Parser
                 (args.Lines == null || args.Lines.Count() == 0 || args.Lines.Count(p => isValidLine(p)) == 0))
             {
                 var definition = DIResolver.Get<IDefinition>();
-                definition.Code = "# This mod contains empty code. Possibly to overwrite other mods.";
+                definition.OriginalCode = definition.Code = "# This mod contains empty code. Possibly to overwrite other mods.";
+                definition.CodeSeparator = definition.CodeTag = string.Empty;
                 definition.ContentSHA = args.ContentSHA;
                 definition.Dependencies = args.ModDependencies;
                 definition.File = args.File;
