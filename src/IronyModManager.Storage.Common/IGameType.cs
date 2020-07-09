@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -28,6 +28,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The checksum folders.</value>
         IEnumerable<string> ChecksumFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game folders.
+        /// </summary>
+        /// <value>The game folders.</value>
+        IEnumerable<string> GameFolders { get; set; }
 
         /// <summary>
         /// Gets or sets the log location.

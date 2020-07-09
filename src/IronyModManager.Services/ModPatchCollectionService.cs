@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-02-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -458,7 +458,7 @@ namespace IronyModManager.Services
             mods.AsParallel().ForAll((m) =>
             {
                 IEnumerable<IDefinition> result = null;
-                result = ParseModFiles(game, Reader.Read(m.FullPath), m);
+                result = ParseModFiles(game, Reader.Read(m.FullPath, game.GameFolders), m);
                 if (result?.Count() > 0)
                 {
                     foreach (var item in result)

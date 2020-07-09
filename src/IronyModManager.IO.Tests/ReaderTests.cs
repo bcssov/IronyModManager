@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -243,8 +243,9 @@ namespace IronyModManager.IO.Tests
             /// Reads the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
+            /// <param name="allowedPaths">The allowed paths.</param>
             /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-            public IReadOnlyCollection<IFileInfo> Read(string path)
+            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
             {
                 return new List<IFileInfo>() { new FileInfo()
                 {
@@ -300,8 +301,9 @@ namespace IronyModManager.IO.Tests
             /// Reads the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
+            /// <param name="allowedPaths">The allowed paths.</param>
             /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-            public IReadOnlyCollection<IFileInfo> Read(string path)
+            public IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
             {
                 return new List<IFileInfo>() { new FileInfo()
                 {
