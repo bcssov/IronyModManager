@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -239,7 +239,7 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" });
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame"});
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
@@ -247,6 +247,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
         }
 
         /// <summary>
@@ -415,7 +416,7 @@ namespace IronyModManager.Storage.Tests
                 return dbMock.Games.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" });
+            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame" });
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
@@ -424,6 +425,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
+            result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
         }
 
         /// <summary>

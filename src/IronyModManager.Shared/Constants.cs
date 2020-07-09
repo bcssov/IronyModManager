@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -181,6 +181,13 @@ namespace IronyModManager.Shared
                 /// The checksum folders
                 /// </summary>
                 public static readonly string[] ChecksumFolders = new string[] { "common", "events", "map", "localisation_synced" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "sound", "tweakergui_assets", "common", "crash_reporter", "dlc", "dlc_metadata",
+                    "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
+                    "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
 
                 /// <summary>
                 /// The log location

@@ -41,7 +41,7 @@ namespace IronyModManager.Services.Registrations
                 Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name),
                 WorkshopDirectory.GetDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId),
                 Path.Combine(Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name), Shared.Constants.GamesTypes.Stellaris.LogLocation),
-                Shared.Constants.GamesTypes.Stellaris.ChecksumFolders);
+                Shared.Constants.GamesTypes.Stellaris.ChecksumFolders, Shared.Constants.GamesTypes.Stellaris.GameFolders);
         }
 
         #endregion Methods
