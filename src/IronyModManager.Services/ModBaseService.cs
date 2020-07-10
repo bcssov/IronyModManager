@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -483,10 +483,10 @@ namespace IronyModManager.Services
         /// <param name="path">The path.</param>
         /// <param name="isDirectory">if set to <c>true</c> [is directory].</param>
         /// <returns>System.Int32.</returns>
-        protected virtual int GetPdxModId(string path, bool isDirectory = false)
+        protected virtual long GetPdxModId(string path, bool isDirectory = false)
         {
             var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
-            int.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
+            long.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
             return id;
         }
 
