@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -53,6 +53,7 @@ namespace IronyModManager.Common.ViewModels
         public BaseViewModel()
         {
             Activator = DIResolver.Get<ViewModelActivator>();
+            MessageBus = DIResolver.Get<Shared.MessageBus.IMessageBus>();
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 Disposables = disposables;
@@ -86,6 +87,12 @@ namespace IronyModManager.Common.ViewModels
             get => isActivated;
             protected set => this.RaiseAndSetIfChanged(ref isActivated, value);
         }
+
+        /// <summary>
+        /// Gets the message bus.
+        /// </summary>
+        /// <value>The message bus.</value>
+        public Shared.MessageBus.IMessageBus MessageBus { get; }
 
         /// <summary>
         /// Gets the disposables.
@@ -130,12 +137,12 @@ namespace IronyModManager.Common.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected virtual void OnActivated(CompositeDisposable disposables)
         {
-            MessageBus.Current.Listen<LocaleChangedEventArgs>()
+            ReactiveUI.MessageBus.Current.Listen<LocaleChangedEventArgs>()
                 .Subscribe(x =>
                 {
                     OnLocaleChanged(x.Locale, x.OldLocale);
                 }).DisposeWith(disposables);
-            MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
+            ReactiveUI.MessageBus.Current.Listen<SelectedGameChangedEventArgs>()
                 .Subscribe(t =>
                 {
                     OnSelectedGameChanged(t.Game);
@@ -170,16 +177,16 @@ namespace IronyModManager.Common.ViewModels
         /// <returns>Task.</returns>
         protected virtual async Task TriggerOverlayAsync(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            var args = new OverlayEventArgs()
+            var args = new OverlayProgressEvent()
             {
                 IsVisible = isVisible,
                 Message = message,
                 MessageProgress = progress
             };
+            await MessageBus.PublishAsync(args);
             await Task.Run(() =>
             {
-                MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
-                MessageBus.Current.SendMessage(args);
+                ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
             }).ConfigureAwait(false);
         }
 
@@ -195,7 +202,7 @@ namespace IronyModManager.Common.ViewModels
                 {
                     PreventShutdown = cannotShutdown
                 };
-                MessageBus.Current.SendMessage(args);
+                ReactiveUI.MessageBus.Current.SendMessage(args);
             }).ConfigureAwait(false);
         }
 

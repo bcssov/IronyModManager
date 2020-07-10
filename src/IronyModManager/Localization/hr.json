@@ -60,7 +60,8 @@
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
         "Supported_Version": "Podržana verzija",
-        "RefreshingModList": "Pričekajte dok se popis modova osvježava ...",
+        "LoadingMods": "Pričekajte dok se učitavaju mod podaci...",
+        "RefreshingModList": "Pričekajte dok se popis modova osvježava...",
         "InvalidMods": {
             "Title": "Otkriveni su nevažeći modovi",
             "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"

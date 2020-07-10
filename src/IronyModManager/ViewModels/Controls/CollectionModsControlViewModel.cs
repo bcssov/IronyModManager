@@ -98,6 +98,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
+        /// The enable all toggled state
+        /// </summary>
+        private bool enableAllToggledState = false;
+
+        /// <summary>
         /// The mod order changed
         /// </summary>
         private IDisposable modOrderChanged;
@@ -519,6 +524,51 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Handles the enable all toggled.
+        /// </summary>
+        /// <param name="toggledState">if set to <c>true</c> [toggled state].</param>
+        /// <param name="enabled">if set to <c>true</c> [enabled].</param>
+        /// <param name="enabledMods">The enabled mods.</param>
+        public virtual void HandleEnableAllToggled(bool toggledState, bool enabled, IEnumerable<IMod> enabledMods)
+        {
+            if (toggledState)
+            {
+                skipModCollectionSave = true;
+            }
+            if (!toggledState && enableAllToggledState)
+            {
+                skipModCollectionSave = false;
+
+                var mods = new List<IMod>(SelectedMods);
+                if (enabledMods != null)
+                {
+                    foreach (var item in enabledMods)
+                    {
+                        if (enabled)
+                        {
+                            if (!mods.Contains(item))
+                            {
+                                mods.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            mods.Remove(item);
+                        }
+                    }
+                }
+
+                SetSelectedMods(mods.ToObservableCollection());
+
+                AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                var state = appStateService.Get();
+                InitSortersAndFilters(state);
+                SaveSelectedCollection();
+            }
+            enableAllToggledState = toggledState;
+        }
+
+        /// <summary>
         /// Handles the mod refresh.
         /// </summary>
         /// <param name="isRefreshing">if set to <c>true</c> [is refreshing].</param>
@@ -532,7 +582,6 @@ namespace IronyModManager.ViewModels.Controls
             if (!isRefreshing && mods?.Count() > 0)
             {
                 SetMods(mods);
-                HandleModCollectionChange();
                 refreshInProgress = false;
             }
         }
@@ -573,12 +622,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        public void SetMods(IEnumerable<IMod> mods)
+        public virtual void SetMods(IEnumerable<IMod> mods)
         {
             Mods = mods;
 
+            skipModCollectionSave = true;
             SubscribeToMods();
             HandleModCollectionChange();
+            skipModCollectionSave = false;
         }
 
         /// <summary>

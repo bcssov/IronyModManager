@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -21,16 +21,13 @@ using IronyModManager.DI;
 using System.Linq;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Shared;
-using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
     /// <summary>
     /// Class MainWindowViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
-    /// Implements the <see cref="ReactiveUI.IScreen" />
     /// </summary>
-    /// <seealso cref="ReactiveUI.IScreen" />
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainWindowViewModel : BaseViewModel
@@ -38,9 +35,19 @@ namespace IronyModManager.ViewModels
         #region Fields
 
         /// <summary>
+        /// The overlay progress handler
+        /// </summary>
+        private readonly OverlayProgressHandler overlayProgressHandler;
+
+        /// <summary>
         /// The writing state operation handler
         /// </summary>
         private readonly WritingStateOperationHandler writingStateOperationHandler;
+
+        /// <summary>
+        /// The overlay disposable
+        /// </summary>
+        private IDisposable overlayDisposable;
 
         #endregion Fields
 
@@ -56,6 +63,14 @@ namespace IronyModManager.ViewModels
             MainOpacity = 1;
             ConflictSolver = DIResolver.Get<MainConflictSolverControlViewModel>();
             writingStateOperationHandler = DIResolver.Get<WritingStateOperationHandler>();
+            overlayProgressHandler = DIResolver.Get<OverlayProgressHandler>();
+            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
+            {
+                OverlayMessage = s.Message;
+                OverlayVisible = s.IsVisible;
+                OverlayMessageProgress = s.MessageProgress;
+                HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
+            });
         }
 
         #endregion Constructors
@@ -152,19 +167,18 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            MessageBus.Current.Listen<OverlayEventArgs>()
+            overlayDisposable?.Dispose();
+            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
+            {
+                OverlayMessage = s.Message;
+                OverlayVisible = s.IsVisible;
+                OverlayMessageProgress = s.MessageProgress;
+                HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
+            }).DisposeWith(disposables);
+            ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>
                 {
-                    OverlayMessage = s.Message;
-                    OverlayVisible = s.IsVisible;
-                    OverlayMessageProgress = s.MessageProgress;
-                    HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
-                }).DisposeWith(disposables);
-
-            MessageBus.Current.Listen<NavigationEventArgs>()
-                .Subscribe(s =>
-                {
-                    MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
+                    ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:

@@ -1,31 +1,38 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Common
+// Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 03-10-2020
+// Created          : 07-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
-// <copyright file="OverlayEventArgs.cs" company="Mario">
+// <copyright file="OverlayProgressEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Collections.Generic;
+using System;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.Common.Events
 {
     /// <summary>
-    /// Class OverlayEventArgs.
-    /// Implements the <see cref="System.EventArgs" />
+    /// Class OverlayProgressEvent.
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     /// </summary>
-    /// <seealso cref="System.EventArgs" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     [ExcludeFromCoverage("Excluding external message bus.")]
-    public class OverlayEventArgs : EventArgs
+    public class OverlayProgressEvent : IMessageBusEvent
     {
         #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is fire and forget.
+        /// </summary>
+        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
+        public bool IsFireAndForget => true;
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is visible.

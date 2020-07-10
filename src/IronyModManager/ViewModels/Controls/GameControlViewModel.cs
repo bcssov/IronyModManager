@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -106,7 +106,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         Game = gameService.GetSelected()
                     };
-                    MessageBus.Current.SendMessage(args);
+                    ReactiveUI.MessageBus.Current.SendMessage(args);
                     previousGame = s;
                 }
             }).DisposeWith(disposables);

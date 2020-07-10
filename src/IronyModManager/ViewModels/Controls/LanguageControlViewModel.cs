@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="LanguageControlViewModel.cs" company="Mario">
 //     Mario
@@ -110,7 +110,7 @@ namespace IronyModManager.ViewModels.Controls
                              Locale = p.Abrv,
                              OldLocale = previousLanguage.Abrv
                          };
-                         MessageBus.Current.SendMessage(args);
+                         ReactiveUI.MessageBus.Current.SendMessage(args);
                          previousLanguage = p;
                      }
                  }

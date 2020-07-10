@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -51,6 +51,7 @@ namespace IronyModManager.DI
             container.Register<ModDefinitionPatchLoadHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IShutDownState, ShutdownState>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<OverlayProgressHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

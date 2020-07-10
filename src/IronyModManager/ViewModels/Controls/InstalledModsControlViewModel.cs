@@ -410,6 +410,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The unlock descriptor command.</value>
         public virtual ReactiveCommand<Unit, Unit> UnlockDescriptorCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [performing enable all].
+        /// </summary>
+        /// <value><c>true</c> if [performing enable all]; otherwise, <c>false</c>.</value>
+        public virtual bool PerformingEnableAll { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -462,9 +468,17 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void RefreshMods()
         {
+            RefreshModsAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// refresh mods as an asynchronous operation.
+        /// </summary>
+        public virtual async Task RefreshModsAsync()
+        {
             RefreshingMods = true;
             var previousMods = Mods;
-            Bind();
+            await BindAsync();
             if (Mods?.Count() > 0)
             {
                 foreach (var item in previousMods.Where(p => p.IsSelected))
@@ -530,6 +544,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task BindAsync(IGame game = null)
         {
+            await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
             if (game == null)
             {
                 game = gameService.GetSelected();
@@ -546,10 +561,7 @@ namespace IronyModManager.ViewModels.Controls
                 var invalidMods = AllMods.Where(p => !p.IsValid);
                 if (invalidMods.Count() > 0)
                 {
-                    await Task.Run(async () =>
-                    {
-                        await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
-                    });
+                    await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
@@ -579,6 +591,7 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
+            await TriggerOverlayAsync(false);
         }
 
         /// <summary>
@@ -767,11 +780,14 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (FilteredMods?.Count() > 0)
                 {
+                    PerformingEnableAll = true;
                     bool enabled = Mods.Where(p => p.IsValid).All(p => p.IsSelected);
                     foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
                     }
+                    AllModsEnabled = FilteredMods?.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    PerformingEnableAll = false;
                 }
             }).DisposeWith(disposables);
 

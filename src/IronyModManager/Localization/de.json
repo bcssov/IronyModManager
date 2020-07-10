@@ -60,6 +60,7 @@
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version",
+        "LoadingMods": "Bitte warten Sie beim Laden der Mod-Daten...",
         "RefreshingModList": "Bitte warten Sie, während die Mod-Liste aktualisiert wird...",
         "InvalidMods": {
             "Title": "Ungültige Mods erkannt",

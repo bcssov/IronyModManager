@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -544,7 +544,7 @@ namespace IronyModManager.ViewModels
                 {
                     State = NavigationState.Main
                 };
-                MessageBus.Current.SendMessage(args);
+                ReactiveUI.MessageBus.Current.SendMessage(args);
             }).DisposeWith(disposables);
 
             ResolveCommand = ReactiveCommand.Create(() =>

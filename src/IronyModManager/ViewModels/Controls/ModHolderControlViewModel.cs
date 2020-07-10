@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -64,11 +64,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
-
-        /// <summary>
-        /// The message bus
-        /// </summary>
-        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The mod definition analyze handler
@@ -139,13 +134,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
-        /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
-            Shared.MessageBus.IMessageBus messageBus, ILogger logger)
+            ILogger logger)
         {
             this.shutDownState = shutDownState;
             this.modService = modService;
@@ -158,7 +152,6 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionLoadHandler = modDefinitionLoadHandler;
             this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
-            this.messageBus = messageBus;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -340,7 +333,7 @@ namespace IronyModManager.ViewModels.Controls
                 State = NavigationState.ConflictSolver,
                 SelectedMods = CollectionMods.SelectedMods.Select(p => p.Name).ToList()
             };
-            MessageBus.Current.SendMessage(args);
+            ReactiveUI.MessageBus.Current.SendMessage(args);
             await TriggerOverlayAsync(false);
 
             definitionAnalyzeLoadHandler?.Dispose();
@@ -447,6 +440,11 @@ namespace IronyModManager.ViewModels.Controls
                 InstalledMods.RefreshMods();
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.InstalledMods.PerformingEnableAll).Subscribe(s =>
+            {
+                CollectionMods.HandleEnableAllToggled(s, InstalledMods.AllModsEnabled, InstalledMods.FilteredMods);
+            }).DisposeWith(disposables);
+
             ApplyCommand = ReactiveCommand.Create(() =>
             {
                 ApplyCollectionAsync().ConfigureAwait(true);
@@ -487,7 +485,7 @@ namespace IronyModManager.ViewModels.Controls
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync();
                         }
-                        await messageBus.PublishAsync(new LaunchingGameEvent(game.Type));
+                        await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         await appAction.OpenAsync(cmd);
                         await appAction.ExitAppAsync();
                     }

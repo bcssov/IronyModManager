@@ -60,6 +60,7 @@
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Supported Version",
+        "LoadingMods": "Please wait while loading mod data...",
         "RefreshingModList": "Please wait while the mod list is being refreshed...",
         "InvalidMods": {
             "Title": "Invalid Mods Detected",
