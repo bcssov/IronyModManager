@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -90,7 +90,7 @@ namespace IronyModManager.Parser.Mod
                             if (string.IsNullOrWhiteSpace(obj.Version))
                             {
                                 obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            }                            
+                            }
                             break;
 
                         case "supported_version":
@@ -102,7 +102,7 @@ namespace IronyModManager.Parser.Mod
                             break;
 
                         case "remote_file_id":
-                            if (int.TryParse(textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}"), out int value))
+                            if (long.TryParse(textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}"), out long value))
                             {
                                 obj.RemoteId = value;
                             }

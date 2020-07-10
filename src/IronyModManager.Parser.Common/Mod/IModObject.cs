@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="IModObject.cs" company="Mario">
 //     Mario
@@ -51,7 +51,7 @@ namespace IronyModManager.Parser.Common.Mod
         /// Gets or sets the remote identifier.
         /// </summary>
         /// <value>The remote identifier.</value>
-        int? RemoteId { get; set; }
+        long? RemoteId { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.
