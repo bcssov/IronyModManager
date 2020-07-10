@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -104,7 +104,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The remote identifier.</value>
         [DescriptorProperty("remote_file_id")]
-        public virtual int? RemoteId { get; set; }
+        public virtual long? RemoteId { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
