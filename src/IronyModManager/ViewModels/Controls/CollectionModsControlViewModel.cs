@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -577,11 +577,8 @@ namespace IronyModManager.ViewModels.Controls
         {
             Mods = mods;
 
-            SetSelectedMods(mods != null ? mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
-
-            var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            HandleModCollectionChange();
         }
 
         /// <summary>
@@ -1224,7 +1221,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveSelectedCollection()
         {
             var collection = modCollectionService.Create();
-            if (collection != null && SelectedModCollection != null)
+            if (collection != null && SelectedModCollection != null && Mods != null)
             {
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
