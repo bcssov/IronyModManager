@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -372,6 +372,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [performing enable all].
+        /// </summary>
+        /// <value><c>true</c> if [performing enable all]; otherwise, <c>false</c>.</value>
+        public virtual bool PerformingEnableAll { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [refreshing mods].
         /// </summary>
         /// <value><c>true</c> if [refreshing mods]; otherwise, <c>false</c>.</value>
@@ -409,12 +415,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The unlock descriptor command.</value>
         public virtual ReactiveCommand<Unit, Unit> UnlockDescriptorCommand { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [performing enable all].
-        /// </summary>
-        /// <value><c>true</c> if [performing enable all]; otherwise, <c>false</c>.</value>
-        public virtual bool PerformingEnableAll { get; protected set; }
 
         #endregion Properties
 
@@ -786,7 +786,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         item.IsSelected = !enabled;
                     }
-                    AllModsEnabled = FilteredMods?.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    AllModsEnabled = FilteredMods.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     PerformingEnableAll = false;
                 }
             }).DisposeWith(disposables);
