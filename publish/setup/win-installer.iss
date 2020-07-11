@@ -5,8 +5,8 @@
 #define MyAppPublisher "Mario"
 #define MyAppURL "https://bcssov.github.io/IronyModManager/"
 #define MyAppExeName "IronyModManager.exe"
-#define PublishPath "..\src\IronyModManager\bin\Release\netcoreapp3.1\publish"
-#define SourcePath "..\src\IronyModManager\bin\Release\netcoreapp3.1\publish\win-x64"
+#define PublishPath "..\..\src\IronyModManager\bin\Release\netcoreapp3.1\publish"
+#define SourcePath "..\..\src\IronyModManager\bin\Release\netcoreapp3.1\publish\win-x64"
 #define MyAppVersion GetStringFileInfo(SourcePath + "\" + MyAppExeName, "ProductVersion")
 
 [Code]
@@ -51,6 +51,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "croatian"; MessagesFile: "Croatian.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
