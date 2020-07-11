@@ -479,7 +479,7 @@ namespace IronyModManager.ViewModels.Controls
             RefreshingMods = true;
             var previousMods = Mods;
             await BindAsync();
-            if (Mods?.Count() > 0)
+            if (Mods?.Count() > 0 && previousMods?.Count() > 0)
             {
                 foreach (var item in previousMods.Where(p => p.IsSelected))
                 {
