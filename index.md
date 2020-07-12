@@ -2,7 +2,7 @@ Irony Mod Manager is a new mod manager for Paradox Games which at the moment sup
 
 ### Download
 * Latest stable version: [v1.1.155](https://github.com/bcssov/IronyModManager/releases/tag/v1.1.155).
-* Latest prerelease version: [v1.2.87-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.2.87-rc).
+* Latest prerelease version: [v1.2.90-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.2.90-rc).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
