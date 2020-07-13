@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-10-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,6 +23,11 @@ namespace IronyModManager
     public class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The application settings
+        /// </summary>
+        public const string AppSettings = "appSettings.json";
 
         /// <summary>
         /// The localizations path

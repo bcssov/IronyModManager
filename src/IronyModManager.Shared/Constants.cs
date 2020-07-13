@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -90,6 +90,11 @@ namespace IronyModManager.Shared
         public const string ZipExtensionWithoutDot = "zip";
 
         /// <summary>
+        /// The image extensions
+        /// </summary>
+        public static readonly string[] ImageExtensions = new string[] { ".gif", ".jpg", ".jpeg", ".png", ".dds", ".tga", ".bmp", ".tiff", ".tif" };
+
+        /// <summary>
         /// The text extensions
         /// </summary>
         public static readonly string[] TextExtensions = new string[] { ".lua", ".txt", ".asset", ".gui", ".gfx", ".yml", ".csv", ".shader", ".fxh", ".mod" };
@@ -97,6 +102,56 @@ namespace IronyModManager.Shared
         #endregion Fields
 
         #region Classes
+
+        /// <summary>
+        /// Class CodeSeparators.
+        /// </summary>
+        public static class CodeSeparators
+        {
+            #region Classes
+
+            /// <summary>
+            /// Class ClosingSeparators.
+            /// </summary>
+            public static class ClosingSeparators
+            {
+                #region Fields
+
+                /// <summary>
+                /// The curly bracket
+                /// </summary>
+                public const string CurlyBracket = "{";
+
+                /// <summary>
+                /// The map
+                /// </summary>
+                public static Dictionary<string, string> Map = new Dictionary<string, string>() { { CurlyBracket, "}" } };
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class NonClosingSeparators.
+            /// </summary>
+            public static class NonClosingSeparators
+            {
+                #region Fields
+
+                /// <summary>
+                /// The colon
+                /// </summary>
+                public const string ColonSign = ":";
+
+                /// <summary>
+                /// The map
+                /// </summary>
+                public static string[] Map = new string[] { ColonSign };
+
+                #endregion Fields
+            }
+
+            #endregion Classes
+        }
 
         /// <summary>
         /// Class GamesTypes.
@@ -126,6 +181,13 @@ namespace IronyModManager.Shared
                 /// The checksum folders
                 /// </summary>
                 public static readonly string[] ChecksumFolders = new string[] { "common", "events", "map", "localisation_synced" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "sound", "tweakergui_assets", "common", "crash_reporter", "dlc", "dlc_metadata",
+                    "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
+                    "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
 
                 /// <summary>
                 /// The log location

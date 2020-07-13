@@ -151,7 +151,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"bitmapfonts = {");
             sb2.AppendLine(@"	bitmapfont = {");
             sb2.AppendLine(@"		name = ""GFX_text_military_size_1""");
-            sb2.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" }");            
+            sb2.AppendLine(@"		texturefile = ""gfx/interface/icons/text_icons/icon_text_military_size_1.dds"" }");
             sb2.AppendLine(@"}");
 
 
@@ -252,6 +252,71 @@ namespace IronyModManager.Parser.Tests
                     case 1:
                         result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
+                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        break;
+                    default:
+                        break;
+                }
+                result[i].ModName.Should().Be("fake");
+                result[i].Type.Should().Be("gfx\\gfx");
+            }
+        }
+
+        /// <summary>
+        /// Defines the test method Parse_variable_should_yield_results.
+        /// </summary>
+        [Fact]
+        public void Parse_variable_should_yield_results()
+        {
+            DISetup.SetupContainer();
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"@test1 = 0");
+            sb.AppendLine(@"spriteTypes = {");
+            sb.AppendLine(@"	@test2 = 1");
+            sb.AppendLine(@"	spriteType = {");
+            sb.AppendLine(@"	    @test3 = 1");
+            sb.AppendLine(@"		name = ""GFX_dmm_mod_1""");
+            sb.AppendLine(@"	}");
+            sb.AppendLine(@"}");
+
+            var args = new ParserArgs()
+            {
+                ContentSHA = "sha",
+                ModDependencies = new List<string> { "1" },
+                File = "gfx\\gfx.gfx",
+                Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
+                ModName = "fake"
+            };
+            var parser = new SimpleGFXParser(new CodeParser(), null);
+            var result = parser.Parse(args).ToList();
+            result.Should().NotBeNullOrEmpty();
+            result.Count().Should().Be(4);
+            for (int i = 0; i < 2; i++)
+            {
+                result[i].ContentSHA.Should().Be("sha");
+                result[i].Dependencies.First().Should().Be("1");
+                result[i].File.Should().Be("gfx\\gfx.gfx");
+                switch (i)
+                {
+
+                    case 0:
+                        result[i].Id.Should().Be("@test1");
+                        result[i].CodeTag.Should().BeNullOrWhiteSpace();
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 1:
+                        result[i].Id.Should().Be("@test2");
+                        result[i].CodeTag.Should().Be("spriteTypes");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 2:
+                        result[i].Id.Should().Be("@test3");
+                        result[i].CodeTag.Should().Be("spriteTypes");
+                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        break;
+                    case 3:
+                        result[i].Id.Should().Be("GFX_dmm_mod_1");
                         result[i].ValueType.Should().Be(Common.ValueType.Object);
                         break;
                     default:

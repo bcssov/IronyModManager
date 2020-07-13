@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
+        "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
         "Shortcuts": {
             "Name": "Prečaci",
             "Wiki": "Wiki",
@@ -59,7 +60,8 @@
         "Selected": "Odabrano",
         "Mod_Name": "Ime moda",
         "Supported_Version": "Podržana verzija",
-        "RefreshingModList": "Pričekajte dok se popis modova osvježava ...",
+        "LoadingMods": "Pričekajte dok se učitavaju mod podaci...",
+        "RefreshingModList": "Pričekajte dok se popis modova osvježava...",
         "InvalidMods": {
             "Title": "Otkriveni su nevažeći modovi",
             "Message": "Nedostaju sljedeći modovi:{NewLine}{Mods}.{NewLine}{NewLine}Želite li izbrisati deskriptore?"
@@ -87,6 +89,7 @@
         "Order": "Redoslijed",
         "Rename": "Preimenuj",
         "Duplicate": "Dupliciraj",
+        "Merge": "Spoji",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "JumpOnDragAndDrop": {
@@ -100,7 +103,15 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Uvezi Paradoxos"
+            "Paradoxos": "Uvezi Paradoxos",
+            "Paradox": "Uvezi iz igre"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Spojeno)",
+            "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+            "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
+            "Overlay_Merging_Collection": "Pričekajte dok spajate kolekcija...",
+            "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
         }
     },
     "Mod_Actions": {
@@ -257,6 +268,10 @@
         "CollectionDuplicated": {
             "Title": "Kolekcija duplicirana",
             "Message": "Kolekcija je duplicirana."
+        },
+        "CollectionMerged": {
+            "Title": "Kolekcija spojena",
+            "Message": "Kolekcija je spojena."
         }
     },
     "Mod_App_Actions": {

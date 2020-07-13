@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.Localization.ResourceProviders;
+using IronyModManager.Shared.Cache;
 using Moq;
 using Xunit;
 
@@ -32,7 +33,7 @@ namespace IronyModManager.Localization.Tests
         [Fact]
         public void Should_find_translation()
         {
-            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object });
+            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object }, new Cache());
             CurrentLocale.SetCurrent("en");
             var result = locManager.GetResource("App.Title");
             result.Should().Be("Irony Mod Manager");
@@ -44,7 +45,7 @@ namespace IronyModManager.Localization.Tests
         [Fact]
         public void Should_not_find_translation()
         {
-            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object });
+            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object }, new Cache());
             CurrentLocale.SetCurrent("en");
             var result = locManager.GetResource("App.Title2");
             result.Should().BeNull();
@@ -56,7 +57,7 @@ namespace IronyModManager.Localization.Tests
         [Fact]
         public void Should_find_translation_after_locale_change()
         {
-            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object });
+            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object }, new Cache());
             CurrentLocale.SetCurrent("en");
             CurrentLocale.SetCurrent("de");
             var result = locManager.GetResource("App.Title");
@@ -69,7 +70,7 @@ namespace IronyModManager.Localization.Tests
         [Fact]
         public void Should_not_find_translation_after_locale_change()
         {
-            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object });
+            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object }, new Cache());
             CurrentLocale.SetCurrent("en");
             CurrentLocale.SetCurrent("de");
             var result = locManager.GetResource("App.Title2");
@@ -82,7 +83,7 @@ namespace IronyModManager.Localization.Tests
         [Fact]
         public void Should_fallback_to_two_letter_iso_language()
         {
-            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object });
+            var locManager = new LocalizationManager(new List<ILocalizationResourceProvider>() { GetProvider().Object }, new Cache());
             CurrentLocale.SetCurrent("de-DE");
             var result = locManager.GetResource("App.Title");
             result.Should().Be("Irony Mod Manager DE");

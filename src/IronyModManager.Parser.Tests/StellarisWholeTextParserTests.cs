@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-25-2020
+// Last Modified On : 06-30-2020
 // ***********************************************************************
 // <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -83,6 +83,21 @@ namespace IronyModManager.Parser.Tests
             var args = new CanParseArgs()
             {
                 File = "common\\diplo_phrases\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_random_names_base_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_random_names_base_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\random_names\\base\\test.txt",
                 GameType = "Stellaris"
             };
             var parser = new WholeTextParser(new CodeParser(), null);

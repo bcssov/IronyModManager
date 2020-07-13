@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-25-2020
+// Last Modified On : 06-26-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -317,7 +317,7 @@ namespace IronyModManager.Parser.Definitions
         {
             if (trie != null)
             {
-                return trie.Get(searchTerm);
+                return trie.Get(searchTerm.ToLowerInvariant());
             }
             return null;
         }

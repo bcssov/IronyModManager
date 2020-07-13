@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="ThemeControlViewModel.cs" company="Mario">
 //     Mario
@@ -107,7 +107,7 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             Theme = p
                         };
-                        MessageBus.Current.SendMessage(args);
+                        ReactiveUI.MessageBus.Current.SendMessage(args);
                         previousTheme = p;
                     }
                 }

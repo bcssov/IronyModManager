@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-16-2020
+// Last Modified On : 06-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -49,6 +49,7 @@ namespace IronyModManager.IO
             container.Register<IModPatchExporter, ModPatchExporter>();
             container.Collection.Register(typeof(IDefinitionInfoProvider), typeof(DIPackage).Assembly);
             container.Register<IPatchState, PatchState>();
+            container.Register<IModMergeExporter, ModMergeExporter>();
         }
 
         #endregion Methods

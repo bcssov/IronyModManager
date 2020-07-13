@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -34,6 +34,7 @@ using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -61,7 +62,7 @@ namespace IronyModManager.Services.Tests
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService)
         {
-            return new ModService(reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(new Cache(),null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace IronyModManager.Services.Tests
                     IsBinary = false
                 }
             };
-            reader.Setup(s => s.Read(It.IsAny<string>())).Returns(fileInfos);
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
 
             modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
             {
@@ -120,7 +121,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, modParser);
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2" });
+            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2", Type = "Should_return_installed_mods" });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
@@ -444,7 +445,7 @@ namespace IronyModManager.Services.Tests
 
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_install_mods",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -481,7 +482,7 @@ namespace IronyModManager.Services.Tests
 
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -557,7 +558,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_lock_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -583,7 +584,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_lock_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -633,7 +634,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_delete_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -659,7 +660,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_delete_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -686,7 +687,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -715,7 +716,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop"
             });
@@ -747,7 +748,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_not_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop",
                 ChecksumFolders = new List<string>() { "common", "events" }
@@ -781,7 +782,7 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Fake",
+                Type = "Should_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = "C:\\workshop",
                 ChecksumFolders = new List<string>() { "common", "events" }

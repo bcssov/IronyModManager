@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 06-25-2020
 // ***********************************************************************
 // <copyright file="ModCollection.cs" company="Mario">
 //     Mario
@@ -34,6 +34,7 @@ namespace IronyModManager.Models
         public ModCollection()
         {
             Mods = new List<string>();
+            ModNames = new List<string>();
         }
 
         #endregion Constructors
@@ -44,25 +45,31 @@ namespace IronyModManager.Models
         /// Gets or sets the game.
         /// </summary>
         /// <value>The game.</value>
-        public string Game { get; set; }
+        public virtual string Game { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
         /// </summary>
         /// <value><c>true</c> if this instance is selected; otherwise, <c>false</c>.</value>
-        public bool IsSelected { get; set; }
+        public virtual bool IsSelected { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mod names.
+        /// </summary>
+        /// <value>The mod names.</value>
+        public virtual IEnumerable<string> ModNames { get; set; }
 
         /// <summary>
         /// Gets or sets the mods.
         /// </summary>
         /// <value>The mods.</value>
-        public IEnumerable<string> Mods { get; set; }
+        public virtual IEnumerable<string> Mods { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         #endregion Properties
     }

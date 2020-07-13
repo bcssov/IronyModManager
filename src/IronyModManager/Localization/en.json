@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
+        "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
         "Shortcuts": {
             "Name": "Shortcuts",
             "Wiki": "Wiki",
@@ -59,6 +60,7 @@
         "Selected": "Selected",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Supported Version",
+        "LoadingMods": "Please wait while loading mod data...",
         "RefreshingModList": "Please wait while the mod list is being refreshed...",
         "InvalidMods": {
             "Title": "Invalid Mods Detected",
@@ -87,6 +89,7 @@
         "Order": "Order",
         "Rename": "Rename",
         "Duplicate": "Duplicate",
+        "Merge": "Merge",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "JumpOnDragAndDrop": {
@@ -100,7 +103,15 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Import Paradoxos"
+            "Paradoxos": "Import Paradoxos",
+            "Paradox": "Import From Game"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Merged)",
+            "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
+            "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
+            "Overlay_Merging_Collection": "Please wait while merging the mod collection...",
+            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
         }
     },
     "Mod_Actions": {
@@ -257,6 +268,10 @@
         "CollectionDuplicated": {
             "Title": "Collection Duplicated",
             "Message": "Collection has been duplicated."
+        },
+        "CollectionMerged": {
+            "Title": "Collection Merged",
+            "Message": "Collection has been merged."
         }
     },
     "Mod_App_Actions": {

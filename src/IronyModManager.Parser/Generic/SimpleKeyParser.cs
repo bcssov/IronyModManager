@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-26-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="SimpleKeyParser.cs" company="Mario">
 //     Mario
@@ -68,7 +68,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return HasPassedComplexThreshold(args.Lines) && EvalContainsKeyElements(args);
+            return ShouldSwitchToSimpleParser(args.Lines) && EvalContainsKeyElements(args);
         }
 
         /// <summary>
@@ -85,6 +85,7 @@ namespace IronyModManager.Parser.Generic
             }
             return base.ParseSimple(args);
         }
+
         #endregion Methods
     }
 }

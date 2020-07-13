@@ -13,6 +13,7 @@ namespace IronyModManager.Shared
             public const string Prefix = "App.";
             public const string Title = Prefix + "Title";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
+            public const string WaitBackgroundOperationMessage = Prefix + "WaitBackgroundOperationMessage";
             public static class Shortcuts
             {
                 public const string Prefix = "App.Shortcuts.";
@@ -90,6 +91,7 @@ namespace IronyModManager.Shared
             public const string Selected = Prefix + "Selected";
             public const string Mod_Name = Prefix + "Mod_Name";
             public const string Supported_Version = Prefix + "Supported_Version";
+            public const string LoadingMods = Prefix + "LoadingMods";
             public const string RefreshingModList = Prefix + "RefreshingModList";
             public static class InvalidMods
             {
@@ -122,6 +124,7 @@ namespace IronyModManager.Shared
             public const string Order = Prefix + "Order";
             public const string Rename = Prefix + "Rename";
             public const string Duplicate = Prefix + "Duplicate";
+            public const string Merge = Prefix + "Merge";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public static class JumpOnDragAndDrop
@@ -142,6 +145,16 @@ namespace IronyModManager.Shared
                 public const string Prefix = "Collection_Mods.ImportOther.";
                 public const string Title = Prefix + "Title";
                 public const string Paradoxos = Prefix + "Paradoxos";
+                public const string Paradox = Prefix + "Paradox";
+            }
+            public static class MergeCollection
+            {
+                public const string Prefix = "Collection_Mods.MergeCollection.";
+                public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
+                public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
+                public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
+                public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
+                public const string Overlay_Progress = Prefix + "Overlay_Progress";
             }
         }
         public static class Mod_Actions
@@ -352,6 +365,12 @@ namespace IronyModManager.Shared
             public static class CollectionDuplicated
             {
                 public const string Prefix = "Notifications.CollectionDuplicated.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionMerged
+            {
+                public const string Prefix = "Notifications.CollectionMerged.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

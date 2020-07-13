@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 06-20-2020
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -79,9 +79,9 @@ namespace IronyModManager.IO.Common.Mods
         /// Writes the descriptor asynchronous.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <param name="isPatchMod">if set to <c>true</c> [is patch mod].</param>
+        /// <param name="writeDescriptorInModDirectory">if set to <c>true</c> [write descriptor in mod directory].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool isPatchMod);
+        Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool writeDescriptorInModDirectory);
 
         #endregion Methods
     }

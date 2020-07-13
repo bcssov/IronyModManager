@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 06-30-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -145,6 +145,11 @@ namespace IronyModManager.Parser.Common
             public const string DefinitionSeparatorId = VariableSeparatorId + "{";
 
             /// <summary>
+            /// The fallback to simple parser comment
+            /// </summary>
+            public const string FallbackToSimpleParserComment = "# Dear Irony please fallback to simple parser";
+
+            /// <summary>
             /// The graphics type name
             /// </summary>
             public const string GraphicsTypeName = "name";
@@ -158,11 +163,6 @@ namespace IronyModManager.Parser.Common
             /// The GUI types identifier
             /// </summary>
             public const string GuiTypesId = GuiTypes + VariableSeparatorId;
-
-            /// <summary>
-            /// The invalid
-            /// </summary>
-            public const string Invalid = "invalid";
 
             /// <summary>
             /// The languages identifier
@@ -215,6 +215,11 @@ namespace IronyModManager.Parser.Common
             public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
 
             /// <summary>
+            /// The variable prefix
+            /// </summary>
+            public const char VariablePrefix = '@';
+
+            /// <summary>
             /// The variable separator identifier
             /// </summary>
             public const string VariableSeparatorId = "=";
@@ -250,6 +255,11 @@ namespace IronyModManager.Parser.Common
             public const string Sound = "sound";
 
             /// <summary>
+            /// The scripted variables
+            /// </summary>
+            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
+
+            /// <summary>
             /// The component tags
             /// </summary>
             public static readonly string ComponentTags = MergePath(CommonPath, "component_tags");
@@ -258,6 +268,11 @@ namespace IronyModManager.Parser.Common
             /// The diplo phrases
             /// </summary>
             public static readonly string DiploPhrases = MergePath(CommonPath, "diplo_phrases");
+
+            /// <summary>
+            /// The districts
+            /// </summary>
+            public static readonly string Districts = MergePath(CommonPath, "districts");
 
             /// <summary>
             /// The map galaxy
@@ -270,19 +285,14 @@ namespace IronyModManager.Parser.Common
             public static readonly string NameLists = MergePath(CommonPath, "name_lists");
 
             /// <summary>
-            /// The pop jobs
-            /// </summary>
-            public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
-
-            /// <summary>
-            /// The districts
-            /// </summary>
-            public static readonly string Districts = MergePath(CommonPath, "districts");
-
-            /// <summary>
             /// The planet classes
             /// </summary>
             public static readonly string PlanetClasses = MergePath(CommonPath, "planet_classes");
+
+            /// <summary>
+            /// The pop jobs
+            /// </summary>
+            public static readonly string PopJobs = MergePath(CommonPath, "pop_jobs");
 
             /// <summary>
             /// The portraits
@@ -292,7 +302,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The random names
             /// </summary>
-            public static readonly string RandomNames = MergePath(CommonPath, "random_names");
+            public static readonly string RandomNamesBase = MergePath(CommonPath, "random_names", "base");
 
             /// <summary>
             /// The solar system initializers

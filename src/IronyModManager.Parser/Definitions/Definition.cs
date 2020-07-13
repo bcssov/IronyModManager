@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -43,6 +43,16 @@ namespace IronyModManager.Parser.Definitions
         private string code = string.Empty;
 
         /// <summary>
+        /// The code separator
+        /// </summary>
+        private string codeSeparator = string.Empty;
+
+        /// <summary>
+        /// The code tag
+        /// </summary>
+        private string codeTag = string.Empty;
+
+        /// <summary>
         /// The definition sha
         /// </summary>
         private string definitionSHA = string.Empty;
@@ -66,6 +76,11 @@ namespace IronyModManager.Parser.Definitions
         /// The identifier
         /// </summary>
         private string id = string.Empty;
+
+        /// <summary>
+        /// The original code
+        /// </summary>
+        private string originalCode = string.Empty;
 
         /// <summary>
         /// The overwritten file names
@@ -162,6 +177,40 @@ namespace IronyModManager.Parser.Definitions
                 {
                     code = value;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets the code separator.
+        /// </summary>
+        /// <value>The code separator.</value>
+        [JsonIgnore]
+        public string CodeSeparator
+        {
+            get
+            {
+                return codeSeparator ?? string.Empty;
+            }
+            set
+            {
+                codeSeparator = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the code tag.
+        /// </summary>
+        /// <value>The code tag.</value>
+        [JsonIgnore]
+        public string CodeTag
+        {
+            get
+            {
+                return codeTag ?? string.Empty;
+            }
+            set
+            {
+                codeTag = value;
             }
         }
 
@@ -311,12 +360,6 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is first level.
-        /// </summary>
-        /// <value><c>true</c> if this instance is first level; otherwise, <c>false</c>.</value>
-        public bool IsFirstLevel { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -328,6 +371,30 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The mod path.</value>
         [JsonIgnore]
         public string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        [JsonIgnore]
+        public int Order { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original code.
+        /// </summary>
+        /// <value>The original code.</value>
+        [JsonIgnore]
+        public string OriginalCode
+        {
+            get
+            {
+                return originalCode ?? string.Empty;
+            }
+            set
+            {
+                originalCode = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the overwritten file names.
@@ -470,14 +537,17 @@ namespace IronyModManager.Parser.Definitions
                 nameof(ErrorColumn) => ErrorColumn,
                 nameof(ErrorLine) => ErrorLine,
                 nameof(ErrorMessage) => ErrorMessage,
-                nameof(IsFirstLevel) => IsFirstLevel,
                 nameof(FileCI) => FileCI,
                 nameof(ParentDirectoryCI) => ParentDirectoryCI,
                 nameof(GeneratedFileNames) => GeneratedFileNames,
                 nameof(AdditionalFileNames) => AdditionalFileNames,
                 nameof(OverwrittenFileNames) => OverwrittenFileNames,
                 nameof(ModPath) => ModPath,
+                nameof(CodeSeparator) => CodeSeparator,
+                nameof(CodeTag) => CodeTag,
+                nameof(OriginalCode) => originalCode,
                 nameof(Tags) => Tags,
+                nameof(Order) => Order,
                 _ => Id,
             };
         }

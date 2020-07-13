@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using Avalonia.Threading;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Implementation.AppState;
 using IronyModManager.Localization;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -51,6 +52,11 @@ namespace IronyModManager.Views
         /// The shutdown requested
         /// </summary>
         private bool shutdownRequested = false;
+
+        /// <summary>
+        /// The shut down state
+        /// </summary>
+        private IShutDownState shutDownState;
 
         #endregion Fields
 
@@ -135,6 +141,11 @@ namespace IronyModManager.Views
             MessageBus.Current.Listen<ShutdownStateEventArgs>()
                 .Subscribe(x =>
                 {
+                    if (shutDownState == null)
+                    {
+                        shutDownState = DIResolver.Get<IShutDownState>();
+                    }
+                    shutDownState.Toggle(!x.PreventShutdown);
                     preventShutdown = x.PreventShutdown;
                     if (shutdownRequested && !preventShutdown)
                     {

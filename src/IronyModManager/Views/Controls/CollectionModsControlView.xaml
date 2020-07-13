@@ -40,18 +40,15 @@
               <RowDefinition Height="30"></RowDefinition>
               <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Panel Grid.Column="0" Grid.Row="0" Margin="0,0,0,-10"
+            <Panel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,-10"
                    Width="{Binding $parent[Window].Width, 
                            Converter={StaticResource MathConverter} 
-                           ConverterParameter=(x/4.2)}">
-              <ContentControl Content="{Binding ExportCollection}" MaxHeight="30"></ContentControl>
-            </Panel>
-            <Panel Grid.Column="1" Grid.Row="0" Margin="0,0,0,-10"
-                   Width="{Binding $parent[Window].Width, 
-                           Converter={StaticResource MathConverter} 
-                           ConverterParameter=(x/4.2)}">
-              <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30"></ContentControl>
-            </Panel>
+                           ConverterParameter=(x/2.1)}">
+              <Grid ColumnDefinitions="2*,3*">
+                <ContentControl Content="{Binding ExportCollection}" MaxHeight="30" Grid.Column="0"></ContentControl>
+                <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30" Grid.Column="1"></ContentControl>
+              </Grid>              
+            </Panel>            
             <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
               <DockPanel HorizontalAlignment="Right">
                 <Button Content="{Binding Remove}" MaxHeight="30"

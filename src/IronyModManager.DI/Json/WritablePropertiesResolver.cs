@@ -4,7 +4,7 @@
 // Created          : 04-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="WritablePropertiesResolver.cs" company="Mario">
 //     Mario
@@ -36,8 +36,8 @@ namespace IronyModManager.DI.Json
         /// <returns>Properties for the given <see cref="T:Newtonsoft.Json.Serialization.JsonContract" />.</returns>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            IList<JsonProperty> props = base.CreateProperties(type, memberSerialization);
-            return props.Where(p => p.Writable).ToList();
+            var props = base.CreateProperties(type, memberSerialization);
+            return props.Where(p => p.Writable && !p.Ignored).ToList();
         }
 
         #endregion Methods

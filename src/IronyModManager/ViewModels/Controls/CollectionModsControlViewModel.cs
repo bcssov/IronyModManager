@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 07-10-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -33,6 +33,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
+using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -92,6 +93,16 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The reorder queue
+        /// </summary>
+        private readonly ConcurrentBag<IMod> reorderQueue;
+
+        /// <summary>
+        /// The enable all toggled state
+        /// </summary>
+        private bool enableAllToggledState = false;
+
+        /// <summary>
         /// The mod order changed
         /// </summary>
         private IDisposable modOrderChanged;
@@ -112,9 +123,9 @@ namespace IronyModManager.ViewModels.Controls
         private int reorderCounter = 0;
 
         /// <summary>
-        /// The reorder queue
+        /// The restore collection selection
         /// </summary>
-        private ConcurrentBag<IMod> reorderQueue;
+        private string restoreCollectionSelection = string.Empty;
 
         /// <summary>
         /// The skip mod collection save
@@ -221,7 +232,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <summary>
             /// The paradoxos
             /// </summary>
-            Paradoxos
+            Paradoxos,
+
+            /// <summary>
+            /// The paradox
+            /// </summary>
+            Paradox
         }
 
         #endregion Enums
@@ -373,6 +389,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ModSelected { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [needs mod list refresh].
+        /// </summary>
+        /// <value><c>true</c> if [needs mod list refresh]; otherwise, <c>false</c>.</value>
+        public virtual bool NeedsModListRefresh { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the not achievement compatible.
         /// </summary>
         /// <value>The not achievement compatible.</value>
@@ -502,6 +524,51 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Handles the enable all toggled.
+        /// </summary>
+        /// <param name="toggledState">if set to <c>true</c> [toggled state].</param>
+        /// <param name="enabled">if set to <c>true</c> [enabled].</param>
+        /// <param name="enabledMods">The enabled mods.</param>
+        public virtual void HandleEnableAllToggled(bool toggledState, bool enabled, IEnumerable<IMod> enabledMods)
+        {
+            if (toggledState)
+            {
+                skipModCollectionSave = true;
+            }
+            if (!toggledState && enableAllToggledState)
+            {
+                skipModCollectionSave = false;
+
+                var mods = new List<IMod>(SelectedMods);
+                if (enabledMods != null)
+                {
+                    foreach (var item in enabledMods)
+                    {
+                        if (enabled)
+                        {
+                            if (!mods.Contains(item))
+                            {
+                                mods.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            mods.Remove(item);
+                        }
+                    }
+                }
+
+                SetSelectedMods(mods.ToObservableCollection());
+
+                AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                var state = appStateService.Get();
+                InitSortersAndFilters(state);
+                SaveSelectedCollection();
+            }
+            enableAllToggledState = toggledState;
+        }
+
+        /// <summary>
         /// Handles the mod refresh.
         /// </summary>
         /// <param name="isRefreshing">if set to <c>true</c> [is refreshing].</param>
@@ -515,7 +582,6 @@ namespace IronyModManager.ViewModels.Controls
             if (!isRefreshing && mods?.Count() > 0)
             {
                 SetMods(mods);
-                HandleModCollectionChange();
                 refreshInProgress = false;
             }
         }
@@ -556,15 +622,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        public void SetMods(IEnumerable<IMod> mods)
+        public virtual void SetMods(IEnumerable<IMod> mods)
         {
             Mods = mods;
 
-            SetSelectedMods(mods != null ? mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
+            skipModCollectionSave = true;
             SubscribeToMods();
-
-            var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            HandleModCollectionChange();
+            skipModCollectionSave = false;
         }
 
         /// <summary>
@@ -588,6 +653,19 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Assigns the mod collection names.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        protected virtual void AssignModCollectionNames(IModCollection collection)
+        {
+            if (collection == null)
+            {
+                collection = SelectedModCollection;
+            }
+            collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+        }
+
+        /// <summary>
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -595,7 +673,8 @@ namespace IronyModManager.ViewModels.Controls
         {
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
-            await modCollectionService.ExportAsync(path, collection);
+            AssignModCollectionNames(collection);
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection));
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -607,6 +686,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void HandleModCollectionChange()
         {
+            if (!string.IsNullOrWhiteSpace(restoreCollectionSelection))
+            {
+                if (ModCollections?.Count() > 0)
+                {
+                    var restored = ModCollections.FirstOrDefault(p => p.Name.Equals(restoreCollectionSelection));
+                    if (restored != null)
+                    {
+                        SelectedModCollection = restored;
+                    }
+                }
+                restoreCollectionSelection = string.Empty;
+            }
             skipModCollectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState();
@@ -649,7 +740,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             async Task<IModCollection> importDefault()
             {
-                var collection = await modCollectionService.ImportAsync(path);
+                var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
                 if (collection != null)
                 {
                     collection.IsSelected = true;
@@ -661,7 +752,7 @@ namespace IronyModManager.ViewModels.Controls
                 return null;
             }
 
-            Task<IModCollection> importParadoxos(IModCollection importData)
+            Task<IModCollection> importInstance(IModCollection importData)
             {
                 if (importData != null)
                 {
@@ -678,6 +769,7 @@ namespace IronyModManager.ViewModels.Controls
             var importData = type switch
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
+                ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
             if (importData == null)
@@ -698,11 +790,18 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (proceed)
             {
-                var result = type switch
+                IModCollection result;
+                switch (type)
                 {
-                    ImportProviderType.Paradoxos => await importParadoxos(importData),
-                    _ => await importDefault(),
-                };
+                    case ImportProviderType.Paradoxos:
+                    case ImportProviderType.Paradox:
+                        result = await importInstance(importData);
+                        break;
+
+                    default:
+                        result = await importDefault();
+                        break;
+                }
                 if (result != null)
                 {
                     LoadModCollections();
@@ -859,7 +958,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
-                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)))
+                    ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
+                    ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)
@@ -878,21 +978,35 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand.Select(p => KeyValuePair.Create(true, p)), ModifyCollection.DuplicateCommand.Select(p => KeyValuePair.Create(false, p))).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
                         return;
                     }
-                    if (s.Value.Result)
+                    if (s.Result == ModifyAction.Rename)
                     {
                         EnteringNewCollection = true;
                         AddNewCollection.RenamingCollection = SelectedModCollection;
                         AddNewCollection.NewCollectionName = SelectedModCollection.Name;
                     }
-                    else
+                    else if (s.Result == ModifyAction.Merge)
                     {
-                        if (s.Value.State == CommandState.Success)
+                        if (s.State == CommandState.Success)
+                        {
+                            ModCollections = modCollectionService.GetAll();
+                            var selected = ModCollections?.FirstOrDefault(p => p.IsSelected);
+                            restoreCollectionSelection = selected.Name;
+                            NeedsModListRefresh = true;
+                            var existsTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Title);
+                            var existsMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionMerged.Message);
+                            notificationAction.ShowNotification(existsTitle, existsMessage, NotificationType.Success);
+                            NeedsModListRefresh = false;
+                        }
+                    }
+                    else if (s.Result == ModifyAction.Duplicate)
+                    {
+                        if (s.State == CommandState.Success)
                         {
                             skipModCollectionSave = true;
                             if (Mods != null)
@@ -1128,7 +1242,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (modCollectionService.Delete(collectionName))
                 {
-                    await modPatchCollectionService.CleanPatchCollectionAsync(collectionName);
+                    await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName));
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
                     notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
@@ -1158,7 +1272,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SaveSelectedCollection()
         {
             var collection = modCollectionService.Create();
-            if (collection != null && SelectedModCollection != null)
+            if (collection != null && SelectedModCollection != null && Mods != null)
             {
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
@@ -1184,6 +1298,17 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets the automatic focus label.
+        /// </summary>
+        protected virtual void SetAutoFocusLabel()
+        {
+            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
+            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
+            var label = Smart.Format(focusLabel, new { State = focusState });
+            CollectionJumpOnPositionChangeLabel = label;
+        }
+
+        /// <summary>
         /// Sets the selected mods.
         /// </summary>
         /// <param name="selectedMods">The selected mods.</param>
@@ -1204,6 +1329,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }
             SelectedMods = selectedMods;
+            ModifyCollection.SelectedMods = selectedMods;
             var order = 1;
             if (SelectedMods?.Count > 0)
             {
@@ -1285,17 +1411,6 @@ namespace IronyModManager.ViewModels.Controls
                     }
                 }).DisposeWith(Disposables);
             }
-        }
-
-        /// <summary>
-        /// Sets the automatic focus label.
-        /// </summary>
-        private void SetAutoFocusLabel()
-        {
-            var focusLabel = localizationManager.GetResource(LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Title);
-            var focusState = localizationManager.GetResource(CollectionJumpOnPositionChange ? LocalizationResources.Collection_Mods.JumpOnDragAndDrop.On : LocalizationResources.Collection_Mods.JumpOnDragAndDrop.Off);
-            var label = Smart.Format(focusLabel, new { State = focusState });
-            CollectionJumpOnPositionChangeLabel = label;
         }
 
         #endregion Methods

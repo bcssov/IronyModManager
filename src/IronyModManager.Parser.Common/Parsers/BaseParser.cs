@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -182,7 +182,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args, bool fallbackToSimpleParser = true)
         {
-            if (HasPassedComplexThreshold(args.Lines))
+            if (ShouldSwitchToSimpleParser(args.Lines))
             {
                 return EvalSimpleParseForErrorsOnly(args);
             }
@@ -255,26 +255,64 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
+        /// Finds the code between curly braces.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string FindCodeBetweenCurlyBraces(string code)
+        {
+            var filtered = code.Substring(code.IndexOf("{") + 1);
+            filtered = filtered.Substring(0, filtered.LastIndexOf("}")).Trim();
+            return filtered;
+        }
+
+        /// <summary>
         /// Formats the code.
         /// </summary>
         /// <param name="code">The code.</param>
         /// <param name="parent">The parent.</param>
+        /// <param name="skipVariables">if set to <c>true</c> [skip variables].</param>
         /// <returns>System.String.</returns>
-        protected virtual string FormatCode(string code, string parent)
+        protected virtual string FormatCode(string code, string parent = Shared.Constants.EmptyParam, bool skipVariables = false)
         {
+            void performVariableCheck(StringBuilder sb, string item, bool insertIndent)
+            {
+                // Ignore variables as they are separate definitions
+                if (skipVariables)
+                {
+                    if (!item.Trim().StartsWith(Constants.Scripts.VariablePrefix))
+                    {
+                        sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                }
+            }
+
             if (string.IsNullOrWhiteSpace(parent))
             {
-                return code;
+                var lines = code.SplitOnNewLine();
+                var sb = new StringBuilder();
+                foreach (var item in lines)
+                {
+                    performVariableCheck(sb, item, false);
+                }
+                return sb.ToString();
             }
-            var lines = code.SplitOnNewLine();
-            var sb = new StringBuilder();
-            sb.AppendLine($"{parent} = {{");
-            foreach (var item in lines)
+            else
             {
-                sb.AppendLine($"{new string(' ', 4)}{item}");
+                var lines = code.SplitOnNewLine();
+                var sb = new StringBuilder();
+                sb.AppendLine($"{parent} = {{");
+                foreach (var item in lines)
+                {
+                    performVariableCheck(sb, item, true);
+                }
+                sb.Append("}");
+                return sb.ToString();
             }
-            sb.Append("}");
-            return sb.ToString();
         }
 
         /// <summary>
@@ -304,22 +342,11 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Determines whether [has passed complex threshold] [the specified lines].
-        /// </summary>
-        /// <param name="lines">The lines.</param>
-        /// <returns><c>true</c> if [has passed complex threshold] [the specified lines]; otherwise, <c>false</c>.</returns>
-        protected virtual bool HasPassedComplexThreshold(IEnumerable<string> lines)
-        {
-            return lines?.Count() > ComplexParseLinesThreshold;
-        }
-
-        /// <summary>
         /// Maps the definition from arguments.
         /// </summary>
         /// <param name="args">The arguments.</param>
         protected virtual void MapDefinitionFromArgs(ParsingArgs args)
         {
-            args.Definition.IsFirstLevel = args.IsFirstLevel;
             args.Definition.ContentSHA = args.Args.ContentSHA;
             args.Definition.Dependencies = args.Args.ModDependencies;
             args.Definition.ModName = args.Args.ModName;
@@ -356,6 +383,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     result.AddRange(ParseComplexScriptKeyValues(values.Value.KeyValues, args));
                     result.AddRange(ParseComplexScriptNodes(values.Value.Nodes, args));
+                    result.AddRange(ParseComplexScriptNodesForVariables(values.Value.Nodes, args));
                 }
                 return result;
             }
@@ -400,18 +428,30 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     var definition = GetDefinitionInstance();
                     MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
-                    definition.Code = FormatCode(item.Code, parent);
+                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
+                    if (!isFirstLevel)
+                    {
+                        definition.OriginalCode = FormatCode(item.Code);
+                        definition.CodeTag = parent;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                    }
+                    bool typeAssigned = false;
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
+                        typeAssigned = true;
                         definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
                         definition.ValueType = ValueType.Namespace;
                     }
-                    else
+                    else if (item.Key.StartsWith(Constants.Scripts.VariablePrefix))
                     {
+                        typeAssigned = true;
                         definition.Id = item.Key;
                         definition.ValueType = ValueType.Variable;
                     }
-                    result.Add(definition);
+                    if (typeAssigned)
+                    {
+                        result.Add(definition);
+                    }
                 }
             }
             return result;
@@ -454,7 +494,13 @@ namespace IronyModManager.Parser.Common.Parsers
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
                     definition.Id = id;
                     definition.ValueType = ValueType.Object;
-                    definition.Code = FormatCode(item.Code, parent);
+                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
+                    if (!isFirstLevel)
+                    {
+                        definition.OriginalCode = FormatCode(item.Code, skipVariables: true);
+                        definition.CodeTag = parent;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                    }
                     var tags = ParseComplexScriptTags(item.KeyValues, item.Key);
                     if (tags.Count() > 0)
                     {
@@ -468,6 +514,43 @@ namespace IronyModManager.Parser.Common.Parsers
                         }
                     }
                     result.Add(definition);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the complex script nodes for variables.
+        /// </summary>
+        /// <param name="nodes">The nodes.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodesForVariables(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        {
+            var result = new List<IDefinition>();
+            if (nodes?.Count() > 0)
+            {
+                foreach (var item in nodes)
+                {
+                    if (item.KeyValues?.Count > 0)
+                    {
+                        var variables = ParseComplexScriptKeyValues(item.KeyValues, args, parent, typeOverride, isFirstLevel);
+                        if (variables.Count() > 0)
+                        {
+                            result.AddRange(variables);
+                        }
+                    }
+                    if (item.Nodes?.Count > 0)
+                    {
+                        var variables = ParseComplexScriptNodesForVariables(item.Nodes, args, parent, typeOverride, isFirstLevel);
+                        if (variables.Count() > 0)
+                        {
+                            result.AddRange(variables);
+                        }
+                    }
                 }
             }
             return result;
@@ -514,12 +597,17 @@ namespace IronyModManager.Parser.Common.Parsers
                 }
                 else
                 {
+                    if (value.Value.KeyValues?.Count() > 0)
+                    {
+                        result.AddRange(ParseComplexScriptKeyValues(value.Value.KeyValues, args));
+                    }
                     if (value.Value.Nodes?.Count() > 0)
                     {
                         foreach (var item in value.Value.Nodes)
                         {
                             result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key, isFirstLevel: false));
                             result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key, isFirstLevel: false));
+                            result.AddRange(ParseComplexScriptNodesForVariables(item.Nodes, args, parent: item.Key, isFirstLevel: false));
                         }
                     }
                 }
@@ -561,8 +649,9 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.ErrorColumn = error.Column;
             definition.ErrorLine = error.Line;
             definition.ErrorMessage = error.Message;
-            definition.Id = Constants.Scripts.Invalid;
+            definition.Id = Path.GetFileName(args.File).ToLowerInvariant();
             definition.ValueType = ValueType.Invalid;
+            definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
             return definition;
         }
@@ -607,7 +696,13 @@ namespace IronyModManager.Parser.Common.Parsers
                         {
                             openBrackets = null;
                             closeBrackets = 0;
-                            definition.Code = sb.ToString();
+                            definition.OriginalCode = definition.Code = sb.ToString();
+                            if (!isFirstLevel)
+                            {
+                                definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                                definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                            }
                             result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                         }
                     }
@@ -615,19 +710,31 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         definition = GetDefinitionInstance();
                         var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.Code = line;
+                        definition.OriginalCode = definition.Code = line;
+                        if (!isFirstLevel)
+                        {
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                            definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                        }
+                        var typeAssigned = false;
                         if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
                         {
+                            typeAssigned = true;
                             definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
                             definition.ValueType = ValueType.Namespace;
                         }
-                        else
+                        else if (cleaned.Trim().StartsWith(Constants.Scripts.VariablePrefix))
                         {
+                            typeAssigned = true;
                             definition.Id = id;
                             definition.ValueType = ValueType.Variable;
                         }
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: isFirstLevel);
-                        result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
+                        if (typeAssigned)
+                        {
+                            var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: isFirstLevel);
+                            result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
+                        }
                     }
                 }
                 else
@@ -646,7 +753,13 @@ namespace IronyModManager.Parser.Common.Parsers
                     {
                         openBrackets = null;
                         closeBrackets = 0;
-                        definition.Code = sb.ToString();
+                        definition.OriginalCode = definition.Code = sb.ToString();
+                        if (!isFirstLevel)
+                        {
+                            definition.CodeTag = definition.Id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
+                        }
                         result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
                     }
                 }
@@ -667,6 +780,20 @@ namespace IronyModManager.Parser.Common.Parsers
             }
             SimpleParserTags.Add(args.Definition.Id);
             return SimpleParserTags;
+        }
+
+        /// <summary>
+        /// Shoulds the switch to simple parser.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSwitchToSimpleParser(IEnumerable<string> lines)
+        {
+            if (lines != null)
+            {
+                return lines.Count() > ComplexParseLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
+            }
+            return false;
         }
 
         #endregion Methods

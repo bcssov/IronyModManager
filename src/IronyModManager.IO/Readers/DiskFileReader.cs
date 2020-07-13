@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-09-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -94,8 +94,9 @@ namespace IronyModManager.IO
         /// Reads the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="allowedPaths">The allowed paths.</param>
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
-        public virtual IReadOnlyCollection<IFileInfo> Read(string path)
+        public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
         {
             var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
             if (files?.Count() > 0)
@@ -104,7 +105,9 @@ namespace IronyModManager.IO
                 foreach (var file in files)
                 {
                     var relativePath = file.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
-                    if (!relativePath.Contains(Path.DirectorySeparatorChar) || relativePath.StartsWith("."))
+                    if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                        relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".")) ||
+                        (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase))))
                     {
                         continue;
                     }

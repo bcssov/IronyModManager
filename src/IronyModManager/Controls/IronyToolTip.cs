@@ -4,7 +4,7 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
@@ -21,6 +21,8 @@ using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
+using IronyModManager.DI;
+using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Controls
 {
@@ -76,6 +78,16 @@ namespace IronyModManager.Controls
         /// </summary>
         public static readonly AttachedProperty<double> VerticalOffsetProperty =
             AvaloniaProperty.RegisterAttached<IronyToolTip, Control, double>("VerticalOffset", 20);
+
+        /// <summary>
+        /// The tooltip section key
+        /// </summary>
+        private const string TooltipSectionKey = "Tooltips";
+
+        /// <summary>
+        /// The tooltip state key
+        /// </summary>
+        private const string TooltipStateKey = "Disable";
 
         /// <summary>
         /// The tool tip property
@@ -294,7 +306,7 @@ namespace IronyModManager.Controls
             if (_popup != null)
             {
                 _popup.SetChild(null);
-                _popup.Hide();
+                _popup.Dispose();
                 _popup = null;
             }
         }
@@ -305,6 +317,10 @@ namespace IronyModManager.Controls
         /// <param name="control">The control.</param>
         private void Open(Control control)
         {
+            if (!ToolTipService.TooltipsEnabled())
+            {
+                return;
+            }
             Close();
 
             _popup = OverlayPopupHost.CreatePopupHost(control, null);
@@ -326,6 +342,11 @@ namespace IronyModManager.Controls
         private sealed class ToolTipService
         {
             #region Fields
+
+            /// <summary>
+            /// The tooltips enabled
+            /// </summary>
+            private static bool? tooltipsEnabled;
 
             /// <summary>
             /// The timer
@@ -356,22 +377,41 @@ namespace IronyModManager.Controls
             #region Methods
 
             /// <summary>
+            /// Tooltipses the enabled.
+            /// </summary>
+            /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            internal static bool TooltipsEnabled()
+            {
+                if (!tooltipsEnabled.HasValue)
+                {
+                    var service = DIResolver.Get<IConfigurationRoot>();
+                    var section = service.GetSection(TooltipSectionKey);
+                    tooltipsEnabled = !section.GetSection(TooltipStateKey).Get<bool>();
+                }
+                return tooltipsEnabled.GetValueOrDefault();
+            }
+
+            /// <summary>
             /// called when the <see cref="ToolTip.TipProperty" /> property changes on a control.
             /// </summary>
             /// <param name="e">The event args.</param>
             internal void TipChanged(AvaloniaPropertyChangedEventArgs e)
             {
+                if (!TooltipsEnabled())
+                {
+                    return;
+                }
                 var control = (Control)e.Sender;
 
-                EventHandler<PointerEventArgs> parentControlLeave = (sender, args) =>
+                void parentControlLeave(object sender, PointerEventArgs args)
                 {
                     HandleControlPointerLeave(control, true);
-                };
+                }
 
-                EventHandler<PointerEventArgs> parentControlEnter = (sender, args) =>
+                void parentControlEnter(object sender, PointerEventArgs args)
                 {
                     HandleControlPointerEnter(control, true);
-                };
+                }
 
                 if (e.OldValue != null)
                 {
@@ -437,10 +477,10 @@ namespace IronyModManager.Controls
                 var control = (Control)sender;
                 if (!skipParentCheck)
                 {
-                    var parentPointerOver = control.Parent.IsPointerOver;
+                    var parentPointerOver = (control.Parent?.IsPointerOver).GetValueOrDefault();
                     var pointerOver = control.IsPointerOver;
                     var reactToParent = GetReactToParent(control);
-                    if (reactToParent && control.Parent != null && (parentPointerOver || pointerOver))
+                    if (reactToParent && (parentPointerOver || pointerOver))
                     {
                         return;
                     }
@@ -470,12 +510,12 @@ namespace IronyModManager.Controls
             private void HandleControlPointerLeave(object sender, bool skipParentCheck)
             {
                 var control = (Control)sender;
-                var parentPointerOver = control.Parent.IsPointerOver;
+                var parentPointerOver = (control.Parent?.IsPointerOver).GetValueOrDefault();
                 var pointerOver = control.IsPointerOver;
                 if (!skipParentCheck)
                 {
                     var reactToParent = GetReactToParent(control);
-                    if (reactToParent && control.Parent != null && (parentPointerOver || pointerOver))
+                    if (reactToParent && (parentPointerOver || pointerOver))
                     {
                         return;
                     }

@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -265,7 +265,7 @@ namespace IronyModManager.Parser
                 code = FormatCode(node.ToRaw);
             }
             var nodes = node.AllChildren.Where(x => x.IsNodeC).Select(x => MapNode(x.node, level + 1)).ToList();
-            var leaves = node.AllChildren.Where(x => x.IsLeafC).Select(x => MapScriptKeyValue(x.leaf, level + 1)).ToList();
+            var leaves = node.AllChildren.Where(x => x.IsLeafC).Select(x => MapScriptKeyValue(x.leaf)).ToList();
             var values = node.AllChildren.Where(x => x.IsLeafValueC).Select(x => MapScriptValue(x.leafvalue, level + 1)).ToList();
             var result = DIResolver.Get<IScriptNode>();
             result.Key = node.Key.Trim();
@@ -280,15 +280,10 @@ namespace IronyModManager.Parser
         /// Maps the script key value.
         /// </summary>
         /// <param name="leaf">The leaf.</param>
-        /// <param name="level">The level.</param>
         /// <returns>IScriptKeyValue.</returns>
-        protected IScriptKeyValue MapScriptKeyValue(Leaf leaf, int level = 1)
+        protected IScriptKeyValue MapScriptKeyValue(Leaf leaf)
         {
-            string code = null;
-            if (level >= 2 && level <= 3)
-            {
-                code = FormatCode(leaf.ToRaw);
-            }
+            var code = FormatCode(leaf.ToRaw);
             var result = DIResolver.Get<IScriptKeyValue>();
             result.Key = leaf.Key.Trim();
             result.Value = leaf.Value.ToRawString().Trim();

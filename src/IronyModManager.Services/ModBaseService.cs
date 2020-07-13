@@ -22,10 +22,11 @@ using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -39,9 +40,24 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// All mods cache key
+        /// </summary>
+        protected const string AllModsCacheKey = "AllMods";
+
+        /// <summary>
+        /// The mods cache prefix
+        /// </summary>
+        protected const string ModsCachePrefix = "Mods";
+
+        /// <summary>
         /// The patch collection name
         /// </summary>
         protected const string PatchCollectionName = nameof(IronyModManager) + "_";
+
+        /// <summary>
+        /// The regular mods cache key
+        /// </summary>
+        protected const string RegularModsCacheKey = "RegularMods";
 
         #endregion Fields
 
@@ -50,14 +66,20 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModBaseService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="modParser">The mod parser.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModBaseService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ModBaseService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+            IModParser modParser, IGameService gameService,
+            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
+            Cache = cache;
+            DefinitionInfoProviders = definitionInfoProviders;
             GameService = gameService;
             Reader = reader;
             ModParser = modParser;
@@ -67,6 +89,18 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        /// <value>The cache.</value>
+        protected ICache Cache { get; private set; }
+
+        /// <summary>
+        /// Gets the definition information providers.
+        /// </summary>
+        /// <value>The definition information providers.</value>
+        protected IEnumerable<IDefinitionInfoProvider> DefinitionInfoProviders { get; private set; }
 
         /// <summary>
         /// Gets the game service.
@@ -97,6 +131,49 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Constructs the mods cache key.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="regularMods">if set to <c>true</c> [regular mods].</param>
+        /// <returns>System.String.</returns>
+        protected virtual string ConstructModsCacheKey(IGame game, bool regularMods)
+        {
+            return $"{game.Type}-{(regularMods ? RegularModsCacheKey : AllModsCacheKey)}";
+        }
+
+        /// <summary>
+        /// Copies the definition.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>IDefinition.</returns>
+        protected virtual IDefinition CopyDefinition(IDefinition definition)
+        {
+            var newDefinition = DIResolver.Get<IDefinition>();
+            newDefinition.Code = definition.Code;
+            newDefinition.ContentSHA = definition.ContentSHA;
+            newDefinition.DefinitionSHA = definition.DefinitionSHA;
+            newDefinition.Dependencies = definition.Dependencies;
+            newDefinition.ErrorColumn = definition.ErrorColumn;
+            newDefinition.ErrorLine = definition.ErrorLine;
+            newDefinition.ErrorMessage = definition.ErrorMessage;
+            newDefinition.File = definition.File;
+            newDefinition.GeneratedFileNames = definition.GeneratedFileNames;
+            newDefinition.OverwrittenFileNames = definition.OverwrittenFileNames;
+            newDefinition.AdditionalFileNames = definition.AdditionalFileNames;
+            newDefinition.Id = definition.Id;
+            newDefinition.ModName = definition.ModName;
+            newDefinition.Type = definition.Type;
+            newDefinition.UsedParser = definition.UsedParser;
+            newDefinition.ValueType = definition.ValueType;
+            newDefinition.Tags = definition.Tags;
+            newDefinition.OriginalCode = definition.OriginalCode;
+            newDefinition.CodeSeparator = definition.CodeSeparator;
+            newDefinition.CodeTag = definition.CodeTag;
+            newDefinition.Order = definition.Order;
+            return newDefinition;
+        }
+
+        /// <summary>
         /// delete descriptors internal as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -117,10 +194,91 @@ namespace IronyModManager.Services
                     tasks.Add(task);
                 }
                 await Task.WhenAll(tasks);
-                ModsCache.InvalidateCache(game);
+                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Evals the definition priority internal.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <returns>IPriorityDefinitionResult.</returns>
+        protected virtual IPriorityDefinitionResult EvalDefinitionPriorityInternal(IEnumerable<IDefinition> definitions)
+        {
+            var game = GameService.GetSelected();
+            var result = GetModelInstance<IPriorityDefinitionResult>();
+            if (game != null && definitions?.Count() > 1)
+            {
+                var definitionEvals = new List<DefinitionEval>();
+                var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                bool isFios = false;
+                if (provider != null)
+                {
+                    bool overrideSkipped = false;
+                    isFios = provider.DefinitionUsesFIOSRules(definitions.First());
+                    foreach (var item in definitions)
+                    {
+                        var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                        if (hasOverrides)
+                        {
+                            overrideSkipped = true;
+                            continue;
+                        }
+                        if (isFios)
+                        {
+                            definitionEvals.Add(new DefinitionEval()
+                            {
+                                Definition = item,
+                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
+                            });
+                        }
+                        else
+                        {
+                            definitionEvals.Add(new DefinitionEval()
+                            {
+                                Definition = item,
+                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
+                            });
+                        }
+                    }
+                    var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
+                    if (uniqueDefinitions.Count() == 1 && overrideSkipped)
+                    {
+                        result.Definition = definitionEvals.First().Definition;
+                        result.PriorityType = DefinitionPriorityType.ModOverride;
+                    }
+                    else if (uniqueDefinitions.Count() > 1)
+                    {
+                        // Has same filenames?
+                        if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
+                        {
+                            result.Definition = uniqueDefinitions.Last().Definition;
+                            result.PriorityType = DefinitionPriorityType.ModOrder;
+                        }
+                        else
+                        {
+                            // Using FIOS or LIOS?
+                            if (isFios)
+                            {
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
+                                result.PriorityType = DefinitionPriorityType.FIOS;
+                            }
+                            else
+                            {
+                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
+                                result.PriorityType = DefinitionPriorityType.LIOS;
+                            }
+                        }
+                    }
+                }
+            }
+            if (result.Definition == null)
+            {
+                result.Definition = definitions?.FirstOrDefault();
+            }
+            return result;
         }
 
         /// <summary>
@@ -150,7 +308,7 @@ namespace IronyModManager.Services
                 mod.Dependencies = dependencies;
             }
             mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
-            mod.FileName = GetPatchDirectory(game, patchName).Replace("\\", "/");
+            mod.FileName = GetModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
@@ -218,7 +376,7 @@ namespace IronyModManager.Services
             {
                 throw new ArgumentNullException("game");
             }
-            var mods = ignorePatchMods ? ModsCache.GetRegularMods(game.Type) : ModsCache.GetAllMods(game.Type);
+            var mods = Cache.Get<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods));
             if (mods != null)
             {
                 return mods;
@@ -273,16 +431,32 @@ namespace IronyModManager.Services
                         result.Add(mod);
                     }
                 }
-                if (!ignorePatchMods)
-                {
-                    ModsCache.SetAllMods(game.Type, result);
-                }
-                else
-                {
-                    ModsCache.SetRegularMods(game.Type, result);
-                }
+                Cache.Set<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods), result);
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Gets the mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetModDirectory(IGame game, IModCollection modCollection)
+        {
+            return GetModDirectory(game, GenerateCollectionPatchName(modCollection.Name));
+        }
+
+        /// <summary>
+        /// Gets the mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetModDirectory(IGame game, string patchName)
+        {
+            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
+            return path;
         }
 
         /// <summary>
@@ -301,29 +475,6 @@ namespace IronyModManager.Services
                 return ModSource.Steam;
             }
             return ModSource.Local;
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="modCollection">The mod collection.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetPatchDirectory(IGame game, IModCollection modCollection)
-        {
-            return GetPatchDirectory(game, GenerateCollectionPatchName(modCollection.Name));
-        }
-
-        /// <summary>
-        /// Gets the patch directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="patchName">Name of the patch.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetPatchDirectory(IGame game, string patchName)
-        {
-            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
-            return path;
         }
 
         /// <summary>
@@ -367,6 +518,69 @@ namespace IronyModManager.Services
             return false;
         }
 
+        /// <summary>
+        /// Populates the mod path.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="collectionMods">The collection mods.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> PopulateModPath(IEnumerable<IDefinition> definitions, IEnumerable<IMod> collectionMods)
+        {
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    if (IsPatchModInternal(item.ModName))
+                    {
+                        item.ModPath = GetModDirectory(GameService.GetSelected(), item.ModName);
+                    }
+                    else
+                    {
+                        item.ModPath = collectionMods.FirstOrDefault(p => p.Name.Equals(item.ModName)).FullPath;
+                    }
+                }
+            }
+            return definitions;
+        }
+
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class DefinitionEval.
+        /// </summary>
+        protected class DefinitionEval
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the definition.
+            /// </summary>
+            /// <value>The definition.</value>
+            public IDefinition Definition { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the file.
+            /// </summary>
+            /// <value>The name of the file.</value>
+            public string FileName { get; set; }
+
+            /// <summary>
+            /// Gets the file name ci.
+            /// </summary>
+            /// <value>The file name ci.</value>
+            public string FileNameCI
+            {
+                get
+                {
+                    return FileName.ToLowerInvariant();
+                }
+            }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

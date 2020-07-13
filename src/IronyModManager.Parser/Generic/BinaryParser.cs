@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-29-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -82,8 +82,15 @@ namespace IronyModManager.Parser.Generic
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: Common.Constants.BinaryType));
-            def.Code = string.Empty;
-            def.Id = Path.GetFileName(args.File).ToLowerInvariant();
+            def.OriginalCode = def.Code = string.Empty;
+            if (Constants.ImageExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+            {
+                def.Id = Path.GetFileNameWithoutExtension(args.File).ToLowerInvariant();
+            }
+            else
+            {
+                def.Id = Path.GetFileName(args.File).ToLowerInvariant();
+            }
             def.ValueType = Common.ValueType.Binary;
             def.Tags.Add(def.Id);
             return new List<IDefinition> { def };

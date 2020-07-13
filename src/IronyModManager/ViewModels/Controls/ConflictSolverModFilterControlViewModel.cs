@@ -161,7 +161,7 @@ namespace IronyModManager.ViewModels.Controls
             ConflictResult = conflictResult;
             previousIgnoredPath = conflictResult.IgnoredPaths;
             isOpen?.Dispose();
-            isOpen = this.WhenAnyValue(p => p.IsOpen).Where(p => p && !syncingSelectedMods).Subscribe(s =>
+            isOpen = this.WhenAnyValue(p => p.IsOpen).Where(p => p).Subscribe(s =>
             {
                 Mods.Clear();
                 SelectedMods.Clear();

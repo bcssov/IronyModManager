@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 06-24-2020
 // ***********************************************************************
 // <copyright file="JsonDISerializer.cs" company="Mario">
 //     Mario
@@ -29,6 +29,11 @@ namespace IronyModManager.DI
         /// The converters
         /// </summary>
         private static readonly List<JsonConverter> converters = new List<JsonConverter>() { new JsonDIConverter() };
+
+        /// <summary>
+        /// The resolver
+        /// </summary>
+        private static readonly WritablePropertiesResolver resolver = new WritablePropertiesResolver();
 
         #endregion Fields
 
@@ -68,7 +73,7 @@ namespace IronyModManager.DI
                 return new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new WritablePropertiesResolver(),
+                    ContractResolver = resolver,
                     Converters = converters
                 };
             }
@@ -77,7 +82,7 @@ namespace IronyModManager.DI
                 return new JsonSerializerSettings()
                 {
                     NullValueHandling = NullValueHandling.Ignore,
-                    ContractResolver = new WritablePropertiesResolver()
+                    ContractResolver = resolver
                 };
             }
         }

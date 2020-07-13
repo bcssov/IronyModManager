@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 06-27-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -494,29 +494,58 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                var previousIdx = -1;
-                var offset = 0;
                 var ordered = OrderSelected(selected, source);
-                foreach (var item in ordered.Reverse())
+                var grouped = ordered.Select((x, id) =>
                 {
-                    var index = item.Key + 1;
-                    var diff = Math.Abs(index - previousIdx);
-                    if (diff <= 1 && previousIdx > -1)
+                    return Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id);
+                }).ToList();
+                Tuple<int, DiffPieceWithIndex, int, int> initial = null;
+                var appliedOffset = 0;
+                foreach (var item in grouped)
+                {
+                    if (initial == null || item.Item3 > 1)
                     {
-                        index = previousIdx;
+                        initial = null;
+                        appliedOffset = 0;
+                        var groupCopy = grouped.Skip(item.Item4 + 1).TakeWhile(p => p.Item3 <= 1);
+                        if (groupCopy.Count() > 0)
+                        {
+                            if (groupCopy.Last() != initial)
+                            {
+                                initial = groupCopy.Last();
+                            }
+                        }
+                        if (initial == null)
+                        {
+                            initial = item;
+                        }                        
                     }
+                    var index = initial.Item1 + item.Item4 + appliedOffset + 1;
                     var count = destination.Count - 1;
-                    if (index < 1)
+                    if (index < 0)
                     {
-                        index = 1;
+                        index = 0;
                     }
                     else if (index > count)
                     {
                         index = count;
                     }
-                    previousIdx = index;
-                    destination.Insert(index, item.Value);
-                    offset++;
+                    while (destination[index].Type == ChangeType.Imaginary)
+                    {
+                        if (index < 0)
+                        {
+                            index = 0;
+                            break;
+                        }
+                        else if (index > count)
+                        {
+                            index = count;
+                            break;
+                        }
+                        index++;
+                        appliedOffset++;
+                    }
+                    destination.Insert(index, item.Item2);
                 }
                 if (leftSide)
                 {
@@ -540,21 +569,21 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (selected?.Count() > 0)
             {
-                var previousIdx = -1;
-                var offset = 0;
                 var ordered = OrderSelected(selected, source);
-                foreach (var item in ordered)
+                var grouped = ordered.Select((x, id) =>
                 {
-                    var index = item.Key;
-                    var diff = Math.Abs(index - previousIdx);
-                    if (diff > 1 && previousIdx > -1)
+                    return Tuple.Create(x.Key, x.Value, id == 0 ? 0 : x.Key - ordered.ElementAt(id - 1).Key, id);
+                }).ToList();
+                Tuple<int, DiffPieceWithIndex, int, int> initial = null;
+                var appliedOffset = 0;
+                foreach (var item in grouped)
+                {
+                    if (initial == null || item.Item3 > 1)
                     {
-                        index += offset;
+                        appliedOffset = 0;
+                        initial = item;
                     }
-                    if (index == previousIdx && previousIdx > -1)
-                    {
-                        index = previousIdx + 1;
-                    }
+                    var index = initial.Item1 + item.Item4 + appliedOffset;
                     var count = destination.Count - 1;
                     if (index < 0)
                     {
@@ -564,9 +593,22 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = count;
                     }
-                    previousIdx = index;
-                    destination.Insert(index, item.Value);
-                    offset++;
+                    while (destination[index].Type == ChangeType.Imaginary)
+                    {
+                        if (index < 0)
+                        {
+                            index = 0;
+                            break;
+                        }
+                        else if (index > count)
+                        {
+                            index = count;
+                            break;
+                        }
+                        index--;
+                        appliedOffset--;
+                    }
+                    destination.Insert(index, item.Item2);
                 }
                 if (leftSide)
                 {
@@ -639,10 +681,6 @@ namespace IronyModManager.ViewModels.Controls
                                 break;
                             }
                             var prevIdx = idx - 1;
-                            if (prevIdx < 0)
-                            {
-                                prevIdx = 0;
-                            }
                             var type = source[prevIdx].Type;
                             if (source[idx].Type == ChangeType.Unchanged || (type == ChangeType.Unchanged && source[idx].Type != ChangeType.Unchanged))
                             {
@@ -652,7 +690,12 @@ namespace IronyModManager.ViewModels.Controls
                         var line = source.Skip(idx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            line = source.Skip(line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            var index = line.Index - 1;
+                            if (index < 0)
+                            {
+                                index = 0;
+                            }
+                            line = source.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
@@ -685,7 +728,12 @@ namespace IronyModManager.ViewModels.Controls
                         var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            line = reverseSrc.Skip(reverseSrc.Count - line.Index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
+                            var index = reverseSrc.Count - line.Index - 1;
+                            if (index < 0)
+                            {
+                                index = 0;
+                            }
+                            line = reverseSrc.Skip(index).TakeWhile(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged).LastOrDefault();
                             if (line != null)
                             {
                                 matchIdx = source.IndexOf(line);
@@ -739,7 +787,6 @@ namespace IronyModManager.ViewModels.Controls
                 foreach (var item in ordered)
                 {
                     var count = source.Count - 1;
-                    source.RemoveAt(item.Key);
                     var index = moveUp ? item.Key - 1 : item.Key + 1;
                     if (index < 0)
                     {
@@ -749,6 +796,28 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         index = count;
                     }
+                    while (source[index].Type == ChangeType.Imaginary)
+                    {
+                        if (index < 0)
+                        {
+                            index = 0;
+                            break;
+                        }
+                        else if (index > count)
+                        {
+                            index = count;
+                            break;
+                        }
+                        if (moveUp)
+                        {
+                            index--;
+                        }
+                        else
+                        {
+                            index++;
+                        }
+                    }
+                    source.RemoveAt(item.Key);
                     source.Insert(index, item.Value);
                 }
                 if (leftSide)

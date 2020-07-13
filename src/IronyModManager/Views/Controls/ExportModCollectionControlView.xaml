@@ -13,9 +13,10 @@
         <Menu>
           <MenuItem Header="{Binding ImportOtherTitle}"
                     Background="{DynamicResource IronyMidBackgroundBrush}"
-                    Foreground="{DynamicResource IronyForegroundMenuBrush}" 
+                    Foreground="{DynamicResource IronyForegroundMenuBrush}"
                     MaxHeight="30">
             <MenuItem Header="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"></MenuItem>
+            <MenuItem Header="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"></MenuItem>
           </MenuItem>
         </Menu>
       </Border>

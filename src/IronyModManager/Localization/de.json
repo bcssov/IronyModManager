@@ -2,6 +2,7 @@
     "App": {
         "Title": "Irony Mod Manager: {AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
+        "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
         "Shortcuts": {
             "Name": "Verknüpfungen",
             "Wiki": "Wiki",
@@ -59,6 +60,7 @@
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version",
+        "LoadingMods": "Bitte warten Sie beim Laden der Mod-Daten...",
         "RefreshingModList": "Bitte warten Sie, während die Mod-Liste aktualisiert wird...",
         "InvalidMods": {
             "Title": "Ungültige Mods erkannt",
@@ -87,6 +89,7 @@
         "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
+        "Merge": "Verschmelzen",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "JumpOnDragAndDrop": {
@@ -100,7 +103,15 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Importieren Paradoxos"
+            "Paradoxos": "Importieren Paradoxos",
+            "Paradox": "Aus dem Spiel importieren"
+        },
+        "MergeCollection": {
+            "MergedCollectionSuffix": "(Zusammengeführt)",
+            "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
+            "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
+            "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen...",
+            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
         }
     },
     "Mod_Actions": {
@@ -257,6 +268,10 @@
         "CollectionDuplicated": {
             "Title": "Sammlung dupliziert",
             "Message": "Sammlung wurde dupliziert."
+        },
+        "CollectionMerged": {
+            "Title": "Sammlung zusammengeführt",
+            "Message": "Sammlung wurde zusammengeführt."
         }
     },
     "Mod_App_Actions": {

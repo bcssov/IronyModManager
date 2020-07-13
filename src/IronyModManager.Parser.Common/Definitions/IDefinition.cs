@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 06-28-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using CodexMicroORM.Core.Collections;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Parser.Common.Definitions
 {
@@ -38,6 +38,20 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The code.</value>
         string Code { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code separator.
+        /// </summary>
+        /// <value>The code separator.</value>
+        [JsonIgnore]
+        string CodeSeparator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the code tag.
+        /// </summary>
+        /// <value>The code tag.</value>
+        [JsonIgnore]
+        string CodeTag { get; set; }
 
         /// <summary>
         /// Gets or sets the content sha.
@@ -101,12 +115,6 @@ namespace IronyModManager.Parser.Common.Definitions
         string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is first level.
-        /// </summary>
-        /// <value><c>true</c> if this instance is first level; otherwise, <c>false</c>.</value>
-        bool IsFirstLevel { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -118,6 +126,20 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The mod path.</value>
         [JsonIgnore]
         string ModPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the order.
+        /// </summary>
+        /// <value>The order.</value>
+        [JsonIgnore]
+        int Order { get; set; }
+
+        /// <summary>
+        /// Gets or sets the original code.
+        /// </summary>
+        /// <value>The original code.</value>
+        [JsonIgnore]
+        string OriginalCode { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten file names.

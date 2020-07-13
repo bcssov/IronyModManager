@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 06-22-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -23,6 +23,7 @@ using IronyModManager.DI;
 using IronyModManager.Implementation;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
+using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager
 {
@@ -69,6 +70,7 @@ namespace IronyModManager
             try
             {
                 var app = BuildAvaloniaApp();
+                InitAvaloniaOptions(app);
                 Bootstrap.PostStartup();
                 app.StartWithClassicDesktopLifetime(args);
             }
@@ -98,6 +100,45 @@ namespace IronyModManager
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+        }
+
+        /// <summary>
+        /// Initializes the avalonia options.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        private static void InitAvaloniaOptions(AppBuilder app)
+        {
+            void configureLinux()
+            {
+                var configuration = DIResolver.Get<IConfigurationRoot>();
+                var linuxSection = configuration.GetSection("LinuxOptions");
+                var useGPU = linuxSection.GetSection("UseGPU").Get<bool?>();
+                var useEGL = linuxSection.GetSection("UseEGL").Get<bool?>();
+                var useDBusMenu = linuxSection.GetSection("UseDBusMenu").Get<bool?>();
+                var useDeferredRendering = linuxSection.GetSection("UseDeferredRendering").Get<bool?>();
+                if (useGPU.HasValue || useEGL.HasValue || useDBusMenu.HasValue || useDeferredRendering.HasValue)
+                {
+                    var opts = new X11PlatformOptions();
+                    if (useGPU.HasValue)
+                    {
+                        opts.UseGpu = useGPU.GetValueOrDefault();
+                    }
+                    if (useEGL.HasValue)
+                    {
+                        opts.UseEGL = useEGL.GetValueOrDefault();
+                    }
+                    if (useDBusMenu.HasValue)
+                    {
+                        opts.UseDBusMenu = useDBusMenu.GetValueOrDefault();
+                    }
+                    if (useDeferredRendering.HasValue)
+                    {
+                        opts.UseDeferredRendering = useDeferredRendering.GetValueOrDefault();
+                    }
+                    app.With(opts);
+                }
+            }
+            configureLinux();
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 07-11-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -372,6 +372,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [performing enable all].
+        /// </summary>
+        /// <value><c>true</c> if [performing enable all]; otherwise, <c>false</c>.</value>
+        public virtual bool PerformingEnableAll { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [refreshing mods].
         /// </summary>
         /// <value><c>true</c> if [refreshing mods]; otherwise, <c>false</c>.</value>
@@ -462,10 +468,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void RefreshMods()
         {
+            RefreshModsAsync().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// refresh mods as an asynchronous operation.
+        /// </summary>
+        public virtual async Task RefreshModsAsync()
+        {
             RefreshingMods = true;
             var previousMods = Mods;
-            Bind();
-            if (Mods?.Count() > 0)
+            await BindAsync();
+            if (Mods?.Count() > 0 && previousMods?.Count() > 0)
             {
                 foreach (var item in previousMods.Where(p => p.IsSelected))
                 {
@@ -520,25 +534,39 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void Bind(IGame game = null)
         {
+            BindAsync(game).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Binds the asynchronous.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns>Task.</returns>
+        protected virtual async Task BindAsync(IGame game = null)
+        {
+            await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
             if (game == null)
             {
                 game = gameService.GetSelected();
             }
             if (game != null)
             {
-                var mods = modService.GetInstalledMods(game);
-                EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
+                var mods = await Task.Run(() => modService.GetInstalledMods(game));
+                await Task.Run(async () =>
+                {
+                    await EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
+                });
                 Mods = mods.ToObservableCollection();
                 AllMods = Mods.ToHashSet();
                 var invalidMods = AllMods.Where(p => !p.IsValid);
                 if (invalidMods.Count() > 0)
                 {
-                    RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(true);
+                    await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
-                AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
+                AllModsEnabled = FilteredMods.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
                 if (Disposables != null)
                 {
@@ -563,6 +591,7 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
+            await TriggerOverlayAsync(false);
         }
 
         /// <summary>
@@ -572,7 +601,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             checkingState = true;
             await Task.Delay(50);
-            AllModsEnabled = Mods.Count() > 0 && Mods.Where(p => p.IsValid).All(p => p.IsSelected);
+            AllModsEnabled = FilteredMods.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
             checkingState = false;
         }
 
@@ -740,8 +769,9 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(s => s.FilterMods.Text).Subscribe(s =>
             {
                 var searchString = FilterMods.Text ?? string.Empty;
-                FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
+                FilteredMods = Mods?.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
+                AllModsEnabled = FilteredMods?.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
                 SaveState();
             }).DisposeWith(disposables);
@@ -750,11 +780,14 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (FilteredMods?.Count() > 0)
                 {
+                    PerformingEnableAll = true;
                     bool enabled = Mods.Where(p => p.IsValid).All(p => p.IsSelected);
                     foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
                     }
+                    AllModsEnabled = FilteredMods.Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    PerformingEnableAll = false;
                 }
             }).DisposeWith(disposables);
 
@@ -890,44 +923,47 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="dictKey">The dictionary key.</param>
         protected virtual void SortFunction<T>(Func<IMod, T> sortProp, string dictKey)
         {
-            var sortOrder = sortOrders[dictKey];
-            IComparer<T> comparer = ResolveComparer<T>(dictKey);
-            switch (sortOrder.SortOrder)
+            if (FilteredMods != null)
             {
-                case Implementation.SortOrder.Asc:
-                    if (comparer != null)
-                    {
-                        FilteredMods = FilteredMods.OrderBy(sortProp, comparer).ToObservableCollection();
-                        AllMods = AllMods.OrderBy(sortProp, comparer).ToHashSet();
-                    }
-                    else
-                    {
-                        FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
-                        AllMods = AllMods.OrderBy(sortProp).ToHashSet();
-                    }
-                    break;
+                var sortOrder = sortOrders[dictKey];
+                IComparer<T> comparer = ResolveComparer<T>(dictKey);
+                switch (sortOrder.SortOrder)
+                {
+                    case Implementation.SortOrder.Asc:
+                        if (comparer != null)
+                        {
+                            FilteredMods = FilteredMods.OrderBy(sortProp, comparer).ToObservableCollection();
+                            AllMods = AllMods.OrderBy(sortProp, comparer).ToHashSet();
+                        }
+                        else
+                        {
+                            FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
+                            AllMods = AllMods.OrderBy(sortProp).ToHashSet();
+                        }
+                        break;
 
-                case Implementation.SortOrder.Desc:
-                    if (comparer != null)
-                    {
-                        FilteredMods = FilteredMods.OrderByDescending(sortProp, comparer).ToObservableCollection();
-                        AllMods = AllMods.OrderByDescending(sortProp, comparer).ToHashSet();
-                    }
-                    else
-                    {
-                        FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
-                        AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
-                    }
-                    break;
+                    case Implementation.SortOrder.Desc:
+                        if (comparer != null)
+                        {
+                            FilteredMods = FilteredMods.OrderByDescending(sortProp, comparer).ToObservableCollection();
+                            AllMods = AllMods.OrderByDescending(sortProp, comparer).ToHashSet();
+                        }
+                        else
+                        {
+                            FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
+                            AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
+                        }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+                foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
+                {
+                    sort.Value.SetSortOrder(Implementation.SortOrder.None);
+                }
+                SaveState();
             }
-            foreach (var sort in sortOrders.Where(p => p.Value != sortOrder))
-            {
-                sort.Value.SetSortOrder(Implementation.SortOrder.None);
-            }
-            SaveState();
         }
 
         #endregion Methods

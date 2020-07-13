@@ -22,8 +22,8 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
-using IronyModManager.Services.Cache;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -42,16 +42,18 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modParser">The mod parser.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModService(IReader reader,
-            IModParser modParser, IModWriter modWriter,
-            IGameService gameService,
-            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
+        public ModService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+            IReader reader, IModParser modParser,
+            IModWriter modWriter, IGameService gameService,
+            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
         }
 
@@ -160,7 +162,7 @@ namespace IronyModManager.Services
                 }, IsPatchModInternal(mod)))
                 {
                     applyModParams.TopPriorityMods = new List<IMod>() { mod };
-                    ModsCache.InvalidateCache(game);
+                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 }
             }
             return await ModWriter.ApplyModsAsync(applyModParams);
@@ -173,7 +175,10 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         public virtual IEnumerable<IMod> GetInstalledMods(IGame game)
         {
-            ModsCache.InvalidateCache(game);
+            if (game != null)
+            {
+                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+            }
             return GetInstalledModsInternal(game, true);
         }
 
@@ -223,7 +228,7 @@ namespace IronyModManager.Services
                     }, IsPatchModInternal(diff)));
                 }
                 await Task.WhenAll(tasks);
-                ModsCache.InvalidateCache(game);
+                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 return true;
             }
 

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 06-23-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -21,6 +22,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -53,6 +55,8 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
+        /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="modParser">The mod parser.</param>
@@ -60,8 +64,9 @@ namespace IronyModManager.Services
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(IReader reader, IModWriter modWriter, IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
-            IStorageProvider storageProvider, IMapper mapper) : base(reader, modWriter, modParser, gameService, storageProvider, mapper)
+        public ModCollectionService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+            IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
             this.modCollectionExporter = modCollectionExporter;
         }
@@ -138,7 +143,7 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
-            var path = GetPatchDirectory(game, modCollection);
+            var path = GetModDirectory(game, modCollection);
             return modCollectionExporter.ExportAsync(new ModCollectionExporterParams()
             {
                 File = file,
@@ -217,7 +222,7 @@ namespace IronyModManager.Services
             var instance = await GetImportedCollectionDetailsAsync(file);
             if (instance != null)
             {
-                var path = GetPatchDirectory(game, instance);
+                var path = GetModDirectory(game, instance);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,
@@ -227,6 +232,29 @@ namespace IronyModManager.Services
                 {
                     return instance;
                 }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// import paradox as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual async Task<IModCollection> ImportParadoxAsync()
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            var instance = Create();
+            if (await modCollectionExporter.ImportParadoxAsync(new ModCollectionExporterParams()
+            {
+                ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                Mod = instance
+            }))
+            {
+                return instance;
             }
             return null;
         }

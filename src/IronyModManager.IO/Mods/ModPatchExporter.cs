@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 07-01-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using Nito.AsyncEx;
 
@@ -38,6 +39,21 @@ namespace IronyModManager.IO.Mods
     public class ModPatchExporter : IModPatchExporter
     {
         #region Fields
+
+        /// <summary>
+        /// The cache external code key
+        /// </summary>
+        private const string CacheExternalCodeKey = "ExternallyLoadedCode";
+
+        /// <summary>
+        /// The cache state key
+        /// </summary>
+        private const string CacheStateKey = "PatchState";
+
+        /// <summary>
+        /// The cache state prefix
+        /// </summary>
+        private const string CacheStatePrefix = "ModPatchExporter";
 
         /// <summary>
         /// The state backup
@@ -60,24 +76,14 @@ namespace IronyModManager.IO.Mods
         private const string StateName = "state" + Constants.JsonExtension;
 
         /// <summary>
-        /// The externally loaded code
-        /// </summary>
-        private static readonly HashSet<string> externallyLoadedCode = new HashSet<string>();
-
-        /// <summary>
         /// The write lock
         /// </summary>
         private static readonly AsyncLock writeLock = new AsyncLock();
 
         /// <summary>
-        /// The cached state
+        /// The cache
         /// </summary>
-        private static IPatchState cachedState;
-
-        /// <summary>
-        /// The last cached state path
-        /// </summary>
-        private static string lastCachedStatePath;
+        private readonly ICache cache;
 
         /// <summary>
         /// The definition information providers
@@ -106,11 +112,13 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// Initializes a new instance of the <see cref="ModPatchExporter" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="messageBus">The message bus.</param>
-        public ModPatchExporter(IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
+        public ModPatchExporter(ICache cache, IReader reader, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IMessageBus messageBus)
         {
+            this.cache = cache;
             this.definitionInfoProviders = definitionInfoProviders;
             this.reader = reader;
             this.messageBus = messageBus;
@@ -218,8 +226,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         public void ResetCache()
         {
-            lastCachedStatePath = string.Empty;
-            cachedState = null;
+            cache.Invalidate(CacheStatePrefix, CacheStateKey);
         }
 
         /// <summary>
@@ -276,7 +283,47 @@ namespace IronyModManager.IO.Mods
                 }
             }
             state.ConflictHistory = MapDefinitions(history, true);
+            var externallyLoadedCode = cache.Get<HashSet<string>>(CacheStatePrefix, CacheExternalCodeKey);
+            if (externallyLoadedCode == null)
+            {
+                externallyLoadedCode = new HashSet<string>();
+                cache.Set(CacheStatePrefix, CacheExternalCodeKey, externallyLoadedCode);
+            }
             return StoreState(state, modifiedHistory, externallyLoadedCode, path);
+        }
+
+        /// <summary>
+        /// Standardizes the definition paths.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        protected virtual void StandardizeDefinitionPaths(IEnumerable<IDefinition> definitions)
+        {
+            static IList<string> standardizeArray(IList<string> paths)
+            {
+                if (paths?.Count() > 0)
+                {
+                    var newPaths = new List<string>();
+                    foreach (var item in paths)
+                    {
+                        newPaths.Add(item.StandardizeDirectorySeparator());
+                    }
+                    return newPaths;
+                }
+                return paths;
+            }
+
+            if (definitions?.Count() > 0)
+            {
+                foreach (var item in definitions)
+                {
+                    item.AdditionalFileNames = standardizeArray(item.AdditionalFileNames);
+                    item.File = item.File.StandardizeDirectorySeparator();
+                    item.GeneratedFileNames = standardizeArray(item.GeneratedFileNames);
+                    item.ModPath = item.ModPath.StandardizeDirectorySeparator();
+                    item.OverwrittenFileNames = standardizeArray(item.OverwrittenFileNames);
+                    item.Type = item.Type.StandardizeDirectorySeparator();
+                }
+            }
         }
 
         /// <summary>
@@ -307,6 +354,20 @@ namespace IronyModManager.IO.Mods
                     continue;
                 }
                 var stream = reader.GetStream(def.ModPath, def.File);
+                // If image and no stream try switching extension
+                if (Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+                {
+                    var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
+                    var file = string.Join(".", segments.Take(segments.Count() - 1));
+                    foreach (var item in Constants.ImageExtensions)
+                    {
+                        stream = reader.GetStream(def.ModPath, file + item);
+                        if (stream != null)
+                        {
+                            break;
+                        }
+                    }
+                }
                 if (!Directory.Exists(Path.GetDirectoryName(outPath)))
                 {
                     Directory.CreateDirectory(Path.GetDirectoryName(outPath));
@@ -390,12 +451,18 @@ namespace IronyModManager.IO.Mods
         /// <returns>IPatchState.</returns>
         private IPatchState GetPatchState(string path)
         {
-            var lastPath = lastCachedStatePath ?? string.Empty;
-            if (!lastPath.Equals(path, StringComparison.OrdinalIgnoreCase))
+            var cachedItem = cache.Get<CachedState>(CacheStatePrefix, CacheStateKey);
+            if (cachedItem != null)
             {
-                cachedState = null;
+                var lastPath = cachedItem.LastCachedPath ?? string.Empty;
+                if (!lastPath.Equals(path, StringComparison.OrdinalIgnoreCase))
+                {
+                    ResetCache();
+                    return null;
+                }
+                return cachedItem.PatchState;
             }
-            return cachedState;
+            return null;
         }
 
         /// <summary>
@@ -423,32 +490,54 @@ namespace IronyModManager.IO.Mods
                     {
                         cached.ConflictHistory = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.ConflictHistory);
+                    }
                     if (cached.Conflicts == null)
                     {
                         cached.Conflicts = new List<IDefinition>();
+                    }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.Conflicts);
                     }
                     if (cached.IgnoredConflicts == null)
                     {
                         cached.IgnoredConflicts = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.IgnoredConflicts);
+                    }
                     if (cached.OrphanConflicts == null)
                     {
                         cached.OrphanConflicts = new List<IDefinition>();
+                    }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.OrphanConflicts);
                     }
                     if (cached.ResolvedConflicts == null)
                     {
                         cached.ResolvedConflicts = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.ResolvedConflicts);
+                    }
                     if (cached.OverwrittenConflicts == null)
                     {
                         cached.OverwrittenConflicts = new List<IDefinition>();
                     }
+                    else
+                    {
+                        StandardizeDefinitionPaths(cached.OverwrittenConflicts);
+                    }
                     // If not allowing full load don't cache anything
                     if (loadExternalCode)
                     {
-                        externallyLoadedCode.Clear();
-                        cachedState = cached;
-                        lastCachedStatePath = statePath;
+                        var externallyLoadedCode = new HashSet<string>();
                         async Task loadCode(IDefinition definition)
                         {
                             var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
@@ -464,6 +553,13 @@ namespace IronyModManager.IO.Mods
                         {
                             tasks.Add(loadCode(item));
                         }
+                        var cachedItem = new CachedState()
+                        {
+                            LastCachedPath = statePath,
+                            PatchState = cached
+                        };
+                        cache.Set(CacheStatePrefix, CacheStateKey, cachedItem);
+                        cache.Set(CacheStatePrefix, CacheExternalCodeKey, externallyLoadedCode);
                         await Task.WhenAll(tasks);
                     }
                 }
@@ -504,10 +600,13 @@ namespace IronyModManager.IO.Mods
             newInstance.ErrorColumn = original.ErrorColumn;
             newInstance.ErrorLine = original.ErrorLine;
             newInstance.ErrorMessage = original.ErrorMessage;
-            newInstance.IsFirstLevel = original.IsFirstLevel;
             newInstance.GeneratedFileNames = original.GeneratedFileNames;
             newInstance.AdditionalFileNames = original.AdditionalFileNames;
             newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
+            newInstance.OriginalCode = original.OriginalCode;
+            newInstance.CodeSeparator = original.CodeSeparator;
+            newInstance.CodeTag = original.CodeTag;
+            newInstance.Order = original.Order;
             return newInstance;
         }
 
@@ -559,8 +658,16 @@ namespace IronyModManager.IO.Mods
         private bool StoreState(IPatchState model, IEnumerable<IDefinition> modifiedHistory, HashSet<string> externalCode, string path)
         {
             var statePath = Path.Combine(path, StateName);
-            cachedState = model;
-            lastCachedStatePath = statePath;
+
+            var cachedItem = cache.Get<CachedState>(CacheStatePrefix, CacheStateKey);
+            if (cachedItem == null)
+            {
+                cachedItem = new CachedState();
+            }
+            cachedItem.LastCachedPath = statePath;
+            cachedItem.PatchState = model;
+            cache.Set(CacheStatePrefix, CacheStateKey, cachedItem);
+
             WriteStateInBackground(model, modifiedHistory, externalCode, path).ConfigureAwait(false);
             return true;
         }
@@ -586,7 +693,7 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
-                    string fileName = infoProvider.GetFileName(item);
+                    string fileName = string.Empty;
                     if (!overwrittenFiles)
                     {
                         fileName = infoProvider.GetFileName(item);
@@ -669,12 +776,13 @@ namespace IronyModManager.IO.Mods
                 MapPatchState(model, patchState, true);
                 foreach (var item in patchState.ConflictHistory)
                 {
-                    if (externalCode.Contains(item.TypeAndId))
+                    if (externalCode != null && externalCode.Contains(item.TypeAndId))
                     {
                         item.Code = null;
                     }
                 }
 
+                var loadedCode = new HashSet<string>();
                 foreach (var item in modifiedHistory)
                 {
                     var historyPath = Path.Combine(path, StateHistory, item.Type, item.Id.GenerateValidFileName() + StateConflictHistoryExtension);
@@ -683,9 +791,9 @@ namespace IronyModManager.IO.Mods
                     {
                         Directory.CreateDirectory(historyDirectory);
                     }
-                    if (!externallyLoadedCode.Contains(item.TypeAndId))
+                    if (externalCode != null && !externalCode.Contains(item.TypeAndId))
                     {
-                        externallyLoadedCode.Add(item.TypeAndId);
+                        loadedCode.Add(item.TypeAndId);
                         var existing = patchState.ConflictHistory.FirstOrDefault(p => p.TypeAndId.Equals(item.TypeAndId));
                         if (existing != null)
                         {
@@ -697,6 +805,16 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(historyPath, item.Code);
                         return true;
                     });
+                }
+
+                var existingLoadedCode = cache.Get<HashSet<string>>(CacheStatePrefix, CacheExternalCodeKey);
+                if (existingLoadedCode != null)
+                {
+                    foreach (var item in loadedCode)
+                    {
+                        existingLoadedCode.Add(item);
+                    }
+                    cache.Set(CacheStatePrefix, CacheExternalCodeKey, existingLoadedCode);
                 }
 
                 var dirPath = Path.GetDirectoryName(statePath);
@@ -718,5 +836,31 @@ namespace IronyModManager.IO.Mods
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class CachedState.
+        /// </summary>
+        private class CachedState
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the last cached path.
+            /// </summary>
+            /// <value>The last cached path.</value>
+            public string LastCachedPath { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the patch.
+            /// </summary>
+            /// <value>The state of the patch.</value>
+            public IPatchState PatchState { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
