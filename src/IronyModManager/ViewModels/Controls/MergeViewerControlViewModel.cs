@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-27-2020
+// Last Modified On : 07-13-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -518,7 +518,7 @@ namespace IronyModManager.ViewModels.Controls
                         if (initial == null)
                         {
                             initial = item;
-                        }                        
+                        }
                     }
                     var index = initial.Item1 + item.Item4 + appliedOffset + 1;
                     var count = destination.Count - 1;
