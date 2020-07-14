@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 07-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -68,12 +68,12 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The left side cached menu items
         /// </summary>
-        private HashSet<object> leftSideCachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The right side cached menu items
         /// </summary>
-        private HashSet<object> rightSideCachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The syncing scroll
@@ -167,49 +167,51 @@ namespace IronyModManager.Views.Controls
                 if (grid != null)
                 {
                     var processedItems = leftSide ? leftSideCachedMenuItems : rightSideCachedMenuItems;
-                    if (listBox.Items != lastDataSource)
+                    bool retrieved = processedItems.TryGetValue(hoveredItem.Content, out var cached);
+                    if (listBox.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
                     {
                         if (leftSide)
                         {
-                            leftSideCachedMenuItems = new HashSet<object>();
+                            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastLeftDataSource = listBox.Items;
                         }
                         else
                         {
-                            rightSideCachedMenuItems = new HashSet<object>();
+                            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastRightDataSource = listBox.Items;
                         }
                     }
-                    if (!processedItems.Contains(hoveredItem.Content))
+                    if (!processedItems.ContainsKey(hoveredItem.Content))
                     {
-                        processedItems.Add(hoveredItem.Content);
+                        List<MenuItem> menuItems = null;
                         if (ViewModel.RightSidePatchMod && ViewModel.LeftSidePatchMod)
                         {
                             grid.ContextMenu = null;
                         }
                         else if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
                         {
-                            if (grid.ContextMenu == null)
-                            {
-                                grid.ContextMenu = new ContextMenu();
-                            }
-                            grid.ContextMenu.Items = GetNonEditableMenuItems(leftSide);
+                            menuItems = GetNonEditableMenuItems(leftSide);
                         }
                         else
+                        {
+                            if (leftSide)
+                            {
+                                menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                            }
+                            else
+                            {
+                                menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                            }
+                        }
+                        if (menuItems != null)
                         {
                             if (grid.ContextMenu == null)
                             {
                                 grid.ContextMenu = new ContextMenu();
                             }
-                            if (leftSide)
-                            {
-                                grid.ContextMenu.Items = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
-                            else
-                            {
-                                grid.ContextMenu.Items = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
+                            grid.ContextMenu.Items = menuItems;
                         }
+                        processedItems.Add(hoveredItem.Content, menuItems);
                     }
                 }
             }
@@ -292,8 +294,8 @@ namespace IronyModManager.Views.Controls
         /// <param name="oldLocale">The old locale.</param>
         protected override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            leftSideCachedMenuItems = new HashSet<object>();
-            rightSideCachedMenuItems = new HashSet<object>();
+            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
+            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
