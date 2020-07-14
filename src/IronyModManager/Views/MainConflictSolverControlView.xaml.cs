@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 07-14-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -41,7 +41,7 @@ namespace IronyModManager.Views
         /// <summary>
         /// The cached menu items
         /// </summary>
-        private HashSet<object> cachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> cachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         #endregion Fields
 
@@ -102,14 +102,14 @@ namespace IronyModManager.Views
                     if (grid != null)
                     {
                         ViewModel.EvalInvalidConflictPath(hoveredItem.Content as IHierarchicalDefinitions);
-                        if (conflictList.Items != lastDataSource)
+                        bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
+                        if (conflictList.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
                         {
-                            cachedMenuItems = new HashSet<object>();
+                            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastDataSource = conflictList.Items;
                         }
-                        if (!cachedMenuItems.Contains(hoveredItem.Content))
+                        if (!cachedMenuItems.ContainsKey(hoveredItem.Content))
                         {
-                            cachedMenuItems.Add(hoveredItem.Content);
                             if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
                             {
                                 var menuItems = new List<MenuItem>()
@@ -133,10 +133,12 @@ namespace IronyModManager.Views
                                     grid.ContextMenu = new ContextMenu();
                                 }
                                 grid.ContextMenu.Items = menuItems;
+                                cachedMenuItems.Add(hoveredItem.Content, menuItems);
                             }
                             else
                             {
                                 grid.ContextMenu = null;
+                                cachedMenuItems.Add(hoveredItem.Content, null);
                             }
                         }
                     }
@@ -153,7 +155,7 @@ namespace IronyModManager.Views
         /// <param name="oldLocale">The old locale.</param>
         protected override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            cachedMenuItems = new HashSet<object>();
+            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 

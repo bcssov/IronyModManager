@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-02-2020
+// Last Modified On : 07-14-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -48,7 +48,7 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The cached menu items
         /// </summary>
-        private HashSet<object> cachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> cachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The mod list
@@ -125,7 +125,7 @@ namespace IronyModManager.Views.Controls
                 {
                     ViewModel.CollectionJumpOnPositionChangeCommand.Subscribe(s =>
                     {
-                        cachedMenuItems = new HashSet<object>();
+                        cachedMenuItems = new Dictionary<object, List<MenuItem>>();
                     }).DisposeWith(disposables);
                 }).DisposeWith(disposables);
             }
@@ -139,7 +139,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="oldLocale">The old locale.</param>
         protected override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            cachedMenuItems = new HashSet<object>();
+            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
@@ -158,14 +158,14 @@ namespace IronyModManager.Views.Controls
                     if (grid != null)
                     {
                         ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                        if (modList.Items != lastDataSource)
+                        bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
+                        if (modList.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
                         {
-                            cachedMenuItems = new HashSet<object>();
+                            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastDataSource = modList.Items;
                         }
-                        if (!cachedMenuItems.Contains(hoveredItem.Content))
+                        if (!cachedMenuItems.ContainsKey(hoveredItem.Content))
                         {
-                            cachedMenuItems.Add(hoveredItem.Content);
                             if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) || !string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
                             {
                                 var menuItems = new List<MenuItem>
@@ -226,6 +226,7 @@ namespace IronyModManager.Views.Controls
                                     }
                                 }
                                 grid.ContextMenu.Items = menuItems;
+                                cachedMenuItems.Add(hoveredItem.Content, menuItems);
                             }
                         }
                     }
