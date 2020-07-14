@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 07-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -68,12 +68,12 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// The left side cached menu items
         /// </summary>
-        private HashSet<object> leftSideCachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The right side cached menu items
         /// </summary>
-        private HashSet<object> rightSideCachedMenuItems = new HashSet<object>();
+        private Dictionary<object, List<MenuItem>> rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The syncing scroll
@@ -95,36 +95,6 @@ namespace IronyModManager.Views.Controls
         #endregion Constructors
 
         #region Methods
-
-        /// <summary>
-        /// Delays the synchronize scroll asynchronous.
-        /// </summary>
-        /// <param name="thisListBox">The this ListBox.</param>
-        /// <param name="otherListBox">The other ListBox.</param>
-        /// <returns>Task.</returns>
-        protected virtual Task DelaySyncScrollAsync(ListBox thisListBox, ListBox otherListBox)
-        {
-            var thisMaxX = Math.Abs(thisListBox.Scroll.Extent.Width - thisListBox.Scroll.Viewport.Width);
-            var thisMaxY = Math.Abs(thisListBox.Scroll.Extent.Height - thisListBox.Scroll.Viewport.Height);
-            var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
-            var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
-            var offset = thisListBox.Scroll.Offset;
-            if (thisListBox.Scroll.Offset.X > otherMaxX || thisListBox.Scroll.Offset.X == thisMaxX)
-            {
-                offset = offset.WithX(otherMaxX);
-            }
-            if (thisListBox.Scroll.Offset.Y > otherMaxY || thisListBox.Scroll.Offset.Y == thisMaxY)
-            {
-                offset = offset.WithY(otherMaxY);
-            }
-            if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
-            {
-                otherListBox.InvalidateArrange();
-                thisListBox.InvalidateArrange();
-                otherListBox.Scroll.Offset = offset;
-            }
-            return Task.FromResult(true);
-        }
 
         /// <summary>
         /// Focuses the conflict.
@@ -167,49 +137,51 @@ namespace IronyModManager.Views.Controls
                 if (grid != null)
                 {
                     var processedItems = leftSide ? leftSideCachedMenuItems : rightSideCachedMenuItems;
-                    if (listBox.Items != lastDataSource)
+                    bool retrieved = processedItems.TryGetValue(hoveredItem.Content, out var cached);
+                    if (listBox.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
                     {
                         if (leftSide)
                         {
-                            leftSideCachedMenuItems = new HashSet<object>();
+                            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastLeftDataSource = listBox.Items;
                         }
                         else
                         {
-                            rightSideCachedMenuItems = new HashSet<object>();
+                            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
                             lastRightDataSource = listBox.Items;
                         }
                     }
-                    if (!processedItems.Contains(hoveredItem.Content))
+                    if (!processedItems.ContainsKey(hoveredItem.Content))
                     {
-                        processedItems.Add(hoveredItem.Content);
+                        List<MenuItem> menuItems = null;
                         if (ViewModel.RightSidePatchMod && ViewModel.LeftSidePatchMod)
                         {
                             grid.ContextMenu = null;
                         }
                         else if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
                         {
-                            if (grid.ContextMenu == null)
-                            {
-                                grid.ContextMenu = new ContextMenu();
-                            }
-                            grid.ContextMenu.Items = GetNonEditableMenuItems(leftSide);
+                            menuItems = GetNonEditableMenuItems(leftSide);
                         }
                         else
+                        {
+                            if (leftSide)
+                            {
+                                menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                            }
+                            else
+                            {
+                                menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
+                            }
+                        }
+                        if (menuItems != null)
                         {
                             if (grid.ContextMenu == null)
                             {
                                 grid.ContextMenu = new ContextMenu();
                             }
-                            if (leftSide)
-                            {
-                                grid.ContextMenu.Items = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
-                            else
-                            {
-                                grid.ContextMenu.Items = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
+                            grid.ContextMenu.Items = menuItems;
                         }
+                        processedItems.Add(hoveredItem.Content, menuItems);
                     }
                 }
             }
@@ -230,16 +202,17 @@ namespace IronyModManager.Views.Controls
                 {
                     if (scrollArgs.Property == ScrollViewer.HorizontalScrollBarValueProperty || scrollArgs.Property == ScrollViewer.VerticalScrollBarValueProperty)
                     {
-                        if (thisListBox.Scroll == null || otherListBox.Scroll == null || syncingScroll)
+                        if (thisListBox.Scroll == null ||
+                            otherListBox.Scroll == null ||
+                            syncingScroll ||
+                            (otherListBox.Scroll.Offset.X == thisListBox.Scroll.Offset.X && otherListBox.Scroll.Offset.Y == thisListBox.Scroll.Offset.Y))
                         {
                             return;
                         }
                         syncingScroll = true;
                         Dispatcher.UIThread.InvokeAsync(async () =>
                         {
-                            await Task.Delay(50);
-                            await DelaySyncScrollAsync(thisListBox, otherListBox);
-                            await Task.Delay(10);
+                            await SyncScrollAsync(thisListBox, otherListBox);
                             syncingScroll = false;
                         });
                     }
@@ -292,8 +265,8 @@ namespace IronyModManager.Views.Controls
         /// <param name="oldLocale">The old locale.</param>
         protected override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            leftSideCachedMenuItems = new HashSet<object>();
-            rightSideCachedMenuItems = new HashSet<object>();
+            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
+            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
@@ -411,6 +384,36 @@ namespace IronyModManager.Views.Controls
                 string text = string.Join(Environment.NewLine, lines);
                 ViewModel.CurrentEditText = text;
             };
+        }
+
+        /// <summary>
+        /// Synchronizes the scroll asynchronous.
+        /// </summary>
+        /// <param name="thisListBox">The this ListBox.</param>
+        /// <param name="otherListBox">The other ListBox.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task SyncScrollAsync(ListBox thisListBox, ListBox otherListBox)
+        {
+            var thisMaxX = Math.Abs(thisListBox.Scroll.Extent.Width - thisListBox.Scroll.Viewport.Width);
+            var thisMaxY = Math.Abs(thisListBox.Scroll.Extent.Height - thisListBox.Scroll.Viewport.Height);
+            var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
+            var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
+            var offset = thisListBox.Scroll.Offset;
+            if (thisListBox.Scroll.Offset.X > otherMaxX || thisListBox.Scroll.Offset.X == thisMaxX)
+            {
+                offset = offset.WithX(otherMaxX);
+            }
+            if (thisListBox.Scroll.Offset.Y > otherMaxY || thisListBox.Scroll.Offset.Y == thisMaxY)
+            {
+                offset = offset.WithY(otherMaxY);
+            }
+            if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
+            {
+                otherListBox.InvalidateArrange();
+                thisListBox.InvalidateArrange();
+                otherListBox.Scroll.Offset = offset;
+            }
+            return Task.FromResult(true);
         }
 
         /// <summary>
