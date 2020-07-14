@@ -97,36 +97,6 @@ namespace IronyModManager.Views.Controls
         #region Methods
 
         /// <summary>
-        /// Delays the synchronize scroll asynchronous.
-        /// </summary>
-        /// <param name="thisListBox">The this ListBox.</param>
-        /// <param name="otherListBox">The other ListBox.</param>
-        /// <returns>Task.</returns>
-        protected virtual Task DelaySyncScrollAsync(ListBox thisListBox, ListBox otherListBox)
-        {
-            var thisMaxX = Math.Abs(thisListBox.Scroll.Extent.Width - thisListBox.Scroll.Viewport.Width);
-            var thisMaxY = Math.Abs(thisListBox.Scroll.Extent.Height - thisListBox.Scroll.Viewport.Height);
-            var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
-            var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
-            var offset = thisListBox.Scroll.Offset;
-            if (thisListBox.Scroll.Offset.X > otherMaxX || thisListBox.Scroll.Offset.X == thisMaxX)
-            {
-                offset = offset.WithX(otherMaxX);
-            }
-            if (thisListBox.Scroll.Offset.Y > otherMaxY || thisListBox.Scroll.Offset.Y == thisMaxY)
-            {
-                offset = offset.WithY(otherMaxY);
-            }
-            if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
-            {
-                otherListBox.InvalidateArrange();
-                thisListBox.InvalidateArrange();
-                otherListBox.Scroll.Offset = offset;
-            }
-            return Task.FromResult(true);
-        }
-
-        /// <summary>
         /// Focuses the conflict.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -232,16 +202,17 @@ namespace IronyModManager.Views.Controls
                 {
                     if (scrollArgs.Property == ScrollViewer.HorizontalScrollBarValueProperty || scrollArgs.Property == ScrollViewer.VerticalScrollBarValueProperty)
                     {
-                        if (thisListBox.Scroll == null || otherListBox.Scroll == null || syncingScroll)
+                        if (thisListBox.Scroll == null ||
+                            otherListBox.Scroll == null ||
+                            syncingScroll ||
+                            (otherListBox.Scroll.Offset.X == thisListBox.Scroll.Offset.X && otherListBox.Scroll.Offset.Y == thisListBox.Scroll.Offset.Y))
                         {
                             return;
                         }
                         syncingScroll = true;
                         Dispatcher.UIThread.InvokeAsync(async () =>
                         {
-                            await Task.Delay(50);
-                            await DelaySyncScrollAsync(thisListBox, otherListBox);
-                            await Task.Delay(10);
+                            await SyncScrollAsync(thisListBox, otherListBox);
                             syncingScroll = false;
                         });
                     }
@@ -413,6 +384,36 @@ namespace IronyModManager.Views.Controls
                 string text = string.Join(Environment.NewLine, lines);
                 ViewModel.CurrentEditText = text;
             };
+        }
+
+        /// <summary>
+        /// Synchronizes the scroll asynchronous.
+        /// </summary>
+        /// <param name="thisListBox">The this ListBox.</param>
+        /// <param name="otherListBox">The other ListBox.</param>
+        /// <returns>Task.</returns>
+        protected virtual Task SyncScrollAsync(ListBox thisListBox, ListBox otherListBox)
+        {
+            var thisMaxX = Math.Abs(thisListBox.Scroll.Extent.Width - thisListBox.Scroll.Viewport.Width);
+            var thisMaxY = Math.Abs(thisListBox.Scroll.Extent.Height - thisListBox.Scroll.Viewport.Height);
+            var otherMaxX = Math.Abs(otherListBox.Scroll.Extent.Width - otherListBox.Scroll.Viewport.Width);
+            var otherMaxY = Math.Abs(otherListBox.Scroll.Extent.Height - otherListBox.Scroll.Viewport.Height);
+            var offset = thisListBox.Scroll.Offset;
+            if (thisListBox.Scroll.Offset.X > otherMaxX || thisListBox.Scroll.Offset.X == thisMaxX)
+            {
+                offset = offset.WithX(otherMaxX);
+            }
+            if (thisListBox.Scroll.Offset.Y > otherMaxY || thisListBox.Scroll.Offset.Y == thisMaxY)
+            {
+                offset = offset.WithY(otherMaxY);
+            }
+            if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
+            {
+                otherListBox.InvalidateArrange();
+                thisListBox.InvalidateArrange();
+                otherListBox.Scroll.Offset = offset;
+            }
+            return Task.FromResult(true);
         }
 
         /// <summary>
