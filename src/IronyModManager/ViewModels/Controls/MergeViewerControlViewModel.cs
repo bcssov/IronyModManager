@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-13-2020
+// Last Modified On : 07-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
