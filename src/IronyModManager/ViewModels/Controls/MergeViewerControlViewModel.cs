@@ -705,9 +705,10 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         var reverseSrc = source.Reverse().ToList();
-                        var reverseIdx = source.Count - idx;
+                        var reverseIdx = source.Count - idx - 1;
                         while (true)
                         {
+                            reverseIdx++;
                             if (reverseIdx > (reverseSrc.Count - 1))
                             {
                                 reverseIdx = reverseSrc.Count - 1;
@@ -723,12 +724,11 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 break;
                             }
-                            reverseIdx++;
                         }
                         var line = reverseSrc.Skip(reverseIdx).FirstOrDefault(p => p.SubPieces.Count > 0 || p.Type != ChangeType.Unchanged);
                         if (line != null)
                         {
-                            var index = reverseSrc.Count - line.Index - 1;
+                            var index = reverseSrc.Count - line.Index;
                             if (index < 0)
                             {
                                 index = 0;
