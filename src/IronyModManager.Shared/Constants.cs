@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 07-15-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -48,6 +48,16 @@ namespace IronyModManager.Shared
         /// The json extension without dot
         /// </summary>
         public const string JsonExtensionWithoutDot = "json";
+
+        /// <summary>
+        /// The localization directory
+        /// </summary>
+        public const string LocalizationDirectory = "localisation";
+
+        /// <summary>
+        /// The localization replace directory
+        /// </summary>
+        public const string LocalizationReplaceDirectory = "replace";
 
         /// <summary>
         /// The mod directory
