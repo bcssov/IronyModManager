@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-14-2020
+// Last Modified On : 07-15-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -123,7 +123,7 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetActionMenuItems()
         {
-            return new List<MenuItem>()
+            var menuItems = new List<MenuItem>()
             {
                 new MenuItem()
                 {
@@ -165,6 +165,21 @@ namespace IronyModManager.Views.Controls
                     Command = ViewModel.UnlockAllDescriptorsCommand
                 }
             };
+            if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+            {
+                var menuItem = new MenuItem()
+                {
+                    Header = ViewModel.OpenInAssociatedApp,
+                    Command = ViewModel.OpenInAssociatedAppCommand
+                };
+
+                menuItems.Insert(0, menuItem);
+                menuItems.Insert(1, new MenuItem()
+                {
+                    Header = "-"
+                });
+            }
+            return menuItems;
         }
 
         /// <summary>
