@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-30-2020
+// Last Modified On : 07-15-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -185,11 +185,21 @@ namespace IronyModManager.Services
                         var exportSingleDefinitions = new List<IDefinition>();
                         foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId))
                         {
+                            // This is because we want to dump localization items regularly and then dump replacement overrides in localization\replace directory.
+                            var canDumpRegular = true;
                             // Orphans are placed under resolved items during analysis so no need to check them
                             var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             if (resolved.Count() > 0 || overwritten.Count() > 0)
                             {
+                                if (file.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    canDumpRegular = !file.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase);
+                                }
+                                else
+                                {
+                                    canDumpRegular = false;
+                                }
                                 // Resolved takes priority, since if an item was resolved no need to use the overwritten code
                                 // Also fetch the code from the patch state.json object to get the latest version of the code to dump
                                 if (resolved.Count() > 0)
@@ -206,7 +216,11 @@ namespace IronyModManager.Services
                                             if (!dumpedIds.Contains(copy.TypeAndId))
                                             {
                                                 exportSingleDefinitions.Add(copy);
-                                                dumpedIds.Add(copy.TypeAndId);
+                                                // Only resolved localization items need this check
+                                                if (!canDumpRegular)
+                                                {
+                                                    dumpedIds.Add(copy.TypeAndId);
+                                                }
                                             }
                                         }
                                         else
@@ -235,7 +249,7 @@ namespace IronyModManager.Services
                                     }
                                 }
                             }
-                            else
+                            if (canDumpRegular)
                             {
                                 // Check if this is a conflict so we can then perform evaluation of which definition would win based on current order
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);

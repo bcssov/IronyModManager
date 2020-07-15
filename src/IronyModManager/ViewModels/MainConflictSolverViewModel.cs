@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-15-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -50,11 +50,6 @@ namespace IronyModManager.ViewModels
         /// The invalid key
         /// </summary>
         private const string InvalidKey = "invalid";
-
-        /// <summary>
-        /// The localization
-        /// </summary>
-        private const string Localization = "localisation";
 
         /// <summary>
         /// The application action
@@ -450,9 +445,9 @@ namespace IronyModManager.ViewModels
                 foreach (var topLevelResolvedConflicts in resolved)
                 {
                     IEnumerable<IHierarchicalDefinitions> topLevelConflicts;
-                    if (topLevelResolvedConflicts.Name.StartsWith(Localization, StringComparison.OrdinalIgnoreCase))
+                    if (topLevelResolvedConflicts.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
                     {
-                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(Localization, StringComparison.OrdinalIgnoreCase));
+                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
                     }
                     else
                     {
@@ -617,7 +612,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null && IsConflictSolverAvailable)
                     {
-                        MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
+                        MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
                         MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.ExitEditMode();
@@ -648,7 +643,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s != null && IsConflictSolverAvailable)
                     {
-                        MergeViewer.EditingYaml = s.Type.StartsWith(Localization);
+                        MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
                         MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                         MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.ExitEditMode();
