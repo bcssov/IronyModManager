@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 07-22-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -508,7 +508,6 @@ namespace IronyModManager.Services
                             foreach (var split in splitLines)
                             {
                                 sb.AppendLine($"{new string(' ', 4)}{split}");
-                                var key = split.Trim().Split("=:".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0].ToLowerInvariant();
                                 if (!varsInserted && split.Contains(Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket))
                                 {
                                     varsInserted = true;
