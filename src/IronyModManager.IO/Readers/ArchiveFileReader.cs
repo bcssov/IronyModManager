@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 07-22-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
+using SharpCompress.Archives;
 using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Readers
@@ -30,6 +31,28 @@ namespace IronyModManager.IO.Readers
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ArchiveFileReader : IFileReader
     {
+        #region Fields
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArchiveFileReader" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public ArchiveFileReader(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         /// <summary>
@@ -49,18 +72,42 @@ namespace IronyModManager.IO.Readers
         /// <returns>IList&lt;System.String&gt;.</returns>
         public virtual IEnumerable<string> GetFiles(string path)
         {
-            using var fileStream = File.OpenRead(path);
-            using var reader = ReaderFactory.Open(fileStream);
-            var files = new List<string>();
-            while (reader.MoveToNextEntry())
+            IEnumerable<string> getUsingReaderFactory()
             {
-                if (!reader.Entry.IsDirectory)
+                using var fileStream = File.OpenRead(path);
+                using var reader = ReaderFactory.Open(fileStream);
+                var files = new List<string>();
+                while (reader.MoveToNextEntry())
                 {
-                    var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        files.Add(relativePath);
+                    }
+                }
+                return files;
+            }
+            IEnumerable<string> getUsingArchiveFactory()
+            {
+                using var fileStream = File.OpenRead(path);
+                using var reader = ArchiveFactory.Open(fileStream);
+                var files = new List<string>();
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                     files.Add(relativePath);
                 }
+                return files;
             }
-            return files;
+            try
+            {
+                return getUsingReaderFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return getUsingArchiveFactory();
+            }
         }
 
         /// <summary>
@@ -71,22 +118,49 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public virtual Stream GetStream(string rootPath, string file)
         {
-            static MemoryStream readStream(SharpCompress.Readers.IReader reader)
+            static MemoryStream readStream(Stream entryStream)
             {
-                using var entryStream = reader.OpenEntryStream();
                 var memoryStream = new MemoryStream();
                 entryStream.CopyTo(memoryStream);
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 return memoryStream;
             }
-
-            using var fileStream = File.OpenRead(rootPath);
-            using var reader = ReaderFactory.Open(fileStream);
-            while (reader.MoveToNextEntry())
+            Stream getUsingReaderFactory()
             {
-                if (!reader.Entry.IsDirectory)
+                using var fileStream = File.OpenRead(rootPath);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
                 {
-                    var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        var filePath = file.StandardizeDirectorySeparator();
+                        // If using wildcard then we are going to match if it ends with and update this logic if ever needed
+                        if (file.StartsWith("*"))
+                        {
+                            var endsWith = file.Replace("*", string.Empty);
+                            if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
+                            {
+                                using var stream = reader.OpenEntryStream();
+                                return readStream(stream);
+                            }
+                        }
+                        else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            using var stream = reader.OpenEntryStream();
+                            return readStream(stream);
+                        }
+                    }
+                }
+                return null;
+            }
+            Stream getUsingArchiveFactory()
+            {
+                using var fileStream = File.OpenRead(rootPath);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                     var filePath = file.StandardizeDirectorySeparator();
                     // If using wildcard then we are going to match if it ends with and update this logic if ever needed
                     if (file.StartsWith("*"))
@@ -94,16 +168,29 @@ namespace IronyModManager.IO.Readers
                         var endsWith = file.Replace("*", string.Empty);
                         if (relativePath.EndsWith(endsWith, StringComparison.OrdinalIgnoreCase))
                         {
-                            return readStream(reader);
+                            using var stream = entry.OpenEntryStream();
+                            return readStream(stream);
                         }
                     }
                     else if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
                     {
-                        return readStream(reader);
+                        using var stream = entry.OpenEntryStream();
+                        return readStream(stream);
                     }
                 }
+                return null;
             }
-            return null;
+
+            try
+            {
+                return getUsingReaderFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                // Falling back to archive factory
+                return getUsingArchiveFactory();
+            }
         }
 
         /// <summary>
@@ -114,14 +201,55 @@ namespace IronyModManager.IO.Readers
         /// <returns>IReadOnlyCollection&lt;IFileInfo&gt;.</returns>
         public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
         {
-            using var fileStream = File.OpenRead(path);
-            using var reader = ReaderFactory.Open(fileStream);
             var result = new List<IFileInfo>();
-            while (reader.MoveToNextEntry())
+
+            void parseUsingReaderFactory()
             {
-                if (!reader.Entry.IsDirectory)
+                using var fileStream = File.OpenRead(path);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
                 {
-                    var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
+                            relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
+                            (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
+                        {
+                            continue;
+                        }
+                        var info = DIResolver.Get<IFileInfo>();
+                        using var entryStream = reader.OpenEntryStream();
+                        using var memoryStream = new MemoryStream();
+                        entryStream.CopyTo(memoryStream);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+                        info.FileName = relativePath;
+                        if (Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            using var streamReader = new StreamReader(memoryStream, true);
+                            var text = streamReader.ReadToEnd();
+                            streamReader.Close();
+                            info.IsBinary = false;
+                            info.Content = text.SplitOnNewLine();
+                            info.ContentSHA = text.CalculateSHA();
+                        }
+                        else
+                        {
+                            info.IsBinary = true;
+                            info.ContentSHA = memoryStream.CalculateSHA();
+                        }
+                        result.Add(info);
+                    }
+                }
+            }
+
+            void parseUsingArchiveFactory()
+            {
+                using var fileStream = File.OpenRead(path);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
                     if (!relativePath.Contains(Path.DirectorySeparatorChar) ||
                         relativePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Any(s => s.StartsWith(".") ||
                         (allowedPaths?.Count() > 0 && !allowedPaths.Any(p => relativePath.StartsWith(p, StringComparison.OrdinalIgnoreCase)))))
@@ -129,12 +257,12 @@ namespace IronyModManager.IO.Readers
                         continue;
                     }
                     var info = DIResolver.Get<IFileInfo>();
-                    using var entryStream = reader.OpenEntryStream();
+                    using var entryStream = entry.OpenEntryStream();
                     using var memoryStream = new MemoryStream();
                     entryStream.CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     info.FileName = relativePath;
-                    if (Constants.TextExtensions.Any(s => reader.Entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
+                    if (Constants.TextExtensions.Any(s => entry.Key.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                     {
                         using var streamReader = new StreamReader(memoryStream, true);
                         var text = streamReader.ReadToEnd();
@@ -151,6 +279,17 @@ namespace IronyModManager.IO.Readers
                     result.Add(info);
                 }
             }
+            try
+            {
+                parseUsingReaderFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                result = new List<IFileInfo>();
+                parseUsingArchiveFactory();
+            }
+
             return result.Count != 0 ? result : null;
         }
 
