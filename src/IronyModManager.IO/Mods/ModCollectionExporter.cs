@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-01-2020
+// Last Modified On : 07-22-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -43,6 +43,11 @@ namespace IronyModManager.IO.Mods
         private static ExtractionOptions extractionOptions;
 
         /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
         /// The paradox importer
         /// </summary>
         private readonly ParadoxImporter paradoxImporter;
@@ -64,6 +69,7 @@ namespace IronyModManager.IO.Mods
         {
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -163,19 +169,54 @@ namespace IronyModManager.IO.Mods
                     Directory.Delete(parameters.ModDirectory, true);
                 }
             }
-            using var fileStream = File.OpenRead(parameters.File);
-            using var reader = ReaderFactory.Open(fileStream);
+
             var result = false;
-            while (reader.MoveToNextEntry())
+
+            void parseUsingReaderFactory()
             {
-                if (!reader.Entry.IsDirectory)
+                using var fileStream = File.OpenRead(parameters.File);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
                 {
-                    var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        if (reader.Entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (importInstance)
+                            {
+                                using var entryStream = reader.OpenEntryStream();
+                                using var memoryStream = new MemoryStream();
+                                entryStream.CopyTo(memoryStream);
+                                memoryStream.Seek(0, SeekOrigin.Begin);
+                                using var streamReader = new StreamReader(memoryStream, true);
+                                var text = streamReader.ReadToEnd();
+                                streamReader.Close();
+                                JsonConvert.PopulateObject(text, parameters.Mod);
+                                result = true;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());
+                        }
+                    }
+                }
+            }
+
+            void parseUsingArchiveFactory()
+            {
+                using var fileStream = File.OpenRead(parameters.File);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    if (entry.Key.Equals(Common.Constants.ExportedModContentId, StringComparison.OrdinalIgnoreCase))
                     {
                         if (importInstance)
                         {
-                            using var entryStream = reader.OpenEntryStream();
+                            using var entryStream = entry.OpenEntryStream();
                             using var memoryStream = new MemoryStream();
                             entryStream.CopyTo(memoryStream);
                             memoryStream.Seek(0, SeekOrigin.Begin);
@@ -189,9 +230,19 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());
+                        entry.WriteToDirectory(parameters.ModDirectory, GetExtractionOptions());
                     }
                 }
+            }
+            try
+            {
+                parseUsingReaderFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                result = false;
+                parseUsingArchiveFactory();
             }
             return !importInstance || result;
         }
