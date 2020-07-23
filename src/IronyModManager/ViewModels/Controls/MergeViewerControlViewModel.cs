@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-14-2020
+// Last Modified On : 07-23-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -47,9 +47,19 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppAction appAction;
 
         /// <summary>
+        /// The redo stack
+        /// </summary>
+        private readonly Stack<string> redoStack = new Stack<string>();
+
+        /// <summary>
         /// The syncing selection
         /// </summary>
         private bool syncingSelection = false;
+
+        /// <summary>
+        /// The undo stack
+        /// </summary>
+        private readonly Stack<string> undoStack = new Stack<string>();
 
         #endregion Fields
 
@@ -82,6 +92,11 @@ namespace IronyModManager.ViewModels.Controls
         /// Occurs when [conflict found].
         /// </summary>
         public event ConflictFoundDelegate ConflictFound;
+
+        /// <summary>
+        /// Occurs when [stack changed].
+        /// </summary>
+        public event EventHandler StackChanged;
 
         #endregion Events
 
@@ -366,6 +381,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<bool, Unit> PrevConflictCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the redo.
+        /// </summary>
+        /// <value>The redo.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.Redo)]
+        public virtual string Redo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the redo command.
+        /// </summary>
+        /// <value>The redo command.</value>
+        public virtual ReactiveCommand<bool, Unit> RedoCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the right difference.
         /// </summary>
         /// <value>The right difference.</value>
@@ -395,6 +423,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The right side selected.</value>
         public virtual IAvaloniaList<DiffPieceWithIndex> RightSideSelected { get; set; }
 
+        /// <summary>
+        /// Gets or sets the undo.
+        /// </summary>
+        /// <value>The undo.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.Undo)]
+        public virtual string Undo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the undo command.
+        /// </summary>
+        /// <value>The undo command.</value>
+        public virtual ReactiveCommand<bool, Unit> UndoCommand { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -411,11 +452,29 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Determines whether [is redo available].
+        /// </summary>
+        /// <returns><c>true</c> if [is redo available]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsRedoAvailable()
+        {
+            return redoStack.Count > 0;
+        }
+
+        /// <summary>
+        /// Determines whether [is undo available].
+        /// </summary>
+        /// <returns><c>true</c> if [is undo available]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsUndoAvailable()
+        {
+            return undoStack.Count > 0;
+        }
+
+        /// <summary>
         /// Resets this instance.
         /// </summary>
         public virtual void Reset()
         {
-            SetText(string.Empty, string.Empty);
+            SetText(string.Empty, string.Empty, true);
             EditingYaml = false;
         }
 
@@ -435,13 +494,57 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="leftSide">The left side.</param>
         /// <param name="rightSide">The right side.</param>
-        public virtual void SetText(string leftSide, string rightSide)
+        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+        /// <param name="skipStackPush">if set to <c>true</c> [skip stack push].</param>
+        public virtual void SetText(string leftSide, string rightSide, bool resetStack = false, bool skipStackPush = false)
         {
+            void evalStack(string text, string prevText)
+            {
+                text ??= string.Empty;
+                prevText ??= string.Empty;
+                if (undoStack.Count == 0 && string.IsNullOrWhiteSpace(prevText))
+                {
+                    return;
+                }
+                else if (undoStack.Count > 0 && undoStack.FirstOrDefault().Equals(prevText))
+                {
+                    return;
+                }
+                else if (prevText.Equals(text))
+                {
+                    return;
+                }
+                else
+                {
+                    undoStack.Push(prevText);
+                    redoStack.Clear();
+                    OnStackChanged();
+                }
+            }
+            var prevLeftSide = LeftSide;
+            var prevRightSide = RightSide;
             LeftSide = !string.IsNullOrEmpty(leftSide) ? leftSide.ReplaceTabs() : string.Empty;
             RightSide = !string.IsNullOrEmpty(rightSide) ? rightSide.ReplaceTabs() : string.Empty;
             LeftDocument = new TextDocument(LeftSide);
             RightDocument = new TextDocument(RightSide);
             Compare();
+            if (resetStack)
+            {
+                undoStack.Clear();
+                redoStack.Clear();
+                OnStackChanged();
+            }
+            else if (!skipStackPush)
+            {
+                if (LeftSidePatchMod)
+                {
+                    evalStack(LeftSide, prevLeftSide);
+                }
+                else if (RightSidePatchMod)
+                {
+                    evalStack(RightSide, prevRightSide);
+                }
+            }
         }
 
         /// <summary>
@@ -991,7 +1094,56 @@ namespace IronyModManager.ViewModels.Controls
                 DeleteLines(leftSide);
             }).DisposeWith(disposables);
 
+            UndoCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                if (undoStack.Count == 0)
+                {
+                    return;
+                }
+                if (leftSide)
+                {
+                    redoStack.Push(LeftSide);
+                    SetText(undoStack.Pop(), RightSide, skipStackPush: true);
+                }
+                else
+                {
+                    redoStack.Push(RightSide);
+                    SetText(LeftSide, undoStack.Pop(), skipStackPush: true);
+                }
+                OnStackChanged();
+            }).DisposeWith(disposables);
+
+            RedoCommand = ReactiveCommand.Create((bool leftSide) =>
+            {
+                if (redoStack.Count == 0)
+                {
+                    return;
+                }
+                if (leftSide)
+                {
+                    undoStack.Push(LeftSide);
+                    SetText(redoStack.Pop(), RightSide, skipStackPush: true);
+                }
+                else
+                {
+                    undoStack.Push(RightSide);
+                    SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
+                }
+                OnStackChanged();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [stack changed].
+        /// </summary>
+        protected virtual void OnStackChanged()
+        {
+            if (StackChanged != null)
+            {
+                StackChanged.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

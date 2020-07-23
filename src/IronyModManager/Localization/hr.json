@@ -164,7 +164,9 @@
             "MoveDown": "Pomakni dolje",
             "Edit": "Uredi",
             "CopyText": "Kopiraj Tekst",
-            "Delete": "Obriši"
+            "Delete": "Obriši",
+            "Undo": "Poništi",
+            "Redo": "Ponovi"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",

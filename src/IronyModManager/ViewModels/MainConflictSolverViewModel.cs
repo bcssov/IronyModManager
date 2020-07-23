@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 07-23-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -594,7 +594,7 @@ namespace IronyModManager.ViewModels
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
-                    MergeViewer.SetText(string.Empty, string.Empty);
+                    MergeViewer.SetText(string.Empty, string.Empty, true);
                     MergeViewer.ExitEditMode();
                     EvalViewerVisibility();
                     IgnoreEnabled = true;
