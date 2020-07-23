@@ -164,7 +164,9 @@
             "MoveDown": "Move Down",
             "Edit": "Edit",
             "CopyText": "Copy Text",
-            "Delete": "Delete"
+            "Delete": "Delete",
+            "Undo": "Undo",
+            "Redo": "Redo"
         },
         "EditorContextMenu": {
             "Copy": "Copy",

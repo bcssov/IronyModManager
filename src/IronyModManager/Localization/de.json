@@ -164,7 +164,9 @@
             "MoveDown": "Sich abwärts bewegen",
             "Edit": "Bearbeiten Sie dies",
             "CopyText": "Text kopieren",
-            "Delete": "Löschen"
+            "Delete": "Löschen",
+            "Undo": "Rückgängig machen",
+            "Redo": "Wiederholen"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",

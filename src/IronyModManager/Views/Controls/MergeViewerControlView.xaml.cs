@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-14-2020
+// Last Modified On : 07-23-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -253,6 +253,11 @@ namespace IronyModManager.Views.Controls
             ViewModel.ConflictFound += (line) =>
             {
                 FocusConflict(line, leftSide, rightSide);
+            };
+            ViewModel.StackChanged += (sender, args) =>
+            {
+                leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
+                rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
             };
 
             base.OnActivated(disposables);
@@ -539,6 +544,33 @@ namespace IronyModManager.Views.Controls
                     CommandParameter = leftSide
                 },
             };
+            var redoAvailable = ViewModel.IsRedoAvailable();
+            var undoAvailable = ViewModel.IsUndoAvailable();
+            if (redoAvailable || undoAvailable)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+                if (undoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.Undo,
+                        Command = ViewModel.UndoCommand,
+                        CommandParameter = leftSide
+                    });
+                }
+                if (redoAvailable)
+                {
+                    menuItems.Add(new MenuItem()
+                    {
+                        Header = ViewModel.Redo,
+                        Command = ViewModel.RedoCommand,
+                        CommandParameter = leftSide
+                    });
+                }
+            }
             return menuItems;
         }
 

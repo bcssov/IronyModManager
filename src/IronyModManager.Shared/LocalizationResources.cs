@@ -220,6 +220,8 @@ namespace IronyModManager.Shared
                 public const string Edit = Prefix + "Edit";
                 public const string CopyText = Prefix + "CopyText";
                 public const string Delete = Prefix + "Delete";
+                public const string Undo = Prefix + "Undo";
+                public const string Redo = Prefix + "Redo";
             }
             public static class EditorContextMenu
             {
