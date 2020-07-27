@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -41,6 +41,12 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The conflicts.</value>
         public IEnumerable<IDefinition> Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom conflicts.
+        /// </summary>
+        /// <value>The custom conflicts.</value>
+        public IEnumerable<IDefinition> CustomConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore conflict paths.

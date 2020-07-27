@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -406,6 +406,8 @@ namespace IronyModManager.Services
             var overwrittenDefinitions = DIResolver.Get<IIndexedDefinitions>();
             overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value));
             result.OverwrittenConflicts = overwrittenDefinitions;
+            var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+            result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
             return result;
@@ -650,6 +652,7 @@ namespace IronyModManager.Services
                 ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                 IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                 OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 PatchName = patchName
             });
@@ -775,6 +778,9 @@ namespace IronyModManager.Services
                     conflicts.IgnoredConflicts = ignoredIndex;
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
+                    var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+                    customConflicts.InitMap(state.CustomConflicts);
+                    conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
                     EvalModIgnoreDefinitions(conflicts);
 
@@ -787,6 +793,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -847,6 +854,7 @@ namespace IronyModManager.Services
                             ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                             IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                             OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
@@ -1135,6 +1143,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -1492,6 +1501,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
