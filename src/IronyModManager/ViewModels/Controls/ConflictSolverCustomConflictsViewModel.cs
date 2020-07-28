@@ -20,6 +20,8 @@ using System.Reactive.Linq;
 using AvaloniaEdit.Document;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
@@ -40,9 +42,19 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
 
         #endregion Fields
 
@@ -52,9 +64,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsViewModel" /> class.
         /// </summary>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ConflictSolverCustomConflictsViewModel(IModPatchCollectionService modPatchCollectionService)
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        public ConflictSolverCustomConflictsViewModel(IModPatchCollectionService modPatchCollectionService, INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.modPatchCollectionService = modPatchCollectionService;
+            this.notificationAction = notificationAction;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -204,6 +220,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The save command.</value>
         public virtual ReactiveCommand<Unit, Unit> SaveCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ConflictSolverCustomConflictsViewModel"/> is saved.
+        /// </summary>
+        /// <value><c>true</c> if saved; otherwise, <c>false</c>.</value>
+        public virtual bool Saved { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -214,6 +236,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void ForceClosePopup()
         {
             IsOpen = false;
+        }
+
+        /// <summary>
+        /// Sets the content.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="text">The text.</param>
+        public virtual void SetContent(string path, string text)
+        {
+            Path = path;
+            CurrentEditText = text;
+            Document = new TextDocument(CurrentEditText);
+            IsOpen = true;
         }
 
         /// <summary>
@@ -295,11 +330,21 @@ namespace IronyModManager.ViewModels.Controls
 
             SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, InitDefinition(), CollectionName))
+                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Count() == 0)
                 {
-                    Path = string.Empty;
-                    CurrentEditText = string.Empty;
-                    Document = new TextDocument(CurrentEditText ?? string.Empty);
+                    if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, InitDefinition(), CollectionName))
+                    {
+                        Saved = true;
+                        Saved = false;
+                        Path = string.Empty;
+                        CurrentEditText = string.Empty;
+                        Document = new TextDocument(CurrentEditText ?? string.Empty);
+                    }
+                }
+                else
+                {
+                    notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchExists.Title),
+                        localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchExists.Message), NotificationType.Warning);
                 }
             }, saveEnabled).DisposeWith(disposables);
 

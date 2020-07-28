@@ -152,7 +152,8 @@
             "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Open File",
-                "OpenDirectory": "Open Directory"
+                "OpenDirectory": "Open Directory",
+                "CustomPatch": "Copy To Custom Patch"
             }
         },
         "ContextMenu": {
@@ -281,6 +282,10 @@
         "CollectionMerged": {
             "Title": "Collection Merged",
             "Message": "Collection has been merged."
+        },
+        "CustomPatchExists": {
+            "Title": "Custom Patch Exists",
+            "Message": "Custom patch already exists with the specified path."
         }
     },
     "Mod_App_Actions": {

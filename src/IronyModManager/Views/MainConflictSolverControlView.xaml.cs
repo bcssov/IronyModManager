@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-14-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -101,7 +101,7 @@ namespace IronyModManager.Views
                     var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
                     if (grid != null)
                     {
-                        ViewModel.EvalInvalidConflictPath(hoveredItem.Content as IHierarchicalDefinitions);
+                        ViewModel.SetParameters(hoveredItem.Content as IHierarchicalDefinitions);
                         bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
                         if (conflictList.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
                         {
@@ -114,6 +114,15 @@ namespace IronyModManager.Views
                             {
                                 var menuItems = new List<MenuItem>()
                                 {
+                                    new MenuItem()
+                                    {
+                                        Header = ViewModel.InvalidCustomPatch,
+                                        Command = ViewModel.InvalidCustomPatchCommand
+                                    },
+                                    new MenuItem()
+                                    {
+                                        Header = "-"
+                                    },
                                     new MenuItem()
                                     {
                                         Header = ViewModel.InvalidOpenFile,

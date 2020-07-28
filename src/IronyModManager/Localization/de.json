@@ -152,7 +152,8 @@
             "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Datei öffnen",
-                "OpenDirectory": "Verzeichnis öffnen"
+                "OpenDirectory": "Verzeichnis öffnen",
+                "CustomPatch": "In benutzerdefinierten Patch kopieren"
             }
         },
         "ContextMenu": {
@@ -281,6 +282,10 @@
         "CollectionMerged": {
             "Title": "Sammlung zusammengeführt",
             "Message": "Sammlung wurde zusammengeführt."
+        },
+        "CustomPatchExists": {
+            "Title": "Benutzerdefinierter Patch vorhanden",
+            "Message": "Ein benutzerdefinierter Patch mit dem angegebenen Pfad ist bereits vorhanden."
         }
     },
     "Mod_App_Actions": {
