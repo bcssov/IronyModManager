@@ -206,6 +206,7 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Conflict_Solver.InvalidConflicts.ContextMenu.";
                     public const string OpenFile = Prefix + "OpenFile";
                     public const string OpenDirectory = Prefix + "OpenDirectory";
+                    public const string CustomPatch = Prefix + "CustomPatch";
                 }
             }
             public static class ContextMenu
@@ -382,6 +383,12 @@ namespace IronyModManager.Shared
             public static class CollectionMerged
             {
                 public const string Prefix = "Notifications.CollectionMerged.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CustomPatchExists
+            {
+                public const string Prefix = "Notifications.CustomPatchExists.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

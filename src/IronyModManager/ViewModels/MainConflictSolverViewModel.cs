@@ -184,6 +184,12 @@ namespace IronyModManager.ViewModels
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the hovered definition.
+        /// </summary>
+        /// <value>The hovered definition.</value>
+        public virtual IHierarchicalDefinitions HoveredDefinition { get; set; }
+
+        /// <summary>
         /// Gets or sets the ignore.
         /// </summary>
         /// <value>The ignore.</value>
@@ -233,6 +239,19 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The invalid conflict path.</value>
         public virtual string InvalidConflictPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid custom patch.
+        /// </summary>
+        /// <value>The invalid custom patch.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.ContextMenu.CustomPatch)]
+        public virtual string InvalidCustomPatch { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid custom patch command.
+        /// </summary>
+        /// <value>The invalid custom patch command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InvalidCustomPatchCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the invalid open directory.
@@ -382,22 +401,6 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
-        /// Evals the invalid conflict path.
-        /// </summary>
-        /// <param name="hierarchicalDefinition">The hierarchical definition.</param>
-        public virtual void EvalInvalidConflictPath(IHierarchicalDefinitions hierarchicalDefinition)
-        {
-            InvalidConflictPath = string.Empty;
-            if (!IsConflictSolverAvailable && hierarchicalDefinition != null)
-            {
-                if (hierarchicalDefinition.AdditionalData is IDefinition definition)
-                {
-                    InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
-                }
-            }
-        }
-
-        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -415,6 +418,23 @@ namespace IronyModManager.ViewModels
         {
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="hierarchicalDefinition">The hierarchical definition.</param>
+        public virtual void SetParameters(IHierarchicalDefinitions hierarchicalDefinition)
+        {
+            InvalidConflictPath = string.Empty;
+            if (!IsConflictSolverAvailable && hierarchicalDefinition != null)
+            {
+                if (hierarchicalDefinition.AdditionalData is IDefinition definition)
+                {
+                    HoveredDefinition = hierarchicalDefinition;
+                    InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+                }
+            }
         }
 
         /// <summary>
@@ -734,6 +754,14 @@ namespace IronyModManager.ViewModels
                 EditingIgnoreConflictsRules = true;
             }).DisposeWith(disposables);
 
+            InvalidCustomPatchCommand = ReactiveCommand.Create(() =>
+            {
+                if (HoveredDefinition.AdditionalData is IDefinition definition)
+                {
+                    CustomConflicts.SetContent(definition.File, definition.Code);
+                }
+            }).DisposeWith(disposables);
+
             this.WhenAnyValue(p => p.ModFilter.IsActivated).Where(p => p).Subscribe(s =>
             {
                 ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
@@ -752,6 +780,11 @@ namespace IronyModManager.ViewModels
                         FilterHierarchalConflicts(Conflicts);
                     }
                 }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
+            {
+                ResetConflicts.Refresh();
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
