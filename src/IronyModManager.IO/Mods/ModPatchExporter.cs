@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -221,6 +221,29 @@ namespace IronyModManager.IO.Mods
                 return results.All(p => p);
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets the patch files.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public IEnumerable<string> GetPatchFiles(ModPatchExporterParameters parameters)
+        {
+            var path = GetPatchRootPath(parameters.RootPath, parameters.PatchName);
+            var files = new List<string>();
+            if (Directory.Exists(path))
+            {
+                foreach (var item in Directory.EnumerateFiles(path, "*", SearchOption.AllDirectories))
+                {
+                    var relativePath = item.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
+                    if (relativePath.Contains(Path.DirectorySeparatorChar) && !relativePath.Contains(StateHistory, StringComparison.OrdinalIgnoreCase))
+                    {
+                        files.Add(relativePath);
+                    }
+                }
+            }
+            return files;
         }
 
         /// <summary>
@@ -736,16 +759,11 @@ namespace IronyModManager.IO.Mods
                 if (infoProvider != null)
                 {
                     string fileName = string.Empty;
-                    switch (mode)
+                    fileName = mode switch
                     {
-                        case FileNameGeneration.GenerateFileName:
-                            fileName = infoProvider.GetFileName(item);
-                            break;
-
-                        default:
-                            fileName = item.File;
-                            break;
-                    }
+                        FileNameGeneration.GenerateFileName => infoProvider.GetFileName(item),
+                        _ => item.File,
+                    };
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (checkIfFileExists && File.Exists(outPath))
                     {

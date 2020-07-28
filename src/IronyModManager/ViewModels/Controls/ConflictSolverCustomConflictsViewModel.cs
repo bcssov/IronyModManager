@@ -221,7 +221,7 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> SaveCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ConflictSolverCustomConflictsViewModel"/> is saved.
+        /// Gets or sets a value indicating whether this <see cref="ConflictSolverCustomConflictsViewModel" /> is saved.
         /// </summary>
         /// <value><c>true</c> if saved; otherwise, <c>false</c>.</value>
         public virtual bool Saved { get; set; }
@@ -338,7 +338,7 @@ namespace IronyModManager.ViewModels.Controls
                         Saved = false;
                         Path = string.Empty;
                         CurrentEditText = string.Empty;
-                        Document = new TextDocument(CurrentEditText ?? string.Empty);
+                        Document = new TextDocument(CurrentEditText);
                     }
                 }
                 else
