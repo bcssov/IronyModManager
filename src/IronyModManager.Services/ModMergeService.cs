@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -183,6 +183,25 @@ namespace IronyModManager.Services
 
                 var lastPercentage = 0;
                 int processed = 0;
+
+                foreach (var file in conflictResult.CustomConflicts.GetAllFileKeys())
+                {
+                    var definition = CopyDefinition(conflictResult.CustomConflicts.GetByFile(file).FirstOrDefault());
+                    definition.Code = conflictHistoryIndex.GetByTypeAndId(definition.TypeAndId).FirstOrDefault().Code;
+                    await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                    {
+                        ExportPath = exportPath,
+                        Definitions = definition != null ? PopulateModPath(new List<IDefinition>() { definition }, collectionMods) : null,
+                        Game = game.Type
+                    });
+                    processed++;
+                    var percentage = GetProgressPercentage(total, processed, 100);
+                    if (lastPercentage != percentage)
+                    {
+                        await messageBus.PublishAsync(new ModMergeProgressEvent(percentage));
+                    }
+                    lastPercentage = percentage;
+                }
 
                 var dumpedIds = new HashSet<string>();
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
@@ -448,23 +467,6 @@ namespace IronyModManager.Services
                     }
                 }
 
-                foreach (var file in conflictResult.CustomConflicts.GetAllFileKeys())
-                {
-                    var definition = conflictResult.CustomConflicts.GetByFile(file).FirstOrDefault();
-                    await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
-                    {
-                        ExportPath = exportPath,
-                        Definitions = definition != null ? PopulateModPath(new List<IDefinition>() { definition }, collectionMods) : null,
-                        Game = game.Type
-                    });
-                    processed++;
-                    var percentage = GetProgressPercentage(total, processed, 100);
-                    if (lastPercentage != percentage)
-                    {
-                        await messageBus.PublishAsync(new ModMergeProgressEvent(percentage));
-                    }
-                    lastPercentage = percentage;
-                }
                 return mod;
             }
             return null;

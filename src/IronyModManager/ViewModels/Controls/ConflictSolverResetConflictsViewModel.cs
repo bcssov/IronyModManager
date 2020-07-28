@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsViewModel.cs" company="Mario">
 //     Mario
@@ -37,6 +37,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ConflictSolverResetConflictsViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The custom value
+        /// </summary>
+        private const string CustomValue = "custom";
 
         /// <summary>
         /// The ignored value
@@ -75,6 +80,11 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Name = Ignored,
                     Value = IgnoredValue
+                },
+                new Mode()
+                {
+                    Name = Custom,
+                    Value = CustomValue
                 }
             };
         }
@@ -107,6 +117,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The conflicts.</value>
         public virtual IConflictResult Conflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the custom.
+        /// </summary>
+        /// <value>The custom.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ResetConflicts.Custom)]
+        public virtual string Custom { get; protected set; }
 
         /// <summary>
         /// Gets or sets the hierarchical definitions.
@@ -272,6 +289,10 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     return Conflicts.ResolvedConflicts.GetHierarchicalDefinitions();
                 }
+                else if (mode?.Value == CustomValue)
+                {
+                    return Conflicts.CustomConflicts.GetHierarchicalDefinitions();
+                }
             }
             return null;
         }
@@ -313,6 +334,15 @@ namespace IronyModManager.ViewModels.Controls
                     else if (SelectedMode?.Value == ResolvedValue)
                     {
                         var result = await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, SelectedHierarchicalDefinition.Key, CollectionName);
+                        if (result)
+                        {
+                            Bind(GetHierarchicalDefinitions(SelectedMode));
+                            return new CommandResult<bool>(true, CommandState.Success);
+                        }
+                    }
+                    else if (SelectedMode?.Value == CustomValue)
+                    {
+                        var result = await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, SelectedHierarchicalDefinition.Key, CollectionName);
                         if (result)
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));

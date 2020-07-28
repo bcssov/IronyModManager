@@ -191,6 +191,7 @@
             "Title": "Reset Conflicts",
             "Resolved": "Resolved",
             "Ignored": "Ignored",
+            "Custom": "Custom",
             "Close": "Close",
             "Reset": "Reset"
         },
@@ -199,6 +200,12 @@
             "Watermark": "Enter search term",
             "Close": "Close",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Custom Patch",
+            "Path": "Path",
+            "Save": "Save",
+            "Close": "Close"
         }
     },
     "ConflictIgnore": {

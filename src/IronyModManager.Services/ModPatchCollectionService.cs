@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -138,6 +138,10 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> AddCustomModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
+            if (definition != null)
+            {
+                definition.ModName = GenerateCollectionPatchName(collectionName);
+            }
             return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Custom);
         }
 
@@ -444,6 +448,7 @@ namespace IronyModManager.Services
             overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value));
             result.OverwrittenConflicts = overwrittenDefinitions;
             var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+            customConflicts.InitMap(null, true);
             result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
@@ -828,7 +833,7 @@ namespace IronyModManager.Services
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
                     var customConflicts = DIResolver.Get<IIndexedDefinitions>();
-                    customConflicts.InitMap(state.CustomConflicts);
+                    customConflicts.InitMap(state.CustomConflicts, true);
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
                     EvalModIgnoreDefinitions(conflicts);
@@ -1147,7 +1152,7 @@ namespace IronyModManager.Services
                     mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
                 }
                 var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (definitionMod != null)
+                if (definitionMod != null || IsPatchMod(definitionMod))
                 {
                     var exportPatches = new HashSet<IDefinition>();
                     switch (exportType)
@@ -1158,6 +1163,7 @@ namespace IronyModManager.Services
 
                         case ExportType.Custom:
                             conflictResult.CustomConflicts.AddToMap(definition);
+                            exportPatches.Add(definition);
                             break;
 
                         default:
@@ -1199,7 +1205,7 @@ namespace IronyModManager.Services
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
-                    return exportType == ExportType.Resolved ? exportResult && stateResult : stateResult;
+                    return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
                 }
             }
             return false;

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-23-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -375,6 +375,7 @@ namespace IronyModManager.Views.Controls
                         manualAppend = false;
                         return;
                     }
+                    var carretOffset = editor.CaretOffset;
                     for (int i = 1; i <= 3; i++)
                     {
                         var last = lines[lines.Count() - i];
@@ -383,6 +384,10 @@ namespace IronyModManager.Views.Controls
                             manualAppend = true;
                             editor.AppendText("\r\n");
                         }
+                    }
+                    if (manualAppend)
+                    {
+                        editor.CaretOffset = carretOffset;
                     }
                 }
                 lines = editor.Text.SplitOnNewLine().ToList();

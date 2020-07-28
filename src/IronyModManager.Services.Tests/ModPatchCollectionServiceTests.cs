@@ -2703,7 +2703,8 @@ namespace IronyModManager.Services.Tests
                 AllConflicts = indexed,
                 Conflicts = indexed,
                 OrphanConflicts = indexed,
-                ResolvedConflicts = indexed
+                ResolvedConflicts = indexed,
+                CustomConflicts = indexed,
             };
             var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
             result.Should().BeFalse();
