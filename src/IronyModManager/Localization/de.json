@@ -191,6 +191,7 @@
             "Title": "Konflikte zurücksetzen",
             "Resolved": "Aufgelöst",
             "Ignored": "Ignoriert",
+            "Custom": "Benutzerdefiniert",
             "Close": "Schließen",
             "Reset": "Zurücksetzen"
         },
@@ -199,6 +200,12 @@
             "Watermark": "Suchbegriff eingeben",
             "Close": "Schließen",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Benutzerdefinierter Patch",
+            "Path": "Verzeichnis",
+            "Save": "Sparen",
+            "Close": "Schließen"
         }
     },
     "ConflictIgnore": {

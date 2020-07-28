@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="IConflictResult.cs" company="Mario">
 //     Mario
@@ -39,6 +39,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The conflicts.</value>
         IIndexedDefinitions Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom conflicts.
+        /// </summary>
+        /// <value>The custom conflicts.</value>
+        IIndexedDefinitions CustomConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the ignored conflicts.

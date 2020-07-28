@@ -191,6 +191,7 @@
             "Title": "Poništi sukobe",
             "Resolved": "Riješeni",
             "Ignored": "Zanemareni",
+            "Custom": "Prilagođen",
             "Close": "Zatvori",
             "Reset": "Poništi"
         },
@@ -199,6 +200,12 @@
             "Watermark": "Unesi pojam",
             "Close": "Zatvori",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Prilagođena zakrpa",
+            "Path": "Direktorij",
+            "Save": "Snimi",
+            "Close": "Zatvori"
         }
     },
     "ConflictIgnore": {

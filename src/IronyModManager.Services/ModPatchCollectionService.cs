@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -102,7 +102,48 @@ namespace IronyModManager.Services
 
         #endregion Constructors
 
+        #region Enums
+
+        /// <summary>
+        /// Enum ExportType
+        /// </summary>
+        protected enum ExportType
+        {
+            /// <summary>
+            /// The resolved
+            /// </summary>
+            Resolved,
+
+            /// <summary>
+            /// The ignored
+            /// </summary>
+            Ignored,
+
+            /// <summary>
+            /// The custom
+            /// </summary>
+            Custom
+        }
+
+        #endregion Enums
+
         #region Methods
+
+        /// <summary>
+        /// Adds the custom mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> AddCustomModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
+        {
+            if (definition != null)
+            {
+                definition.ModName = GenerateCollectionPatchName(collectionName);
+            }
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Custom);
+        }
 
         /// <summary>
         /// Adds the mods to ignore list.
@@ -145,7 +186,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ApplyModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
-            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName);
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Resolved);
         }
 
         /// <summary>
@@ -406,6 +447,9 @@ namespace IronyModManager.Services
             var overwrittenDefinitions = DIResolver.Get<IIndexedDefinitions>();
             overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value));
             result.OverwrittenConflicts = overwrittenDefinitions;
+            var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+            customConflicts.InitMap(null, true);
+            result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
             return result;
@@ -519,7 +563,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
-            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, false);
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Ignored);
         }
 
         /// <summary>
@@ -566,6 +610,18 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Resets the custom conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ResetCustomConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
+        {
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Custom);
+        }
+
+        /// <summary>
         /// Resets the ignored conflict asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -574,7 +630,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetIgnoredConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), false);
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Ignored);
         }
 
         /// <summary>
@@ -596,7 +652,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetResolvedConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), true);
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Resolved);
         }
 
         /// <summary>
@@ -650,6 +706,7 @@ namespace IronyModManager.Services
                 ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                 IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                 OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 PatchName = patchName
             });
@@ -775,6 +832,9 @@ namespace IronyModManager.Services
                     conflicts.IgnoredConflicts = ignoredIndex;
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
+                    var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+                    customConflicts.InitMap(state.CustomConflicts, true);
+                    conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
                     EvalModIgnoreDefinitions(conflicts);
 
@@ -787,6 +847,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -847,6 +908,7 @@ namespace IronyModManager.Services
                             ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                             IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                             OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
@@ -1053,9 +1115,9 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="definition">The definition.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <param name="resolve">if set to <c>true</c> [resolve].</param>
+        /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, bool resolve = true)
+        protected virtual async Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, ExportType exportType)
         {
             var game = GameService.GetSelected();
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
@@ -1090,20 +1152,24 @@ namespace IronyModManager.Services
                     mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
                 }
                 var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (definitionMod != null)
+                if (definitionMod != null || IsPatchMod(definitionMod))
                 {
-                    if (resolve)
-                    {
-                        conflictResult.ResolvedConflicts.AddToMap(definition);
-                    }
-                    else
-                    {
-                        conflictResult.IgnoredConflicts.AddToMap(definition);
-                    }
                     var exportPatches = new HashSet<IDefinition>();
-                    if (resolve)
+                    switch (exportType)
                     {
-                        exportPatches.Add(definition);
+                        case ExportType.Ignored:
+                            conflictResult.IgnoredConflicts.AddToMap(definition);
+                            break;
+
+                        case ExportType.Custom:
+                            conflictResult.CustomConflicts.AddToMap(definition);
+                            exportPatches.Add(definition);
+                            break;
+
+                        default:
+                            conflictResult.ResolvedConflicts.AddToMap(definition);
+                            exportPatches.Add(definition);
+                            break;
                     }
 
                     await ModWriter.ApplyModsAsync(new ModWriterParameters()
@@ -1135,10 +1201,11 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
-                    return resolve ? exportResult && stateResult : stateResult;
+                    return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
                 }
             }
             return false;
@@ -1441,14 +1508,31 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="typeAndId">The type and identifier.</param>
         /// <param name="patchName">Name of the patch.</param>
-        /// <param name="isResolvedConflict">if set to <c>true</c> [is resolved conflict].</param>
+        /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, bool isResolvedConflict)
+        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, ExportType exportType)
         {
             var game = GameService.GetSelected();
             if (conflictResult != null && game != null)
             {
-                var indexed = isResolvedConflict ? conflictResult.ResolvedConflicts : conflictResult.IgnoredConflicts;
+                bool purgeFiles = true;
+                IIndexedDefinitions indexed;
+                switch (exportType)
+                {
+                    case ExportType.Ignored:
+                        indexed = conflictResult.IgnoredConflicts;
+                        purgeFiles = false;
+                        break;
+
+                    case ExportType.Custom:
+                        indexed = conflictResult.CustomConflicts;
+                        break;
+
+                    default:
+                        indexed = conflictResult.ResolvedConflicts;
+                        break;
+                }
+
                 var result = indexed.GetByTypeAndId(typeAndId);
                 if (result.Count() > 0)
                 {
@@ -1456,7 +1540,7 @@ namespace IronyModManager.Services
                     foreach (var item in result)
                     {
                         indexed.Remove(item);
-                        if (isResolvedConflict)
+                        if (purgeFiles)
                         {
                             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                             {
@@ -1492,6 +1576,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });

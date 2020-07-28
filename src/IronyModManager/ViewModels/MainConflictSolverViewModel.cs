@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-23-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -97,6 +97,7 @@ namespace IronyModManager.ViewModels
         /// <param name="modFilter">The mod filter.</param>
         /// <param name="resetConflicts">The reset conflicts.</param>
         /// <param name="dbSearch">The database search.</param>
+        /// <param name="customConflicts">The custom conflicts.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
@@ -104,7 +105,8 @@ namespace IronyModManager.ViewModels
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
-            ConflictSolverDBSearchViewModel dbSearch, ILogger logger, INotificationAction notificationAction, IAppAction appAction)
+            ConflictSolverDBSearchViewModel dbSearch, ConflictSolverCustomConflictsViewModel customConflicts,
+            ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
@@ -118,6 +120,7 @@ namespace IronyModManager.ViewModels
             ModFilter = modFilter;
             ResetConflicts = resetConflicts;
             DatabaseSearch = dbSearch;
+            CustomConflicts = customConflicts;
         }
 
         #endregion Constructors
@@ -141,7 +144,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the binary merge viewer.
         /// </summary>
         /// <value>The binary merge viewer.</value>
-        public MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
+        public virtual MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
 
         /// <summary>
         /// Gets or sets the conflicted objects.
@@ -155,6 +158,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The conflicts.</value>
         public virtual IConflictResult Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom conflicts.
+        /// </summary>
+        /// <value>The custom conflicts.</value>
+        public virtual ConflictSolverCustomConflictsViewModel CustomConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the database search.
@@ -575,6 +584,7 @@ namespace IronyModManager.ViewModels
                 IgnoreConflictsRules.ConflictResult = s;
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
                 DatabaseSearch.SetParameters(s);
+                CustomConflicts.SetParameters(s, SelectedModCollection.Name);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>

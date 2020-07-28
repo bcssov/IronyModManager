@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -27,6 +27,15 @@ namespace IronyModManager.Services.Common
     public interface IModPatchCollectionService : IBaseService
     {
         #region Methods
+
+        /// <summary>
+        /// Adds the custom mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> AddCustomModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
 
         /// <summary>
         /// Adds the mods to ignore list.
@@ -135,6 +144,15 @@ namespace IronyModManager.Services.Common
         /// <param name="newCollectionName">New name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
+
+        /// <summary>
+        /// Resets the custom conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ResetCustomConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName);
 
         /// <summary>
         /// Resets the ignored conflict asynchronous.

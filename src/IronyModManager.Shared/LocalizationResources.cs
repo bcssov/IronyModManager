@@ -254,6 +254,7 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Resolved = Prefix + "Resolved";
                 public const string Ignored = Prefix + "Ignored";
+                public const string Custom = Prefix + "Custom";
                 public const string Close = Prefix + "Close";
                 public const string Reset = Prefix + "Reset";
             }
@@ -264,6 +265,14 @@ namespace IronyModManager.Shared
                 public const string Watermark = Prefix + "Watermark";
                 public const string Close = Prefix + "Close";
                 public const string Clear = Prefix + "Clear";
+            }
+            public static class CustomPatch
+            {
+                public const string Prefix = "Conflict_Solver.CustomPatch.";
+                public const string Title = Prefix + "Title";
+                public const string Path = Prefix + "Path";
+                public const string Save = Prefix + "Save";
+                public const string Close = Prefix + "Close";
             }
         }
         public static class ConflictIgnore

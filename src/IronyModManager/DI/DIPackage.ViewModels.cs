@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -58,6 +58,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ConflictSolverModFilterControlViewModel>();
             container.RegisterLocalization<ConflictSolverResetConflictsViewModel>();
             container.RegisterLocalization<ConflictSolverDBSearchViewModel>();
+            container.RegisterLocalization<ConflictSolverCustomConflictsViewModel>();
         }
 
         #endregion Methods
