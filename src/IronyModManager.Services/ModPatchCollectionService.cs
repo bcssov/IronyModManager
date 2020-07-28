@@ -567,6 +567,24 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Invalidates the state of the patch mod.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool InvalidatePatchModState(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null)
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var cachePrefix = $"CollectionPatchState-{game.Type}";
+                Cache.Invalidate(cachePrefix, patchName);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether [is patch mod] [the specified mod].
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -584,6 +602,67 @@ namespace IronyModManager.Services
         public virtual bool IsPatchMod(string modName)
         {
             return IsPatchModInternal(modName);
+        }
+
+        /// <summary>
+        /// patch mod needs update as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var cachePrefix = $"CollectionPatchState-{game.Type}";
+                var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                if (result != null)
+                {
+                    return result.NeedsUpdate;
+                }
+                else
+                {
+                    var mods = GetCollectionMods();
+                    var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                    {
+                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                        PatchName = patchName
+                    }, false);
+                    var combined = new List<IDefinition>();
+                    combined.AddRange(state.IgnoredConflicts);
+                    combined.AddRange(state.OrphanConflicts);
+                    combined.AddRange(state.OverwrittenConflicts);
+                    combined.AddRange(state.ResolvedConflicts);
+                    foreach (var groupedMods in combined.GroupBy(p => p.ModName))
+                    {
+                        foreach (var item in groupedMods.GroupBy(p => p.File))
+                        {
+                            var definition = item.FirstOrDefault();
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                            if (mod == null)
+                            {
+                                // Mod no longer in collection, needs refresh break further checks...
+                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                return true;
+                            }
+                            else
+                            {
+                                var info = Reader.GetFileInfo(mod.FullPath, definition.File);
+                                if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
+                                {
+                                    // File no longer in collection or content does not match, break further checks
+                                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false });
+                    return false;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -725,7 +804,7 @@ namespace IronyModManager.Services
             async Task syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
             {
                 foreach (var file in patchFiles)
-                {                    
+                {
                     if (conflicts.CustomConflicts.GetByFile(file).Count() == 0 &&
                         conflicts.OrphanConflicts.GetByFile(file).Count() == 0 &&
                         conflicts.OverwrittenConflicts.GetByFile(file).Count() == 0 &&
@@ -1640,5 +1719,25 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class PatchCollectionState.
+        /// </summary>
+        private class PatchCollectionState
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether [needs update].
+            /// </summary>
+            /// <value><c>true</c> if [needs update]; otherwise, <c>false</c>.</value>
+            public bool NeedsUpdate { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
