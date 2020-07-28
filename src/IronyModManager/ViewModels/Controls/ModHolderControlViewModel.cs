@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModHolderControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The block selected
+        /// </summary>
+        private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
         /// The application action
@@ -185,6 +190,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The analyze.</value>
         [StaticLocalization(LocalizationResources.Mod_Actions.Conflict)]
         public virtual string Analyze { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the analyze class.
+        /// </summary>
+        /// <value>The analyze class.</value>
+        public virtual string AnalyzeClass { get; protected set; }
 
         /// <summary>
         /// Gets or sets the analyze command.
@@ -405,6 +416,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            AnalyzeClass = string.Empty;
+
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
             var applyEnabled = Observable.Merge(this.WhenAnyValue(v => v.ApplyingCollection, v => !v), allowModSelectionEnabled);
 
@@ -505,6 +518,11 @@ namespace IronyModManager.ViewModels.Controls
             CloseModeCommand = ReactiveCommand.Create(() =>
             {
                 ForceClosePopups();
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
+            {
+                AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

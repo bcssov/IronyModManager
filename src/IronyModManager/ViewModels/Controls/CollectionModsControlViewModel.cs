@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -111,6 +111,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod selected changed
         /// </summary>
         private IDisposable modSelectedChanged;
+
+        /// <summary>
+        /// The previous validated mods
+        /// </summary>
+        private ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
 
         /// <summary>
         /// The refresh in progress
@@ -286,6 +291,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The collection jump on position change label.</value>
         public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [conflict solver valid].
+        /// </summary>
+        /// <value><c>true</c> if [conflict solver valid]; otherwise, <c>false</c>.</value>
+        public virtual bool ConflictSolverValid { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -854,6 +865,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            ConflictSolverValid = true;
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -1242,6 +1254,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (modCollectionService.Delete(collectionName))
                 {
+                    modPatchCollectionService.InvalidatePatchModState(collectionName);
                     await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName));
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
@@ -1329,7 +1342,18 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }
             SelectedMods = selectedMods;
+            if (SelectedModCollection != null)
+            {
+                var oldMods = new List<IMod>(SelectedMods);
+                previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
+                if (SelectedMods.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Except(SelectedMods).Any())))
+                {
+                    modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
+                }
+                previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (k, v) => oldMods);
+            }
             ModifyCollection.SelectedMods = selectedMods;
+            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             var order = 1;
             if (SelectedMods?.Count > 0)
             {
@@ -1410,6 +1434,23 @@ namespace IronyModManager.ViewModels.Controls
                         ReorderQueuedItemsAsync(queue).ConfigureAwait(false);
                     }
                 }).DisposeWith(Disposables);
+            }
+        }
+
+        /// <summary>
+        /// validate collection patch state as an asynchronous operation.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
+        {
+            if (!string.IsNullOrWhiteSpace(collection))
+            {
+                var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
+                ConflictSolverValid = !result;
+            }
+            else
+            {
+                ConflictSolverValid = true;
             }
         }
 

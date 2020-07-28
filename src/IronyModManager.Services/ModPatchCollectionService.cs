@@ -629,6 +629,10 @@ namespace IronyModManager.Services
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     }, false);
+                    if (state == null)
+                    {
+                        return false;
+                    }
                     var combined = new List<IDefinition>();
                     combined.AddRange(state.IgnoredConflicts);
                     combined.AddRange(state.OrphanConflicts);

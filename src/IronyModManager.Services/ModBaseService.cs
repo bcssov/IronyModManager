@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -351,12 +351,15 @@ namespace IronyModManager.Services
             if (collections?.Count() > 0)
             {
                 var collection = collections.FirstOrDefault(p => p.IsSelected);
-                foreach (var item in collection.Mods)
+                if (collection != null)
                 {
-                    var mod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
-                    if (mod != null)
+                    foreach (var item in collection.Mods)
                     {
-                        collectionMods.Add(mod);
+                        var mod = mods.FirstOrDefault(p => p.DescriptorFile.Equals(item, StringComparison.OrdinalIgnoreCase));
+                        if (mod != null)
+                        {
+                            collectionMods.Add(mod);
+                        }
                     }
                 }
             }
