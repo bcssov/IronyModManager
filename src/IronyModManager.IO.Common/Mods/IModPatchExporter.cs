@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="IModPatchExporter.cs" company="Mario">
 //     Mario
@@ -38,6 +38,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters);
+
+        /// <summary>
+        /// Gets the patch files.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        IEnumerable<string> GetPatchFiles(ModPatchExporterParameters parameters);
 
         /// <summary>
         /// Gets the patch state asynchronous.
