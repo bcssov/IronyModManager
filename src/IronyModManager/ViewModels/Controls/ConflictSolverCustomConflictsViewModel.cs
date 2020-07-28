@@ -118,6 +118,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual TextDocument Document { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [editing yaml].
+        /// </summary>
+        /// <value><c>true</c> if [editing yaml]; otherwise, <c>false</c>.</value>
+        public virtual bool EditingYaml { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the editor copy.
         /// </summary>
         /// <value>The editor copy.</value>
@@ -222,14 +228,15 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Evals the allow save.
+        /// Evals the conditions.
         /// </summary>
-        protected virtual void EvalAllowSave()
+        protected virtual void EvalConditions()
         {
             var code = CurrentEditText ?? string.Empty;
             var path = Path ?? string.Empty;
             var extension = System.IO.Path.GetExtension(path.StandardizeDirectorySeparator());
             AllowSave = !string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(extension);
+            EditingYaml = path.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -267,12 +274,12 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.Path).Subscribe(s =>
             {
-                EvalAllowSave();
+                EvalConditions();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.CurrentEditText).Subscribe(s =>
             {
-                EvalAllowSave();
+                EvalConditions();
             }).DisposeWith(disposables);
 
             CloseCommand = ReactiveCommand.Create(() =>

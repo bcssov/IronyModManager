@@ -49,6 +49,11 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         private static IHighlightingDefinition pdxScriptHighlightingDefinition;
 
+        /// <summary>
+        /// The yaml highlighting definition
+        /// </summary>
+        private static IHighlightingDefinition yamlHighlightingDefinition;
+
         #endregion Fields
 
         #region Constructors
@@ -165,11 +170,31 @@ namespace IronyModManager.Views.Controls
             };
             editor.TextArea.ActiveInputHandler = new Implementation.AvaloniaEdit.TextAreaInputHandler(editor);
 
-            if (pdxScriptHighlightingDefinition == null)
+            ViewModel.WhenAnyValue(p => p.EditingYaml).Subscribe(s =>
             {
-                pdxScriptHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.PDXScript);
+                setEditMode();
+            }).DisposeWith(Disposables);
+            setEditMode();
+
+            void setEditMode()
+            {
+                if (ViewModel.EditingYaml)
+                {
+                    if (yamlHighlightingDefinition == null)
+                    {
+                        yamlHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.YAML);
+                    }
+                    editor.SyntaxHighlighting = yamlHighlightingDefinition;
+                }
+                else
+                {
+                    if (pdxScriptHighlightingDefinition == null)
+                    {
+                        pdxScriptHighlightingDefinition = GetHighlightingDefinition(Constants.Resources.PDXScript);
+                    }
+                    editor.SyntaxHighlighting = pdxScriptHighlightingDefinition;
+                }
             }
-            editor.SyntaxHighlighting = pdxScriptHighlightingDefinition;
 
             bool manualAppend = false;
             editor.TextChanged += (sender, args) =>
