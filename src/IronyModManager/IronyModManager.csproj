@@ -191,10 +191,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.9.11" />
+    <PackageReference Include="Avalonia" Version="0.9.12" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="0.9.0-preview1" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.9.11" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.11" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.9.12" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.12" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
     <PackageReference Include="Material.Avalonia" Version="0.9.0" />
@@ -214,12 +214,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NLog" Version="4.7.2" />
-    <PackageReference Include="ReactiveUI" Version="11.4.17" />
+    <PackageReference Include="ReactiveUI" Version="11.5.1" />
     <PackageReference Include="SimpleInjector" Version="5.0.3" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SmartFormat.NET" Version="2.5.2" />
-    <PackageReference Include="Splat.NLog" Version="9.5.6" />
-    <PackageReference Include="Splat.SimpleInjector" Version="9.5.6" />
+    <PackageReference Include="Splat.NLog" Version="9.5.13" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.5.13" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
   <ItemGroup>
