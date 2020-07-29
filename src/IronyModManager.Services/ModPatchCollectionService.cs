@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -633,16 +633,11 @@ namespace IronyModManager.Services
                     {
                         return false;
                     }
-                    var combined = new List<IDefinition>();
-                    combined.AddRange(state.IgnoredConflicts);
-                    combined.AddRange(state.OrphanConflicts);
-                    combined.AddRange(state.OverwrittenConflicts);
-                    combined.AddRange(state.ResolvedConflicts);
-                    foreach (var groupedMods in combined.GroupBy(p => p.ModName))
+                    foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
                     {
                         foreach (var item in groupedMods.GroupBy(p => p.File))
                         {
-                            var definition = item.FirstOrDefault();
+                            var definition = item.FirstOrDefault();                            
                             var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
                             if (mod == null)
                             {

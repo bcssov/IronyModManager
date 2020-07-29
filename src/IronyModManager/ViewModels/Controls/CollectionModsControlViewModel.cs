@@ -630,6 +630,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>

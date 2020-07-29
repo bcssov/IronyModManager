@@ -286,6 +286,10 @@
         "CustomPatchExists": {
             "Title": "Prilagođena zakrpa postoji",
             "Message": "Prilagođena zakrpa već postoji s navedenom putanjom."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Ažuriranja za rješavanje konflikata",
+            "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
         }
     },
     "Mod_App_Actions": {

@@ -299,6 +299,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            CollectionMods.Reset();
+        }
+
+        /// <summary>
         /// Analyzes the mods asynchronous.
         /// </summary>
         /// <param name="mode">The mode.</param>
@@ -315,6 +323,7 @@ namespace IronyModManager.ViewModels.Controls
             });
             var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(true, message, overlayProgress);
+            modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
             var definitions = await Task.Run(() =>
@@ -523,6 +532,11 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
             {
                 AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
+                if (!s)
+                {
+                    notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
+                        localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

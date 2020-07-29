@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -159,6 +159,14 @@ namespace IronyModManager.ViewModels
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            ModHolder.Reset();
+        }
 
         /// <summary>
         /// Called when [activated].

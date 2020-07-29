@@ -3031,10 +3031,7 @@ namespace IronyModManager.Services.Tests
             {
                 var res = new PatchState()
                 {
-                    IgnoredConflicts = new List<IDefinition>(),
-                    OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
-                    ResolvedConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab" } }
+                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
                 };
                 return res;
             });
@@ -3089,11 +3086,8 @@ namespace IronyModManager.Services.Tests
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
             {
                 var res = new PatchState()
-                {
-                    IgnoredConflicts = new List<IDefinition>(),
-                    OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
-                    ResolvedConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
+                {                    
+                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
                 };
                 return res;
             });
@@ -3149,10 +3143,7 @@ namespace IronyModManager.Services.Tests
             {
                 var res = new PatchState()
                 {
-                    IgnoredConflicts = new List<IDefinition>(),
-                    OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
-                    ResolvedConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", DefinitionSHA = "1" } }
+                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
                 };
                 return res;
             });
@@ -3209,10 +3200,7 @@ namespace IronyModManager.Services.Tests
             {
                 var res = new PatchState()
                 {
-                    IgnoredConflicts = new List<IDefinition>(),
-                    OverwrittenConflicts = new List<IDefinition>(),
-                    OrphanConflicts = new List<IDefinition>(),
-                    ResolvedConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", DefinitionSHA = "1" } }
+                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
                 };
                 return res;
             });
