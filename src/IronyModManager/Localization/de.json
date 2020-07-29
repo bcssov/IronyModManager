@@ -286,6 +286,10 @@
         "CustomPatchExists": {
             "Title": "Benutzerdefinierter Patch vorhanden",
             "Message": "Ein benutzerdefinierter Patch mit dem angegebenen Pfad ist bereits vorhanden."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Conflict Solver-Updates",
+            "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
         }
     },
     "Mod_App_Actions": {

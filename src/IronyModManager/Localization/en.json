@@ -286,6 +286,10 @@
         "CustomPatchExists": {
             "Title": "Custom Patch Exists",
             "Message": "Custom patch already exists with the specified path."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Conflict Solver Updates",
+            "Message": "One or several mods have been updated. Conflict Solver might need updating."
         }
     },
     "Mod_App_Actions": {

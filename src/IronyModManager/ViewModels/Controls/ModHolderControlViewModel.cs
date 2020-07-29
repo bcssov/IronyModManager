@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -44,6 +44,11 @@ namespace IronyModManager.ViewModels.Controls
     public class ModHolderControlViewModel : BaseViewModel
     {
         #region Fields
+
+        /// <summary>
+        /// The block selected
+        /// </summary>
+        private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
         /// The application action
@@ -187,6 +192,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string Analyze { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the analyze class.
+        /// </summary>
+        /// <value>The analyze class.</value>
+        public virtual string AnalyzeClass { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the analyze command.
         /// </summary>
         /// <value>The analyze command.</value>
@@ -288,6 +299,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Resets this instance.
+        /// </summary>
+        public virtual void Reset()
+        {
+            CollectionMods.Reset();
+        }
+
+        /// <summary>
         /// Analyzes the mods asynchronous.
         /// </summary>
         /// <param name="mode">The mode.</param>
@@ -304,6 +323,7 @@ namespace IronyModManager.ViewModels.Controls
             });
             var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(true, message, overlayProgress);
+            modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
             var definitions = await Task.Run(() =>
@@ -405,6 +425,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            AnalyzeClass = string.Empty;
+
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
             var applyEnabled = Observable.Merge(this.WhenAnyValue(v => v.ApplyingCollection, v => !v), allowModSelectionEnabled);
 
@@ -505,6 +527,16 @@ namespace IronyModManager.ViewModels.Controls
             CloseModeCommand = ReactiveCommand.Create(() =>
             {
                 ForceClosePopups();
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
+            {
+                AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
+                if (!s)
+                {
+                    notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
+                        localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

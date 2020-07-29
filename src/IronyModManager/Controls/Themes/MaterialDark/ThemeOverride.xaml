@@ -68,6 +68,10 @@
     <Setter Property="BorderThickness" Value="2,2,2,2"/>
     <Setter Property="BorderBrush" Value="Green"/>
   </Style>
+  <Style Selector="Border.InvalidConflictSolver">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Red"/>
+  </Style>
   <Style Selector="ListBoxItem.ModCompare:selected /template/ ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource BrownDarken3Brush}" />
   </Style>

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -191,6 +191,7 @@ namespace IronyModManager.ViewModels
 
                         default:
                             AnimateTransitionAsync(true).ConfigureAwait(true);
+                            Main.Reset();
                             break;
                     }
                 }).DisposeWith(disposables);
