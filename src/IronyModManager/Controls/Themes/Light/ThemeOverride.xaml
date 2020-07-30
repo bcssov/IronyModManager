@@ -75,6 +75,7 @@
   <Styles.Resources>
     <Color x:Key="IronyForegroundColor">#FF000000</Color>
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyAccentColor">#FF0000</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
     <Color x:Key="IronyEditorBackgroundColor">#FF000000</Color>
