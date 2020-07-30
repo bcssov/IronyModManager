@@ -38,10 +38,8 @@
           </Border>
           <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
-          </Border>
-          <Border BorderThickness="0,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
-          </Border>
-          <Border BorderThickness="1,1,0,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
+          </Border>          
+          <Border BorderThickness="1,1,0,0" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
             <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
           </Border>
           <Border BorderThickness="1,1,1,0" Grid.Column="4" BorderBrush="{DynamicResource ThemeBorderMidBrush}">
