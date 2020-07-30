@@ -16,6 +16,11 @@ Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues)
 * Be sure to include steps to reproduce the issue.
 * Be sure to provide logs if you report crashes. Logs can be found in the logs directory of your Irony install.
 
+### Video Tutorial on using Conflict Solver
+[Tutorial on Vimeo](https://vimeo.com/443078952)
+
+Made by LordOfLA
+
 ### Which file should I download?
 ##### Windows
 - Portable version: **win-x64.7z**
