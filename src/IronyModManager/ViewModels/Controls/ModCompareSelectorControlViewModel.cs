@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -134,10 +134,18 @@ namespace IronyModManager.ViewModels.Controls
                     col.Add(newDefinition);
                 }
                 VirtualDefinitions = col.ToObservableCollection();
+                // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
+                await Task.Delay(100);
+                LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                RightSelectedDefinition = newDefinition;
             }
             else
             {
                 VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
+                // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
+                await Task.Delay(100);
+                LeftSelectedDefinition = definitions.ElementAt(0);
+                RightSelectedDefinition = definitions.ElementAt(1);
             }
         }
 
