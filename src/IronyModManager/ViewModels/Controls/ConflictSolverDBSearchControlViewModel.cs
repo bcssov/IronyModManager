@@ -4,9 +4,9 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-15-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverDBSearchViewModel.cs" company="Mario">
+// <copyright file="ConflictSolverDBSearchControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -28,12 +28,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ConflictSolverDBSearchViewModel.
+    /// Class ConflictSolverDBSearchControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ConflictSolverDBSearchViewModel : BaseViewModel
+    public class ConflictSolverDBSearchControlViewModel : BaseViewModel
     {
         #region Properties
 

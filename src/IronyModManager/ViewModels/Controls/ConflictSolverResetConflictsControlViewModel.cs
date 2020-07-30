@@ -4,9 +4,9 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverResetConflictsViewModel.cs" company="Mario">
+// <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -30,11 +30,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ConflictSolverResetConflictsViewModel. Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
+    /// Class ConflictSolverResetConflictsControlViewModel.
+    /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ConflictSolverResetConflictsViewModel : BaseViewModel
+    public class ConflictSolverResetConflictsControlViewModel : BaseViewModel
     {
         #region Fields
 
@@ -63,10 +64,10 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConflictSolverResetConflictsViewModel" /> class.
+        /// Initializes a new instance of the <see cref="ConflictSolverResetConflictsControlViewModel" /> class.
         /// </summary>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ConflictSolverResetConflictsViewModel(IModPatchCollectionService modPatchCollectionService)
+        public ConflictSolverResetConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             Modes = new List<Mode>()

@@ -4,9 +4,9 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverCustomConflictsViewModel.cs" company="Mario">
+// <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -32,12 +32,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ConflictSolverCustomConflictsViewModel.
+    /// Class ConflictSolverCustomConflictsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ConflictSolverCustomConflictsViewModel : BaseViewModel
+    public class ConflictSolverCustomConflictsControlViewModel : BaseViewModel
     {
         #region Fields
 
@@ -61,12 +61,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsViewModel" /> class.
+        /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsControlViewModel" /> class.
         /// </summary>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public ConflictSolverCustomConflictsViewModel(IModPatchCollectionService modPatchCollectionService, INotificationAction notificationAction, ILocalizationManager localizationManager)
+        public ConflictSolverCustomConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService, INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.notificationAction = notificationAction;
@@ -221,7 +221,7 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> SaveCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ConflictSolverCustomConflictsViewModel" /> is saved.
+        /// Gets or sets a value indicating whether this <see cref="ConflictSolverCustomConflictsControlViewModel" /> is saved.
         /// </summary>
         /// <value><c>true</c> if saved; otherwise, <c>false</c>.</value>
         public virtual bool Saved { get; set; }

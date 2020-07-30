@@ -4,9 +4,9 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverCustomConflictsView.axaml.cs" company="Mario">
+// <copyright file="ConflictSolverCustomConflictsControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -35,12 +35,12 @@ using ReactiveUI;
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
-    /// Class ConflictSolverCustomConflictsView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverCustomConflictsViewModel}" />
+    /// Class ConflictSolverCustomConflictsControlView.
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverCustomConflictsControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverCustomConflictsViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverCustomConflictsControlViewModel}" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ConflictSolverCustomConflictsView : BaseControl<ConflictSolverCustomConflictsViewModel>
+    public class ConflictSolverCustomConflictsControlView : BaseControl<ConflictSolverCustomConflictsControlViewModel>
     {
         #region Fields
 
@@ -59,9 +59,9 @@ namespace IronyModManager.Views.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsView" /> class.
+        /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsControlView" /> class.
         /// </summary>
-        public ConflictSolverCustomConflictsView()
+        public ConflictSolverCustomConflictsControlView()
         {
             this.InitializeComponent();
         }

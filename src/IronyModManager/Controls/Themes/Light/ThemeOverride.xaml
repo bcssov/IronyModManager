@@ -83,8 +83,6 @@
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#FFAAAAAA</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyForegroundMenuColor">#FF000000</Color>
-    <SolidColorBrush x:Key="IronyForegroundMenuBrush" Color="{DynamicResource IronyForegroundMenuColor}" />
     <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>

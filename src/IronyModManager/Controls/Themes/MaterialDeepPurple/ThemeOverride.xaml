@@ -8,7 +8,6 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBox.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBoxItem.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MenuItem.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IconsLight.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IronyToolTip.xaml?assembly=IronyModManager"/>
@@ -87,8 +86,6 @@
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#673AB7</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyForegroundMenuColor">#FFFFFF</Color>
-    <SolidColorBrush x:Key="IronyForegroundMenuBrush" Color="{DynamicResource IronyForegroundMenuColor}" />
     <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>

@@ -4,9 +4,9 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverResetConflictsView.xaml.cs" company="Mario">
+// <copyright file="ConflictSolverResetConflictsControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -27,17 +27,17 @@ namespace IronyModManager.Views.Controls
 {
     /// <summary>
     /// Class ConflictSolverResetConflictsView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverResetConflictsViewModel}" />
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverResetConflictsControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverResetConflictsViewModel}" />
-    public class ConflictSolverResetConflictsView : BaseControl<ConflictSolverResetConflictsViewModel>
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverResetConflictsControlViewModel}" />
+    public class ConflictSolverResetConflictsControlView : BaseControl<ConflictSolverResetConflictsControlViewModel>
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConflictSolverResetConflictsView" /> class.
         /// </summary>
-        public ConflictSolverResetConflictsView()
+        public ConflictSolverResetConflictsControlView()
         {
             this.InitializeComponent();
         }

@@ -104,8 +104,8 @@ namespace IronyModManager.ViewModels
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
-            ConflictSolverDBSearchViewModel dbSearch, ConflictSolverCustomConflictsViewModel customConflicts,
+            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
+            ConflictSolverDBSearchControlViewModel dbSearch, ConflictSolverCustomConflictsControlViewModel customConflicts,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
@@ -163,13 +163,13 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the custom conflicts.
         /// </summary>
         /// <value>The custom conflicts.</value>
-        public virtual ConflictSolverCustomConflictsViewModel CustomConflicts { get; protected set; }
+        public virtual ConflictSolverCustomConflictsControlViewModel CustomConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the database search.
         /// </summary>
         /// <value>The database search.</value>
-        public virtual ConflictSolverDBSearchViewModel DatabaseSearch { get; protected set; }
+        public virtual ConflictSolverDBSearchControlViewModel DatabaseSearch { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing ignore conflicts rules].
@@ -338,7 +338,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the reset conflicts.
         /// </summary>
         /// <value>The reset conflicts.</value>
-        public virtual ConflictSolverResetConflictsViewModel ResetConflicts { get; protected set; }
+        public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the resolve.

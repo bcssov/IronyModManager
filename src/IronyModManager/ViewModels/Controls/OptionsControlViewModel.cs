@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -191,14 +191,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Toggles the open.
-        /// </summary>
-        public virtual void ToggleOpen()
-        {
-            IsOpen = !IsOpen;
-        }
-
-        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -208,7 +200,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OptionsCommand = ReactiveCommand.Create(() =>
             {
-                ToggleOpen();
+                IsOpen = true;
             }).DisposeWith(disposables);
 
             CloseCommand = ReactiveCommand.Create(() =>
