@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 03-09-2020
+// Created          : 06-14-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ExportModCollectionControlView.xaml.cs" company="Mario">
+// <copyright file="ConflictSolverDBSearchControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -26,19 +26,19 @@ using ReactiveUI;
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
-    /// Class ExportModCollectionControlView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ExportModCollectionControlViewModel}" />
+    /// Class ConflictSolverDBSearchControlView.
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverDBSearchControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ExportModCollectionControlViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverDBSearchControlViewModel}" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ExportModCollectionControlView : BaseControl<ExportModCollectionControlViewModel>
+    public class ConflictSolverDBSearchControlView : BaseControl<ConflictSolverDBSearchControlViewModel>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExportModCollectionControlView" /> class.
+        /// Initializes a new instance of the <see cref="ConflictSolverDBSearchControlView" /> class.
         /// </summary>
-        public ExportModCollectionControlView()
+        public ConflictSolverDBSearchControlView()
         {
             this.InitializeComponent();
         }
@@ -56,14 +56,14 @@ namespace IronyModManager.Views.Controls
             var popup = this.FindControl<Popup>("popup");
             popup.Closed += (sender, args) =>
             {
-                ViewModel.ForceClose();
+                ViewModel.ForceClosePopup();
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>
             {
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    ViewModel.ForceClose();
+                    ViewModel.ForceClosePopup();
                 });
             }).DisposeWith(disposables);
 

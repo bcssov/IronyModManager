@@ -9,17 +9,20 @@
             HorizontalAlignment="Left" MaxHeight="30" Margin="10,0,0,0"></Button>
     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
       <Button Content="{Binding Import}" Command="{Binding ImportCommand}" MaxHeight="30"></Button>
-      <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Menu>
-          <MenuItem Header="{Binding ImportOtherTitle}"
-                    Background="{DynamicResource IronyMidBackgroundBrush}"
-                    Foreground="{DynamicResource IronyForegroundMenuBrush}"
-                    MaxHeight="30">
-            <MenuItem Header="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"></MenuItem>
-            <MenuItem Header="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"></MenuItem>
-          </MenuItem>
-        </Menu>
-      </Border>
+      <Panel>
+        <Button Content="{Binding ImportOther}" Command="{Binding ImportOtherCommand}"></Button>
+        <Popup PlacementMode="Bottom" IsOpen="{Binding IsOpen}"
+               Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+          <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+            <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+              <Button Content="{Binding ImportOtherParadoxos}" Command="{Binding ImportOtherParadoxosCommand}"
+                                       Grid.Row="0" Grid.Column="0"></Button>
+              <Button Content="{Binding ImportOtherParadox}" Command="{Binding ImportOtherParadoxCommand}"
+                                       Grid.Row="1" Grid.Column="0"></Button>
+            </Grid>
+          </Border>
+        </Popup>
+      </Panel>
     </StackPanel>
   </Panel>
 </UserControl>

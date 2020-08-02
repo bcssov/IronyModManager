@@ -4,7 +4,7 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-15-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -41,6 +41,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModCollectionService modCollectionService;
 
+        /// <summary>
+        /// The mod patch collection service
+        /// </summary>
+        private readonly IModPatchCollectionService modPatchCollectionService;
+
         #endregion Fields
 
         #region Constructors
@@ -49,9 +54,11 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="AddNewCollectionControlViewModel" /> class.
         /// </summary>
         /// <param name="modCollectionService">The mod collection service.</param>
-        public AddNewCollectionControlViewModel(IModCollectionService modCollectionService)
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
+        public AddNewCollectionControlViewModel(IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService)
         {
             this.modCollectionService = modCollectionService;
+            this.modPatchCollectionService = modPatchCollectionService;
         }
 
         #endregion Constructors
@@ -138,6 +145,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         collection.Mods = RenamingCollection.Mods;
                         modCollectionService.Delete(RenamingCollection.Name);
+                        modPatchCollectionService.InvalidatePatchModState(RenamingCollection.Name);
                     }
                     if (modCollectionService.Save(collection))
                     {

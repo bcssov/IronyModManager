@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -88,14 +88,14 @@ namespace IronyModManager.IO.Mods
                 results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                     parameters.ExportPath));
                 results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                    parameters.ExportPath, parameters.Game, true));
+                    parameters.ExportPath, parameters.Game));
             }
             if (parameters.PatchDefinitions?.Count() > 0)
             {
                 results.Add(await CopyBinariesAsync(parameters.PatchDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                     parameters.ExportPath));
                 results.Add(await WriteTextContentAsync(parameters.PatchDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                    parameters.ExportPath, parameters.Game, true));
+                    parameters.ExportPath, parameters.Game));
             }
             return results.All(p => p);
         }
@@ -176,9 +176,8 @@ namespace IronyModManager.IO.Mods
         /// <param name="definitions">The definitions.</param>
         /// <param name="exportPath">The export path.</param>
         /// <param name="game">The game.</param>
-        /// <param name="useGivenFileName">Name of the use given file.</param>
         /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
-        private async Task<bool> WriteTextContentAsync(IEnumerable<IDefinition> definitions, string exportPath, string game, bool useGivenFileName)
+        private async Task<bool> WriteTextContentAsync(IEnumerable<IDefinition> definitions, string exportPath, string game)
         {
             var tasks = new List<Task>();
             List<bool> results = new List<bool>();
@@ -190,22 +189,7 @@ namespace IronyModManager.IO.Mods
                 if (infoProvider != null)
                 {
                     bool overwrittenFiles = item.OverwrittenFileNames.Count(p => p != item.File) > 0;
-                    string fileName = string.Empty;
-                    if (useGivenFileName)
-                    {
-                        fileName = item.File;
-                    }
-                    else
-                    {
-                        if (!overwrittenFiles)
-                        {
-                            fileName = infoProvider.GetFileName(item);
-                        }
-                        else
-                        {
-                            fileName = item.File;
-                        }
-                    }
+                    string fileName = item.File;
                     var outPath = Path.Combine(exportPath, fileName);
                     if (File.Exists(outPath))
                     {

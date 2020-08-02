@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -163,17 +163,45 @@ namespace IronyModManager.Services
                 var resolvedConflicts = state?.ResolvedConflicts ?? new List<IDefinition>();
                 var ignoredConflicts = state?.IgnoredConflicts ?? new List<IDefinition>();
                 var conflictHistory = state?.ConflictHistory ?? new List<IDefinition>();
+                var customConflicts = state?.CustomConflicts ?? new List<IDefinition>();
+
                 var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
                 resolvedIndex.InitMap(resolvedConflicts, true);
                 conflictResult.ResolvedConflicts = resolvedIndex;
                 var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                 ignoredIndex.InitMap(ignoredConflicts, true);
                 conflictResult.IgnoredConflicts = ignoredIndex;
+                var customConflictsIndex = DIResolver.Get<IIndexedDefinitions>();
+                customConflictsIndex.InitMap(customConflicts);
+                conflictResult.CustomConflicts = customConflictsIndex;
                 var conflictHistoryIndex = DIResolver.Get<IIndexedDefinitions>();
                 conflictHistoryIndex.InitMap(conflictHistory);
+                if (customConflicts.Count() > 0)
+                {
+                    total += customConflicts.Count();
+                }
 
                 var lastPercentage = 0;
                 int processed = 0;
+
+                foreach (var file in conflictResult.CustomConflicts.GetAllFileKeys())
+                {
+                    var definition = CopyDefinition(conflictResult.CustomConflicts.GetByFile(file).FirstOrDefault());
+                    definition.Code = conflictHistoryIndex.GetByTypeAndId(definition.TypeAndId).FirstOrDefault().Code;
+                    await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                    {
+                        ExportPath = exportPath,
+                        Definitions = definition != null ? PopulateModPath(new List<IDefinition>() { definition }, collectionMods) : null,
+                        Game = game.Type
+                    });
+                    processed++;
+                    var percentage = GetProgressPercentage(total, processed, 100);
+                    if (lastPercentage != percentage)
+                    {
+                        await messageBus.PublishAsync(new ModMergeProgressEvent(percentage));
+                    }
+                    lastPercentage = percentage;
+                }
 
                 var dumpedIds = new HashSet<string>();
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
@@ -438,6 +466,7 @@ namespace IronyModManager.Services
                         lastPercentage = percentage;
                     }
                 }
+
                 return mod;
             }
             return null;

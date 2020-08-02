@@ -8,7 +8,6 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBox.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.ComboBoxItem.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialDeepPurple.MenuItem.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IconsLight.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IronyToolTip.xaml?assembly=IronyModManager"/>
@@ -69,12 +68,17 @@
     <Setter Property="BorderThickness" Value="2,2,2,2"/>
     <Setter Property="BorderBrush" Value="Green"/>
   </Style>
+  <Style Selector="Border.InvalidConflictSolver">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Red"/>
+  </Style>
   <Style Selector="ListBoxItem.ModCompare:selected /template/ ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource DeepPurpleLighten2Brush}" />
   </Style>
   <Styles.Resources>
     <Color x:Key="IronyForegroundColor">#FF000000</Color>
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyAccentColor">#FF0000</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
     <Color x:Key="IronyEditorBackgroundColor">#FFFFFFFF</Color>
@@ -83,8 +87,6 @@
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#673AB7</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyForegroundMenuColor">#FFFFFF</Color>
-    <SolidColorBrush x:Key="IronyForegroundMenuBrush" Color="{DynamicResource IronyForegroundMenuColor}" />
     <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>

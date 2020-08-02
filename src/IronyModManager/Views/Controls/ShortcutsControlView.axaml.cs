@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 06-14-2020
+// Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
-// <copyright file="ConflictSolverDBSearchView.xaml.cs" company="Mario">
+// <copyright file="ShortcutsControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -26,19 +26,19 @@ using ReactiveUI;
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
-    /// Class ConflictSolverDBSearchView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverDBSearchViewModel}" />
+    /// Class ShortcutsControlView.
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ShortcutsControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ConflictSolverDBSearchViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ShortcutsControlViewModel}" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ConflictSolverDBSearchView : BaseControl<ConflictSolverDBSearchViewModel>
+    public class ShortcutsControlView : BaseControl<ShortcutsControlViewModel>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConflictSolverDBSearchView" /> class.
+        /// Initializes a new instance of the <see cref="ShortcutsControlView" /> class.
         /// </summary>
-        public ConflictSolverDBSearchView()
+        public ShortcutsControlView()
         {
             this.InitializeComponent();
         }
@@ -56,14 +56,14 @@ namespace IronyModManager.Views.Controls
             var popup = this.FindControl<Popup>("popup");
             popup.Closed += (sender, args) =>
             {
-                ViewModel.ForceClosePopup();
+                ViewModel.ForceClose();
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>
             {
                 Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    ViewModel.ForceClosePopup();
+                    ViewModel.ForceClose();
                 });
             }).DisposeWith(disposables);
 

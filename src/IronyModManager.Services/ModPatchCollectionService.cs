@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 07-29-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -102,7 +102,48 @@ namespace IronyModManager.Services
 
         #endregion Constructors
 
+        #region Enums
+
+        /// <summary>
+        /// Enum ExportType
+        /// </summary>
+        protected enum ExportType
+        {
+            /// <summary>
+            /// The resolved
+            /// </summary>
+            Resolved,
+
+            /// <summary>
+            /// The ignored
+            /// </summary>
+            Ignored,
+
+            /// <summary>
+            /// The custom
+            /// </summary>
+            Custom
+        }
+
+        #endregion Enums
+
         #region Methods
+
+        /// <summary>
+        /// Adds the custom mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> AddCustomModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
+        {
+            if (definition != null)
+            {
+                definition.ModName = GenerateCollectionPatchName(collectionName);
+            }
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Custom);
+        }
 
         /// <summary>
         /// Adds the mods to ignore list.
@@ -145,7 +186,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ApplyModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
-            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName);
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Resolved);
         }
 
         /// <summary>
@@ -406,6 +447,9 @@ namespace IronyModManager.Services
             var overwrittenDefinitions = DIResolver.Get<IIndexedDefinitions>();
             overwrittenDefinitions.InitMap(overwrittenDefs.Select(a => a.Value));
             result.OverwrittenConflicts = overwrittenDefinitions;
+            var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+            customConflicts.InitMap(null, true);
+            result.CustomConflicts = customConflicts;
             messageBus.Publish(new ModDefinitionAnalyzeEvent(100));
 
             return result;
@@ -519,7 +563,25 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
-            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, false);
+            return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Ignored);
+        }
+
+        /// <summary>
+        /// Invalidates the state of the patch mod.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool InvalidatePatchModState(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null)
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var cachePrefix = $"CollectionPatchState-{game.Type}";
+                Cache.Invalidate(cachePrefix, patchName);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -540,6 +602,66 @@ namespace IronyModManager.Services
         public virtual bool IsPatchMod(string modName)
         {
             return IsPatchModInternal(modName);
+        }
+
+        /// <summary>
+        /// patch mod needs update as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                var patchName = GenerateCollectionPatchName(collectionName);
+                var cachePrefix = $"CollectionPatchState-{game.Type}";
+                var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                if (result != null)
+                {
+                    return result.NeedsUpdate;
+                }
+                else
+                {
+                    var mods = GetCollectionMods();
+                    var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                    {
+                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                        PatchName = patchName
+                    }, false);
+                    if (state == null)
+                    {
+                        return false;
+                    }
+                    foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
+                    {
+                        foreach (var item in groupedMods.GroupBy(p => p.File))
+                        {
+                            var definition = item.FirstOrDefault();                            
+                            var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                            if (mod == null)
+                            {
+                                // Mod no longer in collection, needs refresh break further checks...
+                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                return true;
+                            }
+                            else
+                            {
+                                var info = Reader.GetFileInfo(mod.FullPath, definition.File);
+                                if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
+                                {
+                                    // File no longer in collection or content does not match, break further checks
+                                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false });
+                    return false;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -566,6 +688,18 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Resets the custom conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ResetCustomConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
+        {
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Custom);
+        }
+
+        /// <summary>
         /// Resets the ignored conflict asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
@@ -574,7 +708,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetIgnoredConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), false);
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Ignored);
         }
 
         /// <summary>
@@ -596,7 +730,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetResolvedConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), true);
+            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Resolved);
         }
 
         /// <summary>
@@ -650,6 +784,7 @@ namespace IronyModManager.Services
                 ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                 IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                 OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 PatchName = patchName
             });
@@ -665,6 +800,30 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             var previousProgress = 0;
+            async Task syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
+            {
+                foreach (var file in patchFiles)
+                {
+                    if (conflicts.CustomConflicts.GetByFile(file).Count() == 0 &&
+                        conflicts.OrphanConflicts.GetByFile(file).Count() == 0 &&
+                        conflicts.OverwrittenConflicts.GetByFile(file).Count() == 0 &&
+                        conflicts.ResolvedConflicts.GetByFile(file).Count() == 0)
+                    {
+                        await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                            Path = file
+                        });
+                    }
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, maxProgress);
+                    if (previousProgress != perc)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        previousProgress = perc;
+                    }
+                }
+            }
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
@@ -674,18 +833,25 @@ namespace IronyModManager.Services
                     RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                     PatchName = patchName
                 });
+                var patchFiles = modPatchExporter.GetPatchFiles(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                    PatchName = patchName
+                });
+                var total = patchFiles.Count();
                 if (state != null)
                 {
+                    var perc = 0;
                     var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
                     var ignoredConflicts = new List<IDefinition>();
-                    var total = state.Conflicts.Count() + state.OrphanConflicts.Count() + state.OverwrittenConflicts.Count();
+                    total += state.Conflicts.Count() + state.OrphanConflicts.Count() + state.OverwrittenConflicts.Count() + 3; // as in 3 additional steps performed
                     int processed = 0;
                     foreach (var item in state.OrphanConflicts.GroupBy(p => p.TypeAndId))
                     {
                         var files = ProcessPatchStateFiles(state, item, ref processed);
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
-                        var perc = GetProgressPercentage(total, processed, 96);
+                        perc = GetProgressPercentage(total, processed, 99);
                         if (previousProgress != perc)
                         {
                             await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
@@ -697,7 +863,7 @@ namespace IronyModManager.Services
                         var files = ProcessPatchStateFiles(state, item, ref processed);
                         var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
                         await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
-                        var perc = GetProgressPercentage(total, processed, 96);
+                        perc = GetProgressPercentage(total, processed, 99);
                         if (previousProgress != perc)
                         {
                             await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
@@ -720,7 +886,7 @@ namespace IronyModManager.Services
                         }
                         var matchedConflicts = conflictResult.OverwrittenConflicts.GetByTypeAndId(item.First().TypeAndId);
                         await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
-                        var perc = GetProgressPercentage(total, processed, 96);
+                        perc = GetProgressPercentage(total, processed, 99);
                         if (previousProgress != perc)
                         {
                             await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
@@ -730,7 +896,13 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
                     {
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(97));
+                        processed++;
+                        perc = GetProgressPercentage(total, processed, 99);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
                         if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -752,7 +924,13 @@ namespace IronyModManager.Services
 
                     if (conflictResult.OverwrittenConflicts.GetAll().Count() > 0)
                     {
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(98));
+                        processed++;
+                        perc = GetProgressPercentage(total, processed, 99);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
@@ -762,7 +940,13 @@ namespace IronyModManager.Services
                         });
                     }
 
-                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(99));
+                    processed++;
+                    perc = GetProgressPercentage(total, processed, 99);
+                    if (previousProgress != perc)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        previousProgress = perc;
+                    }
                     var conflicts = GetModelInstance<IConflictResult>();
                     conflicts.AllConflicts = conflictResult.AllConflicts;
                     conflicts.Conflicts = conflictResult.Conflicts;
@@ -775,8 +959,12 @@ namespace IronyModManager.Services
                     conflicts.IgnoredConflicts = ignoredIndex;
                     conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
                     conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
+                    var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+                    customConflicts.InitMap(state.CustomConflicts, true);
+                    conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
                     EvalModIgnoreDefinitions(conflicts);
+                    await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
@@ -787,6 +975,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -796,6 +985,9 @@ namespace IronyModManager.Services
                 }
                 else
                 {
+                    var processed = 0;
+                    await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 96);
+
                     var exportedConflicts = false;
                     if (conflictResult.OrphanConflicts.GetAll().Count() > 0)
                     {
@@ -847,6 +1039,7 @@ namespace IronyModManager.Services
                             ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                             IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                             OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
@@ -1053,9 +1246,9 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="definition">The definition.</param>
         /// <param name="collectionName">Name of the collection.</param>
-        /// <param name="resolve">if set to <c>true</c> [resolve].</param>
+        /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, bool resolve = true)
+        protected virtual async Task<bool> ExportModPatchDefinitionAsync(IConflictResult conflictResult, IDefinition definition, string collectionName, ExportType exportType)
         {
             var game = GameService.GetSelected();
             if (definition != null && game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
@@ -1090,20 +1283,24 @@ namespace IronyModManager.Services
                     mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
                 }
                 var definitionMod = allMods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                if (definitionMod != null)
+                if (definitionMod != null || IsPatchMod(definitionMod))
                 {
-                    if (resolve)
-                    {
-                        conflictResult.ResolvedConflicts.AddToMap(definition);
-                    }
-                    else
-                    {
-                        conflictResult.IgnoredConflicts.AddToMap(definition);
-                    }
                     var exportPatches = new HashSet<IDefinition>();
-                    if (resolve)
+                    switch (exportType)
                     {
-                        exportPatches.Add(definition);
+                        case ExportType.Ignored:
+                            conflictResult.IgnoredConflicts.AddToMap(definition);
+                            break;
+
+                        case ExportType.Custom:
+                            conflictResult.CustomConflicts.AddToMap(definition);
+                            exportPatches.Add(definition);
+                            break;
+
+                        default:
+                            conflictResult.ResolvedConflicts.AddToMap(definition);
+                            exportPatches.Add(definition);
+                            break;
                     }
 
                     await ModWriter.ApplyModsAsync(new ModWriterParameters()
@@ -1135,10 +1332,11 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
-                    return resolve ? exportResult && stateResult : stateResult;
+                    return exportPatches.Count > 0 ? exportResult && stateResult : stateResult;
                 }
             }
             return false;
@@ -1441,14 +1639,31 @@ namespace IronyModManager.Services
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="typeAndId">The type and identifier.</param>
         /// <param name="patchName">Name of the patch.</param>
-        /// <param name="isResolvedConflict">if set to <c>true</c> [is resolved conflict].</param>
+        /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, bool isResolvedConflict)
+        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, ExportType exportType)
         {
             var game = GameService.GetSelected();
             if (conflictResult != null && game != null)
             {
-                var indexed = isResolvedConflict ? conflictResult.ResolvedConflicts : conflictResult.IgnoredConflicts;
+                bool purgeFiles = true;
+                IIndexedDefinitions indexed;
+                switch (exportType)
+                {
+                    case ExportType.Ignored:
+                        indexed = conflictResult.IgnoredConflicts;
+                        purgeFiles = false;
+                        break;
+
+                    case ExportType.Custom:
+                        indexed = conflictResult.CustomConflicts;
+                        break;
+
+                    default:
+                        indexed = conflictResult.ResolvedConflicts;
+                        break;
+                }
+
                 var result = indexed.GetByTypeAndId(typeAndId);
                 if (result.Count() > 0)
                 {
@@ -1456,7 +1671,7 @@ namespace IronyModManager.Services
                     foreach (var item in result)
                     {
                         indexed.Remove(item);
-                        if (isResolvedConflict)
+                        if (purgeFiles)
                         {
                             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                             {
@@ -1492,6 +1707,7 @@ namespace IronyModManager.Services
                         ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
                         IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
                         OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                         PatchName = patchName
                     });
@@ -1502,5 +1718,25 @@ namespace IronyModManager.Services
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class PatchCollectionState.
+        /// </summary>
+        private class PatchCollectionState
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether [needs update].
+            /// </summary>
+            /// <value><c>true</c> if [needs update]; otherwise, <c>false</c>.</value>
+            public bool NeedsUpdate { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

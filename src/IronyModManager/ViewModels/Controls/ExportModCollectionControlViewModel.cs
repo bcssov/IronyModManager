@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -102,11 +102,24 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the import dialog title.
+        /// Gets or sets the import dialog.
         /// </summary>
-        /// <value>The import dialog title.</value>
+        /// <value>The import dialog.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Import_Dialog_Title)]
         public virtual string ImportDialogTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other.
+        /// </summary>
+        /// <value>The import other.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Title)]
+        public virtual string ImportOther { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other command.
+        /// </summary>
+        /// <value>The import other command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportOtherCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import other paradox.
@@ -135,15 +148,22 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxosCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the import other title.
+        /// Gets or sets a value indicating whether this instance is open.
         /// </summary>
-        /// <value>The import other title.</value>
-        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Title)]
-        public virtual string ImportOtherTitle { get; protected set; }
+        /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
+        public virtual bool IsOpen { get; protected set; }
 
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Forces the close.
+        /// </summary>
+        public virtual void ForceClose()
+        {
+            IsOpen = false;
+        }
 
         /// <summary>
         /// Called when [activated].
@@ -175,6 +195,11 @@ namespace IronyModManager.ViewModels.Controls
             ImportOtherParadoxCommand = ReactiveCommand.Create(() =>
             {
                 return new CommandResult<string>(string.Empty, CommandState.Success);
+            }).DisposeWith(disposables);
+
+            ImportOtherCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = true;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

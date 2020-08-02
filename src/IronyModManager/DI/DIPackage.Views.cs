@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -55,8 +55,10 @@ namespace IronyModManager.DI
             container.Register<ModifyCollectionControlView>();
             container.Register<OptionsControlView>();
             container.Register<ConflictSolverModFilterControlView>();
-            container.Register<ConflictSolverResetConflictsView>();
-            container.Register<ConflictSolverDBSearchView>();
+            container.Register<ConflictSolverResetConflictsControlView>();
+            container.Register<ConflictSolverDBSearchControlView>();
+            container.Register<ConflictSolverCustomConflictsControlView>();
+            container.Register<ShortcutsControlView>();
         }
 
         #endregion Methods

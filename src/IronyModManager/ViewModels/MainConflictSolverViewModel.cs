@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -97,14 +97,16 @@ namespace IronyModManager.ViewModels
         /// <param name="modFilter">The mod filter.</param>
         /// <param name="resetConflicts">The reset conflicts.</param>
         /// <param name="dbSearch">The database search.</param>
+        /// <param name="customConflicts">The custom conflicts.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
-            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsViewModel resetConflicts,
-            ConflictSolverDBSearchViewModel dbSearch, ILogger logger, INotificationAction notificationAction, IAppAction appAction)
+            ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
+            ConflictSolverDBSearchControlViewModel dbSearch, ConflictSolverCustomConflictsControlViewModel customConflicts,
+            ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
@@ -118,6 +120,7 @@ namespace IronyModManager.ViewModels
             ModFilter = modFilter;
             ResetConflicts = resetConflicts;
             DatabaseSearch = dbSearch;
+            CustomConflicts = customConflicts;
         }
 
         #endregion Constructors
@@ -141,7 +144,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the binary merge viewer.
         /// </summary>
         /// <value>The binary merge viewer.</value>
-        public MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
+        public virtual MergeViewerBinaryControlViewModel BinaryMergeViewer { get; protected set; }
 
         /// <summary>
         /// Gets or sets the conflicted objects.
@@ -157,10 +160,16 @@ namespace IronyModManager.ViewModels
         public virtual IConflictResult Conflicts { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom conflicts.
+        /// </summary>
+        /// <value>The custom conflicts.</value>
+        public virtual ConflictSolverCustomConflictsControlViewModel CustomConflicts { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the database search.
         /// </summary>
         /// <value>The database search.</value>
-        public virtual ConflictSolverDBSearchViewModel DatabaseSearch { get; protected set; }
+        public virtual ConflictSolverDBSearchControlViewModel DatabaseSearch { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [editing ignore conflicts rules].
@@ -173,6 +182,12 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The hierarchal conflicts.</value>
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the hovered definition.
+        /// </summary>
+        /// <value>The hovered definition.</value>
+        public virtual IHierarchicalDefinitions HoveredDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore.
@@ -224,6 +239,19 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The invalid conflict path.</value>
         public virtual string InvalidConflictPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid custom patch.
+        /// </summary>
+        /// <value>The invalid custom patch.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.InvalidConflicts.ContextMenu.CustomPatch)]
+        public virtual string InvalidCustomPatch { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the invalid custom patch command.
+        /// </summary>
+        /// <value>The invalid custom patch command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InvalidCustomPatchCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the invalid open directory.
@@ -310,7 +338,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the reset conflicts.
         /// </summary>
         /// <value>The reset conflicts.</value>
-        public virtual ConflictSolverResetConflictsViewModel ResetConflicts { get; protected set; }
+        public virtual ConflictSolverResetConflictsControlViewModel ResetConflicts { get; protected set; }
 
         /// <summary>
         /// Gets or sets the resolve.
@@ -373,22 +401,6 @@ namespace IronyModManager.ViewModels
         #region Methods
 
         /// <summary>
-        /// Evals the invalid conflict path.
-        /// </summary>
-        /// <param name="hierarchicalDefinition">The hierarchical definition.</param>
-        public virtual void EvalInvalidConflictPath(IHierarchicalDefinitions hierarchicalDefinition)
-        {
-            InvalidConflictPath = string.Empty;
-            if (!IsConflictSolverAvailable && hierarchicalDefinition != null)
-            {
-                if (hierarchicalDefinition.AdditionalData is IDefinition definition)
-                {
-                    InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
-                }
-            }
-        }
-
-        /// <summary>
         /// Called when [locale changed].
         /// </summary>
         /// <param name="newLocale">The new locale.</param>
@@ -406,6 +418,23 @@ namespace IronyModManager.ViewModels
         {
             ModCompareSelector.Reset();
             IgnoreEnabled = false;
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="hierarchicalDefinition">The hierarchical definition.</param>
+        public virtual void SetParameters(IHierarchicalDefinitions hierarchicalDefinition)
+        {
+            InvalidConflictPath = string.Empty;
+            if (!IsConflictSolverAvailable && hierarchicalDefinition != null)
+            {
+                if (hierarchicalDefinition.AdditionalData is IDefinition definition)
+                {
+                    HoveredDefinition = hierarchicalDefinition;
+                    InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+                }
+            }
         }
 
         /// <summary>
@@ -575,6 +604,7 @@ namespace IronyModManager.ViewModels
                 IgnoreConflictsRules.ConflictResult = s;
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
                 DatabaseSearch.SetParameters(s);
+                CustomConflicts.SetParameters(s, SelectedModCollection.Name);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
@@ -594,7 +624,7 @@ namespace IronyModManager.ViewModels
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
-                    MergeViewer.SetText(string.Empty, string.Empty);
+                    MergeViewer.SetText(string.Empty, string.Empty, true);
                     MergeViewer.ExitEditMode();
                     EvalViewerVisibility();
                     IgnoreEnabled = true;
@@ -724,6 +754,14 @@ namespace IronyModManager.ViewModels
                 EditingIgnoreConflictsRules = true;
             }).DisposeWith(disposables);
 
+            InvalidCustomPatchCommand = ReactiveCommand.Create(() =>
+            {
+                if (HoveredDefinition.AdditionalData is IDefinition definition)
+                {
+                    CustomConflicts.SetContent(definition.File, definition.Code);
+                }
+            }).DisposeWith(disposables);
+
             this.WhenAnyValue(p => p.ModFilter.IsActivated).Where(p => p).Subscribe(s =>
             {
                 ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
@@ -742,6 +780,11 @@ namespace IronyModManager.ViewModels
                         FilterHierarchalConflicts(Conflicts);
                     }
                 }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
+            {
+                ResetConflicts.Refresh();
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

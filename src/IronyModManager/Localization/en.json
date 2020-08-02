@@ -152,7 +152,8 @@
             "ErrorNoLine": "Error at file: {File}.{NewLine}Please report this error to the author of the mod: {ModName}.{NewLine}{NewLine}Error message says:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Open File",
-                "OpenDirectory": "Open Directory"
+                "OpenDirectory": "Open Directory",
+                "CustomPatch": "Copy To Custom Patch"
             }
         },
         "ContextMenu": {
@@ -164,7 +165,9 @@
             "MoveDown": "Move Down",
             "Edit": "Edit",
             "CopyText": "Copy Text",
-            "Delete": "Delete"
+            "Delete": "Delete",
+            "Undo": "Undo",
+            "Redo": "Redo"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -189,6 +192,7 @@
             "Title": "Reset Conflicts",
             "Resolved": "Resolved",
             "Ignored": "Ignored",
+            "Custom": "Custom",
             "Close": "Close",
             "Reset": "Reset"
         },
@@ -197,6 +201,12 @@
             "Watermark": "Enter search term",
             "Close": "Close",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Custom Patch",
+            "Path": "Path",
+            "Save": "Save",
+            "Close": "Close"
         }
     },
     "ConflictIgnore": {
@@ -272,6 +282,14 @@
         "CollectionMerged": {
             "Title": "Collection Merged",
             "Message": "Collection has been merged."
+        },
+        "CustomPatchExists": {
+            "Title": "Custom Patch Exists",
+            "Message": "Custom patch already exists with the specified path."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Conflict Solver Updates",
+            "Message": "One or several mods have been updated. Conflict Solver might need updating."
         }
     },
     "Mod_App_Actions": {

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-12-2020
+// Last Modified On : 07-28-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -27,6 +27,15 @@ namespace IronyModManager.Services.Common
     public interface IModPatchCollectionService : IBaseService
     {
         #region Methods
+
+        /// <summary>
+        /// Adds the custom mod patch asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> AddCustomModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
 
         /// <summary>
         /// Adds the mods to ignore list.
@@ -115,6 +124,13 @@ namespace IronyModManager.Services.Common
         Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
 
         /// <summary>
+        /// Invalidates the state of the patch mod.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool InvalidatePatchModState(string collectionName);
+
+        /// <summary>
         /// Determines whether [is patch mod] [the specified mod].
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -129,12 +145,28 @@ namespace IronyModManager.Services.Common
         bool IsPatchMod(string modName);
 
         /// <summary>
+        /// Patches the mod needs update asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PatchModNeedsUpdateAsync(string collectionName);
+
+        /// <summary>
         /// Renames the patch collection asynchronous.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
         /// <param name="newCollectionName">New name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> RenamePatchCollectionAsync(string collectionName, string newCollectionName);
+
+        /// <summary>
+        /// Resets the custom conflict asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="typeAndId">The type and identifier.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ResetCustomConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName);
 
         /// <summary>
         /// Resets the ignored conflict asynchronous.

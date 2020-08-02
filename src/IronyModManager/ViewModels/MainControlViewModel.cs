@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 07-30-2020
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,16 +13,9 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using System.IO;
-using System.Reactive;
-using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
-using IronyModManager.Implementation.Actions;
-using IronyModManager.Localization.Attributes;
-using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
-using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
@@ -34,20 +27,6 @@ namespace IronyModManager.ViewModels
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class MainControlViewModel : BaseViewModel
     {
-        #region Fields
-
-        /// <summary>
-        /// The URL action
-        /// </summary>
-        private readonly IAppAction appAction;
-
-        /// <summary>
-        /// The game service
-        /// </summary>
-        private readonly IGameService gameService;
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -58,40 +37,24 @@ namespace IronyModManager.ViewModels
         /// <param name="gameControl">The game control.</param>
         /// <param name="modControl">The mod control.</param>
         /// <param name="options">The options.</param>
-        /// <param name="appAction">The URL action.</param>
-        /// <param name="gameService">The game service.</param>
+        /// <param name="shortcuts">The shortcuts.</param>
         public MainControlViewModel(ThemeControlViewModel themeControl,
             LanguageControlViewModel languageControl,
             GameControlViewModel gameControl,
             ModHolderControlViewModel modControl,
-            OptionsControlViewModel options,
-            IAppAction appAction, IGameService gameService)
+            OptionsControlViewModel options, ShortcutsControlViewModel shortcuts)
         {
             ThemeSelector = themeControl;
             LanguageSelector = languageControl;
             GameSelector = gameControl;
             ModHolder = modControl;
             Options = options;
-            this.appAction = appAction;
-            this.gameService = gameService;
+            Shortcuts = shortcuts;
         }
 
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the error log.
-        /// </summary>
-        /// <value>The error log.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.ErrorLog)]
-        public virtual string ErrorLog { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the error log command.
-        /// </summary>
-        /// <value>The error log command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ErrorLogCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game selector.
@@ -104,19 +67,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The language selector.</value>
         public virtual LanguageControlViewModel LanguageSelector { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the logs.
-        /// </summary>
-        /// <value>The logs.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Logs)]
-        public virtual string Logs { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the logs command.
-        /// </summary>
-        /// <value>The logs command.</value>
-        public virtual ReactiveCommand<Unit, Unit> LogsCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mod holder.
@@ -134,8 +84,7 @@ namespace IronyModManager.ViewModels
         /// Gets or sets the shortcuts.
         /// </summary>
         /// <value>The shortcuts.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Name)]
-        public virtual string Shortcuts { get; protected set; }
+        public virtual ShortcutsControlViewModel Shortcuts { get; protected set; }
 
         /// <summary>
         /// Gets the theme selector.
@@ -143,55 +92,16 @@ namespace IronyModManager.ViewModels
         /// <value>The theme selector.</value>
         public virtual ThemeControlViewModel ThemeSelector { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets the wiki.
-        /// </summary>
-        /// <value>The wiki.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Wiki)]
-        public virtual string Wiki { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the wiki command.
-        /// </summary>
-        /// <value>The wiki command.</value>
-        public virtual ReactiveCommand<Unit, Unit> WikiCommand { get; protected set; }
-
         #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// Called when [activated].
+        /// Resets this instance.
         /// </summary>
-        /// <param name="disposables">The disposables.</param>
-        protected override void OnActivated(CompositeDisposable disposables)
+        public virtual void Reset()
         {
-            WikiCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                await appAction.OpenAsync(Constants.WikiUrl);
-            }).DisposeWith(disposables);
-
-            LogsCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                if (Directory.Exists(Constants.LogsLocation))
-                {
-                    await appAction.OpenAsync(Constants.LogsLocation);
-                }
-            }).DisposeWith(disposables);
-
-            ErrorLogCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                var game = gameService.GetSelected();
-                if (game != null)
-                {
-                    if (File.Exists(game.LogLocation))
-                    {
-                        await appAction.OpenAsync(game.LogLocation);
-                    }
-                }
-            }).DisposeWith(disposables);
-
-            base.OnActivated(disposables);
+            ModHolder.Reset();
         }
 
         #endregion Methods

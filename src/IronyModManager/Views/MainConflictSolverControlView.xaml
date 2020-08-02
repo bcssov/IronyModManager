@@ -18,9 +18,10 @@
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
           <TextBlock Text="{Binding ConflictedObjects}" HorizontalAlignment="Center" Margin="10"></TextBlock>
           <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
-            <ContentControl Content="{Binding DatabaseSearch}" Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0"></ContentControl>
-            <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="1"></ContentControl>
-            <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>
+            <ContentControl Content="{Binding ModFilter}" Grid.Column="0" Grid.Row="0"></ContentControl>
+            <ContentControl Content="{Binding DatabaseSearch}" Grid.Column="1" Grid.Row="0"></ContentControl>
+            <ContentControl Content="{Binding CustomConflicts}" Grid.Column="0" Grid.Row="1"></ContentControl>
+            <ContentControl Content="{Binding ResetConflicts}" Grid.Column="1" Grid.Row="1"></ContentControl>            
           </Grid>
           <ComboBox Items="{Binding HierarchalConflicts}" SelectedItem="{Binding SelectedParentConflict}"
                    HorizontalAlignment="Stretch" MinHeight="30">

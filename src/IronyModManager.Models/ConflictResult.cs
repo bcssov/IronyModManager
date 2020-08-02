@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 07-27-2020
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The conflicts.</value>
         public IIndexedDefinitions Conflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom conflicts.
+        /// </summary>
+        /// <value>The custom conflicts.</value>
+        public IIndexedDefinitions CustomConflicts { get; set; }
 
         /// <summary>
         /// Gets or sets the ignored conflicts.
@@ -113,6 +119,7 @@ namespace IronyModManager.Models
             ResolvedConflicts?.Dispose();
             RuleIgnoredConflicts?.Dispose();
             OverwrittenConflicts?.Dispose();
+            CustomConflicts?.Dispose();
             AllConflicts = null;
             Conflicts = null;
             IgnoredConflicts = null;
@@ -120,6 +127,7 @@ namespace IronyModManager.Models
             OrphanConflicts = null;
             RuleIgnoredConflicts = null;
             OverwrittenConflicts = null;
+            CustomConflicts = null;
         }
 
         #endregion Methods

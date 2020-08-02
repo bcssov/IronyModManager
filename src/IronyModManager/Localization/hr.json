@@ -152,7 +152,8 @@
             "ErrorNoLine": "Pogreška u datoteci: {Line} stupac: {Column} datoteka: {File}.{NewLine}Prijavite ovu pogrešku autoru mod-a: {ModName}.{NewLine}{NewLine}Poruka o pogrešci kaže:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Otvori datoteku",
-                "OpenDirectory": "Otvori direktorij"
+                "OpenDirectory": "Otvori direktorij",
+                "CustomPatch": "Kopiraj u prilagođenu zakrpu"
             }
         },
         "ContextMenu": {
@@ -164,7 +165,9 @@
             "MoveDown": "Pomakni dolje",
             "Edit": "Uredi",
             "CopyText": "Kopiraj Tekst",
-            "Delete": "Obriši"
+            "Delete": "Obriši",
+            "Undo": "Poništi",
+            "Redo": "Ponovi"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -189,6 +192,7 @@
             "Title": "Poništi sukobe",
             "Resolved": "Riješeni",
             "Ignored": "Zanemareni",
+            "Custom": "Prilagođen",
             "Close": "Zatvori",
             "Reset": "Poništi"
         },
@@ -197,6 +201,12 @@
             "Watermark": "Unesi pojam",
             "Close": "Zatvori",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Prilagođena zakrpa",
+            "Path": "Direktorij",
+            "Save": "Snimi",
+            "Close": "Zatvori"
         }
     },
     "ConflictIgnore": {
@@ -272,6 +282,14 @@
         "CollectionMerged": {
             "Title": "Kolekcija spojena",
             "Message": "Kolekcija je spojena."
+        },
+        "CustomPatchExists": {
+            "Title": "Prilagođena zakrpa postoji",
+            "Message": "Prilagođena zakrpa već postoji s navedenom putanjom."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Ažuriranja za rješavanje konflikata",
+            "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
         }
     },
     "Mod_App_Actions": {

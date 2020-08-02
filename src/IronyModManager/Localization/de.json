@@ -152,7 +152,8 @@
             "ErrorNoLine": "Fehler in der Datei: {File}.{NewLine}Bitte melde diesen Fehler dem Autor des Mods: {ModName}.{NewLine}{NewLine}Die Fehlermeldung lautet:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Datei öffnen",
-                "OpenDirectory": "Verzeichnis öffnen"
+                "OpenDirectory": "Verzeichnis öffnen",
+                "CustomPatch": "In benutzerdefinierten Patch kopieren"
             }
         },
         "ContextMenu": {
@@ -164,7 +165,9 @@
             "MoveDown": "Sich abwärts bewegen",
             "Edit": "Bearbeiten Sie dies",
             "CopyText": "Text kopieren",
-            "Delete": "Löschen"
+            "Delete": "Löschen",
+            "Undo": "Rückgängig machen",
+            "Redo": "Wiederholen"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",
@@ -189,6 +192,7 @@
             "Title": "Konflikte zurücksetzen",
             "Resolved": "Aufgelöst",
             "Ignored": "Ignoriert",
+            "Custom": "Benutzerdefiniert",
             "Close": "Schließen",
             "Reset": "Zurücksetzen"
         },
@@ -197,6 +201,12 @@
             "Watermark": "Suchbegriff eingeben",
             "Close": "Schließen",
             "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Benutzerdefinierter Patch",
+            "Path": "Verzeichnis",
+            "Save": "Sparen",
+            "Close": "Schließen"
         }
     },
     "ConflictIgnore": {
@@ -272,6 +282,14 @@
         "CollectionMerged": {
             "Title": "Sammlung zusammengeführt",
             "Message": "Sammlung wurde zusammengeführt."
+        },
+        "CustomPatchExists": {
+            "Title": "Benutzerdefinierter Patch vorhanden",
+            "Message": "Ein benutzerdefinierter Patch mit dem angegebenen Pfad ist bereits vorhanden."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Conflict Solver-Updates",
+            "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
         }
     },
     "Mod_App_Actions": {
