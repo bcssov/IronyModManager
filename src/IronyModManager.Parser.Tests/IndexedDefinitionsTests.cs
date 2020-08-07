@@ -496,5 +496,32 @@ namespace IronyModManager.Parser.Tests
             results.First().Id.Should().Be("1");
         }
 
+        /// <summary>
+        /// Defines the test method Should_exist_by_file.
+        /// </summary>
+        [Fact]
+        public void Should_exist_by_file()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.ExistsByFile("1");
+            results.Should().BeTrue();
+        }
+
     }
 }
