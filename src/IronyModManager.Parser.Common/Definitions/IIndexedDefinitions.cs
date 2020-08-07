@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 08-07-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -31,6 +31,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <param name="definition">The definition.</param>
         /// <param name="forceIgnoreHierarchical">if set to <c>true</c> [force ignore hierarchical].</param>
         void AddToMap(IDefinition definition, bool forceIgnoreHierarchical = false);
+
+        /// <summary>
+        /// Existses the by file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ExistsByFile(string file);
 
         /// <summary>
         /// Gets all.

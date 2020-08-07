@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 08-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -637,7 +637,7 @@ namespace IronyModManager.Services
                     {
                         foreach (var item in groupedMods.GroupBy(p => p.File))
                         {
-                            var definition = item.FirstOrDefault();                            
+                            var definition = item.FirstOrDefault();
                             var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
                             if (mod == null)
                             {
@@ -804,10 +804,10 @@ namespace IronyModManager.Services
             {
                 foreach (var file in patchFiles)
                 {
-                    if (conflicts.CustomConflicts.GetByFile(file).Count() == 0 &&
-                        conflicts.OrphanConflicts.GetByFile(file).Count() == 0 &&
-                        conflicts.OverwrittenConflicts.GetByFile(file).Count() == 0 &&
-                        conflicts.ResolvedConflicts.GetByFile(file).Count() == 0)
+                    if (conflicts.CustomConflicts.ExistsByFile(file) &&
+                        conflicts.OrphanConflicts.ExistsByFile(file) &&
+                        conflicts.OverwrittenConflicts.ExistsByFile(file) &&
+                        conflicts.ResolvedConflicts.ExistsByFile(file))
                     {
                         await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                         {

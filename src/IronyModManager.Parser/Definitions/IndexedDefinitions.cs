@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-26-2020
+// Last Modified On : 08-07-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -30,6 +30,11 @@ namespace IronyModManager.Parser.Definitions
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
+
+        /// <summary>
+        /// All file keys
+        /// </summary>
+        private HashSet<string> allFileKeys;
 
         /// <summary>
         /// The hierarchical definitions
@@ -90,6 +95,7 @@ namespace IronyModManager.Parser.Definitions
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
+            allFileKeys = new HashSet<string>();
             childHierarchicalDefinitions = new ConcurrentDictionary<string, ConcurrentIndexedList<IHierarchicalDefinitions>>();
             mainHierarchalDefinitions = new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name));
         }
@@ -108,6 +114,14 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(fileKeys, definition.FileCI);
             MapKeys(typeKeys, definition.Type);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
+            MapKeys(allFileKeys, definition.FileCI);
+            if (definition.OverwrittenFileNames?.Count > 0)
+            {
+                foreach (var item in definition.OverwrittenFileNames)
+                {
+                    MapKeys(allFileKeys, item.ToLowerInvariant());
+                }
+            }
             if (useHierarchalMap && !forceIgnoreHierarchical)
             {
                 MapHierarchicalDefinition(definition);
@@ -133,11 +147,23 @@ namespace IronyModManager.Parser.Definitions
             typeAndIdKeys = null;
             typeKeys.Clear();
             typeKeys = null;
+            allFileKeys.Clear();
+            allFileKeys = null;
             childHierarchicalDefinitions.Clear();
             childHierarchicalDefinitions = null;
             mainHierarchalDefinitions.Clear();
             mainHierarchalDefinitions = null;
             trie = null;
+        }
+
+        /// <summary>
+        /// Existses the by file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool ExistsByFile(string file)
+        {
+            return allFileKeys.Contains(file.ToLowerInvariant());
         }
 
         /// <summary>
