@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 08-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -752,6 +752,22 @@ namespace IronyModManager.IO.Mods
             List<bool> results = new List<bool>();
             var validDefinitions = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
             var retry = new RetryStrategy();
+            async Task evalZeroByteFiles(IDefinition definition, IDefinitionInfoProvider infoProvider, string fileName)
+            {
+                if (mode == FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles)
+                {
+                    var emptyFileNames = definition.OverwrittenFileNames.Where(p => p != fileName);
+                    foreach (var emptyFile in emptyFileNames)
+                    {
+                        var emptyPath = Path.Combine(patchRootPath, emptyFile);
+                        await retry.RetryActionAsync(async () =>
+                        {
+                            await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(definition));
+                            return true;
+                        });
+                    }
+                }
+            }
 
             foreach (var item in validDefinitions)
             {
@@ -767,6 +783,8 @@ namespace IronyModManager.IO.Mods
                     var outPath = Path.Combine(patchRootPath, fileName);
                     if (checkIfFileExists && File.Exists(outPath))
                     {
+                        // Zero byte files could still not be present
+                        await evalZeroByteFiles(item, infoProvider, fileName);
                         continue;
                     }
                     if (!Directory.Exists(Path.GetDirectoryName(outPath)))
@@ -780,19 +798,7 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
                         return true;
                     }));
-                    if (mode == FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles)
-                    {
-                        var emptyFileNames = item.OverwrittenFileNames.Where(p => p != fileName);
-                        foreach (var emptyFile in emptyFileNames)
-                        {
-                            var emptyPath = Path.Combine(patchRootPath, emptyFile);
-                            await retry.RetryActionAsync(async () =>
-                            {
-                                await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(item));
-                                return true;
-                            });
-                        }
-                    }
+                    await evalZeroByteFiles(item, infoProvider, fileName);
                     results.Add(true);
                 }
                 else
