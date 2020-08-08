@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-29-2020
+// Last Modified On : 08-08-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -41,7 +41,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <value>The fios paths.</value>
         public override IReadOnlyCollection<string> FIOSPaths => new List<string> { "component_sets", "component_templates", "event_chains", "global_ship_designs",
-            "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "star_classes", "static_modifiers", "strategic_resources", "events" };
+            "scripted_variables", "section_templates", "ship_behaviors", "special_projects", "star_classes", "static_modifiers", "strategic_resources", "events", "solar_system_initializers" };
 
         #endregion Properties
 
