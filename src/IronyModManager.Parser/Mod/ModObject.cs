@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -19,13 +19,26 @@ using IronyModManager.Shared;
 namespace IronyModManager.Parser.Mod
 {
     /// <summary>
-    /// Class ModObject.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.IModObject" />
+    /// Class ModObject. Implements the <see cref="IronyModManager.Parser.Common.Mod.IModObject" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.Common.Mod.IModObject" />
     public class ModObject : IModObject
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the replace path.
+        /// </summary>
+        /// <value>The replace path.</value>
+        [DescriptorProperty("replace_path")]
+        public string ReplacePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user dir.
+        /// </summary>
+        /// <value>The user dir.</value>
+        [DescriptorProperty("user_dir")]
+        public string UserDir { get; set; }
 
         /// <summary>
         /// Gets or sets the dependencies.
