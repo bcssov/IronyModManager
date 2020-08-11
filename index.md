@@ -4,7 +4,7 @@ Irony Mod Manager is a new mod manager for Paradox Games which at the moment sup
 * Latest stable version: [v1.3.48](https://github.com/bcssov/IronyModManager/releases/tag/v1.3.48).
 
 ### Important Notice about Paradox Launcher 2020.10
-This update broke custom launchers since it added play-styles (collections in Irony). A newer Irony update (1.4) will be compatible with it (once I can get the Paradox Launcher to update to 2020.10 version for me). 
+This update broke custom mod managers since it added play-styles (collections in Irony). A newer Irony update (1.4) will be compatible with it (once I can get the Paradox Launcher to update to 2020.10 version for me to analyze the structure). 
 
 For the time being you can do the following:
 Open the options popup in Irony and point Irony towards the Stellaris executable and use Launch Game option from within Irony to launch the game. If you ever re-open the paradox launcher **remember** to **reapply** the collection since it will overwrite settings that Irony has set.
