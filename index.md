@@ -8,7 +8,11 @@ This update broke custom mod managers since it added play-styles (collections in
 
 For the time being you can do the following:
 
-Open the options popup in Irony and point Irony towards the Stellaris executable and use Launch Game option from within Irony to launch the game. If you ever re-open the paradox launcher **remember** to **reapply** the collection since it will overwrite settings that Irony has set.
+- Open the options popup in Irony 
+- Point Irony towards the Stellaris executable 
+- Use Launch Game option from within Irony to launch the game. 
+
+NOTE: If you ever re-open the paradox launcher **remember** to **reapply** the collection in Irony since it will overwrite settings that Irony has set.
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
