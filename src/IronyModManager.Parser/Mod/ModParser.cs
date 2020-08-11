@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -72,6 +72,14 @@ namespace IronyModManager.Parser.Mod
                     var key = textParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
                     switch (key)
                     {
+                        case "replace_path":
+                            obj.ReplacePath = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
+                            break;
+
+                        case "user_dir":
+                            obj.UserDir = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
+                            break;
+
                         case "path":
                         case "archive":
                             obj.FileName = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
