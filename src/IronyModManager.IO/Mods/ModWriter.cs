@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -18,7 +18,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models;
+using IronyModManager.IO.Mods.Models.Paradox.Common;
+using IronyModManager.IO.Mods.Models.Paradox.v1;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
@@ -55,6 +56,11 @@ namespace IronyModManager.IO.Mods
         /// The ready to play
         /// </summary>
         private const string Ready_to_play = "ready_to_play";
+
+        /// <summary>
+        /// The SQL database path
+        /// </summary>
+        private const string Sql_db_path = "launcher-v2.sqlite";
 
         /// <summary>
         /// The write lock

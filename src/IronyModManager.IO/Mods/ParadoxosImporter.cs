@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models;
+using IronyModManager.IO.Mods.Models.Paradoxos;
 using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Mods

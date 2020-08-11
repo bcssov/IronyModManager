@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="GameData.cs" company="Mario">
 //     Mario
@@ -13,18 +13,17 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods.Models
+namespace IronyModManager.IO.Mods.Models.Paradox.v1
 {
     /// <summary>
     /// Class GameData.
-    /// Implements the <see cref="IronyModManager.IO.Models.IPdxFormat" />
-    /// Implements the <see cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
+    /// Implements the <see cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     /// </summary>
-    /// <seealso cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
-    /// <seealso cref="IronyModManager.IO.Models.IPdxFormat" />
+    /// <seealso cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class GameData : IPdxFormat
     {

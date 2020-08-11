@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-01-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="IPdxFormat.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.IO.Mods.Models
+namespace IronyModManager.IO.Mods.Models.Paradox.Common
 {
     /// <summary>
     /// Interface IPdxMod

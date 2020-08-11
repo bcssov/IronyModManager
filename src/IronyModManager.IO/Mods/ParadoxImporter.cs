@@ -4,7 +4,7 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ParadoxImporter.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models;
+using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 

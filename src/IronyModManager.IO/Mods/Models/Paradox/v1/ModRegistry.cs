@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModRegistry.cs" company="Mario">
 //     Mario
@@ -13,10 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods.Models
+namespace IronyModManager.IO.Mods.Models.Paradox.v1
 {
     /// <summary>
     /// Class ModRegistry.
@@ -218,11 +219,11 @@ namespace IronyModManager.IO.Mods.Models
 
     /// <summary>
     /// Class ModRegistryCollection.
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
-    /// Implements the <see cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
+    /// Implements the <see cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
-    /// <seealso cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
+    /// <seealso cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class ModRegistryCollection : Dictionary<string, ModRegistry>, IPdxFormat
     {
