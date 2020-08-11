@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using SharpCompress.Archives;

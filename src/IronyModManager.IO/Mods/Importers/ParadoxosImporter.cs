@@ -22,7 +22,7 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Models.Paradoxos;
 using IronyModManager.Shared;
 
-namespace IronyModManager.IO.Mods
+namespace IronyModManager.IO.Mods.Importers
 {
     /// <summary>
     /// Class ParadoxosImporter.

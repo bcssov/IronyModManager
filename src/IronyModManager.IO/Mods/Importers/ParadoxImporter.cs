@@ -20,7 +20,7 @@ using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods
+namespace IronyModManager.IO.Mods.Importers
 {
     /// <summary>
     /// Class ParadoxImporter.
