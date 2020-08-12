@@ -1,28 +1,30 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO
 // Author           : Mario
-// Created          : 03-14-2020
+// Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
-// <copyright file="ModRegistry.cs" company="Mario">
+// <copyright file="Mods.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Shared;
-using Newtonsoft.Json;
+using IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers;
+using RepoDb.Attributes;
 
-namespace IronyModManager.IO.Mods.Models
+namespace IronyModManager.IO.Mods.Models.Paradox.v2
 {
     /// <summary>
-    /// Class ModRegistry.
+    /// Class Mods.
+    /// Implements the <see cref="IronyModManager.IO.Mods.Models.Paradox.IPdxMod" />
     /// </summary>
-    [ExcludeFromCoverage("Skipping testing IO logic.")]
-    internal class ModRegistry
+    /// <seealso cref="IronyModManager.IO.Mods.Models.Paradox.IPdxMod" />
+    [Map("mods")]
+    internal class Mods : IPdxMod
     {
         #region Fields
 
@@ -41,9 +43,9 @@ namespace IronyModManager.IO.Mods.Models
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModRegistry" /> class.
+        /// Initializes a new instance of the <see cref="Mods" /> class.
         /// </summary>
-        public ModRegistry()
+        public Mods()
         {
             Tags = new List<string>();
         }
@@ -53,45 +55,52 @@ namespace IronyModManager.IO.Mods.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets the arch.
+        /// </summary>
+        /// <value>The arch.</value>
+        [Map("arch")]
+        public string Arch { get; set; }
+
+        /// <summary>
         /// Gets or sets the archive path.
         /// </summary>
         /// <value>The archive path.</value>
-        [JsonProperty("archivePath")]
+        [Map("archivePath")]
         public string ArchivePath { get; set; }
 
         /// <summary>
         /// Gets or sets the cause.
         /// </summary>
         /// <value>The cause.</value>
-        [JsonProperty("cause")]
+        [Map("cause")]
         public string Cause { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        [JsonProperty("description")]
+        [Map("description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the dir path.
         /// </summary>
         /// <value>The dir path.</value>
-        [JsonProperty("dirPath")]
+        [Map("dirPath")]
         public string DirPath { get; set; }
 
         /// <summary>
         /// Gets or sets the display name.
         /// </summary>
         /// <value>The display name.</value>
-        [JsonProperty("displayName")]
+        [Map("displayName")]
         public string DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets the game registry identifier.
         /// </summary>
         /// <value>The game registry identifier.</value>
-        [JsonProperty("gameRegistryId")]
+        [Map("gameRegistryId")]
         public string GameRegistryId
         {
             get
@@ -112,49 +121,63 @@ namespace IronyModManager.IO.Mods.Models
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        [JsonProperty("id")]
-        public string Id { get; set; }
+        [Map("id"), Primary, PropertyHandler(typeof(GuidHandler))] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
+        public Guid id { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is new.
+        /// </summary>
+        /// <value><c>null</c> if [is new] contains no value, <c>true</c> if [is new]; otherwise, <c>false</c>.</value>
+        [Map("isNew")]
+        public bool? IsNew { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [JsonProperty("name")]
+        [Map("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the os.
+        /// </summary>
+        /// <value>The os.</value>
+        [Map("os")]
+        public string OS { get; set; }
 
         /// <summary>
         /// Gets or sets the PDX identifier.
         /// </summary>
         /// <value>The PDX identifier.</value>
-        [JsonProperty("pdxId")]
+        [Map("pdxId")]
         public string PdxId { get; set; }
 
         /// <summary>
         /// Gets or sets the repository path.
         /// </summary>
         /// <value>The repository path.</value>
-        [JsonProperty("repositoryPath")]
+        [Map("repositoryPath")]
         public string RepositoryPath { get; set; }
 
         /// <summary>
         /// Gets or sets the required version.
         /// </summary>
         /// <value>The required version.</value>
-        [JsonProperty("requiredVersion")]
+        [Map("requiredVersion")]
         public string RequiredVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
         /// <value>The source.</value>
-        [JsonProperty("source")]
+        [Map("source")]
         public string Source { get; set; }
 
         /// <summary>
         /// Gets or sets the status.
         /// </summary>
         /// <value>The status.</value>
-        [JsonProperty("status")]
+        [Map("status")]
         public string Status
         {
             get
@@ -175,56 +198,45 @@ namespace IronyModManager.IO.Mods.Models
         /// Gets or sets the steam identifier.
         /// </summary>
         /// <value>The steam identifier.</value>
-        [JsonProperty("steamId")]
+        [Map("steamId")]
         public string SteamId { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
-        [JsonProperty("tags")]
+        [Map("tags")]
+        [PropertyHandler(typeof(JsonHandler))]
         public List<string> Tags { get; set; }
 
         /// <summary>
         /// Gets or sets the thumbnail path.
         /// </summary>
         /// <value>The thumbnail path.</value>
-        [JsonProperty("thumbnailPath")]
+        [Map("thumbnailUrl")]
         public string ThumbnailPath { get; set; }
 
         /// <summary>
         /// Gets or sets the thumbnail URL.
         /// </summary>
         /// <value>The thumbnail URL.</value>
-        [JsonProperty("thumbnailUrl")]
+        [Map("thumbnailUrl")]
         public string ThumbnailUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the time updated.
         /// </summary>
         /// <value>The time updated.</value>
-        [JsonProperty("timeUpdated")]
-        public int TimeUpdated { get; set; }
+        [Map("timeUpdated")]
+        public long? TimeUpdated { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
         /// <value>The version.</value>
-        [JsonProperty("version")]
+        [Map("version")]
         public string Version { get; set; }
 
         #endregion Properties
-    }
-
-    /// <summary>
-    /// Class ModRegistryCollection.
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
-    /// Implements the <see cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
-    /// </summary>
-    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.ModRegistry}" />
-    /// <seealso cref="IronyModManager.IO.Mods.Models.IPdxFormat" />
-    [ExcludeFromCoverage("Skipping testing IO logic.")]
-    internal class ModRegistryCollection : Dictionary<string, ModRegistry>, IPdxFormat
-    {
     }
 }

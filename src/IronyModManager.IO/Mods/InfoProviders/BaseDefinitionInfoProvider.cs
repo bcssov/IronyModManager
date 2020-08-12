@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         public virtual Encoding GetEncoding(IDefinition definition)
         {
             EnsureValidType(definition);
-            if (!definition.ParentDirectory.StartsWith(Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+            if (!definition.ParentDirectory.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
             {
                 return new UTF8Encoding(false);
             }
@@ -106,16 +106,16 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 proposedFileName = Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
                 return EnsureRuleEnforced(definition, proposedFileName, true);
             }
-            else if (definition.ParentDirectory.StartsWith(Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+            else if (definition.ParentDirectory.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
             {
-                if (definition.ParentDirectory.Contains(Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
+                if (definition.ParentDirectory.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
                 {
                     proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
                     return EnsureRuleEnforced(definition, proposedFileName, false);
                 }
                 else
                 {
-                    return Path.Combine(definition.ParentDirectory, Constants.LocalizationReplaceDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                    return Path.Combine(definition.ParentDirectory, Shared.Constants.LocalizationReplaceDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
                 }
             }
             proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");

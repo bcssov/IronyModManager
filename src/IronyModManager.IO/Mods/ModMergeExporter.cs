@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -125,11 +125,11 @@ namespace IronyModManager.IO.Mods
                 var outPath = Path.Combine(exportPath, def.File);
                 var stream = reader.GetStream(def.ModPath, def.File);
                 // If image and no stream try switching extension
-                if (Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+                if (Shared.Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
                 {
                     var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
                     var file = string.Join(".", segments.Take(segments.Count() - 1));
-                    foreach (var item in Constants.ImageExtensions)
+                    foreach (var item in Shared.Constants.ImageExtensions)
                     {
                         stream = reader.GetStream(def.ModPath, file + item);
                         if (stream != null)

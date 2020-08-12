@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="Paradoxos.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods.Models
+namespace IronyModManager.IO.Mods.Models.Paradoxos
 {
     /// <summary>
     /// Class ParadoxosExportedList.

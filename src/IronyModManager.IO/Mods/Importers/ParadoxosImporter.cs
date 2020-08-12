@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-10-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -19,10 +19,10 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models;
+using IronyModManager.IO.Mods.Models.Paradoxos;
 using IronyModManager.Shared;
 
-namespace IronyModManager.IO.Mods
+namespace IronyModManager.IO.Mods.Importers
 {
     /// <summary>
     /// Class ParadoxosImporter.
@@ -121,11 +121,11 @@ namespace IronyModManager.IO.Mods
                 var content = await File.ReadAllTextAsync(parameters.File);
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    if (parameters.File.EndsWith(Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
+                    if (parameters.File.EndsWith(Shared.Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         return parseXML(content);
                     }
-                    else if (parameters.File.EndsWith(Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
+                    else if (parameters.File.EndsWith(Shared.Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         return parseJson(content);
                     }
