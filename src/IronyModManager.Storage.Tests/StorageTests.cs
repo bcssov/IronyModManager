@@ -239,7 +239,17 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame"});
+            var game = new GameType()
+            {
+                Name = key,
+                SteamAppId = 1,
+                ChecksumFolders = new List<string>() { "test" },
+                GameFolders = new List<string>() { "testgame" },
+                LogLocation = "test.log",
+                UserDirectory = "user_directory",
+                WorkshopDirectory = "workshop1"
+            };
+            storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
@@ -416,7 +426,17 @@ namespace IronyModManager.Storage.Tests
                 return dbMock.Games.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame" });
+            var game = new GameType()
+            {
+                Name = key,
+                SteamAppId = 1,
+                ChecksumFolders = new List<string>() { "test" },
+                GameFolders = new List<string>() { "testgame" },
+                LogLocation = "test.log",
+                UserDirectory = "user_directory",
+                WorkshopDirectory = "workshop1"
+            };
+            storage.RegisterGame(game);
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();

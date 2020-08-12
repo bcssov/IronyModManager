@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -36,12 +36,24 @@ namespace IronyModManager.Services.Registrations
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterGame(Shared.Constants.GamesTypes.Stellaris.Name,
-                Shared.Constants.GamesTypes.Stellaris.SteamAppId,
-                Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name),
-                WorkshopDirectory.GetDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId),
-                Path.Combine(Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name), Shared.Constants.GamesTypes.Stellaris.LogLocation),
-                Shared.Constants.GamesTypes.Stellaris.ChecksumFolders, Shared.Constants.GamesTypes.Stellaris.GameFolders);
+            storage.RegisterGame(GetStellaris());
+        }
+
+        /// <summary>
+        /// Gets the stellaris.
+        /// </summary>
+        /// <returns>IGameType.</returns>
+        private IGameType GetStellaris()
+        {
+            var stellaris = DIResolver.Get<IGameType>();
+            stellaris.ChecksumFolders = Shared.Constants.GamesTypes.Stellaris.ChecksumFolders;
+            stellaris.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
+            stellaris.LogLocation = Path.Combine(Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name), Shared.Constants.GamesTypes.Stellaris.LogLocation);
+            stellaris.Name = Shared.Constants.GamesTypes.Stellaris.Name;
+            stellaris.SteamAppId = Shared.Constants.GamesTypes.Stellaris.SteamAppId;
+            stellaris.UserDirectory = Path.Combine(UserDirectory.GetDirectory(), Shared.Constants.GamesTypes.Stellaris.Name);
+            stellaris.WorkshopDirectory = WorkshopDirectory.GetDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId);
+            return stellaris;
         }
 
         #endregion Methods
