@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -507,6 +507,7 @@ namespace IronyModManager.ViewModels.Controls
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync();
                         }
+                        await ApplyCollectionAsync();
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         await appAction.OpenAsync(cmd);
                         await appAction.ExitAppAsync();
