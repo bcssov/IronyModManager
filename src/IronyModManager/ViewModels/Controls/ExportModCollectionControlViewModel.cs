@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -135,6 +135,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other paradox launcher.
+        /// </summary>
+        /// <value>The import other paradox launcher.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.ParadoxLauncher)]
+        public virtual string ImportOtherParadoxLauncher { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox launcher command.
+        /// </summary>
+        /// <value>The import other paradox launcher command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxLauncherCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other paradoxos.
         /// </summary>
         /// <value>The import other paradoxos.</value>
@@ -193,6 +206,11 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             ImportOtherParadoxCommand = ReactiveCommand.Create(() =>
+            {
+                return new CommandResult<string>(string.Empty, CommandState.Success);
+            }).DisposeWith(disposables);
+
+            ImportOtherParadoxLauncherCommand = ReactiveCommand.Create(() =>
             {
                 return new CommandResult<string>(string.Empty, CommandState.Success);
             }).DisposeWith(disposables);
