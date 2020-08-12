@@ -103,8 +103,9 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Importieren Paradoxos",
-            "Paradox": "Aus dem Spiel importieren"
+            "Paradoxos": "Import aus Paradoxos",
+            "Paradox": "Aus dem Spiel importieren",
+            "ParadoxLauncher": "Import aus Paradox Launcher"
         },
         "MergeCollection": {
             "MergedCollectionSuffix": "(Zusammengeführt)",

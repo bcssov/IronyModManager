@@ -242,7 +242,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <summary>
             /// The paradox
             /// </summary>
-            Paradox
+            Paradox,
+
+            /// <summary>
+            /// The paradox launcher
+            /// </summary>
+            ParadoxLauncher
         }
 
         #endregion Enums
@@ -789,6 +794,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
                 ImportProviderType.Paradox => await modCollectionService.ImportParadoxAsync(),
+                ImportProviderType.ParadoxLauncher => await modCollectionService.ImportParadoxLauncherAsync(),
                 _ => await modCollectionService.GetImportedCollectionDetailsAsync(path),
             };
             if (importData == null)
@@ -812,13 +818,12 @@ namespace IronyModManager.ViewModels.Controls
                 IModCollection result;
                 switch (type)
                 {
-                    case ImportProviderType.Paradoxos:
-                    case ImportProviderType.Paradox:
-                        result = await importInstance(importData);
+                    case ImportProviderType.Default:
+                        result = await importDefault();
                         break;
 
                     default:
-                        result = await importDefault();
+                        result = await importInstance(importData);
                         break;
                 }
                 if (result != null)
@@ -979,7 +984,8 @@ namespace IronyModManager.ViewModels.Controls
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
-                    ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)))
+                    ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
+                    ExportCollection.ImportOtherParadoxLauncherCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.ParadoxLauncher)))
                 .Subscribe(s =>
                 {
                     if (s.Item2.State == CommandState.Success)

@@ -103,8 +103,9 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Uvezi Paradoxos",
-            "Paradox": "Uvezi iz igre"
+            "Paradoxos": "Uvezi iz Paradoxos",
+            "Paradox": "Uvezi iz igre",
+            "ParadoxLauncher": "Uvezi iz Paradox Launcher"
         },
         "MergeCollection": {
             "MergedCollectionSuffix": "(Spojeno)",
