@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -168,6 +168,15 @@ namespace IronyModManager.Shared
         /// </summary>
         public static class GamesTypes
         {
+            #region Fields
+
+            /// <summary>
+            /// The launcher settings file name
+            /// </summary>
+            public static string LauncherSettingsFileName = "launcher-settings.json";
+
+            #endregion Fields
+
             #region Classes
 
             /// <summary>

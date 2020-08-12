@@ -4,9 +4,9 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
-// <copyright file="WorkshopDirectory.cs" company="Mario">
+// <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -21,12 +21,27 @@ using Microsoft.Win32;
 namespace IronyModManager.Services.Registrations
 {
     /// <summary>
-    /// Class WorkshopDirectory.
+    /// Class SteamDirectory.
     /// </summary>
     [ExcludeFromCoverage("Helper setup static class.")]
-    public static class WorkshopDirectory
+    public static class SteamDirectory
     {
         #region Fields
+
+        /// <summary>
+        /// The acf format
+        /// </summary>
+        private const string ACFFormat = "appmanifest_{0}.acf";
+
+        /// <summary>
+        /// The install dir identifier
+        /// </summary>
+        private const string InstallDirId = "installdir";
+
+        /// <summary>
+        /// The steam apps directory
+        /// </summary>
+        private const string SteamAppsDirectory = "steamapps";
 
         /// <summary>
         /// The steam registry path
@@ -44,6 +59,11 @@ namespace IronyModManager.Services.Registrations
         private const string SteamVDFBaseInstallFolderId = "BaseInstallFolder_";
 
         /// <summary>
+        /// The steam common directory
+        /// </summary>
+        private static readonly string SteamCommonDirectory = PathHelper.MergePaths(SteamAppsDirectory, "common");
+
+        /// <summary>
         /// The steam configuration VDF
         /// </summary>
         private static readonly string SteamConfigVDF = PathHelper.MergePaths("config", "config.vdf");
@@ -51,18 +71,84 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The steam workshop directory
         /// </summary>
-        private static readonly string SteamWorkshopDirectory = PathHelper.MergePaths("steamapps", "workshop", "content");
+        private static readonly string SteamWorkshopDirectory = PathHelper.MergePaths(SteamAppsDirectory, "workshop", "content");
 
         #endregion Fields
 
         #region Methods
 
         /// <summary>
-        /// Gets the directory.
+        /// Gets the game directory.
         /// </summary>
         /// <param name="appId">The application identifier.</param>
         /// <returns>System.String.</returns>
-        public static string GetDirectory(int appId)
+        public static string GetGameDirectory(int appId)
+        {
+            string findInstallDirectory(string path)
+            {
+                var lines = File.ReadAllLines(path);
+                foreach (var item in lines)
+                {
+                    if (item.Contains(InstallDirId))
+                    {
+                        return item.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty);
+                    }
+                }
+                return string.Empty;
+            }
+            var steamInstallDirectory = GetSteamRootPath();
+            if (Directory.Exists(steamInstallDirectory))
+            {
+                var acfFile = string.Format(ACFFormat, appId);
+                if (File.Exists(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile)))
+                {
+                    var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
+                    if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, SteamCommonDirectory, path)))
+                    {
+                        return Path.Combine(steamInstallDirectory, SteamCommonDirectory, path);
+                    }
+                }
+                var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
+                if (File.Exists(vdfPath))
+                {
+                    static string CleanPath(string path)
+                    {
+                        path = ReplaceMultipleCharacters(path, '\\');
+                        path = ReplaceMultipleCharacters(path, '/');
+                        return path;
+                    }
+                    static string ReplaceMultipleCharacters(string text, char delimiter)
+                    {
+                        return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                    // I know there's a vdf parser out there but I see no need to add another dependency to look for a simple string
+                    var lines = File.ReadAllLines(vdfPath);
+                    foreach (var line in lines)
+                    {
+                        if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var directory = CleanPath(line.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty));
+                            if (File.Exists(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile)))
+                            {
+                                var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
+                                if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, SteamCommonDirectory, path)))
+                                {
+                                    return Path.Combine(steamInstallDirectory, SteamCommonDirectory, path);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the workshop directory.
+        /// </summary>
+        /// <param name="appId">The application identifier.</param>
+        /// <returns>System.String.</returns>
+        public static string GetWorkshopDirectory(int appId)
         {
             var steamInstallDirectory = GetSteamRootPath();
             if (Directory.Exists(steamInstallDirectory))

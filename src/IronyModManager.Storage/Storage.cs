@@ -184,6 +184,9 @@ namespace IronyModManager.Storage
                 game.LogLocation = gameType.LogLocation;
                 game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
                 game.GameFolders = gameType.GameFolders ?? new List<string>();
+                game.BaseGameDirectory = gameType.BaseGameDirectory ?? string.Empty;
+                game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
+                game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 Database.Games.Add(game);
                 return true;
             }

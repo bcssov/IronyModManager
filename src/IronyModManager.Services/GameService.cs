@@ -205,7 +205,7 @@ namespace IronyModManager.Services
             game.Name = gameType.Name;
             game.IsSelected = selectedGame == gameType.Name;
             game.UserDirectory = gameType.UserDirectory;
-            game.SteamAppId = gameType.SteamAppId;
+            game.SteamAppId = gameType.SteamAppId;            
             game.WorkshopDirectory = gameType.WorkshopDirectory;
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
