@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -239,7 +239,20 @@ namespace IronyModManager.Storage.Tests
             var dbMock = GetDbMock();
             var key = "test2";
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame"});
+            var game = new GameType()
+            {
+                Name = key,
+                SteamAppId = 1,
+                ChecksumFolders = new List<string>() { "test" },
+                GameFolders = new List<string>() { "testgame" },
+                LogLocation = "test.log",
+                UserDirectory = "user_directory",
+                WorkshopDirectory = "workshop1",
+                BaseGameDirectory = "base",
+                ExecutablePath = "exe",
+                ExecutableArgs = "args"
+            };
+            storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
@@ -248,6 +261,9 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
         }
 
         /// <summary>
@@ -416,7 +432,20 @@ namespace IronyModManager.Storage.Tests
                 return dbMock.Games.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterGame(key, 1, "user_directory", "workshop1", "test.log", new List<string>() { "test" }, new List<string>() { "testgame" });
+            var game = new GameType()
+            {
+                Name = key,
+                SteamAppId = 1,
+                ChecksumFolders = new List<string>() { "test" },
+                GameFolders = new List<string>() { "testgame" },
+                LogLocation = "test.log",
+                UserDirectory = "user_directory",
+                WorkshopDirectory = "workshop1",
+                BaseGameDirectory = "base",
+                ExecutablePath = "exe",
+                ExecutableArgs = "args"
+            };
+            storage.RegisterGame(game);
             var result = storage.GetGames();
             result.Count().Should().Be(2);
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
@@ -426,6 +455,9 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
+            result.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            result.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
+            result.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
         }
 
         /// <summary>

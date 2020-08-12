@@ -117,13 +117,23 @@
     },
     "Mod_Actions": {
         "Apply": "Primjeni",
-        "LaunchGame": "Pokreni igru",
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "Conflict": "Rješavanje sukoba",
         "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
-        "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
+        "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Name": "Pokreni igru",
+            "LaunchError": {
+                "Title": "Nije moguće pokrenuti igru",
+                "Message": "Pokretanje igre nije uspjelo."
+            },
+            "NotSet": {
+                "Title": "Igra nije postavljena",
+                "Message": "Igra nije automatski otkrivena, koristite prozor opcija da bi ručno postavili izvršnu datoteku igre."
+            }
+        }
     },
     "Conflict_Solver": {
         "Back": "Nazad",

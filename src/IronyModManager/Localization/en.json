@@ -117,13 +117,23 @@
     },
     "Mod_Actions": {
         "Apply": "Apply",
-        "LaunchGame": "Launch Game",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
-        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
+        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Name": "Launch Game",
+            "LaunchError": {
+                "Title": "Cannot Launch Game",
+                "Message": "Failed to launch the game."
+            },
+            "NotSet": {
+                "Title": "Game Not Set",
+                "Message": "Game was not automatically detected, please use the options window to manually set the executable path."
+            }
+        }
     },
     "Conflict_Solver": {
         "Back": "Back",

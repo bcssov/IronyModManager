@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -63,7 +63,15 @@ namespace IronyModManager.Services.Tests
                     Name = "game 2",
                     UserDirectory = "user2",
                     SteamAppId = 2,
-                    WorkshopDirectory = "workshop2"
+                    WorkshopDirectory = "workshop2",
+                    ExecutableArgs = "args",
+                    ExecutablePath = "exePath.exe"
+                },
+                new GameType()
+                {
+                    Name = "game 3",
+                    UserDirectory = "user2",
+                    SteamAppId = 3
                 }
             };
             storageProvider.Setup(p => p.GetGames()).Returns(games);
@@ -91,8 +99,8 @@ namespace IronyModManager.Services.Tests
 
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
-            result.Count().Should().Be(2);
-            result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(2);
+            result.Count().Should().Be(3);
+            result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(3);
         }
 
         /// <summary>
@@ -369,9 +377,11 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetLaunchArguments(game);
-            args.Should().Be("steam://run/1");
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("steam://run/1");
+            args.LaunchArguments.Should().BeNullOrWhiteSpace();
         }
 
         /// <summary>
@@ -379,7 +389,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_steam_launch_command()
-        {
+        {            
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -391,9 +401,11 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetLaunchArguments(game);
-            args.Should().Be("steam://run/1//test");
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("steam://run/1//test");
+            args.LaunchArguments.Should().BeNullOrWhiteSpace();
         }
 
         /// <summary>
@@ -401,7 +413,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_native_launch_command_only()
-        {
+        {            
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -412,9 +424,11 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetLaunchArguments(game);
-            args.Should().Be("test.exe");
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("test.exe");
+            args.LaunchArguments.Should().BeNullOrWhiteSpace();
         }
 
         /// <summary>
@@ -422,7 +436,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_native_launch_command()
-        {
+        {            
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -434,9 +448,34 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetLaunchArguments(game);
-            args.Should().Be("\"test.exe\" \"args\"");
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("test.exe");
+            args.LaunchArguments.Should().Be("args");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_default_steam_location.
+        /// </summary>
+        [Fact]
+        public void Should_return_default_steam_location()
+        {            
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                WorkshopDirectory = "test",
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultGameSettings(game);
+            args.ExecutableLocation.Should().Be("steam://run/1");
         }
 
         /// <summary>
@@ -444,21 +483,21 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_default_exe_location()
-        {
+        {        
             var game = new Game()
             {
-                SteamAppId = 1,
+                SteamAppId = 2,
                 IsSelected = true,
-                Type = "game 1",
-                WorkshopDirectory = "test",
+                Type = "game 2",
                 LaunchArguments = "args",
                 ExecutableLocation = "test.exe"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetDefaultExecutableLocation(game);
-            args.Should().Be("steam://run/1");
+            var args = service.GetDefaultGameSettings(game);
+            args.ExecutableLocation.Should().Be("exePath.exe");
         }
 
         /// <summary>
@@ -466,20 +505,55 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_empty_default_exe_location()
-        {
+        {            
             var game = new Game()
             {
-                SteamAppId = 1,
+                SteamAppId = 3,
                 IsSelected = true,
-                Type = "game 1",         
+                Type = "game 3",
                 LaunchArguments = "args",
                 ExecutableLocation = "test.exe"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetDefaultExecutableLocation(game);
-            args.Should().BeNullOrEmpty();
+            var args = service.GetDefaultGameSettings(game);
+            args.ExecutableLocation.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_be_steam_launch_path.
+        /// </summary>
+        [Fact]
+        public void Should_be_steam_launch_path()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "steam://run/1"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamLaunchPath(gameSettings);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_be_steam_launch_path.
+        /// </summary>
+        [Fact]
+        public void Should_not_be_steam_launch_path()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamLaunchPath(gameSettings);
+            result.Should().BeFalse();
         }
     }
 }

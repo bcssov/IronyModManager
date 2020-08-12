@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -165,31 +165,28 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Registers the game.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="appId">The application identifier.</param>
-        /// <param name="userDirectory">The user directory.</param>
-        /// <param name="workshopDirectory">The workshop directory.</param>
-        /// <param name="logLocation">The log location.</param>
-        /// <param name="checkSumFolders">The check sum folders.</param>
-        /// <param name="gameFolders">The game folders.</param>
+        /// <param name="gameType">Type of the game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterGame(string name, int appId, string userDirectory, string workshopDirectory, string logLocation, IEnumerable<string> checkSumFolders, IEnumerable<string> gameFolders)
+        public virtual bool RegisterGame(IGameType gameType)
         {
             lock (dbLock)
             {
-                if (Database.Games.Any(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                if (gameType == null || Database.Games.Any(s => s.Name.Equals(gameType.Name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidOperationException($"{name} game is already registered.");
+                    throw new InvalidOperationException($"{gameType.Name} game is already registered or invalid registration.");
                 }
                 var game = DIResolver.Get<IGameType>();
-                game.Name = name;
-                game.UserDirectory = userDirectory ?? string.Empty;
-                game.SteamAppId = appId;
-                game.WorkshopDirectory = workshopDirectory ?? string.Empty;
-                game.LogLocation = logLocation;
-                game.ChecksumFolders = checkSumFolders ?? new List<string>();
-                game.GameFolders = gameFolders ?? new List<string>();
+                game.Name = gameType.Name;
+                game.UserDirectory = gameType.UserDirectory ?? string.Empty;
+                game.SteamAppId = gameType.SteamAppId;
+                game.WorkshopDirectory = gameType.WorkshopDirectory ?? string.Empty;
+                game.LogLocation = gameType.LogLocation;
+                game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
+                game.GameFolders = gameType.GameFolders ?? new List<string>();
+                game.BaseGameDirectory = gameType.BaseGameDirectory ?? string.Empty;
+                game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
+                game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 Database.Games.Add(game);
                 return true;
             }

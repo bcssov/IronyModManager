@@ -270,7 +270,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the launch game.
         /// </summary>
         /// <value>The launch game.</value>
-        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame)]
+        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame.Name)]
         public virtual string LaunchGame { get; protected set; }
 
         /// <summary>
@@ -499,8 +499,8 @@ namespace IronyModManager.ViewModels.Controls
                 var game = gameService.GetSelected();
                 if (game != null)
                 {
-                    var cmd = gameService.GetLaunchArguments(game);
-                    if (!string.IsNullOrWhiteSpace(cmd))
+                    var args = gameService.GetLaunchSettings(game);
+                    if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
                         if (game.RefreshDescriptors)
                         {
@@ -509,8 +509,35 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         await ApplyCollectionAsync();
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
-                        await appAction.OpenAsync(cmd);
-                        await appAction.ExitAppAsync();
+                        if (gameService.IsSteamLaunchPath(args))
+                        {
+                            if (await appAction.OpenAsync(args.ExecutableLocation))
+                            {
+                                await appAction.ExitAppAsync();
+                            }
+                            else
+                            {
+                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                            }
+                        }
+                        else
+                        {
+                            if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
+                            {
+                                await appAction.ExitAppAsync();
+                            }
+                            else
+                            {
+                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Title),
+                            localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Message), NotificationType.Warning, 10);
                     }
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);

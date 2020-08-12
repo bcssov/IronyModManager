@@ -815,17 +815,11 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (proceed)
             {
-                IModCollection result;
-                switch (type)
+                var result = type switch
                 {
-                    case ImportProviderType.Default:
-                        result = await importDefault();
-                        break;
-
-                    default:
-                        result = await importInstance(importData);
-                        break;
-                }
+                    ImportProviderType.Default => await importDefault(),
+                    _ => await importInstance(importData),
+                };
                 if (result != null)
                 {
                     LoadModCollections();

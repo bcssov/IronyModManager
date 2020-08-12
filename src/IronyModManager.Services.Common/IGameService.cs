@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -33,24 +33,31 @@ namespace IronyModManager.Services.Common
         IEnumerable<IGame> Get();
 
         /// <summary>
-        /// Gets the default executable location.
+        /// Gets the default game settings.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>System.String.</returns>
-        string GetDefaultExecutableLocation(IGame game);
+        /// <returns>IGameSettings.</returns>
+        IGameSettings GetDefaultGameSettings(IGame game);
 
         /// <summary>
-        /// Gets the launch arguments.
+        /// Gets the launch settings.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>System.String.</returns>
-        string GetLaunchArguments(IGame game);
+        /// <returns>IGameSettings.</returns>
+        IGameSettings GetLaunchSettings(IGame game);
 
         /// <summary>
         /// Gets the selected.
         /// </summary>
         /// <returns>IGame.</returns>
         IGame GetSelected();
+
+        /// <summary>
+        /// Determines whether [is steam launch path] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam launch path] [the specified settings]; otherwise, <c>false</c>.</returns>
+        bool IsSteamLaunchPath(IGameSettings settings);
 
         /// <summary>
         /// Saves the specified game.

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -149,9 +149,6 @@ namespace IronyModManager
             var appTitle = Smart.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
                 new
                 {
-                    // I mean why not always include this? https://github.com/dotnet/Nerdbank.GitVersioning/issues/454
-                    // It's not like one might actually want to display the correct version, no?
-                    // Oh wait THERE ARE people using this.
                     AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
                 });
             desktop.MainWindow.Title = appTitle;
@@ -199,8 +196,11 @@ namespace IronyModManager
             if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
                 var path = Process.GetCurrentProcess().MainModule.FileName;
-                Process.Start(path);
-                ((IClassicDesktopStyleApplicationLifetime)Current.ApplicationLifetime).Shutdown();
+                var appAction = DIResolver.Get<IAppAction>();
+                if (await appAction.RunAsync(path))
+                {
+                    await appAction.ExitAppAsync();
+                }
             }
         }
     }
