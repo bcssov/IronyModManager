@@ -162,13 +162,29 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = "Mod_Actions.";
             public const string Apply = Prefix + "Apply";
-            public const string LaunchGame = Prefix + "LaunchGame";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
             public const string Conflict = Prefix + "Conflict";
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
             public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
             public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
             public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+            public static class LaunchGame
+            {
+                public const string Prefix = "Mod_Actions.LaunchGame.";
+                public const string Name = Prefix + "Name";
+                public static class LaunchError
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.LaunchError.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class NotSet
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.NotSet.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+            }
         }
         public static class Conflict_Solver
         {

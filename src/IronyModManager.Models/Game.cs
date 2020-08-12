@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -29,6 +29,12 @@ namespace IronyModManager.Models
     public class Game : BaseModel, IGame
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the base game directory.
+        /// </summary>
+        /// <value>The base game directory.</value>
+        public virtual string BaseGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.
@@ -84,18 +90,6 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The steam application identifier.</value>
         public virtual int SteamAppId { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether [steam install exists].
-        /// </summary>
-        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
-        public virtual bool SteamInstallExists
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(WorkshopDirectory);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the type.

@@ -84,7 +84,7 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         public static string GetGameDirectory(int appId)
         {
-            string findInstallDirectory(string path)
+            static string findInstallDirectory(string path)
             {
                 var lines = File.ReadAllLines(path);
                 foreach (var item in lines)

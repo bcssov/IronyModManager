@@ -117,13 +117,23 @@
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
-        "LaunchGame": "Spiel startet",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
-        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
+        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Name": "Spiel startet",
+            "LaunchError": {
+                "Title": "Spiel kann nicht gestartet werden",
+                "Message": "Das Spiel konnte nicht gestartet werden."
+            },
+            "NotSet": {
+                "Title": "Spiel nicht eingestellt",
+                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den ausführbaren Pfad manuell festzulegen."
+            }
+        }
     },
     "Conflict_Solver": {
         "Back": "Zurück",

@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -19,8 +19,8 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using IronyModManager.Shared;
 using Avalonia.Threading;
+using IronyModManager.Shared;
 
 namespace IronyModManager.Implementation.Actions
 {
@@ -37,15 +37,16 @@ namespace IronyModManager.Implementation.Actions
         /// <summary>
         /// copy as an asynchronous operation.
         /// </summary>
-        /// <param name="text">The URL.</param>
-        /// <returns>Task.</returns>
-        public async Task CopyAsync(string text)
+        /// <param name="text">The text.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> CopyAsync(string text)
         {
             await Application.Current.Clipboard.SetTextAsync(text);
+            return true;
         }
 
         /// <summary>
-        /// Exits the application asynchronous.
+        /// exit application as an asynchronous operation.
         /// </summary>
         /// <returns>Task.</returns>
         public async Task ExitAppAsync()
@@ -59,28 +60,64 @@ namespace IronyModManager.Implementation.Actions
 
         // Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
         /// <summary>
-        /// Opens the specified URL.
-        /// Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
+        /// Opens the asynchronous.
         /// </summary>
-        /// <param name="command">The URL.</param>
-        /// <returns>Task.</returns>
-        public Task OpenAsync(string command)
+        /// <param name="command">The command.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> OpenAsync(string command)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            try
             {
-                ShellExec($"xdg-open {command}");
-            }
-            else
-            {
-                using var process = Process.Start(new ProcessStartInfo
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? command : "open",
-                    Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"-e {command}" : "",
-                    CreateNoWindow = true,
-                    UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                });
+                    ShellExec($"xdg-open {command}");
+                }
+                else
+                {
+                    using var process = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? command : "open",
+                        Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ? $"-e {command}" : "",
+                        CreateNoWindow = true,
+                        UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    });
+                }
+                return Task.FromResult(true);
             }
-            return Task.FromResult(true);
+            catch
+            {
+                return Task.FromResult(false);
+            }
+        }
+
+        /// <summary>
+        /// Runs the asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> RunAsync(string path, string args = Shared.Constants.EmptyParam)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(args))
+                {
+                    Process.Start(path);
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = path,
+                        Arguments = args
+                    });
+                }
+                return Task.FromResult(true);
+            }
+            catch
+            {
+                return Task.FromResult(false);
+            }
         }
 
         /// <summary>
