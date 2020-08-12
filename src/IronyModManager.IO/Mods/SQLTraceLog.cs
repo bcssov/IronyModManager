@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="SQLTraceLog.cs" company="Mario">
 //     Mario
@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 using RepoDb;
 using RepoDb.Interfaces;
 
-namespace IronyModManager.IO.Mods.Exporter
+namespace IronyModManager.IO.Mods
 {
     /// <summary>
     /// Class SQLTraceLog.

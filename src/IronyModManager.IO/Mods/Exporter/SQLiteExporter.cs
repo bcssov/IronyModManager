@@ -157,7 +157,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 {
                     await con.DeleteAsync<Playsets>(p => p.Name == colName, transaction: transaction, trace: trace);
 
-                    if (activeCollections?.Count() > 0)
+                    if (activeCollections.Count() > 0)
                     {
                         foreach (var item in activeCollections)
                         {
@@ -173,7 +173,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 {
                     ironyCollection = (await con.QueryAsync<Playsets>(p => p.Name == colName, trace: trace)).FirstOrDefault();
 
-                    if (activeCollections?.Count() > 0)
+                    if (activeCollections.Count() > 0)
                     {
                         foreach (var item in activeCollections)
                         {
@@ -340,7 +340,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.playsetId == collection.id.ToString(), trace: trace);
                 int pos = 1000;
-                if (recreateCollection || collectionMods == null || collectionMods?.Count() == 0)
+                if (recreateCollection || collectionMods == null || collectionMods.Count() == 0)
                 {
                     if (recreateCollection)
                     {

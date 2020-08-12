@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -93,6 +93,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The previous validated mods
+        /// </summary>
+        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
+
+        /// <summary>
         /// The reorder queue
         /// </summary>
         private readonly ConcurrentBag<IMod> reorderQueue;
@@ -111,11 +116,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod selected changed
         /// </summary>
         private IDisposable modSelectedChanged;
-
-        /// <summary>
-        /// The previous validated mods
-        /// </summary>
-        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
 
         /// <summary>
         /// The refresh in progress
@@ -1352,9 +1352,13 @@ namespace IronyModManager.ViewModels.Controls
             SelectedMods = selectedMods;
             if (SelectedModCollection != null)
             {
-                var oldMods = new List<IMod>(SelectedMods);
+                var oldMods = new List<IMod>();
+                if (SelectedMods != null)
+                {
+                    oldMods.AddRange(SelectedMods);
+                }
                 previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
-                if (SelectedMods.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Except(SelectedMods).Any())))
+                if (SelectedMods?.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Except(SelectedMods).Any())))
                 {
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }
