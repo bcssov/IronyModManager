@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="JsonHandler.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Interfaces;
@@ -37,7 +36,6 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
         /// <returns>List&lt;System.String&gt;.</returns>
         public List<string> Get(string input, ClassProperty property)
         {
-            JsonConvert.DeserializeObject<List<string>>(input);
             if (string.IsNullOrWhiteSpace(input))
             {
                 return new List<string>();
