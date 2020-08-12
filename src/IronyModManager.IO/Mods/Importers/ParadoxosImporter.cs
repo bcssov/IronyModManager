@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -27,6 +27,7 @@ namespace IronyModManager.IO.Mods.Importers
     /// <summary>
     /// Class ParadoxosImporter.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class ParadoxosImporter
     {
         #region Fields

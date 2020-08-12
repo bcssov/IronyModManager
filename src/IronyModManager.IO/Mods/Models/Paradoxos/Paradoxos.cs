@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="Paradoxos.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using IronyModManager.Shared;
 using Newtonsoft.Json;
 
 namespace IronyModManager.IO.Mods.Models.Paradoxos
@@ -21,6 +22,7 @@ namespace IronyModManager.IO.Mods.Models.Paradoxos
     /// <summary>
     /// Class ParadoxosExportedList.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing model logic.")]
     [Serializable, XmlRoot("exportedlist")]
     public class ParadoxosExportedList
     {
@@ -48,6 +50,7 @@ namespace IronyModManager.IO.Mods.Models.Paradoxos
     /// <summary>
     /// Class ParadoxosList.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing model logic.")]
     public class ParadoxosList
     {
         #region Properties
@@ -106,6 +109,7 @@ namespace IronyModManager.IO.Mods.Models.Paradoxos
     /// <summary>
     /// Class ParadoxosMod.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing model logic.")]
     public class ParadoxosMod
     {
         #region Properties

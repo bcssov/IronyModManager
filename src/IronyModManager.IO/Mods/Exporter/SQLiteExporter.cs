@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -32,6 +32,7 @@ namespace IronyModManager.IO.Mods.Exporter
     /// Implements the <see cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
     /// </summary>
     /// <seealso cref="IronyModManager.IO.Mods.Exporter.BaseExporter" />
+    [ExcludeFromCoverage("Skipping testing SQL logic.")]
     internal class SQLiteExporter : BaseExporter
     {
         #region Fields

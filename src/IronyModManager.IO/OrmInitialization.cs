@@ -4,9 +4,9 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
-// <copyright file="Initialization.cs" company="Mario">
+// <copyright file="OrmInitialization.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -23,7 +23,8 @@ namespace IronyModManager.IO
     /// Implements the <see cref="IronyModManager.Shared.PostStartup" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.PostStartup" />
-    public class Initialization : PostStartup
+    [ExcludeFromCoverage("Setup module.")]
+    public class OrmInitialization : PostStartup
     {
         #region Methods
 

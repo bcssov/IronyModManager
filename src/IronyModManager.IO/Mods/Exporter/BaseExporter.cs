@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="BaseExporter.cs" company="Mario">
 //     Mario
@@ -17,12 +17,14 @@ using System.IO;
 using System.Linq;
 using IronyModManager.IO.Mods.Models.Paradox;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Mods.Exporter
 {
     /// <summary>
     /// Class BaseExporter.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal abstract class BaseExporter
     {
         #region Methods

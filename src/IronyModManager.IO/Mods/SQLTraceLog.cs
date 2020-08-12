@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="SQLTraceLog.cs" company="Mario">
 //     Mario
@@ -25,6 +25,7 @@ namespace IronyModManager.IO.Mods
     /// Implements the <see cref="RepoDb.Interfaces.ITrace" />
     /// </summary>
     /// <seealso cref="RepoDb.Interfaces.ITrace" />
+    [ExcludeFromCoverage("Skipping testing SQL logic.")]
     internal class SQLTraceLog : ITrace
     {
         #region Fields

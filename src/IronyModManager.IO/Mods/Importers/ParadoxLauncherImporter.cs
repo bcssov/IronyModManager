@@ -28,6 +28,7 @@ namespace IronyModManager.IO.Mods.Importers
     /// <summary>
     /// Class ParadoxLauncherImporter.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class ParadoxLauncherImporter
     {
         #region Fields
