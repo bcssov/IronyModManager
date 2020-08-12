@@ -13,12 +13,12 @@
     <SolutionDir Condition="'$(SolutionDir)'==''">$(MSBuildThisFileDirectory)</SolutionDir>
   </PropertyGroup>
   <PropertyGroup>
-    <MicrosoftExtensionsDependencyModelVersion>[3.1.2]</MicrosoftExtensionsDependencyModelVersion>
-    <MicrosoftDotNetPlatformAbstractionsVersion>[3.1.2]</MicrosoftDotNetPlatformAbstractionsVersion>
-    <MicrosoftNETCorePlatformsVersion>[3.1.1]</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftExtensionsDependencyModelVersion>[3.1.6]</MicrosoftExtensionsDependencyModelVersion>
+    <MicrosoftDotNetPlatformAbstractionsVersion>[3.1.6]</MicrosoftDotNetPlatformAbstractionsVersion>
+    <MicrosoftNETCorePlatformsVersion>[3.1.2]</MicrosoftNETCorePlatformsVersion>
     <MicrosoftWin32Registry>[4.7.0]</MicrosoftWin32Registry>
-	<MicrosoftExtensionsConfigurationBinder>[3.1.5]</MicrosoftExtensionsConfigurationBinder>
-	<MicrosoftExtensionsConfigurationJson>[3.1.5]</MicrosoftExtensionsConfigurationJson>
+    <MicrosoftExtensionsConfigurationBinder>[3.1.6]</MicrosoftExtensionsConfigurationBinder>
+    <MicrosoftExtensionsConfigurationJson>[3.1.6]</MicrosoftExtensionsConfigurationJson>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning">
