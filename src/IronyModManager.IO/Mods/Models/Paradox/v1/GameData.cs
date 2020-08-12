@@ -34,7 +34,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
         /// </summary>
         public GameData()
         {
-            ModsOrder = new List<string>();
+            ModsOrder = new List<Guid>();
         }
 
         #endregion Constructors
@@ -53,7 +53,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
         /// </summary>
         /// <value>The mods order.</value>
         [JsonProperty("modsOrder")]
-        public List<string> ModsOrder { get; set; }
+        public List<Guid> ModsOrder { get; set; }
 
         #endregion Properties
     }

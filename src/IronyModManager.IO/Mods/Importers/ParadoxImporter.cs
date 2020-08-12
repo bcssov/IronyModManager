@@ -35,11 +35,6 @@ namespace IronyModManager.IO.Mods.Importers
         private const string CollectionName = "Paradox";
 
         /// <summary>
-        /// The DLC load path
-        /// </summary>
-        private const string DLC_load_path = "dlc_load.json";
-
-        /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger logger;
@@ -68,7 +63,7 @@ namespace IronyModManager.IO.Mods.Importers
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
         {
-            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), DLC_load_path);
+            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.DLC_load_path);
             if (File.Exists(path))
             {
                 var content = await File.ReadAllTextAsync(path);

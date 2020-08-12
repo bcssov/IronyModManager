@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -18,11 +18,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models.Paradox.Common;
-using IronyModManager.IO.Mods.Models.Paradox.v1;
-using IronyModManager.Models.Common;
+using IronyModManager.IO.Mods.Exporter;
 using IronyModManager.Shared;
-using Newtonsoft.Json;
 using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods
@@ -38,36 +35,35 @@ namespace IronyModManager.IO.Mods
         #region Fields
 
         /// <summary>
-        /// The DLC load path
-        /// </summary>
-        private const string DLC_load_path = "dlc_load.json";
-
-        /// <summary>
-        /// The game data path
-        /// </summary>
-        private const string Game_data_path = "game_data.json";
-
-        /// <summary>
-        /// The mod registry path
-        /// </summary>
-        private const string Mod_registry_path = "mods_registry.json";
-
-        /// <summary>
-        /// The ready to play
-        /// </summary>
-        private const string Ready_to_play = "ready_to_play";
-
-        /// <summary>
-        /// The SQL database path
-        /// </summary>
-        private const string Sql_db_path = "launcher-v2.sqlite";
-
-        /// <summary>
         /// The write lock
         /// </summary>
         private static readonly AsyncLock writeLock = new AsyncLock();
 
+        /// <summary>
+        /// The json exporter
+        /// </summary>
+        private readonly JsonExporter jsonExporter;
+
+        /// <summary>
+        /// The sqlite exporter
+        /// </summary>
+        private readonly SQLiteExporter sqliteExporter;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModWriter" /> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public ModWriter(ILogger logger)
+        {
+            jsonExporter = new JsonExporter();
+            sqliteExporter = new SQLiteExporter(logger);
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -78,75 +74,13 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> ApplyModsAsync(ModWriterParameters parameters)
         {
-            var dlcPath = Path.Combine(parameters.RootDirectory, DLC_load_path);
-            var gameDataPath = Path.Combine(parameters.RootDirectory, Game_data_path);
-            var modRegistryPath = Path.Combine(parameters.RootDirectory, Mod_registry_path);
-            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
-            var gameData = await LoadPdxModelAsync<GameData>(gameDataPath) ?? new GameData();
-            var modRegistry = await LoadPdxModelAsync<ModRegistryCollection>(modRegistryPath) ?? new ModRegistryCollection();
-
-            if (!parameters.AppendOnly)
-            {
-                gameData.ModsOrder.Clear();
-                dLCLoad.EnabledMods.Clear();
-            }
-
-            // Remove invalid mods
-            var toRemove = new List<string>();
-            foreach (var pdxMod in modRegistry)
-            {
-                if (pdxMod.Value.Status != Ready_to_play)
-                {
-                    toRemove.Add(pdxMod.Key);
-                }
-            }
-            foreach (var item in toRemove)
-            {
-                modRegistry.Remove(item);
-            }
-
-            if (parameters.EnabledMods != null)
-            {
-                foreach (var mod in parameters.EnabledMods)
-                {
-                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
-                }
-            }
-
-            if (parameters.OtherMods != null)
-            {
-                foreach (var mod in parameters.OtherMods)
-                {
-                    SyncData(dLCLoad, gameData, modRegistry, mod, false);
-                }
-            }
-
-            if (parameters.TopPriorityMods != null)
-            {
-                foreach (var mod in parameters.TopPriorityMods)
-                {
-                    var existingEntry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                    if (existingEntry != null)
-                    {
-                        gameData.ModsOrder.Remove(existingEntry.Id);
-                    }
-                    var existingEnabledMod = dLCLoad.EnabledMods.FirstOrDefault(p => p.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-                    if (!string.IsNullOrWhiteSpace(existingEnabledMod))
-                    {
-                        dLCLoad.EnabledMods.Remove(existingEnabledMod);
-                    }
-                    SyncData(dLCLoad, gameData, modRegistry, mod, true);
-                }
-            }
-
             Task<bool>[] tasks;
             using (var mutex = await writeLock.LockAsync())
             {
                 tasks = new Task<bool>[]
                 {
-                    WritePdxModelAsync(dLCLoad, dlcPath),
-                    WritePdxModelAsync(gameData, gameDataPath),
-                    WritePdxModelAsync(modRegistry, modRegistryPath),
+                    Task.Run(async() => await sqliteExporter.ExportAsync(parameters)),
+                    Task.Run(async() => await jsonExporter.ExportAsync(parameters))
                 };
                 await Task.WhenAll(tasks);
             }
@@ -288,7 +222,7 @@ namespace IronyModManager.IO.Mods
                 await writeDescriptor(fullPath);
                 if (writeDescriptorInModDirectory)
                 {
-                    var modPath = Path.Combine(parameters.Mod.FileName, Constants.DescriptorFile);
+                    var modPath = Path.Combine(parameters.Mod.FileName, Shared.Constants.DescriptorFile);
                     await writeDescriptor(modPath);
                 }
                 return true;
@@ -335,165 +269,6 @@ namespace IronyModManager.IO.Mods
 
             var retry = new RetryStrategy();
             return await retry.RetryActionAsync(writeDescriptors);
-        }
-
-        /// <summary>
-        /// load PDX model as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="path">The path.</param>
-        /// <returns>Task&lt;T&gt;.</returns>
-        private async Task<T> LoadPdxModelAsync<T>(string path) where T : IPdxFormat
-        {
-            if (File.Exists(path))
-            {
-                var content = await File.ReadAllTextAsync(path);
-                if (!string.IsNullOrWhiteSpace(content))
-                {
-                    var result = JsonConvert.DeserializeObject<T>(content);
-                    return result;
-                }
-            }
-            return default;
-        }
-
-        /// <summary>
-        /// Maps the PDX identifier.
-        /// </summary>
-        /// <param name="registry">The registry.</param>
-        /// <param name="mod">The mod.</param>
-        private void MapPdxId(ModRegistry registry, IMod mod)
-        {
-            if (mod.RemoteId.HasValue)
-            {
-                switch (mod.Source)
-                {
-                    case ModSource.Paradox:
-                        registry.PdxId = mod.RemoteId.ToString();
-                        break;
-
-                    default:
-                        // Assume steam
-                        registry.SteamId = mod.RemoteId.ToString();
-                        break;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Maps the PDX path.
-        /// </summary>
-        /// <param name="registry">The registry.</param>
-        /// <param name="mod">The mod.</param>
-        private void MapPdxPath(ModRegistry registry, IMod mod)
-        {
-            if (mod.FileName.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
-            {
-                registry.ArchivePath = mod.FileName;
-                if (mod.Source != ModSource.Local)
-                {
-                    registry.DirPath = Path.GetDirectoryName(mod.FileName);
-                }
-            }
-            else
-            {
-                registry.DirPath = mod.FileName;
-            }
-        }
-
-        /// <summary>
-        /// Maps the type of the PDX.
-        /// </summary>
-        /// <param name="modSource">The mod source.</param>
-        /// <returns>System.String.</returns>
-        private string MapPdxType(ModSource modSource)
-        {
-            var pdxSource = modSource switch
-            {
-                ModSource.Paradox => "pdx",
-                ModSource.Steam => "steam",
-                _ => "local",
-            };
-            return pdxSource;
-        }
-
-        /// <summary>
-        /// Synchronizes the data.
-        /// </summary>
-        /// <param name="dLCLoad">The d lc load.</param>
-        /// <param name="gameData">The game data.</param>
-        /// <param name="modRegistry">The mod registry.</param>
-        /// <param name="mod">The mod.</param>
-        /// <param name="isEnabled">if set to <c>true</c> [is enabled].</param>
-        private void SyncData(DLCLoad dLCLoad, GameData gameData, ModRegistryCollection modRegistry, IMod mod, bool isEnabled)
-        {
-            ModRegistry pdxMod;
-            // Populate registry
-            if (!modRegistry.Values.Any(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase)))
-            {
-                pdxMod = new ModRegistry()
-                {
-                    Id = Guid.NewGuid().ToString()
-                };
-                modRegistry.Add(pdxMod.Id, pdxMod);
-            }
-            else
-            {
-                pdxMod = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-            }
-            pdxMod.DisplayName = mod.Name;
-            pdxMod.Tags = mod.Tags?.ToList();
-            pdxMod.RequiredVersion = mod.Version;
-            pdxMod.GameRegistryId = mod.DescriptorFile;
-            pdxMod.Status = Ready_to_play;
-            pdxMod.Source = MapPdxType(mod.Source);
-            MapPdxPath(pdxMod, mod);
-            MapPdxId(pdxMod, mod);
-
-            // Populate game data
-            var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-            gameData.ModsOrder.Add(entry.Id);
-
-            // Populate dlc
-            if (isEnabled)
-            {
-                dLCLoad.EnabledMods.Add(mod.DescriptorFile);
-            }
-        }
-
-        /// <summary>
-        /// write PDX model as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model">The model.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        private async Task<bool> WritePdxModelAsync<T>(T model, string path) where T : IPdxFormat
-        {
-            async Task<bool> writeFile()
-            {
-                var dirPath = Path.GetDirectoryName(path);
-                if (!Directory.Exists(dirPath))
-                {
-                    Directory.CreateDirectory(dirPath);
-                }
-
-                if (File.Exists(path))
-                {
-                    _ = new System.IO.FileInfo(path)
-                    {
-                        IsReadOnly = false
-                    };
-                }
-                await File.WriteAllTextAsync(path, JsonConvert.SerializeObject(model, Formatting.None, new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                }));
-                return true;
-            }
-
-            var retry = new RetryStrategy();
-            return await retry.RetryActionAsync(writeFile);
         }
 
         #endregion Methods

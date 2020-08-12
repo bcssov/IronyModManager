@@ -121,11 +121,11 @@ namespace IronyModManager.IO.Mods.Importers
                 var content = await File.ReadAllTextAsync(parameters.File);
                 if (!string.IsNullOrWhiteSpace(content))
                 {
-                    if (parameters.File.EndsWith(Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
+                    if (parameters.File.EndsWith(Shared.Constants.XMLExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         return parseXML(content);
                     }
-                    else if (parameters.File.EndsWith(Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
+                    else if (parameters.File.EndsWith(Shared.Constants.JsonExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         return parseJson(content);
                     }

@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -67,6 +67,18 @@ namespace IronyModManager.Tests.Common
             if (!string.IsNullOrEmpty(message))
             {
                 log.Info(message);
+            }
+        }
+
+        /// <summary>
+        /// Traces the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public void Trace(string message)
+        {
+            if (!string.IsNullOrEmpty(message))
+            {
+                log.Trace(message);
             }
         }
 

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-07-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1698,6 +1698,40 @@ namespace IronyModManager.Services
                             }
                         }
                     }
+                    var allMods = GetInstalledModsInternal(game, false).ToList();
+                    IMod mod;
+                    if (!allMods.Any(p => p.Name.Equals(patchName)))
+                    {
+                        mod = GeneratePatchModDescriptor(allMods, game, patchName);
+                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = game.UserDirectory,
+                            Path = Shared.Constants.ModDirectory
+                        });
+                        await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = game.UserDirectory,
+                            Path = Path.Combine(Shared.Constants.ModDirectory, patchName)
+                        });
+                        await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                        {
+                            Mod = mod,
+                            RootDirectory = game.UserDirectory,
+                            Path = mod.DescriptorFile
+                        }, IsPatchMod(mod));
+                        allMods.Add(mod);
+                        Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                    }
+                    else
+                    {
+                        mod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
+                    }
+                    await ModWriter.ApplyModsAsync(new ModWriterParameters()
+                    {
+                        AppendOnly = true,
+                        TopPriorityMods = new List<IMod>() { mod },
+                        RootDirectory = game.UserDirectory
+                    });
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
                         Mode = MapPatchStateMode(conflictResult.Mode),
