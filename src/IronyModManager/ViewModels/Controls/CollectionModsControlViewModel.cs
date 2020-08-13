@@ -1358,7 +1358,7 @@ namespace IronyModManager.ViewModels.Controls
                     oldMods.AddRange(SelectedMods);
                 }
                 previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
-                if (SelectedMods?.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Except(SelectedMods).Any())))
+                if (SelectedMods?.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())))
                 {
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }
@@ -1455,12 +1455,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="collection">The collection.</param>
         protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
         {
-            ConflictSolverValid = true;
-            if (!string.IsNullOrWhiteSpace(collection))
+            if (SelectedMods?.Count > 0)
             {
-                var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
-                ConflictSolverValid = !result;
-            }            
+                ConflictSolverValid = true;
+                if (!string.IsNullOrWhiteSpace(collection))
+                {
+                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
+                    ConflictSolverValid = !result;
+                }
+            }
+            else
+            {
+                ConflictSolverValid = true;
+            }
         }
 
         #endregion Methods

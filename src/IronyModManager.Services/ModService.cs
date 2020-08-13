@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -227,8 +227,11 @@ namespace IronyModManager.Services
                         Path = diff.DescriptorFile
                     }, IsPatchModInternal(diff)));
                 }
-                await Task.WhenAll(tasks);
-                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                if (tasks.Count > 0)
+                {
+                    await Task.WhenAll(tasks);
+                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                }
                 return true;
             }
 

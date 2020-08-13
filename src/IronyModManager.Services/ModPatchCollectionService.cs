@@ -34,7 +34,6 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
-using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
@@ -58,11 +57,6 @@ namespace IronyModManager.Services
         /// The service lock
         /// </summary>
         private static readonly object serviceLock = new { };
-
-        /// <summary>
-        /// The update check lock
-        /// </summary>
-        private static readonly AsyncLock updateCheckLock = new AsyncLock();
 
         /// <summary>
         /// The message bus
@@ -620,16 +614,22 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
             {
-                using var mutex = await updateCheckLock.LockAsync();
                 var patchName = GenerateCollectionPatchName(collectionName);
                 var cachePrefix = $"CollectionPatchState-{game.Type}";
                 var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
                 if (result != null)
                 {
+                    while (result.CheckInProgress)
+                    {
+                        // Since another check is queued, wait and periodically check if the task is done...
+                        await Task.Delay(10);
+                        result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                    }
                     return result.NeedsUpdate;
                 }
                 else
                 {
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
                     var mods = GetCollectionMods();
                     var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                     {
@@ -638,6 +638,7 @@ namespace IronyModManager.Services
                     }, false);
                     if (state == null)
                     {
+                        Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
                         return false;
                     }
                     foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
@@ -649,7 +650,7 @@ namespace IronyModManager.Services
                             if (mod == null)
                             {
                                 // Mod no longer in collection, needs refresh break further checks...
-                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
                                 return true;
                             }
                             else
@@ -658,13 +659,13 @@ namespace IronyModManager.Services
                                 if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
                                 {
                                     // File no longer in collection or content does not match, break further checks
-                                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true });
+                                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
                                     return true;
                                 }
                             }
                         }
                     }
-                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false });
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
                     return false;
                 }
             }
@@ -1768,6 +1769,12 @@ namespace IronyModManager.Services
         private class PatchCollectionState
         {
             #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether [check in progress].
+            /// </summary>
+            /// <value><c>true</c> if [check in progress]; otherwise, <c>false</c>.</value>
+            public bool CheckInProgress { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether [needs update].

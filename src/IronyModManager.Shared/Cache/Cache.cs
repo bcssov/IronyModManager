@@ -4,7 +4,7 @@
 // Created          : 06-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="Cache.cs" company="Mario">
 //     Mario
@@ -123,7 +123,7 @@ namespace IronyModManager.Shared.Cache
                 var cacheKey = ConstructKey(prefix, key);
                 if (cache.ContainsKey(cacheKey))
                 {
-                    cache[key] = new CacheItem(value, expiration);
+                    cache[cacheKey] = new CacheItem(value, expiration);
                 }
                 else
                 {
