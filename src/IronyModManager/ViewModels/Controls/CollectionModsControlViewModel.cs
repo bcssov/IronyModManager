@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1455,15 +1455,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="collection">The collection.</param>
         protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
         {
+            ConflictSolverValid = true;
             if (!string.IsNullOrWhiteSpace(collection))
             {
                 var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
                 ConflictSolverValid = !result;
-            }
-            else
-            {
-                ConflictSolverValid = true;
-            }
+            }            
         }
 
         #endregion Methods

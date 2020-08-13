@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -34,6 +34,7 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
+using Nito.AsyncEx;
 
 namespace IronyModManager.Services
 {
@@ -57,6 +58,11 @@ namespace IronyModManager.Services
         /// The service lock
         /// </summary>
         private static readonly object serviceLock = new { };
+
+        /// <summary>
+        /// The update check lock
+        /// </summary>
+        private static readonly AsyncLock updateCheckLock = new AsyncLock();
 
         /// <summary>
         /// The message bus
@@ -614,6 +620,7 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
             {
+                using var mutex = await updateCheckLock.LockAsync();
                 var patchName = GenerateCollectionPatchName(collectionName);
                 var cachePrefix = $"CollectionPatchState-{game.Type}";
                 var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
