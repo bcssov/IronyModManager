@@ -52,7 +52,10 @@
     },
     "Games": {
         "Name": "Spiele",
-        "Stellaris": "Stellaris"
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome"
     },
     "Installed_Mods": {
         "Name": "Installierte Mods",

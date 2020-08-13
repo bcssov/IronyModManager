@@ -81,7 +81,7 @@ namespace IronyModManager.Services
                 games.Add(game);
             }
 
-            return games;
+            return games.OrderBy(p => p.Type);
         }
 
         /// <summary>

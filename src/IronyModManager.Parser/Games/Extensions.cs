@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-28-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.Parser.Games
         /// <returns><c>true</c> if the specified arguments is stellaris; otherwise, <c>false</c>.</returns>
         public static bool IsStellaris(this CanParseArgs args)
         {
-            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris.Name, StringComparison.OrdinalIgnoreCase);
+            return args.GameType.Equals(Shared.Constants.GamesTypes.Stellaris.Id, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion Methods

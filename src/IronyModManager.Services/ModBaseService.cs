@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -431,6 +431,7 @@ namespace IronyModManager.Services
                         }
                         // Validate if path exists
                         mod.IsValid = File.Exists(mod.FullPath) || Directory.Exists(mod.FullPath);
+                        mod.Game = game.Type;
                         result.Add(mod);
                     }
                 }

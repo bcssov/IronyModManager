@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -59,6 +59,11 @@ namespace IronyModManager.Services.Registrations
         private const string SteamVDFBaseInstallFolderId = "BaseInstallFolder_";
 
         /// <summary>
+        /// The cached paths
+        /// </summary>
+        private static readonly Dictionary<string, List<string>> cachedPaths = new Dictionary<string, List<string>>();
+
+        /// <summary>
         /// The steam common directory
         /// </summary>
         private static readonly string SteamCommonDirectory = PathHelper.MergePaths(SteamAppsDirectory, "common");
@@ -109,33 +114,15 @@ namespace IronyModManager.Services.Registrations
                     }
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                if (File.Exists(vdfPath))
+                var paths = GetVdf(vdfPath);
+                foreach (var path in paths)
                 {
-                    static string CleanPath(string path)
+                    if (File.Exists(Path.Combine(path, SteamAppsDirectory, acfFile)))
                     {
-                        path = ReplaceMultipleCharacters(path, '\\');
-                        path = ReplaceMultipleCharacters(path, '/');
-                        return path;
-                    }
-                    static string ReplaceMultipleCharacters(string text, char delimiter)
-                    {
-                        return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
-                    }
-                    // I know there's a vdf parser out there but I see no need to add another dependency to look for a simple string
-                    var lines = File.ReadAllLines(vdfPath);
-                    foreach (var line in lines)
-                    {
-                        if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
+                        var installDir = findInstallDirectory(Path.Combine(path, SteamAppsDirectory, acfFile));
+                        if (!string.IsNullOrWhiteSpace(installDir) && Directory.Exists(Path.Combine(path, SteamCommonDirectory, installDir)))
                         {
-                            var directory = CleanPath(line.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty));
-                            if (File.Exists(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile)))
-                            {
-                                var path = findInstallDirectory(Path.Combine(steamInstallDirectory, SteamAppsDirectory, acfFile));
-                                if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(Path.Combine(steamInstallDirectory, SteamCommonDirectory, path)))
-                                {
-                                    return Path.Combine(steamInstallDirectory, SteamCommonDirectory, path);
-                                }
-                            }
+                            return Path.Combine(path, SteamCommonDirectory, installDir);
                         }
                     }
                 }
@@ -158,30 +145,12 @@ namespace IronyModManager.Services.Registrations
                     return Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString());
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
-                if (File.Exists(vdfPath))
+                var paths = GetVdf(vdfPath);
+                foreach (var path in paths)
                 {
-                    static string CleanPath(string path)
+                    if (Directory.Exists(Path.Combine(path, SteamWorkshopDirectory, appId.ToString())))
                     {
-                        path = ReplaceMultipleCharacters(path, '\\');
-                        path = ReplaceMultipleCharacters(path, '/');
-                        return path;
-                    }
-                    static string ReplaceMultipleCharacters(string text, char delimiter)
-                    {
-                        return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
-                    }
-                    // I know there's a vdf parser out there but I see no need to add another dependency to look for a simple string
-                    var lines = File.ReadAllLines(vdfPath);
-                    foreach (var line in lines)
-                    {
-                        if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            var directory = CleanPath(line.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty));
-                            if (Directory.Exists(Path.Combine(directory, SteamWorkshopDirectory, appId.ToString())))
-                            {
-                                return Path.Combine(directory, SteamWorkshopDirectory, appId.ToString());
-                            }
-                        }
+                        return Path.Combine(path, SteamWorkshopDirectory, appId.ToString());
                     }
                 }
             }
@@ -239,6 +208,52 @@ namespace IronyModManager.Services.Registrations
                 key = ReadSteamWindowsRegistryKey(Registry.LocalMachine);
             }
             return key;
+        }
+
+        /// <summary>
+        /// Gets the VDF.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
+        private static List<string> GetVdf(string path)
+        {
+            if (cachedPaths.ContainsKey(path))
+            {
+                return cachedPaths[path];
+            }
+            else
+            {
+                if (File.Exists(path))
+                {
+                    static string CleanPath(string path)
+                    {
+                        path = ReplaceMultipleCharacters(path, '\\');
+                        path = ReplaceMultipleCharacters(path, '/');
+                        return path;
+                    }
+                    static string ReplaceMultipleCharacters(string text, char delimiter)
+                    {
+                        return string.Join(delimiter, text.Split(delimiter, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                    var paths = new List<string>();
+                    // I know there's a vdf parser out there but I see no need to add another dependency to look for a simple string
+                    var lines = File.ReadAllLines(path);
+                    foreach (var line in lines)
+                    {
+                        if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var directory = CleanPath(line.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty));
+                            if (Directory.Exists(directory))
+                            {
+                                paths.Add(directory);
+                            }
+                        }
+                    }
+                    cachedPaths.Add(path, paths);
+                    return paths;
+                }
+            }
+            return new List<string>();
         }
 
         /// <summary>

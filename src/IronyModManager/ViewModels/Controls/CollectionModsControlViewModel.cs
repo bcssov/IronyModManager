@@ -1292,9 +1292,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SaveSelectedCollection()
         {
+            var game = gameService.GetSelected()?.Name ?? string.Empty;
             var collection = modCollectionService.Create();
-            if (collection != null && SelectedModCollection != null && Mods != null)
+            // Due to async nature ensure that the game and mods are from the same source before saving
+            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && Mods.FirstOrDefault().Game.Equals(game))
             {
+                collection.Game = game;
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
