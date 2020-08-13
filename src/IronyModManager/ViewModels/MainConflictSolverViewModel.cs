@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -450,7 +450,8 @@ namespace IronyModManager.ViewModels
         /// Filters the hierarchal conflicts.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
-        protected virtual void FilterHierarchalConflicts(IConflictResult conflictResult)
+        /// <param name="selectedDefinitionOverride">The selected definition override.</param>
+        protected virtual void FilterHierarchalConflicts(IConflictResult conflictResult, IHierarchicalDefinitions selectedDefinitionOverride = null)
         {
             var index = PreviousConflictIndex;
             PreviousConflictIndex = null;
@@ -528,6 +529,10 @@ namespace IronyModManager.ViewModels
                     conflicts.Add(invalidDef);
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
+                if (HierarchalConflicts.Count() > 0 && SelectedParentConflict == null)
+                {
+                    SelectedParentConflict = HierarchalConflicts.FirstOrDefault();
+                }
                 if (SelectedParentConflict != null)
                 {
                     var conflictName = SelectedParentConflict.Name;
@@ -536,6 +541,14 @@ namespace IronyModManager.ViewModels
                     if (newSelected != null)
                     {
                         PreviousConflictIndex = index;
+                        if (selectedDefinitionOverride != null)
+                        {
+                            var overrideMatch = newSelected.Children.FirstOrDefault(p => p.Key.Equals(selectedDefinitionOverride.Key));
+                            if (overrideMatch != null)
+                            {
+                                PreviousConflictIndex = newSelected.Children.ToList().IndexOf(overrideMatch);
+                            }
+                        }
                         if (PreviousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
                         {
                             PreviousConflictIndex = newSelected.Children.Count - 1;
@@ -736,7 +749,7 @@ namespace IronyModManager.ViewModels
                     {
                         case Implementation.CommandState.Success:
                             EditingIgnoreConflictsRules = false;
-                            FilterHierarchalConflicts(Conflicts);
+                            FilterHierarchalConflicts(Conflicts, SelectedConflict);
                             break;
 
                         case Implementation.CommandState.NotExecuted:
@@ -767,7 +780,7 @@ namespace IronyModManager.ViewModels
                 ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
                 this.WhenAnyValue(p => p.ModFilter.HasSavedState).Where(p => p).Subscribe(s =>
                 {
-                    FilterHierarchalConflicts(Conflicts);
+                    FilterHierarchalConflicts(Conflicts, SelectedConflict);
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
@@ -777,7 +790,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s.State == Implementation.CommandState.Success)
                     {
-                        FilterHierarchalConflicts(Conflicts);
+                        FilterHierarchalConflicts(Conflicts, SelectedConflict);
                     }
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
@@ -805,6 +818,7 @@ namespace IronyModManager.ViewModels
             {
                 IHierarchicalDefinitions conflictParent = null;
                 int? conflictParentIdx = null;
+                int parentIdx = HierarchalConflicts.ToList().IndexOf(SelectedParentConflict);
                 foreach (var item in HierarchalConflicts)
                 {
                     if (item.Children.Contains(SelectedConflict))
@@ -885,9 +899,15 @@ namespace IronyModManager.ViewModels
                 }
                 if (SelectedConflict == null)
                 {
-                    ModCompareSelector.Reset();
-                    MergeViewer.Reset();
-                    BinaryMergeViewer.Reset();
+                    if (parentIdx > (HierarchalConflicts.Count() - 1))
+                    {
+                        parentIdx = HierarchalConflicts.Count() - 1;
+                    }
+                    else if (parentIdx < 0)
+                    {
+                        parentIdx = 0;
+                    }
+                    SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
                 }
                 await TriggerOverlayAsync(false);
             }

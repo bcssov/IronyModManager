@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
@@ -77,19 +78,22 @@ namespace IronyModManager.Views
                     ViewModel.SelectedConflict = null;
                 }
             };
-            this.WhenAnyValue(v => v.ViewModel.SelectedParentConflict).Subscribe(s =>
+            this.WhenAnyValue(p => p.IsActivated).Where(v => v).Subscribe(s =>
             {
-                if (s?.Children.Count > 0)
+                this.WhenAnyValue(v => v.ViewModel.SelectedParentConflict).Subscribe(s =>
                 {
-                    if (ViewModel.PreviousConflictIndex.HasValue)
+                    if (s?.Children.Count > 0)
                     {
-                        conflictList.SelectedIndex = ViewModel.PreviousConflictIndex.GetValueOrDefault();
+                        if (ViewModel.PreviousConflictIndex.HasValue)
+                        {
+                            conflictList.SelectedIndex = ViewModel.PreviousConflictIndex.GetValueOrDefault();
+                        }
+                        else
+                        {
+                            conflictList.SelectedIndex = 0;
+                        }
                     }
-                    else
-                    {
-                        conflictList.SelectedIndex = 0;
-                    }
-                }
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             IEnumerable lastDataSource = null;
