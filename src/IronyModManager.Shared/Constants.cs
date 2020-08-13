@@ -293,6 +293,47 @@ namespace IronyModManager.Shared
                 #endregion Fields
             }
 
+            /// <summary>
+            /// Class ImperatorRome.
+            /// </summary>
+            public static class ImperatorRome
+            {
+                #region Fields
+
+                /// <summary>
+                /// The launcher settings file name
+                /// </summary>
+                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "ImperatorRome";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Imperator";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 859580;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "decisions", "gui","localization", "map_data", "setup"};
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "content_source", "decisions", "events", "fonts", "gfx",
+                    "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets" };
+
+                #endregion Fields
+            }
+
             #endregion Classes
         }
 
