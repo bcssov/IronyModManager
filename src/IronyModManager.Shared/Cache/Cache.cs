@@ -35,7 +35,7 @@ namespace IronyModManager.Shared.Cache
         /// <summary>
         /// The service lock
         /// </summary>
-        private object serviceLock = new { };
+        private readonly object serviceLock = new { };
 
         #endregion Fields
 

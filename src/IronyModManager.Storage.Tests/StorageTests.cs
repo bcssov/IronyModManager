@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -250,7 +250,8 @@ namespace IronyModManager.Storage.Tests
                 WorkshopDirectory = "workshop1",
                 BaseGameDirectory = "base",
                 ExecutablePath = "exe",
-                ExecutableArgs = "args"
+                ExecutableArgs = "args",
+                LauncherSettingsFileName = "settings"
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -264,6 +265,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
         }
 
         /// <summary>
@@ -443,7 +445,8 @@ namespace IronyModManager.Storage.Tests
                 WorkshopDirectory = "workshop1",
                 BaseGameDirectory = "base",
                 ExecutablePath = "exe",
-                ExecutableArgs = "args"
+                ExecutableArgs = "args",
+                LauncherSettingsFileName = "settings"
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -458,6 +461,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
             result.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             result.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
+            result.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
         }
 
         /// <summary>

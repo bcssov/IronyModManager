@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -13,11 +13,13 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Services
 {
@@ -99,6 +101,23 @@ namespace IronyModManager.Services
             else if (!string.IsNullOrWhiteSpace(game.WorkshopDirectory))
             {
                 model.ExecutableLocation = $"{SteamLaunchArgs}{game.SteamAppId}";
+            }
+            else if (!string.IsNullOrWhiteSpace(game.ExecutableLocation) && !string.IsNullOrWhiteSpace(game.LauncherSettingsFileName))
+            {
+                var basePath = Path.GetDirectoryName(game.ExecutableLocation);
+                var settingsFile = Path.Combine(basePath, game.LauncherSettingsFileName);
+                if (File.Exists(settingsFile))
+                {
+                    var text = File.ReadAllText(settingsFile);
+                    try
+                    {
+                        var settingsObject = JsonConvert.DeserializeObject<Registrations.Models.LauncherSettings>(text);
+                        model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             return model;
         }
@@ -228,7 +247,8 @@ namespace IronyModManager.Services
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
-            game.BaseGameDirectory = game.BaseGameDirectory;
+            game.BaseGameDirectory = gameType.BaseGameDirectory;
+            game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             bool setExeLocation = true;
             if (gameSettings != null)
             {
