@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -557,14 +557,16 @@ namespace IronyModManager.ViewModels.Controls
                 ForceClosePopups();
             }).DisposeWith(disposables);
 
+            var previousCollectionNotification = string.Empty;
             this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
             {
                 AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
-                if (!s)
+                if (!s && previousCollectionNotification != CollectionMods.SelectedModCollection?.Name)
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                 }
+                previousCollectionNotification = CollectionMods.SelectedModCollection?.Name;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
