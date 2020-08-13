@@ -204,6 +204,7 @@ namespace IronyModManager.Shared
             public const string OverlayResolve = Prefix + "OverlayResolve";
             public const string NextConflict = Prefix + "NextConflict";
             public const string PrevConflict = Prefix + "PrevConflict";
+            public const string ConflictCount = Prefix + "ConflictCount";
             public static class PriorityReason
             {
                 public const string Prefix = "Conflict_Solver.PriorityReason.";

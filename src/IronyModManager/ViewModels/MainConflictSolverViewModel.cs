@@ -329,6 +329,12 @@ namespace IronyModManager.ViewModels
         public virtual ConflictSolverModFilterControlViewModel ModFilter { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the number of conflicts caption.
+        /// </summary>
+        /// <value>The number of conflicts caption.</value>
+        public virtual string NumberOfConflictsCaption { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the index of the previous conflict.
         /// </summary>
         /// <value>The index of the previous conflict.</value>
@@ -529,6 +535,7 @@ namespace IronyModManager.ViewModels
                     conflicts.Add(invalidDef);
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
+                NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
                 if (HierarchalConflicts.Count() > 0 && SelectedParentConflict == null)
                 {
                     SelectedParentConflict = HierarchalConflicts.FirstOrDefault();
@@ -907,7 +914,10 @@ namespace IronyModManager.ViewModels
                     {
                         parentIdx = 0;
                     }
-                    SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
+                    if (HierarchalConflicts.Count() > 0)
+                    {
+                        SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
+                    }
                 }
                 await TriggerOverlayAsync(false);
             }
