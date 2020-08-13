@@ -1,11 +1,20 @@
-Irony Mod Manager is a new mod manager for Paradox Games which at the moment supports Stellaris only but at a later date support for additional games will be added. The games which will be supported are the ones which support the newest Paradox Launcher.
+# About
+Irony Mod Manager is a new advanced mod manager for Paradox Games, it started out as a Stellaris oriented Mod Manager at first with plans to add additional games later. Not all of the advanced Stellaris equivalent features might be available for most supported games but that will change depending on community support in these games. In order to have a fully operational conflict solver or mod merging Irony needs to understand the game structure and whether certain game folders utilize FIOS\LIOS rules.
+
+### Supported Games
+* Europa Universalis IV
+* Hearts of Iron IV
+* Imperator Rome
+* Stellaris
+
+Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
+
+### Important Notice about Paradox Launcher 2020.10
+Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
 * Latest stable version: [v1.3.48](https://github.com/bcssov/IronyModManager/releases/tag/v1.3.48).
 * Latest prerelease version: [v1.4.38-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.4.38-rc).
-
-### Important Notice about Paradox Launcher 2020.10
-Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
