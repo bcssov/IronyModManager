@@ -611,6 +611,47 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName)
         {
+            async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
+            {
+                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
+                var mods = GetCollectionMods();
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                    PatchName = patchName
+                }, false);
+                if (state == null)
+                {
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
+                    return false;
+                }
+                foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
+                {
+                    foreach (var item in groupedMods.GroupBy(p => p.File))
+                    {
+                        var definition = item.FirstOrDefault();
+                        var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
+                        if (mod == null)
+                        {
+                            // Mod no longer in collection, needs refresh break further checks...
+                            Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                            return true;
+                        }
+                        else
+                        {
+                            var info = Reader.GetFileInfo(mod.FullPath, definition.File);
+                            if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
+                            {
+                                // File no longer in collection or content does not match, break further checks
+                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                                return true;
+                            }
+                        }
+                    }
+                }
+                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
+                return false;
+            }
             var game = GameService.GetSelected();
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
             {
@@ -624,49 +665,17 @@ namespace IronyModManager.Services
                         // Since another check is queued, wait and periodically check if the task is done...
                         await Task.Delay(10);
                         result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                        if (result == null)
+                        {
+                            await evalState(game, cachePrefix, patchName);
+                            result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                        }
                     }
                     return result.NeedsUpdate;
                 }
                 else
                 {
-                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
-                    var mods = GetCollectionMods();
-                    var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
-                    {
-                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                        PatchName = patchName
-                    }, false);
-                    if (state == null)
-                    {
-                        Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
-                        return false;
-                    }
-                    foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
-                    {
-                        foreach (var item in groupedMods.GroupBy(p => p.File))
-                        {
-                            var definition = item.FirstOrDefault();
-                            var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
-                            if (mod == null)
-                            {
-                                // Mod no longer in collection, needs refresh break further checks...
-                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
-                                return true;
-                            }
-                            else
-                            {
-                                var info = Reader.GetFileInfo(mod.FullPath, definition.File);
-                                if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
-                                {
-                                    // File no longer in collection or content does not match, break further checks
-                                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
-                    return false;
+                    return await evalState(game, cachePrefix, patchName);
                 }
             }
             return false;
