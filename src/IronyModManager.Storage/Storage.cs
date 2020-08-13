@@ -188,6 +188,7 @@ namespace IronyModManager.Storage
                 game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
+                game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
                 Database.Games.Add(game);
                 return true;
             }

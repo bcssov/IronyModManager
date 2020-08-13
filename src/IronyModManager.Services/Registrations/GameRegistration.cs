@@ -93,6 +93,7 @@ namespace IronyModManager.Services.Registrations
             stellaris.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             stellaris.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             stellaris.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            stellaris.AdvancedFeaturesSupported = true;
             MapExecutableSettings(stellaris, GetExecutableSettings(stellaris.BaseGameDirectory, stellaris.LauncherSettingsFileName));
             return stellaris;
         }

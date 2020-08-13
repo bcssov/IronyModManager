@@ -29,6 +29,12 @@ namespace IronyModManager.Models.Common
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether [advanced features supported].
+        /// </summary>
+        /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
+        bool AdvancedFeaturesSupported { get; set; }
+
+        /// <summary>
         /// Gets or sets the base game directory.
         /// </summary>
         /// <value>The base game directory.</value>

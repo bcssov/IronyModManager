@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -220,6 +220,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The selected mods.</value>
         public virtual IEnumerable<IMod> SelectedMods { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -230,6 +236,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
+
             IModCollection copyCollection(string requestedName)
             {
                 var collections = modCollectionService.GetAll();
@@ -350,6 +358,16 @@ namespace IronyModManager.ViewModels.Controls
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            base.OnSelectedGameChanged(game);
         }
 
         /// <summary>

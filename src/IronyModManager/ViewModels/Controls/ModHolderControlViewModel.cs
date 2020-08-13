@@ -286,6 +286,12 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Title)]
         public virtual string ModeTitle { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -425,6 +431,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -570,6 +577,16 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            base.OnSelectedGameChanged(game);
         }
 
         /// <summary>
