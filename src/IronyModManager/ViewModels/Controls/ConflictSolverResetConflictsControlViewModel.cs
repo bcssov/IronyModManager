@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -251,6 +251,10 @@ namespace IronyModManager.ViewModels.Controls
             if (hierarchicalDefinitions != null)
             {
                 HierarchicalDefinitions = hierarchicalDefinitions.ToObservableCollection();
+                if (HierarchicalDefinitions.Count() > 0 && SelectedHierarchicalDefinition == null)
+                {
+                    SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault();
+                }
                 if (SelectedParentHierarchicalDefinition != null)
                 {
                     var conflictName = SelectedParentHierarchicalDefinition.Name;
@@ -264,6 +268,10 @@ namespace IronyModManager.ViewModels.Controls
                             PreviousConflictIndex = newSelected.Children.Count - 1;
                         }
                         SelectedParentHierarchicalDefinition = newSelected;
+                    }
+                    if (SelectedParentHierarchicalDefinition.Children.Count > 0)
+                    {
+                        SelectedHierarchicalDefinition = SelectedParentHierarchicalDefinition.Children.FirstOrDefault();
                     }
                 }
             }
@@ -304,6 +312,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            SelectedMode = Modes.FirstOrDefault();
+
             CloseCommand = ReactiveCommand.Create(() =>
             {
                 ForceClosePopup();

@@ -151,6 +151,7 @@
         "OverlayResolve": "Pričekajte dok se riješavaju sukobi...",
         "NextConflict": "Slijedeći sukob",
         "PrevConflict": "Prijašnji sukob",
+        "ConflictCount": "Broj sukoba: {Count}",
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",

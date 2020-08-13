@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-23-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -467,15 +467,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsUndoAvailable()
         {
             return undoStack.Count > 0;
-        }
-
-        /// <summary>
-        /// Resets this instance.
-        /// </summary>
-        public virtual void Reset()
-        {
-            SetText(string.Empty, string.Empty, true);
-            EditingYaml = false;
         }
 
         /// <summary>
