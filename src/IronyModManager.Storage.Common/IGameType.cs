@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -52,6 +52,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The game folders.</value>
         IEnumerable<string> GameFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the launcher settings file.
+        /// </summary>
+        /// <value>The name of the launcher settings file.</value>
+        string LauncherSettingsFileName { get; set; }
 
         /// <summary>
         /// Gets or sets the log location.

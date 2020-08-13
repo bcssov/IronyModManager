@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -46,12 +46,13 @@ namespace IronyModManager.Services.Registrations
         /// Gets the executable launcher path.
         /// </summary>
         /// <param name="path">The path.</param>
+        /// <param name="launcherFilename">The launcher filename.</param>
         /// <returns>System.String.</returns>
-        private ExecutableSettings GetExecutableSettings(string path)
+        private ExecutableSettings GetExecutableSettings(string path, string launcherFilename)
         {
-            if (File.Exists(Path.Combine(path, Shared.Constants.GamesTypes.LauncherSettingsFileName)))
+            if (File.Exists(Path.Combine(path, launcherFilename)))
             {
-                var text = File.ReadAllText(Path.Combine(path, Shared.Constants.GamesTypes.LauncherSettingsFileName));
+                var text = File.ReadAllText(Path.Combine(path, launcherFilename));
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     try
@@ -91,7 +92,8 @@ namespace IronyModManager.Services.Registrations
             stellaris.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.Name).StandardizeDirectorySeparator();
             stellaris.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             stellaris.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
-            MapExecutableSettings(stellaris, GetExecutableSettings(stellaris.BaseGameDirectory));
+            stellaris.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            MapExecutableSettings(stellaris, GetExecutableSettings(stellaris.BaseGameDirectory, stellaris.LauncherSettingsFileName));
             return stellaris;
         }
 
