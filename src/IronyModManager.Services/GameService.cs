@@ -81,7 +81,7 @@ namespace IronyModManager.Services
                 games.Add(game);
             }
 
-            return games;
+            return games.OrderBy(p => p.Type);
         }
 
         /// <summary>
@@ -248,6 +248,7 @@ namespace IronyModManager.Services
             game.ChecksumFolders = gameType.ChecksumFolders;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
             game.BaseGameDirectory = gameType.BaseGameDirectory;
+            game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             bool setExeLocation = true;
             if (gameSettings != null)

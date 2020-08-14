@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ShortcutsControlViewModel.cs" company="Mario">
 //     Mario
@@ -63,6 +63,19 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the close.
+        /// </summary>
+        /// <value>The close.</value>
+        [StaticLocalization(LocalizationResources.App.Shortcuts.Close)]
+        public virtual string Close { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the close command.
+        /// </summary>
+        /// <value>The close command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the error log.
@@ -168,6 +181,11 @@ namespace IronyModManager.ViewModels.Controls
             ShortcutsCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = true;
+            }).DisposeWith(disposables);
+
+            CloseCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = false;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

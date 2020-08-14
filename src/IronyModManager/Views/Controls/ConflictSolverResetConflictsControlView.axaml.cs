@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -82,14 +82,32 @@ namespace IronyModManager.Views.Controls
             {
                 if (s?.Children.Count > 0)
                 {
-                    if (ViewModel.PreviousConflictIndex.HasValue)
+                    Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        conflictList.SelectedIndex = ViewModel.PreviousConflictIndex.GetValueOrDefault();
-                    }
-                    else
-                    {
-                        conflictList.SelectedIndex = 0;
-                    }
+                        if (ViewModel.PreviousConflictIndex.HasValue)
+                        {
+                            if (conflictList.ItemCount > 0)
+                            {
+                                conflictList.SelectedIndex = -1;
+                                conflictList.SelectedIndex = ViewModel.PreviousConflictIndex.GetValueOrDefault();
+                            }
+                            else
+                            {
+                                conflictList.SelectedIndex = -1;
+                            }
+                        }
+                        else
+                        {
+                            if (conflictList.ItemCount > 0)
+                            {
+                                conflictList.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                conflictList.SelectedIndex = -1;
+                            }
+                        }
+                    });
                 }
             }).DisposeWith(disposables);
             base.OnActivated(disposables);

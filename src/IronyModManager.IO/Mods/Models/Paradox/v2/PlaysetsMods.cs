@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="PlaysetsMods.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers;
 using RepoDb.Attributes;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.v2
@@ -29,8 +30,8 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// Gets or sets a value indicating whether this <see cref="PlaysetsMods" /> is enabled.
         /// </summary>
         /// <value><c>null</c> if [enabled] contains no value, <c>true</c> if [enabled]; otherwise, <c>false</c>.</value>
-        [Map("enabled")]
-        public bool? Enabled { get; set; }
+        [Map("enabled"), PropertyHandler(typeof(ObjectToBoolHandler))]
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.

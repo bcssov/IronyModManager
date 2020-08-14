@@ -21,6 +21,7 @@ namespace IronyModManager.Shared
                 public const string Wiki = Prefix + "Wiki";
                 public const string Logs = Prefix + "Logs";
                 public const string ErrorLog = Prefix + "ErrorLog";
+                public const string Close = Prefix + "Close";
             }
         }
         public static class FatalError
@@ -82,6 +83,9 @@ namespace IronyModManager.Shared
             public const string Prefix = "Games.";
             public const string Name = Prefix + "Name";
             public const string Stellaris = Prefix + "Stellaris";
+            public const string EuropaUniversalisIV = Prefix + "EuropaUniversalisIV";
+            public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
+            public const string ImperatorRome = Prefix + "ImperatorRome";
         }
         public static class Installed_Mods
         {
@@ -124,7 +128,6 @@ namespace IronyModManager.Shared
             public const string Order = Prefix + "Order";
             public const string Rename = Prefix + "Rename";
             public const string Duplicate = Prefix + "Duplicate";
-            public const string Merge = Prefix + "Merge";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public static class JumpOnDragAndDrop
@@ -147,15 +150,35 @@ namespace IronyModManager.Shared
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
             {
                 public const string Prefix = "Collection_Mods.MergeCollection.";
+                public const string Name = Prefix + "Name";
                 public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
-                public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
-                public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
-                public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
                 public const string Overlay_Progress = Prefix + "Overlay_Progress";
+                public static class Options
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Options.";
+                    public const string Title = Prefix + "Title";
+                    public const string Basic = Prefix + "Basic";
+                    public const string Advanced = Prefix + "Advanced";
+                    public const string Close = Prefix + "Close";
+                }
+                public static class Advanced
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Advanced.";
+                    public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
+                    public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
+                    public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
+                }
+                public static class Basic
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Basic.";
+                    public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
+                    public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
+                }
             }
         }
         public static class Mod_Actions

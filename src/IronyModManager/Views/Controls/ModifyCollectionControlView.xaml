@@ -9,7 +9,24 @@
             HorizontalAlignment="Left" MaxHeight="30" Margin="10,0,0,0"></Button>
     <Button Content="{Binding Duplicate}" Command="{Binding DuplicateCommand}"
             HorizontalAlignment="Center" MaxHeight="30"  Margin="0,0,10,0"></Button>
-    <Button Content="{Binding Merge}" Command="{Binding MergeCommand}"
-                HorizontalAlignment="Right" MaxHeight="30"  Margin="0,0,10,0"></Button>
+    <Panel HorizontalAlignment="Right">
+      <Button Content="{Binding MergeOpen}" Command="{Binding MergeOpenCommand}"
+                  MaxHeight="30"  Margin="0,0,10,0"></Button>
+      <Popup PlacementMode="Bottom" IsOpen="{Binding IsMergeOpen}"
+             Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+        <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+          <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+            <TextBlock Text="{Binding MergeSelectMode}" Grid.Row="0" Grid.Column="0"
+                       MinHeight="20" Margin="0,5"></TextBlock>
+            <Button Content="{Binding MergeBasic}" Command="{Binding MergeBasicCommand}"
+                    Grid.Row="1" Grid.Column="0"></Button>
+            <Button Content="{Binding MergeAdvanced}" Command="{Binding MergeAdvancedCommand}"
+                    Grid.Row="2" Grid.Column="0" IsVisible="{Binding ShowAdvancedFeatures}"></Button>
+            <Button Content="{Binding MergeClose}" Command="{Binding MergeCloseCommand}"
+                    Grid.Row="3" Grid.Column="0"></Button>
+          </Grid>
+        </Border>
+      </Popup>
+    </Panel>
   </Panel>
 </UserControl>

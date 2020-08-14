@@ -4,26 +4,27 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
-// <copyright file="GuidHandler.cs" company="Mario">
+// <copyright file="JsonStringToListHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using RepoDb;
 using RepoDb.Interfaces;
 
 namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
 {
     /// <summary>
-    /// Class GuidHandler.
-    /// Implements the <see cref="RepoDb.Interfaces.IPropertyHandler{System.String, System.Guid}" />
+    /// Class StringToListHandler.
+    /// Implements the <see cref="RepoDb.Interfaces.IPropertyHandler{System.String, System.Collections.Generic.List{System.String}}" />
     /// </summary>
-    /// <seealso cref="RepoDb.Interfaces.IPropertyHandler{System.String, System.Guid}" />
-    internal class GuidHandler : IPropertyHandler<string, Guid>
+    /// <seealso cref="RepoDb.Interfaces.IPropertyHandler{System.String, System.Collections.Generic.List{System.String}}" />
+    internal class JsonStringToListHandler : IPropertyHandler<string, List<string>>
     {
         #region Methods
 
@@ -32,11 +33,15 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
         /// </summary>
         /// <param name="input">The input.</param>
         /// <param name="property">The property.</param>
-        /// <returns>Guid.</returns>
-        public Guid Get(string input, ClassProperty property)
+        /// <returns>List&lt;System.String&gt;.</returns>
+        public List<string> Get(string input, ClassProperty property)
         {
-            Guid.TryParse(input, out var output);
-            return output;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return new List<string>();
+            }
+            var array = new JArray(input);
+            return array.ToObject<List<string>>();
         }
 
         /// <summary>
@@ -45,9 +50,13 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
         /// <param name="input">The input.</param>
         /// <param name="property">The property.</param>
         /// <returns>System.String.</returns>
-        public string Set(Guid input, ClassProperty property)
+        public string Set(List<string> input, ClassProperty property)
         {
-            return input.ToString();
+            if (input == null || input.Count == 0)
+            {
+                return new JArray(new List<string>()).ToString();
+            }
+            return new JArray(input).ToString();
         }
 
         #endregion Methods

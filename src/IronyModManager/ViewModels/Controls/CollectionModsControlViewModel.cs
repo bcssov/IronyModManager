@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -103,6 +103,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ConcurrentBag<IMod> reorderQueue;
 
         /// <summary>
+        /// The active game
+        /// </summary>
+        private IGame activeGame;
+
+        /// <summary>
         /// The enable all toggled state
         /// </summary>
         private bool enableAllToggledState = false;
@@ -190,6 +195,13 @@ namespace IronyModManager.ViewModels.Controls
         #region Delegates
 
         /// <summary>
+        /// Delegate ConflictSolverStateChangedDelegate
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="isValid">if set to <c>true</c> [is valid].</param>
+        public delegate void ConflictSolverStateChangedDelegate(string collectionName, bool isValid);
+
+        /// <summary>
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -198,6 +210,11 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Delegates
 
         #region Events
+
+        /// <summary>
+        /// Occurs when [conflict solver state changed].
+        /// </summary>
+        public event ConflictSolverStateChangedDelegate ConflictSolverStateChanged;
 
         /// <summary>
         /// Occurs when [mod reordered].
@@ -296,12 +313,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The collection jump on position change label.</value>
         public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [conflict solver valid].
-        /// </summary>
-        /// <value><c>true</c> if [conflict solver valid]; otherwise, <c>false</c>.</value>
-        public virtual bool ConflictSolverValid { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -589,7 +600,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="isRefreshing">if set to <c>true</c> [is refreshing].</param>
         /// <param name="mods">The mods.</param>
-        public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods)
+        /// <param name="activeGame">The active game.</param>
+        public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods, IGame activeGame)
         {
             if (isRefreshing)
             {
@@ -597,7 +609,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (!isRefreshing && mods?.Count() > 0)
             {
-                SetMods(mods);
+                SetMods(mods, activeGame);
                 refreshInProgress = false;
             }
         }
@@ -646,8 +658,10 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        public virtual void SetMods(IEnumerable<IMod> mods)
+        /// <param name="activeGame">The active game.</param>
+        public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame)
         {
+            this.activeGame = activeGame;
             Mods = mods;
 
             skipModCollectionSave = true;
@@ -872,7 +886,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            ConflictSolverValid = true;
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -998,7 +1011,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeCommand).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeAdvancedCommand, ModifyCollection.MergeBasicCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
@@ -1292,9 +1305,16 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SaveSelectedCollection()
         {
+            var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
-            if (collection != null && SelectedModCollection != null && Mods != null)
+            // Due to async nature ensure that the game and mods are from the same source before saving
+            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame.Type.Equals(game))
             {
+                if (Mods.Count() > 0 && !Mods.All(p => p.Game.Equals(game)))
+                {
+                    return;
+                }
+                collection.Game = game;
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
@@ -1455,18 +1475,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="collection">The collection.</param>
         protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
         {
-            if (SelectedMods?.Count > 0)
+            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
+            if (activeGame != null && SelectedMods?.Count > 0)
             {
-                ConflictSolverValid = true;
-                if (!string.IsNullOrWhiteSpace(collection))
+                ConflictSolverStateChanged?.Invoke(collection, true);
+                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
                 {
                     var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
-                    ConflictSolverValid = !result;
+                    ConflictSolverStateChanged?.Invoke(collection, !result);
                 }
             }
             else
             {
-                ConflictSolverValid = true;
+                ConflictSolverStateChanged?.Invoke(collection, true);
             }
         }
 

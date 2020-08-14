@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="Playsets.cs" company="Mario">
 //     Mario
@@ -30,15 +30,15 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        [Map("id"), PropertyHandler(typeof(GuidHandler))] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
+        [Map("id"), PropertyHandler(typeof(StringToGuidHandler))] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
         public Guid id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is active.
         /// </summary>
         /// <value><c>null</c> if [is active] contains no value, <c>true</c> if [is active]; otherwise, <c>false</c>.</value>
-        [Map("isActive")]
-        public bool? IsActive { get; set; }
+        [Map("isActive"), PropertyHandler(typeof(ObjectToBoolHandler))]
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the load order.

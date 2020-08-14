@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
@@ -52,6 +52,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The full path.</value>
         string FullPath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the game.
+        /// </summary>
+        /// <value>The game.</value>
+        string Game { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.

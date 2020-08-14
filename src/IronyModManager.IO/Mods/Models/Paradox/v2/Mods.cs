@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -121,15 +121,15 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        [Map("id"), Primary, PropertyHandler(typeof(GuidHandler))] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
+        [Map("id"), Primary, PropertyHandler(typeof(StringToGuidHandler))] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
         public Guid id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is new.
         /// </summary>
         /// <value><c>null</c> if [is new] contains no value, <c>true</c> if [is new]; otherwise, <c>false</c>.</value>
-        [Map("isNew")]
-        public bool? IsNew { get; set; }
+        [Map("isNew"), PropertyHandler(typeof(ObjectToBoolHandler))]
+        public bool IsNew { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -206,7 +206,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// </summary>
         /// <value>The tags.</value>
         [Map("tags")]
-        [PropertyHandler(typeof(JsonHandler))]
+        [PropertyHandler(typeof(JsonStringToListHandler))]
         public List<string> Tags { get; set; }
 
         /// <summary>

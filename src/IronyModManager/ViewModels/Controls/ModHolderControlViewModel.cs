@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -286,6 +286,12 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Title)]
         public virtual string ModeTitle { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -425,6 +431,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -449,12 +456,12 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
-                CollectionMods.SetMods(v);
+                CollectionMods.SetMods(v, InstalledMods.ActiveGame);
             });
 
             this.WhenAnyValue(v => v.InstalledMods.RefreshingMods).Subscribe(s =>
             {
-                CollectionMods.HandleModRefresh(s, InstalledMods.Mods);
+                CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(s =>
@@ -558,18 +565,28 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             var previousCollectionNotification = string.Empty;
-            this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
+            CollectionMods.ConflictSolverStateChanged += (collectionName, state) =>
             {
-                AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
-                if (!s && previousCollectionNotification != CollectionMods.SelectedModCollection?.Name)
+                AnalyzeClass = !state ? InvalidConflictSolverClass : string.Empty;
+                if (!state && previousCollectionNotification != collectionName)
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                 }
-                previousCollectionNotification = CollectionMods.SelectedModCollection?.Name;
-            }).DisposeWith(disposables);
+                previousCollectionNotification = collectionName;
+            };
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            base.OnSelectedGameChanged(game);
         }
 
         /// <summary>

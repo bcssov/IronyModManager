@@ -40,6 +40,31 @@ namespace IronyModManager.Services.Registrations
             var storage = DIResolver.Get<IStorageProvider>();
             var userDir = UserDirectory.GetDirectory();
             storage.RegisterGame(GetStellaris(userDir));
+            storage.RegisterGame(GetEUIV(userDir));
+            storage.RegisterGame(GetHOI4(userDir));
+            storage.RegisterGame(GetImperator(userDir));
+        }
+
+        /// <summary>
+        /// Gets the euiv.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetEUIV(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.ChecksumFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.EuropaUniversalis4.Id;
+            game.SteamAppId = Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.AdvancedFeaturesSupported = false;
+            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            return game;
         }
 
         /// <summary>
@@ -77,24 +102,69 @@ namespace IronyModManager.Services.Registrations
         }
 
         /// <summary>
+        /// Gets the ho i4.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetHOI4(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.ChecksumFolders = Shared.Constants.GamesTypes.HeartsOfIron4.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.HeartsOfIron4.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.HeartsOfIron4.Id;
+            game.SteamAppId = Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.AdvancedFeaturesSupported = false;
+            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            return game;
+        }
+
+        /// <summary>
+        /// Gets the imperator.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetImperator(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.ChecksumFolders = Shared.Constants.GamesTypes.ImperatorRome.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.ImperatorRome.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.ImperatorRome.Id;
+            game.SteamAppId = Shared.Constants.GamesTypes.ImperatorRome.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsFileName;
+            game.AdvancedFeaturesSupported = false;
+            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            return game;
+        }
+
+        /// <summary>
         /// Gets the stellaris.
         /// </summary>
         /// <param name="baseUserDir">The base user dir.</param>
         /// <returns>IGameType.</returns>
         private IGameType GetStellaris(string baseUserDir)
         {
-            var stellaris = DIResolver.Get<IGameType>();
-            stellaris.ChecksumFolders = Shared.Constants.GamesTypes.Stellaris.ChecksumFolders;
-            stellaris.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
-            stellaris.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.Name), Shared.Constants.GamesTypes.Stellaris.LogLocation).StandardizeDirectorySeparator();
-            stellaris.Name = Shared.Constants.GamesTypes.Stellaris.Name;
-            stellaris.SteamAppId = Shared.Constants.GamesTypes.Stellaris.SteamAppId;
-            stellaris.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.Name).StandardizeDirectorySeparator();
-            stellaris.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
-            stellaris.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
-            stellaris.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
-            MapExecutableSettings(stellaris, GetExecutableSettings(stellaris.BaseGameDirectory, stellaris.LauncherSettingsFileName));
-            return stellaris;
+            var game = DIResolver.Get<IGameType>();
+            game.ChecksumFolders = Shared.Constants.GamesTypes.Stellaris.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.Stellaris.Id;
+            game.SteamAppId = Shared.Constants.GamesTypes.Stellaris.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.AdvancedFeaturesSupported = true;
+            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            return game;
         }
 
         /// <summary>
