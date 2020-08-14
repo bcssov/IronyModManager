@@ -1006,7 +1006,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeAdvancedCommand).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeAdvancedCommand, ModifyCollection.MergeBasicCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {

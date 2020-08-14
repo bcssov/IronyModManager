@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -99,7 +99,7 @@ namespace IronyModManager.Services
         /// <param name="modOrder">The mod order.</param>
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IMod&gt;.</returns>
-        public virtual async Task<IMod> MergeCollectionAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
+        public virtual async Task<IMod> MergeCollectionByDefinitionsAsync(IConflictResult conflictResult, IList<string> modOrder, string collectionName)
         {
             static string cleanString(string text)
             {
@@ -188,7 +188,7 @@ namespace IronyModManager.Services
                 {
                     var definition = CopyDefinition(conflictResult.CustomConflicts.GetByFile(file).FirstOrDefault());
                     definition.Code = conflictHistoryIndex.GetByTypeAndId(definition.TypeAndId).FirstOrDefault().Code;
-                    await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                    await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
                     {
                         ExportPath = exportPath,
                         Definitions = definition != null ? PopulateModPath(new List<IDefinition>() { definition }, collectionMods) : null,
@@ -198,7 +198,7 @@ namespace IronyModManager.Services
                     var percentage = GetProgressPercentage(total, processed, 100);
                     if (lastPercentage != percentage)
                     {
-                        await messageBus.PublishAsync(new ModMergeProgressEvent(percentage));
+                        await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(percentage));
                     }
                     lastPercentage = percentage;
                 }
@@ -449,7 +449,7 @@ namespace IronyModManager.Services
                                 var conflicts = conflictResult.AllConflicts.GetByFile(file);
                                 merged.File = conflicts.FirstOrDefault().File;
                             }
-                            await modMergeExporter.ExportDefinitionsAsync(new ModMergeExporterParameters()
+                            await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
                             {
                                 ExportPath = exportPath,
                                 Definitions = merged != null ? PopulateModPath(new List<IDefinition>() { merged }, collectionMods) : null,
@@ -461,7 +461,7 @@ namespace IronyModManager.Services
                         var percentage = GetProgressPercentage(total, processed, 100);
                         if (lastPercentage != percentage)
                         {
-                            await messageBus.PublishAsync(new ModMergeProgressEvent(percentage));
+                            await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(percentage));
                         }
                         lastPercentage = percentage;
                     }
@@ -470,6 +470,96 @@ namespace IronyModManager.Services
                 return mod;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Merges the collection by files asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IMod&gt;.</returns>
+        public virtual async Task<IMod> MergeCollectionByFilesAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return null;
+            }
+
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var collectionMods = GetCollectionMods(allMods).ToList();
+            if (collectionMods.Count == 0)
+            {
+                return null;
+            }
+
+            var mergeCollectionPath = collectionName.GenerateValidFileName();
+            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+            }, true);
+            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Shared.Constants.ModDirectory
+            });
+            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+            });
+
+            var mod = DIResolver.Get<IMod>();
+            mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
+            mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
+            mod.Name = collectionName;
+            mod.Source = ModSource.Local;
+            mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.FullPath = GetModDirectory(game, mergeCollectionPath);
+            await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+            {
+                Mod = mod,
+                RootDirectory = game.UserDirectory,
+                Path = mod.DescriptorFile
+            }, true);
+            Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+
+            var exportPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath);
+            var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
+            var patchName = GenerateCollectionPatchName(collection.Name);
+            var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
+            if (patchMod != null)
+            {
+                collectionMods.Add(patchMod);
+            }
+
+            await messageBus.PublishAsync(new ModFileMergeProgressEvent(1, 0));
+            await PopulateModFilesInternalAsync(collectionMods);
+            await messageBus.PublishAsync(new ModFileMergeProgressEvent(1, 100));
+
+            var totalFiles = collectionMods.Where(p => p.Files != null).Select(p => p.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count();
+            var lastPercentage = 0;
+            var processed = 0;
+            foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
+            {
+                foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
+                {
+                    processed++;
+                    await modMergeExporter.ExportFilesAsync(new ModMergeFileExporterParameters()
+                    {
+                        RootModPath = collectionMod.FullPath,
+                        ExportFile = file,
+                        ExportPath = mod.FullPath
+                    });
+                    var percentage = GetProgressPercentage(totalFiles, processed, 100);
+                    if (lastPercentage != percentage)
+                    {
+                        await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, percentage));
+                    }
+                    lastPercentage = percentage;
+                }
+            }
+            return mod;
         }
 
         /// <summary>

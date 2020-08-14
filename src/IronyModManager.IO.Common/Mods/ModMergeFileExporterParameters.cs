@@ -1,36 +1,33 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.IO.Common
 // Author           : Mario
-// Created          : 06-19-2020
+// Created          : 08-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
-// <copyright file="ModMergeExporterParameters.cs" company="Mario">
+// <copyright file="ModMergeFileExporterParameters.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Common.Definitions;
-using IronyModManager.Shared;
 
 namespace IronyModManager.IO.Common.Mods
 {
     /// <summary>
-    /// Class ModMergeExporterParameters.
+    /// Class ModMergeFileExporterParameters.
     /// </summary>
-    [ExcludeFromCoverage("Parameters.")]
-    public class ModMergeExporterParameters
+    public class ModMergeFileExporterParameters
     {
         #region Properties
 
         /// <summary>
-        /// Gets or sets the definitions.
+        /// Gets or sets the export file.
         /// </summary>
-        /// <value>The definitions.</value>
-        public IEnumerable<IDefinition> Definitions { get; set; }
+        /// <value>The export file.</value>
+        public string ExportFile { get; set; }
 
         /// <summary>
         /// Gets or sets the export path.
@@ -39,16 +36,10 @@ namespace IronyModManager.IO.Common.Mods
         public string ExportPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the game.
+        /// Gets or sets the root mod path.
         /// </summary>
-        /// <value>The game.</value>
-        public string Game { get; set; }
-
-        /// <summary>
-        /// Gets or sets the patch definitions.
-        /// </summary>
-        /// <value>The patch definitions.</value>
-        public IEnumerable<IDefinition> PatchDefinitions { get; set; }
+        /// <value>The root mod path.</value>
+        public string RootModPath { get; set; }
 
         #endregion Properties
     }

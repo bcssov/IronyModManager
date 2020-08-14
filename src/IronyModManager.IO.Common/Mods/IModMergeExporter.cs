@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="IModMergeExporter.cs" company="Mario">
 //     Mario
@@ -29,7 +29,14 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportDefinitionsAsync(ModMergeExporterParameters parameters);
+        Task<bool> ExportDefinitionsAsync(ModMergeDefinitionExporterParameters parameters);
+
+        /// <summary>
+        /// Exports the files asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportFilesAsync(ModMergeFileExporterParameters parameters);
 
         #endregion Methods
     }

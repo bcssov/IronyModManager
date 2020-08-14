@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -83,7 +83,7 @@ namespace IronyModManager.Services.Tests
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
-            var result = await service.MergeCollectionAsync(new ConflictResult()
+            var result = await service.MergeCollectionByDefinitionsAsync(new ConflictResult()
             {
                 AllConflicts = indexed,
                 Conflicts = empty,
@@ -119,7 +119,7 @@ namespace IronyModManager.Services.Tests
             }));
             IDefinition definition = null;
             var modMergeExporter = new Mock<IModMergeExporter>();
-            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeExporterParameters>())).Returns((ModMergeExporterParameters p) =>
+            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
                 definition = p.Definitions.FirstOrDefault();
                 return Task.FromResult(true);
@@ -201,7 +201,7 @@ namespace IronyModManager.Services.Tests
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
-            var result = await service.MergeCollectionAsync(new ConflictResult()
+            var result = await service.MergeCollectionByDefinitionsAsync(new ConflictResult()
             {
                 AllConflicts = indexed,
                 Conflicts = empty,
@@ -237,7 +237,7 @@ namespace IronyModManager.Services.Tests
             }));
             IDefinition definition = null;
             var modMergeExporter = new Mock<IModMergeExporter>();
-            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeExporterParameters>())).Returns((ModMergeExporterParameters p) =>
+            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
                 definition = p.Definitions.FirstOrDefault();
                 return Task.FromResult(true);
@@ -323,7 +323,7 @@ namespace IronyModManager.Services.Tests
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
-            var result = await service.MergeCollectionAsync(new ConflictResult()
+            var result = await service.MergeCollectionByDefinitionsAsync(new ConflictResult()
             {
                 AllConflicts = indexed,
                 Conflicts = empty,
@@ -378,7 +378,7 @@ namespace IronyModManager.Services.Tests
             }));
             IDefinition definition = null;
             var modMergeExporter = new Mock<IModMergeExporter>();
-            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeExporterParameters>())).Returns((ModMergeExporterParameters p) =>
+            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
                 definition = p.PatchDefinitions.FirstOrDefault();
                 return Task.FromResult(true);
@@ -452,7 +452,7 @@ namespace IronyModManager.Services.Tests
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
-            var result = await service.MergeCollectionAsync(new ConflictResult()
+            var result = await service.MergeCollectionByDefinitionsAsync(new ConflictResult()
             {
                 AllConflicts = indexed,
                 Conflicts = empty,
@@ -488,7 +488,7 @@ namespace IronyModManager.Services.Tests
             }));
             IDefinition definition = null;
             var modMergeExporter = new Mock<IModMergeExporter>();
-            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeExporterParameters>())).Returns((ModMergeExporterParameters p) =>
+            modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
                 definition = p.PatchDefinitions.FirstOrDefault();
                 return Task.FromResult(true);
@@ -574,7 +574,7 @@ namespace IronyModManager.Services.Tests
             var empty = new IndexedDefinitions();
             empty.InitMap(new List<IDefinition>());
 
-            var result = await service.MergeCollectionAsync(new ConflictResult()
+            var result = await service.MergeCollectionByDefinitionsAsync(new ConflictResult()
             {
                 AllConflicts = indexed,
                 Conflicts = empty,
@@ -584,6 +584,145 @@ namespace IronyModManager.Services.Tests
 
             result.Should().NotBeNull();
             definition.Code.Should().Be("test = {testfakeoverwritten}");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_create_file_merge_mod_due_to_no_game_set.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_create_file_merge_mod_due_to_no_game_set()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCollectionByFilesAsync("test");
+
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_create_file_merge_mod_due_to_no_collection_name.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_create_file_merge_mod_due_to_no_collection_name()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
+            });
+
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCollectionByFilesAsync(string.Empty);
+
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_create_file_merge_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_create_file_merge_mod()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+
+            modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_create_file_merge_mod",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Should_create_file_merge_mod"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+
+            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCollectionByFilesAsync("test");
+
+            result.Should().NotBeNull();
         }
     }
 }

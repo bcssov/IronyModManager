@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -66,10 +66,10 @@ namespace IronyModManager.IO.Mods
         /// export definitions as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">ExportPath.</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
-        public async Task<bool> ExportDefinitionsAsync(ModMergeExporterParameters parameters)
+        public async Task<bool> ExportDefinitionsAsync(ModMergeDefinitionExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.ExportPath))
             {
@@ -98,6 +98,31 @@ namespace IronyModManager.IO.Mods
                     parameters.ExportPath, parameters.Game));
             }
             return results.All(p => p);
+        }
+
+        /// <summary>
+        /// Exports the files asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <exception cref="ArgumentNullException">ExportPath.</exception>
+        /// <exception cref="ArgumentNullException">ExportFile.</exception>
+        /// <exception cref="ArgumentNullException">RootModPath</exception>
+        public Task<bool> ExportFilesAsync(ModMergeFileExporterParameters parameters)
+        {
+            if (string.IsNullOrWhiteSpace(parameters.ExportPath))
+            {
+                throw new ArgumentNullException("ExportPath.");
+            }
+            if (string.IsNullOrWhiteSpace(parameters.ExportFile))
+            {
+                throw new ArgumentNullException("ExportFile.");
+            }
+            if (string.IsNullOrWhiteSpace(parameters.RootModPath))
+            {
+                throw new ArgumentNullException("RootModPath");
+            }
+            return CopyStreamAsync(parameters.RootModPath, parameters.ExportFile, parameters.ExportPath);
         }
 
         /// <summary>
@@ -168,6 +193,50 @@ namespace IronyModManager.IO.Mods
                 }
             }
             return true;
+        }
+
+        private Task<bool> CopyStreamAsync(string modPath, string modFile, string exportPath)
+        {
+            static async Task<bool> copyStream(Stream s, FileStream fs)
+            {
+                await s.CopyToAsync(fs);
+                return true;
+            }
+
+            var retry = new RetryStrategy();
+            var outPath = Path.Combine(exportPath, modFile);
+            var stream = reader.GetStream(modPath, modFile);
+            // If image and no stream try switching extension
+            if (Shared.Constants.ImageExtensions.Any(s => modFile.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
+            {
+                var segments = modFile.Split(".", StringSplitOptions.RemoveEmptyEntries);
+                var file = string.Join(".", segments.Take(segments.Count() - 1));
+                foreach (var item in Shared.Constants.ImageExtensions)
+                {
+                    stream = reader.GetStream(modPath, file + item);
+                    if (stream != null)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!Directory.Exists(Path.GetDirectoryName(outPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(outPath));
+            }
+            if (File.Exists(outPath))
+            {
+                File.Delete(outPath);
+            }
+            var fs = new FileStream(outPath, FileMode.Create, FileAccess.Write, FileShare.Read);
+            if (stream.CanSeek)
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+            }
+            return retry.RetryActionAsync(() =>
+            {
+                return copyStream(stream, fs);
+            });
         }
 
         /// <summary>
