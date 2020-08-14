@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -133,7 +133,7 @@ namespace IronyModManager.Services
                 var collections = StorageProvider.GetModCollections().ToList();
                 if (collections.Count() > 0)
                 {
-                    var existing = collections.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    var existing = collections.FirstOrDefault(p => p.Game.Equals(game.Type) && p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (existing != null)
                     {
                         collections.Remove(existing);

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -152,6 +152,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The achievement compatible.</value>
         [StaticLocalization(LocalizationResources.Achievements.AchievementCompatible)]
         public virtual string AchievementCompatible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the active game.
+        /// </summary>
+        /// <value>The active game.</value>
+        public IGame ActiveGame { get; protected set; }
 
         /// <summary>
         /// Gets or sets all mods.
@@ -549,6 +555,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 game = gameService.GetSelected();
             }
+            ActiveGame = game;
             if (game != null)
             {
                 var mods = await Task.Run(() => modService.GetInstalledMods(game));

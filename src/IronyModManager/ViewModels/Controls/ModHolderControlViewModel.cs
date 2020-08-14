@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -456,12 +456,12 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
-                CollectionMods.SetMods(v);
+                CollectionMods.SetMods(v, InstalledMods.ActiveGame);
             });
 
             this.WhenAnyValue(v => v.InstalledMods.RefreshingMods).Subscribe(s =>
             {
-                CollectionMods.HandleModRefresh(s, InstalledMods.Mods);
+                CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(s =>

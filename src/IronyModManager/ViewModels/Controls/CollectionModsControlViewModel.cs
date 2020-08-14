@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -101,6 +101,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The reorder queue
         /// </summary>
         private readonly ConcurrentBag<IMod> reorderQueue;
+
+        /// <summary>
+        /// The active game
+        /// </summary>
+        private IGame activeGame;
 
         /// <summary>
         /// The enable all toggled state
@@ -589,7 +594,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="isRefreshing">if set to <c>true</c> [is refreshing].</param>
         /// <param name="mods">The mods.</param>
-        public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods)
+        /// <param name="activeGame">The active game.</param>
+        public virtual void HandleModRefresh(bool isRefreshing, IEnumerable<IMod> mods, IGame activeGame)
         {
             if (isRefreshing)
             {
@@ -597,7 +603,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (!isRefreshing && mods?.Count() > 0)
             {
-                SetMods(mods);
+                SetMods(mods, activeGame);
                 refreshInProgress = false;
             }
         }
@@ -646,8 +652,10 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        public virtual void SetMods(IEnumerable<IMod> mods)
+        /// <param name="activeGame">The active game.</param>
+        public virtual void SetMods(IEnumerable<IMod> mods, IGame activeGame)
         {
+            this.activeGame = activeGame;
             Mods = mods;
 
             skipModCollectionSave = true;
@@ -1292,11 +1300,15 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual void SaveSelectedCollection()
         {
-            var game = gameService.GetSelected()?.Name ?? string.Empty;
+            var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
             // Due to async nature ensure that the game and mods are from the same source before saving
-            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && Mods.FirstOrDefault().Game.Equals(game))
+            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame.Type.Equals(game))
             {
+                if (Mods.Count() > 0 && !Mods.All(p => p.Game.Equals(game)))
+                {
+                    return;
+                }
                 collection.Game = game;
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
