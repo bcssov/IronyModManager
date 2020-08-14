@@ -150,6 +150,7 @@ namespace IronyModManager.Shared
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
             {

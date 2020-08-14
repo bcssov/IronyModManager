@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -116,6 +116,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ImportOther { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other close.
+        /// </summary>
+        /// <value>The import other close.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Close)]
+        public virtual string ImportOtherClose { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other close command.
+        /// </summary>
+        /// <value>The import other close command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportOtherCloseCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other command.
         /// </summary>
         /// <value>The import other command.</value>
@@ -218,6 +231,11 @@ namespace IronyModManager.ViewModels.Controls
             ImportOtherCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = true;
+            }).DisposeWith(disposables);
+
+            ImportOtherCloseCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = false;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

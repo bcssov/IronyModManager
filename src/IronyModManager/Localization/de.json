@@ -108,7 +108,8 @@
             "Title": "...",
             "Paradoxos": "Import aus Paradoxos",
             "Paradox": "Aus dem Spiel importieren",
-            "ParadoxLauncher": "Import aus Paradox Launcher"
+            "ParadoxLauncher": "Import aus Paradox Launcher",
+            "Close": "Schließen"
         },
         "MergeCollection": {
             "Name": "Verschmelzen",

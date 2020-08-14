@@ -108,7 +108,8 @@
             "Title": "...",
             "Paradoxos": "Uvezi iz Paradoxos",
             "Paradox": "Uvezi iz igre",
-            "ParadoxLauncher": "Uvezi iz Paradox Launcher"
+            "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+            "Close": "Zatvori"
         },
         "MergeCollection": {
             "Name": "Spoji",

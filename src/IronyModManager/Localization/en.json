@@ -108,7 +108,8 @@
             "Title": "...",
             "Paradoxos": "Import From Paradoxos",
             "Paradox": "Import From Game",
-            "ParadoxLauncher": "Import From Paradox Launcher"
+            "ParadoxLauncher": "Import From Paradox Launcher",
+            "Close": "Close"
         },
         "MergeCollection": {
             "Name": "Merge",
