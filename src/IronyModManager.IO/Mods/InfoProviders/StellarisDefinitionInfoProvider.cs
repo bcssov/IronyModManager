@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-08-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -54,7 +54,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>CanProcess.</returns>
         public override bool CanProcess(string game)
         {
-            return game.Equals(Shared.Constants.GamesTypes.Stellaris.Name);
+            return game.Equals(Shared.Constants.GamesTypes.Stellaris.Id);
         }
 
         /// <summary>

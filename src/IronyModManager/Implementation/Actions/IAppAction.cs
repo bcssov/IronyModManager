@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="IAppAction.cs" company="Mario">
 //     Mario
@@ -29,8 +29,8 @@ namespace IronyModManager.Implementation.Actions
         /// Copies the asynchronous.
         /// </summary>
         /// <param name="text">The text.</param>
-        /// <returns>Task.</returns>
-        Task CopyAsync(string text);
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CopyAsync(string text);
 
         /// <summary>
         /// Exits the application asynchronous.
@@ -42,8 +42,16 @@ namespace IronyModManager.Implementation.Actions
         /// Opens the asynchronous.
         /// </summary>
         /// <param name="command">The command.</param>
-        /// <returns>Task.</returns>
-        Task OpenAsync(string command);
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> OpenAsync(string command);
+
+        /// <summary>
+        /// Runs the asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="args">The arguments.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> RunAsync(string path, string args = Shared.Constants.EmptyParam);
 
         #endregion Methods
     }

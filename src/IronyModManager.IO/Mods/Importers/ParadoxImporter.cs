@@ -4,7 +4,7 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ParadoxImporter.cs" company="Mario">
 //     Mario
@@ -16,15 +16,16 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.IO.Mods.Models;
+using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
-namespace IronyModManager.IO.Mods
+namespace IronyModManager.IO.Mods.Importers
 {
     /// <summary>
     /// Class ParadoxImporter.
     /// </summary>
+    [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class ParadoxImporter
     {
         #region Fields
@@ -33,11 +34,6 @@ namespace IronyModManager.IO.Mods
         /// The collection name
         /// </summary>
         private const string CollectionName = "Paradox";
-
-        /// <summary>
-        /// The DLC load path
-        /// </summary>
-        private const string DLC_load_path = "dlc_load.json";
 
         /// <summary>
         /// The logger
@@ -68,7 +64,7 @@ namespace IronyModManager.IO.Mods
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<bool> ImportAsync(ModCollectionExporterParams parameters)
         {
-            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), DLC_load_path);
+            var path = Path.Combine(Path.GetDirectoryName(parameters.ModDirectory), Constants.DLC_load_path);
             if (File.Exists(path))
             {
                 var content = await File.ReadAllTextAsync(path);

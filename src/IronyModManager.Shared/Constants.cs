@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -168,7 +168,93 @@ namespace IronyModManager.Shared
         /// </summary>
         public static class GamesTypes
         {
+            #region Fields
+
+            /// <summary>
+            /// The log location
+            /// </summary>
+            public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
+
+            /// <summary>
+            /// The launcher settings file name
+            /// </summary>
+            public static string LauncherSettingsFileName = "launcher-settings.json";
+
+            #endregion Fields
+
             #region Classes
+
+            /// <summary>
+            /// Class EuropaUniversalis4.
+            /// </summary>
+            public static class EuropaUniversalis4
+            {
+                #region Fields
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "EuropaUniversalisIV";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Europa Universalis IV";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 236850;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "missions", "decisions", "history", "map" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "customizable_localization", "decisions", "events", "gfx", "hints",
+                    "history", "interface", "localisation", "map", "missions", "music", "sound", "tutorial", "tweakergui_assets" };
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class HeartsOfIron4.
+            /// </summary>
+            public static class HeartsOfIron4
+            {
+                #region Fields
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "HeartsofIronIV";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Hearts of Iron IV";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 394360;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "history", "map" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "events", "gfx", "history", "interface", "localisation",
+                    "map", "music", "portraits", "previewer_assets", "script", "sound", "tutorial", "tweakergui_assets" };
+
+                #endregion Fields
+            }
 
             /// <summary>
             /// Class Stellaris.
@@ -178,9 +264,14 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
-                /// The name
+                /// The identifier
                 /// </summary>
-                public const string Name = "Stellaris";
+                public const string Id = "Stellaris";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = Id;
 
                 /// <summary>
                 /// The steam application identifier
@@ -199,10 +290,46 @@ namespace IronyModManager.Shared
                     "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
                     "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
 
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class ImperatorRome.
+            /// </summary>
+            public static class ImperatorRome
+            {
+                #region Fields
+
                 /// <summary>
-                /// The log location
+                /// The launcher settings file name
                 /// </summary>
-                public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
+                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "ImperatorRome";
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Imperator";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 859580;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "decisions", "gui","localization", "map_data", "setup"};
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "content_source", "decisions", "events", "fonts", "gfx",
+                    "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets" };
 
                 #endregion Fields
             }

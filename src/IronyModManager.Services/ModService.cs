@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-11-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -227,8 +227,11 @@ namespace IronyModManager.Services
                         Path = diff.DescriptorFile
                     }, IsPatchModInternal(diff)));
                 }
-                await Task.WhenAll(tasks);
-                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                if (tasks.Count > 0)
+                {
+                    await Task.WhenAll(tasks);
+                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                }
                 return true;
             }
 
@@ -267,32 +270,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods)
+        public virtual Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods)
         {
-            if (mods?.Count() > 0)
-            {
-                var tasks = new List<Task>();
-                foreach (var mod in mods)
-                {
-                    if (mod.IsValid)
-                    {
-                        var task = Task.Run(() =>
-                        {
-                            var localMod = mod;
-                            var files = Reader.GetFiles(mod.FullPath);
-                            localMod.Files = files ?? new List<string>();
-                        });
-                        tasks.Add(task);
-                    }
-                    else
-                    {
-                        mod.Files = new List<string>();
-                    }
-                }
-                await Task.WhenAll(tasks);
-                return true;
-            }
-            return false;
+            return PopulateModFilesInternalAsync(mods);
         }
 
         /// <summary>

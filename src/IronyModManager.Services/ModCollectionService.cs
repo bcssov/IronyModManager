@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -73,6 +73,31 @@ namespace IronyModManager.Services
 
         #endregion Constructors
 
+        #region Enums
+
+        /// <summary>
+        /// Enum ImportType
+        /// </summary>
+        protected enum ImportType
+        {
+            /// <summary>
+            /// The paradox
+            /// </summary>
+            Paradox,
+
+            /// <summary>
+            /// The paradox launcher
+            /// </summary>
+            ParadoxLauncher,
+
+            /// <summary>
+            /// The paradoxos
+            /// </summary>
+            Paradoxos
+        }
+
+        #endregion Enums
+
         #region Methods
 
         /// <summary>
@@ -108,7 +133,7 @@ namespace IronyModManager.Services
                 var collections = StorageProvider.GetModCollections().ToList();
                 if (collections.Count() > 0)
                 {
-                    var existing = collections.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    var existing = collections.FirstOrDefault(p => p.Game.Equals(game.Type) && p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (existing != null)
                     {
                         collections.Remove(existing);
@@ -240,23 +265,18 @@ namespace IronyModManager.Services
         /// import paradox as an asynchronous operation.
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
-        public virtual async Task<IModCollection> ImportParadoxAsync()
+        public virtual Task<IModCollection> ImportParadoxAsync()
         {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return null;
-            }
-            var instance = Create();
-            if (await modCollectionExporter.ImportParadoxAsync(new ModCollectionExporterParams()
-            {
-                ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                Mod = instance
-            }))
-            {
-                return instance;
-            }
-            return null;
+            return ImportModsAsync(ImportType.Paradox);
+        }
+
+        /// <summary>
+        /// Imports the paradox launcher asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;IModCollection&gt;.</returns>
+        public virtual Task<IModCollection> ImportParadoxLauncherAsync()
+        {
+            return ImportModsAsync(ImportType.ParadoxLauncher);
         }
 
         /// <summary>
@@ -264,23 +284,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
-        public virtual async Task<IModCollection> ImportParadoxosAsync(string file)
+        public virtual Task<IModCollection> ImportParadoxosAsync(string file)
         {
-            var game = GameService.GetSelected();
-            if (game == null)
-            {
-                return null;
-            }
-            var instance = Create();
-            if (await modCollectionExporter.ImportParadoxosAsync(new ModCollectionExporterParams()
-            {
-                File = file,
-                Mod = instance
-            }))
-            {
-                return instance;
-            }
-            return null;
+            return ImportModsAsync(ImportType.Paradoxos, file);
         }
 
         /// <summary>
@@ -321,6 +327,56 @@ namespace IronyModManager.Services
                 collections.Add(collection);
                 return StorageProvider.SetModCollections(collections);
             }
+        }
+
+        /// <summary>
+        /// import mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="importType">Type of the import.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IModCollection.</returns>
+        protected virtual async Task<IModCollection> ImportModsAsync(ImportType importType, string file = Shared.Constants.EmptyParam)
+        {
+            async Task<IModCollection> performImport(IGame game)
+            {
+                var instance = Create();
+                var parameters = new ModCollectionExporterParams()
+                {
+                    ModDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                    File = file,
+                    Mod = instance
+                };
+                bool result = false;
+                switch (importType)
+                {
+                    case ImportType.Paradox:
+                        result = await modCollectionExporter.ImportParadoxAsync(parameters);
+                        break;
+
+                    case ImportType.ParadoxLauncher:
+                        result = await modCollectionExporter.ImportParadoxLauncherAsync(parameters);
+                        break;
+
+                    case ImportType.Paradoxos:
+                        result = await modCollectionExporter.ImportParadoxosAsync(parameters);
+                        break;
+
+                    default:
+                        break;
+                }
+                if (result)
+                {
+                    return instance;
+                }
+                return null;
+            }
+
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return null;
+            }
+            return await performImport(game);
         }
 
         #endregion Methods

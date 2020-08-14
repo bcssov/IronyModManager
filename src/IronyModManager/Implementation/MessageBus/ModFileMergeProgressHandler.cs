@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 06-20-2020
+// Created          : 08-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
-// <copyright file="ModMergeProgressHandler.cs" company="Mario">
+// <copyright file="ModFileMergeProgressHandler.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,11 +19,11 @@ using IronyModManager.Shared.MessageBus;
 namespace IronyModManager.Implementation.MessageBus
 {
     /// <summary>
-    /// Class ModMergeProgressHandler.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.Services.Common.MessageBus.ModMergeProgressEvent}" />
+    /// Class ModFileMergeProgressHandler.
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.Services.Common.MessageBus.ModFileMergeProgressEvent}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.Services.Common.MessageBus.ModMergeProgressEvent}" />
-    public class ModMergeProgressHandler : BaseMessageBusConsumer<ModMergeProgressEvent>
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseMessageBusConsumer{IronyModManager.Services.Common.MessageBus.ModFileMergeProgressEvent}" />
+    public class ModFileMergeProgressHandler : BaseMessageBusConsumer<ModFileMergeProgressEvent>
     {
     }
 }

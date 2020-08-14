@@ -7,7 +7,8 @@
             "Name": "Verknüpfungen",
             "Wiki": "Wiki",
             "Logs": "Protokolle",
-            "ErrorLog": "Error.log"
+            "ErrorLog": "Error.log",
+            "Close": "Schließen"
         }
     },
     "FatalError": {
@@ -52,7 +53,10 @@
     },
     "Games": {
         "Name": "Spiele",
-        "Stellaris": "Stellaris"
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome"
     },
     "Installed_Mods": {
         "Name": "Installierte Mods",
@@ -89,7 +93,6 @@
         "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
-        "Merge": "Verschmelzen",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "JumpOnDragAndDrop": {
@@ -103,26 +106,51 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Importieren Paradoxos",
-            "Paradox": "Aus dem Spiel importieren"
+            "Paradoxos": "Import aus Paradoxos",
+            "Paradox": "Aus dem Spiel importieren",
+            "ParadoxLauncher": "Import aus Paradox Launcher",
+            "Close": "Schließen"
         },
         "MergeCollection": {
+            "Name": "Verschmelzen",
             "MergedCollectionSuffix": "(Zusammengeführt)",
-            "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
-            "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
-            "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen...",
-            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
+            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "Auswahlmodus",
+                "Basic": "Basic",
+                "Advanced": "Fortgeschrittene",
+                "Close": "Schließen"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
+                "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
+                "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
+                "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            }
         }
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
-        "LaunchGame": "Spiel startet",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
-        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
+        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Name": "Spiel startet",
+            "LaunchError": {
+                "Title": "Spiel kann nicht gestartet werden",
+                "Message": "Das Spiel konnte nicht gestartet werden."
+            },
+            "NotSet": {
+                "Title": "Spiel nicht eingestellt",
+                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den ausführbaren Pfad manuell festzulegen."
+            }
+        }
     },
     "Conflict_Solver": {
         "Back": "Zurück",
@@ -140,6 +168,7 @@
         "OverlayResolve": "Bitte warten Sie, während Sie den Konflikt lösen...",
         "NextConflict": "Nächster Konflikt",
         "PrevConflict": "Vorheriger Konflikt",
+        "ConflictCount": "Konflikt Zahl: {Count}",
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",

@@ -7,7 +7,8 @@
             "Name": "Shortcuts",
             "Wiki": "Wiki",
             "Logs": "Logs",
-            "ErrorLog": "Error.log"
+            "ErrorLog": "Error.log",
+            "Close": "Close"
         }
     },
     "FatalError": {
@@ -52,7 +53,10 @@
     },
     "Games": {
         "Name": "Games",
-        "Stellaris": "Stellaris"
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome"
     },
     "Installed_Mods": {
         "Name": "Installed Mods",
@@ -89,7 +93,6 @@
         "Order": "Order",
         "Rename": "Rename",
         "Duplicate": "Duplicate",
-        "Merge": "Merge",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "JumpOnDragAndDrop": {
@@ -103,26 +106,51 @@
         },
         "ImportOther": {
             "Title": "...",
-            "Paradoxos": "Import Paradoxos",
-            "Paradox": "Import From Game"
+            "Paradoxos": "Import From Paradoxos",
+            "Paradox": "Import From Game",
+            "ParadoxLauncher": "Import From Paradox Launcher",
+            "Close": "Close"
         },
         "MergeCollection": {
+            "Name": "Merge",
             "MergedCollectionSuffix": "(Merged)",
-            "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
-            "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
-            "Overlay_Merging_Collection": "Please wait while merging the mod collection...",
-            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
+            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "Select mode",
+                "Basic": "Basic",
+                "Advanced": "Advanced",
+                "Close": "Close"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
+                "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
+                "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
+                "Overlay_Writting_Files": "Please wait while merging the mod collection..."
+            }
         }
     },
     "Mod_Actions": {
         "Apply": "Apply",
-        "LaunchGame": "Launch Game",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
         "Conflict": "Conflict Solver",
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
-        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
+        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Name": "Launch Game",
+            "LaunchError": {
+                "Title": "Cannot Launch Game",
+                "Message": "Failed to launch the game."
+            },
+            "NotSet": {
+                "Title": "Game Not Set",
+                "Message": "Game was not automatically detected, please use the options window to manually set the executable path."
+            }
+        }
     },
     "Conflict_Solver": {
         "Back": "Back",
@@ -140,6 +168,7 @@
         "OverlayResolve": "Please wait while resolving conflict...",
         "NextConflict": "Next Conflict",
         "PrevConflict": "Prev Conflict",
+        "ConflictCount": "Conflict Count: {Count}",
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",

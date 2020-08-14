@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -13,11 +13,13 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Storage.Common;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Services
 {
@@ -79,21 +81,45 @@ namespace IronyModManager.Services
                 games.Add(game);
             }
 
-            return games;
+            return games.OrderBy(p => p.Type);
         }
 
         /// <summary>
-        /// Gets the default executable location.
+        /// Gets the default game settings.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <returns>System.String.</returns>
-        public virtual string GetDefaultExecutableLocation(IGame game)
+        /// <returns>IGameSettings.</returns>
+        public virtual IGameSettings GetDefaultGameSettings(IGame game)
         {
-            if (game.SteamInstallExists)
+            var model = GetModelInstance<IGameSettings>();
+            var settings = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(game.Type));
+            if (!string.IsNullOrWhiteSpace(settings.ExecutablePath))
             {
-                return $"{SteamLaunchArgs}{game.SteamAppId}";
+                model.ExecutableLocation = settings.ExecutablePath;
+                model.LaunchArguments = settings.ExecutableArgs;
             }
-            return string.Empty;
+            else if (!string.IsNullOrWhiteSpace(game.WorkshopDirectory))
+            {
+                model.ExecutableLocation = $"{SteamLaunchArgs}{game.SteamAppId}";
+            }
+            else if (!string.IsNullOrWhiteSpace(game.ExecutableLocation) && !string.IsNullOrWhiteSpace(game.LauncherSettingsFileName))
+            {
+                var basePath = Path.GetDirectoryName(game.ExecutableLocation);
+                var settingsFile = Path.Combine(basePath, game.LauncherSettingsFileName);
+                if (File.Exists(settingsFile))
+                {
+                    var text = File.ReadAllText(settingsFile);
+                    try
+                    {
+                        var settingsObject = JsonConvert.DeserializeObject<Registrations.Models.LauncherSettings>(text);
+                        model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            return model;
         }
 
         /// <summary>
@@ -101,32 +127,33 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>System.String.</returns>
-        public virtual string GetLaunchArguments(IGame game)
+        public virtual IGameSettings GetLaunchSettings(IGame game)
         {
+            var model = GetModelInstance<IGameSettings>();
             var exeLoc = game.ExecutableLocation ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(exeLoc))
+            if (!string.IsNullOrWhiteSpace(exeLoc))
             {
-                return string.Empty;
-            }
-            if (exeLoc.StartsWith(SteamLaunchArgs, StringComparison.OrdinalIgnoreCase))
-            {
-                if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
+                if (exeLoc.StartsWith(SteamLaunchArgs, StringComparison.OrdinalIgnoreCase))
                 {
-                    return $"{exeLoc.Trim('/')}//{game.LaunchArguments}";
+                    if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
+                    {
+                        model.ExecutableLocation = $"{exeLoc.Trim('/')}//{game.LaunchArguments}";
+                    }
+                    else
+                    {
+                        model.ExecutableLocation = $"{exeLoc.Trim('/')}";
+                    }
                 }
                 else
                 {
-                    return $"{exeLoc.Trim('/')}";
+                    model.ExecutableLocation = exeLoc;
+                    if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
+                    {
+                        model.LaunchArguments = game.LaunchArguments;
+                    }
                 }
             }
-            else
-            {
-                if (!string.IsNullOrWhiteSpace(game.LaunchArguments))
-                {
-                    return $"\"{exeLoc}\" \"{game.LaunchArguments}\"";
-                }
-            }
-            return exeLoc;
+            return model;
         }
 
         /// <summary>
@@ -136,6 +163,16 @@ namespace IronyModManager.Services
         public virtual IGame GetSelected()
         {
             return Get().FirstOrDefault(s => s.IsSelected);
+        }
+
+        /// <summary>
+        /// Determines whether [is steam launch path] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam launch path] [the specified settings]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsSteamLaunchPath(IGameSettings settings)
+        {
+            return settings.ExecutableLocation.StartsWith(SteamLaunchArgs);
         }
 
         /// <summary>
@@ -210,6 +247,9 @@ namespace IronyModManager.Services
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
+            game.BaseGameDirectory = gameType.BaseGameDirectory;
+            game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
+            game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             bool setExeLocation = true;
             if (gameSettings != null)
             {
@@ -226,7 +266,9 @@ namespace IronyModManager.Services
             }
             if (setExeLocation)
             {
-                game.ExecutableLocation = GetDefaultExecutableLocation(game);
+                var settings = GetDefaultGameSettings(game);
+                game.ExecutableLocation = settings.ExecutableLocation ?? string.Empty;
+                game.LaunchArguments = settings.LaunchArguments ?? string.Empty;
             }
             return game;
         }

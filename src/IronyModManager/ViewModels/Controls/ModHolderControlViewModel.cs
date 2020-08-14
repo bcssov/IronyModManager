@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -270,7 +270,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the launch game.
         /// </summary>
         /// <value>The launch game.</value>
-        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame)]
+        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame.Name)]
         public virtual string LaunchGame { get; protected set; }
 
         /// <summary>
@@ -285,6 +285,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mode title.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Title)]
         public virtual string ModeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; set; }
 
         #endregion Properties
 
@@ -425,6 +431,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
             AnalyzeClass = string.Empty;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
@@ -449,12 +456,12 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
             {
-                CollectionMods.SetMods(v);
+                CollectionMods.SetMods(v, InstalledMods.ActiveGame);
             });
 
             this.WhenAnyValue(v => v.InstalledMods.RefreshingMods).Subscribe(s =>
             {
-                CollectionMods.HandleModRefresh(s, InstalledMods.Mods);
+                CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(s =>
@@ -499,17 +506,45 @@ namespace IronyModManager.ViewModels.Controls
                 var game = gameService.GetSelected();
                 if (game != null)
                 {
-                    var cmd = gameService.GetLaunchArguments(game);
-                    if (!string.IsNullOrWhiteSpace(cmd))
+                    var args = gameService.GetLaunchSettings(game);
+                    if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
                         if (game.RefreshDescriptors)
                         {
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync();
                         }
+                        await ApplyCollectionAsync();
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
-                        await appAction.OpenAsync(cmd);
-                        await appAction.ExitAppAsync();
+                        if (gameService.IsSteamLaunchPath(args))
+                        {
+                            if (await appAction.OpenAsync(args.ExecutableLocation))
+                            {
+                                await appAction.ExitAppAsync();
+                            }
+                            else
+                            {
+                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                            }
+                        }
+                        else
+                        {
+                            if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
+                            {
+                                await appAction.ExitAppAsync();
+                            }
+                            else
+                            {
+                                notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
+                                    localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Title),
+                            localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Message), NotificationType.Warning, 10);
                     }
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);
@@ -529,17 +564,29 @@ namespace IronyModManager.ViewModels.Controls
                 ForceClosePopups();
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
+            var previousCollectionNotification = string.Empty;
+            CollectionMods.ConflictSolverStateChanged += (collectionName, state) =>
             {
-                AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
-                if (!s)
+                AnalyzeClass = !state ? InvalidConflictSolverClass : string.Empty;
+                if (!state && previousCollectionNotification != collectionName)
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                 }
-            }).DisposeWith(disposables);
+                previousCollectionNotification = collectionName;
+            };
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            base.OnSelectedGameChanged(game);
         }
 
         /// <summary>

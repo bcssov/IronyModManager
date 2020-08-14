@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -27,6 +27,18 @@ namespace IronyModManager.Models.Common
     public interface IGame : IModel, ILocalizableModel
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [advanced features supported].
+        /// </summary>
+        /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
+        bool AdvancedFeaturesSupported { get; set; }
+
+        /// <summary>
+        /// Gets or sets the base game directory.
+        /// </summary>
+        /// <value>The base game directory.</value>
+        string BaseGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.
@@ -59,6 +71,12 @@ namespace IronyModManager.Models.Common
         string LaunchArguments { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the launcher settings file.
+        /// </summary>
+        /// <value>The name of the launcher settings file.</value>
+        string LauncherSettingsFileName { get; set; }
+
+        /// <summary>
         /// Gets or sets the log location.
         /// </summary>
         /// <value>The log location.</value>
@@ -81,12 +99,6 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The steam application identifier.</value>
         int SteamAppId { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether [steam install exists].
-        /// </summary>
-        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
-        bool SteamInstallExists { get; }
 
         /// <summary>
         /// Gets or sets the type.

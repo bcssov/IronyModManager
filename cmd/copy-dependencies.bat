@@ -36,3 +36,4 @@ if "%config%" == "Debug" (
 		endlocal
 	)
 )
+xcopy "%solutiondir%References\*.*" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D

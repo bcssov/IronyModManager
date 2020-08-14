@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ModParserTests.cs" company="Mario">
 //     Mario
@@ -38,6 +38,8 @@ namespace IronyModManager.Parser.Tests
             var sb = new StringBuilder();
             sb.AppendLine(@"name=""AI Species Limit""");
             sb.AppendLine(@"path=""path""");
+            sb.AppendLine(@"user_dir=""dir""");
+            sb.AppendLine(@"replace_path=""replace""");
             sb.AppendLine(@"tags={");
             sb.AppendLine(@"	""Gameplay""");
             sb.AppendLine(@"	""Fixes""");
@@ -62,6 +64,8 @@ namespace IronyModManager.Parser.Tests
             result.Tags.First().Should().Be("Gameplay");
             result.Tags.Last().Should().Be("Fixes");
             result.Version.Should().Be("2.5.*");
+            result.UserDir.Should().Be("dir");
+            result.ReplacePath.Should().Be("replace");
         }
 
         /// <summary>
@@ -75,6 +79,8 @@ namespace IronyModManager.Parser.Tests
             var sb = new StringBuilder();
             sb.AppendLine(@"name=""AI Species Limit""");
             sb.AppendLine(@"archive=""path""");
+            sb.AppendLine(@"user_dir=""dir""");
+            sb.AppendLine(@"replace_path=""replace""");
             sb.AppendLine(@"tags={");
             sb.AppendLine(@"	""Gameplay""");
             sb.AppendLine(@"	""Fixes""");

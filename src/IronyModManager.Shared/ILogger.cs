@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-17-2020
+// Last Modified On : 08-11-2020
 // ***********************************************************************
 // <copyright file="ILogger.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <param name="message">The message.</param>
         void Info(string message);
+
+        /// <summary>
+        /// Traces the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        void Trace(string message);
 
         #endregion Methods
     }

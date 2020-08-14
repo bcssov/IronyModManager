@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2020
+// Last Modified On : 08-12-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
+using IronyModManager.IO.Mods.Importers;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 using SharpCompress.Archives;
@@ -53,6 +54,11 @@ namespace IronyModManager.IO.Mods
         private readonly ParadoxImporter paradoxImporter;
 
         /// <summary>
+        /// The paradox launcher importer
+        /// </summary>
+        private readonly ParadoxLauncherImporter paradoxLauncherImporter;
+
+        /// <summary>
         /// The paradoxos importer
         /// </summary>
         private readonly ParadoxosImporter paradoxosImporter;
@@ -69,6 +75,7 @@ namespace IronyModManager.IO.Mods
         {
             paradoxosImporter = new ParadoxosImporter(logger);
             paradoxImporter = new ParadoxImporter(logger);
+            paradoxLauncherImporter = new ParadoxLauncherImporter(logger);
             this.logger = logger;
         }
 
@@ -124,6 +131,16 @@ namespace IronyModManager.IO.Mods
         public Task<bool> ImportParadoxAsync(ModCollectionExporterParams parameters)
         {
             return paradoxImporter.ImportAsync(parameters);
+        }
+
+        /// <summary>
+        /// Imports the paradox launcher asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public Task<bool> ImportParadoxLauncherAsync(ModCollectionExporterParams parameters)
+        {
+            return paradoxLauncherImporter.ImportAsync(parameters);
         }
 
         /// <summary>

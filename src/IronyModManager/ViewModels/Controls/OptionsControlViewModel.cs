@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -216,19 +216,27 @@ namespace IronyModManager.ViewModels.Controls
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     Game.ExecutableLocation = result;
+                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                    {
+                        Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                    }
                     Save();
                 }
             }).DisposeWith(disposables);
 
             ResetExeCommand = ReactiveCommand.Create(() =>
             {
-                Game.ExecutableLocation = gameService.GetDefaultExecutableLocation(Game);
+                Game.ExecutableLocation = gameService.GetDefaultGameSettings(Game).ExecutableLocation;
+                if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                {
+                    Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                }
                 Save();
             }).DisposeWith(disposables);
 
             ResetArgsCommand = ReactiveCommand.Create(() =>
             {
-                Game.LaunchArguments = string.Empty;
+                Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

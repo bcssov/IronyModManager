@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -40,6 +40,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The previous definitions
+        /// </summary>
+        private IEnumerable<IDefinition> previousDefinitions = null;
 
         #endregion Fields
 
@@ -112,6 +117,7 @@ namespace IronyModManager.ViewModels.Controls
             LeftSelectedDefinition = null;
             RightSelectedDefinition = null;
             VirtualDefinitions = null;
+            previousDefinitions = null;
         }
 
         /// <summary>
@@ -120,33 +126,43 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definitions">The definitions.</param>
         protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions)
         {
-            if (!IsBinaryConflict)
+            if (previousDefinitions != definitions)
             {
-                var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                var priorityDefinition = modPatchCollectionService.EvalDefinitionPriority(col);
-                if (priorityDefinition?.Definition == null)
+                if (!IsBinaryConflict)
                 {
-                    priorityDefinition.Definition = col.First();
+                    var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
+                    var priorityDefinition = modPatchCollectionService.EvalDefinitionPriority(col);
+                    if (priorityDefinition?.Definition == null)
+                    {
+                        priorityDefinition.Definition = col.First();
+                    }
+                    var newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
+                    if (newDefinition != null)
+                    {
+                        col.Add(newDefinition);
+                    }
+                    VirtualDefinitions = col.ToObservableCollection();
+                    if (VirtualDefinitions.Count() > 0)
+                    {
+                        // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
+                        await Task.Delay(100);
+                        LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                        RightSelectedDefinition = newDefinition;
+                    }
                 }
-                var newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
-                if (newDefinition != null)
+                else
                 {
-                    col.Add(newDefinition);
+                    VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
+                    if (VirtualDefinitions.Count() > 0)
+                    {
+                        // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
+                        await Task.Delay(100);
+                        LeftSelectedDefinition = definitions.ElementAt(0);
+                        RightSelectedDefinition = definitions.ElementAt(1);
+                    }
                 }
-                VirtualDefinitions = col.ToObservableCollection();
-                // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                await Task.Delay(100);
-                LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
-                RightSelectedDefinition = newDefinition;
             }
-            else
-            {
-                VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                await Task.Delay(100);
-                LeftSelectedDefinition = definitions.ElementAt(0);
-                RightSelectedDefinition = definitions.ElementAt(1);
-            }
+            previousDefinitions = definitions;
         }
 
         /// <summary>
@@ -164,6 +180,7 @@ namespace IronyModManager.ViewModels.Controls
                 else
                 {
                     VirtualDefinitions = null;
+                    previousDefinitions = null;
                 }
             }).DisposeWith(disposables);
             base.OnActivated(disposables);

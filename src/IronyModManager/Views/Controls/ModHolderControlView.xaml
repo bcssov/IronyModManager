@@ -23,7 +23,7 @@
                   VerticalAlignment="Bottom" HorizontalAlignment="Left"></Button>
           <Button Content="{Binding LaunchGame}" Command="{Binding LaunchGameCommand}"
                             VerticalAlignment="Bottom" HorizontalAlignment="Center"></Button>
-          <Panel VerticalAlignment="Bottom" HorizontalAlignment="Right">
+          <Panel VerticalAlignment="Bottom" HorizontalAlignment="Right" IsVisible="{Binding ShowAdvancedFeatures}">
             <controls:BoundClassBorder BoundClasses="{Binding AnalyzeClass}">
               <Button Content="{Binding Analyze}" Command="{Binding AnalyzeCommand}"></Button>
             </controls:BoundClassBorder>

@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -116,6 +116,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string ImportOther { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the import other close.
+        /// </summary>
+        /// <value>The import other close.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.Close)]
+        public virtual string ImportOtherClose { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other close command.
+        /// </summary>
+        /// <value>The import other close command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportOtherCloseCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the import other command.
         /// </summary>
         /// <value>The import other command.</value>
@@ -133,6 +146,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The import other paradox command.</value>
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox launcher.
+        /// </summary>
+        /// <value>The import other paradox launcher.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportOther.ParadoxLauncher)]
+        public virtual string ImportOtherParadoxLauncher { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import other paradox launcher command.
+        /// </summary>
+        /// <value>The import other paradox launcher command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxLauncherCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import other paradoxos.
@@ -197,9 +223,19 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<string>(string.Empty, CommandState.Success);
             }).DisposeWith(disposables);
 
+            ImportOtherParadoxLauncherCommand = ReactiveCommand.Create(() =>
+            {
+                return new CommandResult<string>(string.Empty, CommandState.Success);
+            }).DisposeWith(disposables);
+
             ImportOtherCommand = ReactiveCommand.Create(() =>
             {
                 IsOpen = true;
+            }).DisposeWith(disposables);
+
+            ImportOtherCloseCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = false;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

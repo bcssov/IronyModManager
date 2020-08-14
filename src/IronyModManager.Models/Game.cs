@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -29,6 +29,18 @@ namespace IronyModManager.Models
     public class Game : BaseModel, IGame
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [advanced features supported].
+        /// </summary>
+        /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedFeaturesSupported { get; set; }
+
+        /// <summary>
+        /// Gets or sets the base game directory.
+        /// </summary>
+        /// <value>The base game directory.</value>
+        public virtual string BaseGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.
@@ -61,6 +73,12 @@ namespace IronyModManager.Models
         public virtual string LaunchArguments { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the launcher settings file.
+        /// </summary>
+        /// <value>The name of the launcher settings file.</value>
+        public virtual string LauncherSettingsFileName { get; set; }
+
+        /// <summary>
         /// Gets or sets the log location.
         /// </summary>
         /// <value>The log location.</value>
@@ -84,18 +102,6 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The steam application identifier.</value>
         public virtual int SteamAppId { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether [steam install exists].
-        /// </summary>
-        /// <value><c>true</c> if [steam install exists]; otherwise, <c>false</c>.</value>
-        public virtual bool SteamInstallExists
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(WorkshopDirectory);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the type.

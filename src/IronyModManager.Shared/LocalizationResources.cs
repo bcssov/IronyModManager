@@ -21,6 +21,7 @@ namespace IronyModManager.Shared
                 public const string Wiki = Prefix + "Wiki";
                 public const string Logs = Prefix + "Logs";
                 public const string ErrorLog = Prefix + "ErrorLog";
+                public const string Close = Prefix + "Close";
             }
         }
         public static class FatalError
@@ -82,6 +83,9 @@ namespace IronyModManager.Shared
             public const string Prefix = "Games.";
             public const string Name = Prefix + "Name";
             public const string Stellaris = Prefix + "Stellaris";
+            public const string EuropaUniversalisIV = Prefix + "EuropaUniversalisIV";
+            public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
+            public const string ImperatorRome = Prefix + "ImperatorRome";
         }
         public static class Installed_Mods
         {
@@ -124,7 +128,6 @@ namespace IronyModManager.Shared
             public const string Order = Prefix + "Order";
             public const string Rename = Prefix + "Rename";
             public const string Duplicate = Prefix + "Duplicate";
-            public const string Merge = Prefix + "Merge";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public static class JumpOnDragAndDrop
@@ -146,28 +149,65 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
+                public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
             {
                 public const string Prefix = "Collection_Mods.MergeCollection.";
+                public const string Name = Prefix + "Name";
                 public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
-                public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
-                public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
-                public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
                 public const string Overlay_Progress = Prefix + "Overlay_Progress";
+                public static class Options
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Options.";
+                    public const string Title = Prefix + "Title";
+                    public const string Basic = Prefix + "Basic";
+                    public const string Advanced = Prefix + "Advanced";
+                    public const string Close = Prefix + "Close";
+                }
+                public static class Advanced
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Advanced.";
+                    public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
+                    public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
+                    public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
+                }
+                public static class Basic
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Basic.";
+                    public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
+                    public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
+                }
             }
         }
         public static class Mod_Actions
         {
             public const string Prefix = "Mod_Actions.";
             public const string Apply = Prefix + "Apply";
-            public const string LaunchGame = Prefix + "LaunchGame";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
             public const string Conflict = Prefix + "Conflict";
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
             public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
             public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
             public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+            public static class LaunchGame
+            {
+                public const string Prefix = "Mod_Actions.LaunchGame.";
+                public const string Name = Prefix + "Name";
+                public static class LaunchError
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.LaunchError.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class NotSet
+                {
+                    public const string Prefix = "Mod_Actions.LaunchGame.NotSet.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+            }
         }
         public static class Conflict_Solver
         {
@@ -187,6 +227,7 @@ namespace IronyModManager.Shared
             public const string OverlayResolve = Prefix + "OverlayResolve";
             public const string NextConflict = Prefix + "NextConflict";
             public const string PrevConflict = Prefix + "PrevConflict";
+            public const string ConflictCount = Prefix + "ConflictCount";
             public static class PriorityReason
             {
                 public const string Prefix = "Conflict_Solver.PriorityReason.";

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 08-13-2020
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -27,16 +27,46 @@ namespace IronyModManager.Storage
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether [advanced features supported].
+        /// </summary>
+        /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
+        public virtual bool AdvancedFeaturesSupported { get; set; }
+
+        /// <summary>
+        /// Gets or sets the base game directory.
+        /// </summary>
+        /// <value>The base game directory.</value>
+        public virtual string BaseGameDirectory { get; set; }
+
+        /// <summary>
         /// Gets or sets the checksum folders.
         /// </summary>
         /// <value>The checksum folders.</value>
         public virtual IEnumerable<string> ChecksumFolders { get; set; }
 
         /// <summary>
+        /// Gets or sets the executable arguments.
+        /// </summary>
+        /// <value>The executable arguments.</value>
+        public string ExecutableArgs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the executable path.
+        /// </summary>
+        /// <value>The executable path.</value>
+        public virtual string ExecutablePath { get; set; }
+
+        /// <summary>
         /// Gets or sets the game folders.
         /// </summary>
         /// <value>The game folders.</value>
         public virtual IEnumerable<string> GameFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the launcher settings file.
+        /// </summary>
+        /// <value>The name of the launcher settings file.</value>
+        public virtual string LauncherSettingsFileName { get; set; }
 
         /// <summary>
         /// Gets or sets the log location.
