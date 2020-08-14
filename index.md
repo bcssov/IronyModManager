@@ -1,5 +1,6 @@
 # About
-Irony Mod Manager is a new advanced mod manager for Paradox Games, it started out as a Stellaris oriented Mod Manager at first with plans to add additional games later. Not all of the advanced Stellaris equivalent features might be available for most supported games but that will change depending on community support in these games. In order to have a fully operational conflict solver or mod merging Irony needs to understand the game structure and whether certain game folders utilize FIOS\LIOS rules.
+# About
+Irony Mod Manager is a new advanced mod manager for Paradox Games, it started out as a Stellaris oriented Mod Manager at first with plans to add additional games later. Not all of the advanced Stellaris equivalent features might be available for most supported games but that will change depending on community support in these games. In order to have a fully operational conflict solver or advanced mod merging Irony needs to understand the game structure and whether certain game folders utilize FIOS\LIOS rules.
 
 ### Supported Games
 * Europa Universalis IV
@@ -13,8 +14,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
-* Latest stable version: [v1.3.48](https://github.com/bcssov/IronyModManager/releases/tag/v1.3.48).
-* Latest prerelease version: [v1.4.46-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.4.46-rc).
+* Latest stable version: [v1.4.52](https://github.com/bcssov/IronyModManager/releases/tag/v1.4.52).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
