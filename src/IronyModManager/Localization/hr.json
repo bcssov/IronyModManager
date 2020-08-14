@@ -7,7 +7,8 @@
             "Name": "Prečaci",
             "Wiki": "Wiki",
             "Logs": "Logovi",
-            "ErrorLog": "Error.log"
+            "ErrorLog": "Error.log",
+            "Close": "Zatvori"
         }
     },
     "FatalError": {
@@ -92,7 +93,6 @@
         "Order": "Redoslijed",
         "Rename": "Preimenuj",
         "Duplicate": "Dupliciraj",
-        "Merge": "Spoji",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "JumpOnDragAndDrop": {
@@ -111,11 +111,24 @@
             "ParadoxLauncher": "Uvezi iz Paradox Launcher"
         },
         "MergeCollection": {
+            "Name": "Spoji",
             "MergedCollectionSuffix": "(Spojeno)",
-            "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-            "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
-            "Overlay_Merging_Collection": "Pričekajte dok spajate kolekcija...",
-            "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%"
+            "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "Odaberi način",
+                "Basic": "Osnovno",
+                "Advanced": "Napredno",
+                "Close": "Zatvori"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+                "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
+                "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Priječaj dok se skupljaju mod informacije...",
+                "Overlay_Writting_Files": "Pričekaj dok se spaja kolekcija..."
+            }
         }
     },
     "Mod_Actions": {

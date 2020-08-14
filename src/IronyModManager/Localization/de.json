@@ -7,7 +7,8 @@
             "Name": "Verknüpfungen",
             "Wiki": "Wiki",
             "Logs": "Protokolle",
-            "ErrorLog": "Error.log"
+            "ErrorLog": "Error.log",
+            "Close": "Schließen"
         }
     },
     "FatalError": {
@@ -92,7 +93,6 @@
         "Order": "Reihenfolge",
         "Rename": "Umbenennen",
         "Duplicate": "Duplizieren",
-        "Merge": "Verschmelzen",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "JumpOnDragAndDrop": {
@@ -111,11 +111,24 @@
             "ParadoxLauncher": "Import aus Paradox Launcher"
         },
         "MergeCollection": {
+            "Name": "Verschmelzen",
             "MergedCollectionSuffix": "(Zusammengeführt)",
-            "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
-            "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
-            "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen...",
-            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%"
+            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "Auswahlmodus",
+                "Basic": "Basic",
+                "Advanced": "Fortgeschrittene",
+                "Close": "Schließen"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
+                "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
+                "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
+                "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            }
         }
     },
     "Mod_Actions": {

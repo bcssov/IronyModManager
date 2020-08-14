@@ -7,7 +7,8 @@
             "Name": "Shortcuts",
             "Wiki": "Wiki",
             "Logs": "Logs",
-            "ErrorLog": "Error.log"
+            "ErrorLog": "Error.log",
+            "Close": "Close"
         }
     },
     "FatalError": {
@@ -92,7 +93,6 @@
         "Order": "Order",
         "Rename": "Rename",
         "Duplicate": "Duplicate",
-        "Merge": "Merge",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "JumpOnDragAndDrop": {
@@ -111,11 +111,24 @@
             "ParadoxLauncher": "Import From Paradox Launcher"
         },
         "MergeCollection": {
+            "Name": "Merge",
             "MergedCollectionSuffix": "(Merged)",
-            "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
-            "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
-            "Overlay_Merging_Collection": "Please wait while merging the mod collection...",
-            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}%"
+            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "Select mode",
+                "Basic": "Basic",
+                "Advanced": "Advanced",
+                "Close": "Close"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
+                "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
+                "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
+                "Overlay_Writting_Files": "Please wait while merging the mod collection..."
+            }
         }
     },
     "Mod_Actions": {

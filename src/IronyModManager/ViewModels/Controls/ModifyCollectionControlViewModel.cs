@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -189,17 +189,56 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> DuplicateCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the merge.
+        /// Gets or sets a value indicating whether this instance is open.
         /// </summary>
-        /// <value>The merge.</value>
-        [StaticLocalization(LocalizationResources.Collection_Mods.Merge)]
-        public virtual string Merge { get; protected set; }
+        /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
+        public virtual bool IsMergeOpen { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the merge command.
+        /// Gets or sets the merge advanced.
         /// </summary>
-        /// <value>The merge command.</value>
-        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> MergeCommand { get; protected set; }
+        /// <value>The merge advanced.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.MergeCollection.Options.Advanced)]
+        public virtual string MergeAdvanced { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge advanced command.
+        /// </summary>
+        /// <value>The merge advanced command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> MergeAdvancedCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge close.
+        /// </summary>
+        /// <value>The merge close.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.MergeCollection.Options.Close)]
+        public virtual string MergeClose { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge close command.
+        /// </summary>
+        /// <value>The merge close command.</value>
+        public virtual ReactiveCommand<Unit, Unit> MergeCloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge open.
+        /// </summary>
+        /// <value>The merge open.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.MergeCollection.Name)]
+        public virtual string MergeOpen { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge open command.
+        /// </summary>
+        /// <value>The merge open command.</value>
+        public virtual ReactiveCommand<Unit, Unit> MergeOpenCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge select mode.
+        /// </summary>
+        /// <value>The merge select mode.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.MergeCollection.Options.Title)]
+        public virtual string MergeSelectMode { get; protected set; }
 
         /// <summary>
         /// Gets or sets the rename.
@@ -229,6 +268,14 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Forces the close popups.
+        /// </summary>
+        public void ForceClosePopups()
+        {
+            IsMergeOpen = false;
+        }
 
         /// <summary>
         /// Called when [activated].
@@ -290,7 +337,17 @@ namespace IronyModManager.ViewModels.Controls
                 return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.NotExecuted);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
-            MergeCommand = ReactiveCommand.CreateFromTask(async () =>
+            MergeOpenCommand = ReactiveCommand.Create(() =>
+            {
+                IsMergeOpen = true;
+            }).DisposeWith(disposables);
+
+            MergeCloseCommand = ReactiveCommand.Create(() =>
+            {
+                IsMergeOpen = false;
+            }).DisposeWith(disposables);
+
+            MergeAdvancedCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (ActiveCollection != null)
                 {
@@ -315,7 +372,7 @@ namespace IronyModManager.ViewModels.Controls
                         Count = 1,
                         TotalCount = 3
                     });
-                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
+                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Loading_Definitions);
                     await TriggerOverlayAsync(true, message, overlayProgress);
 
                     modPatchCollectionService.ResetPatchStateCache();
@@ -379,7 +436,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionLoadHandler?.Dispose();
             definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Loading_Definitions);
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                 {
                     PercentDone = s.Percentage,
@@ -392,7 +449,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler?.Dispose();
             definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Analyzing_Definitions);
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Analyzing_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                 {
                     PercentDone = s.Percentage,
@@ -405,7 +462,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionProgressHandler?.Dispose();
             definitionProgressHandler = modMergeProgressHandler.Message.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Merging_Collection);
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Merging_Collection);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                 {
                     PercentDone = s.Percentage,
