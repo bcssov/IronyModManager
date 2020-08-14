@@ -14,7 +14,7 @@ Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
 * Latest stable version: [v1.3.48](https://github.com/bcssov/IronyModManager/releases/tag/v1.3.48).
-* Latest prerelease version: [v1.4.43-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.4.43-rc).
+* Latest prerelease version: [v1.4.44-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.4.44-rc).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
