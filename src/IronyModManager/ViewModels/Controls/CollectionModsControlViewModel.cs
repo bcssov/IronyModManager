@@ -195,6 +195,13 @@ namespace IronyModManager.ViewModels.Controls
         #region Delegates
 
         /// <summary>
+        /// Delegate ConflictSolverStateChangedDelegate
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="isValid">if set to <c>true</c> [is valid].</param>
+        public delegate void ConflictSolverStateChangedDelegate(string collectionName, bool isValid);
+
+        /// <summary>
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
@@ -203,6 +210,11 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Delegates
 
         #region Events
+
+        /// <summary>
+        /// Occurs when [conflict solver state changed].
+        /// </summary>
+        public event ConflictSolverStateChangedDelegate ConflictSolverStateChanged;
 
         /// <summary>
         /// Occurs when [mod reordered].
@@ -301,12 +313,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The collection jump on position change label.</value>
         public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [conflict solver valid].
-        /// </summary>
-        /// <value><c>true</c> if [conflict solver valid]; otherwise, <c>false</c>.</value>
-        public virtual bool ConflictSolverValid { get; protected set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -880,7 +886,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            ConflictSolverValid = true;
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -1470,18 +1475,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="collection">The collection.</param>
         protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
         {
-            if (SelectedMods?.Count > 0)
+            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
+            if (activeGame != null && SelectedMods?.Count > 0)
             {
-                ConflictSolverValid = true;
-                if (!string.IsNullOrWhiteSpace(collection))
+                ConflictSolverStateChanged?.Invoke(collection, true);
+                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
                 {
                     var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
-                    ConflictSolverValid = !result;
+                    ConflictSolverStateChanged?.Invoke(collection, !result);
                 }
             }
             else
             {
-                ConflictSolverValid = true;
+                ConflictSolverStateChanged?.Invoke(collection, true);
             }
         }
 

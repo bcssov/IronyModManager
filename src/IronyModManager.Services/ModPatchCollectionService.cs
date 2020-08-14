@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -655,6 +655,11 @@ namespace IronyModManager.Services
             var game = GameService.GetSelected();
             if (game != null && !string.IsNullOrWhiteSpace(collectionName))
             {
+                var activeCollection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
+                if (activeCollection == null)
+                {
+                    return false;
+                }
                 var patchName = GenerateCollectionPatchName(collectionName);
                 var cachePrefix = $"CollectionPatchState-{game.Type}";
                 var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);

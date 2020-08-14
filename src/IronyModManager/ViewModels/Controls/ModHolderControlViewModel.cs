@@ -565,16 +565,16 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             var previousCollectionNotification = string.Empty;
-            this.WhenAnyValue(p => p.CollectionMods.ConflictSolverValid).Subscribe(s =>
+            CollectionMods.ConflictSolverStateChanged += (collectionName, state) =>
             {
-                AnalyzeClass = !s ? InvalidConflictSolverClass : string.Empty;
-                if (!s && previousCollectionNotification != CollectionMods.SelectedModCollection?.Name)
+                AnalyzeClass = !state ? InvalidConflictSolverClass : string.Empty;
+                if (!state && previousCollectionNotification != collectionName)
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                 }
-                previousCollectionNotification = CollectionMods.SelectedModCollection?.Name;
-            }).DisposeWith(disposables);
+                previousCollectionNotification = collectionName;
+            };
 
             base.OnActivated(disposables);
         }
