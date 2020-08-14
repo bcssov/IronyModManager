@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="Mods.cs" company="Mario">
 //     Mario
@@ -129,7 +129,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// </summary>
         /// <value><c>null</c> if [is new] contains no value, <c>true</c> if [is new]; otherwise, <c>false</c>.</value>
         [Map("isNew"), PropertyHandler(typeof(ObjectToBoolHandler))]
-        public bool? IsNew { get; set; }
+        public bool IsNew { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

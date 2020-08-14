@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-14-2020
 // ***********************************************************************
 // <copyright file="Playsets.cs" company="Mario">
 //     Mario
@@ -38,7 +38,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// </summary>
         /// <value><c>null</c> if [is active] contains no value, <c>true</c> if [is active]; otherwise, <c>false</c>.</value>
         [Map("isActive"), PropertyHandler(typeof(ObjectToBoolHandler))]
-        public bool? IsActive { get; set; }
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Gets or sets the load order.

@@ -78,7 +78,7 @@ namespace IronyModManager.IO.Mods.Importers
                     if (collectionMods?.Count() > 0)
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v2.Mods>(trace: trace);
-                        var ordered = collectionMods.Where(p => p.Enabled.GetValueOrDefault()).OrderBy(p => p.Position).ToList();
+                        var ordered = collectionMods.Where(p => p.Enabled).OrderBy(p => p.Position).ToList();
                         var validMods = mods.Where(p => collectionMods.Any(m => m.modId.Equals(p.id.ToString()))).OrderBy(p => ordered.FindIndex(o => o.modId == p.id.ToString()));
                         if (validMods.Count() > 0)
                         {
