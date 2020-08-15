@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-15-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -146,6 +146,9 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
                         await Task.Delay(100);
+                        LeftSelectedDefinition = null;
+                        RightSelectedDefinition = null;
+                        await Task.Delay(10);
                         LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
                         RightSelectedDefinition = newDefinition;
                     }
@@ -157,6 +160,9 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
                         await Task.Delay(100);
+                        LeftSelectedDefinition = null;
+                        RightSelectedDefinition = null;
+                        await Task.Delay(10);
                         LeftSelectedDefinition = definitions.ElementAt(0);
                         RightSelectedDefinition = definitions.ElementAt(1);
                     }
