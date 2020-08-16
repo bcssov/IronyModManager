@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 08-16-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -379,6 +379,13 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFree();
 
+                    var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    while (savedCollection == null)
+                    {
+                        await Task.Delay(25);
+                        savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    }
+
                     SubscribeToProgressReports(disposables, true);
 
                     var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
@@ -445,6 +452,13 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFree();
+
+                    var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    while (savedCollection == null)
+                    {
+                        await Task.Delay(25);
+                        savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    }
 
                     SubscribeToProgressReports(disposables, false);
 
