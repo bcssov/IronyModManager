@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 08-16-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -66,7 +66,7 @@ namespace IronyModManager.IO.Mods
         /// export definitions as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="ArgumentNullException">ExportPath.</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
         public async Task<bool> ExportDefinitionsAsync(ModMergeDefinitionExporterParameters parameters)
@@ -129,8 +129,7 @@ namespace IronyModManager.IO.Mods
         /// Copies the binaries asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        /// <param name="exportPath">The patch root path.</param>
-        /// <param name="checkIfExists">The check if exists.</param>
+        /// <param name="exportPath">The export path.</param>
         /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
         private async Task<bool> CopyBinariesAsync(IEnumerable<IDefinition> definitions, string exportPath)
         {
@@ -195,11 +194,22 @@ namespace IronyModManager.IO.Mods
             return true;
         }
 
+        /// <summary>
+        /// Copies the stream asynchronous.
+        /// </summary>
+        /// <param name="modPath">The mod path.</param>
+        /// <param name="modFile">The mod file.</param>
+        /// <param name="exportPath">The export path.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.Boolean&gt;.</returns>
         private Task<bool> CopyStreamAsync(string modPath, string modFile, string exportPath)
         {
             static async Task<bool> copyStream(Stream s, FileStream fs)
             {
                 await s.CopyToAsync(fs);
+                await fs.DisposeAsync();
+                await s.DisposeAsync();
+                fs.Close();
+                s.Close();
                 return true;
             }
 
