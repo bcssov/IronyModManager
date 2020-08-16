@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-16-2020
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -333,14 +333,15 @@ namespace IronyModManager.IO.Mods.Exporter
 
             static string formatPosition(int position)
             {
-                // Why not simply use numbers? What actually makes sense!!! Therefore generate a 10 digit int with trailing zeroes...
-                return position.ToString("0000000000");
+                // Why not simply use numbers? What actually makes sense!!! Therefore generate a 10 digit int with leading zeroes... or in other words a proper hex number.
+                return position.ToString("x10");
             }
 
             if (mods?.Count() > 0)
             {
                 var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.playsetId == collection.id.ToString(), trace: trace);
-                int pos = 1000;
+                // Because it's readeable for me in hex
+                int pos = 4096;
                 if (recreateCollection || collectionMods == null || collectionMods.Count() == 0)
                 {
                     if (recreateCollection)
