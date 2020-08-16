@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-16-2020
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -79,7 +79,7 @@ namespace IronyModManager.IO.Mods.Importers
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v2.Mods>(trace: trace);
                         var ordered = collectionMods.Where(p => p.Enabled).OrderBy(p => p.Position).ToList();
-                        var validMods = mods.Where(p => collectionMods.Any(m => m.modId.Equals(p.id.ToString()))).OrderBy(p => ordered.FindIndex(o => o.modId == p.id.ToString()));
+                        var validMods = mods.Where(p => ordered.Any(m => m.modId.Equals(p.id.ToString()))).OrderBy(p => ordered.FindIndex(o => o.modId == p.id.ToString()));
                         if (validMods.Count() > 0)
                         {
                             parameters.Mod.Name = activeCollection.Name;
