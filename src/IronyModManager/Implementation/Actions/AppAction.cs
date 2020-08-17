@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 08-17-2020
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
@@ -32,6 +33,7 @@ namespace IronyModManager.Implementation.Actions
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class AppAction : IAppAction
     {
+
         #region Methods
 
         /// <summary>
@@ -109,7 +111,8 @@ namespace IronyModManager.Implementation.Actions
                     Process.Start(new ProcessStartInfo()
                     {
                         FileName = path,
-                        Arguments = args
+                        Arguments = args,
+                        WorkingDirectory = Path.GetDirectoryName(path)
                     });
                 }
                 return Task.FromResult(true);
@@ -142,5 +145,6 @@ namespace IronyModManager.Implementation.Actions
         }
 
         #endregion Methods
+
     }
 }
