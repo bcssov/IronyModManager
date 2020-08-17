@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 08-17-2020
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using IronyModManager.Shared;
 using Microsoft.Win32;
 
@@ -64,6 +65,11 @@ namespace IronyModManager.Services.Registrations
         private static readonly Dictionary<string, List<string>> cachedPaths = new Dictionary<string, List<string>>();
 
         /// <summary>
+        /// The quotes regex
+        /// </summary>
+        private static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        /// <summary>
         /// The steam common directory
         /// </summary>
         private static readonly string SteamCommonDirectory = PathHelper.MergePaths(SteamAppsDirectory, "common");
@@ -96,7 +102,7 @@ namespace IronyModManager.Services.Registrations
                 {
                     if (item.Contains(InstallDirId))
                     {
-                        return item.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty);
+                        return FindPath(item);
                     }
                 }
                 return string.Empty;
@@ -153,6 +159,21 @@ namespace IronyModManager.Services.Registrations
                         return Path.Combine(path, SteamWorkshopDirectory, appId.ToString());
                     }
                 }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Finds the path.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        private static string FindPath(string line)
+        {
+            var result = quotesRegex.Matches(line.ReplaceTabs());
+            if (result.Count == 2)
+            {
+                return result[1].Value.Replace("\"", string.Empty);
             }
             return string.Empty;
         }
@@ -242,7 +263,7 @@ namespace IronyModManager.Services.Registrations
                     {
                         if (line.Contains(SteamVDFBaseInstallFolderId, StringComparison.OrdinalIgnoreCase))
                         {
-                            var directory = CleanPath(line.Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries)[1].Replace("\"", string.Empty));
+                            var directory = CleanPath(FindPath(line));
                             if (Directory.Exists(directory))
                             {
                                 paths.Add(directory);
