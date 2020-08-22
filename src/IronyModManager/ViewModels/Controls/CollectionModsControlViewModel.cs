@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 08-28-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -591,6 +591,7 @@ namespace IronyModManager.ViewModels.Controls
                 var state = appStateService.Get();
                 InitSortersAndFilters(state);
                 SaveSelectedCollection();
+                RecognizeSortOrder(SelectedModCollection);
             }
             enableAllToggledState = toggledState;
         }
