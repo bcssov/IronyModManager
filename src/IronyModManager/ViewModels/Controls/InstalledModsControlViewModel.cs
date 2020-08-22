@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 08-22-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -563,6 +563,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
                 });
+                await Task.Delay(100);
                 Mods = mods.ToObservableCollection();
                 AllMods = Mods.ToHashSet();
                 var invalidMods = AllMods.Where(p => !p.IsValid);
