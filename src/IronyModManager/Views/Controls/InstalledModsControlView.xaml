@@ -16,7 +16,7 @@
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x-50}"
+         ConverterParameter=x-60}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.1}">
