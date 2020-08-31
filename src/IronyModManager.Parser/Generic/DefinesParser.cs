@@ -93,7 +93,7 @@ namespace IronyModManager.Parser.Generic
                         var definition = GetDefinitionInstance();
                         string id = EvalDefinitionId(item.Values, item.Key);
                         MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
-                        definition.Id = id;
+                        definition.Id = TrimId(id);
                         definition.ValueType = Common.ValueType.SpecialVariable;
                         definition.Code = FormatCode(item, dataItem.Key);
                         definition.OriginalCode = FormatCode(item, skipVariables: true);

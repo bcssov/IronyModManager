@@ -197,12 +197,12 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     if (!item.Trim().StartsWith(Constants.Scripts.VariableId))
                     {
-                        sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                        sb.AppendLine(item);
                     }
                 }
                 else
                 {
-                    sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                    sb.AppendLine(item);
                 }
             }
 
@@ -294,9 +294,9 @@ namespace IronyModManager.Parser.Common.Parsers
                         var langNode = item.Values.FirstOrDefault(p => p.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase));
                         if (langNode.Values?.Count() > 0)
                         {
-                            foreach (var value in langNode.Values.OrderBy(p => p.Value))
+                            foreach (var value in langNode.Values.OrderBy(p => p.Key))
                             {
-                                sbLangs.Append($"{value.Value}-");
+                                sbLangs.Append($"{TrimId(value.Key)}-");
                             }
                         }
                     }
@@ -306,7 +306,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         id = $"{sbLangs}{id}";
                     }
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
-                    definition.Id = id;
+                    definition.Id = TrimId(id);
                     definition.ValueType = ValueType.Object;
                     definition.OriginalCode = definition.Code = FormatCode(item, parent);
                     if (!isFirstLevel)
@@ -402,9 +402,9 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     foreach (var item in values.Values.Where(p => !p.IsSimpleType))
                     {
-                        result.AddRange(ParseSimpleTypes(item.Values, args));
-                        result.AddRange(ParseComplexTypes(item.Values, args));
-                        result.AddRange(ParseTypesForVariables(item.Values, args));
+                        result.AddRange(ParseSimpleTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
+                        result.AddRange(ParseComplexTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
+                        result.AddRange(ParseTypesForVariables(item.Values, args, parent: item.Key, isFirstLevel: false));
                     }
                 }
             }
@@ -440,13 +440,13 @@ namespace IronyModManager.Parser.Common.Parsers
                     if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
                     {
                         typeAssigned = true;
-                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
+                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
                         definition.ValueType = ValueType.Namespace;
                     }
                     else if (item.Key.StartsWith(Constants.Scripts.VariableId))
                     {
                         typeAssigned = true;
-                        definition.Id = item.Key;
+                        definition.Id = TrimId(item.Key);
                         definition.ValueType = ValueType.Variable;
                     }
                     if (typeAssigned)
@@ -524,6 +524,16 @@ namespace IronyModManager.Parser.Common.Parsers
             definition.OriginalCode = definition.Code = string.Join(Environment.NewLine, args.Lines);
             MapDefinitionFromArgs(ConstructArgs(args, definition));
             return definition;
+        }
+
+        /// <summary>
+        /// Trims the identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string TrimId(string id)
+        {
+            return id.Replace("\"", string.Empty);
         }
 
         #endregion Methods
