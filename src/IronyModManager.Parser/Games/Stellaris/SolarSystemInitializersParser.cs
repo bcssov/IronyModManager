@@ -4,7 +4,7 @@
 // Created          : 02-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="SolarSystemInitializersParser.cs" company="Mario">
 //     Mario
@@ -78,16 +78,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            if (ShouldSwitchToSimpleParser(args.Lines))
-            {
-                var error = EvalSimpleParseForErrorsOnly(args);
-                if (error != null)
-                {
-                    return error;
-                }
-                return ParseSimple(args);
-            }
-            return ParseComplexRoot(args);
+            return ParseRoot(args);
         }
 
         #endregion Methods

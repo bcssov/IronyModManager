@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="KeyParser.cs" company="Mario">
 //     Mario
@@ -25,12 +25,12 @@ namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class KeyParser.
-    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseKeyParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseLineParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Generic.BaseKeyParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.BaseLineParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class KeyParser : BaseKeyParser, IGenericParser
+    public class KeyParser : BaseLineParser, IGenericParser
     {
         #region Constructors
 
@@ -70,7 +70,69 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !ShouldSwitchToSimpleParser(args.Lines) && EvalContainsKeyElements(args);
+            int? openBrackets = null;
+            int closeBrackets = 0;
+            foreach (var line in args.Lines)
+            {
+                var cleaned = codeParser.CleanWhitespace(line);
+                if (!openBrackets.HasValue)
+                {
+                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.EqualsOperator))
+                    {
+                        openBrackets = line.Count(s => s == Constants.Scripts.OpenObject);
+                        closeBrackets = line.Count(s => s == Constants.Scripts.CloseObject);
+                        if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
+                        {
+                            int idLoc = -1;
+                            foreach (var item in Constants.Scripts.GenericKeyIds)
+                            {
+                                idLoc = cleaned.IndexOf(item);
+                                if (idLoc > -1)
+                                {
+                                    break;
+                                }
+                            }
+                            if (cleaned.Substring(0, idLoc).Count(s => s == Constants.Scripts.OpenObject) == 1)
+                            {
+                                return true;
+                            }
+                        }
+                        if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                        {
+                            openBrackets = null;
+                            closeBrackets = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    openBrackets += line.Count(s => s == Constants.Scripts.OpenObject);
+                    closeBrackets += line.Count(s => s == Constants.Scripts.CloseObject);
+                    if (openBrackets - closeBrackets <= 1 && Constants.Scripts.GenericKeyIds.Any(s => !string.IsNullOrWhiteSpace(GetValue(line, s))))
+                    {
+                        var bracketLocation = cleaned.IndexOf(Constants.Scripts.OpenObject.ToString());
+                        int idLoc = -1;
+                        foreach (var item in Constants.Scripts.GenericKeyIds)
+                        {
+                            idLoc = cleaned.IndexOf(item);
+                            if (idLoc > -1)
+                            {
+                                break;
+                            }
+                        }
+                        if (idLoc < bracketLocation || bracketLocation == -1)
+                        {
+                            return true;
+                        }
+                    }
+                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
+                    {
+                        openBrackets = null;
+                        closeBrackets = 0;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -80,21 +142,21 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseComplexRoot(args);
+            return ParseRoot(args);
         }
 
         /// <summary>
-        /// Evals the complex parse key value for identifier.
+        /// Evals the element for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
+        protected override string EvalElementForId(IScriptElement value)
         {
             if (Constants.Scripts.GenericKeys.Any(s => s.Equals(value.Key, StringComparison.OrdinalIgnoreCase)))
             {
                 return value.Value;
             }
-            return base.EvalComplexParseKeyValueForId(value);
+            return base.EvalElementForId(value);
         }
 
         #endregion Methods

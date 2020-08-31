@@ -1,28 +1,33 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser.Common
 // Author           : Mario
-// Created          : 04-24-2020
+// Created          : 08-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
-// <copyright file="IScriptNode.cs" company="Mario">
+// <copyright file="IScriptElement.cs" company="Mario">
 //     Mario
 // </copyright>
-// <summary>Based on CWTools samples.</summary>
+// <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 
 namespace IronyModManager.Parser.Common.Parsers.Models
 {
     /// <summary>
-    /// Interface IScriptNode
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.Models.IScriptBase" />
+    /// Interface IScriptElement
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.Models.IScriptBase" />
-    public interface IScriptNode : IScriptBase
+    public interface IScriptElement
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is simple type.
+        /// </summary>
+        /// <value><c>true</c> if this instance is simple type; otherwise, <c>false</c>.</value>
+        bool IsSimpleType { get; set; }
 
         /// <summary>
         /// Gets or sets the key.
@@ -31,22 +36,22 @@ namespace IronyModManager.Parser.Common.Parsers.Models
         string Key { get; set; }
 
         /// <summary>
-        /// Gets or sets the key values.
+        /// Gets or sets the operator.
         /// </summary>
-        /// <value>The key values.</value>
-        IList<IScriptKeyValue> KeyValues { get; set; }
+        /// <value>The operator.</value>
+        string Operator { get; set; }
 
         /// <summary>
-        /// Gets or sets the nodes.
+        /// Gets or sets the value.
         /// </summary>
-        /// <value>The nodes.</value>
-        IList<IScriptNode> Nodes { get; set; }
+        /// <value>The value.</value>
+        string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the values.
         /// </summary>
         /// <value>The values.</value>
-        IList<IScriptValue> Values { get; set; }
+        IEnumerable<IScriptElement> Values { get; set; }
 
         #endregion Properties
     }

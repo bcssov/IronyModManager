@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-30-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -130,19 +130,14 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
-            /// The bitmap fonts identifier
+            /// The definition separator identifier
             /// </summary>
-            public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
+            public const string DefinitionSeparatorId = "={";
 
             /// <summary>
             /// The closing bracket
             /// </summary>
-            public const char ClosingBracket = '}';
-
-            /// <summary>
-            /// The definition separator identifier
-            /// </summary>
-            public const string DefinitionSeparatorId = VariableSeparatorId + "{";
+            public const char CloseObject = '}';
 
             /// <summary>
             /// The fallback to simple parser comment
@@ -155,16 +150,6 @@ namespace IronyModManager.Parser.Common
             public const string GraphicsTypeName = "name";
 
             /// <summary>
-            /// The GUI types
-            /// </summary>
-            public const string GuiTypes = "guiTypes";
-
-            /// <summary>
-            /// The GUI types identifier
-            /// </summary>
-            public const string GuiTypesId = GuiTypes + VariableSeparatorId;
-
-            /// <summary>
             /// The languages identifier
             /// </summary>
             public const string LanguagesId = "languages";
@@ -175,64 +160,69 @@ namespace IronyModManager.Parser.Common
             public const string Namespace = "namespace";
 
             /// <summary>
-            /// The namespace identifier
-            /// </summary>
-            public const string NamespaceId = Namespace + VariableSeparatorId;
-
-            /// <summary>
-            /// The object types
-            /// </summary>
-            public const string ObjectTypes = "objectTypes";
-
-            /// <summary>
-            /// The object types identifier
-            /// </summary>
-            public const string ObjectTypesId = "objectTypes" + VariableSeparatorId;
-
-            /// <summary>
             /// The opening bracket
             /// </summary>
-            public const char OpeningBracket = '{';
-
-            /// <summary>
-            /// The position type identifier
-            /// </summary>
-            public const string PositionTypeId = "positionType" + VariableSeparatorId;
+            public const char OpenObject = '{';
 
             /// <summary>
             /// The script comment identifier
             /// </summary>
-            public const string ScriptCommentId = "#";
-
-            /// <summary>
-            /// The sprite types
-            /// </summary>
-            public const string SpriteTypes = "spriteTypes";
-
-            /// <summary>
-            /// The sprite types identifier
-            /// </summary>
-            public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
+            public const char ScriptCommentId = '#';
 
             /// <summary>
             /// The variable prefix
             /// </summary>
-            public const char VariablePrefix = '@';
+            public const char VariableId = '@';
 
             /// <summary>
             /// The variable separator identifier
             /// </summary>
-            public const string VariableSeparatorId = "=";
+            public const char EqualsOperator = '=';
 
             /// <summary>
-            /// The generic key ids
+            /// The greater than operator
             /// </summary>
-            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
+            public const char GreaterThanOperator = '>';
+
+            /// <summary>
+            /// The lower than operator
+            /// </summary>
+            public const char LowerThanOperator = '<';
+
+            /// <summary>
+            /// The quote
+            /// </summary>
+            public const char Quote = '"';
+
+            /// <summary>
+            /// The terminators
+            /// </summary>
+            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject };
+
+            /// <summary>
+            /// The inline operators
+            /// </summary>
+            public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
+
+            /// <summary>
+            /// Creates new lineterminators.
+            /// </summary>
+            public static readonly char[] NewLineTerminators = new char[] { '\r', '\n' };
+
+            /// <summary>
+            /// The operators
+            /// </summary>
+            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator };
 
             /// <summary>
             /// The generic keys
             /// </summary>
             public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
+
+            /// <summary>
+            /// The generic key ids
+            /// </summary>
+            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             #endregion Fields
         }

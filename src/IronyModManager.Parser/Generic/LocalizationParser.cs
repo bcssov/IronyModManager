@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -26,12 +26,12 @@ namespace IronyModManager.Parser.Generic
 {
     /// <summary>
     /// Class LocalizationParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Generic.BaseLineParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
+    /// <seealso cref="IronyModManager.Parser.Generic.BaseLineParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class LocalizationParser : BaseParser, IGenericParser
+    public class LocalizationParser : BaseLineParser, IGenericParser
     {
         #region Fields
 
@@ -118,7 +118,7 @@ namespace IronyModManager.Parser.Generic
                             def.OriginalCode = line;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            def.Id = codeParser.GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                            def.Id = GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
                             prevId = def.Id;
                             def.ValueType = Common.ValueType.SpecialVariable;
                             def.Tags.Add(def.Id.ToLowerInvariant());
@@ -135,7 +135,7 @@ namespace IronyModManager.Parser.Generic
             {
                 var error = DIResolver.Get<IScriptError>();
                 error.Message = string.Join(Environment.NewLine, errors);
-                return new List<IDefinition>() { ParseScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
+                return new List<IDefinition>() { TranslateScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
             }
             return result;
         }

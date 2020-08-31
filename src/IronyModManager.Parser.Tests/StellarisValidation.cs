@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="StellarisValidation.cs" company="Mario">
 //     Mario
@@ -13,10 +13,10 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
@@ -62,11 +62,9 @@ namespace IronyModManager.Parser.Tests
         #endregion Constructors
 
         #region Methods
-
         /// <summary>
         /// Defines the test method Detect.
         /// </summary>
-        /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
 
@@ -79,6 +77,50 @@ namespace IronyModManager.Parser.Tests
 #endif
         public void StellarisDetectDuplicatesAndGenerateParserMap()
         {
+            var codeParser = new CodeParser();
+            var quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            static string cleanParsedText(string text)
+            {
+                var sb = new StringBuilder();
+                foreach (var item in text)
+                {
+                    if (!char.IsWhiteSpace(item) &&
+                        !item.Equals(Common.Constants.Scripts.OpenObject) &&
+                        !item.Equals(Common.Constants.Scripts.CloseObject))
+                    {
+                        sb.Append(item);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return sb.ToString();
+            }
+            string getKey(string line, string key)
+            {
+                var cleaned = codeParser.CleanWhitespace(line);
+                if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
+                {
+                    var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
+                    if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
+                    {
+                        var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
+                        if (parsed.Count() > 0)
+                        {
+                            if (parsed.First().StartsWith("\""))
+                            {
+                                return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
+                            }
+                            else
+                            {
+                                return cleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
+                            }
+                        }
+                    }
+                }
+                return string.Empty;
+            }
             DISetup.SetupContainer();
 
             var parser = DIResolver.Get<IParserManager>();
@@ -153,7 +195,6 @@ namespace IronyModManager.Parser.Tests
             indexed.InitMap(result);
             var typesKeys = indexed.GetAllTypeKeys();
             var objects = new List<string>();
-            var textParser = new CodeParser();
             var parserMap = new List<IParserMap>();
 
             foreach (var item in typesKeys)
@@ -185,7 +226,7 @@ namespace IronyModManager.Parser.Tests
                         var objectIds = new List<string>();
                         foreach (var type in types)
                         {
-                            var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
+                            var id = getKey(type.Code.SplitOnNewLine().First(), "=");
                             objectIds.Add(id);
                         }
                         if (objectIds.GroupBy(p => p).Count() == objectIds.Count)
@@ -212,7 +253,7 @@ namespace IronyModManager.Parser.Tests
                     foreach (var type in types)
                     {
                         var reserved = new string[] { "entity", "animation", "music" };
-                        var id = textParser.GetKey(type.Code.SplitOnNewLine().First(), "=");
+                        var id = getKey(type.Code.SplitOnNewLine().First(), "=");
                         objectIds.Add(reserved.Any(p => p.Equals(id, StringComparison.OrdinalIgnoreCase)) ? "reserved" : id);
                     }
                     if (objectIds.GroupBy(p => p).Count() == objectIds.Count)

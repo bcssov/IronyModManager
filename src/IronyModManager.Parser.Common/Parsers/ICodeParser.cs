@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="ICodeParser.cs" company="Mario">
 //     Mario
@@ -25,13 +25,6 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Methods
 
         /// <summary>
-        /// Cleans the parsed text.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>System.String.</returns>
-        string CleanParsedText(string text);
-
-        /// <summary>
         /// Cleans the whitespace.
         /// </summary>
         /// <param name="line">The line.</param>
@@ -39,51 +32,37 @@ namespace IronyModManager.Parser.Common.Parsers
         string CleanWhitespace(string line);
 
         /// <summary>
-        /// Gets the key.
+        /// Formats the code.
         /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
+        /// <param name="element">The element.</param>
+        /// <param name="indentLevel">The indent level.</param>
         /// <returns>System.String.</returns>
-        string GetKey(string line, char key);
-
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        string GetKey(string line, string key);
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        string GetValue(string line, char key);
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        string GetValue(string line, string key);
+        string FormatCode(IScriptElement element, int indentLevel = 0);
 
         /// <summary>
         /// Parses the script.
         /// </summary>
         /// <param name="lines">The lines.</param>
         /// <param name="file">The file.</param>
+        /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
         /// <returns>IParseResponse.</returns>
-        IParseResponse ParseScript(IEnumerable<string> lines, string file);
+        IParseResponse ParseScript(IEnumerable<string> lines, string file, bool performSimpleCheck = false);
 
         /// <summary>
-        /// Prettifies the line.
+        /// Parses the script without validation.
         /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        string PrettifyLine(string line);
+        /// <param name="lines">The lines.</param>
+        /// <returns>IParseResponse.</returns>
+        IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines);
+
+        /// <summary>
+        /// Performs the validity check.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
+        /// <returns>IScriptError.</returns>
+        IScriptError PerformValidityCheck(IEnumerable<string> lines, string file, bool performSimpleCheck = false);
 
         #endregion Methods
     }

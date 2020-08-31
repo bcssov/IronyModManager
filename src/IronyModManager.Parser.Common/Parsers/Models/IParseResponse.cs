@@ -4,7 +4,7 @@
 // Created          : 04-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="IParseResponse.cs" company="Mario">
 //     Mario
@@ -30,10 +30,10 @@ namespace IronyModManager.Parser.Common.Parsers.Models
         IScriptError Error { get; set; }
 
         /// <summary>
-        /// Gets or sets the response.
+        /// Gets or sets the values.
         /// </summary>
-        /// <value>The response.</value>
-        IScriptNode Value { get; set; }
+        /// <value>The values.</value>
+        IEnumerable<IScriptElement> Values { get; set; }
 
         #endregion Properties
     }
