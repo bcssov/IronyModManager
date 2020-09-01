@@ -34,6 +34,11 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// The trace back tolerance
+        /// </summary>
+        protected const int TraceBackTolerance = 100;
+
+        /// <summary>
         /// The cleaner conversion map
         /// </summary>
         protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
@@ -56,7 +61,7 @@ namespace IronyModManager.Parser
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CodeParser"/> class.
+        /// Initializes a new instance of the <see cref="CodeParser" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public CodeParser(ILogger logger)
@@ -213,7 +218,25 @@ namespace IronyModManager.Parser
             }
             if (!Common.Constants.Scripts.Operators.Any(p => p == elOperator))
             {
-                if (!string.IsNullOrWhiteSpace(elKey.Value))
+                if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elKey.Value, StringComparison.OrdinalIgnoreCase)))
+                {
+                    IgnoreElementWhiteSpace(code, ref index);
+                    var inlineValues = GetElementValue(code, ref index);
+                    if (inlineValues.Terminator.HasValue)
+                    {
+                        index++;
+                        var values = GetElements(code, ref index);
+                        var scriptElement = DIResolver.Get<IScriptElement>();
+                        scriptElement.Key = elKey.Value;
+                        scriptElement.Values = values;
+                        return scriptElement;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(elKey.Value))
                 {
                     var scriptElement = DIResolver.Get<IScriptElement>();
                     scriptElement.Key = elKey.Value;
@@ -296,9 +319,10 @@ namespace IronyModManager.Parser
         /// <param name="code">The code.</param>
         /// <param name="index">The index.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
-        /// <exception cref="ArgumentException">Unknown script syntax error.</exception>
+        /// <exception cref="ArgumentException">Unknown script syntax error near code:{sb}</exception>
         protected IEnumerable<IScriptElement> GetElements(List<char> code, ref int index)
         {
+            var counter = 0;
             var values = new List<IScriptElement>();
             for (int i = index; i < code.Count(); i++)
             {
@@ -318,8 +342,9 @@ namespace IronyModManager.Parser
                 i = index = i - 1;
                 if (prevIndex >= index)
                 {
-                    // take last 50 characters and dump the code
-                    var dumpIndex = prevIndex - 50;                    
+                    counter++;
+                    // track back 50 characters and dump the code
+                    var dumpIndex = prevIndex - 50;
                     while (true)
                     {
                         if (dumpIndex < 0)
@@ -333,12 +358,20 @@ namespace IronyModManager.Parser
                         }
                         dumpIndex--;
                     }
+                    var end = dumpIndex + 200 > code.Count ? code.Count : dumpIndex + 200;
                     var sb = new StringBuilder();
-                    for (int dump = dumpIndex; dump < code.Count; dump++)
+                    for (int dump = dumpIndex; dump < end; dump++)
                     {
                         sb.Append(code[dump]);
                     }
-                    throw new ArgumentException($"Unknown script syntax error near code:{Environment.NewLine}{sb}");
+                    if (counter >= TraceBackTolerance)
+                    {
+                        throw new ArgumentException($"Unknown script syntax error near code:{sb}");
+                    }
+                }
+                else
+                {
+                    counter = 0;
                 }
             }
             return values;

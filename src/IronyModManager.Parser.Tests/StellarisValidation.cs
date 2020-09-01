@@ -139,7 +139,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                if (relativePath.Contains(@"events\fed_vote_events.txt"))
+                if (relativePath.Contains(@"common\policies\00_policies.txt"))
                 {
                     System.Diagnostics.Debugger.Break();
                 }
@@ -303,6 +303,10 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Invalid{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, invalid.OrderBy(s => s))}");
             sb.AppendLine($"{Environment.NewLine}-------------------{Environment.NewLine}Objects{Environment.NewLine}-------------------{Environment.NewLine}{string.Join(Environment.NewLine, objects.OrderBy(s => s))}");
 
+            if (!Directory.Exists("..\\..\\..\\..\\IronyModManager\\Maps"))
+            {
+                Directory.CreateDirectory("..\\..\\..\\..\\IronyModManager\\Maps");
+            }
             File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json.txt", sb.ToString());
 
             File.WriteAllText("..\\..\\..\\..\\IronyModManager\\Maps\\StellarisParserMap.json", JsonDISerializer.Serialize(parserMap));
