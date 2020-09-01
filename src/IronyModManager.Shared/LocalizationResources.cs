@@ -179,6 +179,12 @@ namespace IronyModManager.Shared
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
                     public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
                 }
+                public static class OverwritePrompt
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.OverwritePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
         }
         public static class Mod_Actions

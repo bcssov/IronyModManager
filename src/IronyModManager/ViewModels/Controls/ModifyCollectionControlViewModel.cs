@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-16-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
@@ -88,6 +89,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModPatchCollectionService modPatchCollectionService;
 
         /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
+
+        /// <summary>
         /// The shut down state
         /// </summary>
         private readonly IShutDownState shutDownState;
@@ -129,10 +135,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="notificationAction">The notification action.</param>
         public ModifyCollectionControlViewModel(ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
             ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionMergeProgressHandler modDefinitionMergeProgressHandler,
             ModFileMergeProgressHandler modFileMergeProgressHandler, IShutDownState shutDownState, IGameService gameService, IModMergeService modMergeService,
-            IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager)
+            IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService,
+            ILocalizationManager localizationManager, INotificationAction notificationAction)
         {
             this.modCollectionService = modCollectionService;
             this.modPatchCollectionService = modPatchCollectionService;
@@ -144,6 +152,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionMergeProgressHandler = modDefinitionMergeProgressHandler;
             this.shutDownState = shutDownState;
             this.modFileMergeProgressHandler = modFileMergeProgressHandler;
+            this.notificationAction = notificationAction;
         }
 
         #endregion Constructors
@@ -303,18 +312,19 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Called when [activated].
+        /// Copies the collection.
         /// </summary>
-        /// <param name="disposables">The disposables.</param>
-        protected override void OnActivated(CompositeDisposable disposables)
+        /// <param name="requestedName">Name of the requested.</param>
+        /// <param name="skipNameCheck">if set to <c>true</c> [skip name check].</param>
+        /// <returns>IModCollection.</returns>
+        protected virtual IModCollection CopyCollection(string requestedName, bool skipNameCheck = false)
         {
-            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
-
-            IModCollection copyCollection(string requestedName)
+            string name = requestedName;
+            if (!skipNameCheck)
             {
                 var collections = modCollectionService.GetAll();
                 var count = collections.Where(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase)).Count();
-                string name = string.Empty;
+                name = string.Empty;
                 if (count == 0)
                 {
                     name = requestedName;
@@ -328,12 +338,41 @@ namespace IronyModManager.ViewModels.Controls
                     count++;
                     name = $"{requestedName} ({count})";
                 }
-                var copied = modCollectionService.Create();
-                copied.IsSelected = true;
-                copied.Mods = ActiveCollection.Mods;
-                copied.Name = name;
-                return copied;
             }
+            var copied = modCollectionService.Create();
+            copied.IsSelected = true;
+            copied.Mods = ActiveCollection.Mods;
+            copied.Name = name;
+            return copied;
+        }
+
+        /// <summary>
+        /// get merged collection as an asynchronous operation.
+        /// </summary>
+        /// <returns>IModCollection.</returns>
+        protected virtual async Task<IModCollection> GetMergedCollectionAsync()
+        {
+            var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
+            var requestedName = $"{ActiveCollection.Name} {suffix}";
+            var exists = modCollectionService.GetAll().Any(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
+            bool skipNameCheck = false;
+            if (exists)
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.OverwritePrompt.Title);
+                var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.OverwritePrompt.Message);
+                skipNameCheck = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info);
+            }
+            var copy = CopyCollection(requestedName, skipNameCheck);
+            return copy;
+        }
+
+        /// <summary>
+        /// Called when [activated].
+        /// </summary>
+        /// <param name="disposables">The disposables.</param>
+        protected override void OnActivated(CompositeDisposable disposables)
+        {
+            ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
@@ -346,7 +385,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null)
                 {
-                    var copy = copyCollection(ActiveCollection.Name);
+                    var copy = CopyCollection(ActiveCollection.Name);
                     if (modCollectionService.Save(copy))
                     {
                         await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
@@ -376,6 +415,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null)
                 {
+                    var copy = await GetMergedCollectionAsync();
+
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFree();
 
@@ -387,9 +428,6 @@ namespace IronyModManager.ViewModels.Controls
                     }
 
                     SubscribeToProgressReports(disposables, true);
-
-                    var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
-                    var copy = copyCollection($"{ActiveCollection.Name} {suffix}");
 
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(ActiveCollection.Name);
                     if (mode == PatchStateMode.None)
@@ -434,6 +472,8 @@ namespace IronyModManager.ViewModels.Controls
                     definitionLoadHandler?.Dispose();
                     definitionMergeProgressHandler?.Dispose();
 
+                    modCollectionService.Delete(copy.Name);
+                    modPatchCollectionService.InvalidatePatchModState(copy.Name);
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
@@ -450,6 +490,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (ActiveCollection != null)
                 {
+                    var copy = await GetMergedCollectionAsync();
+
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFree();
 
@@ -461,9 +503,6 @@ namespace IronyModManager.ViewModels.Controls
                     }
 
                     SubscribeToProgressReports(disposables, false);
-
-                    var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
-                    var copy = copyCollection($"{ActiveCollection.Name} {suffix}");
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
@@ -483,6 +522,8 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(false);
                     fileMergeProgressHandler?.Dispose();
 
+                    modCollectionService.Delete(copy.Name);
+                    modPatchCollectionService.InvalidatePatchModState(copy.Name);
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);

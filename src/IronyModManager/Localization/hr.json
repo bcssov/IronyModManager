@@ -129,6 +129,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Priječaj dok se skupljaju mod informacije...",
                 "Overlay_Writting_Files": "Pričekaj dok se spaja kolekcija..."
+            },
+            "OverwritePrompt": {
+                "Title": "Prebriši postojeću kolekciju?",
+                "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
             }
         }
     },

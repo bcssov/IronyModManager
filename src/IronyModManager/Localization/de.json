@@ -129,6 +129,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "OverwritePrompt": {
+                "Title": "Bestehende Sammlung überschreiben?",
+                "Message": "Eine zusammengeführte Sammlung mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
             }
         }
     },

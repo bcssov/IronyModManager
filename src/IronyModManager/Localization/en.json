@@ -129,6 +129,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
                 "Overlay_Writting_Files": "Please wait while merging the mod collection..."
+            },
+            "OverwritePrompt": {
+                "Title": "Overwrite existing collection?",
+                "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
             }
         }
     },
