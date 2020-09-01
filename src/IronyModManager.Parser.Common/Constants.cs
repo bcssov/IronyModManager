@@ -235,6 +235,11 @@ namespace IronyModManager.Parser.Common
             public const string Flags = "flags";
 
             /// <summary>
+            /// The prescripted countries
+            /// </summary>
+            public const string PrescriptedCountries = "prescripted_countries";
+
+            /// <summary>
             /// The sound
             /// </summary>
             public const string Sound = "sound";

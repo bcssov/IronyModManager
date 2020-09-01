@@ -39,7 +39,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         private static readonly string[] startsWithChecks = new string[]
         {
             Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
-            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses
+            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
+            Common.Constants.Stellaris.PrescriptedCountries
         };
 
         /// <summary>
