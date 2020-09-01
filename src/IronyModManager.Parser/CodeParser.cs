@@ -236,6 +236,16 @@ namespace IronyModManager.Parser
                         return null;
                     }
                 }
+                else if (elKey.Terminator.GetValueOrDefault() == Common.Constants.Scripts.OpenObject)
+                {
+                    // Seriously paradox language is way too weird, we need to cover cases such as this aw well: statement = { { code } }
+                    index++;
+                    var values = GetElements(code, ref index);
+                    var scriptElement = DIResolver.Get<IScriptElement>();
+                    scriptElement.Key = elKey.Value;
+                    scriptElement.Values = values;
+                    return scriptElement;
+                }
                 else if (!string.IsNullOrWhiteSpace(elKey.Value))
                 {
                     var scriptElement = DIResolver.Get<IScriptElement>();

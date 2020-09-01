@@ -139,14 +139,14 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                if (relativePath.Contains(@"common\policies\00_policies.txt"))
-                {
-                    System.Diagnostics.Debugger.Break();
-                }
-                else
-                {
-                    continue;
-                }
+                //if (relativePath.Contains(@"common\policies\00_policies.txt"))
+                //{
+                //    System.Diagnostics.Debugger.Break();
+                //}
+                //else
+                //{
+                //    continue;
+                //}
                 var lines = content.Contains("\r\n") ? content.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : content.Split("\n", StringSplitOptions.RemoveEmptyEntries);
                 bool notEmpty = false;
                 foreach (var line in lines)
