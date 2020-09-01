@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -367,14 +367,17 @@ namespace IronyModManager.Parser.Common.Parsers
         {
             var tags = new List<string>
             {
-                defaultId
+                TrimId(defaultId)
             };
-            foreach (var item in values)
+            if (values?.Count() > 0)
             {
-                string id = EvalElementForId(item);
-                if (!string.IsNullOrWhiteSpace(id))
+                foreach (var item in values)
                 {
-                    tags.Add(id);
+                    string id = EvalElementForId(item);
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        tags.Add(TrimId(id));
+                    }
                 }
             }
             return tags;

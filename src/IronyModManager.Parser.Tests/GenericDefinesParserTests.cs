@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-20-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="GenericDefinesParserTests.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
+using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
 
@@ -66,19 +67,21 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NCamera = {");
-            sb2.AppendLine(@"FOV = 35 # Field-of-View");
+            sb2.AppendLine(@"    FOV = 35 # Field-of-View");
             sb2.Append(@"}");
 
-
-            var sb3 = new StringBuilder();
+            var sb3 = new System.Text.StringBuilder();
             sb3.AppendLine(@"NCamera = {");
-            sb3.AppendLine(@"ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR = { -1.0 -0.6 0.3 }");
-            sb3.Append(@"}");
-
+            sb3.AppendLine(@"    ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR = {");
+            sb3.AppendLine(@"        -1.0");
+            sb3.AppendLine(@"        -0.6");
+            sb3.AppendLine(@"        0.3");
+            sb3.AppendLine(@"    }");
+            sb3.Append(@"}");            
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics = {");
-            sb4.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM = 10.0");
+            sb4.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
             sb4.Append(@"}");
 
 
@@ -150,6 +153,31 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"		""policies"" ""F10""");
             sb.AppendLine(@"		}}");
 
+            var sb2 = new StringBuilder();
+            sb2.AppendLine(@"NInterface = {");
+            sb2.AppendLine(@"	TOPBAR_BUTTONS_SHORTCUTS = {");
+            sb2.AppendLine(@"		""contacts""");
+            sb2.AppendLine(@"		""F1""");
+            sb2.AppendLine(@"		""situation""");
+            sb2.AppendLine(@"		""F2""");
+            sb2.AppendLine(@"		""technology""");
+            sb2.AppendLine(@"		""F3""");
+            sb2.AppendLine(@"		""empire""");
+            sb2.AppendLine(@"		""F4""");
+            sb2.AppendLine(@"		""leaders""");
+            sb2.AppendLine(@"		""F5""");
+            sb2.AppendLine(@"		""species""");
+            sb2.AppendLine(@"		""F6""");
+            sb2.AppendLine(@"		""ship_designer""");
+            sb2.AppendLine(@"		""F7""");
+            sb2.AppendLine(@"		""fleet_manager""");
+            sb2.AppendLine(@"		""F8""");
+            sb2.AppendLine(@"		""edicts""");
+            sb2.AppendLine(@"		""F9""");
+            sb2.AppendLine(@"		""policies""");
+            sb2.AppendLine(@"		""F10""");
+            sb2.AppendLine(@"	}");
+            sb2.Append(@"}");
 
             var args = new ParserArgs()
             {
@@ -170,10 +198,10 @@ namespace IronyModManager.Parser.Tests
                 result[i].File.Should().Be("common\\defines\\t.txt");
                 switch (i)
                 {
-                    case 0:                        
+                    case 0:
                         result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
-                        result[i].Code.Should().Be("NInterface = {\r\nTOPBAR_BUTTONS_SHORTCUTS = {\r\n\"contacts\" \"F1\"\r\n\"situation\" \"F2\"\r\n\"technology\" \"F3\"\r\n\"empire\" \"F4\"\r\n\"leaders\" \"F5\"\r\n\"species\" \"F6\"\r\n\"ship_designer\" \"F7\"\r\n\"fleet_manager\" \"F8\"\r\n\"edicts\" \"F9\"\r\n\"policies\" \"F10\"\r\n}\r\n}");
+                        result[i].Code.Should().Be(sb2.ToString().ReplaceTabs());
                         result[i].Type.Should().Be("common\\defines\\NInterface-txt");
                         break;
                     default:
@@ -205,7 +233,31 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"		""policies"" ""F10""");
             sb.AppendLine(@"		}}");
 
-
+            var sb2 = new StringBuilder();
+            sb2.AppendLine(@"NInterface = {");
+            sb2.AppendLine(@"	TOPBAR_BUTTONS_SHORTCUTS = {");
+            sb2.AppendLine(@"		""contacts""");
+            sb2.AppendLine(@"		""F1""");
+            sb2.AppendLine(@"		""situation""");
+            sb2.AppendLine(@"		""F2""");
+            sb2.AppendLine(@"		""technology""");
+            sb2.AppendLine(@"		""F3""");
+            sb2.AppendLine(@"		""empire""");
+            sb2.AppendLine(@"		""F4""");
+            sb2.AppendLine(@"		""leaders""");
+            sb2.AppendLine(@"		""F5""");
+            sb2.AppendLine(@"		""species""");
+            sb2.AppendLine(@"		""F6""");
+            sb2.AppendLine(@"		""ship_designer""");
+            sb2.AppendLine(@"		""F7""");
+            sb2.AppendLine(@"		""fleet_manager""");
+            sb2.AppendLine(@"		""F8""");
+            sb2.AppendLine(@"		""edicts""");
+            sb2.AppendLine(@"		""F9""");
+            sb2.AppendLine(@"		""policies""");
+            sb2.AppendLine(@"		""F10""");
+            sb2.AppendLine(@"	}");
+            sb2.Append(@"}");
 
             var args = new ParserArgs()
             {
@@ -229,7 +281,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
-                        result[i].Code.Should().Be("NInterface = {\r\nTOPBAR_BUTTONS_SHORTCUTS = {\r\n\"contacts\" \"F1\"\r\n\"situation\" \"F2\"\r\n\"technology\" \"F3\"\r\n\"empire\" \"F4\"\r\n\"leaders\" \"F5\"\r\n\"species\" \"F6\"\r\n\"ship_designer\" \"F7\"\r\n\"fleet_manager\" \"F8\"\r\n\"edicts\" \"F9\"\r\n\"policies\" \"F10\"\r\n}\r\n}");
+                        result[i].Code.Should().Be(sb2.ToString().ReplaceTabs());
                         result[i].Type.Should().Be("common\\defines\\NInterface-txt");
                         break;
                     default:
@@ -254,7 +306,7 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NGraphics = {");
-            sb2.AppendLine(@"CAMERA_DISTANCE_TO_ZOOM = 10.0");
+            sb2.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
             sb2.Append(@"}");
 
 
@@ -329,23 +381,23 @@ namespace IronyModManager.Parser.Tests
                 result[i].File.Should().Be("common\\defines\\t.txt");
                 switch (i)
                 {
-                    case 0:                        
+                    case 0:
                         result[i].Id.Should().Be("ARMY_MILITARY_POWER_EXPONENT");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NArmy-txt");
-                        result[i].Code.Should().Be("NArmy = {\r\nARMY_MILITARY_POWER_EXPONENT = 0.5 # 0.65\r\n}");
-                        break;                    
+                        result[i].Code.Should().Be("NArmy = {\r\n    ARMY_MILITARY_POWER_EXPONENT = 0.5    # 0.65\r\n}");
+                        break;
                     case 1:
                         result[i].Id.Should().Be("ASCENSION_PERKS_SLOTS");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
-                        result[i].Code.Should().Be("NGameplay = {\r\nASCENSION_PERKS_SLOTS = 12\r\n}");
+                        result[i].Code.Should().Be("NGameplay = {\r\n    ASCENSION_PERKS_SLOTS = 12\r\n}");
                         break;
                     case 2:
                         result[i].Id.Should().Be("JUMP_DRIVE_COOLDOWN");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
-                        result[i].Code.Should().Be("NGameplay = {\r\nJUMP_DRIVE_COOLDOWN = 0\r\n}");
+                        result[i].Code.Should().Be("NGameplay = {\r\n    JUMP_DRIVE_COOLDOWN = 0\r\n}");
                         break;
                     default:
                         break;
