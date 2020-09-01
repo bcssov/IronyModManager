@@ -531,7 +531,7 @@ namespace IronyModManager.Parser
         {
             var result = new List<IScriptElement>();
             var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-                .Select(p => p.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0 ? p.Substring(0, p.IndexOf(Common.Constants.Scripts.ScriptCommentId) - 1) : p);
+                .Select(p => p.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0 ? p.Substring(0, p.IndexOf(Common.Constants.Scripts.ScriptCommentId)) : p);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
             for (int i = 0; i < code.Count(); i++)
             {
