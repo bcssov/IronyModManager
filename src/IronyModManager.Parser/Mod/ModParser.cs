@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -128,7 +128,7 @@ namespace IronyModManager.Parser.Mod
         {
             foreach (var key in keys)
             {
-                var value = elements.FirstOrDefault(p => p.Key == key);
+                var value = elements.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
                 if (value != null && !string.IsNullOrWhiteSpace(value.Value))
                 {
                     return Convert<T>(value.Value);
@@ -150,8 +150,8 @@ namespace IronyModManager.Parser.Mod
             var result = (IList)Activator.CreateInstance(type);
             foreach (var key in keys)
             {
-                var value = elements.FirstOrDefault(p => p.Key == key);
-                if (value != null && value.Values.Count() > 0)
+                var value = elements.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+                if (value?.Values?.Count() > 0)
                 {
                     foreach (var item in value.Values)
                     {
