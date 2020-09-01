@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -130,14 +130,19 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
+            /// The closing bracket
+            /// </summary>
+            public const char CloseObject = '}';
+
+            /// <summary>
             /// The definition separator identifier
             /// </summary>
             public const string DefinitionSeparatorId = "={";
 
             /// <summary>
-            /// The closing bracket
+            /// The variable separator identifier
             /// </summary>
-            public const char CloseObject = '}';
+            public const char EqualsOperator = '=';
 
             /// <summary>
             /// The fallback to simple parser comment
@@ -150,9 +155,19 @@ namespace IronyModManager.Parser.Common
             public const string GraphicsTypeName = "name";
 
             /// <summary>
+            /// The greater than operator
+            /// </summary>
+            public const char GreaterThanOperator = '>';
+
+            /// <summary>
             /// The languages identifier
             /// </summary>
             public const string LanguagesId = "languages";
+
+            /// <summary>
+            /// The lower than operator
+            /// </summary>
+            public const char LowerThanOperator = '<';
 
             /// <summary>
             /// The namespace
@@ -165,6 +180,11 @@ namespace IronyModManager.Parser.Common
             public const char OpenObject = '{';
 
             /// <summary>
+            /// The quote
+            /// </summary>
+            public const char Quote = '"';
+
+            /// <summary>
             /// The script comment identifier
             /// </summary>
             public const char ScriptCommentId = '#';
@@ -175,44 +195,14 @@ namespace IronyModManager.Parser.Common
             public const char VariableId = '@';
 
             /// <summary>
-            /// The variable separator identifier
-            /// </summary>
-            public const char EqualsOperator = '=';
-
-            /// <summary>
-            /// The greater than operator
-            /// </summary>
-            public const char GreaterThanOperator = '>';
-
-            /// <summary>
-            /// The lower than operator
-            /// </summary>
-            public const char LowerThanOperator = '<';
-
-            /// <summary>
-            /// The quote
-            /// </summary>
-            public const char Quote = '"';
-
-            /// <summary>
             /// The terminators
             /// </summary>
-            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject };
+            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject, ScriptCommentId };
 
             /// <summary>
-            /// The inline operators
+            /// The generic key ids
             /// </summary>
-            public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
-
-            /// <summary>
-            /// Creates new lineterminators.
-            /// </summary>
-            public static readonly char[] NewLineTerminators = new char[] { '\r', '\n' };
-
-            /// <summary>
-            /// The operators
-            /// </summary>
-            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator };
+            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
 
             /// <summary>
             /// The generic keys
@@ -220,9 +210,14 @@ namespace IronyModManager.Parser.Common
             public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
 
             /// <summary>
-            /// The generic key ids
+            /// The inline operators
             /// </summary>
-            public static readonly string[] GenericKeyIds = new string[] { "id=", "name=", "key=", "format=", "world=", "localization=" };
+            public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
+
+            /// <summary>
+            /// The operators
+            /// </summary>
+            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator };
 
             #endregion Fields
         }
@@ -243,11 +238,6 @@ namespace IronyModManager.Parser.Common
             /// The sound
             /// </summary>
             public const string Sound = "sound";
-
-            /// <summary>
-            /// The scripted variables
-            /// </summary>
-            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
             /// The component tags
@@ -293,6 +283,11 @@ namespace IronyModManager.Parser.Common
             /// The random names
             /// </summary>
             public static readonly string RandomNamesBase = MergePath(CommonPath, "random_names", "base");
+
+            /// <summary>
+            /// The scripted variables
+            /// </summary>
+            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
             /// The solar system initializers

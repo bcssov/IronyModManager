@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -193,30 +193,12 @@ namespace IronyModManager.Parser
                 IgnoreElementWhiteSpace(code, ref index);
                 elOperator = GetElementCharacter(code, index);
             }
-            string keyComment = string.Empty;
-            // Handles inline comments when no assignment operators are present ex. assignment operators are the line below. In this case we want to omit the comment
-            bool commentParsed = false;
-            if (elOperator == Common.Constants.Scripts.ScriptCommentId)
-            {
-                var oldIndex = index;
-                GetElementComment(code, ref index);
-                if (oldIndex != index)
-                {
-                    IgnoreElementWhiteSpace(code, ref index);
-                    elOperator = GetElementCharacter(code, index);
-                }
-                commentParsed = true;
-            }
             if (!Common.Constants.Scripts.Operators.Any(p => p == elOperator))
             {
                 if (!string.IsNullOrWhiteSpace(elKey.Value))
                 {
-                    if (!commentParsed)
-                    {
-                        keyComment = GetElementComment(code, ref index);
-                    }
                     var scriptElement = DIResolver.Get<IScriptElement>();
-                    scriptElement.Key = $"{elKey.Value}{keyComment}";
+                    scriptElement.Key = elKey.Value;
                     scriptElement.IsSimpleType = true;
                     return scriptElement;
                 }
@@ -265,10 +247,9 @@ namespace IronyModManager.Parser
             }
             else
             {
-                string valueComment = GetElementComment(code, ref index);
                 var scriptElement = DIResolver.Get<IScriptElement>();
-                scriptElement.Key = $"{elKey.Value}{keyComment}";
-                scriptElement.Value = $"{elValue.Value}{valueComment}";
+                scriptElement.Key = elKey.Value;
+                scriptElement.Value = elValue.Value;
                 scriptElement.IsSimpleType = true;
                 scriptElement.Operator = elValue.Operator;
                 return scriptElement;
@@ -289,41 +270,6 @@ namespace IronyModManager.Parser
                 character = code[index];
             }
             return character;
-        }
-
-        /// <summary>
-        /// Gets the element comment.
-        /// </summary>
-        /// <param name="code">The code.</param>
-        /// <param name="index">The index.</param>
-        /// <returns>System.String.</returns>
-        protected string GetElementComment(List<char> code, ref int index)
-        {
-            // Don't skip whitespace here
-            var oldIndex = index;
-            StringBuilder sb = new StringBuilder();
-            bool commentStarted = false;
-            for (int i = index; i < code.Count(); i++)
-            {
-                var character = code[i];
-                if (Common.Constants.Scripts.NewLineTerminators.Any(p => p == character))
-                {
-                    index = i;
-                    break;
-                }
-                if (character == Common.Constants.Scripts.ScriptCommentId)
-                {
-                    commentStarted = true;
-                }
-                sb.Append(character);
-                index = i;
-            }
-            if (!commentStarted)
-            {
-                index = oldIndex;
-                return string.Empty;
-            }
-            return sb.ToString();
         }
 
         /// <summary>
@@ -497,7 +443,8 @@ namespace IronyModManager.Parser
         protected IEnumerable<IScriptElement> ParseElements(IEnumerable<string> lines)
         {
             var result = new List<IScriptElement>();
-            var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()));
+            var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
+                .Select(p => p.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0 ? p.Substring(0, p.IndexOf(Common.Constants.Scripts.ScriptCommentId) - 1) : p);
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
             for (int i = 0; i < code.Count(); i++)
             {

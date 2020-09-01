@@ -67,7 +67,7 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NCamera = {");
-            sb2.AppendLine(@"    FOV = 35 # Field-of-View");
+            sb2.AppendLine(@"    FOV = 35");
             sb2.Append(@"}");
 
             var sb3 = new System.Text.StringBuilder();
@@ -385,7 +385,7 @@ namespace IronyModManager.Parser.Tests
                         result[i].Id.Should().Be("ARMY_MILITARY_POWER_EXPONENT");
                         result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NArmy-txt");
-                        result[i].Code.Should().Be("NArmy = {\r\n    ARMY_MILITARY_POWER_EXPONENT = 0.5    # 0.65\r\n}");
+                        result[i].Code.Should().Be("NArmy = {\r\n    ARMY_MILITARY_POWER_EXPONENT = 0.5\r\n}");
                         break;
                     case 1:
                         result[i].Id.Should().Be("ASCENSION_PERKS_SLOTS");
