@@ -190,7 +190,7 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <returns>System.String.</returns>
         protected virtual string FormatCode(IScriptElement element, string parent = Shared.Constants.EmptyParam, bool skipVariables = false)
         {
-            void performVariableCheck(StringBuilder sb, string item, bool insertIndent)
+            void performVariableCheck(StringBuilder sb, string item)
             {
                 // Ignore variables as they are separate definitions
                 if (skipVariables)
@@ -213,7 +213,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 var sb = new StringBuilder();
                 foreach (var item in lines)
                 {
-                    performVariableCheck(sb, item, false);
+                    performVariableCheck(sb, item);
                 }
                 return sb.ToString();
             }
@@ -225,7 +225,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 sb.AppendLine($"{parent} = {{");
                 foreach (var item in lines)
                 {
-                    performVariableCheck(sb, item, true);
+                    performVariableCheck(sb, item);
                 }
                 sb.Append("}");
                 return sb.ToString();

@@ -77,7 +77,7 @@ namespace IronyModManager.Parser.Tests
 #endif
         public void StellarisDetectDuplicatesAndGenerateParserMap()
         {
-            var codeParser = new CodeParser();
+            var codeParser = new CodeParser(new Logger());
             var quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             static string cleanParsedText(string text)
             {
@@ -139,14 +139,14 @@ namespace IronyModManager.Parser.Tests
                 {
                     continue;
                 }
-                //if (relativePath.Contains(@"gfx\worldgfx\star_ed_class.txt"))
-                //{
-                //    Debugger.Break();
-                //}
-                //else
-                //{
-                //    continue;
-                //}
+                if (relativePath.Contains(@"events\fed_vote_events.txt"))
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
+                else
+                {
+                    continue;
+                }
                 var lines = content.Contains("\r\n") ? content.Split("\r\n", StringSplitOptions.RemoveEmptyEntries) : content.Split("\n", StringSplitOptions.RemoveEmptyEntries);
                 bool notEmpty = false;
                 foreach (var line in lines)

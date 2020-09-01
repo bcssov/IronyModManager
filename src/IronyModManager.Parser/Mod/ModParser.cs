@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Mod
         {
             var obj = DIResolver.Get<IModObject>();
             var data = codeParser.ParseScriptWithoutValidation(lines);
-            if (data.Values?.Count() > 0)
+            if (data.Error == null && data.Values?.Count() > 0)
             {
                 obj.ReplacePath = GetValue<string>(data.Values, "replace_path");
                 obj.UserDir = GetValue<string>(data.Values, "user_dir");

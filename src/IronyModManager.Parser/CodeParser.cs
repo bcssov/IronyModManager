@@ -46,7 +46,25 @@ namespace IronyModManager.Parser
             { $"{Common.Constants.Scripts.CloseObject} ", Common.Constants.Scripts.CloseObject.ToString() },
         };
 
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
         #endregion Fields
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CodeParser"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public CodeParser(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -226,8 +244,8 @@ namespace IronyModManager.Parser
             else if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elValue.Value, StringComparison.OrdinalIgnoreCase)))
             {
                 IgnoreElementWhiteSpace(code, ref index);
-                var colorValues = GetElementValue(code, ref index);
-                if (colorValues.Terminator.HasValue)
+                var inlineValues = GetElementValue(code, ref index);
+                if (inlineValues.Terminator.HasValue)
                 {
                     index++;
                     var values = GetElements(code, ref index);
@@ -278,11 +296,13 @@ namespace IronyModManager.Parser
         /// <param name="code">The code.</param>
         /// <param name="index">The index.</param>
         /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
+        /// <exception cref="ArgumentException">Unknown script syntax error.</exception>
         protected IEnumerable<IScriptElement> GetElements(List<char> code, ref int index)
         {
             var values = new List<IScriptElement>();
             for (int i = index; i < code.Count(); i++)
             {
+                var prevIndex = index;
                 var character = GetElementCharacter(code, i);
                 if (character == null || character == Common.Constants.Scripts.CloseObject)
                 {
@@ -296,6 +316,30 @@ namespace IronyModManager.Parser
                 }
                 // Move position back by
                 i = index = i - 1;
+                if (prevIndex >= index)
+                {
+                    // take last 50 characters and dump the code
+                    var dumpIndex = prevIndex - 50;                    
+                    while (true)
+                    {
+                        if (dumpIndex < 0)
+                        {
+                            dumpIndex = 0;
+                            break;
+                        }
+                        else if (char.IsWhiteSpace(code[dumpIndex]))
+                        {
+                            break;
+                        }
+                        dumpIndex--;
+                    }
+                    var sb = new StringBuilder();
+                    for (int dump = dumpIndex; dump < code.Count; dump++)
+                    {
+                        sb.Append(code[dump]);
+                    }
+                    throw new ArgumentException($"Unknown script syntax error near code:{Environment.NewLine}{sb}");
+                }
             }
             return values;
         }
@@ -470,7 +514,17 @@ namespace IronyModManager.Parser
             var result = DIResolver.Get<IParseResponse>();
             if (skipValidityCheck)
             {
-                result.Values = ParseElements(lines);
+                try
+                {
+                    result.Values = ParseElements(lines);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                    var parseError = DIResolver.Get<IScriptError>();
+                    parseError.Message = ex.Message;
+                    result.Error = parseError;
+                }
             }
             else
             {
@@ -481,7 +535,17 @@ namespace IronyModManager.Parser
                 }
                 else
                 {
-                    result.Values = ParseElements(lines);
+                    try
+                    {
+                        result.Values = ParseElements(lines);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        var parseError = DIResolver.Get<IScriptError>();
+                        parseError.Message = ex.Message;
+                        result.Error = parseError;
+                    }
                 }
             }
             return result;

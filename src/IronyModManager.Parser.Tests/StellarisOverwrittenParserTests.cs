@@ -42,7 +42,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\districts\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -57,7 +57,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\planet_classes\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -72,7 +72,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\pop_jobs\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -87,7 +87,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\ship_designs\\test.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
         }
 
@@ -102,7 +102,7 @@ namespace IronyModManager.Parser.Tests
                 File = "common\\traits\\t.txt",
                 GameType = "Stellaris"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeTrue();
         }
 
@@ -177,7 +177,7 @@ namespace IronyModManager.Parser.Tests
                 Lines = sb.ToString().Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries),
                 ModName = "fake"
             };
-            var parser = new OverwrittenParser(new CodeParser(), null);
+            var parser = new OverwrittenParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
             result.Count().Should().Be(4);

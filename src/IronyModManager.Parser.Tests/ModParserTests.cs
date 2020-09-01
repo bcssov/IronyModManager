@@ -52,7 +52,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"	""fake""");
             sb.AppendLine(@"}");
 
-            var parser = new ModParser(new CodeParser());
+            var parser = new ModParser(new CodeParser(new Logger()));
             var result = parser.Parse(sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
             result.Dependencies.Count().Should().Be(1);
             result.Dependencies.First().Should().Be("fake");
@@ -93,7 +93,7 @@ namespace IronyModManager.Parser.Tests
             sb.AppendLine(@"	""fake""");
             sb.AppendLine(@"}");
 
-            var parser = new ModParser(new CodeParser());
+            var parser = new ModParser(new CodeParser(new Logger()));
             var result = parser.Parse(sb.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));            
             result.FileName.Should().Be("path");            
         }
