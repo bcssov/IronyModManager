@@ -353,29 +353,29 @@ namespace IronyModManager.Parser
                 if (prevIndex >= index)
                 {
                     counter++;
-                    // track back 50 characters and dump the code
-                    var dumpIndex = prevIndex - 50;
-                    while (true)
-                    {
-                        if (dumpIndex < 0)
-                        {
-                            dumpIndex = 0;
-                            break;
-                        }
-                        else if (char.IsWhiteSpace(code[dumpIndex]))
-                        {
-                            break;
-                        }
-                        dumpIndex--;
-                    }
-                    var end = dumpIndex + 200 > code.Count ? code.Count : dumpIndex + 200;
-                    var sb = new StringBuilder();
-                    for (int dump = dumpIndex; dump < end; dump++)
-                    {
-                        sb.Append(code[dump]);
-                    }
                     if (counter >= TraceBackTolerance)
                     {
+                        // track back 50 characters and dump the code
+                        var dumpIndex = prevIndex - 50;
+                        while (true)
+                        {
+                            if (dumpIndex < 0)
+                            {
+                                dumpIndex = 0;
+                                break;
+                            }
+                            else if (char.IsWhiteSpace(code[dumpIndex]))
+                            {
+                                break;
+                            }
+                            dumpIndex--;
+                        }
+                        var end = dumpIndex + 200 > code.Count ? code.Count : dumpIndex + 200;
+                        var sb = new StringBuilder();
+                        for (int dump = dumpIndex; dump < end; dump++)
+                        {
+                            sb.Append(code[dump]);
+                        }
                         throw new ArgumentException($"Unknown script syntax error near code:{sb}");
                     }
                 }
