@@ -95,6 +95,7 @@
         "Duplicate": "Dupliciraj",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+        "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
             "On": "Uključen",
