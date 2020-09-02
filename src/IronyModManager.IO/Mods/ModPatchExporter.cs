@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -255,6 +255,22 @@ namespace IronyModManager.IO.Mods
         public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true)
         {
             return await GetPatchStateInternalAsync(parameters, loadExternalCode);
+        }
+
+        /// <summary>
+        /// Loads the definition contents asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        public Task<string> LoadDefinitionContentsAsync(ModPatchExporterParameters parameters, string path)
+        {
+            var patchPath = Path.Combine(parameters.RootPath, parameters.PatchName, path);
+            if (File.Exists(patchPath))
+            {
+                return File.ReadAllTextAsync(patchPath);
+            }
+            return Task.FromResult(string.Empty);
         }
 
         /// <summary>

@@ -238,6 +238,7 @@
         },
         "CustomPatch": {
             "Title": "Benutzerdefinierter Patch",
+            "Load": "Lade",
             "Path": "Verzeichnis",
             "Save": "Sparen",
             "Close": "Schließen"
@@ -316,10 +317,6 @@
         "CollectionMerged": {
             "Title": "Sammlung zusammengeführt",
             "Message": "Sammlung wurde zusammengeführt."
-        },
-        "CustomPatchExists": {
-            "Title": "Benutzerdefinierter Patch vorhanden",
-            "Message": "Ein benutzerdefinierter Patch mit dem angegebenen Pfad ist bereits vorhanden."
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",

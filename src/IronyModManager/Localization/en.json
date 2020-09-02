@@ -238,6 +238,7 @@
         },
         "CustomPatch": {
             "Title": "Custom Patch",
+            "Load": "Belastung",
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"
@@ -316,10 +317,6 @@
         "CollectionMerged": {
             "Title": "Collection Merged",
             "Message": "Collection has been merged."
-        },
-        "CustomPatchExists": {
-            "Title": "Custom Patch Exists",
-            "Message": "Custom patch already exists with the specified path."
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",

@@ -319,6 +319,7 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.CustomPatch.";
                 public const string Title = Prefix + "Title";
+                public const string Load = Prefix + "Load";
                 public const string Path = Prefix + "Path";
                 public const string Save = Prefix + "Save";
                 public const string Close = Prefix + "Close";
@@ -431,12 +432,6 @@ namespace IronyModManager.Shared
             public static class CollectionMerged
             {
                 public const string Prefix = "Notifications.CollectionMerged.";
-                public const string Title = Prefix + "Title";
-                public const string Message = Prefix + "Message";
-            }
-            public static class CustomPatchExists
-            {
-                public const string Prefix = "Notifications.CustomPatchExists.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

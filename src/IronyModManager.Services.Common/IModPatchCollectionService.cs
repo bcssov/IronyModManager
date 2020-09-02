@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -143,6 +143,14 @@ namespace IronyModManager.Services.Common
         /// <param name="modName">Name of the mod.</param>
         /// <returns><c>true</c> if [is patch mod] [the specified mod name]; otherwise, <c>false</c>.</returns>
         bool IsPatchMod(string modName);
+
+        /// <summary>
+        /// Loads the definition contents asynchronous.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        Task<string> LoadDefinitionContentsAsync(IDefinition definition, string collectionName);
 
         /// <summary>
         /// Patches the mod needs update asynchronous.

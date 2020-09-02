@@ -238,6 +238,7 @@
         },
         "CustomPatch": {
             "Title": "Prilagođena zakrpa",
+            "Load": "Učitaj",
             "Path": "Direktorij",
             "Save": "Snimi",
             "Close": "Zatvori"
@@ -316,10 +317,6 @@
         "CollectionMerged": {
             "Title": "Kolekcija spojena",
             "Message": "Kolekcija je spojena."
-        },
-        "CustomPatchExists": {
-            "Title": "Prilagođena zakrpa postoji",
-            "Message": "Prilagođena zakrpa već postoji s navedenom putanjom."
         },
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",

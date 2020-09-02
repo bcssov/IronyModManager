@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -3086,7 +3086,7 @@ namespace IronyModManager.Services.Tests
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
             {
                 var res = new PatchState()
-                {                    
+                {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } }
                 };
                 return res;
@@ -3156,6 +3156,9 @@ namespace IronyModManager.Services.Tests
             result.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Defines the test method Patch_mod_should_not_need_update.
+        /// </summary>
         [Fact]
         public async Task Patch_mod_should_not_need_update()
         {
@@ -3211,6 +3214,92 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method LoadDefinitionContent_should_be_null_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task LoadDefinitionContent_should_be_null_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+            modPatchExporter.Setup(p => p.LoadDefinitionContentsAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<string>())).Returns(Task.FromResult("test-response"));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.LoadDefinitionContentsAsync(new Definition() { File = "test.txt" }, "test");
+            result.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method LoadDefinitionContent_should_be_null.
+        /// </summary>
+        [Fact]
+        public async Task LoadDefinitionContent_should_be_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "LoadDefinitionContent_should_be_false_when_no_game",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            modPatchExporter.Setup(p => p.LoadDefinitionContentsAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<string>())).Returns(Task.FromResult("test-response"));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.LoadDefinitionContentsAsync(null, "test");
+            result.Should().BeNullOrWhiteSpace();
+
+            result = await service.LoadDefinitionContentsAsync(new Definition() { File = "test.txt" }, string.Empty);
+            result.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Defines the test method LoadDefinitionContent_should_not_be_null.
+        /// </summary>
+        [Fact]
+        public async Task LoadDefinitionContent_should_not_be_null()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "LoadDefinitionContent_should_be_false_when_no_game",
+                UserDirectory = "C:\\Users\\Fake"
+            });
+            modPatchExporter.Setup(p => p.LoadDefinitionContentsAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<string>())).Returns(Task.FromResult("test-response"));
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
+
+            var result = await service.LoadDefinitionContentsAsync(new Definition() { File = "test.txt" }, "test");
+            result.Should().Be("test-response");
         }
 
         /// <summary>

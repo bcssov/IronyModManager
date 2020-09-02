@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -602,6 +602,27 @@ namespace IronyModManager.Services
         public virtual bool IsPatchMod(string modName)
         {
             return IsPatchModInternal(modName);
+        }
+
+        /// <summary>
+        /// Loads the definition contents asynchronous.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        public virtual Task<string> LoadDefinitionContentsAsync(IDefinition definition, string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (definition == null || string.IsNullOrWhiteSpace(collectionName) || game == null)
+            {
+                return Task.FromResult(string.Empty);
+            }
+            var patchName = GenerateCollectionPatchName(collectionName);
+            return modPatchExporter.LoadDefinitionContentsAsync(new ModPatchExporterParameters()
+            {
+                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                PatchName = patchName
+            }, definition.File);
         }
 
         /// <summary>
