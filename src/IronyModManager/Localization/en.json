@@ -238,7 +238,7 @@
         },
         "CustomPatch": {
             "Title": "Custom Patch",
-            "Load": "Belastung",
+            "Load": "Load",
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"

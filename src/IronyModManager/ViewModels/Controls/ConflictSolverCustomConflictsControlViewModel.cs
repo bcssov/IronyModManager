@@ -62,6 +62,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether [allow load].
+        /// </summary>
+        /// <value><c>true</c> if [allow load]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowLoad { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [allow save].
         /// </summary>
         /// <value><c>true</c> if [allow save]; otherwise, <c>false</c>.</value>
@@ -222,12 +228,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if saved; otherwise, <c>false</c>.</value>
         public virtual bool Saved { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [allow load].
-        /// </summary>
-        /// <value><c>true</c> if [allow load]; otherwise, <c>false</c>.</value>
-        protected virtual bool AllowLoad { get; set; }
 
         #endregion Properties
 
