@@ -86,6 +86,7 @@ namespace IronyModManager.Shared
             public const string EuropaUniversalisIV = Prefix + "EuropaUniversalisIV";
             public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
             public const string ImperatorRome = Prefix + "ImperatorRome";
+            public const string CrusaderKings3 = Prefix + "CrusaderKings3";
         }
         public static class Installed_Mods
         {

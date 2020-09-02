@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -43,6 +43,29 @@ namespace IronyModManager.Services.Registrations
             storage.RegisterGame(GetEUIV(userDir));
             storage.RegisterGame(GetHOI4(userDir));
             storage.RegisterGame(GetImperator(userDir));
+            storage.RegisterGame(GetCK3(userDir));
+        }
+
+        /// <summary>
+        /// Gets the c k3.
+        /// </summary>
+        /// <param name="baseUserDir">The base user dir.</param>
+        /// <returns>IGameType.</returns>
+        private IGameType GetCK3(string baseUserDir)
+        {
+            var game = DIResolver.Get<IGameType>();
+            game.ChecksumFolders = Shared.Constants.GamesTypes.CrusaderKings3.ChecksumFolders;
+            game.GameFolders = Shared.Constants.GamesTypes.CrusaderKings3.GameFolders;
+            game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
+            game.Name = Shared.Constants.GamesTypes.CrusaderKings3.Id;
+            game.SteamAppId = Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId;
+            game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath).StandardizeDirectorySeparator();
+            game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
+            game.LauncherSettingsFileName = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsFileName;
+            game.AdvancedFeaturesSupported = false;
+            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            return game;
         }
 
         /// <summary>
