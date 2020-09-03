@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-03-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -78,7 +78,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var data = codeParser.ParseScript(args.Lines, args.File);
+            var data = TryParse(args, false);
             if (data.Error != null)
             {
                 return new List<IDefinition>() { TranslateScriptError(data.Error, args) };

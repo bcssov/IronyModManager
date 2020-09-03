@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-01-2020
+// Last Modified On : 09-03-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -343,7 +343,7 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
         {
             var result = new List<IDefinition>();
-            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : codeParser.ParseScript(args.Lines, args.File, useSimpleValidation);
+            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
             if (values.Error != null)
             {
                 result.Add(TranslateScriptError(values.Error, args));
@@ -393,7 +393,7 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual IEnumerable<IDefinition> ParseSecondLevel(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
         {
             var result = new List<IDefinition>();
-            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : codeParser.ParseScript(args.Lines, args.File, useSimpleValidation);
+            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
             if (values.Error != null)
             {
                 result.Add(TranslateScriptError(values.Error, args));
@@ -537,6 +537,25 @@ namespace IronyModManager.Parser.Common.Parsers
         protected virtual string TrimId(string id)
         {
             return id.Replace("\"", string.Empty);
+        }
+
+        /// <summary>
+        /// Tries the parse.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="simpleChecks">if set to <c>true</c> [simple checks].</param>
+        /// <returns>IParseResponse.</returns>
+        protected virtual IParseResponse TryParse(ParserArgs args, bool simpleChecks)
+        {
+            try
+            {
+                return codeParser.ParseScript(args.Lines, args.File, simpleChecks);
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                return codeParser.ParseScript(args.Lines, args.File, true);
+            }
         }
 
         #endregion Methods
