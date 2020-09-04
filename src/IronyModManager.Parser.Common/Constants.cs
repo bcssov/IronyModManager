@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-01-2020
+// Last Modified On : 09-04-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -188,6 +188,16 @@ namespace IronyModManager.Parser.Common
             /// The script comment identifier
             /// </summary>
             public const char ScriptCommentId = '#';
+
+            /// <summary>
+            /// The square open bracket
+            /// </summary>
+            public const char SquareOpenBracket = '[';
+
+            /// <summary>
+            /// The square close bracket
+            /// </summary>
+            public const char SquareCloseBracket = ']';
 
             /// <summary>
             /// The variable prefix

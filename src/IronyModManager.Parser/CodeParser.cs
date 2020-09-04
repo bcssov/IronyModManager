@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-01-2020
+// Last Modified On : 09-04-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -100,14 +100,21 @@ namespace IronyModManager.Parser
         /// <returns>System.String.</returns>
         public string FormatCode(IScriptElement element, int indentLevel = 0)
         {
-            static string format(IScriptElement element, int indent)
+            static string format(IScriptElement element, int indent, bool noLeadingSpace = false)
             {
                 var sb = new StringBuilder();
                 if (element.IsSimpleType)
                 {
                     if (!string.IsNullOrWhiteSpace(element.Value))
                     {
-                        sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {element.Value}");
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
+                        {
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {element.Value}");
+                        }
+                        else
+                        {
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Value}");
+                        }
                     }
                     else
                     {
@@ -116,15 +123,58 @@ namespace IronyModManager.Parser
                 }
                 else
                 {
-                    sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {Common.Constants.Scripts.OpenObject}");
-                    if (element.Values?.Count() > 0)
+                    var inlineChildValues = element.Values?.Where(p => Common.Constants.Scripts.InlineOperators.Any(a => a.Equals(p.Key, StringComparison.OrdinalIgnoreCase)));
+                    if (inlineChildValues.Count() == element.Values?.Count() && inlineChildValues.Count() > 0)
                     {
-                        foreach (var value in element.Values)
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
                         {
-                            sb.AppendLine(format(value, indent + 1));
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Operator} ");
+                        }
+                        else
+                        {
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} ");
+                        }
+                        if (element.Values?.Count() > 0)
+                        {
+                            foreach (var value in element.Values)
+                            {
+                                sb.Append(format(value, indent, true));
+                            }
                         }
                     }
-                    sb.Append($"{new string(' ', indent * 4)}{Common.Constants.Scripts.CloseObject}");
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
+                        {
+                            if (noLeadingSpace)
+                            {
+                                sb.AppendLine($"{element.Key} {element.Operator} {Common.Constants.Scripts.OpenObject}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {Common.Constants.Scripts.OpenObject}");
+                            }
+                        }
+                        else
+                        {
+                            if (noLeadingSpace)
+                            {
+                                sb.AppendLine($"{element.Key} {Common.Constants.Scripts.OpenObject}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {Common.Constants.Scripts.OpenObject}");
+                            }
+                        }
+                        if (element.Values?.Count() > 0)
+                        {
+                            foreach (var value in element.Values)
+                            {
+                                sb.AppendLine(format(value, indent + 1));
+                            }
+                        }
+                        sb.Append($"{new string(' ', indent * 4)}{Common.Constants.Scripts.CloseObject}");
+                    }
                 }
                 return sb.ToString();
             }
@@ -401,6 +451,7 @@ namespace IronyModManager.Parser
             var sbOperator = new StringBuilder();
             var openQuote = false;
             var operatorOpened = false;
+            var squareBracketOpen = false;
             for (int i = index; i < code.Count(); i++)
             {
                 var character = GetElementCharacter(code, i);
@@ -430,14 +481,22 @@ namespace IronyModManager.Parser
                     }
                     openQuote = true;
                 }
+                else if (character == Common.Constants.Scripts.SquareOpenBracket)
+                {
+                    squareBracketOpen = true;
+                }
+                else if (character == Common.Constants.Scripts.SquareCloseBracket)
+                {
+                    squareBracketOpen = false;
+                }
                 else if (Common.Constants.Scripts.Operators.Any(p => p == character.GetValueOrDefault()))
                 {
-                    if (!openQuote)
+                    if (!openQuote && !squareBracketOpen)
                     {
                         operatorOpened = true;
                     }
                 }
-                else if (char.IsWhiteSpace(character.GetValueOrDefault()) && !openQuote)
+                else if (char.IsWhiteSpace(character.GetValueOrDefault()) && !openQuote && !squareBracketOpen)
                 {
                     if (!operatorOpened)
                     {

@@ -200,17 +200,17 @@ namespace IronyModManager.IO.Mods
                 if (parameters.OrphanConflicts?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
                     results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, FileNameGeneration.GenerateFileName));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
                 }
 
                 if (parameters.OverwrittenConflicts?.Count() > 0)
                 {
                     results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), true));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
                     results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
+                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
                 }
 
                 if (parameters.CustomConflicts?.Count() > 0)
