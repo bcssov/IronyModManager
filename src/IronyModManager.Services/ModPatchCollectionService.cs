@@ -965,6 +965,9 @@ namespace IronyModManager.Services
                         }
                     }
 
+                    var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
+                    resolvedIndex.InitMap(resolvedConflicts, true);
+
                     if (conflictResult.OverwrittenConflicts.GetAll().Count() > 0)
                     {
                         processed++;
@@ -977,7 +980,7 @@ namespace IronyModManager.Services
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods()),
+                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => resolvedIndex.GetByTypeAndId(p.TypeAndId).Count() == 0), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
@@ -994,8 +997,6 @@ namespace IronyModManager.Services
                     conflicts.AllConflicts = conflictResult.AllConflicts;
                     conflicts.Conflicts = conflictResult.Conflicts;
                     conflicts.OrphanConflicts = conflictResult.OrphanConflicts;
-                    var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
-                    resolvedIndex.InitMap(resolvedConflicts, true);
                     conflicts.ResolvedConflicts = resolvedIndex;
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
@@ -1063,7 +1064,7 @@ namespace IronyModManager.Services
                         await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                         {
                             Game = game.Type,
-                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll(), GetCollectionMods()),
+                            OverwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Count() == 0), GetCollectionMods()),
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
@@ -1733,7 +1734,7 @@ namespace IronyModManager.Services
                                     await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
                                     {
                                         Game = game.Type,
-                                        OverwrittenConflicts = PopulateModPath(overwritten, collectionMods),
+                                        OverwrittenConflicts = PopulateModPath(overwritten.Where(p => conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Count() == 0), collectionMods),
                                         RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                                         PatchName = patchName
                                     });
