@@ -4,7 +4,7 @@
 // Created          : 06-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="ScriptedVariablesParser.cs" company="Mario">
 //     Mario
@@ -77,7 +77,7 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var results = ParseComplexRoot(args);
+            var results = ParseRoot(args);
             foreach (var item in results)
             {
                 if (item.ValueType == Common.ValueType.Variable)

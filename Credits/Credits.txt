@@ -7,15 +7,15 @@ license Type:MIT
 
 #########################
 Package:AutoMapper
-Version:9.0.0
+Version:10.0.0
 project URL:https://automapper.org/
 Description:A convention-based object-object mapper.
-licenseUrl:https://github.com/AutoMapper/AutoMapper/blob/master/LICENSE.txt
+licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
 Package:Avalonia
-Version:0.9.10
+Version:0.9.12
 project URL:https://avaloniaui.net/
 Description:Avalonia is a WPF/UWP-inspired cross-platform XAML-based UI framework providing a flexible styling system and supporting a wide range of Operating Systems such as Windows (.NET Framework, .NET Core), Linux (via Xorg), MacOS and with experimental support for Android and iOS.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -31,7 +31,7 @@ license Type:MIT
 
 #########################
 Package:Avalonia.Desktop
-Version:0.9.10
+Version:0.9.12
 project URL:https://avaloniaui.net/
 Description:Avalonia is a WPF/UWP-inspired cross-platform XAML-based UI framework providing a flexible styling system and supporting a wide range of Operating Systems such as Windows (.NET Framework, .NET Core), Linux (via Xorg), MacOS and with experimental support for Android and iOS.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -39,7 +39,7 @@ license Type:MIT
 
 #########################
 Package:Avalonia.ReactiveUI
-Version:0.9.10
+Version:0.9.12
 project URL:https://avaloniaui.net/
 Description:Avalonia is a WPF/UWP-inspired cross-platform XAML-based UI framework providing a flexible styling system and supporting a wide range of Operating Systems such as Windows (.NET Framework, .NET Core), Linux (via Xorg), MacOS and with experimental support for Android and iOS.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -97,7 +97,7 @@ license Type:Microsoft Public License (MS-PL)
 
 #########################
 Package:Jot
-Version:2.1.6
+Version:2.1.7
 project URL:https://github.com/anakic/Jot
 Description:Jot is a library for tracking application state. Typically this includes window sizes and locations, last entered data, application settings, and user preferences. In short: a better alternative to using settings files.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -124,6 +124,7 @@ Package:Microsoft.Bcl.AsyncInterfaces
 Version:1.1.1
 project URL:https://github.com/dotnet/corefx
 Description:Provides the IAsyncEnumerable<T> and IAsyncDisposable interfaces and helper types for .NET Standard 2.0. This package is not required starting with .NET Standard 2.1 and .NET Core 3.0.
+
 Commonly Used Types:
 System.IAsyncDisposable
 System.Collections.Generic.IAsyncEnumerable
@@ -135,7 +136,7 @@ license Type:MIT
 
 #########################
 Package:Microsoft.NET.Test.Sdk
-Version:16.6.0
+Version:16.6.1
 project URL:https://github.com/microsoft/vstest/
 Description:The MSbuild targets and properties for building .NET test projects.
 licenseUrl:http://www.microsoft.com/web/webpi/eula/net_library_eula_enu.htm
@@ -151,7 +152,7 @@ license Type:MIT
 
 #########################
 Package:MimeMapping
-Version:1.0.1.26
+Version:1.0.1.30
 project URL:https://github.com/zone117x/MimeMapping
 Description:Constants for (almost) all MIME types and method to determine MIME type from a file name. Contains just over 1000 mime types.
 Generated from the Apache server mime.types file and the H5PB nginx mime.types file. Works similar to .NET's System.Web.MimeMapping.GetMimeMapping.
@@ -164,7 +165,7 @@ license Type:MIT
 
 #########################
 Package:Moq
-Version:4.14.1
+Version:4.14.5
 project URL:https://github.com/moq/moq4
 Description:Moq is the most popular and friendly mocking framework for .NET.
 licenseUrl:https://raw.githubusercontent.com/moq/moq4/master/License.txt
@@ -172,7 +173,7 @@ license Type:BSD 3-Clause License
 
 #########################
 Package:Nerdbank.GitVersioning
-Version:3.2.7-beta
+Version:3.2.31
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -196,7 +197,7 @@ license Type:MIT
 
 #########################
 Package:NLog
-Version:4.7.2
+Version:4.7.3
 project URL:https://nlog-project.org/
 Description:NLog is a logging platform for .NET with rich log routing and management capabilities.
 NLog supports traditional logging, structured logging and the combination of both.
@@ -218,15 +219,23 @@ license Type:BSD 3-Clause "New" or "Revised" License
 
 #########################
 Package:ReactiveUI
-Version:11.4.17
+Version:11.5.17
 project URL:https://reactiveui.net/
 Description:A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable User Interfaces that run on any mobile or desktop platform. This is the base package with the base platform implementations
 licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
+Package:RepoDb.SqLite
+Version:1.0.16
+project URL:http://repodb.net/
+Description:A hybrid .NET ORM library for SqLite.
+licenseUrl:https://aka.ms/deprecateLicenseUrl
+license Type:Apache License 2.0
+
+#########################
 Package:SharpCompress
-Version:0.25.1
+Version:0.26.0
 project URL:https://github.com/adamhathcock/sharpcompress
 Description:SharpCompress is a compression library for NET Standard 1.3/2.0/NET 4.6 that can unrar, decompress 7zip, decompress xz, zip/unzip, tar/untar lzip/unlzip, bzip2/unbzip2 and gzip/ungzip with forward-only reading and file random access APIs. Write support for zip/tar/bzip2/gzip is implemented.
 licenseUrl:https://github.com/adamhathcock/sharpcompress/blob/master/LICENSE.txt
@@ -234,7 +243,7 @@ license Type:MIT
 
 #########################
 Package:SimpleInjector
-Version:5.0.1
+Version:5.0.3
 project URL:https://simpleinjector.org/
 Description:Simple Injector is an easy, flexible and fast dependency injection library that uses best practice to guide your solutions toward the pit of success.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -250,7 +259,7 @@ license Type:MIT
 
 #########################
 Package:SlimMessageBus.Host.Memory
-Version:1.8.0
+Version:1.8.2
 project URL:https://github.com/zarusz/SlimMessageBus
 Description:Simple provider for SlimMessageBus for in process message passing. Messages are stored in memory (state is transient).
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -258,7 +267,7 @@ license Type:Apache-2.0
 
 #########################
 Package:SmartFormat.NET
-Version:2.5.1
+Version:2.5.2
 project URL:https://github.com/axuno/SmartFormat
 Description:A string composition library written in C# that can format data into a string with a minimal, intuitive syntax. It uses extensions to provide named placeholders, pluralization, gender conjugation, and time and list formatting. Project hosted on GitHub https://github.com/axuno/SmartFormat
 licenseUrl:https://licenses.nuget.org/MIT
@@ -266,7 +275,7 @@ license Type:MIT
 
 #########################
 Package:Splat.NLog
-Version:9.4.5
+Version:9.5.20
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -274,7 +283,7 @@ license Type:MIT
 
 #########################
 Package:Splat.SimpleInjector
-Version:9.4.5
+Version:9.5.20
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT

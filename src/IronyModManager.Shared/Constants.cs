@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -185,6 +185,47 @@ namespace IronyModManager.Shared
             #region Classes
 
             /// <summary>
+            /// Class CrusaderKings3.
+            /// </summary>
+            public static class CrusaderKings3
+            {
+                #region Fields
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Crusader Kings III";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "CrusaderKings3";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 1158310;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "history", "map_data", "gui", "localization" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "history", "localization", 
+                    "map_data", "music", "notifications", "sound", "tests", "tools", "tweakergui_assets" };
+
+                /// <summary>
+                /// The launcher settings file name
+                /// </summary>
+                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                #endregion Fields
+            }
+
+            /// <summary>
             /// Class EuropaUniversalis4.
             /// </summary>
             public static class EuropaUniversalis4
@@ -192,14 +233,14 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
-                /// The identifier
-                /// </summary>
-                public const string Id = "EuropaUniversalisIV";
-
-                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = "Europa Universalis IV";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "EuropaUniversalisIV";
 
                 /// <summary>
                 /// The steam application identifier
@@ -228,14 +269,14 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
-                /// The identifier
-                /// </summary>
-                public const string Id = "HeartsofIronIV";
-
-                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = "Hearts of Iron IV";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "HeartsofIronIV";
 
                 /// <summary>
                 /// The steam application identifier
@@ -257,6 +298,47 @@ namespace IronyModManager.Shared
             }
 
             /// <summary>
+            /// Class ImperatorRome.
+            /// </summary>
+            public static class ImperatorRome
+            {
+                #region Fields
+
+                /// <summary>
+                /// The docs path
+                /// </summary>
+                public const string DocsPath = "Imperator";
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "ImperatorRome";
+
+                /// <summary>
+                /// The steam application identifier
+                /// </summary>
+                public const int SteamAppId = 859580;
+
+                /// <summary>
+                /// The checksum folders
+                /// </summary>
+                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "decisions", "gui", "localization", "map_data", "setup" };
+
+                /// <summary>
+                /// The game folders
+                /// </summary>
+                public static readonly string[] GameFolders = new string[] { "common", "content_source", "decisions", "events", "fonts", "gfx",
+                    "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets" };
+
+                /// <summary>
+                /// The launcher settings file name
+                /// </summary>
+                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                #endregion Fields
+            }
+
+            /// <summary>
             /// Class Stellaris.
             /// </summary>
             public static class Stellaris
@@ -264,14 +346,14 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
-                /// The identifier
-                /// </summary>
-                public const string Id = "Stellaris";
-
-                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = Id;
+
+                /// <summary>
+                /// The identifier
+                /// </summary>
+                public const string Id = "Stellaris";
 
                 /// <summary>
                 /// The steam application identifier
@@ -289,47 +371,6 @@ namespace IronyModManager.Shared
                 public static readonly string[] GameFolders = new string[] { "sound", "tweakergui_assets", "common", "crash_reporter", "dlc", "dlc_metadata",
                     "events", "flags", "fonts", "gfx", "interface", "launcher-assets", "licenses", "locales", "localisation", "localisation_synced", "map",
                     "music", "pdx_browser", "pdx_launcher", "pdx_online_assets", "prescripted_countries", "previewer_assets" };
-
-                #endregion Fields
-            }
-
-            /// <summary>
-            /// Class ImperatorRome.
-            /// </summary>
-            public static class ImperatorRome
-            {
-                #region Fields
-
-                /// <summary>
-                /// The launcher settings file name
-                /// </summary>
-                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
-
-                /// <summary>
-                /// The identifier
-                /// </summary>
-                public const string Id = "ImperatorRome";
-
-                /// <summary>
-                /// The docs path
-                /// </summary>
-                public const string DocsPath = "Imperator";
-
-                /// <summary>
-                /// The steam application identifier
-                /// </summary>
-                public const int SteamAppId = 859580;
-
-                /// <summary>
-                /// The checksum folders
-                /// </summary>
-                public static readonly string[] ChecksumFolders = new string[] { "common", "events", "decisions", "gui","localization", "map_data", "setup"};
-
-                /// <summary>
-                /// The game folders
-                /// </summary>
-                public static readonly string[] GameFolders = new string[] { "common", "content_source", "decisions", "events", "fonts", "gfx",
-                    "gui", "localization", "map_data", "music", "setup", "sound", "tutorial", "tweakergui_assets" };
 
                 #endregion Fields
             }

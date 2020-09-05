@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,8 +20,6 @@ using System.Reactive.Linq;
 using AvaloniaEdit.Document;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using IronyModManager.Implementation.Actions;
-using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
@@ -42,19 +40,9 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
-        /// The localization manager
-        /// </summary>
-        private readonly ILocalizationManager localizationManager;
-
-        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
-
-        /// <summary>
-        /// The notification action
-        /// </summary>
-        private readonly INotificationAction notificationAction;
 
         #endregion Fields
 
@@ -64,18 +52,20 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsControlViewModel" /> class.
         /// </summary>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        /// <param name="notificationAction">The notification action.</param>
-        /// <param name="localizationManager">The localization manager.</param>
-        public ConflictSolverCustomConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService, INotificationAction notificationAction, ILocalizationManager localizationManager)
+        public ConflictSolverCustomConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
-            this.notificationAction = notificationAction;
-            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [allow load].
+        /// </summary>
+        /// <value><c>true</c> if [allow load]; otherwise, <c>false</c>.</value>
+        public virtual bool AllowLoad { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [allow save].
@@ -195,6 +185,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsOpen { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the load.
+        /// </summary>
+        /// <value>The load.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.CustomPatch.Load)]
+        public virtual string Load { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the load command.
+        /// </summary>
+        /// <value>The load command.</value>
+        public virtual ReactiveCommand<Unit, Unit> LoadCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the path.
         /// </summary>
         /// <value>The path.</value>
@@ -271,6 +274,7 @@ namespace IronyModManager.ViewModels.Controls
             var path = Path ?? string.Empty;
             var extension = System.IO.Path.GetExtension(path.StandardizeDirectorySeparator());
             AllowSave = !string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(extension);
+            AllowLoad = ConflictResult.CustomConflicts.GetByFile(path.StandardizeDirectorySeparator()).Count() > 0;
             EditingYaml = path.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -306,6 +310,7 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var saveEnabled = this.WhenAnyValue(v => v.AllowSave, v => v == true);
+            var loadEnabled = this.WhenAnyValue(v => v.AllowLoad, v => v == true);
 
             this.WhenAnyValue(v => v.Path).Subscribe(s =>
             {
@@ -330,23 +335,31 @@ namespace IronyModManager.ViewModels.Controls
 
             SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Count() == 0)
+                var definition = InitDefinition();
+                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Count() > 0)
                 {
-                    if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, InitDefinition(), CollectionName))
-                    {
-                        Saved = true;
-                        Saved = false;
-                        Path = string.Empty;
-                        CurrentEditText = string.Empty;
-                        Document = new TextDocument(CurrentEditText);
-                    }
+                    await modPatchCollectionService.ResetCustomConflictAsync(ConflictResult, definition.TypeAndId, CollectionName);
                 }
-                else
+                if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
-                    notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchExists.Title),
-                        localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchExists.Message), NotificationType.Warning);
+                    Saved = true;
+                    Saved = false;
+                    Path = string.Empty;
+                    CurrentEditText = string.Empty;
+                    Document = new TextDocument(CurrentEditText);
                 }
             }, saveEnabled).DisposeWith(disposables);
+
+            LoadCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var definition = ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).FirstOrDefault();
+                if (definition != null)
+                {
+                    var code = await modPatchCollectionService.LoadDefinitionContentsAsync(definition, CollectionName);
+                    CurrentEditText = code;
+                    Document = new TextDocument(CurrentEditText ?? string.Empty);
+                }
+            }, loadEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

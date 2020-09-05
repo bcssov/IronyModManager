@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -103,7 +103,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             if (valType == Common.ValueType.WholeTextFile)
             {
                 // Get tags only
-                var definitions = ParseComplexRoot(args);
+                var definitions = ParseRoot(args);
                 foreach (var item in definitions)
                 {
                     foreach (var tag in item.Tags)

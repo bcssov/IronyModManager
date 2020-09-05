@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 09-01-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -12,11 +12,15 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 
 namespace IronyModManager.Parser.Mod
 {
@@ -30,9 +34,14 @@ namespace IronyModManager.Parser.Mod
         #region Fields
 
         /// <summary>
+        /// The converters
+        /// </summary>
+        private static readonly ConcurrentDictionary<Type, TypeConverter> converters = new ConcurrentDictionary<Type, TypeConverter>();
+
+        /// <summary>
         /// The text parser
         /// </summary>
-        private readonly ICodeParser textParser;
+        private readonly ICodeParser codeParser;
 
         #endregion Fields
 
@@ -41,10 +50,10 @@ namespace IronyModManager.Parser.Mod
         /// <summary>
         /// Initializes a new instance of the <see cref="ModParser" /> class.
         /// </summary>
-        /// <param name="textParser">The text parser.</param>
-        public ModParser(ICodeParser textParser)
+        /// <param name="codeParser">The code parser.</param>
+        public ModParser(ICodeParser codeParser)
         {
-            this.textParser = textParser;
+            this.codeParser = codeParser;
         }
 
         #endregion Constructors
@@ -59,87 +68,105 @@ namespace IronyModManager.Parser.Mod
         public IModObject Parse(IEnumerable<string> lines)
         {
             var obj = DIResolver.Get<IModObject>();
-            List<string> arrayProps = null;
-            foreach (var line in lines)
+            var data = codeParser.ParseScriptWithoutValidation(lines);
+            if (data.Error == null && data.Values?.Count() > 0)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.StartsWith(Common.Constants.Scripts.ScriptCommentId))
+                obj.ReplacePath = GetValue<string>(data.Values, "replace_path");
+                obj.UserDir = GetValue<string>(data.Values, "user_dir");
+                obj.FileName = GetValue<string>(data.Values, "path", "archive");
+                obj.Picture = GetValue<string>(data.Values, "picture");
+                obj.Name = GetValue<string>(data.Values, "name");
+                obj.Version = GetValue<string>(data.Values, "supported_version", "version");
+                obj.Tags = GetValues<string>(data.Values, "tags");
+                obj.RemoteId = GetValue<long?>(data.Values, "remote_file_id");
+                obj.Dependencies = GetValues<string>(data.Values, "dependencies");
+            }
+            return obj;
+        }
+
+        /// <summary>
+        /// Converts the specified value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>T.</returns>
+        private T Convert<T>(string value)
+        {
+            value = value.Replace("\"", string.Empty);
+            var converter = GetConverter<T>();
+            return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
+        }
+
+        /// <summary>
+        /// Gets the converter.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>TypeConverter.</returns>
+        private TypeConverter GetConverter<T>()
+        {
+            TypeConverter converter;
+            if (converters.ContainsKey(typeof(T)))
+            {
+                converter = converters[typeof(T)];
+            }
+            else
+            {
+                converter = TypeDescriptor.GetConverter(typeof(T));
+                converters.TryAdd(typeof(T), converter);
+            }
+            return converter;
+        }
+
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="elements">The elements.</param>
+        /// <param name="keys">The keys.</param>
+        /// <returns>System.String.</returns>
+        private T GetValue<T>(IEnumerable<IScriptElement> elements, params string[] keys)
+        {
+            foreach (var key in keys)
+            {
+                var value = elements.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+                if (value != null && !string.IsNullOrWhiteSpace(value.Value))
                 {
-                    continue;
+                    return Convert<T>(value.Value);
                 }
-                var cleaned = textParser.CleanWhitespace(line);
-                if (cleaned.Contains(Common.Constants.Scripts.VariableSeparatorId))
+            }
+            return default;
+        }
+
+        /// <summary>
+        /// Gets the values.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="elements">The elements.</param>
+        /// <param name="keys">The keys.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        private IEnumerable<T> GetValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
+        {
+            var type = typeof(List<>).MakeGenericType(typeof(T));
+            var result = (IList)Activator.CreateInstance(type);
+            foreach (var key in keys)
+            {
+                var value = elements.FirstOrDefault(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+                if (value?.Values?.Count() > 0)
                 {
-                    var key = textParser.GetKey(cleaned, Common.Constants.Scripts.VariableSeparatorId);
-                    switch (key)
+                    foreach (var item in value.Values)
                     {
-                        case "replace_path":
-                            obj.ReplacePath = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "user_dir":
-                            obj.UserDir = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "path":
-                        case "archive":
-                            obj.FileName = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "picture":
-                            obj.Picture = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "name":
-                            obj.Name = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "version":
-                            // supported version tag has priority
-                            if (string.IsNullOrWhiteSpace(obj.Version))
-                            {
-                                obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            }
-                            break;
-
-                        case "supported_version":
-                            obj.Version = textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}");
-                            break;
-
-                        case "tags":
-                            obj.Tags = arrayProps = new List<string>();
-                            break;
-
-                        case "remote_file_id":
-                            if (long.TryParse(textParser.GetValue(cleaned, $"{key}{Common.Constants.Scripts.VariableSeparatorId}"), out long value))
-                            {
-                                obj.RemoteId = value;
-                            }
-                            break;
-
-                        case "dependencies":
-                            obj.Dependencies = arrayProps = new List<string>();
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    if (arrayProps != null)
-                    {
-                        if (cleaned.Contains(Common.Constants.Scripts.ClosingBracket))
+                        if (!string.IsNullOrWhiteSpace(item.Key))
                         {
-                            arrayProps = null;
-                        }
-                        else
-                        {
-                            arrayProps.Add(cleaned.Replace("\"", string.Empty));
+                            result.Add(Convert<T>(item.Key));
                         }
                     }
                 }
             }
-            return obj;
+            if (result.Count > 0)
+            {
+                return (IEnumerable<T>)result;
+            }
+            return null;
         }
 
         #endregion Methods

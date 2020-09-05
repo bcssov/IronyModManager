@@ -56,7 +56,8 @@
         "Stellaris": "Stellaris",
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
-        "ImperatorRome": "Imperator Rome"
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
     },
     "Installed_Mods": {
         "Name": "Installed Mods",
@@ -95,6 +96,7 @@
         "Duplicate": "Duplicate",
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
+        "ExportToClipboard": "Copy Collection To Clipboard",
         "JumpOnDragAndDrop": {
             "Title": "Auto Focus: {State}",
             "On": "On",
@@ -129,6 +131,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
                 "Overlay_Writting_Files": "Please wait while merging the mod collection..."
+            },
+            "OverwritePrompt": {
+                "Title": "Overwrite existing collection?",
+                "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
             }
         }
     },
@@ -233,6 +239,7 @@
         },
         "CustomPatch": {
             "Title": "Custom Patch",
+            "Load": "Load",
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"
@@ -311,10 +318,6 @@
         "CollectionMerged": {
             "Title": "Collection Merged",
             "Message": "Collection has been merged."
-        },
-        "CustomPatchExists": {
-            "Title": "Custom Patch Exists",
-            "Message": "Custom patch already exists with the specified path."
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",

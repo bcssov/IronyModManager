@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="GraphicsParser.cs" company="Mario">
 //     Mario
@@ -26,10 +26,12 @@ namespace IronyModManager.Parser.Generic
     /// Class GraphicsParser.
     /// Implements the <see cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
     /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
+    /// Implements the <see cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Parser.Common.Parsers.BaseParser" />
     /// <seealso cref="IronyModManager.Parser.Generic.BaseGraphicsParser" />
     /// <seealso cref="IronyModManager.Parser.Common.Parsers.IGenericParser" />
-    public class GraphicsParser : BaseGraphicsParser, IGenericParser
+    public class GraphicsParser : BaseParser, IGenericParser
     {
         #region Constructors
 
@@ -69,7 +71,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !ShouldSwitchToSimpleParser(args.Lines) && (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase));
+            return args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase) || args.File.EndsWith(Common.Constants.GfxExtension, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -79,40 +81,21 @@ namespace IronyModManager.Parser.Generic
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseComplexSecondLevel(args);
+            return ParseSecondLevel(args);
         }
 
         /// <summary>
-        /// Evals the complex parse key value for identifier.
+        /// Evals the element for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
+        protected override string EvalElementForId(IScriptElement value)
         {
             if (Common.Constants.Scripts.GraphicsTypeName.Equals(value.Key, StringComparison.OrdinalIgnoreCase))
             {
                 return value.Value;
             }
-            return base.EvalComplexParseKeyValueForId(value);
-        }
-
-        /// <summary>
-        /// Parses the simple.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected override IEnumerable<IDefinition> ParseSimple(ParserArgs args, bool isFirstLevel = true)
-        {
-            // Called as a part of a fallback strategy
-            if (args.File.EndsWith(Common.Constants.GuiExtension, StringComparison.OrdinalIgnoreCase))
-            {
-                return ParseGUI(args);
-            }
-            else
-            {
-                return ParseGFX(args);
-            }
+            return base.EvalElementForId(value);
         }
 
         #endregion Methods

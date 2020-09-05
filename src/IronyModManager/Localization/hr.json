@@ -56,7 +56,8 @@
         "Stellaris": "Stellaris",
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
-        "ImperatorRome": "Imperator Rome"
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
     },
     "Installed_Mods": {
         "Name": "Instalirani modovi",
@@ -95,6 +96,7 @@
         "Duplicate": "Dupliciraj",
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
+        "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
             "On": "Uključen",
@@ -129,6 +131,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Priječaj dok se skupljaju mod informacije...",
                 "Overlay_Writting_Files": "Pričekaj dok se spaja kolekcija..."
+            },
+            "OverwritePrompt": {
+                "Title": "Prebriši postojeću kolekciju?",
+                "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
             }
         }
     },
@@ -233,6 +239,7 @@
         },
         "CustomPatch": {
             "Title": "Prilagođena zakrpa",
+            "Load": "Učitaj",
             "Path": "Direktorij",
             "Save": "Snimi",
             "Close": "Zatvori"
@@ -311,10 +318,6 @@
         "CollectionMerged": {
             "Title": "Kolekcija spojena",
             "Message": "Kolekcija je spojena."
-        },
-        "CustomPatchExists": {
-            "Title": "Prilagođena zakrpa postoji",
-            "Message": "Prilagođena zakrpa već postoji s navedenom putanjom."
         },
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",

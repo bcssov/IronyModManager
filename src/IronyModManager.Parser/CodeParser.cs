@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 09-04-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -13,13 +13,9 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using CWTools.CSharp;
-using CWTools.Parser;
-using CWTools.Process;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
@@ -38,60 +34,44 @@ namespace IronyModManager.Parser
         #region Fields
 
         /// <summary>
+        /// The trace back tolerance
+        /// </summary>
+        protected const int TraceBackTolerance = 100;
+
+        /// <summary>
         /// The cleaner conversion map
         /// </summary>
         protected static readonly Dictionary<string, string> cleanerConversionMap = new Dictionary<string, string>()
         {
-            { $" {Common.Constants.Scripts.VariableSeparatorId}", Common.Constants.Scripts.VariableSeparatorId.ToString() },
-            { $"{Common.Constants.Scripts.VariableSeparatorId} ", Common.Constants.Scripts.VariableSeparatorId.ToString() },
-            { $" {Common.Constants.Scripts.OpeningBracket}", Common.Constants.Scripts.OpeningBracket.ToString() },
-            { $"{Common.Constants.Scripts.OpeningBracket} ", Common.Constants.Scripts.OpeningBracket.ToString() },
-            { $" {Common.Constants.Scripts.ClosingBracket}", Common.Constants.Scripts.ClosingBracket.ToString() },
-            { $"{Common.Constants.Scripts.ClosingBracket} ", Common.Constants.Scripts.ClosingBracket.ToString() },
+            { $" {Common.Constants.Scripts.EqualsOperator}", Common.Constants.Scripts.EqualsOperator.ToString() },
+            { $"{Common.Constants.Scripts.EqualsOperator} ", Common.Constants.Scripts.EqualsOperator.ToString() },
+            { $" {Common.Constants.Scripts.OpenObject}", Common.Constants.Scripts.OpenObject.ToString() },
+            { $"{Common.Constants.Scripts.OpenObject} ", Common.Constants.Scripts.OpenObject.ToString() },
+            { $" {Common.Constants.Scripts.CloseObject}", Common.Constants.Scripts.CloseObject.ToString() },
+            { $"{Common.Constants.Scripts.CloseObject} ", Common.Constants.Scripts.CloseObject.ToString() },
         };
 
         /// <summary>
-        /// The quotes regex
+        /// The logger
         /// </summary>
-        protected static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        /// <summary>
-        /// The reverse cleaner conversion map
-        /// </summary>
-        protected static readonly Dictionary<string, string> reverseCleanerConversionMap = new Dictionary<string, string>()
-        {
-            { Common.Constants.Scripts.VariableSeparatorId.ToString(), $" {Common.Constants.Scripts.VariableSeparatorId} " },
-            { Common.Constants.Scripts.OpeningBracket.ToString(), $" {Common.Constants.Scripts.OpeningBracket} " },
-            { Common.Constants.Scripts.ClosingBracket.ToString(), $" {Common.Constants.Scripts.ClosingBracket} " },
-        };
+        private readonly ILogger logger;
 
         #endregion Fields
 
-        #region Methods
+        #region Constructors
 
         /// <summary>
-        /// Cleans the parsed text.
+        /// Initializes a new instance of the <see cref="CodeParser" /> class.
         /// </summary>
-        /// <param name="text">The text.</param>
-        /// <returns>System.String.</returns>
-        public string CleanParsedText(string text)
+        /// <param name="logger">The logger.</param>
+        public CodeParser(ILogger logger)
         {
-            var sb = new StringBuilder();
-            foreach (var item in text)
-            {
-                if (!char.IsWhiteSpace(item) &&
-                    !item.Equals(Common.Constants.Scripts.OpeningBracket) &&
-                    !item.Equals(Common.Constants.Scripts.ClosingBracket))
-                {
-                    sb.Append(item);
-                }
-                else
-                {
-                    break;
-                }
-            }
-            return sb.ToString();
+            this.logger = logger;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Cleans the whitespace.
@@ -113,86 +93,94 @@ namespace IronyModManager.Parser
         }
 
         /// <summary>
-        /// Gets the key.
+        /// Formats the code.
         /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
+        /// <param name="element">The element.</param>
+        /// <param name="indentLevel">The indent level.</param>
         /// <returns>System.String.</returns>
-        public string GetKey(string line, char key)
+        public string FormatCode(IScriptElement element, int indentLevel = 0)
         {
-            return GetKey(line, key.ToString());
-        }
-
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        public string GetKey(string line, string key)
-        {
-            var cleaned = CleanWhitespace(line);
-            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
+            static string format(IScriptElement element, int indent, bool noLeadingSpace = false)
             {
-                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-                if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
+                var sb = new StringBuilder();
+                if (element.IsSimpleType)
                 {
-                    var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
+                    if (!string.IsNullOrWhiteSpace(element.Value))
                     {
-                        if (parsed.First().StartsWith("\""))
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
                         {
-                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {element.Value}");
                         }
                         else
                         {
-                            return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Value}");
                         }
                     }
+                    else
+                    {
+                        sb.Append($"{new string(' ', indent * 4)}{element.Key}");
+                    }
                 }
+                else
+                {
+                    var inlineChildValues = element.Values?.Where(p => Common.Constants.Scripts.InlineOperators.Any(a => a.Equals(p.Key, StringComparison.OrdinalIgnoreCase)));
+                    if (inlineChildValues.Count() == element.Values?.Count() && inlineChildValues.Count() > 0)
+                    {
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
+                        {
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} {element.Operator} ");
+                        }
+                        else
+                        {
+                            sb.Append($"{new string(' ', indent * 4)}{element.Key} ");
+                        }
+                        if (element.Values?.Count() > 0)
+                        {
+                            foreach (var value in element.Values)
+                            {
+                                sb.Append(format(value, indent, true));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrWhiteSpace(element.Operator))
+                        {
+                            if (noLeadingSpace)
+                            {
+                                sb.AppendLine($"{element.Key} {element.Operator} {Common.Constants.Scripts.OpenObject}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {element.Operator} {Common.Constants.Scripts.OpenObject}");
+                            }
+                        }
+                        else
+                        {
+                            if (noLeadingSpace)
+                            {
+                                sb.AppendLine($"{element.Key} {Common.Constants.Scripts.OpenObject}");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{new string(' ', indent * 4)}{element.Key} {Common.Constants.Scripts.OpenObject}");
+                            }
+                        }
+                        if (element.Values?.Count() > 0)
+                        {
+                            foreach (var value in element.Values)
+                            {
+                                sb.AppendLine(format(value, indent + 1));
+                            }
+                        }
+                        sb.Append($"{new string(' ', indent * 4)}{Common.Constants.Scripts.CloseObject}");
+                    }
+                }
+                return sb.ToString();
             }
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        public string GetValue(string line, char key)
-        {
-            return GetValue(line, key.ToString());
-        }
-
-        /// <summary>
-        /// Gets the value.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
-        public string GetValue(string line, string key)
-        {
-            var cleaned = CleanWhitespace(line);
-            if (cleaned.Contains(key, StringComparison.OrdinalIgnoreCase))
+            if (element != null)
             {
-                var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
-                if (prev == 0 || (char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Common.Constants.Scripts.OpeningBracket || cleaned[prev - 1] == Common.Constants.Scripts.ClosingBracket))
-                {
-                    var part = cleaned.Substring(cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase));
-                    var parsed = part.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
-                    {
-                        if (parsed.First().StartsWith("\""))
-                        {
-                            return quotesRegex.Match(parsed.First().Trim()).Value.Replace("\"", string.Empty);
-                        }
-                        else
-                        {
-                            return CleanParsedText(parsed.First().Trim().Replace("\"", string.Empty));
-                        }
-                    }
-                }
+                return format(element, indentLevel);
             }
             return string.Empty;
         }
@@ -202,114 +190,520 @@ namespace IronyModManager.Parser
         /// </summary>
         /// <param name="lines">The lines.</param>
         /// <param name="file">The file.</param>
+        /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
         /// <returns>IParseResponse.</returns>
-        public IParseResponse ParseScript(IEnumerable<string> lines, string file)
+        public IParseResponse ParseScript(IEnumerable<string> lines, string file, bool performSimpleCheck = false)
         {
-            var line = string.Join(Environment.NewLine, lines);
-            var response = Parsers.ParseScriptFile(file, line);
-            var result = DIResolver.Get<IParseResponse>();
-            if (response.IsSuccess)
+            return ParseScriptData(lines, file, performSimpleCheck, false);
+        }
+
+        /// <summary>
+        /// Parses the script without validation.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IParseResponse.</returns>
+        public IParseResponse ParseScriptWithoutValidation(IEnumerable<string> lines)
+        {
+            return ParseScriptData(lines, skipValidityCheck: true);
+        }
+
+        /// <summary>
+        /// Performs the validity check.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
+        /// <returns>IScriptError.</returns>
+        public IScriptError PerformValidityCheck(IEnumerable<string> lines, string file, bool performSimpleCheck = false)
+        {
+            if (performSimpleCheck)
             {
-                var successResponse = Parsers.ProcessStatements(Path.GetFileName(file), file, response.GetResult());
-                result.Value = MapNode(successResponse);
+                var error = PerformBasicValidityCheck(lines);
+                if (error != null)
+                {
+                    return error;
+                }
             }
             else
             {
-                var errorResponse = response.GetError();
+                var code = string.Join(Environment.NewLine, lines);
+                var response = Parsers.ParseScriptFile(file, code);
+                if (!response.IsSuccess)
+                {
+                    var errorResponse = response.GetError();
+                    var error = DIResolver.Get<IScriptError>();
+                    error.Column = errorResponse.Column;
+                    error.Line = errorResponse.Line;
+                    error.Message = errorResponse.ErrorMessage;
+                    return error;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the element.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>IScriptElement.</returns>
+        protected IScriptElement GetElement(List<char> code, ref int index)
+        {
+            IgnoreElementWhiteSpace(code, ref index);
+            var elKey = GetElementValue(code, ref index, true);
+            char? elOperator;
+            if (!string.IsNullOrWhiteSpace(elKey.Operator))
+            {
+                elOperator = elKey.Operator[0];
+                if (elKey.Operator.Count() > 1)
+                {
+                    // Move back index in case we're seing greater or equal to kind of operators
+                    index -= elKey.Operator.Count() - 1;
+                }
+            }
+            else
+            {
+                IgnoreElementWhiteSpace(code, ref index);
+                elOperator = GetElementCharacter(code, index);
+            }
+            if (!Common.Constants.Scripts.Operators.Any(p => p == elOperator))
+            {
+                if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elKey.Value, StringComparison.OrdinalIgnoreCase)))
+                {
+                    IgnoreElementWhiteSpace(code, ref index);
+                    var inlineValues = GetElementValue(code, ref index);
+                    if (inlineValues.Terminator.HasValue)
+                    {
+                        index++;
+                        var values = GetElements(code, ref index);
+                        var scriptElement = DIResolver.Get<IScriptElement>();
+                        scriptElement.Key = elKey.Value;
+                        scriptElement.Values = values;
+                        return scriptElement;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else if (elKey.Terminator.GetValueOrDefault() == Common.Constants.Scripts.OpenObject)
+                {
+                    // Seriously paradox language is way too weird, we need to cover cases such as this aw well: statement = { { code } }
+                    index++;
+                    var values = GetElements(code, ref index);
+                    var scriptElement = DIResolver.Get<IScriptElement>();
+                    scriptElement.Key = elKey.Value;
+                    scriptElement.Values = values;
+                    return scriptElement;
+                }
+                else if (!string.IsNullOrWhiteSpace(elKey.Value))
+                {
+                    var scriptElement = DIResolver.Get<IScriptElement>();
+                    scriptElement.Key = elKey.Value;
+                    scriptElement.IsSimpleType = true;
+                    return scriptElement;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            IgnoreElementWhiteSpace(code, ref index);
+            var elValue = GetElementValue(code, ref index);
+            if (elValue.Terminator.HasValue)
+            {
+                if (elValue.Terminator.GetValueOrDefault() != Common.Constants.Scripts.OpenObject)
+                {
+                    return null;
+                }
+                index++;
+                var values = GetElements(code, ref index);
+                var scriptElement = DIResolver.Get<IScriptElement>();
+                scriptElement.Key = elKey.Value;
+                scriptElement.Values = values;
+                scriptElement.Operator = Common.Constants.Scripts.EqualsOperator.ToString();
+                return scriptElement;
+            }
+            else if (Common.Constants.Scripts.InlineOperators.Any(p => p.Equals(elValue.Value, StringComparison.OrdinalIgnoreCase)))
+            {
+                IgnoreElementWhiteSpace(code, ref index);
+                var inlineValues = GetElementValue(code, ref index);
+                if (inlineValues.Terminator.HasValue)
+                {
+                    index++;
+                    var values = GetElements(code, ref index);
+                    var parentElement = DIResolver.Get<IScriptElement>();
+                    parentElement.Key = elKey.Value;
+                    parentElement.Operator = Common.Constants.Scripts.EqualsOperator.ToString();
+                    var childElement = DIResolver.Get<IScriptElement>();
+                    childElement.Key = elValue.Value;
+                    childElement.Values = values;
+                    parentElement.Values = new List<IScriptElement>() { childElement };
+                    return parentElement;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                var scriptElement = DIResolver.Get<IScriptElement>();
+                scriptElement.Key = elKey.Value;
+                scriptElement.Value = elValue.Value;
+                scriptElement.IsSimpleType = true;
+                scriptElement.Operator = elValue.Operator;
+                return scriptElement;
+            }
+        }
+
+        /// <summary>
+        /// Gets the element character.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>System.Nullable&lt;System.Char&gt;.</returns>
+        protected char? GetElementCharacter(IList<char> code, int index)
+        {
+            char? character = null;
+            if (index < code.Count())
+            {
+                character = code[index];
+            }
+            return character;
+        }
+
+        /// <summary>
+        /// Gets the elements.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="index">The index.</param>
+        /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
+        /// <exception cref="ArgumentException">Unknown script syntax error near code:{sb}</exception>
+        protected IEnumerable<IScriptElement> GetElements(List<char> code, ref int index)
+        {
+            var counter = 0;
+            var values = new List<IScriptElement>();
+            for (int i = index; i < code.Count(); i++)
+            {
+                var prevIndex = index;
+                var character = GetElementCharacter(code, i);
+                if (character == null || character == Common.Constants.Scripts.CloseObject)
+                {
+                    index = i + 1;
+                    break;
+                }
+                var el = GetElement(code, ref i);
+                if (el != null)
+                {
+                    values.Add(el);
+                }
+                // Move position back by
+                i = index = i - 1;
+                if (prevIndex >= index)
+                {
+                    counter++;
+                    if (counter >= TraceBackTolerance)
+                    {
+                        // track back 50 characters and dump the code
+                        var dumpIndex = prevIndex - 50;
+                        while (true)
+                        {
+                            if (dumpIndex < 0)
+                            {
+                                dumpIndex = 0;
+                                break;
+                            }
+                            else if (char.IsWhiteSpace(code[dumpIndex]))
+                            {
+                                break;
+                            }
+                            dumpIndex--;
+                        }
+                        var end = dumpIndex + 200 > code.Count ? code.Count : dumpIndex + 200;
+                        var sb = new StringBuilder();
+                        for (int dump = dumpIndex; dump < end; dump++)
+                        {
+                            sb.Append(code[dump]);
+                        }
+                        throw new ArgumentException($"Unknown script syntax error near code:{sb}");
+                    }
+                }
+                else
+                {
+                    counter = 0;
+                }
+            }
+            return values;
+        }
+
+        /// <summary>
+        /// Gets the element value.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="index">The index.</param>
+        /// <param name="breakOnOperatorTerminator">if set to <c>true</c> [break on operator terminator].</param>
+        /// <returns>ElementValue.</returns>
+        protected ElementValue GetElementValue(List<char> code, ref int index, bool breakOnOperatorTerminator = false)
+        {
+            char? terminator = null;
+            var sbValue = new StringBuilder();
+            var sbOperator = new StringBuilder();
+            var openQuote = false;
+            var operatorOpened = false;
+            var squareBracketOpen = false;
+            for (int i = index; i < code.Count(); i++)
+            {
+                var character = GetElementCharacter(code, i);
+                if (character == null)
+                {
+                    index = i;
+                    break;
+                }
+                if (character == Common.Constants.Scripts.Quote)
+                {
+                    if (operatorOpened)
+                    {
+                        if (breakOnOperatorTerminator)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            operatorOpened = false;
+                        }
+                    }
+                    if (openQuote)
+                    {
+                        sbValue.Append(character.GetValueOrDefault());
+                        index = i + 1;
+                        break;
+                    }
+                    openQuote = true;
+                }
+                else if (character == Common.Constants.Scripts.SquareOpenBracket)
+                {
+                    squareBracketOpen = true;
+                }
+                else if (character == Common.Constants.Scripts.SquareCloseBracket)
+                {
+                    squareBracketOpen = false;
+                }
+                else if (Common.Constants.Scripts.Operators.Any(p => p == character.GetValueOrDefault()))
+                {
+                    if (!openQuote && !squareBracketOpen)
+                    {
+                        operatorOpened = true;
+                    }
+                }
+                else if (char.IsWhiteSpace(character.GetValueOrDefault()) && !openQuote && !squareBracketOpen)
+                {
+                    if (!operatorOpened)
+                    {
+                        index = i;
+                        break;
+                    }
+                    else
+                    {
+                        if (breakOnOperatorTerminator)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            sbOperator.Append(character.GetValueOrDefault());
+                            IgnoreElementWhiteSpace(code, ref i);
+                            // Move back by 1
+                            i--;
+                            operatorOpened = false;
+                            index = i;
+                            continue;
+                        }
+                    }
+                }
+                else if (Common.Constants.Scripts.CodeTerminators.Any(p => p == character.GetValueOrDefault()))
+                {
+                    terminator = character;
+                    index = i;
+                    break;
+                }
+                else if (!char.IsWhiteSpace(character.GetValueOrDefault()))
+                {
+                    if (operatorOpened)
+                    {
+                        if (breakOnOperatorTerminator)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            operatorOpened = false;
+                        }
+                    }
+                }
+                if (!operatorOpened)
+                {
+                    sbValue.Append(character.GetValueOrDefault());
+                }
+                else
+                {
+                    sbOperator.Append(character.GetValueOrDefault());
+                }
+                index = i;
+            }
+            return new ElementValue()
+            {
+                Value = sbValue.ToString(),
+                Operator = sbOperator.ToString().Trim(),
+                Terminator = terminator
+            };
+        }
+
+        /// <summary>
+        /// Ignores the element white space.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="index">The index.</param>
+        protected void IgnoreElementWhiteSpace(List<char> code, ref int index)
+        {
+            for (int i = index; i < code.Count(); i++)
+            {
+                var character = GetElementCharacter(code, i);
+                if (character == null || char.IsWhiteSpace(character.GetValueOrDefault()))
+                {
+                    continue;
+                }
+                else
+                {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Parses the elements.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IEnumerable&lt;IScriptElement&gt;.</returns>
+        protected IEnumerable<IScriptElement> ParseElements(IEnumerable<string> lines)
+        {
+            var result = new List<IScriptElement>();
+            var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
+                .Select(p => p.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0 ? p.Substring(0, p.IndexOf(Common.Constants.Scripts.ScriptCommentId)) : p);
+            var code = string.Join(Environment.NewLine, validCodeLines).ToList();
+            for (int i = 0; i < code.Count(); i++)
+            {
+                var element = GetElement(code, ref i);
+                if (element != null)
+                {
+                    result.Add(element);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the script data.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="performSimpleCheck">if set to <c>true</c> [perform simple check].</param>
+        /// <param name="skipValidityCheck">if set to <c>true</c> [skip validity check].</param>
+        /// <returns>IParseResponse.</returns>
+        protected IParseResponse ParseScriptData(IEnumerable<string> lines, string file = Constants.EmptyParam, bool performSimpleCheck = false, bool skipValidityCheck = false)
+        {
+            var result = DIResolver.Get<IParseResponse>();
+            if (skipValidityCheck)
+            {
+                try
+                {
+                    result.Values = ParseElements(lines);
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                    var parseError = DIResolver.Get<IScriptError>();
+                    parseError.Message = ex.Message;
+                    result.Error = parseError;
+                }
+            }
+            else
+            {
+                var error = PerformValidityCheck(lines, file, performSimpleCheck);
+                if (error != null)
+                {
+                    result.Error = error;
+                }
+                else
+                {
+                    try
+                    {
+                        result.Values = ParseElements(lines);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        var parseError = DIResolver.Get<IScriptError>();
+                        parseError.Message = ex.Message;
+                        result.Error = parseError;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Performs the basic validity check.
+        /// </summary>
+        /// <param name="lines">The lines.</param>
+        /// <returns>IScriptError.</returns>
+        protected IScriptError PerformBasicValidityCheck(IEnumerable<string> lines)
+        {
+            var text = string.Join(Environment.NewLine, lines);
+            var openBracket = text.Count(s => s == Common.Constants.Scripts.OpenObject);
+            var closeBracket = text.Count(s => s == Common.Constants.Scripts.CloseObject);
+            if (openBracket != closeBracket)
+            {
                 var error = DIResolver.Get<IScriptError>();
-                error.Column = errorResponse.Column;
-                error.Line = errorResponse.Line;
-                error.Message = errorResponse.ErrorMessage;
-                result.Error = error;
+                error.Message = "Number of open and close curly brackets does not match. This indicates a syntax error somewhere in the file.";
+                return error;
             }
-            return result;
-        }
-
-        /// <summary>
-        /// Prettifies the line.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <returns>System.String.</returns>
-        public string PrettifyLine(string line)
-        {
-            var cleaned = CleanWhitespace(line);
-            foreach (var item in reverseCleanerConversionMap)
-            {
-                cleaned = cleaned.Replace(item.Key, item.Value);
-            }
-            cleaned = string.Join(' ', cleaned.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
-            return cleaned;
-        }
-
-        /// <summary>
-        /// Formats the code.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <returns>System.String.</returns>
-        protected string FormatCode(Types.Statement source)
-        {
-            return source.PrettyPrint().Replace("\r", string.Empty).Replace("\n", Environment.NewLine).Trim(Environment.NewLine.ToCharArray()).ReplaceTabs();
-        }
-
-        /// <summary>
-        /// Maps the node.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="level">The level.</param>
-        /// <returns>IScriptNode.</returns>
-        protected IScriptNode MapNode(Node node, int level = 1)
-        {
-            string code = null;
-            if (level >= 2 && level <= 3)
-            {
-                code = FormatCode(node.ToRaw);
-            }
-            var nodes = node.AllChildren.Where(x => x.IsNodeC).Select(x => MapNode(x.node, level + 1)).ToList();
-            var leaves = node.AllChildren.Where(x => x.IsLeafC).Select(x => MapScriptKeyValue(x.leaf)).ToList();
-            var values = node.AllChildren.Where(x => x.IsLeafValueC).Select(x => MapScriptValue(x.leafvalue, level + 1)).ToList();
-            var result = DIResolver.Get<IScriptNode>();
-            result.Key = node.Key.Trim();
-            result.Nodes = nodes;
-            result.Values = values;
-            result.KeyValues = leaves;
-            result.Code = code;
-            return result;
-        }
-
-        /// <summary>
-        /// Maps the script key value.
-        /// </summary>
-        /// <param name="leaf">The leaf.</param>
-        /// <returns>IScriptKeyValue.</returns>
-        protected IScriptKeyValue MapScriptKeyValue(Leaf leaf)
-        {
-            var code = FormatCode(leaf.ToRaw);
-            var result = DIResolver.Get<IScriptKeyValue>();
-            result.Key = leaf.Key.Trim();
-            result.Value = leaf.Value.ToRawString().Trim();
-            result.Code = code;
-            return result;
-        }
-
-        /// <summary>
-        /// Maps the script value.
-        /// </summary>
-        /// <param name="leafValue">The leaf value.</param>
-        /// <param name="level">The level.</param>
-        /// <returns>IScriptValue.</returns>
-        protected IScriptValue MapScriptValue(LeafValue leafValue, int level = 1)
-        {
-            string code = null;
-            if (level >= 2 && level <= 3)
-            {
-                code = FormatCode(leafValue.ToRaw);
-            }
-            var result = DIResolver.Get<IScriptValue>();
-            result.Code = code;
-            result.Value = leafValue.Key.Trim();
-            return result;
+            return null;
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ElementValue.
+        /// </summary>
+        protected class ElementValue
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the operator.
+            /// </summary>
+            /// <value>The operator.</value>
+            public string Operator { get; set; }
+
+            /// <summary>
+            /// Gets or sets the terminator.
+            /// </summary>
+            /// <value>The terminator.</value>
+            public char? Terminator { get; set; }
+
+            /// <summary>
+            /// Gets or sets the value.
+            /// </summary>
+            /// <value>The value.</value>
+            public string Value { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

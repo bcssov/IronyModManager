@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="DefaultParser.cs" company="Mario">
 //     Mario
@@ -60,7 +60,7 @@ namespace IronyModManager.Parser.Default
         /// <returns><c>true</c> if this instance can parse the specified arguments; otherwise, <c>false</c>.</returns>
         public override bool CanParse(CanParseArgs args)
         {
-            return !ShouldSwitchToSimpleParser(args.Lines);
+            return true;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace IronyModManager.Parser.Default
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            return ParseComplexRoot(args);
+            return ParseRoot(args);
         }
 
         #endregion Methods

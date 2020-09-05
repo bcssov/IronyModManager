@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 09-03-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -34,9 +34,9 @@ namespace IronyModManager.Parser.Common.Parsers
         #region Fields
 
         /// <summary>
-        /// The complex parse lines threshold
+        /// The simple error check lines threshold
         /// </summary>
-        protected const int ComplexParseLinesThreshold = 20000;
+        protected const int SimpleErrorCheckLinesThreshold = 20000;
 
         /// <summary>
         /// The code parser
@@ -47,11 +47,6 @@ namespace IronyModManager.Parser.Common.Parsers
         /// The logger
         /// </summary>
         protected readonly ILogger logger;
-
-        /// <summary>
-        /// The simple parser tags
-        /// </summary>
-        protected List<string> SimpleParserTags;
 
         #endregion Fields
 
@@ -105,10 +100,10 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="openBrackets">The open brackets.</param>
         /// <param name="closeBrackets">The close brackets.</param>
         /// <param name="line">The line.</param>
-        /// <param name="inline">if set to <c>true</c> [inline].</param>
+        /// <param name="inline">The inline.</param>
         /// <param name="typeOverride">The type override.</param>
-        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
-        /// <returns>ParsingArgs.</returns>
+        /// <param name="isFirstLevel">The is first level.</param>
+        /// <returns>IronyModManager.Parser.Common.Parsers.BaseParser.ParsingArgs.</returns>
         protected virtual ParsingArgs ConstructArgs(ParserArgs args, IDefinition definition, StringBuilder sb = null,
             int? openBrackets = null, int? closeBrackets = null, string line = Shared.Constants.EmptyParam, bool? inline = null,
             string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
@@ -128,18 +123,18 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Evals the complex parse definition identifier.
+        /// Evals the definition identifier.
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="defaultId">The default identifier.</param>
         /// <returns>System.String.</returns>
-        protected virtual string EvalComplexParseDefinitionId(IEnumerable<IScriptKeyValue> values, string defaultId)
+        protected virtual string EvalDefinitionId(IEnumerable<IScriptElement> values, string defaultId)
         {
             if (values?.Count() > 0)
             {
                 foreach (var item in values)
                 {
-                    string id = EvalComplexParseKeyValueForId(item);
+                    string id = EvalElementForId(item);
                     if (!string.IsNullOrWhiteSpace(id))
                     {
                         return id;
@@ -150,26 +145,11 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Evals the complex parse for errors only.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> EvalComplexParseForErrorsOnly(ParserArgs args)
-        {
-            var value = codeParser.ParseScript(args.Lines, args.File);
-            if (value.Error != null)
-            {
-                return new List<IDefinition>() { ParseScriptError(value.Error, args) };
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Evals the complex parse key value for identifier.
+        /// Evals the element for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected virtual string EvalComplexParseKeyValueForId(IScriptKeyValue value)
+        protected virtual string EvalElementForId(IScriptElement value)
         {
             return string.Empty;
         }
@@ -178,137 +158,74 @@ namespace IronyModManager.Parser.Common.Parsers
         /// Evals for errors only.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args, bool fallbackToSimpleParser = true)
+        protected virtual IEnumerable<IDefinition> EvalForErrorsOnly(ParserArgs args)
         {
-            if (ShouldSwitchToSimpleParser(args.Lines))
+            try
             {
-                return EvalSimpleParseForErrorsOnly(args);
-            }
-            if (fallbackToSimpleParser)
-            {
-                try
+                var error = codeParser.PerformValidityCheck(args.Lines, args.File, ShouldSwitchToBasicChecking(args.Lines));
+                if (error != null)
                 {
-                    return EvalComplexParseForErrorsOnly(args);
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                    return EvalSimpleParseForErrorsOnly(args);
+                    return new List<IDefinition>() { TranslateScriptError(error, args) };
                 }
             }
-            return EvalComplexParseForErrorsOnly(args);
-        }
-
-        /// <summary>
-        /// Evals the simple parse for errors only.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> EvalSimpleParseForErrorsOnly(ParserArgs args)
-        {
-            var text = string.Join(Environment.NewLine, args.Lines);
-            var openBracket = text.Count(s => s == Constants.Scripts.OpeningBracket);
-            var closeBracket = text.Count(s => s == Constants.Scripts.ClosingBracket);
-            if (openBracket != closeBracket)
+            catch (Exception ex)
             {
-                var error = DIResolver.Get<IScriptError>();
-                error.Message = "Number of open and close curly brackets does not match. This indicates a syntax error somewhere in the file.";
+                logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                var error = codeParser.PerformValidityCheck(args.Lines, args.File, true);
+                if (error != null)
+                {
+                    return new List<IDefinition>() { TranslateScriptError(error, args) };
+                }
             }
             return null;
         }
 
         /// <summary>
-        /// Finalizes the simple parse object definition.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeSimpleParseObjectDefinition(ParsingArgs args)
-        {
-            MapDefinitionFromArgs(args);
-            var tags = ParseSimpleScriptTags(args);
-            if (tags.Count() > 0)
-            {
-                foreach (var tag in tags)
-                {
-                    var lower = tag.ToLowerInvariant();
-                    if (!args.Definition.Tags.Contains(lower))
-                    {
-                        args.Definition.Tags.Add(lower);
-                    }
-                }
-            }
-            SimpleParserTags = new List<string>();
-            return args.Definition;
-        }
-
-        /// <summary>
-        /// Finalizes the simple parse variable definition.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <returns>IDefinition.</returns>
-        protected virtual IDefinition FinalizeSimpleParseVariableDefinition(ParsingArgs args)
-        {
-            MapDefinitionFromArgs(args);
-            return args.Definition;
-        }
-
-        /// <summary>
-        /// Finds the code between curly braces.
-        /// </summary>
-        /// <param name="code">The code.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string FindCodeBetweenCurlyBraces(string code)
-        {
-            var filtered = code.Substring(code.IndexOf("{") + 1);
-            filtered = filtered.Substring(0, filtered.LastIndexOf("}")).Trim();
-            return filtered;
-        }
-
-        /// <summary>
         /// Formats the code.
         /// </summary>
-        /// <param name="code">The code.</param>
+        /// <param name="element">The element.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="skipVariables">if set to <c>true</c> [skip variables].</param>
         /// <returns>System.String.</returns>
-        protected virtual string FormatCode(string code, string parent = Shared.Constants.EmptyParam, bool skipVariables = false)
+        protected virtual string FormatCode(IScriptElement element, string parent = Shared.Constants.EmptyParam, bool skipVariables = false)
         {
-            void performVariableCheck(StringBuilder sb, string item, bool insertIndent)
+            void performVariableCheck(StringBuilder sb, string item)
             {
                 // Ignore variables as they are separate definitions
                 if (skipVariables)
                 {
-                    if (!item.Trim().StartsWith(Constants.Scripts.VariablePrefix))
+                    if (!item.Trim().StartsWith(Constants.Scripts.VariableId))
                     {
-                        sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                        sb.AppendLine(item);
                     }
                 }
                 else
                 {
-                    sb.AppendLine($"{new string(' ', insertIndent ? 4 : 0)}{item}");
+                    sb.AppendLine(item);
                 }
             }
 
             if (string.IsNullOrWhiteSpace(parent))
             {
+                var code = codeParser.FormatCode(element, 0);
                 var lines = code.SplitOnNewLine();
                 var sb = new StringBuilder();
                 foreach (var item in lines)
                 {
-                    performVariableCheck(sb, item, false);
+                    performVariableCheck(sb, item);
                 }
                 return sb.ToString();
             }
             else
             {
+                var code = codeParser.FormatCode(element, 1);
                 var lines = code.SplitOnNewLine();
                 var sb = new StringBuilder();
                 sb.AppendLine($"{parent} = {{");
                 foreach (var item in lines)
                 {
-                    performVariableCheck(sb, item, true);
+                    performVariableCheck(sb, item);
                 }
                 sb.Append("}");
                 return sb.ToString();
@@ -355,153 +272,50 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Called when [simple parse read object line].
+        /// Parses the complex types.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        protected virtual void OnSimpleParseReadObjectLine(ParsingArgs args)
-        {
-            args.StringBuilder.AppendLine(args.Line);
-        }
-
-        /// <summary>
-        /// Parses the complex root.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexRoot(ParserArgs args, bool fallbackToSimpleParser = true)
-        {
-            List<IDefinition> parse()
-            {
-                var result = new List<IDefinition>();
-                var values = codeParser.ParseScript(args.Lines, args.File);
-                if (values.Error != null)
-                {
-                    result.Add(ParseScriptError(values.Error, args));
-                }
-                else
-                {
-                    result.AddRange(ParseComplexScriptKeyValues(values.Value.KeyValues, args));
-                    result.AddRange(ParseComplexScriptNodes(values.Value.Nodes, args));
-                    result.AddRange(ParseComplexScriptNodesForVariables(values.Value.Nodes, args));
-                }
-                return result;
-            }
-            if (fallbackToSimpleParser)
-            {
-                try
-                {
-                    return parse();
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                    var error = EvalSimpleParseForErrorsOnly(args);
-                    if (error != null)
-                    {
-                        return error;
-                    }
-                    return ParseSimple(args, false);
-                }
-            }
-            else
-            {
-                return parse();
-            }
-        }
-
-        /// <summary>
-        /// Parses the complex script key values.
-        /// </summary>
-        /// <param name="keyValues">The key values.</param>
+        /// <param name="values">The values.</param>
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
         /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexScriptKeyValues(IEnumerable<IScriptKeyValue> keyValues, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        protected virtual IEnumerable<IDefinition> ParseComplexTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
-            if (keyValues?.Count() > 0)
+            if (values?.Count() > 0)
             {
-                foreach (var item in keyValues)
-                {
-                    var definition = GetDefinitionInstance();
-                    MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
-                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
-                    if (!isFirstLevel)
-                    {
-                        definition.OriginalCode = FormatCode(item.Code);
-                        definition.CodeTag = parent;
-                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                    }
-                    bool typeAssigned = false;
-                    if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
-                    {
-                        typeAssigned = true;
-                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{item.Key}";
-                        definition.ValueType = ValueType.Namespace;
-                    }
-                    else if (item.Key.StartsWith(Constants.Scripts.VariablePrefix))
-                    {
-                        typeAssigned = true;
-                        definition.Id = item.Key;
-                        definition.ValueType = ValueType.Variable;
-                    }
-                    if (typeAssigned)
-                    {
-                        result.Add(definition);
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Parses the complex script nodes.
-        /// </summary>
-        /// <param name="nodes">The nodes.</param>
-        /// <param name="args">The arguments.</param>
-        /// <param name="parent">The parent.</param>
-        /// <param name="typeOverride">The type override.</param>
-        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodes(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
-        {
-            var result = new List<IDefinition>();
-            if (nodes?.Count() > 0)
-            {
-                foreach (var item in nodes)
+                foreach (var item in values.Where(p => !p.IsSimpleType))
                 {
                     var definition = GetDefinitionInstance();
                     var sbLangs = new StringBuilder();
-                    if (item.Nodes != null && item.Nodes.Any(s => s.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase)))
+                    if (item.Values != null && item.Values.Any(s => s.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase)))
                     {
-                        var langNode = item.Nodes.FirstOrDefault(p => p.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase));
-                        if (langNode.Values?.Count > 0)
+                        var langNode = item.Values.FirstOrDefault(p => p.Key.Equals(Constants.Scripts.LanguagesId, StringComparison.OrdinalIgnoreCase));
+                        if (langNode.Values?.Count() > 0)
                         {
-                            foreach (var value in langNode.Values.OrderBy(p => p.Value))
+                            foreach (var value in langNode.Values.OrderBy(p => p.Key))
                             {
-                                sbLangs.Append($"{value.Value}-");
+                                sbLangs.Append($"{TrimId(value.Key)}-");
                             }
                         }
                     }
-                    string id = EvalComplexParseDefinitionId(item.KeyValues, item.Key);
+                    string id = EvalDefinitionId(item.Values, item.Key);
                     if (sbLangs.Length > 0)
                     {
                         id = $"{sbLangs}{id}";
                     }
                     MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: typeOverride, isFirstLevel: isFirstLevel));
-                    definition.Id = id;
+                    definition.Id = TrimId(id);
                     definition.ValueType = ValueType.Object;
-                    definition.OriginalCode = definition.Code = FormatCode(item.Code, parent);
+                    definition.OriginalCode = definition.Code = FormatCode(item, parent);
                     if (!isFirstLevel)
                     {
-                        definition.OriginalCode = FormatCode(item.Code, skipVariables: true);
+                        definition.OriginalCode = FormatCode(item, skipVariables: true);
                         definition.CodeTag = parent;
                         definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
-                    var tags = ParseComplexScriptTags(item.KeyValues, item.Key);
+                    var tags = ParseScriptTags(item.Values, item.Key);
                     if (tags.Count() > 0)
                     {
                         foreach (var tag in tags)
@@ -520,32 +334,157 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the complex script nodes for variables.
+        /// Parses the root.
         /// </summary>
-        /// <param name="nodes">The nodes.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="useSimpleValidation">if set to <c>true</c> [use simple validation].</param>
+        /// <param name="skipValidation">if set to <c>true</c> [skip validation].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseRoot(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
+        {
+            var result = new List<IDefinition>();
+            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
+            if (values.Error != null)
+            {
+                result.Add(TranslateScriptError(values.Error, args));
+            }
+            else
+            {
+                result.AddRange(ParseSimpleTypes(values.Values, args));
+                result.AddRange(ParseComplexTypes(values.Values, args));
+                result.AddRange(ParseTypesForVariables(values.Values, args));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the script tags.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="defaultId">The default identifier.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        protected virtual IEnumerable<string> ParseScriptTags(IEnumerable<IScriptElement> values, string defaultId)
+        {
+            var tags = new List<string>
+            {
+                TrimId(defaultId)
+            };
+            if (values?.Count() > 0)
+            {
+                foreach (var item in values)
+                {
+                    string id = EvalElementForId(item);
+                    if (!string.IsNullOrWhiteSpace(id))
+                    {
+                        tags.Add(TrimId(id));
+                    }
+                }
+            }
+            return tags;
+        }
+
+        /// <summary>
+        /// Parses the second level.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        /// <param name="useSimpleValidation">if set to <c>true</c> [use simple validation].</param>
+        /// <param name="skipValidation">if set to <c>true</c> [skip validation].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseSecondLevel(ParserArgs args, bool useSimpleValidation = false, bool skipValidation = false)
+        {
+            var result = new List<IDefinition>();
+            var values = skipValidation ? codeParser.ParseScriptWithoutValidation(args.Lines) : TryParse(args, useSimpleValidation);
+            if (values.Error != null)
+            {
+                result.Add(TranslateScriptError(values.Error, args));
+            }
+            else
+            {
+                result.AddRange(ParseSimpleTypes(values.Values, args));
+                if (values.Values?.Count() > 0)
+                {
+                    foreach (var item in values.Values.Where(p => !p.IsSimpleType))
+                    {
+                        result.AddRange(ParseSimpleTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
+                        result.AddRange(ParseComplexTypes(item.Values, args, parent: item.Key, isFirstLevel: false));
+                        result.AddRange(ParseTypesForVariables(item.Values, args, parent: item.Key, isFirstLevel: false));
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the simple types.
+        /// </summary>
+        /// <param name="values">The values.</param>
         /// <param name="args">The arguments.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="typeOverride">The type override.</param>
         /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexScriptNodesForVariables(IEnumerable<IScriptNode> nodes, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        protected virtual IEnumerable<IDefinition> ParseSimpleTypes(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
         {
             var result = new List<IDefinition>();
-            if (nodes?.Count() > 0)
+            if (values?.Count() > 0)
             {
-                foreach (var item in nodes)
+                foreach (var item in values.Where(p => p.IsSimpleType))
                 {
-                    if (item.KeyValues?.Count > 0)
+                    var definition = GetDefinitionInstance();
+                    MapDefinitionFromArgs(ConstructArgs(args, definition, isFirstLevel: isFirstLevel));
+                    definition.OriginalCode = definition.Code = FormatCode(item, parent);
+                    if (!isFirstLevel)
                     {
-                        var variables = ParseComplexScriptKeyValues(item.KeyValues, args, parent, typeOverride, isFirstLevel);
+                        definition.OriginalCode = FormatCode(item);
+                        definition.CodeTag = parent;
+                        definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                    }
+                    bool typeAssigned = false;
+                    if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                    {
+                        typeAssigned = true;
+                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
+                        definition.ValueType = ValueType.Namespace;
+                    }
+                    else if (item.Key.StartsWith(Constants.Scripts.VariableId))
+                    {
+                        typeAssigned = true;
+                        definition.Id = TrimId(item.Key);
+                        definition.ValueType = ValueType.Variable;
+                    }
+                    if (typeAssigned)
+                    {
+                        result.Add(definition);
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the complex script nodes for variables.
+        /// </summary>
+        /// <param name="values">The nodes.</param>
+        /// <param name="args">The arguments.</param>
+        /// <param name="parent">The parent.</param>
+        /// <param name="typeOverride">The type override.</param>
+        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        protected virtual IEnumerable<IDefinition> ParseTypesForVariables(IEnumerable<IScriptElement> values, ParserArgs args, string parent = Shared.Constants.EmptyParam, string typeOverride = Shared.Constants.EmptyParam, bool isFirstLevel = true)
+        {
+            var result = new List<IDefinition>();
+            if (values?.Count() > 0)
+            {
+                foreach (var item in values)
+                {
+                    if (item.Values?.Count() > 0)
+                    {
+                        var variables = ParseSimpleTypes(item.Values, args, parent, typeOverride, isFirstLevel);
                         if (variables.Count() > 0)
                         {
                             result.AddRange(variables);
                         }
-                    }
-                    if (item.Nodes?.Count > 0)
-                    {
-                        var variables = ParseComplexScriptNodesForVariables(item.Nodes, args, parent, typeOverride, isFirstLevel);
+                        variables = ParseTypesForVariables(item.Values, args, parent, typeOverride, isFirstLevel);
                         if (variables.Count() > 0)
                         {
                             result.AddRange(variables);
@@ -557,93 +496,27 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the complex script tags.
+        /// Shoulds the switch to basic checking.
         /// </summary>
-        /// <param name="values">The values.</param>
-        /// <param name="defaultId">The default identifier.</param>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        protected virtual IEnumerable<string> ParseComplexScriptTags(IEnumerable<IScriptKeyValue> values, string defaultId)
+        /// <param name="lines">The lines.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSwitchToBasicChecking(IEnumerable<string> lines)
         {
-            var tags = new List<string>
+            if (lines != null)
             {
-                defaultId
-            };
-            foreach (var item in values)
-            {
-                string id = EvalComplexParseKeyValueForId(item);
-                if (!string.IsNullOrWhiteSpace(id))
-                {
-                    tags.Add(id);
-                }
+                return lines.Count() > SimpleErrorCheckLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
             }
-            return tags;
+            return false;
         }
 
         /// <summary>
-        /// Parses the complex second level.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="fallbackToSimpleParser">if set to <c>true</c> [fallback to simple parser].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseComplexSecondLevel(ParserArgs args, bool fallbackToSimpleParser = true)
-        {
-            List<IDefinition> parse()
-            {
-                var result = new List<IDefinition>();
-                var value = codeParser.ParseScript(args.Lines, args.File);
-                if (value.Error != null)
-                {
-                    result.Add(ParseScriptError(value.Error, args));
-                }
-                else
-                {
-                    if (value.Value.KeyValues?.Count() > 0)
-                    {
-                        result.AddRange(ParseComplexScriptKeyValues(value.Value.KeyValues, args));
-                    }
-                    if (value.Value.Nodes?.Count() > 0)
-                    {
-                        foreach (var item in value.Value.Nodes)
-                        {
-                            result.AddRange(ParseComplexScriptKeyValues(item.KeyValues, args, parent: item.Key, isFirstLevel: false));
-                            result.AddRange(ParseComplexScriptNodes(item.Nodes, args, parent: item.Key, isFirstLevel: false));
-                            result.AddRange(ParseComplexScriptNodesForVariables(item.Nodes, args, parent: item.Key, isFirstLevel: false));
-                        }
-                    }
-                }
-                return result;
-            }
-            if (fallbackToSimpleParser)
-            {
-                try
-                {
-                    return parse();
-                }
-                catch (Exception ex)
-                {
-                    logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
-                    var error = EvalSimpleParseForErrorsOnly(args);
-                    if (error != null)
-                    {
-                        return error;
-                    }
-                    return ParseSimple(args);
-                }
-            }
-            else
-            {
-                return parse();
-            }
-        }
-
-        /// <summary>
-        /// Parses the script error.
+        /// Translates the script error.
         /// </summary>
         /// <param name="error">The error.</param>
         /// <param name="args">The arguments.</param>
         /// <param name="typeOverride">The type override.</param>
         /// <returns>IDefinition.</returns>
-        protected virtual IDefinition ParseScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
+        protected virtual IDefinition TranslateScriptError(IScriptError error, ParserArgs args, string typeOverride = Shared.Constants.EmptyParam)
         {
             var definition = GetDefinitionInstance();
             definition.ErrorColumn = error.Column;
@@ -657,143 +530,32 @@ namespace IronyModManager.Parser.Common.Parsers
         }
 
         /// <summary>
-        /// Parses the simple.
+        /// Trims the identifier.
         /// </summary>
-        /// <param name="args">The arguments.</param>
-        /// <param name="isFirstLevel">if set to <c>true</c> [is first level].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        protected virtual IEnumerable<IDefinition> ParseSimple(ParserArgs args, bool isFirstLevel = true)
+        /// <param name="id">The identifier.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string TrimId(string id)
         {
-            SimpleParserTags = new List<string>();
-            var result = new List<IDefinition>();
-            IDefinition definition = null;
-            var sb = new StringBuilder();
-            int? openBrackets = null;
-            int closeBrackets = 0;
-            foreach (var line in args.Lines)
-            {
-                if (line.Trim().StartsWith(Constants.Scripts.ScriptCommentId))
-                {
-                    continue;
-                }
-                if (!openBrackets.HasValue)
-                {
-                    var cleaned = codeParser.CleanWhitespace(line);
-                    if (cleaned.Contains(Constants.Scripts.DefinitionSeparatorId) || cleaned.EndsWith(Constants.Scripts.VariableSeparatorId))
-                    {
-                        openBrackets = line.Count(s => s == Constants.Scripts.OpeningBracket);
-                        closeBrackets = line.Count(s => s == Constants.Scripts.ClosingBracket);
-                        sb.Clear();
-                        var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition = GetDefinitionInstance();
-                        definition.Id = id;
-                        definition.ValueType = ValueType.Object;
-                        bool inline = openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets;
-                        var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, inline, isFirstLevel: isFirstLevel);
-                        OnSimpleParseReadObjectLine(parsingArgs);
-                        // incase some wise ass opened and closed an object definition in the same line
-                        if (inline)
-                        {
-                            openBrackets = null;
-                            closeBrackets = 0;
-                            definition.OriginalCode = definition.Code = sb.ToString();
-                            if (!isFirstLevel)
-                            {
-                                definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                                definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                                definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
-                            }
-                            result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
-                        }
-                    }
-                    else if (line.Trim().Contains(Constants.Scripts.VariableSeparatorId))
-                    {
-                        definition = GetDefinitionInstance();
-                        var id = codeParser.GetKey(line, Constants.Scripts.VariableSeparatorId);
-                        definition.OriginalCode = definition.Code = line;
-                        if (!isFirstLevel)
-                        {
-                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
-                            definition.CodeTag = id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                        }
-                        var typeAssigned = false;
-                        if (cleaned.Contains(Constants.Scripts.NamespaceId, StringComparison.OrdinalIgnoreCase))
-                        {
-                            typeAssigned = true;
-                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{id}";
-                            definition.ValueType = ValueType.Namespace;
-                        }
-                        else if (cleaned.Trim().StartsWith(Constants.Scripts.VariablePrefix))
-                        {
-                            typeAssigned = true;
-                            definition.Id = id;
-                            definition.ValueType = ValueType.Variable;
-                        }
-                        if (typeAssigned)
-                        {
-                            var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, true, isFirstLevel: isFirstLevel);
-                            result.Add(FinalizeSimpleParseVariableDefinition(parsingArgs));
-                        }
-                    }
-                }
-                else
-                {
-                    if (line.Contains(Constants.Scripts.OpeningBracket))
-                    {
-                        openBrackets += line.Count(s => s == Constants.Scripts.OpeningBracket);
-                    }
-                    if (line.Contains(Constants.Scripts.ClosingBracket))
-                    {
-                        closeBrackets += line.Count(s => s == Constants.Scripts.ClosingBracket);
-                    }
-                    var parsingArgs = ConstructArgs(args, definition, sb, openBrackets, closeBrackets, line, false, isFirstLevel: isFirstLevel);
-                    OnSimpleParseReadObjectLine(parsingArgs);
-                    if (openBrackets.GetValueOrDefault() > 0 && openBrackets == closeBrackets)
-                    {
-                        openBrackets = null;
-                        closeBrackets = 0;
-                        definition.OriginalCode = definition.Code = sb.ToString();
-                        if (!isFirstLevel)
-                        {
-                            definition.CodeTag = definition.Id.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                            definition.OriginalCode = FindCodeBetweenCurlyBraces(definition.OriginalCode);
-                        }
-                        result.Add(FinalizeSimpleParseObjectDefinition(parsingArgs));
-                    }
-                }
-            }
-            return result;
+            return id.Replace("\"", string.Empty);
         }
 
         /// <summary>
-        /// Parses the simple script tags.
+        /// Tries the parse.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        protected virtual IEnumerable<string> ParseSimpleScriptTags(ParsingArgs args)
+        /// <param name="simpleChecks">if set to <c>true</c> [simple checks].</param>
+        /// <returns>IParseResponse.</returns>
+        protected virtual IParseResponse TryParse(ParserArgs args, bool simpleChecks)
         {
-            if (SimpleParserTags == null)
+            try
             {
-                SimpleParserTags = new List<string>();
+                return codeParser.ParseScript(args.Lines, args.File, simpleChecks);
             }
-            SimpleParserTags.Add(args.Definition.Id);
-            return SimpleParserTags;
-        }
-
-        /// <summary>
-        /// Shoulds the switch to simple parser.
-        /// </summary>
-        /// <param name="lines">The lines.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldSwitchToSimpleParser(IEnumerable<string> lines)
-        {
-            if (lines != null)
+            catch (Exception ex)
             {
-                return lines.Count() > ComplexParseLinesThreshold || lines.Any(p => !string.IsNullOrEmpty(p) && p.Contains(Constants.Scripts.FallbackToSimpleParserComment, StringComparison.OrdinalIgnoreCase));
+                logger.Error(ex, $"CWTools has encountered an error, switching to simple parser. ModName: {args.ModName} File: {args.File}");
+                return codeParser.ParseScript(args.Lines, args.File, true);
             }
-            return false;
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 04-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-24-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="ParseResponse.cs" company="Mario">
 //     Mario
@@ -36,7 +36,7 @@ namespace IronyModManager.Parser.Models
         /// Gets or sets the response.
         /// </summary>
         /// <value>The response.</value>
-        public IScriptNode Value { get; set; }
+        public IEnumerable<IScriptElement> Values { get; set; }
 
         #endregion Properties
     }

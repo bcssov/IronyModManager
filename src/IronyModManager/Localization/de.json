@@ -56,7 +56,8 @@
         "Stellaris": "Stellaris",
         "EuropaUniversalisIV": "Europa Universalis IV",
         "HeartsofIronIV": "Hearts of Iron IV",
-        "ImperatorRome": "Imperator Rome"
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
     },
     "Installed_Mods": {
         "Name": "Installierte Mods",
@@ -95,6 +96,7 @@
         "Duplicate": "Duplizieren",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
+        "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
             "On": "Auf",
@@ -129,6 +131,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "OverwritePrompt": {
+                "Title": "Bestehende Sammlung überschreiben?",
+                "Message": "Eine zusammengeführte Sammlung mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
             }
         }
     },
@@ -233,6 +239,7 @@
         },
         "CustomPatch": {
             "Title": "Benutzerdefinierter Patch",
+            "Load": "Lade",
             "Path": "Verzeichnis",
             "Save": "Sparen",
             "Close": "Schließen"
@@ -311,10 +318,6 @@
         "CollectionMerged": {
             "Title": "Sammlung zusammengeführt",
             "Message": "Sammlung wurde zusammengeführt."
-        },
-        "CustomPatchExists": {
-            "Title": "Benutzerdefinierter Patch vorhanden",
-            "Message": "Ein benutzerdefinierter Patch mit dem angegebenen Pfad ist bereits vorhanden."
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",

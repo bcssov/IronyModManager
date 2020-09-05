@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-28-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using DynamicData;
@@ -357,6 +358,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The export collection.</value>
         public virtual ExportModCollectionControlViewModel ExportCollection { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection to clipboard.
+        /// </summary>
+        /// <value>The export collection to clipboard.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportToClipboard)]
+        public virtual string ExportCollectionToClipboard { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection to clipboard command.
+        /// </summary>
+        /// <value>The export collection to clipboard command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the hovered mod.
@@ -1184,6 +1198,19 @@ namespace IronyModManager.ViewModels.Controls
             {
                 CollectionJumpOnPositionChange = !CollectionJumpOnPositionChange;
                 SaveState();
+            }).DisposeWith(disposables);
+
+            ExportCollectionToClipboardCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (SelectedModCollection != null && SelectedMods.Count > 0)
+                {
+                    var sb = new StringBuilder();
+                    foreach (var item in SelectedMods)
+                    {
+                        sb.AppendLine(item.Name);
+                    }
+                    await appAction.CopyAsync(sb.ToString());
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

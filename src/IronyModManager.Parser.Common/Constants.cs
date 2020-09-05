@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-30-2020
+// Last Modified On : 09-04-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -130,19 +130,19 @@ namespace IronyModManager.Parser.Common
             #region Fields
 
             /// <summary>
-            /// The bitmap fonts identifier
-            /// </summary>
-            public const string BitmapFontsId = "bitmapfonts" + VariableSeparatorId;
-
-            /// <summary>
             /// The closing bracket
             /// </summary>
-            public const char ClosingBracket = '}';
+            public const char CloseObject = '}';
 
             /// <summary>
             /// The definition separator identifier
             /// </summary>
-            public const string DefinitionSeparatorId = VariableSeparatorId + "{";
+            public const string DefinitionSeparatorId = "={";
+
+            /// <summary>
+            /// The variable separator identifier
+            /// </summary>
+            public const char EqualsOperator = '=';
 
             /// <summary>
             /// The fallback to simple parser comment
@@ -155,14 +155,9 @@ namespace IronyModManager.Parser.Common
             public const string GraphicsTypeName = "name";
 
             /// <summary>
-            /// The GUI types
+            /// The greater than operator
             /// </summary>
-            public const string GuiTypes = "guiTypes";
-
-            /// <summary>
-            /// The GUI types identifier
-            /// </summary>
-            public const string GuiTypesId = GuiTypes + VariableSeparatorId;
+            public const char GreaterThanOperator = '>';
 
             /// <summary>
             /// The languages identifier
@@ -170,59 +165,49 @@ namespace IronyModManager.Parser.Common
             public const string LanguagesId = "languages";
 
             /// <summary>
+            /// The lower than operator
+            /// </summary>
+            public const char LowerThanOperator = '<';
+
+            /// <summary>
             /// The namespace
             /// </summary>
             public const string Namespace = "namespace";
 
             /// <summary>
-            /// The namespace identifier
-            /// </summary>
-            public const string NamespaceId = Namespace + VariableSeparatorId;
-
-            /// <summary>
-            /// The object types
-            /// </summary>
-            public const string ObjectTypes = "objectTypes";
-
-            /// <summary>
-            /// The object types identifier
-            /// </summary>
-            public const string ObjectTypesId = "objectTypes" + VariableSeparatorId;
-
-            /// <summary>
             /// The opening bracket
             /// </summary>
-            public const char OpeningBracket = '{';
+            public const char OpenObject = '{';
 
             /// <summary>
-            /// The position type identifier
+            /// The quote
             /// </summary>
-            public const string PositionTypeId = "positionType" + VariableSeparatorId;
+            public const char Quote = '"';
 
             /// <summary>
             /// The script comment identifier
             /// </summary>
-            public const string ScriptCommentId = "#";
+            public const char ScriptCommentId = '#';
 
             /// <summary>
-            /// The sprite types
+            /// The square open bracket
             /// </summary>
-            public const string SpriteTypes = "spriteTypes";
+            public const char SquareOpenBracket = '[';
 
             /// <summary>
-            /// The sprite types identifier
+            /// The square close bracket
             /// </summary>
-            public const string SpriteTypesId = "spriteTypes" + VariableSeparatorId;
+            public const char SquareCloseBracket = ']';
 
             /// <summary>
             /// The variable prefix
             /// </summary>
-            public const char VariablePrefix = '@';
+            public const char VariableId = '@';
 
             /// <summary>
-            /// The variable separator identifier
+            /// The terminators
             /// </summary>
-            public const string VariableSeparatorId = "=";
+            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject, ScriptCommentId };
 
             /// <summary>
             /// The generic key ids
@@ -233,6 +218,16 @@ namespace IronyModManager.Parser.Common
             /// The generic keys
             /// </summary>
             public static readonly string[] GenericKeys = new string[] { "id", "name", "key", "format", "world", "localization" };
+
+            /// <summary>
+            /// The inline operators
+            /// </summary>
+            public static readonly string[] InlineOperators = new string[] { "hsv", "rgb" };
+
+            /// <summary>
+            /// The operators
+            /// </summary>
+            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator };
 
             #endregion Fields
         }
@@ -250,14 +245,14 @@ namespace IronyModManager.Parser.Common
             public const string Flags = "flags";
 
             /// <summary>
+            /// The prescripted countries
+            /// </summary>
+            public const string PrescriptedCountries = "prescripted_countries";
+
+            /// <summary>
             /// The sound
             /// </summary>
             public const string Sound = "sound";
-
-            /// <summary>
-            /// The scripted variables
-            /// </summary>
-            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
             /// The component tags
@@ -303,6 +298,11 @@ namespace IronyModManager.Parser.Common
             /// The random names
             /// </summary>
             public static readonly string RandomNamesBase = MergePath(CommonPath, "random_names", "base");
+
+            /// <summary>
+            /// The scripted variables
+            /// </summary>
+            public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
             /// The solar system initializers

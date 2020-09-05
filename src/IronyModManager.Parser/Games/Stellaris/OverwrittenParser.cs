@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -39,7 +39,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         private static readonly string[] startsWithChecks = new string[]
         {
             Common.Constants.Stellaris.PopJobs, Common.Constants.Stellaris.Traits,
-            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses
+            Common.Constants.Stellaris.Districts, Common.Constants.Stellaris.PlanetClasses,
+            Common.Constants.Stellaris.PrescriptedCountries
         };
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             {
                 keyType = true;
             }
-            var results = ParseComplexRoot(args);
+            var results = ParseRoot(args);
             if (results?.Count() > 0)
             {
                 foreach (var item in results)
@@ -127,11 +128,11 @@ namespace IronyModManager.Parser.Games.Stellaris
         }
 
         /// <summary>
-        /// Evals the complex parse key value for identifier.
+        /// Evals the element for identifier.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        protected override string EvalComplexParseKeyValueForId(IScriptKeyValue value)
+        protected override string EvalElementForId(IScriptElement value)
         {
             if (keyType)
             {
@@ -140,7 +141,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                     return value.Value;
                 }
             }
-            return base.EvalComplexParseKeyValueForId(value);
+            return base.EvalElementForId(value);
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-02-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -174,7 +174,7 @@ namespace IronyModManager.Storage
             {
                 if (gameType == null || Database.Games.Any(s => s.Name.Equals(gameType.Name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    throw new InvalidOperationException($"{gameType.Name} game is already registered or invalid registration.");
+                    throw new InvalidOperationException($"{gameType?.Name} game is already registered or invalid registration.");
                 }
                 var game = DIResolver.Get<IGameType>();
                 game.Name = gameType.Name;

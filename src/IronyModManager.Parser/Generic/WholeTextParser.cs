@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 08-31-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -34,9 +34,9 @@ namespace IronyModManager.Parser.Generic
         #region Fields
 
         /// <summary>
-        /// The ends with check
+        /// The skip validation for types
         /// </summary>
-        private static readonly string[] endsWithCheck = new string[]
+        private static readonly string[] skipValidationForTypes = new string[]
         {
             Common.Constants.ShaderExtension, Common.Constants.FxhExtension
         };
@@ -101,7 +101,7 @@ namespace IronyModManager.Parser.Generic
         {
             bool fileNameTag = false;
             // Doesn't seem to like fxh and or shader file extensions
-            if (!endsWithCheck.Any(p => args.File.EndsWith(p)))
+            if (!skipValidationForTypes.Any(p => args.File.EndsWith(p)))
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)
@@ -126,7 +126,7 @@ namespace IronyModManager.Parser.Generic
             else
             {
                 // Get tags only
-                var definitions = ParseComplexRoot(args);
+                var definitions = ParseRoot(args);
                 foreach (var item in definitions)
                 {
                     foreach (var tag in item.Tags)
@@ -150,7 +150,7 @@ namespace IronyModManager.Parser.Generic
         /// <returns><c>true</c> if this instance [can parse ends with] the specified arguments; otherwise, <c>false</c>.</returns>
         protected virtual bool CanParseEndsWith(CanParseArgs args)
         {
-            return endsWithCheck.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+            return skipValidationForTypes.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>

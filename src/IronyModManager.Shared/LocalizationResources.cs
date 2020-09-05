@@ -86,6 +86,7 @@ namespace IronyModManager.Shared
             public const string EuropaUniversalisIV = Prefix + "EuropaUniversalisIV";
             public const string HeartsofIronIV = Prefix + "HeartsofIronIV";
             public const string ImperatorRome = Prefix + "ImperatorRome";
+            public const string CrusaderKings3 = Prefix + "CrusaderKings3";
         }
         public static class Installed_Mods
         {
@@ -130,6 +131,7 @@ namespace IronyModManager.Shared
             public const string Duplicate = Prefix + "Duplicate";
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
+            public const string ExportToClipboard = Prefix + "ExportToClipboard";
             public static class JumpOnDragAndDrop
             {
                 public const string Prefix = "Collection_Mods.JumpOnDragAndDrop.";
@@ -178,6 +180,12 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.Basic.";
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
                     public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
+                }
+                public static class OverwritePrompt
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.OverwritePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
                 }
             }
         }
@@ -312,6 +320,7 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Conflict_Solver.CustomPatch.";
                 public const string Title = Prefix + "Title";
+                public const string Load = Prefix + "Load";
                 public const string Path = Prefix + "Path";
                 public const string Save = Prefix + "Save";
                 public const string Close = Prefix + "Close";
@@ -424,12 +433,6 @@ namespace IronyModManager.Shared
             public static class CollectionMerged
             {
                 public const string Prefix = "Notifications.CollectionMerged.";
-                public const string Title = Prefix + "Title";
-                public const string Message = Prefix + "Message";
-            }
-            public static class CustomPatchExists
-            {
-                public const string Prefix = "Notifications.CustomPatchExists.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
