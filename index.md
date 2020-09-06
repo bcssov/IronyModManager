@@ -28,8 +28,13 @@ Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues)
 * Be sure to include steps to reproduce the issue.
 * Be sure to provide logs if you report crashes. Logs can be found in the logs directory of your Irony install.
 
-### Video Tutorial on using Conflict Solver
-[Tutorial on Vimeo](https://vimeo.com/443078952)
+### Video Tutorials
+
+* Basic intro tutorial: [Watch on Youtube](https://www.youtube.com/watch?v=98dKbDxtqQw)
+
+Made by OldEnt
+
+* Video without any captions showing off how to use Conflict Solver in combination with VS Code: [Watch on Vimeo](https://vimeo.com/443078952) 
 
 Made by LordOfLA
 
