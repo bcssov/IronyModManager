@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-06-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -651,6 +651,12 @@ namespace IronyModManager.ViewModels
                 }
                 else
                 {
+                    if (HierarchalConflicts == null || HierarchalConflicts.Count() == 0)
+                    {
+                        ModCompareSelector.Reset();
+                        BinaryMergeViewer.Reset();
+                        MergeViewer.SetText(string.Empty, string.Empty, true);
+                    }
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
