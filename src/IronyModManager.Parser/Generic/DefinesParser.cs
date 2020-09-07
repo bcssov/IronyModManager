@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-03-2020
+// Last Modified On : 09-07-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -14,9 +14,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Parser.Generic
@@ -88,30 +90,43 @@ namespace IronyModManager.Parser.Generic
             {
                 foreach (var dataItem in data.Values)
                 {
-                    foreach (var item in dataItem.Values)
+                    if (dataItem.Values != null)
                     {
-                        var definition = GetDefinitionInstance();
-                        string id = EvalDefinitionId(item.Values, item.Key);
-                        MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
-                        definition.Id = TrimId(id);
-                        definition.ValueType = Common.ValueType.SpecialVariable;
-                        definition.Code = FormatCode(item, dataItem.Key);
-                        definition.OriginalCode = FormatCode(item, skipVariables: true);
-                        definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
-                        definition.CodeTag = dataItem.Key;
-                        var tags = ParseScriptTags(item.Values, item.Key);
-                        if (tags.Count() > 0)
+                        foreach (var item in dataItem.Values)
                         {
-                            foreach (var tag in tags)
+                            var definition = GetDefinitionInstance();
+                            string id = EvalDefinitionId(item.Values, item.Key);
+                            MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
+                            definition.Id = TrimId(id);
+                            definition.ValueType = Common.ValueType.SpecialVariable;
+                            definition.Code = FormatCode(item, dataItem.Key);
+                            definition.OriginalCode = FormatCode(item, skipVariables: true);
+                            definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
+                            definition.CodeTag = dataItem.Key;
+                            var tags = ParseScriptTags(item.Values, item.Key);
+                            if (tags.Count() > 0)
                             {
-                                var lower = tag.ToLowerInvariant();
-                                if (!definition.Tags.Contains(lower))
+                                foreach (var tag in tags)
                                 {
-                                    definition.Tags.Add(lower);
+                                    var lower = tag.ToLowerInvariant();
+                                    if (!definition.Tags.Contains(lower))
+                                    {
+                                        definition.Tags.Add(lower);
+                                    }
                                 }
                             }
+                            result.Add(definition);
                         }
-                        result.Add(definition);
+                    }
+                    else
+                    {
+                        // No operator detected means something is wrong in the mod file
+                        if (string.IsNullOrWhiteSpace(dataItem.Operator))
+                        {
+                            var definesError = DIResolver.Get<IScriptError>();
+                            definesError.Message = $"There appears to be a syntax error detected in: {args.File}";
+                            return new List<IDefinition>() { TranslateScriptError(definesError, args) };
+                        }
                     }
                 }
             }
