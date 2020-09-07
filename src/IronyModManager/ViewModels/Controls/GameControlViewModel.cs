@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 09-07-2020
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -37,6 +38,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The active game request handler
+        /// </summary>
+        private readonly ActiveGameRequestHandler activeGameRequestHandler;
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -54,9 +60,11 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="GameControlViewModel" /> class.
         /// </summary>
         /// <param name="gameService">The game service.</param>
-        public GameControlViewModel(IGameService gameService)
+        /// <param name="activeGameRequestHandler">The active game request handler.</param>
+        public GameControlViewModel(IGameService gameService, ActiveGameRequestHandler activeGameRequestHandler)
         {
             this.gameService = gameService;
+            this.activeGameRequestHandler = activeGameRequestHandler;
         }
 
         #endregion Constructors
@@ -108,6 +116,14 @@ namespace IronyModManager.ViewModels.Controls
                     };
                     ReactiveUI.MessageBus.Current.SendMessage(args);
                     previousGame = s;
+                }
+            }).DisposeWith(disposables);
+
+            activeGameRequestHandler.Message.Subscribe(m =>
+            {
+                if (m.Game != null)
+                {
+                    SelectedGame = Games.FirstOrDefault(p => p.Type.Equals(m.Game.Type, StringComparison.OrdinalIgnoreCase));
                 }
             }).DisposeWith(disposables);
 

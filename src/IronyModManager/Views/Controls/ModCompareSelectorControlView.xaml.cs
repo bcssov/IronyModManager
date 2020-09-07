@@ -17,6 +17,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
+using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 
@@ -47,12 +48,11 @@ namespace IronyModManager.Views.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModCompareSelectorControlView" /> class.
+        /// Initializes a new instance of the <see cref="ModCompareSelectorControlView"/> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
-        public ModCompareSelectorControlView(ILogger logger)
+        public ModCompareSelectorControlView()
         {
-            this.logger = logger;
+            logger = DIResolver.Get<ILogger>();
             this.InitializeComponent();
         }
 
@@ -66,7 +66,7 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            void appendClass(ListBox listBox)
+            static void appendClass(ListBox listBox)
             {
                 var children = listBox.GetLogicalChildren().Cast<ListBoxItem>();
                 foreach (var item in children)

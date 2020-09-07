@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-07-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
@@ -72,6 +73,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The mod collection service
@@ -168,11 +174,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
+        /// <param name="messageBus">The message bus.</param>
         public CollectionModsControlViewModel(IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
-            INotificationAction notificationAction, IAppAction appAction)
+            INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
         {
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -187,6 +194,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modService = modService;
             this.gameService = gameService;
             this.modPatchCollectionService = modPatchCollectionService;
+            this.messageBus = messageBus;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
         }
@@ -851,6 +859,9 @@ namespace IronyModManager.ViewModels.Controls
                 };
                 if (result != null)
                 {
+                    var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
+                    await messageBus.PublishAsync(new ActiveGameRequestEvent(game));
+                    restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
                     var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
