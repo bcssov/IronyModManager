@@ -29,6 +29,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
 using IronyModManager.Common.Views;
+using IronyModManager.DI;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
@@ -90,12 +91,11 @@ namespace IronyModManager.Views.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MergeViewerControlView" /> class.
+        /// Initializes a new instance of the <see cref="MergeViewerControlView"/> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
-        public MergeViewerControlView(ILogger logger)
+        public MergeViewerControlView()
         {
-            this.logger = logger;
+            logger = DIResolver.Get<ILogger>();
             this.InitializeComponent();
         }
 
