@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-08-2020
+// Last Modified On : 09-07-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -37,6 +37,11 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         private const string ModCompareClass = "ModCompare";
 
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
         #endregion Fields
 
         #region Constructors
@@ -44,8 +49,10 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCompareSelectorControlView" /> class.
         /// </summary>
-        public ModCompareSelectorControlView()
+        /// <param name="logger">The logger.</param>
+        public ModCompareSelectorControlView(ILogger logger)
         {
+            this.logger = logger;
             this.InitializeComponent();
         }
 
@@ -74,10 +81,17 @@ namespace IronyModManager.Views.Controls
             var right = this.FindControl<ListBox>("rightSide");
             LayoutUpdated += (sender, args) =>
             {
-                left.InvalidateArrange();
-                right.InvalidateArrange();
-                appendClass(left);
-                appendClass(right);
+                try
+                {
+                    left.InvalidateArrange();
+                    right.InvalidateArrange();
+                    appendClass(left);
+                    appendClass(right);
+                }
+                catch (System.Exception ex)
+                {
+                    logger.Error(ex);
+                }
             };
             base.OnActivated(disposables);
         }
