@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-28-2020
+// Last Modified On : 09-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -56,6 +56,11 @@ namespace IronyModManager.Views.Controls
         private static IHighlightingDefinition yamlHighlightingDefinition;
 
         /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
         /// The last left data source
         /// </summary>
         private IEnumerable lastLeftDataSource = null;
@@ -87,8 +92,10 @@ namespace IronyModManager.Views.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlView" /> class.
         /// </summary>
-        public MergeViewerControlView()
+        /// <param name="logger">The logger.</param>
+        public MergeViewerControlView(ILogger logger)
         {
+            this.logger = logger;
             this.InitializeComponent();
         }
 
@@ -419,9 +426,16 @@ namespace IronyModManager.Views.Controls
             }
             if (otherListBox.Scroll.Offset.X != offset.X || otherListBox.Scroll.Offset.Y != offset.Y)
             {
-                otherListBox.InvalidateArrange();
-                thisListBox.InvalidateArrange();
-                otherListBox.Scroll.Offset = offset;
+                try
+                {
+                    otherListBox.InvalidateArrange();
+                    thisListBox.InvalidateArrange();
+                    otherListBox.Scroll.Offset = offset;
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                }
             }
             return Task.FromResult(true);
         }
