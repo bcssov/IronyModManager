@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-17-2020
+// Last Modified On : 09-08-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -24,6 +24,7 @@ using Avalonia.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
+using SmartFormat;
 
 namespace IronyModManager.Controls.Dialogs
 {
@@ -50,7 +51,7 @@ namespace IronyModManager.Controls.Dialogs
             Environment.SpecialFolder.MyDocuments,
             Environment.SpecialFolder.MyMusic,
             Environment.SpecialFolder.MyPictures,
-            Environment.SpecialFolder.MyVideos
+            Environment.SpecialFolder.MyVideos,
         };
 
         /// <summary>
@@ -103,6 +104,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <returns>ManagedDialogNavigationItem[].</returns>
         public static ManagedDialogNavigationItem[] DefaultGetFileSystemRoots()
         {
+            InitLocalizationManager();
             return MountedVolumes
                    .Select(x =>
                    {
@@ -110,7 +112,7 @@ namespace IronyModManager.Controls.Dialogs
 
                        if (displayName == null & x.VolumeSizeBytes > 0)
                        {
-                           displayName = $"{ByteSizeHelper.ToString(x.VolumeSizeBytes)} Volume";
+                           displayName = Smart.Format(localizationManager.GetResource(LocalizationResources.FileDialog.Volume), new { Size = ByteSizeHelper.ToString(x.VolumeSizeBytes) });
                        };
 
                        try
@@ -157,6 +159,17 @@ namespace IronyModManager.Controls.Dialogs
         public ManagedDialogNavigationItem[] GetAllItems() => GetAllItemsDelegate(this);
 
         /// <summary>
+        /// Initializes the localization manager.
+        /// </summary>
+        private static void InitLocalizationManager()
+        {
+            if (localizationManager == null)
+            {
+                localizationManager = DIResolver.Get<ILocalizationManager>();
+            }
+        }
+
+        /// <summary>
         /// Localizes the folder.
         /// </summary>
         /// <param name="folder">The folder.</param>
@@ -164,10 +177,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <returns>System.String.</returns>
         private static string LocalizeFolder(Environment.SpecialFolder folder, string path)
         {
-            if (localizationManager == null)
-            {
-                localizationManager = DIResolver.Get<ILocalizationManager>();
-            }
+            InitLocalizationManager();
             string localized = string.Empty;
             switch (folder)
             {

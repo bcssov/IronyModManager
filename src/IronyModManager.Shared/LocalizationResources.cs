@@ -48,11 +48,13 @@ namespace IronyModManager.Shared
             public const string Prefix = "FileDialog.";
             public const string FileName = Prefix + "FileName";
             public const string ShowHiddenFiles = Prefix + "ShowHiddenFiles";
+            public const string Volume = Prefix + "Volume";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
             public static class Folders
             {
                 public const string Prefix = "FileDialog.Folders.";
+                public const string Downloads = Prefix + "Downloads";
                 public const string Desktop = Prefix + "Desktop";
                 public const string Documents = Prefix + "Documents";
                 public const string Music = Prefix + "Music";
