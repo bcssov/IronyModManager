@@ -27,9 +27,11 @@
     "FileDialog": {
         "FileName": "File name",
         "ShowHiddenFiles": "Show hidden files",
+        "Volume": "{Size} Volume",
         "OK": "OK",
         "Cancel": "Cancel",
         "Folders": {
+            "Downloads": "Downloads",
             "Desktop": "Desktop",
             "Documents": "Documents",
             "Music": "Music",

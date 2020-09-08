@@ -27,9 +27,11 @@
     "FileDialog": {
         "FileName": "Naziv datoteke",
         "ShowHiddenFiles": "Pokaži skrivene datoteke",
+        "Volume": "{Size} Volumen",
         "OK": "U redu",
         "Cancel": "Otkaži",
         "Folders": {
+            "Downloads": "Preuzimanja",
             "Desktop": "Desktop",
             "Documents": "Dokumenti",
             "Music": "Glazba",

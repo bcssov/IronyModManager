@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-17-2020
+// Last Modified On : 09-08-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -24,6 +24,7 @@ using Avalonia.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
+using SmartFormat;
 
 namespace IronyModManager.Controls.Dialogs
 {
@@ -43,14 +44,15 @@ namespace IronyModManager.Controls.Dialogs
         /// <summary>
         /// The s folders
         /// </summary>
-        private static readonly Environment.SpecialFolder[] s_folders = new[]
+        private static readonly SpecialFolder[] s_folders = new[]
         {
-            Environment.SpecialFolder.Desktop,
-            Environment.SpecialFolder.UserProfile,
-            Environment.SpecialFolder.MyDocuments,
-            Environment.SpecialFolder.MyMusic,
-            Environment.SpecialFolder.MyPictures,
-            Environment.SpecialFolder.MyVideos
+            new SpecialFolder(Environment.SpecialFolder.Desktop, SpecialFolderType.Desktop),
+            new SpecialFolder(Environment.SpecialFolder.UserProfile, SpecialFolderType.UserProfile),
+            new SpecialFolder(Environment.SpecialFolder.MyDocuments, SpecialFolderType.MyDocuments),
+            new SpecialFolder(Environment.SpecialFolder.UserProfile, SpecialFolderType.UserProfile, "Downloads"),
+            new SpecialFolder(Environment.SpecialFolder.MyMusic, SpecialFolderType.MyMusic),
+            new SpecialFolder(Environment.SpecialFolder.MyPictures, SpecialFolderType.MyPictures),
+            new SpecialFolder(Environment.SpecialFolder.MyVideos, SpecialFolderType.MyVideos),
         };
 
         /// <summary>
@@ -59,6 +61,51 @@ namespace IronyModManager.Controls.Dialogs
         private static ILocalizationManager localizationManager;
 
         #endregion Fields
+
+        #region Enums
+
+        /// <summary>
+        /// Enum SpecialFolderType
+        /// </summary>
+        private enum SpecialFolderType
+        {
+            /// <summary>
+            /// The desktop
+            /// </summary>
+            Desktop,
+
+            /// <summary>
+            /// The user profile
+            /// </summary>
+            UserProfile,
+
+            /// <summary>
+            /// My documents
+            /// </summary>
+            MyDocuments,
+
+            /// <summary>
+            /// My music
+            /// </summary>
+            MyMusic,
+
+            /// <summary>
+            /// My pictures
+            /// </summary>
+            MyPictures,
+
+            /// <summary>
+            /// My videos
+            /// </summary>
+            MyVideos,
+
+            /// <summary>
+            /// The downloads
+            /// </summary>
+            Downloads
+        }
+
+        #endregion Enums
 
         #region Properties
 
@@ -103,6 +150,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <returns>ManagedDialogNavigationItem[].</returns>
         public static ManagedDialogNavigationItem[] DefaultGetFileSystemRoots()
         {
+            InitLocalizationManager();
             return MountedVolumes
                    .Select(x =>
                    {
@@ -110,7 +158,7 @@ namespace IronyModManager.Controls.Dialogs
 
                        if (displayName == null & x.VolumeSizeBytes > 0)
                        {
-                           displayName = $"{ByteSizeHelper.ToString(x.VolumeSizeBytes)} Volume";
+                           displayName = Smart.Format(localizationManager.GetResource(LocalizationResources.FileDialog.Volume), new { Size = ByteSizeHelper.ToString(x.VolumeSizeBytes) });
                        };
 
                        try
@@ -139,14 +187,14 @@ namespace IronyModManager.Controls.Dialogs
         /// <returns>ManagedDialogNavigationItem[].</returns>
         public static ManagedDialogNavigationItem[] DefaultGetUserDirectories()
         {
-            return s_folders.Select(s => KeyValuePair.Create(s, Environment.GetFolderPath(s))).GroupBy(p => p.Value).Select(p => p.First())
-                .Where(d => !string.IsNullOrWhiteSpace(d.Value))
-                .Where(d => Directory.Exists(d.Value))
+            return s_folders.GroupBy(p => p.FullPath).Select(p => p.First())
+                .Where(d => !string.IsNullOrWhiteSpace(d.FullPath))
+                .Where(d => Directory.Exists(d.FullPath))
                 .Select(d => new ManagedDialogNavigationItem
                 {
                     ItemType = ManagedFileChooserItemType.Folder,
-                    Path = d.Value,
-                    DisplayName = LocalizeFolder(d.Key, Path.GetFileName(d.Value))
+                    Path = d.FullPath,
+                    DisplayName = LocalizeFolder(d.Type, Path.GetFileName(d.FullPath))
                 }).ToArray();
         }
 
@@ -157,38 +205,50 @@ namespace IronyModManager.Controls.Dialogs
         public ManagedDialogNavigationItem[] GetAllItems() => GetAllItemsDelegate(this);
 
         /// <summary>
-        /// Localizes the folder.
+        /// Initializes the localization manager.
         /// </summary>
-        /// <param name="folder">The folder.</param>
-        /// <param name="path">The path.</param>
-        /// <returns>System.String.</returns>
-        private static string LocalizeFolder(Environment.SpecialFolder folder, string path)
+        private static void InitLocalizationManager()
         {
             if (localizationManager == null)
             {
                 localizationManager = DIResolver.Get<ILocalizationManager>();
             }
+        }
+
+        /// <summary>
+        /// Localizes the folder.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private static string LocalizeFolder(SpecialFolderType folder, string path)
+        {
+            InitLocalizationManager();
             string localized = string.Empty;
             switch (folder)
             {
-                case Environment.SpecialFolder.Desktop:
+                case SpecialFolderType.Desktop:
                     localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Desktop);
                     break;
 
-                case Environment.SpecialFolder.MyDocuments:
+                case SpecialFolderType.MyDocuments:
                     localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Documents);
                     break;
 
-                case Environment.SpecialFolder.MyMusic:
+                case SpecialFolderType.MyMusic:
                     localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Music);
                     break;
 
-                case Environment.SpecialFolder.MyPictures:
+                case SpecialFolderType.MyPictures:
                     localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Pictures);
                     break;
 
-                case Environment.SpecialFolder.MyVideos:
+                case SpecialFolderType.MyVideos:
                     localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Videos);
+                    break;
+
+                case SpecialFolderType.Downloads:
+                    localized = localizationManager.GetResource(LocalizationResources.FileDialog.Folders.Downloads);
                     break;
 
                 default:
@@ -202,5 +262,70 @@ namespace IronyModManager.Controls.Dialogs
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class SpecialFolder.
+        /// </summary>
+        private class SpecialFolder
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SpecialFolder"/> class.
+            /// </summary>
+            /// <param name="folder">The folder.</param>
+            /// <param name="type">The type.</param>
+            /// <param name="subPah">The sub pah.</param>
+            public SpecialFolder(Environment.SpecialFolder folder, SpecialFolderType type, string subPah = Shared.Constants.EmptyParam)
+            {
+                Folder = folder;
+                Type = type;
+                SubPath = subPah;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the folder.
+            /// </summary>
+            /// <value>The folder.</value>
+            public Environment.SpecialFolder Folder { get; set; }
+
+            /// <summary>
+            /// Gets the full path.
+            /// </summary>
+            /// <value>The full path.</value>
+            public string FullPath
+            {
+                get
+                {
+                    if (!string.IsNullOrWhiteSpace(SubPath))
+                    {
+                        return Path.Combine(Environment.GetFolderPath(Folder), SubPath);
+                    }
+                    return Environment.GetFolderPath(Folder);
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets the sub path.
+            /// </summary>
+            /// <value>The sub path.</value>
+            public string SubPath { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type.
+            /// </summary>
+            /// <value>The type.</value>
+            public SpecialFolderType Type { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
