@@ -197,7 +197,7 @@ license Type:MIT
 
 #########################
 Package:NLog
-Version:4.7.3
+Version:4.7.4
 project URL:https://nlog-project.org/
 Description:NLog is a logging platform for .NET with rich log routing and management capabilities.
 NLog supports traditional logging, structured logging and the combination of both.
@@ -205,6 +205,7 @@ NLog supports traditional logging, structured logging and the combination of bot
 Supported platforms:
 
 - .NET Framework 3.5, 4, 4.5, 4.6, 4.7 & 4.8
+- .NET Core 1, 2 and 3
 - .NET Standard 1.3+ and 2.0+;
 - .NET Framework 4 client profile
 - Xamarin Android, Xamarin iOs
@@ -219,7 +220,7 @@ license Type:BSD 3-Clause "New" or "Revised" License
 
 #########################
 Package:ReactiveUI
-Version:11.5.17
+Version:11.5.35
 project URL:https://reactiveui.net/
 Description:A MVVM framework that integrates with the Reactive Extensions for .NET to create elegant, testable User Interfaces that run on any mobile or desktop platform. This is the base package with the base platform implementations
 licenseUrl:https://licenses.nuget.org/MIT
@@ -275,7 +276,7 @@ license Type:MIT
 
 #########################
 Package:Splat.NLog
-Version:9.5.20
+Version:9.5.35
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -283,7 +284,7 @@ license Type:MIT
 
 #########################
 Package:Splat.SimpleInjector
-Version:9.5.20
+Version:9.5.35
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -295,6 +296,14 @@ Version:0.2.5
 project URL:https://github.com/dsplaisted/strongnamer
 Description:Strong Namer will automatically add strong names to referenced assemblies which do not already have a strong name.
 licenseUrl:
+license Type:MIT
+
+#########################
+Package:Syroot.Windows.IO.KnownFolders
+Version:1.2.3
+project URL:https://gitlab.com/Syroot/KnownFolders
+Description:.NET library for retrieving and changing all special Windows folder paths.
+licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
@@ -325,7 +334,7 @@ license Type:Apache-2
 
 #########################
 Package:xunit.runner.visualstudio
-Version:2.4.2
+Version:2.4.3
 project URL:https://github.com/xunit/visualstudio.xunit
 Description:Visual Studio 2017 15.9+ Test Explorer runner for the xUnit.net framework. Capable of running xUnit.net v1.9.2 and v2.0+ tests. Supports .NET 2.0 or later, .NET Core 2.1 or later, and Universal Windows 10.0.16299 or later.
 licenseUrl:https://licenses.nuget.org/MIT
