@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-08-2020
+// Last Modified On : 09-11-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogSources.cs" company="Avalonia">
 //     Avalonia
@@ -19,12 +19,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Avalonia.Controls.Platform;
 using Avalonia.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Shared;
 using SmartFormat;
+using Syroot.Windows.IO;
 
 namespace IronyModManager.Controls.Dialogs
 {
@@ -46,13 +48,13 @@ namespace IronyModManager.Controls.Dialogs
         /// </summary>
         private static readonly SpecialFolder[] s_folders = new[]
         {
-            new SpecialFolder(Environment.SpecialFolder.Desktop, SpecialFolderType.Desktop),
-            new SpecialFolder(Environment.SpecialFolder.UserProfile, SpecialFolderType.UserProfile),
-            new SpecialFolder(Environment.SpecialFolder.MyDocuments, SpecialFolderType.MyDocuments),
-            new SpecialFolder(Environment.SpecialFolder.UserProfile, SpecialFolderType.UserProfile, "Downloads"),
-            new SpecialFolder(Environment.SpecialFolder.MyMusic, SpecialFolderType.MyMusic),
-            new SpecialFolder(Environment.SpecialFolder.MyPictures, SpecialFolderType.MyPictures),
-            new SpecialFolder(Environment.SpecialFolder.MyVideos, SpecialFolderType.MyVideos),
+            new SpecialFolder(SpecialFolderType.Desktop),
+            new SpecialFolder(SpecialFolderType.UserProfile),
+            new SpecialFolder(SpecialFolderType.MyDocuments),
+            new SpecialFolder(SpecialFolderType.Downloads),
+            new SpecialFolder(SpecialFolderType.MyMusic),
+            new SpecialFolder(SpecialFolderType.MyPictures),
+            new SpecialFolder(SpecialFolderType.MyVideos),
         };
 
         /// <summary>
@@ -273,16 +275,60 @@ namespace IronyModManager.Controls.Dialogs
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SpecialFolder"/> class.
+            /// Initializes a new instance of the <see cref="SpecialFolder" /> class.
             /// </summary>
-            /// <param name="folder">The folder.</param>
             /// <param name="type">The type.</param>
-            /// <param name="subPah">The sub pah.</param>
-            public SpecialFolder(Environment.SpecialFolder folder, SpecialFolderType type, string subPah = Shared.Constants.EmptyParam)
+            public SpecialFolder(SpecialFolderType type)
             {
-                Folder = folder;
                 Type = type;
-                SubPath = subPah;
+                switch (type)
+                {
+                    case SpecialFolderType.Desktop:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                        break;
+
+                    case SpecialFolderType.UserProfile:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                        break;
+
+                    case SpecialFolderType.MyDocuments:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        break;
+
+                    case SpecialFolderType.MyMusic:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+                        break;
+
+                    case SpecialFolderType.MyPictures:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+                        break;
+
+                    case SpecialFolderType.MyVideos:
+                        FullPath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+                        break;
+
+                    case SpecialFolderType.Downloads:
+                        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        {
+                            FullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                        }
+                        else
+                        {
+                            try
+                            {
+                                FullPath = KnownFolders.Downloads.Path;
+                            }
+                            catch
+                            {
+                                // Fall back since the library can throw exceptions
+                                FullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
             #endregion Constructors
@@ -290,32 +336,14 @@ namespace IronyModManager.Controls.Dialogs
             #region Properties
 
             /// <summary>
-            /// Gets or sets the folder.
-            /// </summary>
-            /// <value>The folder.</value>
-            public Environment.SpecialFolder Folder { get; set; }
-
-            /// <summary>
             /// Gets the full path.
             /// </summary>
             /// <value>The full path.</value>
             public string FullPath
             {
-                get
-                {
-                    if (!string.IsNullOrWhiteSpace(SubPath))
-                    {
-                        return Path.Combine(Environment.GetFolderPath(Folder), SubPath);
-                    }
-                    return Environment.GetFolderPath(Folder);
-                }
+                get;
+                private set;
             }
-
-            /// <summary>
-            /// Gets or sets the sub path.
-            /// </summary>
-            /// <value>The sub path.</value>
-            public string SubPath { get; set; }
 
             /// <summary>
             /// Gets or sets the type.

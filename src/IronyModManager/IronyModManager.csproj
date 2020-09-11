@@ -208,6 +208,7 @@
     <PackageReference Include="Splat.NLog" Version="9.5.37" />
     <PackageReference Include="Splat.SimpleInjector" Version="9.5.37" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
+    <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Common\IronyModManager.Common.csproj" />

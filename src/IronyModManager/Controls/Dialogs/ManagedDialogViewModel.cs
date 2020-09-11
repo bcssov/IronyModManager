@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 09-11-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogViewModel.cs" company="Avalonia">
 //     Avalonia
@@ -462,7 +462,7 @@ namespace IronyModManager.Controls.Dialogs
                         (!(SelectedFilter?.Extensions.FirstOrDefault()).StartsWith(".") ? $".{SelectedFilter?.Extensions.FirstOrDefault()}" : SelectedFilter?.Extensions.FirstOrDefault());
                     if (!string.IsNullOrWhiteSpace(ext) && !FileName.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
                     {
-                        FileName = FileName + ext;
+                        FileName += ext;
                     }
                     CompleteRequested?.Invoke(new[] { Path.Combine(Location, FileName) });
                 }
