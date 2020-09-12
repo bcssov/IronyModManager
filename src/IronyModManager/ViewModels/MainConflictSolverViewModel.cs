@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-06-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -75,6 +75,11 @@ namespace IronyModManager.ViewModels
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The filtering conflicts
+        /// </summary>
+        private bool filteringConflicts = false;
 
         /// <summary>
         /// The take left binary
@@ -413,7 +418,7 @@ namespace IronyModManager.ViewModels
         /// <param name="oldLocale">The old locale.</param>
         public override void OnLocaleChanged(string newLocale, string oldLocale)
         {
-            FilterHierarchalConflicts(Conflicts);
+            FilterHierarchalConflictsAsync(Conflicts).ConfigureAwait(false);
             base.OnLocaleChanged(newLocale, oldLocale);
         }
 
@@ -453,12 +458,18 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
-        /// Filters the hierarchal conflicts.
+        /// Filters the hierarchal conflicts asynchronous.
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="selectedDefinitionOverride">The selected definition override.</param>
-        protected virtual void FilterHierarchalConflicts(IConflictResult conflictResult, IHierarchicalDefinitions selectedDefinitionOverride = null)
+        /// <returns>Task.</returns>
+        protected virtual async Task FilterHierarchalConflictsAsync(IConflictResult conflictResult, IHierarchicalDefinitions selectedDefinitionOverride = null)
         {
+            while (filteringConflicts)
+            {
+                await Task.Delay(25);
+            }
+            filteringConflicts = true;
             var index = PreviousConflictIndex;
             PreviousConflictIndex = null;
             if (conflictResult != null && conflictResult.Conflicts != null)
@@ -568,6 +579,7 @@ namespace IronyModManager.ViewModels
             {
                 HierarchalConflicts = null;
             }
+            filteringConflicts = false;
         }
 
         /// <summary>
@@ -619,7 +631,7 @@ namespace IronyModManager.ViewModels
 
             this.WhenAnyValue(p => p.Conflicts).Subscribe(s =>
             {
-                FilterHierarchalConflicts(s);
+                FilterHierarchalConflictsAsync(s).ConfigureAwait(false);
                 IgnoreConflictsRules.CollectionName = SelectedModCollection.Name;
                 IgnoreConflictsRules.ConflictResult = s;
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
@@ -762,7 +774,7 @@ namespace IronyModManager.ViewModels
                     {
                         case Implementation.CommandState.Success:
                             EditingIgnoreConflictsRules = false;
-                            FilterHierarchalConflicts(Conflicts, SelectedConflict);
+                            FilterHierarchalConflictsAsync(Conflicts, SelectedConflict).ConfigureAwait(false);
                             break;
 
                         case Implementation.CommandState.NotExecuted:
@@ -793,7 +805,7 @@ namespace IronyModManager.ViewModels
                 ModFilter.SetConflictResult(Conflicts, SelectedModsOrder.ToList(), SelectedModCollection.Name);
                 this.WhenAnyValue(p => p.ModFilter.HasSavedState).Where(p => p).Subscribe(s =>
                 {
-                    FilterHierarchalConflicts(Conflicts, SelectedConflict);
+                    FilterHierarchalConflictsAsync(Conflicts, SelectedConflict).ConfigureAwait(false);
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
@@ -803,7 +815,7 @@ namespace IronyModManager.ViewModels
                 {
                     if (s.State == Implementation.CommandState.Success)
                     {
-                        FilterHierarchalConflicts(Conflicts, SelectedConflict);
+                        FilterHierarchalConflictsAsync(Conflicts, SelectedConflict).ConfigureAwait(false);
                     }
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
@@ -877,7 +889,7 @@ namespace IronyModManager.ViewModels
                             await modPatchCollectionService.ApplyModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name) :
                             await modPatchCollectionService.IgnoreModPatchAsync(Conflicts, patchDefinition, SelectedModCollection.Name))
                         {
-                            FilterHierarchalConflicts(Conflicts);
+                            await FilterHierarchalConflictsAsync(Conflicts);
                             IHierarchicalDefinitions selectedConflict = null;
                             if (conflictParentIdx.HasValue && HierarchalConflicts.Count() > 0)
                             {
