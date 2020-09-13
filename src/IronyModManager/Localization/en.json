@@ -115,6 +115,11 @@
             "ParadoxLauncher": "Import From Paradox Launcher",
             "Close": "Close"
         },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Export Order Only",
+            "Close": "Close"
+        },
         "MergeCollection": {
             "Name": "Merge",
             "MergedCollectionSuffix": "(Merged)",

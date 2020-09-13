@@ -115,6 +115,11 @@
             "ParadoxLauncher": "Uvezi iz Paradox Launcher",
             "Close": "Zatvori"
         },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "izvezi redoslijed",
+            "Close": "Zatvori"
+        },
         "MergeCollection": {
             "Name": "Spoji",
             "MergedCollectionSuffix": "(Spojeno)",

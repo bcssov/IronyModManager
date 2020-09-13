@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlView.xaml.cs" company="Mario">
 //     Mario
@@ -53,8 +53,13 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var popup = this.FindControl<Popup>("popup");
-            popup.Closed += (sender, args) =>
+            var popupImport = this.FindControl<Popup>("popupImport");
+            popupImport.Closed += (sender, args) =>
+            {
+                ViewModel.ForceClose();
+            };
+            var popupExport = this.FindControl<Popup>("popupExport");
+            popupExport.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
             };

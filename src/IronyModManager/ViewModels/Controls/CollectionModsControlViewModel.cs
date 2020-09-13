@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -259,6 +259,11 @@ namespace IronyModManager.ViewModels.Controls
             /// The default
             /// </summary>
             Default,
+
+            /// <summary>
+            /// The default order only
+            /// </summary>
+            DefaultOrderOnly,
 
             /// <summary>
             /// The paradoxos
@@ -730,12 +735,13 @@ namespace IronyModManager.ViewModels.Controls
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
-        protected virtual async Task ExportCollectionAsync(string path)
+        /// <param name="providerType">Type of the provider.</param>
+        protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection));
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly));
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1015,6 +1021,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
+                    ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
@@ -1025,7 +1032,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         if (s.Item1 == ImportActionType.Export)
                         {
-                            ExportCollectionAsync(s.Item2.Result).ConfigureAwait(true);
+                            ExportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
                         }
                         else
                         {

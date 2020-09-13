@@ -156,6 +156,13 @@ namespace IronyModManager.Shared
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
                 public const string Close = Prefix + "Close";
             }
+            public static class ExportOther
+            {
+                public const string Prefix = "Collection_Mods.ExportOther.";
+                public const string Title = Prefix + "Title";
+                public const string OrderOnly = Prefix + "OrderOnly";
+                public const string Close = Prefix + "Close";
+            }
             public static class MergeCollection
             {
                 public const string Prefix = "Collection_Mods.MergeCollection.";

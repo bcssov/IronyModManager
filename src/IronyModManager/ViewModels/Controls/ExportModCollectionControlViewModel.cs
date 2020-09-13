@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -87,6 +87,45 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The export dialog title.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Export_Dialog_Title)]
         public virtual string ExportDialogTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export order only.
+        /// </summary>
+        /// <value>The export order only.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportOther.OrderOnly)]
+        public virtual string ExportOrderOnly { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export order only command.
+        /// </summary>
+        /// <value>The export order only command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<string>> ExportOrderOnlyCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export other.
+        /// </summary>
+        /// <value>The export other.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportOther.Title)]
+        public virtual string ExportOther { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export other close.
+        /// </summary>
+        /// <value>The export other close.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ExportOther.Close)]
+        public virtual string ExportOtherClose { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export other close command.
+        /// </summary>
+        /// <value>The export other close command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportOtherCloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export other command.
+        /// </summary>
+        /// <value>The export other command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportOtherCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the import.
@@ -174,10 +213,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<string>> ImportOtherParadoxosCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is export open.
+        /// </summary>
+        /// <value><c>true</c> if this instance is export open; otherwise, <c>false</c>.</value>
+        public virtual bool IsExportOpen { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
         /// </summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
-        public virtual bool IsOpen { get; protected set; }
+        public virtual bool IsImportOpen { get; protected set; }
 
         #endregion Properties
 
@@ -188,7 +233,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void ForceClose()
         {
-            IsOpen = false;
+            IsImportOpen = false;
+            IsExportOpen = false;
         }
 
         /// <summary>
@@ -230,13 +276,29 @@ namespace IronyModManager.ViewModels.Controls
 
             ImportOtherCommand = ReactiveCommand.Create(() =>
             {
-                IsOpen = true;
+                IsImportOpen = true;
             }).DisposeWith(disposables);
 
             ImportOtherCloseCommand = ReactiveCommand.Create(() =>
             {
-                IsOpen = false;
+                IsImportOpen = false;
             }).DisposeWith(disposables);
+
+            ExportOtherCommand = ReactiveCommand.Create(() =>
+            {
+                IsExportOpen = true;
+            }).DisposeWith(disposables);
+
+            ExportOtherCloseCommand = ReactiveCommand.Create(() =>
+            {
+                IsExportOpen = false;
+            }).DisposeWith(disposables);
+
+            ExportOrderOnlyCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var result = await fileDialogAction.SaveDialogAsync(ExportDialogTitle, CollectionName, Shared.Constants.ZipExtensionWithoutDot);
+                return new CommandResult<string>(result, !string.IsNullOrWhiteSpace(result) ? CommandState.Success : CommandState.Failed);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
