@@ -117,7 +117,7 @@
         },
         "ExportOther": {
             "Title": "...",
-            "OrderOnly": "izvezi redoslijed",
+            "OrderOnly": "Izvezi redoslijed",
             "Close": "Zatvori"
         },
         "MergeCollection": {
@@ -171,6 +171,7 @@
         "LeftSide": "Lijeva strana",
         "RightSide": "Desna strana",
         "BinaryFile": "Binarni sadržaj",
+        "ImageInfo": "Širina: {Width} Visina: {Height}",
         "TakeLeft": "Uzmi lijevo",
         "TakeRight": "Uzmi desno",
         "OK": "U redu",

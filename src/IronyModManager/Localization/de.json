@@ -171,6 +171,7 @@
         "LeftSide": "Linke Seite",
         "RightSide": "Rechte Seite",
         "BinaryFile": "Binärer Inhalt",
+        "ImageInfo": "Breite: {Width} Höhe: {Height}",
         "TakeLeft": "Biegen Sie links ab",
         "TakeRight": "Hier rechts",
         "OK": "In Ordnung",

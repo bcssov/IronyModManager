@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
@@ -63,6 +64,22 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, string collectionName);
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="modName">Name of the mod.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        Task<MemoryStream> GetImageStreamAsync(string modName, string path);
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        Task<MemoryStream> GetImageStreamAsync(IMod mod, string path);
 
         /// <summary>
         /// Gets the installed mods.
