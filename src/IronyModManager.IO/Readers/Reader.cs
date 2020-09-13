@@ -132,7 +132,7 @@ namespace IronyModManager.IO.Readers
                     {
                         if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
                         {
-                            var pfimImage = Pfim.Dds.Create(stream, new Pfim.PfimConfig());
+                            using var pfimImage = Pfim.Dds.Create(stream, new Pfim.PfimConfig());
                             if (pfimImage.Compressed)
                             {
                                 pfimImage.Decompress();
@@ -140,20 +140,20 @@ namespace IronyModManager.IO.Readers
                             if (pfimImage.Format == Pfim.ImageFormat.Rgba32)
                             {
                                 ms = new MemoryStream();
-                                var image = Image.LoadPixelData<Bgra32>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
+                                using var image = Image.LoadPixelData<Bgra32>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
                                 image.SaveAsBmp(ms);
                             }
                             else if (pfimImage.Format == Pfim.ImageFormat.Rgb24)
                             {
                                 ms = new MemoryStream();
-                                var image = Image.LoadPixelData<Bgr24>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
+                                using var image = Image.LoadPixelData<Bgr24>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
                                 image.SaveAsBmp(ms);
                             }
                         }
                         else
                         {
                             ms = new MemoryStream();
-                            var image = await Image.LoadAsync(stream);
+                            using var image = await Image.LoadAsync(stream);
                             await image.SaveAsBmpAsync(ms);
                         }
                         if (ms != null && ms.CanSeek)
