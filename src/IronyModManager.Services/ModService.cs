@@ -193,7 +193,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
         public virtual Task<MemoryStream> GetImageStreamAsync(IMod mod, string path)
         {
-            if (mod != null)
+            if (mod != null && !string.IsNullOrWhiteSpace(path))
             {
                 return Reader.GetImageStreamAsync(mod.FullPath, path);
             }

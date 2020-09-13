@@ -698,6 +698,7 @@ namespace IronyModManager.ViewModels
                             BinaryMergeViewer.EnableSelection = ModCompareSelector.LeftSelectedDefinition != null &&
                                 ModCompareSelector.RightSelectedDefinition != null &&
                                 ModCompareSelector.LeftSelectedDefinition != ModCompareSelector.RightSelectedDefinition;
+                            BinaryMergeViewer.SetLeft(s);
                         }
                     }
                     else
@@ -729,6 +730,7 @@ namespace IronyModManager.ViewModels
                             BinaryMergeViewer.EnableSelection = ModCompareSelector.LeftSelectedDefinition != null &&
                                 ModCompareSelector.RightSelectedDefinition != null &&
                                 ModCompareSelector.LeftSelectedDefinition != ModCompareSelector.RightSelectedDefinition;
+                            BinaryMergeViewer.SetRight(s);
                         }
                     }
                     else

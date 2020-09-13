@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -829,6 +829,17 @@ namespace IronyModManager.Services.Tests
             result.Should().BeNull();
 
             result = await service.GetImageStreamAsync(string.Empty, "test");
+            result.Should().BeNull();
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_return_mod_image_stream",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop",
+                ChecksumFolders = new List<string>() { "common", "events" }
+            });
+
+            result = await service.GetImageStreamAsync("test", string.Empty);
             result.Should().BeNull();
         }
 
