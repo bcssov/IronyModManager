@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -52,8 +52,9 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
+        /// <param name="exportOrderOnly">if set to <c>true</c> [export order only].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportAsync(string file, IModCollection modCollection);
+        Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false);
 
         /// <summary>
         /// Gets the specified name.

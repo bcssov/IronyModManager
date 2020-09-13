@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -160,8 +160,9 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="file">The file.</param>
         /// <param name="modCollection">The mod collection.</param>
+        /// <param name="exportOrderOnly">if set to <c>true</c> [export order only].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection)
+        public virtual Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false)
         {
             var game = GameService.GetSelected();
             if (game == null || modCollection == null)
@@ -173,7 +174,8 @@ namespace IronyModManager.Services
             {
                 File = file,
                 Mod = modCollection,
-                ModDirectory = path
+                ModDirectory = path,
+                ExportModOrderOnly = exportOrderOnly
             });
         }
 

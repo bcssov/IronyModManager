@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -484,6 +484,38 @@ namespace IronyModManager.Services.Tests
             {
                 Name = "fake"
             });
+            isValid.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_mod_with_order_only.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_mod_with_order_only()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            var modExport = new Mock<IModCollectionExporter>();
+            var isValid = false;
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake"
+            });
+            modExport.Setup(p => p.ExportAsync(It.IsAny<ModCollectionExporterParams>())).Callback((ModCollectionExporterParams p) =>
+            {
+                if (p.File.Equals("file") && p.Mod.Name.Equals("fake") && p.ExportModOrderOnly)
+                {
+                    isValid = true;
+                }
+            });
+
+            var service = new ModCollectionService(new Cache(), null, null, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            await service.ExportAsync("file", new ModCollection()
+            {
+                Name = "fake"
+            }, true);
             isValid.Should().BeTrue();
         }
 
