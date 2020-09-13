@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="IReader.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace IronyModManager.IO.Common.Readers
 {
@@ -38,6 +39,14 @@ namespace IronyModManager.IO.Common.Readers
         /// <param name="path">The path.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         IEnumerable<string> GetFiles(string path);
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        Task<MemoryStream> GetImageStreamAsync(string rootPath, string file);
 
         /// <summary>
         /// Gets the stream.

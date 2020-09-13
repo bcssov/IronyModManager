@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -15,9 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace IronyModManager.IO.Readers
 {
@@ -29,6 +32,16 @@ namespace IronyModManager.IO.Readers
     public class Reader : IReader
     {
         #region Fields
+
+        /// <summary>
+        /// The DDS extension
+        /// </summary>
+        private const string DDSExtension = ".dds";
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
 
         /// <summary>
         /// The readers
@@ -43,9 +56,11 @@ namespace IronyModManager.IO.Readers
         /// Initializes a new instance of the <see cref="Reader" /> class.
         /// </summary>
         /// <param name="readers">The readers.</param>
-        public Reader(IEnumerable<IFileReader> readers)
+        /// <param name="logger">The logger.</param>
+        public Reader(IEnumerable<IFileReader> readers, ILogger logger)
         {
             this.readers = readers;
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -95,6 +110,70 @@ namespace IronyModManager.IO.Readers
             if (reader != null)
             {
                 return reader.GetFiles(path);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPat">The root pat.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>MemoryStream.</returns>
+        public async Task<MemoryStream> GetImageStreamAsync(string rootPat, string file)
+        {
+            if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+            {
+                var stream = GetStream(rootPat, file);
+                if (stream != null)
+                {
+                    MemoryStream ms = null;
+                    try
+                    {
+                        if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var pfimImage = Pfim.Dds.Create(stream, new Pfim.PfimConfig());
+                            if (pfimImage.Compressed)
+                            {
+                                pfimImage.Decompress();
+                            }
+                            if (pfimImage.Format == Pfim.ImageFormat.Rgba32)
+                            {
+                                ms = new MemoryStream();
+                                var image = Image.LoadPixelData<Bgra32>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
+                                image.SaveAsBmp(ms);
+                            }
+                            else if (pfimImage.Format == Pfim.ImageFormat.Rgb24)
+                            {
+                                ms = new MemoryStream();
+                                var image = Image.LoadPixelData<Bgr24>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
+                                image.SaveAsBmp(ms);
+                            }
+                        }
+                        else
+                        {
+                            ms = new MemoryStream();
+                            var image = await Image.LoadAsync(stream);
+                            await image.SaveAsBmpAsync(ms);
+                        }
+                        if (ms != null && ms.CanSeek)
+                        {
+                            ms.Seek(0, SeekOrigin.Begin);
+                        }
+                        return ms;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        ms.Close();
+                        await ms.DisposeAsync();
+                    }
+                    finally
+                    {
+                        stream.Close();
+                        await stream.DisposeAsync();
+                    }
+                }
             }
             return null;
         }
