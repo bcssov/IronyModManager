@@ -234,6 +234,7 @@ namespace IronyModManager.Shared
             public const string LeftSide = Prefix + "LeftSide";
             public const string RightSide = Prefix + "RightSide";
             public const string BinaryFile = Prefix + "BinaryFile";
+            public const string ImageInfo = Prefix + "ImageInfo";
             public const string TakeLeft = Prefix + "TakeLeft";
             public const string TakeRight = Prefix + "TakeRight";
             public const string OK = Prefix + "OK";

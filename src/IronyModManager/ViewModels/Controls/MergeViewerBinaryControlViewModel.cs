@@ -18,11 +18,13 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -40,6 +42,8 @@ namespace IronyModManager.ViewModels.Controls
         /// The block selected
         /// </summary>
         private const string BlockSelected = "BlockSelected";
+
+        private readonly ILocalizationManager localizationManager;
 
         /// <summary>
         /// The mod service
@@ -69,9 +73,10 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="MergeViewerBinaryControlViewModel" /> class.
         /// </summary>
         /// <param name="modService">The mod service.</param>
-        public MergeViewerBinaryControlViewModel(IModService modService)
+        public MergeViewerBinaryControlViewModel(IModService modService, ILocalizationManager localizationManager)
         {
             this.modService = modService;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -103,6 +108,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The left image.</value>
         public virtual IBitmap LeftImage { get; protected set; }
 
+        public virtual string LeftImageInfo { get; protected set; }
+
         /// <summary>
         /// Gets or sets the right definition.
         /// </summary>
@@ -114,6 +121,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The right image.</value>
         public virtual IBitmap RightImage { get; protected set; }
+
+        public virtual string RightImageInfo { get; protected set; }
 
         /// <summary>
         /// Gets or sets the take left.
@@ -170,6 +179,8 @@ namespace IronyModManager.ViewModels.Controls
             var right = RightImage;
             RightImage = null;
             right?.Dispose();
+            LeftImageInfo = string.Empty;
+            RightImageInfo = string.Empty;
         }
 
         /// <summary>
@@ -206,6 +217,7 @@ namespace IronyModManager.ViewModels.Controls
             loadingImages = true;
             if (prevLeftDefinition != LeftDefinition)
             {
+                LeftImageInfo = string.Empty;
                 var left = LeftImage;
                 LeftImage = null;
                 left?.Dispose();
@@ -213,10 +225,13 @@ namespace IronyModManager.ViewModels.Controls
                 if (ms != null)
                 {
                     LeftImage = new Bitmap(ms);
+                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                    LeftImageInfo = Smart.Format(info, new { LeftImage.PixelSize.Width, LeftImage.PixelSize.Height });
                 }
             }
             if (prevRightDefinition != RightDefinition)
             {
+                RightImageInfo = string.Empty;
                 var right = RightImage;
                 RightImage = null;
                 right?.Dispose();
@@ -224,6 +239,8 @@ namespace IronyModManager.ViewModels.Controls
                 if (ms != null)
                 {
                     RightImage = new Bitmap(ms);
+                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                    RightImageInfo = Smart.Format(info, new { RightImage.PixelSize.Width, RightImage.PixelSize.Height });
                 }
             }
             loadingImages = false;

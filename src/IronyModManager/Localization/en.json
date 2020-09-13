@@ -171,6 +171,7 @@
         "LeftSide": "Left Side",
         "RightSide": "Right Side",
         "BinaryFile": "Binary Content",
+        "ImageInfo": "Width: {Width} Height: {Height}",
         "TakeLeft": "Take Left",
         "TakeRight": "Take Right",
         "OK": "OK",

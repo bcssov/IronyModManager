@@ -11,7 +11,10 @@
         <controls:BoundClassBorder BoundClasses="{Binding TakeLeftClass}">
           <Grid ColumnDefinitions="*" RowDefinitions="6*,1*">
             <Panel Grid.Row="0" Grid.Column="0">
-              <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+              <StackPanel Orientation="Vertical" Spacing="5">
+                <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding LeftImageInfo}" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+              </StackPanel>
               <Image Source="{Binding LeftImage}" VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
             </Panel>
             <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
@@ -23,7 +26,10 @@
         <controls:BoundClassBorder BoundClasses="{Binding TakeRightClass}">
           <Grid ColumnDefinitions="*" RowDefinitions="6*,1*">
             <Panel Grid.Row="0" Grid.Column="0">
-              <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+              <StackPanel Orientation="Vertical" Spacing="5">
+                <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding RightImageInfo}" HorizontalAlignment="Center"></TextBlock>
+              </StackPanel>
               <Image Source="{Binding RightImage}" VerticalAlignment="Center" HorizontalAlignment="Center"></Image>
             </Panel>
             <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
