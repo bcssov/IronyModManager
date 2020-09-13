@@ -117,7 +117,7 @@
         },
         "ExportOther": {
             "Title": "...",
-            "OrderOnly": "izvezi redoslijed",
+            "OrderOnly": "Izvezi redoslijed",
             "Close": "Zatvori"
         },
         "MergeCollection": {
