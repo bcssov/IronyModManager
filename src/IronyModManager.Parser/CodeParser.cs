@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-04-2020
+// Last Modified On : 09-14-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -124,7 +124,7 @@ namespace IronyModManager.Parser
                 else
                 {
                     var inlineChildValues = element.Values?.Where(p => Common.Constants.Scripts.InlineOperators.Any(a => a.Equals(p.Key, StringComparison.OrdinalIgnoreCase)));
-                    if (inlineChildValues.Count() == element.Values?.Count() && inlineChildValues.Count() > 0)
+                    if (inlineChildValues?.Count() > 0 && inlineChildValues.Count() == element.Values?.Count())
                     {
                         if (!string.IsNullOrWhiteSpace(element.Operator))
                         {
@@ -134,7 +134,7 @@ namespace IronyModManager.Parser
                         {
                             sb.Append($"{new string(' ', indent * 4)}{element.Key} ");
                         }
-                        if (element.Values?.Count() > 0)
+                        if (element.Values.Count() > 0)
                         {
                             foreach (var value in element.Values)
                             {

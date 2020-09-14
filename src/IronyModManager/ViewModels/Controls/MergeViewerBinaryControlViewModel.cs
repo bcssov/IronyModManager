@@ -43,6 +43,9 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private const string BlockSelected = "BlockSelected";
 
+        /// <summary>
+        /// The localization manager
+        /// </summary>
         private readonly ILocalizationManager localizationManager;
 
         /// <summary>
@@ -73,6 +76,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="MergeViewerBinaryControlViewModel" /> class.
         /// </summary>
         /// <param name="modService">The mod service.</param>
+        /// <param name="localizationManager">The localization manager.</param>
         public MergeViewerBinaryControlViewModel(IModService modService, ILocalizationManager localizationManager)
         {
             this.modService = modService;
@@ -108,6 +112,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The left image.</value>
         public virtual IBitmap LeftImage { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the left image information.
+        /// </summary>
+        /// <value>The left image information.</value>
         public virtual string LeftImageInfo { get; protected set; }
 
         /// <summary>
@@ -122,6 +130,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The right image.</value>
         public virtual IBitmap RightImage { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the right image information.
+        /// </summary>
+        /// <value>The right image information.</value>
         public virtual string RightImageInfo { get; protected set; }
 
         /// <summary>
