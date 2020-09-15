@@ -359,6 +359,6 @@ MigrationBackup/
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.runtimeconfig.dev.json
 /Tools/LocalizationResourceGenerator/LocalizationResourceGenerator.runtimeconfig.json
 /Tools/LocalizationResourceGenerator/Newtonsoft.Json.dll
-/archive_detects
-/Notes
-desktop.ini
+/Dev-Tools
+/keys/NetSparkle_Ed25519.priv
+/keys/NetSparkle_Ed25519.pub
