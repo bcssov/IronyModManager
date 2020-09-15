@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-14-2020
+// Last Modified On : 09-15-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -82,7 +82,7 @@ namespace Irony.AppCastGenerator
         private static void Run(Options opts)
         {
             // Really really lacks documentation
-            _signatureManager.SetStorageDirectory("..\\..\\..\\..\\..\\keys");
+            _signatureManager.SetStorageDirectory(opts.KeyLocation);
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -149,10 +149,7 @@ namespace Irony.AppCastGenerator
                 Environment.Exit(1);
             }
 
-            if (string.IsNullOrEmpty(opts.OutputDirectory))
-            {
-                opts.OutputDirectory = opts.SourceBinaryDirectory;
-            }
+            var outputDirectory = opts.SourceBinaryDirectory;
 
             Console.WriteLine("");
             Console.WriteLine($"Searching: {opts.SourceBinaryDirectory}", Color.Blue);
@@ -215,7 +212,7 @@ namespace Irony.AppCastGenerator
 
                 var appcastXmlDocument = XMLAppCast.GenerateAppCastXml(items, productName);
 
-                var appcastFileName = Path.Combine(opts.OutputDirectory, "appcast.xml");
+                var appcastFileName = Path.Combine(outputDirectory, opts.AppCastFileName);
 
                 var dirName = Path.GetDirectoryName(appcastFileName);
 
@@ -276,6 +273,13 @@ namespace Irony.AppCastGenerator
             #region Properties
 
             /// <summary>
+            /// Gets or sets the output directory.
+            /// </summary>
+            /// <value>The output directory.</value>
+            [Option('a', "appcast-file-name", Required = false, HelpText = "Appcast filename")]
+            public string AppCastFileName { get; set; }
+
+            /// <summary>
             /// Gets or sets the base URL.
             /// </summary>
             /// <value>The base URL.</value>
@@ -300,15 +304,8 @@ namespace Irony.AppCastGenerator
             /// Gets or sets the change log path.
             /// </summary>
             /// <value>The change log path.</value>
-            [Option('p', "change-log-path", SetName = "local", Required = false, HelpText = "File path to Markdown changelog files (expected extension: .md; version must match AssemblyVersion, e.g. MyApp 1.0.0.md).", Default = "")]
+            [Option('p', "change-log-path", SetName = "local", Required = false, HelpText = "File path to change log.", Default = "")]
             public string ChangeLogPath { get; set; }
-
-            /// <summary>
-            /// Gets or sets the change log URL.
-            /// </summary>
-            /// <value>The change log URL.</value>
-            [Option('l', "change-log-url", SetName = "local", Required = false, HelpText = "Base URL to the location for your changelog files on some server for downloading", Default = "")]
-            public string ChangeLogUrl { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether this <see cref="Options" /> is export.
@@ -339,11 +336,11 @@ namespace Irony.AppCastGenerator
             public bool GenerateKeys { get; set; }
 
             /// <summary>
-            /// Gets or sets the output directory.
+            /// Gets or sets the key location.
             /// </summary>
-            /// <value>The output directory.</value>
-            [Option('a', "appcast-output-directory", Required = false, HelpText = "Directory to write appcast.xml")]
-            public string OutputDirectory { get; set; }
+            /// <value>The key location.</value>
+            [Option("key-location", Required = false, HelpText = "Key location")]
+            public string KeyLocation { get; set; }
 
             /// <summary>
             /// Gets or sets a value indicating whether [prefix version].
@@ -377,7 +374,7 @@ namespace Irony.AppCastGenerator
             /// Gets or sets the version extraction path.
             /// </summary>
             /// <value>The version extraction path.</value>
-            [Option('f', "file-extract-version", SetName = "local", Required = false, HelpText = "Determine the version from the file name", Default = false)]
+            [Option('f', "file-extract-version", SetName = "local", Required = false, HelpText = "Location where to extract version info from.", Default = false)]
             public string VersionExtractionPath { get; set; }
 
             #endregion Properties
