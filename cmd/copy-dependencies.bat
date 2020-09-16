@@ -21,6 +21,7 @@ if "%config%" == "Debug" (
         setlocal enabledelayedexpansion	
 		if "!projPath:Tests=!"=="!projPath!" (
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.dll" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
+			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.exe" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.json" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.pdb" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D
 		)
@@ -31,7 +32,8 @@ if "%config%" == "Debug" (
 		set "projPath=%%i"
         setlocal enabledelayedexpansion	
 		if "!projPath:Tests=!"=="!projPath!" (
-			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.dll" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D		
+			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.dll" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D	
+			if not "%%i" == "%solutiondir%src\IronyModManager" xcopy "%%i\%copydir%*.exe" "%solutiondir%src\IronyModManager\%outdir%" /Y /S /D			
 		)
 		endlocal
 	)

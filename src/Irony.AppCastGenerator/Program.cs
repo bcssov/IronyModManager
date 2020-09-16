@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-15-2020
+// Last Modified On : 09-16-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -46,6 +46,17 @@ namespace Irony.AppCastGenerator
         #region Methods
 
         /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        public static void Main(string[] args)
+        {
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(Run)
+                .WithNotParsed(HandleParseError);
+        }
+
+        /// <summary>
         /// Gets the version from assembly.
         /// </summary>
         /// <param name="fileInfo">The file information.</param>
@@ -62,17 +73,6 @@ namespace Irony.AppCastGenerator
         private static void HandleParseError(IEnumerable<Error> errs)
         {
             errs.Output();
-        }
-
-        /// <summary>
-        /// Defines the entry point of the application.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        private static void Main(string[] args)
-        {
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(Run)
-                .WithNotParsed(HandleParseError);
         }
 
         /// <summary>
