@@ -17,6 +17,7 @@ using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.Shared;
+using Newtonsoft.Json;
 
 namespace IronyModManager
 {
@@ -45,20 +46,56 @@ namespace IronyModManager
             var path = StaticResources.GetUpdaterPath();
             if (Directory.Exists(path))
             {
-                // If exists wait for a couple of seconds before attempting to delete the update directory
-                await Task.Delay(5000);
-                try
+                bool cleanup = true;
+                var settingsFileName = Path.Combine(path, "update-settings.json");
+                if (File.Exists(settingsFileName))
                 {
-                    Directory.Delete(path, true);
+                    var text = await File.ReadAllTextAsync(settingsFileName);
+                    var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
+                    cleanup = settings.Updated;
                 }
-                catch (Exception ex)
+                if (cleanup)
                 {
-                    var logger = DIResolver.Get<ILogger>();
-                    logger.Error(ex);
+                    await Task.Delay(5000);
+                    try
+                    {
+                        Directory.Delete(path, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        var logger = DIResolver.Get<ILogger>();
+                        logger.Error(ex);
+                    }
                 }
             }
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class UpdateSettings.
+        /// </summary>
+        private class UpdateSettings
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the path.
+            /// </summary>
+            /// <value>The path.</value>
+            public string Path { get; set; }
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this <see cref="UpdateSettings" /> is updated.
+            /// </summary>
+            /// <value><c>true</c> if updated; otherwise, <c>false</c>.</value>
+            public bool Updated { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
