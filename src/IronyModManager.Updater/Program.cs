@@ -121,17 +121,27 @@ namespace IronyModManager.Updater
         }
 
         /// <summary>
+        /// Gets the name of the updater executable file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.String.</returns>
+        private static string GetUpdaterExeFileName(string path)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Path.Combine(path, "IronyModManager.Updater.exe");
+            }
+            return Path.Combine(path, "IronyModManager.Updater");
+        }
+
+        /// <summary>
         /// Gets the updater executable file name parameter.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>System.String.</returns>
         private static string GetUpdaterExeFileNameParam(string path)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return $"\"{Path.Combine(path, "IronyModManager.Updater.exe")}\"";
-            }
-            return $"\"{Path.Combine(path, "IronyModManager.Updater")}\"";
+            return $"\"{GetUpdaterExeFileName(path)}\"";
         }
 
         /// <summary>
@@ -151,7 +161,26 @@ namespace IronyModManager.Updater
                 return;
             }
             Console.WriteLine("Copying updates...");
-            await CopyUpdateAsync(AppDomain.CurrentDomain.BaseDirectory, settings.Path);
+            try
+            {
+                await CopyUpdateAsync(AppDomain.CurrentDomain.BaseDirectory, settings.Path);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // If windows probably UAC is blocking, attempt to elevate the process
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var updaterFileName = GetUpdaterExeFileName(AppDomain.CurrentDomain.BaseDirectory);
+                    var procInfo = new ProcessStartInfo()
+                    {
+                        UseShellExecute = true,
+                        Verb = "runas",
+                        FileName = updaterFileName
+                    };
+                    Process.Start(procInfo);
+                }
+                Environment.Exit(1);
+            }
             Console.WriteLine("Updates copied...");
 
             Console.WriteLine("Settings permissions...");
@@ -166,7 +195,7 @@ namespace IronyModManager.Updater
             Console.WriteLine("Relaunching Irony...");
             Process.Start(GetMainExeFileName(settings.Path));
             Console.WriteLine("Closing updater...");
-            Environment.Exit(1);
+            Environment.Exit(0);
         }
 
         #endregion Methods

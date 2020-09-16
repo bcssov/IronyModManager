@@ -193,19 +193,13 @@ namespace IronyModManager.IO.Tests
 
             var reader = DIResolver.Get<IReader>();
             var result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
-            result.Should().NotBeNull();
-            var bmp = new Bitmap(result);
-            bmp.Should().NotBeNull();
+            result.Should().NotBeNull();            
 
             result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.tga");
-            result.Should().NotBeNull();
-            bmp = new Bitmap(result);
-            bmp.Should().NotBeNull();
+            result.Should().NotBeNull();            
 
             result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.png");
-            result.Should().NotBeNull();
-            bmp = new Bitmap(result);
-            bmp.Should().NotBeNull();
+            result.Should().NotBeNull();            
         }
 
 #if FUNCTIONAL_TEST

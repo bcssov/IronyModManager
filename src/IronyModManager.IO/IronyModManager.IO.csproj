@@ -58,7 +58,6 @@
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0010" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
-    <PackageReference Include="System.Drawing.Common" Version="[4.7.0]" allowedVersions="[4.7.0]" />
   </ItemGroup>
 
   <ItemGroup>

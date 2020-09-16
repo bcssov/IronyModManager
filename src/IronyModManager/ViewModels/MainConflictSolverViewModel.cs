@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-16-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -693,7 +693,7 @@ namespace IronyModManager.ViewModels
                         }
                         else
                         {
-                            BinaryMergeViewer.Reset();
+                            BinaryMergeViewer.Reset(false);
                             ResolveEnabled = false;
                             BinaryMergeViewer.EnableSelection = ModCompareSelector.LeftSelectedDefinition != null &&
                                 ModCompareSelector.RightSelectedDefinition != null &&
@@ -725,7 +725,7 @@ namespace IronyModManager.ViewModels
                         }
                         else
                         {
-                            BinaryMergeViewer.Reset();
+                            BinaryMergeViewer.Reset(false);
                             ResolveEnabled = false;
                             BinaryMergeViewer.EnableSelection = ModCompareSelector.LeftSelectedDefinition != null &&
                                 ModCompareSelector.RightSelectedDefinition != null &&
