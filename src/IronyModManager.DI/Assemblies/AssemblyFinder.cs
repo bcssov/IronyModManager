@@ -31,7 +31,7 @@ namespace IronyModManager.DI.Assemblies
         /// <summary>
         /// The excluded assemblies
         /// </summary>
-        private static string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater" };
+        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater" };
 
         #endregion Fields
 
