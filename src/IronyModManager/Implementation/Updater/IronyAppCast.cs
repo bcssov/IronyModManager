@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using IronyModManager.DI;
@@ -56,6 +55,29 @@ namespace IronyModManager.Implementation.Updater
 
         #endregion Fields
 
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IronyAppCast" /> class.
+        /// </summary>
+        /// <param name="isInstallerVersion">if set to <c>true</c> [is installer version].</param>
+        public IronyAppCast(bool isInstallerVersion) : base()
+        {
+            IsInstallerVersion = isInstallerVersion;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is installer version.
+        /// </summary>
+        /// <value><c>true</c> if this instance is installer version; otherwise, <c>false</c>.</value>
+        public bool IsInstallerVersion { get; private set; }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
@@ -70,7 +92,6 @@ namespace IronyModManager.Implementation.Updater
             }
             Version installed = new Version(config.InstalledVersion);
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
-            var isInstallerVersion = IsInstallerVersion();
             var allowAlphaVersions = updaterService.Get().CheckForPrerelease;
 
             return Items.Where((item) =>
@@ -89,11 +110,11 @@ namespace IronyModManager.Implementation.Updater
                     {
                         return false;
                     }
-                    else if (isInstallerVersion && !fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
+                    else if (IsInstallerVersion && !fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
                     {
                         return false;
                     }
-                    else if (!isInstallerVersion && fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
+                    else if (!IsInstallerVersion && fileName.Contains("setup", StringComparison.OrdinalIgnoreCase))
                     {
                         return false;
                     }
@@ -133,16 +154,6 @@ namespace IronyModManager.Implementation.Updater
             this.config = config;
             this.signatureVerifier = signatureVerifier;
             base.SetupAppCastHandler(dataDownloader, castUrl, config, signatureVerifier, logWriter);
-        }
-
-        /// <summary>
-        /// Determines whether [is installer version].
-        /// </summary>
-        /// <returns><c>true</c> if [is installer version]; otherwise, <c>false</c>.</returns>
-        private bool IsInstallerVersion()
-        {
-            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
-            return files.Any(p => p.StartsWith("unins", StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods

@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -79,7 +80,7 @@ namespace IronyModManager.Implementation.Updater
             updater = new SparkleUpdater(Constants.AppCastAddress, new Ed25519Checker(NetSparkleUpdater.Enums.SecurityMode.Strict, Constants.PublicUpdateKey))
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
-                AppCastHandler = new IronyAppCast(),
+                AppCastHandler = new IronyAppCast(IsInstallerVersion()),
                 Configuration = new UpdaterConfiguration(new AssemblyReflectionAccessor(string.Empty)),
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
@@ -98,6 +99,7 @@ namespace IronyModManager.Implementation.Updater
             updater.DownloadFinished += (sender, path) =>
             {
                 updatePath = path;
+                progress.OnNext(100);
             };
         }
 
@@ -146,18 +148,22 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// download update as an asynchronous operation.
         /// </summary>
-        public async Task DownloadUpdateAsync()
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public async Task<bool> DownloadUpdateAsync()
         {
             if (busy)
             {
-                return;
+                return false;
             }
             busy = true;
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
+                updatePath = string.Empty;
                 await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
+                return true;
             }
             busy = false;
+            return false;
         }
 
         /// <summary>
@@ -171,6 +177,16 @@ namespace IronyModManager.Implementation.Updater
                 return updateInfo.Updates.FirstOrDefault().Description;
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Determines whether [is installer version].
+        /// </summary>
+        /// <returns><c>true</c> if [is installer version]; otherwise, <c>false</c>.</returns>
+        private bool IsInstallerVersion()
+        {
+            var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
+            return files.Any(p => p.StartsWith("unins", StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods
