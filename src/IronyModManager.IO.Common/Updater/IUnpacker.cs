@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Services.Common
+// Assembly         : IronyModManager.IO.Common
 // Author           : Mario
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 09-17-2020
 // ***********************************************************************
-// <copyright file="IUpdaterService.cs" company="Mario">
+// <copyright file="IUnpacker.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -14,29 +14,15 @@
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
-using IronyModManager.Models.Common;
 
-namespace IronyModManager.Services.Common
+namespace IronyModManager.IO.Common.Updater
 {
     /// <summary>
-    /// Interface IUpdaterService
+    /// Interface IUnpacker
     /// </summary>
-    public interface IUpdaterService
+    public interface IUnpacker
     {
         #region Methods
-
-        /// <summary>
-        /// Gets this instance.
-        /// </summary>
-        /// <returns>IUpdateSettings.</returns>
-        IUpdateSettings Get();
-
-        /// <summary>
-        /// Saves the specified settings.
-        /// </summary>
-        /// <param name="settings">The settings.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Save(IUpdateSettings settings);
 
         /// <summary>
         /// Unpacks the update asynchronous.

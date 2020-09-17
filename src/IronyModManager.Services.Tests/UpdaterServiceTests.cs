@@ -15,8 +15,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using IronyModManager.IO.Common.Updater;
 using IronyModManager.Localization;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models;
@@ -42,11 +44,11 @@ namespace IronyModManager.Services.Tests
         private void SetupMocks(Mock<IPreferencesService> preferencesService)
         {
             DISetup.SetupContainer();
-            CurrentLocale.SetCurrent("en");            
+            CurrentLocale.SetCurrent("en");
             preferencesService.Setup(p => p.Get()).Returns(() =>
             {
                 return new Preferences()
-                {                    
+                {
                     AutoUpdates = true,
                     CheckForPrerelease = false
                 };
@@ -59,9 +61,10 @@ namespace IronyModManager.Services.Tests
         /// <summary>
         /// Shoulds the contain selected language.
         /// </summary>
-        [Fact] 
+        [Fact]
         public void Should_return_updater_settings()
         {
+            var unpacker = new Mock<IUnpacker>();
             var mapper = new Mock<IMapper>();
             var preferencesService = new Mock<IPreferencesService>();
             mapper.Setup(s => s.Map<IUpdateSettings>(It.IsAny<IPreferences>())).Returns((IPreferences o) =>
@@ -74,7 +77,7 @@ namespace IronyModManager.Services.Tests
             });
             SetupMocks(preferencesService);
 
-            var service = new UpdaterService(preferencesService.Object, new Mock<IStorageProvider>().Object, mapper.Object);
+            var service = new UpdaterService(unpacker.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, mapper.Object);
             var result = service.Get();
             result.CheckForPrerelease.Should().BeFalse();
             result.AutoUpdates.Should().BeTrue();
@@ -88,16 +91,33 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_save_updater_settings()
         {
+            var unpacker = new Mock<IUnpacker>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMocks(preferencesService);
 
-            var languageService = new UpdaterService(preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
-            var result = languageService.Save(new UpdateSettings()
+            var service = new UpdaterService(unpacker.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
+            var result = service.Save(new UpdateSettings()
             {
-               CheckForPrerelease = true,
-               AutoUpdates = false
+                CheckForPrerelease = true,
+                AutoUpdates = false
             });
             result.Should().Be(true);
-        }        
+        }
+
+        /// <summary>
+        /// Defines the test method Should_unpack_update.
+        /// </summary>
+        [Fact]
+        public async Task Should_unpack_update()
+        {
+            var unpacker = new Mock<IUnpacker>();
+            unpacker.Setup(p => p.UnpackUpdateAsync(It.IsAny<string>())).Returns(Task.FromResult("test"));
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMocks(preferencesService);
+
+            var service = new UpdaterService(unpacker.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
+            var result = await service.UnpackUpdateAsync("path");
+            result.Should().Be("test");
+        }
     }
 }
