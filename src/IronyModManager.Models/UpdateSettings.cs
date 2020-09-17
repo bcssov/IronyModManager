@@ -1,34 +1,30 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
-// Created          : 01-11-2020
+// Created          : 09-17-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 09-17-2020
 // ***********************************************************************
-// <copyright file="Preferences.cs" company="Mario">
+// <copyright file="UpdateSettings.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-
 using System.Collections.Generic;
 using System;
 using IronyModManager.Models.Common;
 
-/// <summary>
-/// The Models namespace.
-/// </summary>
 namespace IronyModManager.Models
 {
     /// <summary>
-    /// Class Preferences.
+    /// Class UpdateSettings.
     /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
-    /// Implements the <see cref="IronyModManager.Models.Common.IPreferences" />
+    /// Implements the <see cref="IronyModManager.Models.Common.IUpdateSettings" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
-    /// <seealso cref="IronyModManager.Models.Common.IPreferences" />
-    public class Preferences : BaseModel, IPreferences
+    /// <seealso cref="IronyModManager.Models.Common.IUpdateSettings" />
+    public class UpdateSettings : BaseModel, IUpdateSettings
     {
         #region Properties
 
@@ -43,24 +39,6 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         public virtual bool CheckForPrerelease { get; set; }
-
-        /// <summary>
-        /// Gets or sets the game.
-        /// </summary>
-        /// <value>The game.</value>
-        public virtual string Game { get; set; }
-
-        /// <summary>
-        /// Gets or sets the locale.
-        /// </summary>
-        /// <value>The locale.</value>
-        public virtual string Locale { get; set; }
-
-        /// <summary>
-        /// Gets or sets the theme.
-        /// </summary>
-        /// <value>The theme.</value>
-        public virtual string Theme { get; set; }
 
         #endregion Properties
     }

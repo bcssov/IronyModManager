@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="IronyAppCast.cs" company="Mario">
 //     Mario
@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using IronyModManager.DI;
+using IronyModManager.Services.Common;
 using NetSparkleUpdater;
 using NetSparkleUpdater.AppCastHandlers;
 using NetSparkleUpdater.Configurations;
@@ -33,6 +35,11 @@ namespace IronyModManager.Implementation.Updater
         #region Fields
 
         /// <summary>
+        /// The prerelease version tags
+        /// </summary>
+        private static readonly string[] prereleaseVersionTags = new string[] { "alpha", "beta", "preview", "rc" };
+
+        /// <summary>
         /// The configuration
         /// </summary>
         private Configuration config;
@@ -41,6 +48,11 @@ namespace IronyModManager.Implementation.Updater
         /// The signature verifier
         /// </summary>
         private ISignatureVerifier signatureVerifier;
+
+        /// <summary>
+        /// The updater service
+        /// </summary>
+        private IUpdaterService updaterService;
 
         #endregion Fields
 
@@ -52,14 +64,26 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>List&lt;AppCastItem&gt;.</returns>
         public override List<AppCastItem> GetAvailableUpdates()
         {
+            if (updaterService == null)
+            {
+                updaterService = DIResolver.Get<IUpdaterService>();
+            }
             Version installed = new Version(config.InstalledVersion);
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
             var isInstallerVersion = IsInstallerVersion();
+            var allowAlphaVersions = updaterService.Get().CheckForPrerelease;
 
             return Items.Where((item) =>
             {
+                // Filter out prerelease tags if specified as such
+                if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Version.Contains(p, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return false;
+                }
+                // Filter out by os
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
+                    // Filter out if using portable or installer version
                     var fileName = item.DownloadLink.Split("/", StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
                     if (!item.IsWindowsUpdate)
                     {
@@ -82,6 +106,7 @@ namespace IronyModManager.Implementation.Updater
                 {
                     return false;
                 }
+                // Base validation stuff
                 if (new Version(item.Version).CompareTo(installed) <= 0)
                 {
                     return false;
@@ -104,7 +129,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="logWriter">The log writer.</param>
         public new void SetupAppCastHandler(IAppCastDataDownloader dataDownloader, string castUrl, Configuration config, ISignatureVerifier signatureVerifier, ILogger logWriter = null)
         {
-            // Why on earth would any of these fiels be marked as protected or maybe even declared as properties with a private setter?
+            // Why on earth would any of these files be marked as protected or maybe even declared as properties with a private setter?
             this.config = config;
             this.signatureVerifier = signatureVerifier;
             base.SetupAppCastHandler(dataDownloader, castUrl, config, signatureVerifier, logWriter);

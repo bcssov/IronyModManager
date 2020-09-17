@@ -4,15 +4,12 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
 // </copyright>
-// <summary>
-// NetSparkle sounds like a good idea but some implementations behind it are bad (most generous description).
-// Such as having a tool as a nuget but not a dotnet tool and little to no documentation on how it was envisioned to be used...
-// </summary>
+// <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
@@ -172,7 +169,7 @@ namespace Irony.AppCastGenerator
 
                     var productVersion = versionInfo;
                     var itemTitle = string.IsNullOrWhiteSpace(productName) ? productVersion : productName + " " + productVersion;
-                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"{versionInfo}/" : "")}{HttpUtility.UrlEncode(fileInfo.Name)}";
+                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"v{versionInfo}/" : "")}{HttpUtility.UrlEncode(fileInfo.Name)}";
 
                     string os = string.Empty;
                     if (binary.Contains("win", StringComparison.OrdinalIgnoreCase))
