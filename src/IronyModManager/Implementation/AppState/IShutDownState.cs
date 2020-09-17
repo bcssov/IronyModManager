@@ -4,7 +4,7 @@
 // Created          : 06-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="IShutDownState.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.Implementation.AppState
         /// Waits the until free.
         /// </summary>
         /// <returns>Task.</returns>
-        Task WaitUntilFree();
+        Task WaitUntilFreeAsync();
 
         #endregion Methods
     }

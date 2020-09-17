@@ -204,7 +204,7 @@ namespace IronyModManager.Implementation.Updater
                 return false;
             }
             busy = true;
-            await shutDownState.WaitUntilFree();
+            await shutDownState.WaitUntilFreeAsync();
             updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
             busy = false;
             return true;

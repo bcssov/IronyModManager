@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -485,7 +485,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
                 {
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFree();
+                    await shutDownState.WaitUntilFreeAsync();
                     modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
                     if (mode == PatchStateMode.None)
