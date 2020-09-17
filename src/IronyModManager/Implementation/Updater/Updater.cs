@@ -199,8 +199,14 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> InstallUpdateAsync()
         {
+            if (busy)
+            {
+                return false;
+            }
+            busy = true;
             await shutDownState.WaitUntilFree();
             updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
+            busy = false;
             return true;
         }
 
