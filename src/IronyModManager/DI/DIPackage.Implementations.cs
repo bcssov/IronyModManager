@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
@@ -54,6 +55,7 @@ namespace IronyModManager.DI
             container.Register<OverlayProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModFileMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ActiveGameRequestHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IUpdater, Updater>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using IronyModManager.DI;
 using IronyModManager.Services.Common;
 using NetSparkleUpdater;
 using NetSparkleUpdater.AppCastHandlers;
@@ -39,6 +38,11 @@ namespace IronyModManager.Implementation.Updater
         private static readonly string[] prereleaseVersionTags = new string[] { "alpha", "beta", "preview", "rc" };
 
         /// <summary>
+        /// The updater service
+        /// </summary>
+        private readonly IUpdaterService updaterService;
+
+        /// <summary>
         /// The configuration
         /// </summary>
         private Configuration config;
@@ -48,11 +52,6 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         private ISignatureVerifier signatureVerifier;
 
-        /// <summary>
-        /// The updater service
-        /// </summary>
-        private IUpdaterService updaterService;
-
         #endregion Fields
 
         #region Constructors
@@ -61,9 +60,11 @@ namespace IronyModManager.Implementation.Updater
         /// Initializes a new instance of the <see cref="IronyAppCast" /> class.
         /// </summary>
         /// <param name="isInstallerVersion">if set to <c>true</c> [is installer version].</param>
-        public IronyAppCast(bool isInstallerVersion) : base()
+        /// <param name="updaterService">The updater service.</param>
+        public IronyAppCast(bool isInstallerVersion, IUpdaterService updaterService) : base()
         {
             IsInstallerVersion = isInstallerVersion;
+            this.updaterService = updaterService;
         }
 
         #endregion Constructors
@@ -86,10 +87,6 @@ namespace IronyModManager.Implementation.Updater
         /// <returns>List&lt;AppCastItem&gt;.</returns>
         public override List<AppCastItem> GetAvailableUpdates()
         {
-            if (updaterService == null)
-            {
-                updaterService = DIResolver.Get<IUpdaterService>();
-            }
             Version installed = new Version(config.InstalledVersion);
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
             var allowAlphaVersions = updaterService.Get().CheckForPrerelease;

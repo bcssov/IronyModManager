@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Updater;
 using IronyModManager.Shared;
 using Newtonsoft.Json;
 
@@ -47,12 +48,12 @@ namespace IronyModManager
             if (Directory.Exists(path))
             {
                 bool cleanup = true;
-                var settingsFileName = Path.Combine(path, "update-settings.json");
+                var settingsFileName = Path.Combine(path, Constants.UpdateSettings);
                 if (File.Exists(settingsFileName))
                 {
                     var text = await File.ReadAllTextAsync(settingsFileName);
                     var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
-                    cleanup = settings.Updated;
+                    cleanup = settings.Updated || settings.IsInstaller;
                 }
                 if (cleanup)
                 {
@@ -71,31 +72,5 @@ namespace IronyModManager
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class UpdateSettings.
-        /// </summary>
-        private class UpdateSettings
-        {
-            #region Properties
-
-            /// <summary>
-            /// Gets or sets the path.
-            /// </summary>
-            /// <value>The path.</value>
-            public string Path { get; set; }
-
-            /// <summary>
-            /// Gets or sets a value indicating whether this <see cref="UpdateSettings" /> is updated.
-            /// </summary>
-            /// <value><c>true</c> if updated; otherwise, <c>false</c>.</value>
-            public bool Updated { get; set; }
-
-            #endregion Properties
-        }
-
-        #endregion Classes
     }
 }

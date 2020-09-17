@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -208,6 +208,12 @@ namespace IronyModManager.Updater
         private class UpdateSettings
         {
             #region Properties
+
+            /// <summary>
+            /// Gets or sets a value indicating whether this instance is installer.
+            /// </summary>
+            /// <value><c>true</c> if this instance is installer; otherwise, <c>false</c>.</value>
+            public bool IsInstaller { get; set; }
 
             /// <summary>
             /// Gets or sets the path.

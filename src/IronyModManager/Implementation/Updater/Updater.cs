@@ -18,16 +18,20 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.AppState;
+using IronyModManager.Services.Common;
 using NetSparkleUpdater;
 using NetSparkleUpdater.AssemblyAccessors;
-using NetSparkleUpdater.SignatureVerifiers;
 
 namespace IronyModManager.Implementation.Updater
 {
     /// <summary>
     /// Class Updater.
+    /// Implements the <see cref="IronyModManager.Implementation.Updater.IUpdater" />
     /// </summary>
-    public class Updater
+    /// <seealso cref="IronyModManager.Implementation.Updater.IUpdater" />
+    public class Updater : IUpdater
     {
         #region Fields
 
@@ -40,6 +44,11 @@ namespace IronyModManager.Implementation.Updater
         /// The progress
         /// </summary>
         private readonly Subject<int> progress;
+
+        /// <summary>
+        /// The shut down state
+        /// </summary>
+        private readonly IShutDownState shutDownState;
 
         /// <summary>
         /// The update check threshold
@@ -73,14 +82,19 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// Initializes a new instance of the <see cref="Updater" /> class.
         /// </summary>
-        public Updater()
+        /// <param name="updaterService">The updater service.</param>
+        /// <param name="appAction">The application action.</param>
+        /// <param name="shutDownState">State of the shut down.</param>
+        public Updater(IUpdaterService updaterService, IAppAction appAction, IShutDownState shutDownState)
         {
+            this.shutDownState = shutDownState;
+            var isInstallerVersion = IsInstallerVersion();
             progress = new Subject<int>();
             error = new Subject<Exception>();
-            updater = new SparkleUpdater(Constants.AppCastAddress, new Ed25519Checker(NetSparkleUpdater.Enums.SecurityMode.Strict, Constants.PublicUpdateKey))
+            updater = new IronySparkleUpdater(isInstallerVersion, updaterService, appAction)
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
-                AppCastHandler = new IronyAppCast(IsInstallerVersion()),
+                AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
                 Configuration = new UpdaterConfiguration(new AssemblyReflectionAccessor(string.Empty)),
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
@@ -177,6 +191,17 @@ namespace IronyModManager.Implementation.Updater
                 return updateInfo.Updates.FirstOrDefault().Description;
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Installs the update asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> InstallUpdateAsync()
+        {
+            await shutDownState.WaitUntilFree();
+            updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
+            return true;
         }
 
         /// <summary>

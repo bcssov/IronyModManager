@@ -60,6 +60,11 @@ namespace IronyModManager
         public const string UnhandledErrorTitle = "Error";
 
         /// <summary>
+        /// The update settings
+        /// </summary>
+        public const string UpdateSettings = "update-settings.json";
+
+        /// <summary>
         /// The wiki URL
         /// </summary>
         public const string WikiUrl = "https://github.com/bcssov/IronyModManager/wiki";
