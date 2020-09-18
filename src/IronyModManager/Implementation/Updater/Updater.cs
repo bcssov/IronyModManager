@@ -95,7 +95,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
-                Configuration = new UpdaterConfiguration(new AssemblyReflectionAccessor(string.Empty)),
+                Configuration = new UpdaterConfiguration(new AssemblyReflectionAccessor(null)),
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
             updater.DownloadStarted += (sender, path) =>

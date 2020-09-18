@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Common;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
@@ -43,7 +44,7 @@ namespace IronyModManager.DI
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
-            container.Register<IAppAction, AppAction>();
+            container.RegisterWithoutMixedLifetimeWarning<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
             container.Register<WritingStateOperationHandler>(SimpleInjector.Lifestyle.Singleton);
