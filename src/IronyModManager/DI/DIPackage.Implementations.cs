@@ -22,6 +22,7 @@ using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
 
@@ -44,7 +45,7 @@ namespace IronyModManager.DI
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
-            container.RegisterWithoutMixedLifetimeWarning<IAppAction, AppAction>();
+            container.Register<IAppAction, AppAction>();
             container.Register<INotificationAction, NotificationAction>();
             container.Register<IFileDialogAction, FileDialogAction>();
             container.Register<WritingStateOperationHandler>(SimpleInjector.Lifestyle.Singleton);
@@ -57,6 +58,8 @@ namespace IronyModManager.DI
             container.Register<ModFileMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ActiveGameRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IUpdater, Updater>(SimpleInjector.Lifestyle.Singleton);
+            container.RemoveMixedLifetimeWarning<IAppAction>();
+            container.RemoveMixedLifetimeWarning<IUpdaterService>();
         }
 
         #endregion Methods

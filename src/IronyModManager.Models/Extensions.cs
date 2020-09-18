@@ -4,7 +4,7 @@
 // Created          : 05-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -48,8 +48,7 @@ namespace IronyModManager.Models
         {
             container.Register<T, T2>();
             container.InterceptWith<PropertyChangedInterceptor<T>>(x => x == typeof(T), true);
-            var registration = container.GetRegistration(typeof(T)).Registration;
-            registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.DisposableTransientComponent, "Transient disposable is okay at times.");
+            container.RemoveTransientWarning<T>();
         }
 
         #endregion Methods

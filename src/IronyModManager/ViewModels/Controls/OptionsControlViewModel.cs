@@ -412,11 +412,12 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             updater.Error.Subscribe(s =>
-            {
+            {                
                 var title = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorTitle);
                 var message = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorMessage);
                 logger.Error(s);
                 notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                TriggerOverlay(false);
             }).DisposeWith(disposables);
 
             updater.Progress.Subscribe(s =>

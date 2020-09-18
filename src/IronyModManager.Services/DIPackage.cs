@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.DI.Extensions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using SimpleInjector;
@@ -47,8 +46,7 @@ namespace IronyModManager.Services
             container.Register<IModCollectionService, ModCollectionService>();
             container.Register<IModPatchCollectionService, ModPatchCollectionService>();
             container.Register<IModMergeService, ModMergeService>();
-            // I don't like smart ass automated verification logic
-            container.RegisterWithoutMixedLifetimeWarning<IUpdaterService, UpdaterService>();
+            container.Register<IUpdaterService, UpdaterService>();
         }
 
         #endregion Methods
