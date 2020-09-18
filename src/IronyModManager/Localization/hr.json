@@ -266,6 +266,18 @@
         "GameExecutable": "Izvršna datoteka",
         "GameArgs": "Argumenti",
         "RefreshMods": "Osvježite deskriptore prije startanja igre",
+        "GameOptions": "Opcije igre",
+        "UpdateOptions": "Mogućnosti ažuriranja",
+        "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
+        "CheckPrerelease": "Uključi alpha\beta\rc azužiranja",
+        "CheckForUpdates": "Provjeri ima li ažuriranja",
+        "Install": "Instaliraj ažuriranja",
+        "Changelog": "Popis promjena",
+        "UpdateDownloading": "Preuzimanje ažuriranja...",
+        "UpdateDownloadProgress": "{Progress}%",
+        "UpdateInstalling": "Raspakiravanje ažuriranja i priprema za pokretanje instalacijskog programa...",
+        "DownloadErrorTitle": "Pogreška pri ažuriranju",
+        "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka.",
         "Dialog": {
             "Title": "Nađi izvršnu datoteku igre"
         }
@@ -330,6 +342,10 @@
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",
             "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Nema ažuriranja",
+            "Message": "Čini se da nema dostupnih ažuriranja."
         }
     },
     "Mod_App_Actions": {

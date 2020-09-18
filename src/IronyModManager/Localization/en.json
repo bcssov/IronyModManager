@@ -266,6 +266,18 @@
         "GameExecutable": "Game Executable",
         "GameArgs": "Game Args",
         "RefreshMods": "Refresh Descriptors Before Playing",
+        "GameOptions": "Game Options",
+        "UpdateOptions": "Update Options",
+        "AutoUpdates": "Check For Updates at Startup",
+        "CheckPrerelease": "Update To Prerelease Versions",
+        "CheckForUpdates": "Check For Updates",
+        "Install": "Install Updates",
+        "Changelog": "Changelog",
+        "UpdateDownloading": "Downloading Updates...",
+        "UpdateDownloadProgress": "{Progress}%",
+        "UpdateInstalling": "Unpacking updates and preparing to run installer...",
+        "DownloadErrorTitle": "Update Error",
+        "DownloadErrorMessage": "Error occurred while downloading updates, please see error log for more details.",
         "Dialog": {
             "Title": "Find game executable"
         }
@@ -330,6 +342,10 @@
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",
             "Message": "One or several mods have been updated. Conflict Solver might need updating."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "No Updates",
+            "Message": "There seem to be no updates available."
         }
     },
     "Mod_App_Actions": {

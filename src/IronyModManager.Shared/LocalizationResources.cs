@@ -353,6 +353,18 @@ namespace IronyModManager.Shared
             public const string GameExecutable = Prefix + "GameExecutable";
             public const string GameArgs = Prefix + "GameArgs";
             public const string RefreshMods = Prefix + "RefreshMods";
+            public const string GameOptions = Prefix + "GameOptions";
+            public const string UpdateOptions = Prefix + "UpdateOptions";
+            public const string AutoUpdates = Prefix + "AutoUpdates";
+            public const string CheckPrerelease = Prefix + "CheckPrerelease";
+            public const string CheckForUpdates = Prefix + "CheckForUpdates";
+            public const string Install = Prefix + "Install";
+            public const string Changelog = Prefix + "Changelog";
+            public const string UpdateDownloading = Prefix + "UpdateDownloading";
+            public const string UpdateDownloadProgress = Prefix + "UpdateDownloadProgress";
+            public const string UpdateInstalling = Prefix + "UpdateInstalling";
+            public const string DownloadErrorTitle = Prefix + "DownloadErrorTitle";
+            public const string DownloadErrorMessage = Prefix + "DownloadErrorMessage";
             public static class Dialog
             {
                 public const string Prefix = "Options.Dialog.";
@@ -449,6 +461,12 @@ namespace IronyModManager.Shared
             public static class ConflictSolverUpdate
             {
                 public const string Prefix = "Notifications.ConflictSolverUpdate.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class NoUpdatesAvailable
+            {
+                public const string Prefix = "Notifications.NoUpdatesAvailable.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,11 +18,14 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Updater;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -47,14 +50,54 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The updater
+        /// </summary>
+        private readonly IUpdater updater;
+
+        /// <summary>
+        /// The updater service
+        /// </summary>
+        private readonly IUpdaterService updaterService;
+
+        /// <summary>
         /// The arguments changed
         /// </summary>
         private IDisposable argsChanged;
 
         /// <summary>
-        /// The is reloading
+        /// The automatic update changed
         /// </summary>
-        private bool isReloading = false;
+        private IDisposable autoUpdateChanged;
+
+        /// <summary>
+        /// The check for prerelease changed
+        /// </summary>
+        private IDisposable checkForPrereleaseChanged;
+
+        /// <summary>
+        /// The is game reloading
+        /// </summary>
+        private bool isGameReloading = false;
+
+        /// <summary>
+        /// The is update reloading
+        /// </summary>
+        private bool isUpdateReloading = false;
 
         /// <summary>
         /// The refresh descriptors changed
@@ -68,17 +111,74 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="updater">The updater.</param>
+        /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IGameService gameService, IFileDialogAction fileDialogAction)
+        public OptionsControlViewModel(ILogger logger, INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
+            IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
             this.gameService = gameService;
             this.fileDialogAction = fileDialogAction;
+            this.updaterService = updaterService;
+            this.updater = updater;
+            this.localizationManager = localizationManager;
+            this.notificationAction = notificationAction;
+            this.logger = logger;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the automatic update.
+        /// </summary>
+        /// <value>The automatic update.</value>
+        [StaticLocalization(LocalizationResources.Options.AutoUpdates)]
+        public virtual string AutoUpdate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the content of the changelog.
+        /// </summary>
+        /// <value>The content of the changelog.</value>
+        public virtual string ChangelogContent { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the changelog title.
+        /// </summary>
+        /// <value>The changelog title.</value>
+        [StaticLocalization(LocalizationResources.Options.Changelog)]
+        public virtual string ChangelogTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for prerelease.
+        /// </summary>
+        /// <value>The check for prerelease.</value>
+        [StaticLocalization(LocalizationResources.Options.CheckPrerelease)]
+        public virtual string CheckForPrerelease { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for updates.
+        /// </summary>
+        /// <value>The check for updates.</value>
+        [StaticLocalization(LocalizationResources.Options.CheckForUpdates)]
+        public virtual string CheckForUpdates { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for updates command.
+        /// </summary>
+        /// <value>The check for updates command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [checking for updates].
+        /// </summary>
+        /// <value><c>true</c> if [checking for updates]; otherwise, <c>false</c>.</value>
+        public virtual bool CheckingForUpdates { get; protected set; }
 
         /// <summary>
         /// Gets or sets the close.
@@ -112,6 +212,26 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The game executable.</value>
         [StaticLocalization(LocalizationResources.Options.GameExecutable)]
         public virtual string GameExecutable { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the game options.
+        /// </summary>
+        /// <value>The game options.</value>
+        [StaticLocalization(LocalizationResources.Options.GameOptions)]
+        public virtual string GameOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the install updates.
+        /// </summary>
+        /// <value>The install updates.</value>
+        [StaticLocalization(LocalizationResources.Options.Install)]
+        public virtual string InstallUpdates { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the install updates command.
+        /// </summary>
+        /// <value>The install updates command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InstallUpdatesCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -178,6 +298,25 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The reset command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetExeCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [update information visible].
+        /// </summary>
+        /// <value><c>true</c> if [update information visible]; otherwise, <c>false</c>.</value>
+        public virtual bool UpdateInfoVisible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the update options.
+        /// </summary>
+        /// <value>The update options.</value>
+        [StaticLocalization(LocalizationResources.Options.UpdateOptions)]
+        public virtual string UpdateOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the update settings.
+        /// </summary>
+        /// <value>The update settings.</value>
+        public virtual IUpdateSettings UpdateSettings { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -197,6 +336,9 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             SetGame(gameService.GetSelected());
+            SetUpdateSettings(updaterService.Get());
+
+            var updateCheckAllowed = this.WhenAnyValue(p => p.CheckingForUpdates, v => !v);
 
             OptionsCommand = ReactiveCommand.Create(() =>
             {
@@ -220,7 +362,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
                     }
-                    Save();
+                    SaveGame();
                 }
             }).DisposeWith(disposables);
 
@@ -231,12 +373,60 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
                 }
-                Save();
+                SaveGame();
             }).DisposeWith(disposables);
 
             ResetArgsCommand = ReactiveCommand.Create(() =>
             {
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+            }).DisposeWith(disposables);
+
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                CheckingForUpdates = true;
+                UpdateInfoVisible = false;
+                var updatesAvailable = await updater.CheckForUpdatesAsync();
+                if (updatesAvailable)
+                {
+                    ChangelogContent = updater.GetChangeLog();
+                    UpdateInfoVisible = true;
+                }
+                else
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
+                }
+                CheckingForUpdates = false;
+            }, updateCheckAllowed).DisposeWith(disposables);
+
+            var downloadingUpdates = false;
+            InstallUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                downloadingUpdates = true;
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.UpdateDownloading));
+                await updater.DownloadUpdateAsync();
+                downloadingUpdates = false;
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.UpdateInstalling));
+                await updater.InstallUpdateAsync();
+            }).DisposeWith(disposables);
+
+            updater.Error.Subscribe(s =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorTitle);
+                var message = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorMessage);
+                logger.Error(s);
+                notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+            }).DisposeWith(disposables);
+
+            updater.Progress.Subscribe(s =>
+            {
+                if (downloadingUpdates)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Options.UpdateDownloading);
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.UpdateInstalling), new { Progress = s });
+                    TriggerOverlay(true, message, progress);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -255,7 +445,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves this instance.
         /// </summary>
-        protected virtual void Save()
+        protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
             game.ExecutableLocation = Game.ExecutableLocation;
@@ -266,24 +456,57 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Saves the update settings.
+        /// </summary>
+        protected virtual void SaveUpdateSettings()
+        {
+            var settings = updaterService.Get();
+            settings.AutoUpdates = UpdateSettings.AutoUpdates;
+            settings.CheckForPrerelease = UpdateSettings.CheckForPrerelease;
+            updaterService.Save(settings);
+            SetUpdateSettings(settings);
+        }
+
+        /// <summary>
         /// Sets the game.
         /// </summary>
         /// <param name="game">The game.</param>
         protected virtual void SetGame(IGame game)
         {
-            isReloading = true;
+            isGameReloading = true;
             argsChanged?.Dispose();
             refreshDescriptorsChanged?.Dispose();
             Game = game;
-            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isReloading).Subscribe(s =>
+            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
             {
-                Save();
+                SaveGame();
             }).DisposeWith(Disposables);
-            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isReloading).Subscribe(s =>
+            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isGameReloading).Subscribe(s =>
             {
-                Save();
+                SaveGame();
             }).DisposeWith(Disposables);
-            isReloading = false;
+            isGameReloading = false;
+        }
+
+        /// <summary>
+        /// Sets the update settings.
+        /// </summary>
+        /// <param name="updateSettings">The update settings.</param>
+        protected virtual void SetUpdateSettings(IUpdateSettings updateSettings)
+        {
+            isUpdateReloading = true;
+            autoUpdateChanged?.Dispose();
+            checkForPrereleaseChanged?.Dispose();
+            UpdateSettings = updateSettings;
+            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            isUpdateReloading = false;
         }
 
         #endregion Methods

@@ -266,6 +266,18 @@
         "GameExecutable": "Spiel ausführbar",
         "GameArgs": "Spiel Args",
         "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+        "GameOptions": "Spieleinstellungen",
+        "UpdateOptions": "Aktualisierungsoptionen",
+        "AutoUpdates": "Beim Start nach Updates suchen",
+        "CheckPrerelease": "Update auf Vorabversionen",
+        "CheckForUpdates": "Auf Updates prüfen",
+        "Install": "Installiere Updates",
+        "Changelog": "Änderungsprotokoll",
+        "UpdateDownloading": "Updates herunterladen...",
+        "UpdateDownloadProgress": "{Progress}%",
+        "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten...",
+        "DownloadErrorTitle": "Aktualisierungsfehler",
+        "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll.",
         "Dialog": {
             "Title": "Finde eine ausführbare Spieldatei"
         }
@@ -330,6 +342,10 @@
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",
             "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Keine Aktualisierungen",
+            "Message": "Es scheinen keine Updates verfügbar zu sein."
         }
     },
     "Mod_App_Actions": {
