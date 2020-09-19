@@ -261,23 +261,31 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Spiel ausführbar",
-        "GameArgs": "Spiel Args",
-        "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
-        "GameOptions": "Spieleinstellungen",
-        "UpdateOptions": "Aktualisierungsoptionen",
-        "AutoUpdates": "Beim Start nach Updates suchen",
-        "CheckPrerelease": "Update auf Vorabversionen",
-        "CheckForUpdates": "Auf Updates prüfen",
-        "Install": "Installiere Updates",
-        "Changelog": "Änderungsprotokoll",
-        "UpdateDownloading": "Updates herunterladen...",
-        "UpdateDownloadProgress": "{Progress}%",
-        "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten...",
-        "DownloadErrorTitle": "Aktualisierungsfehler",
-        "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll.",
+        "Game": {
+            "Title": "Spieleinstellungen",
+            "NavigateToExe": "...",
+            "Reset": "X",
+            "GameExecutable": "Spiel ausführbar",
+            "GameArgs": "Spiel Args",
+            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen"
+        },
+        "Updates": {
+            "Title": "Aktualisierungsoptionen",
+            "AutoUpdates": "Beim Start nach Updates suchen",
+            "CheckPrerelease": "Update auf Vorabversionen",
+            "CheckForUpdates": "Auf Updates prüfen",
+            "Install": "Installiere Updates",
+            "Changelog": "Änderungsprotokoll",
+            "Overlay": {
+                "UpdateDownloading": "Updates herunterladen...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Aktualisierungsfehler",
+                "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll."
+            }
+        },
         "Dialog": {
             "Title": "Finde eine ausführbare Spieldatei"
         }

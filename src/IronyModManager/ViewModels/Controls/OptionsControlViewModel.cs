@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -138,7 +138,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the automatic update.
         /// </summary>
         /// <value>The automatic update.</value>
-        [StaticLocalization(LocalizationResources.Options.AutoUpdates)]
+        [StaticLocalization(LocalizationResources.Options.Updates.AutoUpdates)]
         public virtual string AutoUpdate { get; protected set; }
 
         /// <summary>
@@ -151,21 +151,21 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the changelog title.
         /// </summary>
         /// <value>The changelog title.</value>
-        [StaticLocalization(LocalizationResources.Options.Changelog)]
+        [StaticLocalization(LocalizationResources.Options.Updates.Changelog)]
         public virtual string ChangelogTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the check for prerelease.
         /// </summary>
         /// <value>The check for prerelease.</value>
-        [StaticLocalization(LocalizationResources.Options.CheckPrerelease)]
+        [StaticLocalization(LocalizationResources.Options.Updates.CheckPrerelease)]
         public virtual string CheckForPrerelease { get; protected set; }
 
         /// <summary>
         /// Gets or sets the check for updates.
         /// </summary>
         /// <value>The check for updates.</value>
-        [StaticLocalization(LocalizationResources.Options.CheckForUpdates)]
+        [StaticLocalization(LocalizationResources.Options.Updates.CheckForUpdates)]
         public virtual string CheckForUpdates { get; protected set; }
 
         /// <summary>
@@ -203,28 +203,28 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the game arguments.
         /// </summary>
         /// <value>The game arguments.</value>
-        [StaticLocalization(LocalizationResources.Options.GameArgs)]
+        [StaticLocalization(LocalizationResources.Options.Game.GameArgs)]
         public virtual string GameArgs { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game executable.
         /// </summary>
         /// <value>The game executable.</value>
-        [StaticLocalization(LocalizationResources.Options.GameExecutable)]
+        [StaticLocalization(LocalizationResources.Options.Game.GameExecutable)]
         public virtual string GameExecutable { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game options.
         /// </summary>
         /// <value>The game options.</value>
-        [StaticLocalization(LocalizationResources.Options.GameOptions)]
+        [StaticLocalization(LocalizationResources.Options.Game.Title)]
         public virtual string GameOptions { get; protected set; }
 
         /// <summary>
         /// Gets or sets the install updates.
         /// </summary>
         /// <value>The install updates.</value>
-        [StaticLocalization(LocalizationResources.Options.Install)]
+        [StaticLocalization(LocalizationResources.Options.Updates.Install)]
         public virtual string InstallUpdates { get; protected set; }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the navigate.
         /// </summary>
         /// <value>The navigate.</value>
-        [StaticLocalization(LocalizationResources.Options.NavigateToExe)]
+        [StaticLocalization(LocalizationResources.Options.Game.NavigateToExe)]
         public virtual string Navigate { get; protected set; }
 
         /// <summary>
@@ -276,14 +276,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the refresh descriptors.
         /// </summary>
         /// <value>The refresh descriptors.</value>
-        [StaticLocalization(LocalizationResources.Options.RefreshMods)]
+        [StaticLocalization(LocalizationResources.Options.Game.RefreshMods)]
         public virtual string RefreshDescriptors { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
-        [StaticLocalization(LocalizationResources.Options.Reset)]
+        [StaticLocalization(LocalizationResources.Options.Game.Reset)]
         public virtual string Reset { get; protected set; }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the update options.
         /// </summary>
         /// <value>The update options.</value>
-        [StaticLocalization(LocalizationResources.Options.UpdateOptions)]
+        [StaticLocalization(LocalizationResources.Options.Updates.Title)]
         public virtual string UpdateOptions { get; protected set; }
 
         /// <summary>
@@ -404,17 +404,17 @@ namespace IronyModManager.ViewModels.Controls
             InstallUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 downloadingUpdates = true;
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.UpdateDownloading));
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading));
                 await updater.DownloadUpdateAsync();
                 downloadingUpdates = false;
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.UpdateInstalling));
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
                 await updater.InstallUpdateAsync();
             }).DisposeWith(disposables);
 
             updater.Error.Subscribe(s =>
-            {                
-                var title = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorTitle);
-                var message = localizationManager.GetResource(LocalizationResources.Options.DownloadErrorMessage);
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorTitle);
+                var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorMessage);
                 logger.Error(s);
                 notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 TriggerOverlay(false);
@@ -424,8 +424,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (downloadingUpdates)
                 {
-                    var message = localizationManager.GetResource(LocalizationResources.Options.UpdateDownloading);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.UpdateInstalling), new { Progress = s });
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling), new { Progress = s });
                     TriggerOverlay(true, message, progress);
                 }
             }).DisposeWith(disposables);
