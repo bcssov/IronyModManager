@@ -58,7 +58,7 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// The updater
         /// </summary>
-        private readonly SparkleUpdater updater;
+        private readonly IronySparkleUpdater updater;
 
         /// <summary>
         /// The busy
