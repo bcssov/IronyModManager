@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -22,7 +22,6 @@ using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
-using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
 
@@ -59,7 +58,6 @@ namespace IronyModManager.DI
             container.Register<ActiveGameRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IUpdater, Updater>(SimpleInjector.Lifestyle.Singleton);
             container.RemoveMixedLifetimeWarning<IAppAction>();
-            container.RemoveMixedLifetimeWarning<IUpdaterService>();
         }
 
         #endregion Methods
