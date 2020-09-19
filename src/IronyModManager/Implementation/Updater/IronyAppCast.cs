@@ -108,7 +108,7 @@ namespace IronyModManager.Implementation.Updater
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
             var allowAlphaVersions = updaterService.Get().CheckForPrerelease;
 
-            return appCast.Items.Where((item) =>
+            var results = appCast.Items.Where((item) =>
             {
                 // Filter out prerelease tags if specified as such
                 if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Version.Contains(p, StringComparison.OrdinalIgnoreCase)))
@@ -152,6 +152,7 @@ namespace IronyModManager.Implementation.Updater
                 }
                 return true;
             }).ToList();
+            return results;
         }
 
         /// <summary>
@@ -164,7 +165,6 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="logWriter">The log writer.</param>
         public void SetupAppCastHandler(IAppCastDataDownloader dataDownloader, string castUrl, Configuration config, ISignatureVerifier signatureVerifier, ILogger logWriter = null)
         {
-            // Why on earth would any of these files be marked as protected or maybe even declared as properties with a private setter?
             this.config = config;
             this.signatureVerifier = signatureVerifier;
             appCast.SetupAppCastHandler(dataDownloader, castUrl, config, signatureVerifier, logWriter);

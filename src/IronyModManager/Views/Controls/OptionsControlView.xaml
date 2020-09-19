@@ -37,10 +37,10 @@
               <CheckBox Content="{Binding CheckForPrerelease}" IsChecked="{Binding UpdateSettings.CheckForPrerelease}" Grid.Row="1"></CheckBox>
               <Button Margin="0,5" Content="{Binding CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}" Grid.Row="2"></Button>
               <Grid Grid.Row="3" RowDefinitions="1*,1*,1*" IsVisible="{Binding UpdateInfoVisible}">
-                <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="0">
-                  <TextBlock Text="{Binding VersionTitle}"></TextBlock>
-                  <TextBox Text="{Binding VersionContent}" IsReadOnly="True"></TextBox>
-                </StackPanel>
+                <Grid Grid.Row="0" ColumnDefinitions="1*,4*">
+                  <TextBlock Text="{Binding VersionTitle}" VerticalAlignment="Center" Grid.Column="0"></TextBlock>
+                  <TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></TextBox>
+                </Grid>                
                 <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="1">
                   <TextBlock Text="{Binding ChangelogTitle}"></TextBlock>
                   <TextBox Text="{Binding ChangelogContent}" IsReadOnly="True"

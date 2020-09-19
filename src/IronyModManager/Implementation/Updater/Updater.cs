@@ -22,7 +22,6 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Services.Common;
 using NetSparkleUpdater;
-using NetSparkleUpdater.AssemblyAccessors;
 
 namespace IronyModManager.Implementation.Updater
 {
@@ -95,7 +94,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
-                Configuration = new UpdaterConfiguration(new AssemblyDiagnosticsAccessor(null)),
+                Configuration = new UpdaterConfiguration(new EntryAssemblyAccessor()),
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
             updater.DownloadStarted += (sender, path) =>
