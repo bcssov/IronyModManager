@@ -60,7 +60,7 @@ namespace Irony.AppCastGenerator
         /// <returns>System.String.</returns>
         private static string GetTitleVersionFromAssembly(FileInfo fileInfo)
         {
-            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).FileVersion.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
+            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).ProductVersion.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
         }
 
         /// <summary>
