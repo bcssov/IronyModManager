@@ -380,6 +380,18 @@ namespace IronyModManager.Shared
                     public const string DownloadErrorTitle = Prefix + "DownloadErrorTitle";
                     public const string DownloadErrorMessage = Prefix + "DownloadErrorMessage";
                 }
+                public static class AutoUpdatePrompts
+                {
+                    public const string Prefix = "Options.Updates.AutoUpdatePrompts.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class UpdateNotification
+                {
+                    public const string Prefix = "Options.Updates.UpdateNotification.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
             public static class Dialog
             {

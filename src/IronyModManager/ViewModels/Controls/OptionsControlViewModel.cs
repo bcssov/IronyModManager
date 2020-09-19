@@ -16,6 +16,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Updater;
@@ -330,13 +331,70 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// check for updates as an asynchronous operation.
+        /// </summary>
+        /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
+        protected virtual async Task CheckForUpdatesAsync(bool autoUpdateCheck = false)
+        {
+            CheckingForUpdates = true;
+            UpdateInfoVisible = false;
+            var updatesAvailable = await updater.CheckForUpdatesAsync();
+            if (updatesAvailable)
+            {
+                ChangelogContent = updater.GetChangeLog();
+                UpdateInfoVisible = true;
+                if (autoUpdateCheck)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, onClick: () => { IsOpen = true; });
+                }
+            }
+            else
+            {
+                if (!autoUpdateCheck)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
+                }
+            }
+            CheckingForUpdates = false;
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
             SetGame(gameService.GetSelected());
-            SetUpdateSettings(updaterService.Get());
+            var updateSettings = updaterService.Get();
+            if (updateSettings.AutoUpdates == null)
+            {
+                async Task showPrompt()
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Message);
+                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info))
+                    {
+                        updateSettings.AutoUpdates = true;
+                        SaveUpdateSettings();
+                        await CheckForUpdatesAsync(true);
+                    }
+                    else
+                    {
+                        updateSettings.AutoUpdates = false;
+                        SaveUpdateSettings();
+                    }
+                }
+                showPrompt().ConfigureAwait(false);
+            }
+            else if (UpdateSettings.AutoUpdates.GetValueOrDefault())
+            {
+                CheckForUpdatesAsync(true).ConfigureAwait(false);
+            }
+            SetUpdateSettings(updateSettings);
 
             var updateCheckAllowed = this.WhenAnyValue(p => p.CheckingForUpdates, v => !v);
 

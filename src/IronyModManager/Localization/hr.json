@@ -284,6 +284,14 @@
             "Errors": {
                 "DownloadErrorTitle": "Pogreška pri ažuriranju",
                 "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatski provjeri ažuriranja",
+                "Message": "Irony želi vaše dopuštenje da provjeri ima li ažuriranja prilikom pokretanja. Želite li da vas Irony automatski obavještava o novostima?"
+            },
+            "UpdateNotification": {
+                "Title": "UAžuriranje otkriveno",
+                "Message": "Pogledajte detalje o ažuriranju na zaslonu opcija ili kliknite ovu poruku."
             }
         },
         "Dialog": {

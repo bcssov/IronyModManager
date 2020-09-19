@@ -284,6 +284,14 @@
             "Errors": {
                 "DownloadErrorTitle": "Update Error",
                 "DownloadErrorMessage": "Error occurred while downloading updates, please see error log for more details."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatically Check For Updates",
+                "Message": "Irony would like your permission to check for updates at startup. Would you like Irony to notify you of updates automatically?"
+            },
+            "UpdateNotification": {
+                "Title": "Update Detected",
+                "Message": "Check the options screen for update details or click on this message."
             }
         },
         "Dialog": {

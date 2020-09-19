@@ -284,6 +284,14 @@
             "Errors": {
                 "DownloadErrorTitle": "Aktualisierungsfehler",
                 "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatisch nach Aktualisierungen suchen",
+                "Message": "Irony möchte, dass Sie beim Start nach Updates suchen. Möchten Sie, dass Irony Sie automatisch über Updates informiert?"
+            },
+            "UpdateNotification": {
+                "Title": "Update erkannt",
+                "Message": "Überprüfen Sie den Optionsbildschirm auf Aktualisierungsdetails oder klicken Sie auf diese Nachricht."
             }
         },
         "Dialog": {

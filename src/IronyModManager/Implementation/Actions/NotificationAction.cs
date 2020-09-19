@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -58,7 +58,8 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="message">The message.</param>
         /// <param name="notificationType">Type of the notification.</param>
         /// <param name="timeout">The timeout.</param>
-        public void ShowNotification(string title, string message, NotificationType notificationType, int timeout = 5)
+        /// <param name="onClick">The on click.</param>
+        public void ShowNotification(string title, string message, NotificationType notificationType, int timeout = 5, Action onClick = null)
         {
             var type = notificationType switch
             {
@@ -67,7 +68,7 @@ namespace IronyModManager.Implementation.Actions
                 NotificationType.Error => Avalonia.Controls.Notifications.NotificationType.Error,
                 _ => Avalonia.Controls.Notifications.NotificationType.Information,
             };
-            var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout));
+            var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout), onClick);
             notificationFactory.GetManager().Show(model);
         }
 
