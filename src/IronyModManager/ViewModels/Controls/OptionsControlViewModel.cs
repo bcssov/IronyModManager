@@ -318,6 +318,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The update settings.</value>
         public virtual IUpdateSettings UpdateSettings { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the content of the version.
+        /// </summary>
+        /// <value>The content of the version.</value>
+        public virtual string VersionContent { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the version title.
+        /// </summary>
+        /// <value>The version title.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Version)]
+        public virtual string VersionTitle { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -342,6 +355,7 @@ namespace IronyModManager.ViewModels.Controls
             if (updatesAvailable)
             {
                 ChangelogContent = updater.GetChangeLog();
+                VersionContent = updater.GetVersion();
                 UpdateInfoVisible = true;
                 if (autoUpdateCheck)
                 {
@@ -439,23 +453,9 @@ namespace IronyModManager.ViewModels.Controls
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
             }).DisposeWith(disposables);
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(() =>
             {
-                CheckingForUpdates = true;
-                UpdateInfoVisible = false;
-                var updatesAvailable = await updater.CheckForUpdatesAsync();
-                if (updatesAvailable)
-                {
-                    ChangelogContent = updater.GetChangeLog();
-                    UpdateInfoVisible = true;
-                }
-                else
-                {
-                    var title = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
-                }
-                CheckingForUpdates = false;
+                return CheckForUpdatesAsync();
             }, updateCheckAllowed).DisposeWith(disposables);
 
             var downloadingUpdates = false;

@@ -276,6 +276,7 @@
             "CheckForUpdates": "Provjeri ima li ažuriranja",
             "Install": "Instaliraj ažuriranja",
             "Changelog": "Popis promjena",
+            "Version": "Verzija",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",
                 "UpdateDownloadProgress": "{Progress}%",

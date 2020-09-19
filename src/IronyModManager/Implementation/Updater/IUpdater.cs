@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="IUpdater.cs" company="Mario">
 //     Mario
@@ -56,6 +56,12 @@ namespace IronyModManager.Implementation.Updater
         /// </summary>
         /// <returns>System.String.</returns>
         string GetChangeLog();
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        string GetVersion();
 
         /// <summary>
         /// Installs the update asynchronous.

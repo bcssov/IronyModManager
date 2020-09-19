@@ -276,6 +276,7 @@
             "CheckForUpdates": "Check For Updates",
             "Install": "Install Updates",
             "Changelog": "Changelog",
+            "Version": "Version",
             "Overlay": {
                 "UpdateDownloading": "Downloading Updates...",
                 "UpdateDownloadProgress": "{Progress}%",

@@ -276,6 +276,7 @@
             "CheckForUpdates": "Auf Updates prüfen",
             "Install": "Installiere Updates",
             "Changelog": "Änderungsprotokoll",
+            "Version": "Ausführung",
             "Overlay": {
                 "UpdateDownloading": "Updates herunterladen...",
                 "UpdateDownloadProgress": "{Progress}%",

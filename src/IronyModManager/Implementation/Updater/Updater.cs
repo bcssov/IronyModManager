@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -189,6 +189,19 @@ namespace IronyModManager.Implementation.Updater
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
                 return updateInfo.Updates.FirstOrDefault().Description;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the version.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetVersion()
+        {
+            if (updateInfo != null && updateInfo.Updates.Count > 0)
+            {
+                return updateInfo.Updates.FirstOrDefault().Version;
             }
             return string.Empty;
         }

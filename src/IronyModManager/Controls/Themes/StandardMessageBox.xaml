@@ -70,7 +70,7 @@
       <!--Bold text-->
       <TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" MaxHeight="400"/>
+      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" MaxHeight="400" MaxWidth="500"/>
     </Grid>
     <!--Buttons-->
     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"

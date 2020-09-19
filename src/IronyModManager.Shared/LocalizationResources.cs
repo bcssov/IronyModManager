@@ -367,6 +367,7 @@ namespace IronyModManager.Shared
                 public const string CheckForUpdates = Prefix + "CheckForUpdates";
                 public const string Install = Prefix + "Install";
                 public const string Changelog = Prefix + "Changelog";
+                public const string Version = Prefix + "Version";
                 public static class Overlay
                 {
                     public const string Prefix = "Options.Updates.Overlay.";
