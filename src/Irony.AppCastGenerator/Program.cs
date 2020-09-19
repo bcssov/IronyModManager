@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -54,13 +54,23 @@ namespace Irony.AppCastGenerator
         }
 
         /// <summary>
+        /// Gets the title version from assembly.
+        /// </summary>
+        /// <param name="fileInfo">The file information.</param>
+        /// <returns>System.String.</returns>
+        private static string GetTitleVersionFromAssembly(FileInfo fileInfo)
+        {
+            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).FileVersion.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
+        }
+
+        /// <summary>
         /// Gets the version from assembly.
         /// </summary>
         /// <param name="fileInfo">The file information.</param>
         /// <returns>System.String.</returns>
         private static string GetVersionFromAssembly(FileInfo fileInfo)
         {
-            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).ProductVersion.Split("+", StringSplitOptions.RemoveEmptyEntries)[0];
+            return FileVersionInfo.GetVersionInfo(fileInfo.FullName).FileVersion;
         }
 
         /// <summary>
@@ -155,21 +165,18 @@ namespace Irony.AppCastGenerator
 
             try
             {
-                var productName = opts.ProductName;
-
                 var items = new List<AppCastItem>();
 
                 var hasChangelog = File.Exists(opts.ChangeLogPath);
 
-                var versionInfo = GetVersionFromAssembly(new FileInfo(Path.Combine(opts.VersionExtractionPath, "IronyModManager.exe")));
+                var verFileInfo = new FileInfo(Path.Combine(opts.VersionExtractionPath, "IronyModManager.exe"));
+                var versionInfo = GetVersionFromAssembly(verFileInfo);
+                var titleVersionInfo = GetTitleVersionFromAssembly(verFileInfo);
 
                 foreach (var binary in binaries)
                 {
                     var fileInfo = new FileInfo(binary);
-
-                    var productVersion = versionInfo;
-                    var itemTitle = string.IsNullOrWhiteSpace(productName) ? productVersion : productName + " " + productVersion;
-                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"v{versionInfo}/" : "")}{HttpUtility.UrlEncode(fileInfo.Name)}";
+                    var remoteUpdateFile = $"{opts.BaseUrl}/{(opts.PrefixVersion ? $"v{titleVersionInfo}/" : "")}{HttpUtility.UrlEncode(fileInfo.Name)}";
 
                     string os = string.Empty;
                     if (binary.Contains("win", StringComparison.OrdinalIgnoreCase))
@@ -187,10 +194,10 @@ namespace Irony.AppCastGenerator
                     //
                     var item = new AppCastItem()
                     {
-                        Title = itemTitle,
+                        Title = titleVersionInfo,
                         DownloadLink = remoteUpdateFile,
-                        Version = productVersion,
-                        ShortVersion = productVersion.Substring(0, productVersion.LastIndexOf('.')),
+                        Version = versionInfo,
+                        ShortVersion = versionInfo.Substring(0, versionInfo.LastIndexOf('.')),
                         PublicationDate = fileInfo.CreationTime,
                         UpdateSize = fileInfo.Length,
                         Description = "",
@@ -207,7 +214,7 @@ namespace Irony.AppCastGenerator
                     items.Add(item);
                 }
 
-                var appcastXmlDocument = XMLAppCast.GenerateAppCastXml(items, productName);
+                var appcastXmlDocument = XMLAppCast.GenerateAppCastXml(items, "Irony Mod Manager");
 
                 var appcastFileName = Path.Combine(outputDirectory, opts.AppCastFileName);
 
@@ -224,30 +231,6 @@ namespace Irony.AppCastGenerator
                 using (var w = XmlWriter.Create(appcastFileName, new XmlWriterSettings { NewLineChars = "\n", Encoding = new UTF8Encoding(false) }))
                 {
                     appcastXmlDocument.Save(w);
-                }
-
-                if (_signatureManager.KeysExist())
-                {
-                    var appcastFile = new FileInfo(appcastFileName);
-                    var signatureFile = appcastFileName + ".signature";
-                    var signature = _signatureManager.GetSignatureForFile(appcastFile);
-
-                    var result = _signatureManager.VerifySignature(appcastFile, signature);
-
-                    if (result)
-                    {
-                        File.WriteAllText(signatureFile, signature);
-                        Console.WriteLine($"Wrote {signatureFile}", Color.Green);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Failed to verify {signatureFile}", Color.Red);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Skipped generating signature.  Generate keys with --generate-keys", Color.Red);
-                    Environment.Exit(1);
                 }
             }
             catch (Exception e)
@@ -345,13 +328,6 @@ namespace Irony.AppCastGenerator
             /// <value><c>true</c> if [prefix version]; otherwise, <c>false</c>.</value>
             [Option('x', "url-prefix-version", SetName = "local", Required = false, HelpText = "Add the version as a prefix to the download url")]
             public bool PrefixVersion { get; set; }
-
-            /// <summary>
-            /// Gets or sets the name of the product.
-            /// </summary>
-            /// <value>The name of the product.</value>
-            [Option('n', "product-name", Required = false, HelpText = "Product Name", Default = "Application")]
-            public string ProductName { get; set; }
 
             /// <summary>
             /// Gets or sets the signature.

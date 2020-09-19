@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -95,7 +95,7 @@ namespace IronyModManager.Implementation.Updater
             {
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
-                Configuration = new UpdaterConfiguration(new AssemblyReflectionAccessor(null)),
+                Configuration = new UpdaterConfiguration(new AssemblyDiagnosticsAccessor(null)),
                 TmpDownloadFilePath = StaticResources.GetUpdaterPath()
             };
             updater.DownloadStarted += (sender, path) =>
@@ -201,7 +201,7 @@ namespace IronyModManager.Implementation.Updater
         {
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
-                return updateInfo.Updates.FirstOrDefault().Version;
+                return updateInfo.Updates.FirstOrDefault().Title;
             }
             return string.Empty;
         }

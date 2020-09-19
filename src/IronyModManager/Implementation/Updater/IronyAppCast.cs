@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="IronyAppCast.cs" company="Mario">
 //     Mario
@@ -26,9 +26,11 @@ namespace IronyModManager.Implementation.Updater
     /// <summary>
     /// Class IronyAppCast.
     /// Implements the <see cref="NetSparkleUpdater.AppCastHandlers.XMLAppCast" />
+    /// Implements the <see cref="NetSparkleUpdater.Interfaces.IAppCastHandler" />
     /// </summary>
+    /// <seealso cref="NetSparkleUpdater.Interfaces.IAppCastHandler" />
     /// <seealso cref="NetSparkleUpdater.AppCastHandlers.XMLAppCast" />
-    public class IronyAppCast : XMLAppCast
+    public class IronyAppCast : IAppCastHandler
     {
         #region Fields
 
@@ -36,6 +38,11 @@ namespace IronyModManager.Implementation.Updater
         /// The prerelease version tags
         /// </summary>
         private static readonly string[] prereleaseVersionTags = new string[] { "alpha", "beta", "preview", "rc" };
+
+        /// <summary>
+        /// The application cast
+        /// </summary>
+        private readonly XMLAppCast appCast;
 
         /// <summary>
         /// The updater service
@@ -63,6 +70,7 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="updaterService">The updater service.</param>
         public IronyAppCast(bool isInstallerVersion, IUpdaterService updaterService) : base()
         {
+            appCast = new XMLAppCast();
             IsInstallerVersion = isInstallerVersion;
             this.updaterService = updaterService;
         }
@@ -82,16 +90,25 @@ namespace IronyModManager.Implementation.Updater
         #region Methods
 
         /// <summary>
+        /// Downloads the and parse.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool DownloadAndParse()
+        {
+            return appCast.DownloadAndParse();
+        }
+
+        /// <summary>
         /// Gets the available updates.
         /// </summary>
         /// <returns>List&lt;AppCastItem&gt;.</returns>
-        public override List<AppCastItem> GetAvailableUpdates()
+        public List<AppCastItem> GetAvailableUpdates()
         {
             Version installed = new Version(config.InstalledVersion);
             var signatureNeeded = Utilities.IsSignatureNeeded(signatureVerifier.SecurityMode, signatureVerifier.HasValidKeyInformation(), false);
             var allowAlphaVersions = updaterService.Get().CheckForPrerelease;
 
-            return Items.Where((item) =>
+            return appCast.Items.Where((item) =>
             {
                 // Filter out prerelease tags if specified as such
                 if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Version.Contains(p, StringComparison.OrdinalIgnoreCase)))
@@ -145,12 +162,12 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="config">The configuration.</param>
         /// <param name="signatureVerifier">The signature verifier.</param>
         /// <param name="logWriter">The log writer.</param>
-        public new void SetupAppCastHandler(IAppCastDataDownloader dataDownloader, string castUrl, Configuration config, ISignatureVerifier signatureVerifier, ILogger logWriter = null)
+        public void SetupAppCastHandler(IAppCastDataDownloader dataDownloader, string castUrl, Configuration config, ISignatureVerifier signatureVerifier, ILogger logWriter = null)
         {
             // Why on earth would any of these files be marked as protected or maybe even declared as properties with a private setter?
             this.config = config;
             this.signatureVerifier = signatureVerifier;
-            base.SetupAppCastHandler(dataDownloader, castUrl, config, signatureVerifier, logWriter);
+            appCast.SetupAppCastHandler(dataDownloader, castUrl, config, signatureVerifier, logWriter);
         }
 
         #endregion Methods
