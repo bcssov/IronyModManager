@@ -36,19 +36,16 @@ namespace IronyModManager.Models
         public MappingProfile()
         {
             CreateMap<ITheme, IPreferences>()
-                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllMembers(p => p.Ignore());
+                .ForMember(p => p.Theme, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
             CreateMap<ILanguage, IPreferences>()
-                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().ForAllMembers(p => p.Ignore());
+                .ForMember(p => p.Locale, o => o.MapFrom(m => m.Abrv)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
             CreateMap<IGame, IPreferences>()
-                .ForMember(m => m.Game, o => o.MapFrom(s => s.Type)).ReverseMap().ForAllMembers(m => m.Ignore());
+                .ForMember(m => m.Game, o => o.MapFrom(s => s.Type)).ReverseMap().ForAllOtherMembers(m => m.Ignore());
             CreateMap<IUpdateSettings, IPreferences>()
                 .ForMember(m => m.AutoUpdates, o => o.MapFrom(s => s.AutoUpdates))
                 .ForMember(m => m.CheckForPrerelease, o => o.MapFrom(s => s.CheckForPrerelease))
-                .ReverseMap().ForAllMembers(m => m.Ignore());
-            CreateMap<IPreferences, IUpdateSettings>()
-                .ForMember(m => m.AutoUpdates, o => o.MapFrom(s => s.AutoUpdates))
-                .ForMember(m => m.CheckForPrerelease, o => o.MapFrom(s => s.CheckForPrerelease))
-                .ReverseMap().ForAllMembers(m => m.Ignore());
+                .ReverseMap()
+                .ForAllOtherMembers(m => m.Ignore());
             CreateMap<IDefinition, IDefinition>().ReverseMap();
             CreateMap<IMod, IMod>().ReverseMap();
         }

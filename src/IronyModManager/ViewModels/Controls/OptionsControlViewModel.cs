@@ -404,7 +404,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 showPrompt().ConfigureAwait(false);
             }
-            else if (UpdateSettings.AutoUpdates.GetValueOrDefault())
+            else if (updateSettings.AutoUpdates.GetValueOrDefault())
             {
                 CheckForUpdatesAsync(true).ConfigureAwait(false);
             }
