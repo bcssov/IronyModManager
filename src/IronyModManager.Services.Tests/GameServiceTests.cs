@@ -555,5 +555,55 @@ namespace IronyModManager.Services.Tests
             var result = service.IsSteamLaunchPath(gameSettings);
             result.Should().BeFalse();
         }
+
+        /// <summary>
+        /// Defines the test method Should_not_be_steam_game.
+        /// </summary>
+        [Fact]
+        public void Should_not_be_steam_game()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            preferencesService.Setup(p => p.Get()).Returns(() =>
+            {
+                return new Preferences()
+                {
+                    Game = "game 2"
+                };
+            });
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamGame(gameSettings);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_be_steam_game.
+        /// </summary>
+        [Fact]
+        public void Should_be_steam_game()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "exePath.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            preferencesService.Setup(p => p.Get()).Returns(() =>
+            {
+                return new Preferences()
+                {
+                    Game = "game 2"
+                };
+            });
+            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamGame(gameSettings);
+            result.Should().BeTrue();
+        }
     }
 }

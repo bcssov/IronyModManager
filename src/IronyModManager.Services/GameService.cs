@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Linq;
 using AutoMapper;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
 
@@ -163,6 +164,19 @@ namespace IronyModManager.Services
         public virtual IGame GetSelected()
         {
             return Get().FirstOrDefault(s => s.IsSelected);
+        }
+
+        /// <summary>
+        /// Determines whether [is steam game] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam game] [the specified settings]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsSteamGame(IGameSettings settings)
+        {
+            var game = GetSelected();
+            var gameExe = (game.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+            var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+            return gameExe.Equals(settingsExe);
         }
 
         /// <summary>

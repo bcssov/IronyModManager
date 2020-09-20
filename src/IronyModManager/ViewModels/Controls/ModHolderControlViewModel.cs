@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,8 +13,9 @@
 // ***********************************************************************
 
 using System;
-using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -49,6 +50,16 @@ namespace IronyModManager.ViewModels.Controls
         /// The block selected
         /// </summary>
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
+
+        /// <summary>
+        /// The steam launch
+        /// </summary>
+        private const string SteamLaunch = SteamProcess + ":";
+
+        /// <summary>
+        /// The steam process
+        /// </summary>
+        private const string SteamProcess = "steam";
 
         /// <summary>
         /// The application action
@@ -530,6 +541,17 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         else
                         {
+                            if (gameService.IsSteamGame(args))
+                            {
+                                // Check if process is running
+                                var processes = Process.GetProcesses();
+                                if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    await appAction.OpenAsync(SteamLaunch);
+                                    // Artificial delay to allow steam to boot up
+                                    await Task.Delay(250);
+                                }
+                            }
                             if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
                             {
                                 await appAction.ExitAppAsync();

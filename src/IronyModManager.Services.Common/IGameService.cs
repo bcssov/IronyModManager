@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -51,6 +51,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IGame.</returns>
         IGame GetSelected();
+
+        /// <summary>
+        /// Determines whether [is steam game] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam game] [the specified settings]; otherwise, <c>false</c>.</returns>
+        bool IsSteamGame(IGameSettings settings);
 
         /// <summary>
         /// Determines whether [is steam launch path] [the specified settings].
