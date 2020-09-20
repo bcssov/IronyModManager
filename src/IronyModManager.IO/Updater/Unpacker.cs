@@ -73,12 +73,17 @@ namespace IronyModManager.IO.Updater
             var all = reader.Entries.Where(entry => !entry.IsDirectory);
             double total = all.Count();
             double processed = 0;
+            var lastPercentage = 0;
             foreach (var entry in all)
             {
                 entry.WriteToDirectory(extractPath, ZipExtractionOpts.GetExtractionOptions());
                 processed++;
                 var progress = GetProgressPercentage(total, processed);
-                await messageBus.PublishAsync(new UpdateUnpackProgressEvent(progress));
+                if (progress != lastPercentage)
+                {
+                    await messageBus.PublishAsync(new UpdateUnpackProgressEvent(progress));
+                }
+                lastPercentage = progress;
             }
             return extractPath;
         }
