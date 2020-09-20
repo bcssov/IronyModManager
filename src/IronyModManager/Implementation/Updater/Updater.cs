@@ -60,6 +60,16 @@ namespace IronyModManager.Implementation.Updater
         private readonly IronySparkleUpdater updater;
 
         /// <summary>
+        /// The updater service
+        /// </summary>
+        private readonly IUpdaterService updaterService;
+
+        /// <summary>
+        /// The allow prerelease
+        /// </summary>
+        private bool allowPrerelease;
+
+        /// <summary>
         /// The busy
         /// </summary>
         private bool busy;
@@ -88,6 +98,7 @@ namespace IronyModManager.Implementation.Updater
         {
             this.shutDownState = shutDownState;
             var isInstallerVersion = IsInstallerVersion();
+            this.updaterService = updaterService;
             progress = new Subject<int>();
             error = new Subject<Exception>();
             updater = new IronySparkleUpdater(isInstallerVersion, updaterService, appAction)
@@ -142,11 +153,14 @@ namespace IronyModManager.Implementation.Updater
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public async Task<bool> CheckForUpdatesAsync()
         {
+            var settings = updaterService.Get();
             var elapsedTime = DateTime.Now - updater.Configuration.LastCheckTime;
             if (elapsedTime >= updateCheckThreshold || updateInfo == null ||
-                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine || updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.UserSkipped)
+                updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.CouldNotDetermine || updateInfo.Status == NetSparkleUpdater.Enums.UpdateStatus.UserSkipped ||
+                settings.CheckForPrerelease != allowPrerelease)
             {
                 updateInfo = await updater.CheckForUpdatesQuietly();
+                allowPrerelease = settings.CheckForPrerelease;
             }
             if (updateInfo == null)
             {

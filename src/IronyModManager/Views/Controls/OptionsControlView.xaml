@@ -40,12 +40,9 @@
                 <Grid Grid.Row="0" ColumnDefinitions="1*,4*">
                   <TextBlock Text="{Binding VersionTitle}" VerticalAlignment="Center" Grid.Column="0"></TextBlock>
                   <TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></TextBox>
-                </Grid>                
-                <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="1">
-                  <TextBlock Text="{Binding ChangelogTitle}"></TextBlock>
-                  <TextBox Text="{Binding ChangelogContent}" IsReadOnly="True"
-                           TextWrapping="Wrap" MaxHeight="300"></TextBox>
-                </StackPanel>
+                </Grid>
+                <TextBox Text="{Binding Changelog}" IsReadOnly="True"
+                           TextWrapping="Wrap" MaxHeight="300" Grid.Row="1"></TextBox>
                 <Button Margin="0,5" Content="{Binding InstallUpdates}"
                         Command="{Binding InstallUpdatesCommand}" Grid.Row="2"></Button>
               </Grid>

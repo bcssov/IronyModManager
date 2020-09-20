@@ -274,8 +274,7 @@
             "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
             "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
             "CheckForUpdates": "Provjeri ima li ažuriranja",
-            "Install": "Instaliraj ažuriranja",
-            "Changelog": "Popis promjena",
+            "Install": "Instaliraj ažuriranja",            
             "Version": "Verzija",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",

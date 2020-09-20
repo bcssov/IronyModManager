@@ -143,17 +143,10 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string AutoUpdate { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the content of the changelog.
+        /// Gets or sets the changelog.
         /// </summary>
-        /// <value>The content of the changelog.</value>
-        public virtual string ChangelogContent { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the changelog title.
-        /// </summary>
-        /// <value>The changelog title.</value>
-        [StaticLocalization(LocalizationResources.Options.Updates.Changelog)]
-        public virtual string ChangelogTitle { get; protected set; }
+        /// <value>The changelog.</value>
+        public virtual string Changelog { get; protected set; }
 
         /// <summary>
         /// Gets or sets the check for prerelease.
@@ -354,7 +347,7 @@ namespace IronyModManager.ViewModels.Controls
             var updatesAvailable = await updater.CheckForUpdatesAsync();
             if (updatesAvailable)
             {
-                ChangelogContent = updater.GetChangeLog();
+                Changelog = updater.GetChangeLog();
                 VersionContent = updater.GetVersion();
                 UpdateInfoVisible = true;
                 if (autoUpdateCheck)

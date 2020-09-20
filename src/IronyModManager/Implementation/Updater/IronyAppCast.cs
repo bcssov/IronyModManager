@@ -111,7 +111,7 @@ namespace IronyModManager.Implementation.Updater
             var results = appCast.Items.Where((item) =>
             {
                 // Filter out prerelease tags if specified as such
-                if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Version.Contains(p, StringComparison.OrdinalIgnoreCase)))
+                if (!allowAlphaVersions && prereleaseVersionTags.Any(p => item.Title.Contains(p, StringComparison.OrdinalIgnoreCase)))
                 {
                     return false;
                 }
