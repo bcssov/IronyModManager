@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -456,6 +456,30 @@ namespace IronyModManager.Services.Tests
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().Be("args");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_continue_game_args.
+        /// </summary>
+        [Fact]
+        public void Should_return_continue_game_args()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                WorkshopDirectory = "test",
+                LaunchArguments = " -args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("test.exe");
+            args.LaunchArguments.Should().Be("--continuelastsave -args");
         }
 
         /// <summary>

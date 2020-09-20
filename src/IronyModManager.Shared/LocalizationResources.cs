@@ -211,7 +211,8 @@ namespace IronyModManager.Shared
             public static class LaunchGame
             {
                 public const string Prefix = "Mod_Actions.LaunchGame.";
-                public const string Name = Prefix + "Name";
+                public const string Launch = Prefix + "Launch";
+                public const string Resume = Prefix + "Resume";
                 public static class LaunchError
                 {
                     public const string Prefix = "Mod_Actions.LaunchGame.LaunchError.";

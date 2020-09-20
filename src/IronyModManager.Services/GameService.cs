@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -35,6 +35,11 @@ namespace IronyModManager.Services
     public class GameService : BaseService, IGameService
     {
         #region Fields
+
+        /// <summary>
+        /// The continue game arguments
+        /// </summary>
+        private const string ContinueGameArgs = "--continuelastsave";
 
         /// <summary>
         /// The continue game file name
@@ -140,8 +145,9 @@ namespace IronyModManager.Services
         /// Gets the launch arguments.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="appendContinueGame">if set to <c>true</c> [append continue game].</param>
         /// <returns>System.String.</returns>
-        public virtual IGameSettings GetLaunchSettings(IGame game)
+        public virtual IGameSettings GetLaunchSettings(IGame game, bool appendContinueGame = false)
         {
             var model = GetModelInstance<IGameSettings>();
             var exeLoc = game.ExecutableLocation ?? string.Empty;
@@ -166,6 +172,10 @@ namespace IronyModManager.Services
                         model.LaunchArguments = game.LaunchArguments;
                     }
                 }
+            }
+            if (appendContinueGame)
+            {
+                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}";
             }
             return model;
         }
@@ -199,7 +209,7 @@ namespace IronyModManager.Services
                     string[] files;
                     if (!string.IsNullOrWhiteSpace(saveDir))
                     {
-                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games", saveDir), "*");
+                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games", saveDir.Trim(Path.DirectorySeparatorChar)), "*");
                     }
                     else
                     {

@@ -154,7 +154,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Spiel startet",
+            "Launch": "Spiel startet",
+            "Resume": "Setzen Sie Gameg fort",
             "LaunchError": {
                 "Title": "Spiel kann nicht gestartet werden",
                 "Message": "Das Spiel konnte nicht gestartet werden."

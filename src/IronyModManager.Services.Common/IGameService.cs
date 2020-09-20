@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -43,8 +43,9 @@ namespace IronyModManager.Services.Common
         /// Gets the launch settings.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="appendContinueGame">if set to <c>true</c> [append continue game].</param>
         /// <returns>IGameSettings.</returns>
-        IGameSettings GetLaunchSettings(IGame game);
+        IGameSettings GetLaunchSettings(IGame game, bool appendContinueGame = false);
 
         /// <summary>
         /// Gets the selected.
