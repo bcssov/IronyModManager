@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -635,7 +635,7 @@ namespace IronyModManager.Services
             async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
             {
                 Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
-                var mods = GetCollectionMods();
+                var mods = GetCollectionMods(collectionName: collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),

@@ -53,6 +53,13 @@ namespace IronyModManager.Services.Common
         IGame GetSelected();
 
         /// <summary>
+        /// Determines whether [is continue game allowed] [the specified game].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
+        bool IsContinueGameAllowed(IGame game);
+
+        /// <summary>
         /// Determines whether [is steam game] [the specified settings].
         /// </summary>
         /// <param name="settings">The settings.</param>
