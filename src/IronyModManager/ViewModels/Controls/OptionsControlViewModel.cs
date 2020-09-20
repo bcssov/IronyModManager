@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -354,7 +354,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Info, onClick: () => { IsOpen = true; });
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, onClick: () => { IsOpen = true; });
                 }
             }
             else
