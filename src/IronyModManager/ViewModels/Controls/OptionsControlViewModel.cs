@@ -556,6 +556,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(Disposables);
             checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
             {
+                UpdateInfoVisible = false;
                 SaveUpdateSettings();
             }).DisposeWith(Disposables);
             isUpdateReloading = false;
