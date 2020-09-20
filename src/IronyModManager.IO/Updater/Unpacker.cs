@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
@@ -16,10 +16,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.IO.Common.MessageBus;
 using IronyModManager.IO.Common.Updater;
 using IronyModManager.Shared;
+using IronyModManager.Shared.MessageBus;
 using SharpCompress.Archives;
-using SharpCompress.Readers;
 
 namespace IronyModManager.IO.Updater
 {
@@ -34,9 +35,9 @@ namespace IronyModManager.IO.Updater
         #region Fields
 
         /// <summary>
-        /// The logger
+        /// The message bus
         /// </summary>
-        private readonly ILogger logger;
+        private readonly IMessageBus messageBus;
 
         #endregion Fields
 
@@ -45,10 +46,10 @@ namespace IronyModManager.IO.Updater
         /// <summary>
         /// Initializes a new instance of the <see cref="Unpacker" /> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
-        public Unpacker(ILogger logger)
+        /// <param name="messageBus">The message bus.</param>
+        public Unpacker(IMessageBus messageBus)
         {
-            this.logger = logger;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
@@ -60,46 +61,47 @@ namespace IronyModManager.IO.Updater
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
-        public Task<string> UnpackUpdateAsync(string path)
+        public async Task<string> UnpackUpdateAsync(string path)
         {
             if (!File.Exists(path))
             {
-                return Task.FromResult(string.Empty);
+                return string.Empty;
             }
             var extractPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-            string parseUsingReaderFactory()
+            using var fileStream = File.OpenRead(path);
+            using var reader = ArchiveFactory.Open(fileStream);
+            var all = reader.Entries.Where(entry => !entry.IsDirectory);
+            double total = all.Count();
+            double processed = 0;
+            foreach (var entry in all)
             {
-                using var fileStream = File.OpenRead(path);
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
-                {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        reader.WriteEntryToDirectory(extractPath, ZipExtractionOpts.GetExtractionOptions());
-                    }
-                }
-                return extractPath;
+                entry.WriteToDirectory(extractPath, ZipExtractionOpts.GetExtractionOptions());
+                processed++;
+                var progress = GetProgressPercentage(total, processed);
+                await messageBus.PublishAsync(new UpdateUnpackProgressEvent(progress));
             }
+            return extractPath;
+        }
 
-            string parseUsingArchiveFactory()
+        /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 100)
+        {
+            var perc = Convert.ToInt32(processed / total * 100);
+            if (perc < 1)
             {
-                using var fileStream = File.OpenRead(path);
-                using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    entry.WriteToDirectory(extractPath, ZipExtractionOpts.GetExtractionOptions());
-                }
-                return extractPath;
+                perc = 1;
             }
-            try
+            else if (perc > maxPerc)
             {
-                return Task.FromResult(parseUsingReaderFactory());
+                perc = maxPerc;
             }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                return Task.FromResult(parseUsingArchiveFactory());
-            }
+            return perc;
         }
 
         #endregion Methods

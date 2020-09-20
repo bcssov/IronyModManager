@@ -452,6 +452,7 @@ namespace IronyModManager.ViewModels.Controls
             }, updateCheckAllowed).DisposeWith(disposables);
 
             var downloadingUpdates = false;
+            var installingUpdates = false;
             InstallUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 downloadingUpdates = true;
@@ -460,7 +461,9 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     downloadingUpdates = false;
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
+                    installingUpdates = true;
                     await updater.InstallUpdateAsync();
+                    installingUpdates = false;
                     await TriggerOverlayAsync(false);
                 }
                 else
@@ -484,7 +487,12 @@ namespace IronyModManager.ViewModels.Controls
                 if (downloadingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling), new { Progress = s });
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
+                    TriggerOverlay(true, message, progress);
+                } else if (installingUpdates)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
                     TriggerOverlay(true, message, progress);
                 }
             }).DisposeWith(disposables);

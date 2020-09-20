@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -58,6 +58,7 @@ namespace IronyModManager.DI
             container.Register<ActiveGameRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IUpdater, Updater>(SimpleInjector.Lifestyle.Singleton);
             container.RemoveMixedLifetimeWarning<IAppAction>();
+            container.Register<UpdateUnpackProgressHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

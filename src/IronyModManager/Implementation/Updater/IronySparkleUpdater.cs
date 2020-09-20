@@ -22,7 +22,6 @@ using IronyModManager.Implementation.Actions;
 using IronyModManager.Services.Common;
 using NetSparkleUpdater;
 using NetSparkleUpdater.SignatureVerifiers;
-using Newtonsoft.Json;
 
 namespace IronyModManager.Implementation.Updater
 {
@@ -73,9 +72,27 @@ namespace IronyModManager.Implementation.Updater
         /// <value><c>true</c> if this instance is installer version; otherwise, <c>false</c>.</value>
         public bool IsInstallerVersion { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [update installing].
+        /// </summary>
+        /// <value><c>true</c> if [update installing]; otherwise, <c>false</c>.</value>
+        public bool UpdateInstalling { get; private set; }
+
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Installs the update.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="installPath">The install path.</param>
+        public new void InstallUpdate(AppCastItem item, string installPath = null)
+        {
+            // So what to say to this "async void"? I don't know where to even begin.
+            UpdateInstalling = true;
+            base.InstallUpdate(item, installPath);
+        }
 
         /// <summary>
         /// Runs the downloaded installer.
@@ -83,15 +100,9 @@ namespace IronyModManager.Implementation.Updater
         /// <param name="downloadFilePath">The download file path.</param>
         protected override async Task RunDownloadedInstaller(string downloadFilePath)
         {
-            var extractPath = await updaterService.UnpackUpdateAsync(downloadFilePath);
+            var extractPath = await Task.Run(async () => await updaterService.UnpackUpdateAsync(downloadFilePath));
             if (Directory.Exists(extractPath))
             {
-                var updateSettings = new UpdateSettings()
-                {
-                    IsInstaller = IsInstallerVersion,
-                    Path = AppDomain.CurrentDomain.BaseDirectory
-                };
-                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
                 if (IsInstallerVersion)
                 {
                     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -115,6 +126,7 @@ namespace IronyModManager.Implementation.Updater
                     }
                 }
             }
+            UpdateInstalling = false;
         }
 
         /// <summary>

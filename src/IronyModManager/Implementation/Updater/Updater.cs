@@ -20,8 +20,11 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using NetSparkleUpdater;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Implementation.Updater
 {
@@ -38,6 +41,11 @@ namespace IronyModManager.Implementation.Updater
         /// The error
         /// </summary>
         private readonly Subject<Exception> error;
+
+        /// <summary>
+        /// The is installer version
+        /// </summary>
+        private readonly bool isInstallerVersion;
 
         /// <summary>
         /// The progress
@@ -96,13 +104,14 @@ namespace IronyModManager.Implementation.Updater
         /// <summary>
         /// Initializes a new instance of the <see cref="Updater" /> class.
         /// </summary>
+        /// <param name="updateProgressHandler">The update progress handler.</param>
         /// <param name="updaterService">The updater service.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="shutDownState">State of the shut down.</param>
-        public Updater(IUpdaterService updaterService, IAppAction appAction, IShutDownState shutDownState)
+        public Updater(UpdateUnpackProgressHandler updateProgressHandler, IUpdaterService updaterService, IAppAction appAction, IShutDownState shutDownState)
         {
             this.shutDownState = shutDownState;
-            var isInstallerVersion = IsInstallerVersion();
+            isInstallerVersion = IsInstallerVersion();
             this.updaterService = updaterService;
             progress = new Subject<int>();
             error = new Subject<Exception>();
@@ -134,6 +143,10 @@ namespace IronyModManager.Implementation.Updater
                 updatePath = path;
                 progress.OnNext(100);
             };
+            updateProgressHandler.Message.Subscribe(s =>
+            {
+                progress.OnNext(s.Progress);
+            });
         }
 
         #endregion Constructors
@@ -197,8 +210,19 @@ namespace IronyModManager.Implementation.Updater
                 lastException = null;
                 updatePath = string.Empty;
                 await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
+                while (updater.UpdateDownloader.IsDownloading)
+                {
+                    // Sigh
+                    await Task.Delay(25);
+                }
                 busy = false;
-                return !string.IsNullOrWhiteSpace(updatePath);
+                var updateSettings = new UpdateSettings()
+                {
+                    IsInstaller = isInstallerVersion,
+                    Path = AppDomain.CurrentDomain.BaseDirectory
+                };
+                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
+                return !string.IsNullOrWhiteSpace(updatePath) || lastException == null; // In case file is already downloaded
             }
             busy = false;
             return false;
@@ -212,7 +236,7 @@ namespace IronyModManager.Implementation.Updater
         {
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
-                return updateInfo.Updates.FirstOrDefault().Description;
+                return string.Join(Environment.NewLine, updateInfo.Updates.FirstOrDefault().Description.SplitOnNewLine().Select(p => p.Trim()));
             }
             return string.Empty;
         }
@@ -243,6 +267,10 @@ namespace IronyModManager.Implementation.Updater
             busy = true;
             await shutDownState.WaitUntilFreeAsync();
             updater.InstallUpdate(updateInfo.Updates.FirstOrDefault(), updatePath);
+            while (updater.UpdateInstalling)
+            {
+                await Task.Delay(25);
+            }
             busy = false;
             return true;
         }
@@ -254,7 +282,7 @@ namespace IronyModManager.Implementation.Updater
         private bool IsInstallerVersion()
         {
             var files = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.exe");
-            return files.Any(p => p.StartsWith("unins", StringComparison.OrdinalIgnoreCase));
+            return files.Any(p => Path.GetFileName(p).StartsWith("unins", StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion Methods
