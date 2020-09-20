@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -25,6 +25,11 @@ namespace IronyModManager
         #region Fields
 
         /// <summary>
+        /// The application cast address
+        /// </summary>
+        public const string AppCastAddress = "https://bcssov.github.io/IronyModManager/appcast.xml";
+
+        /// <summary>
         /// The application settings
         /// </summary>
         public const string AppSettings = "appSettings.json";
@@ -33,6 +38,11 @@ namespace IronyModManager
         /// The localizations path
         /// </summary>
         public const string LocalizationsPath = "Localization";
+
+        /// <summary>
+        /// The public update key
+        /// </summary>
+        public const string PublicUpdateKey = "Oc2c/G6WMYkKL9+owAZYNIwMAMu9YqURiKw+gkY4zEw=";
 
         /// <summary>
         /// The unhandled error header
@@ -48,6 +58,11 @@ namespace IronyModManager
         /// The unhandled error title
         /// </summary>
         public const string UnhandledErrorTitle = "Error";
+
+        /// <summary>
+        /// The update settings
+        /// </summary>
+        public const string UpdateSettings = "update-settings.json";
 
         /// <summary>
         /// The wiki URL

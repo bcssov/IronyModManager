@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using IronyModManager.Shared;
@@ -68,6 +69,26 @@ namespace IronyModManager
                 iconBitmap = new Bitmap(ms);
             }
             return iconBitmap;
+        }
+
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetUpdaterPath()
+        {
+            string companyPart = string.Empty;
+            string appNamePart = string.Empty;
+
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
+            if (!string.IsNullOrEmpty(companyAttribute.Company))
+                companyPart = $"{companyAttribute.Company}\\";
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+            if (!string.IsNullOrEmpty(titleAttribute.Title))
+                appNamePart = $"{titleAttribute.Title}-Updater\\";
+
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
         }
 
         /// <summary>

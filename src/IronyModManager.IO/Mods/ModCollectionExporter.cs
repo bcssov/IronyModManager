@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -37,11 +37,6 @@ namespace IronyModManager.IO.Mods
     public class ModCollectionExporter : IModCollectionExporter
     {
         #region Fields
-
-        /// <summary>
-        /// The extraction options
-        /// </summary>
-        private static ExtractionOptions extractionOptions;
 
         /// <summary>
         /// The logger
@@ -154,24 +149,6 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// Gets the extraction options.
-        /// </summary>
-        /// <returns>ExtractionOptions.</returns>
-        private ExtractionOptions GetExtractionOptions()
-        {
-            if (extractionOptions == null)
-            {
-                extractionOptions = new ExtractionOptions()
-                {
-                    ExtractFullPath = true,
-                    Overwrite = true,
-                    PreserveFileTime = true
-                };
-            }
-            return extractionOptions;
-        }
-
-        /// <summary>
         /// Imports the internal.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
@@ -216,7 +193,7 @@ namespace IronyModManager.IO.Mods
                         }
                         else
                         {
-                            reader.WriteEntryToDirectory(parameters.ModDirectory, GetExtractionOptions());
+                            reader.WriteEntryToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
                         }
                     }
                 }
@@ -247,7 +224,7 @@ namespace IronyModManager.IO.Mods
                     }
                     else
                     {
-                        entry.WriteToDirectory(parameters.ModDirectory, GetExtractionOptions());
+                        entry.WriteToDirectory(parameters.ModDirectory, ZipExtractionOpts.GetExtractionOptions());
                     }
                 }
             }

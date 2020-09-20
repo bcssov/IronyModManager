@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-16-2020
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -181,18 +181,26 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Resets this instance.
         /// </summary>
-        public void Reset()
+        /// <param name="fullReset">if set to <c>true</c> [full reset].</param>
+        public void Reset(bool fullReset = true)
         {
             TakeLeftClass = string.Empty;
             TakeRightClass = string.Empty;
-            var left = LeftImage;
-            LeftImage = null;
-            left?.Dispose();
-            var right = RightImage;
-            RightImage = null;
-            right?.Dispose();
-            LeftImageInfo = string.Empty;
-            RightImageInfo = string.Empty;
+            if (fullReset)
+            {
+                var left = LeftImage;
+                LeftImage = null;
+                left?.Dispose();
+                prevLeftDefinition = null;
+                LeftDefinition = null;
+                var right = RightImage;
+                RightImage = null;
+                right?.Dispose();
+                prevRightDefinition = null;
+                RightDefinition = null;
+                LeftImageInfo = string.Empty;
+                RightImageInfo = string.Empty;
+            }
         }
 
         /// <summary>

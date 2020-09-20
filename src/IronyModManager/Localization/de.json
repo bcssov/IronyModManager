@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager: {AppVersion}",
+        "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
         "Shortcuts": {
@@ -261,11 +261,39 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Spiel ausführbar",
-        "GameArgs": "Spiel Args",
-        "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+        "Game": {
+            "Title": "Spieleinstellungen",
+            "NavigateToExe": "...",
+            "Reset": "X",
+            "GameExecutable": "Spiel ausführbar",
+            "GameArgs": "Spiel Args",
+            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen"
+        },
+        "Updates": {
+            "Title": "Aktualisierungsoptionen",
+            "AutoUpdates": "Beim Start nach Updates suchen",
+            "CheckPrerelease": "Update auf Vorabversionen",
+            "CheckForUpdates": "Auf Updates prüfen",
+            "Install": "Installiere Updates",
+            "Version": "Ausführung",
+            "Overlay": {
+                "UpdateDownloading": "Updates herunterladen...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Aktualisierungsfehler",
+                "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatisch nach Aktualisierungen suchen",
+                "Message": "Irony möchte, dass Sie beim Start nach Updates suchen. Möchten Sie, dass Irony Sie automatisch über Updates informiert?"
+            },
+            "UpdateNotification": {
+                "Title": "Update erkannt",
+                "Message": "Überprüfen Sie den Optionsbildschirm auf Aktualisierungsdetails oder klicken Sie auf diese Nachricht."
+            }
+        },
         "Dialog": {
             "Title": "Finde eine ausführbare Spieldatei"
         }
@@ -330,6 +358,10 @@
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",
             "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Keine Aktualisierungen",
+            "Message": "Es scheinen keine Updates verfügbar zu sein."
         }
     },
     "Mod_App_Actions": {

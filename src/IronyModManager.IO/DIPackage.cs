@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-19-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -16,9 +16,11 @@ using System;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Common.Updater;
 using IronyModManager.IO.Mods;
 using IronyModManager.IO.Mods.Models;
 using IronyModManager.IO.Readers;
+using IronyModManager.IO.Updater;
 using IronyModManager.Shared;
 using SimpleInjector;
 using SimpleInjector.Packaging;
@@ -50,6 +52,7 @@ namespace IronyModManager.IO
             container.Collection.Register(typeof(IDefinitionInfoProvider), typeof(DIPackage).Assembly);
             container.Register<IPatchState, PatchState>();
             container.Register<IModMergeExporter, ModMergeExporter>();
+            container.Register<IUnpacker, Unpacker>();
         }
 
         #endregion Methods

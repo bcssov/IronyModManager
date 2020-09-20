@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.DI
 // Author           : Mario
-// Created          : 05-11-2020
+// Created          : 09-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
-// <copyright file="DisposableTransient.cs" company="Mario">
+// <copyright file="DisableDiagnosticWarnings.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -18,33 +18,30 @@ using SimpleInjector;
 namespace IronyModManager.DI.Extensions
 {
     /// <summary>
-    /// Class DisposableTransient.
+    /// Class DisableDiagnosticWarnings.
     /// </summary>
-    public static class DisposableTransient
+    public static class DisableDiagnosticWarnings
     {
         #region Methods
 
         /// <summary>
-        /// Registers the without transient warning.
+        /// Removes the mixed lifetime warning.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container">The container.</param>
-        public static void RegisterWithoutTransientWarning<T>(this Container container) where T : class
+        public static void RemoveMixedLifetimeWarning<T>(this Container container) where T : class
         {
-            container.Register<T>();
             var registration = container.GetRegistration(typeof(T)).Registration;
-            registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.DisposableTransientComponent, "Transient disposable is okay at times.");
+            registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.LifestyleMismatch, "Sometimes lifetimes can be mixed.");
         }
 
         /// <summary>
-        /// Registers the without transient warning.
+        /// Removes the transient warning.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <typeparam name="T2">The type of the t2.</typeparam>
         /// <param name="container">The container.</param>
-        public static void RegisterWithoutTransientWarning<T, T2>(this Container container) where T : class where T2 : class, T
+        public static void RemoveTransientWarning<T>(this Container container) where T : class
         {
-            container.Register<T, T2>();
             var registration = container.GetRegistration(typeof(T)).Registration;
             registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.DisposableTransientComponent, "Transient disposable is okay at times.");
         }

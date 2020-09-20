@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-07-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="INotificationAction.cs" company="Mario">
 //     Mario
@@ -31,7 +31,8 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="message">The message.</param>
         /// <param name="notificationType">Type of the notification.</param>
         /// <param name="timeout">The timeout.</param>
-        void ShowNotification(string title, string message, NotificationType notificationType, int timeout = 5);
+        /// <param name="onClick">The on click.</param>
+        void ShowNotification(string title, string message, NotificationType notificationType, int timeout = 5, Action onClick = null);
 
         /// <summary>
         /// Shows the prompt asynchronous.

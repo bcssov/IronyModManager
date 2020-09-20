@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager: {AppVersion}",
+        "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
         "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
         "Shortcuts": {
@@ -261,11 +261,39 @@
     "Options": {
         "Name": "Opcije",
         "Close": "Zatvori",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Izvršna datoteka",
-        "GameArgs": "Argumenti",
-        "RefreshMods": "Osvježite deskriptore prije startanja igre",
+        "Game": {
+            "Title": "Title",
+            "NavigateToExe": "...",
+            "Reset": "X",
+            "GameExecutable": "Izvršna datoteka",
+            "GameArgs": "Argumenti",
+            "RefreshMods": "Osvježite deskriptore prije startanja igre"
+        },
+        "Updates": {
+            "Title": "Mogućnosti ažuriranja",
+            "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
+            "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
+            "CheckForUpdates": "Provjeri ima li ažuriranja",
+            "Install": "Instaliraj ažuriranja",            
+            "Version": "Verzija",
+            "Overlay": {
+                "UpdateDownloading": "Preuzimanje ažuriranja...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Raspakiravanje ažuriranja i priprema za pokretanje instalacijskog programa..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Pogreška pri ažuriranju",
+                "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatski provjeri ažuriranja",
+                "Message": "Irony želi vaše dopuštenje da provjeri ima li ažuriranja prilikom pokretanja. Želite li da vas Irony automatski obavještava o novostima?"
+            },
+            "UpdateNotification": {
+                "Title": "UAžuriranje otkriveno",
+                "Message": "Pogledajte detalje o ažuriranju na zaslonu opcija ili kliknite ovu poruku."
+            }
+        },
         "Dialog": {
             "Title": "Nađi izvršnu datoteku igre"
         }
@@ -330,6 +358,10 @@
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",
             "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Nema ažuriranja",
+            "Message": "Čini se da nema dostupnih ažuriranja."
         }
     },
     "Mod_App_Actions": {

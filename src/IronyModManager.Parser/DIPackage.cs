@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -48,7 +48,8 @@ namespace IronyModManager.Parser
         public void RegisterServices(Container container)
         {
             container.Register<IDefinition, Definition>();
-            container.RegisterWithoutTransientWarning<IIndexedDefinitions, IndexedDefinitions>();
+            container.Register<IIndexedDefinitions, IndexedDefinitions>();
+            container.RemoveTransientWarning<IIndexedDefinitions>();
             container.Collection.Register(typeof(IDefaultParser), new List<Type>()
             {
                 typeof(DefaultParser)

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-03-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -31,6 +31,18 @@ namespace IronyModManager.Models
     public class Preferences : BaseModel, IPreferences
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [automatic updates].
+        /// </summary>
+        /// <value><c>null</c> if [automatic updates] contains no value, <c>true</c> if [automatic updates]; otherwise, <c>false</c>.</value>
+        public virtual bool? AutoUpdates { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [check for prerelease].
+        /// </summary>
+        /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
+        public virtual bool CheckForPrerelease { get; set; }
 
         /// <summary>
         /// Gets or sets the game.
