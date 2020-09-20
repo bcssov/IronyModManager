@@ -154,7 +154,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
         "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Pokreni igru",
+            "Launch": "Pokreni igru",
+            "Resume": "Nastavi igru",
             "LaunchError": {
                 "Title": "Nije moguće pokrenuti igru",
                 "Message": "Pokretanje igre nije uspjelo."

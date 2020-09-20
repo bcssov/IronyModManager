@@ -292,7 +292,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -351,7 +351,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(1);
@@ -400,8 +400,8 @@ namespace IronyModManager.Services.Tests
                 }
             };
             var indexed = new IndexedDefinitions();
-            indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            indexed.InitMap(definitions);            
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(2);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -461,7 +461,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -520,7 +520,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -579,7 +579,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -648,7 +648,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(1);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -716,7 +716,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.Conflicts.GetAll().Count().Should().Be(0);
             result.Conflicts.GetAllFileKeys().Count().Should().Be(0);
             result.OrphanConflicts.GetAll().Count().Should().Be(0);
@@ -765,7 +765,7 @@ namespace IronyModManager.Services.Tests
             };
             var indexed = new IndexedDefinitions();
             indexed.InitMap(definitions);
-            var result = service.FindConflicts(indexed, new List<string>(), Models.Common.PatchStateMode.Default);
+            var result = service.FindConflicts(indexed, new List<string>(), IronyModManager.Models.Common.PatchStateMode.Default);
             result.AllConflicts.GetAll().Count().Should().Be(2);
         }
 
@@ -2133,7 +2133,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(Models.Common.PatchStateMode.None);
+            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.None);
         }
 
         /// <summary>
@@ -2156,7 +2156,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync(null);
-            result.Should().Be(Models.Common.PatchStateMode.None);
+            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.None);
         }
 
         /// <summary>
@@ -2195,7 +2195,7 @@ namespace IronyModManager.Services.Tests
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.GetPatchStateModeAsync("fake");
-            result.Should().Be(Models.Common.PatchStateMode.Default);
+            result.Should().Be(IronyModManager.Models.Common.PatchStateMode.Default);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
 
@@ -35,6 +37,16 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// The continue game arguments
+        /// </summary>
+        private const string ContinueGameArgs = "--continuelastsave";
+
+        /// <summary>
+        /// The continue game file name
+        /// </summary>
+        private const string ContinueGameFileName = "continue_game.json";
+
+        /// <summary>
         /// The steam launch arguments
         /// </summary>
         private const string SteamLaunchArgs = "steam://run/";
@@ -44,6 +56,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IPreferencesService preferencesService;
 
+        /// <summary>
+        /// The reader
+        /// </summary>
+        private readonly IReader reader;
+
         #endregion Fields
 
         #region Constructors
@@ -51,12 +68,14 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="GameService" /> class.
         /// </summary>
+        /// <param name="reader">The reader.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="mapper">The mapper.</param>
-        public GameService(IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
+        public GameService(IReader reader, IStorageProvider storageProvider, IPreferencesService preferencesService, IMapper mapper) : base(storageProvider, mapper)
         {
             this.preferencesService = preferencesService;
+            this.reader = reader;
         }
 
         #endregion Constructors
@@ -111,7 +130,7 @@ namespace IronyModManager.Services
                     var text = File.ReadAllText(settingsFile);
                     try
                     {
-                        var settingsObject = JsonConvert.DeserializeObject<Registrations.Models.LauncherSettings>(text);
+                        var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
                         model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
                     }
                     catch
@@ -126,8 +145,9 @@ namespace IronyModManager.Services
         /// Gets the launch arguments.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="appendContinueGame">if set to <c>true</c> [append continue game].</param>
         /// <returns>System.String.</returns>
-        public virtual IGameSettings GetLaunchSettings(IGame game)
+        public virtual IGameSettings GetLaunchSettings(IGame game, bool appendContinueGame = false)
         {
             var model = GetModelInstance<IGameSettings>();
             var exeLoc = game.ExecutableLocation ?? string.Empty;
@@ -153,6 +173,10 @@ namespace IronyModManager.Services
                     }
                 }
             }
+            if (appendContinueGame)
+            {
+                model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}";
+            }
             return model;
         }
 
@@ -163,6 +187,55 @@ namespace IronyModManager.Services
         public virtual IGame GetSelected()
         {
             return Get().FirstOrDefault(s => s.IsSelected);
+        }
+
+        /// <summary>
+        /// Determines whether [is continue game allowed] [the specified game].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsContinueGameAllowed(IGame game)
+        {
+            var continueGameFile = Path.Combine(game.UserDirectory, ContinueGameFileName);
+            var parsed = reader.Read(continueGameFile);
+            if (parsed?.Count() == 1)
+            {
+                try
+                {
+                    var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault().Content));
+                    var fileName = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
+                    var path = Path.GetFileNameWithoutExtension(fileName);
+                    var saveDir = Path.GetDirectoryName(fileName).Replace("save games", string.Empty).StandardizeDirectorySeparator();
+                    string[] files;
+                    if (!string.IsNullOrWhiteSpace(saveDir))
+                    {
+                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games", saveDir.Trim(Path.DirectorySeparatorChar)), "*");
+                    }
+                    else
+                    {
+                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games"), "*");
+                    }
+                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Contains(path, StringComparison.OrdinalIgnoreCase));
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether [is steam game] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam game] [the specified settings]; otherwise, <c>false</c>.</returns>
+        public virtual bool IsSteamGame(IGameSettings settings)
+        {
+            var game = GetSelected();
+            var gameExe = (game.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+            var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+            return gameExe.Equals(settingsExe);
         }
 
         /// <summary>

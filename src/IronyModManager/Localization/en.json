@@ -154,7 +154,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Launch Game",
+            "Launch": "Launch Game",
+            "Resume": "Resume Game",
             "LaunchError": {
                 "Title": "Cannot Launch Game",
                 "Message": "Failed to launch the game."
@@ -274,7 +275,7 @@
             "AutoUpdates": "Check For Updates at Startup",
             "CheckPrerelease": "Update To Prerelease Versions",
             "CheckForUpdates": "Check For Updates",
-            "Install": "Install Updates",            
+            "Install": "Install Updates",
             "Version": "Version",
             "Overlay": {
                 "UpdateDownloading": "Downloading Updates...",

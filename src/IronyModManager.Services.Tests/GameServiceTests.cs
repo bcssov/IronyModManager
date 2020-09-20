@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -13,10 +13,13 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using AutoMapper;
 using FluentAssertions;
+using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -97,7 +100,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.Count().Should().Be(3);
             result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(3);
@@ -113,7 +116,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
@@ -132,7 +135,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Get();
             result.FirstOrDefault(p => p.IsSelected).Should().NotBeNull();
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
@@ -153,7 +156,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.GetSelected();
             result.Should().NotBeNull();
             result.Type.Should().Be("game 1");
@@ -172,7 +175,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Save(new Game()
             {
                 IsSelected = true,
@@ -197,7 +200,7 @@ namespace IronyModManager.Services.Tests
                 return true;
             });
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.Save(new Game()
             {
                 IsSelected = true,
@@ -219,7 +222,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             Exception exception = null;
             try
             {
@@ -246,7 +249,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var games = new List<IGame>
             {
                 new Game()
@@ -278,7 +281,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var games = new List<IGame>
             {
                 new Game()
@@ -339,7 +342,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
 
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var themes = new List<IGame>
             {
                 new Game()
@@ -378,7 +381,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -389,7 +392,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_steam_launch_command()
-        {            
+        {
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -402,7 +405,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1//test");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -413,7 +416,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_native_launch_command_only()
-        {            
+        {
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -425,7 +428,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().BeNullOrWhiteSpace();
@@ -436,7 +439,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_native_launch_command()
-        {            
+        {
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -449,10 +452,34 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetLaunchSettings(game);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().Be("args");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_continue_game_args.
+        /// </summary>
+        [Fact]
+        public void Should_return_continue_game_args()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                WorkshopDirectory = "test",
+                LaunchArguments = " -args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetLaunchSettings(game);
+            args.ExecutableLocation.Should().Be("test.exe");
+            args.LaunchArguments.Should().Be("--continuelastsave -args");
         }
 
         /// <summary>
@@ -460,7 +487,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_default_steam_location()
-        {            
+        {
             var game = new Game()
             {
                 SteamAppId = 1,
@@ -473,7 +500,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().Be("steam://run/1");
         }
@@ -483,7 +510,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_default_exe_location()
-        {        
+        {
             var game = new Game()
             {
                 SteamAppId = 2,
@@ -495,7 +522,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().Be("exePath.exe");
         }
@@ -505,7 +532,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public void Should_return_empty_default_exe_location()
-        {            
+        {
             var game = new Game()
             {
                 SteamAppId = 3,
@@ -517,7 +544,7 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().BeNullOrWhiteSpace();
         }
@@ -534,7 +561,7 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamLaunchPath(gameSettings);
             result.Should().BeTrue();
         }
@@ -551,9 +578,106 @@ namespace IronyModManager.Services.Tests
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
-            var service = new GameService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var result = service.IsSteamLaunchPath(gameSettings);
             result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_be_steam_game.
+        /// </summary>
+        [Fact]
+        public void Should_not_be_steam_game()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            preferencesService.Setup(p => p.Get()).Returns(() =>
+            {
+                return new Preferences()
+                {
+                    Game = "game 2"
+                };
+            });
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamGame(gameSettings);
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_be_steam_game.
+        /// </summary>
+        [Fact]
+        public void Should_be_steam_game()
+        {
+            var gameSettings = new GameSettings()
+            {
+                ExecutableLocation = "exePath.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            preferencesService.Setup(p => p.Get()).Returns(() =>
+            {
+                return new Preferences()
+                {
+                    Game = "game 2"
+                };
+            });
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsSteamGame(gameSettings);
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_allow_continue_gae.
+        /// </summary>
+        [Fact]
+        public void Should_not_allow_continue_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsContinueGameAllowed(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+            });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_allow_continue_gae.
+        /// </summary>
+        [Fact]
+        public void Should_allow_continue_game()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var fileInfos = new List<IFileInfo>()
+            {
+                new IO.FileInfo()
+                {
+                    Content = new List<string>() { "{ \"title\":	\"save games/save.sav\" }" },
+                    FileName = "continue_game.json",
+                    IsBinary = false
+                }
+            };
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.IsContinueGameAllowed(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+            });
+            result.Should().BeTrue();
         }
     }
 }
