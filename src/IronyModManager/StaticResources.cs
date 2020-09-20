@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -86,9 +86,9 @@ namespace IronyModManager
                 companyPart = $"{companyAttribute.Company}\\";
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute.Title))
-                appNamePart = $"{titleAttribute.Title}\\";
+                appNamePart = $"{titleAttribute.Title}-Updater\\";
 
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}-Updater");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
         }
 
         /// <summary>

@@ -75,6 +75,11 @@ namespace IronyModManager.Implementation.Updater
         private bool busy;
 
         /// <summary>
+        /// The last exception
+        /// </summary>
+        private Exception lastException;
+
+        /// <summary>
         /// The update information
         /// </summary>
         private UpdateInfo updateInfo;
@@ -114,7 +119,11 @@ namespace IronyModManager.Implementation.Updater
             };
             updater.DownloadHadError += (sender, path, exception) =>
             {
-                error.OnNext(exception);
+                if (exception.Message != lastException?.Message)
+                {
+                    error.OnNext(exception);
+                    lastException = exception;
+                }
             };
             updater.DownloadMadeProgress += (sender, item, progress) =>
             {
@@ -185,9 +194,11 @@ namespace IronyModManager.Implementation.Updater
             busy = true;
             if (updateInfo != null && updateInfo.Updates.Count > 0)
             {
+                lastException = null;
                 updatePath = string.Empty;
                 await updater.InitAndBeginDownload(updateInfo.Updates.FirstOrDefault());
-                return true;
+                busy = false;
+                return !string.IsNullOrWhiteSpace(updatePath);
             }
             busy = false;
             return false;

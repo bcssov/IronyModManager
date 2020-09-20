@@ -456,10 +456,18 @@ namespace IronyModManager.ViewModels.Controls
             {
                 downloadingUpdates = true;
                 await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading));
-                await updater.DownloadUpdateAsync();
-                downloadingUpdates = false;
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
-                await updater.InstallUpdateAsync();
+                if (await updater.DownloadUpdateAsync())
+                {
+                    downloadingUpdates = false;
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
+                    await updater.InstallUpdateAsync();
+                    await TriggerOverlayAsync(false);
+                }
+                else
+                {
+                    downloadingUpdates = false;
+                    await TriggerOverlayAsync(false);
+                }
             }).DisposeWith(disposables);
 
             updater.Error.Subscribe(s =>
