@@ -200,6 +200,10 @@
                 "CustomPatch": "In benutzerdefinierten Patch kopieren"
             }
         },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Datei öffnen",
+            "OpenDirectory": "Verzeichnis öffnen"
+        },
         "ContextMenu": {
             "CopyAll": "Kopiere alles",
             "CopyThis": "Kopier das",

@@ -269,6 +269,12 @@ namespace IronyModManager.Shared
                     public const string CustomPatch = Prefix + "CustomPatch";
                 }
             }
+            public static class CompareSelectorContextMenu
+            {
+                public const string Prefix = "Conflict_Solver.CompareSelectorContextMenu.";
+                public const string OpenFile = Prefix + "OpenFile";
+                public const string OpenDirectory = Prefix + "OpenDirectory";
+            }
             public static class ContextMenu
             {
                 public const string Prefix = "Conflict_Solver.ContextMenu.";
