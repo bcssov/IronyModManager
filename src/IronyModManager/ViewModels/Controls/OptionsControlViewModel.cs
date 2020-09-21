@@ -350,6 +350,9 @@ namespace IronyModManager.ViewModels.Controls
                 Changelog = updater.GetChangeLog();
                 VersionContent = updater.GetVersion();
                 UpdateInfoVisible = true;
+                var openState = IsOpen;
+                IsOpen = false;
+                IsOpen = openState;
                 if (autoUpdateCheck)
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
@@ -365,7 +368,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
                     notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
                 }
-            }
+            }            
             CheckingForUpdates = false;
         }
 
