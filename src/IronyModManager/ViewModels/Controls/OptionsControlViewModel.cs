@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -446,9 +446,10 @@ namespace IronyModManager.ViewModels.Controls
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
             }).DisposeWith(disposables);
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(() =>
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                return CheckForUpdatesAsync();
+                await CheckForUpdatesAsync();
+                IsOpen = true;
             }, updateCheckAllowed).DisposeWith(disposables);
 
             var downloadingUpdates = false;
@@ -489,7 +490,8 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
                     var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
                     TriggerOverlay(true, message, progress);
-                } else if (installingUpdates)
+                }
+                else if (installingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
                     var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
