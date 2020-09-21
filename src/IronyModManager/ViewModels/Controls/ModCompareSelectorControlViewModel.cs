@@ -174,7 +174,10 @@ namespace IronyModManager.ViewModels.Controls
             ConflictPath = string.Empty;
             if (definition != null)
             {
-                ConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+                if (!modPatchCollectionService.IsPatchMod(definition?.ModName))
+                {
+                    ConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+                }
             }
         }
 

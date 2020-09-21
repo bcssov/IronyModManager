@@ -9,6 +9,7 @@
   <UserControl.Resources>
     <converter:DefinitionPriorityClassConverter x:Key="DefinitionPriorityClassConverter" />
     <converter:DefinitionPriorityTextConverter x:Key="DefinitionPriorityTextConverter" />
+    <converter:DefinitionFileTooltipConverter x:Key="DefinitionFileTooltipConverter" />
   </UserControl.Resources>
   <Panel>
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
@@ -30,7 +31,7 @@
                   </MultiBinding>
                 </controls:BoundClassBorder.BoundClasses>
                 <controls:BoundClassTextBlock TextWrapping="Wrap"
-                                              controls:IronyToolTip.Tip="{Binding File}"
+                                              controls:IronyToolTip.Tip="{Binding, Converter={StaticResource DefinitionFileTooltipConverter}}"
                                               controls:IronyToolTip.ShowDelay="0">
                   <controls:BoundClassTextBlock.Text>
                     <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
@@ -62,7 +63,7 @@
                   </MultiBinding>
                 </controls:BoundClassBorder.BoundClasses>
                 <controls:BoundClassTextBlock TextWrapping="Wrap"
-                                              controls:IronyToolTip.Tip="{Binding File}"
+                                              controls:IronyToolTip.Tip="{Binding, Converter={StaticResource DefinitionFileTooltipConverter}}"
                                               controls:IronyToolTip.ShowDelay="0">
                   <controls:BoundClassTextBlock.Text>
                     <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
