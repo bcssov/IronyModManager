@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-07-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -385,6 +385,7 @@ namespace IronyModManager.Parser.Definitions
                 child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
+                child.FileName = definition.FileCI;
                 children.Add(child);
                 if (shouldAdd)
                 {
