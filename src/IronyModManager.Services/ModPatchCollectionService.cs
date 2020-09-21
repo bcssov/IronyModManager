@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1451,7 +1451,7 @@ namespace IronyModManager.Services
             {
                 return true;
             }
-            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
+            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             return cachedDiffs.Count() != cachedConflicts.Count();
         }
 

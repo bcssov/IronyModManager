@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-12-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -19,6 +19,8 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
+using IronyModManager.DI;
+using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -132,9 +134,17 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var col = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
                     var priorityDefinition = modPatchCollectionService.EvalDefinitionPriority(col);
-                    if (priorityDefinition?.Definition == null)
+                    if (priorityDefinition == null || priorityDefinition.Definition == null)
                     {
-                        priorityDefinition.Definition = col.First();
+                        if (priorityDefinition == null)
+                        {
+                            priorityDefinition = DIResolver.Get<IPriorityDefinitionResult>();
+                            priorityDefinition.PriorityType = DefinitionPriorityType.None;
+                        }
+                        if (priorityDefinition.Definition == null)
+                        {
+                            priorityDefinition.Definition = col.First();
+                        }
                     }
                     var newDefinition = await modPatchCollectionService.CreatePatchDefinitionAsync(priorityDefinition.Definition, CollectionName);
                     if (newDefinition != null)
