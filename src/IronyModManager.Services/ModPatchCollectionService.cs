@@ -1294,7 +1294,7 @@ namespace IronyModManager.Services
             if (pattern.Contains("*") || pattern.Contains("?"))
             {
                 var regex = $"^{Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".")}$";
-                return Regex.IsMatch(content, regex);
+                return Regex.IsMatch(content, regex, RegexOptions.IgnoreCase);
             }
             else
             {
