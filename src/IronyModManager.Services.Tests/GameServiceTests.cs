@@ -477,7 +477,7 @@ namespace IronyModManager.Services.Tests
             var preferencesService = new Mock<IPreferencesService>();
             SetupMockCase(preferencesService, storageProvider);
             var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var args = service.GetLaunchSettings(game);
+            var args = service.GetLaunchSettings(game, true);
             args.ExecutableLocation.Should().Be("test.exe");
             args.LaunchArguments.Should().Be("--continuelastsave -args");
         }
