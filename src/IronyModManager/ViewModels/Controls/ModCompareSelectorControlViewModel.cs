@@ -14,12 +14,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
@@ -39,6 +43,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The application action
+        /// </summary>
+        private readonly IAppAction appAction;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -55,10 +64,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCompareSelectorControlViewModel" /> class.
         /// </summary>
+        /// <param name="appAction">The application action.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ModCompareSelectorControlViewModel(IModPatchCollectionService modPatchCollectionService)
+        public ModCompareSelectorControlViewModel(IAppAction appAction, IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
+            this.appAction = appAction;
         }
 
         #endregion Constructors
@@ -70,6 +81,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The name of the collection.</value>
         public virtual string CollectionName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the invalid conflict path.
+        /// </summary>
+        /// <value>The invalid conflict path.</value>
+        public virtual string ConflictPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets the definitions.
@@ -88,6 +105,32 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The left selected definition.</value>
         public virtual IDefinition LeftSelectedDefinition { get; set; }
+
+        /// <summary>
+        /// Gets or sets the open directory.
+        /// </summary>
+        /// <value>The open directory.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.CompareSelectorContextMenu.OpenDirectory)]
+        public virtual string OpenDirectory { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open directory command.
+        /// </summary>
+        /// <value>The open directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open file.
+        /// </summary>
+        /// <value>The open file.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.CompareSelectorContextMenu.OpenFile)]
+        public virtual string OpenFile { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the open file command.
+        /// </summary>
+        /// <value>The open file command.</value>
+        public virtual ReactiveCommand<Unit, Unit> OpenFileCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the right selected definition.
@@ -120,6 +163,19 @@ namespace IronyModManager.ViewModels.Controls
             RightSelectedDefinition = null;
             VirtualDefinitions = null;
             previousDefinitions = null;
+        }
+
+        /// <summary>
+        /// Sets the parameters.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        public virtual void SetParameters(IDefinition definition)
+        {
+            ConflictPath = string.Empty;
+            if (definition != null)
+            {
+                ConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
+            }
         }
 
         /// <summary>
@@ -199,6 +255,23 @@ namespace IronyModManager.ViewModels.Controls
                     previousDefinitions = null;
                 }
             }).DisposeWith(disposables);
+
+            OpenDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (!string.IsNullOrWhiteSpace(ConflictPath))
+                {
+                    await appAction.OpenAsync(Path.GetDirectoryName(ConflictPath));
+                }
+            }).DisposeWith(disposables);
+
+            OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (!string.IsNullOrWhiteSpace(ConflictPath))
+                {
+                    await appAction.OpenAsync(ConflictPath);
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 

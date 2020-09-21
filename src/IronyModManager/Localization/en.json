@@ -200,6 +200,10 @@
                 "CustomPatch": "Copy To Custom Patch"
             }
         },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Open File",
+            "OpenDirectory": "Open Directory"
+        },
         "ContextMenu": {
             "CopyAll": "Copy All",
             "CopyThis": "Copy This",

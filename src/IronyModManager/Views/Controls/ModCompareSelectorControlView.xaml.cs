@@ -4,13 +4,16 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
@@ -18,6 +21,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 
@@ -43,12 +47,17 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         private readonly ILogger logger;
 
+        /// <summary>
+        /// The cached menu items
+        /// </summary>
+        private Dictionary<object, List<MenuItem>> cachedMenuItems = new Dictionary<object, List<MenuItem>>();
+
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModCompareSelectorControlView"/> class.
+        /// Initializes a new instance of the <see cref="ModCompareSelectorControlView" /> class.
         /// </summary>
         public ModCompareSelectorControlView()
         {
@@ -59,6 +68,66 @@ namespace IronyModManager.Views.Controls
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Binds the ListBox pointer.
+        /// </summary>
+        /// <param name="listBox">The list box.</param>
+        protected virtual void BindListBoxPointer(ListBox listBox)
+        {
+            IEnumerable lastDataSource = null;
+            listBox.PointerMoved += (sender, args) =>
+            {
+                var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
+                if (hoveredItem != null)
+                {
+                    var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                    if (grid != null)
+                    {
+                        ViewModel.SetParameters(hoveredItem.Content as IDefinition);
+                        bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
+                        if (listBox.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
+                        {
+                            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
+                            lastDataSource = listBox.Items;
+                        }
+                        if (!cachedMenuItems.ContainsKey(hoveredItem.Content))
+                        {
+                            if (!string.IsNullOrWhiteSpace(ViewModel.ConflictPath))
+                            {
+                                var menuItems = new List<MenuItem>()
+                                {
+                                    new MenuItem()
+                                    {
+                                        Header = ViewModel.OpenFile,
+                                        Command = ViewModel.OpenFileCommand
+                                    }
+                                };
+                                if (!ViewModel.ConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.OpenDirectory,
+                                        Command = ViewModel.OpenDirectoryCommand
+                                    });
+                                }
+                                if (grid.ContextMenu == null)
+                                {
+                                    grid.ContextMenu = new ContextMenu();
+                                }
+                                grid.ContextMenu.Items = menuItems;
+                                cachedMenuItems.Add(hoveredItem.Content, menuItems);
+                            }
+                            else
+                            {
+                                grid.ContextMenu = null;
+                                cachedMenuItems.Add(hoveredItem.Content, null);
+                            }
+                        }
+                    }
+                }
+            };
+        }
 
         /// <summary>
         /// Called when [activated].
@@ -93,7 +162,20 @@ namespace IronyModManager.Views.Controls
                     logger.Error(ex);
                 }
             };
+            BindListBoxPointer(left);
+            BindListBoxPointer(right);
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        protected override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
+            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>

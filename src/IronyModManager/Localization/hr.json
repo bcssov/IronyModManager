@@ -200,6 +200,10 @@
                 "CustomPatch": "Kopiraj u prilagođenu zakrpu"
             }
         },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Otvori datoteku",
+            "OpenDirectory": "Otvori direktorij"
+        },
         "ContextMenu": {
             "CopyAll": "Kopiraj sve",
             "CopyThis": "Kopiraj odabrano",
@@ -275,7 +279,7 @@
             "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
             "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
             "CheckForUpdates": "Provjeri ima li ažuriranja",
-            "Install": "Instaliraj ažuriranja",            
+            "Install": "Instaliraj ažuriranja",
             "Version": "Verzija",
             "Overlay": {
                 "UpdateDownloading": "Preuzimanje ažuriranja...",

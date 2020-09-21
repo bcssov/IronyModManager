@@ -17,24 +17,30 @@
                SelectedItem="{Binding LeftSelectedDefinition}" x:Name="leftSide">
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <controls:BoundClassBorder>
-              <controls:BoundClassBorder.BoundClasses>
-                <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                  <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
-                  <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
-                </MultiBinding>
-              </controls:BoundClassBorder.BoundClasses>
-              <controls:BoundClassTextBlock TextWrapping="Wrap"
-                                            controls:IronyToolTip.Tip="{Binding File}"
-                                            controls:IronyToolTip.ShowDelay="0">
-                <controls:BoundClassTextBlock.Text>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+            <Grid ColumnDefinitions="*" Background="Transparent">
+              <Grid.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+              </Grid.ContextMenu>
+              <controls:BoundClassBorder>
+                <controls:BoundClassBorder.BoundClasses>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
-                </controls:BoundClassTextBlock.Text>
-              </controls:BoundClassTextBlock>
-            </controls:BoundClassBorder>
+                </controls:BoundClassBorder.BoundClasses>
+                <controls:BoundClassTextBlock TextWrapping="Wrap"
+                                              controls:IronyToolTip.Tip="{Binding File}"
+                                              controls:IronyToolTip.ShowDelay="0">
+                  <controls:BoundClassTextBlock.Text>
+                    <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+                      <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                      <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                  </controls:BoundClassTextBlock.Text>
+                </controls:BoundClassTextBlock>
+              </controls:BoundClassBorder>
+            </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
@@ -43,24 +49,30 @@
                SelectedItem="{Binding RightSelectedDefinition}" x:Name="rightSide">
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <controls:BoundClassBorder>
-              <controls:BoundClassBorder.BoundClasses>
-                <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
-                  <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
-                  <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
-                </MultiBinding>
-              </controls:BoundClassBorder.BoundClasses>
-              <controls:BoundClassTextBlock TextWrapping="Wrap"
-                                            controls:IronyToolTip.Tip="{Binding File}"
-                                            controls:IronyToolTip.ShowDelay="0">
-                <controls:BoundClassTextBlock.Text>
-                  <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+            <Grid ColumnDefinitions="*" Background="Transparent">
+              <Grid.ContextMenu>
+                <ContextMenu>
+                </ContextMenu>
+              </Grid.ContextMenu>
+              <controls:BoundClassBorder>
+                <controls:BoundClassBorder.BoundClasses>
+                  <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                   </MultiBinding>
-                </controls:BoundClassTextBlock.Text>
-              </controls:BoundClassTextBlock>
-            </controls:BoundClassBorder>
+                </controls:BoundClassBorder.BoundClasses>
+                <controls:BoundClassTextBlock TextWrapping="Wrap"
+                                              controls:IronyToolTip.Tip="{Binding File}"
+                                              controls:IronyToolTip.ShowDelay="0">
+                  <controls:BoundClassTextBlock.Text>
+                    <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
+                      <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
+                      <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                  </controls:BoundClassTextBlock.Text>
+                </controls:BoundClassTextBlock>
+              </controls:BoundClassBorder>
+            </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
