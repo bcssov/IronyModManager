@@ -655,8 +655,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
-                }
-                previousCollectionNotification = collectionName;
+                    previousCollectionNotification = collectionName;
+                }                
             };
 
             base.OnActivated(disposables);
