@@ -24,7 +24,9 @@
                   <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
               </controls:BoundClassBorder.BoundClasses>
-              <controls:BoundClassTextBlock TextWrapping="Wrap">
+              <controls:BoundClassTextBlock TextWrapping="Wrap"
+                                            controls:IronyToolTip.Tip="{Binding File}"
+                                            controls:IronyToolTip.ShowDelay="0">
                 <controls:BoundClassTextBlock.Text>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />
@@ -48,7 +50,9 @@
                   <Binding Path="DataContext" RelativeSource="{RelativeSource Self}" />
                 </MultiBinding>
               </controls:BoundClassBorder.BoundClasses>
-              <controls:BoundClassTextBlock TextWrapping="Wrap">
+              <controls:BoundClassTextBlock TextWrapping="Wrap"
+                                            controls:IronyToolTip.Tip="{Binding File}"
+                                            controls:IronyToolTip.ShowDelay="0">
                 <controls:BoundClassTextBlock.Text>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityTextConverter}" Mode="OneWay">
                     <Binding Path="Items" RelativeSource="{RelativeSource AncestorType={x:Type ListBox}}" />

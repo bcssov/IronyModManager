@@ -1144,7 +1144,7 @@ namespace IronyModManager.Services
                         var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
                         if (validConflictsGroup.Count() > 1)
                         {
-                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
+                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(m => modOrder.IndexOf(m.ModName))).Definition);
                             foreach (var item in filteredConflicts)
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
