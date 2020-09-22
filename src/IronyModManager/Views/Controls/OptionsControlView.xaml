@@ -47,7 +47,7 @@
                   <TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></TextBox>
                 </Grid>
                 <TextBox Text="{Binding Changelog}" IsReadOnly="True"
-                         MaxHeight="300" Grid.Row="1"
+                         MaxHeight="200" Grid.Row="1"
                          MaxWidth="320" ScrollViewer.HorizontalScrollBarVisibility="Auto"></TextBox>
                 <Button Margin="0,5" Content="{Binding InstallUpdates}"
                         Command="{Binding InstallUpdatesCommand}" Grid.Row="2"></Button>
