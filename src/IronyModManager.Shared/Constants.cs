@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -214,13 +214,18 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The game folders
                 /// </summary>
-                public static readonly string[] GameFolders = new string[] { "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "history", "localization", 
+                public static readonly string[] GameFolders = new string[] { "common", "content_source", "dlc", "events", "fonts", "gfx", "gui", "history", "localization",
                     "map_data", "music", "notifications", "sound", "tests", "tools", "tweakergui_assets" };
 
                 /// <summary>
                 /// The launcher settings file name
                 /// </summary>
-                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+                public static string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                /// <summary>
+                /// The launcher settings prefix
+                /// </summary>
+                public static string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
                 #endregion Fields
             }
@@ -333,7 +338,12 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The launcher settings file name
                 /// </summary>
-                public static string LauncherSettingsFileName = ".." + Path.DirectorySeparatorChar + "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+                public static string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+
+                /// <summary>
+                /// The launcher settings prefix
+                /// </summary>
+                public static string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
                 #endregion Fields
             }

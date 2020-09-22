@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -124,7 +124,15 @@ namespace IronyModManager.Services
             else if (!string.IsNullOrWhiteSpace(game.ExecutableLocation) && !string.IsNullOrWhiteSpace(game.LauncherSettingsFileName))
             {
                 var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-                var settingsFile = Path.Combine(basePath, game.LauncherSettingsFileName);
+                string settingsFile;
+                if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+                {
+                    settingsFile = Path.Combine(basePath, game.LauncherSettingsFileName);
+                }
+                else
+                {
+                    settingsFile = Path.Combine(basePath, game.LauncherSettingsPrefix, game.LauncherSettingsFileName);
+                }
                 if (File.Exists(settingsFile))
                 {
                     var text = File.ReadAllText(settingsFile);
@@ -323,6 +331,7 @@ namespace IronyModManager.Services
             game.BaseGameDirectory = gameType.BaseGameDirectory;
             game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
+            game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
             bool setExeLocation = true;
             if (gameSettings != null)
             {
