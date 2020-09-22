@@ -132,28 +132,11 @@ namespace IronyModManager.Services
             else if (!string.IsNullOrWhiteSpace(game.ExecutableLocation) && !string.IsNullOrWhiteSpace(game.LauncherSettingsFileName))
             {
                 var basePath = Path.GetDirectoryName(game.ExecutableLocation);
-                string settingsFile;
-                if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+                var jsonData = GetGameSettingsFromJson(game, basePath);
+                if (jsonData != null)
                 {
-                    settingsFile = game.LauncherSettingsFileName;
-                }
-                else
-                {
-                    settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
-                }
-                var info = reader.Read(Path.Combine(basePath, settingsFile));
-                if (info?.Count() > 0)
-                {
-                    var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
-                    try
-                    {
-                        var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
-                        model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
-                        model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
-                    }
-                    catch
-                    {
-                    }
+                    model.LaunchArguments = jsonData.LaunchArguments;
+                    model.UserDirectory = jsonData.UserDirectory;
                 }
             }
             if (string.IsNullOrWhiteSpace(model.UserDirectory))
@@ -161,6 +144,43 @@ namespace IronyModManager.Services
                 model.UserDirectory = game.UserDirectory;
             }
             return model;
+        }
+
+        /// <summary>
+        /// Gets the game settings from json.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>IGameSettings.</returns>
+        public virtual IGameSettings GetGameSettingsFromJson(IGame game, string path)
+        {
+            string settingsFile;
+            if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
+            {
+                settingsFile = game.LauncherSettingsFileName;
+            }
+            else
+            {
+                settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
+            }
+            var info = reader.Read(Path.Combine(path, settingsFile));
+            if (info?.Count() > 0)
+            {
+                var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
+                try
+                {
+                    var model = GetModelInstance<IGameSettings>();
+                    var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
+                    model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                    model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
+                    model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
+                    return model;
+                }
+                catch
+                {
+                }
+            }
+            return null;
         }
 
         /// <summary>

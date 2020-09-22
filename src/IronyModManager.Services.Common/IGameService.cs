@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -38,6 +38,14 @@ namespace IronyModManager.Services.Common
         /// <param name="game">The game.</param>
         /// <returns>IGameSettings.</returns>
         IGameSettings GetDefaultGameSettings(IGame game);
+
+        /// <summary>
+        /// Gets the game settings from json.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>IGameSettings.</returns>
+        IGameSettings GetGameSettingsFromJson(IGame game, string path);
 
         /// <summary>
         /// Gets the launch settings.
