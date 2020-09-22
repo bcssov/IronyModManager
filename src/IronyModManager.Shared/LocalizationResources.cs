@@ -134,6 +134,13 @@ namespace IronyModManager.Shared
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public const string ExportToClipboard = Prefix + "ExportToClipboard";
+            public static class ImportFromClipboard
+            {
+                public const string Prefix = "Collection_Mods.ImportFromClipboard.";
+                public const string Title = Prefix + "Title";
+                public const string PromptTitle = Prefix + "PromptTitle";
+                public const string PromptMessage = Prefix + "PromptMessage";
+            }
             public static class JumpOnDragAndDrop
             {
                 public const string Prefix = "Collection_Mods.JumpOnDragAndDrop.";

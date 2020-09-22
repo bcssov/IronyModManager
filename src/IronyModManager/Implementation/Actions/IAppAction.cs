@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="IAppAction.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.Implementation.Actions
         /// </summary>
         /// <returns>Task.</returns>
         Task ExitAppAsync();
+
+        /// <summary>
+        /// Gets the asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        Task<string> GetAsync();
 
         /// <summary>
         /// Opens the asynchronous.

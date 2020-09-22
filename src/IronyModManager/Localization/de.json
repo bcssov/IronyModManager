@@ -99,6 +99,11 @@
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
+        "ImportFromClipboard": {
+            "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
+            "PromptTitle": "Mod-Reihenfolge überschreiben?",
+            "PromptMessage": "Dies überschreibt deine Mod-Sammlungs-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
             "On": "Auf",
