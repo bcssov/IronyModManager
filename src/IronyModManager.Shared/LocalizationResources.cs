@@ -366,11 +366,13 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Options.Game.";
                 public const string Title = Prefix + "Title";
-                public const string NavigateToExe = Prefix + "NavigateToExe";
+                public const string NavigateTo = Prefix + "NavigateTo";
                 public const string Reset = Prefix + "Reset";
                 public const string GameExecutable = Prefix + "GameExecutable";
+                public const string UserDirectory = Prefix + "UserDirectory";
                 public const string GameArgs = Prefix + "GameArgs";
                 public const string RefreshMods = Prefix + "RefreshMods";
+                public const string AutoConfigure = Prefix + "AutoConfigure";
             }
             public static class Updates
             {
@@ -410,7 +412,9 @@ namespace IronyModManager.Shared
             public static class Dialog
             {
                 public const string Prefix = "Options.Dialog.";
-                public const string Title = Prefix + "Title";
+                public const string ExeTitle = Prefix + "ExeTitle";
+                public const string GameRootTitle = Prefix + "GameRootTitle";
+                public const string UserDirTitle = Prefix + "UserDirTitle";
             }
         }
         public static class Notifications

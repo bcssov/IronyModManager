@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="UpdateUnpackProgressEvent.cs" company="Mario">
 //     Mario
@@ -27,7 +27,7 @@ namespace IronyModManager.IO.Common.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpdateUnpackProgressEvent"/> class.
+        /// Initializes a new instance of the <see cref="UpdateUnpackProgressEvent" /> class.
         /// </summary>
         /// <param name="progress">The progress.</param>
         public UpdateUnpackProgressEvent(int progress)
@@ -43,7 +43,7 @@ namespace IronyModManager.IO.Common.MessageBus
         /// Gets a value indicating whether this instance is fire and forget.
         /// </summary>
         /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => false;
+        public bool IsFireAndForget => true;
 
         /// <summary>
         /// Gets or sets the progress.

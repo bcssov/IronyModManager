@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -97,6 +97,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
 
         /// <summary>
+        /// The game directory changed handler
+        /// </summary>
+        private readonly GameUserDirectoryChangedHandler gameDirectoryChangedHandler;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -150,12 +155,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
+        /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
-            ILogger logger)
+            GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
         {
             this.shutDownState = shutDownState;
             this.modService = modService;
@@ -168,6 +174,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionLoadHandler = modDefinitionLoadHandler;
             this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
+            this.gameDirectoryChangedHandler = gameDirectoryChangedHandler;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -658,6 +665,12 @@ namespace IronyModManager.ViewModels.Controls
                     previousCollectionNotification = collectionName;
                 }                
             };
+
+            gameDirectoryChangedHandler.Message.Subscribe(s =>
+            {
+                InstalledMods.RefreshMods();
+                EvalResumeAvailability(s.Game);
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }

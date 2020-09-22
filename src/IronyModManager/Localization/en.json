@@ -273,11 +273,13 @@
         "Close": "Close",
         "Game": {
             "Title": "Game Options",
-            "NavigateToExe": "...",
+            "NavigateTo": "...",
             "Reset": "X",
             "GameExecutable": "Game Executable",
+            "UserDirectory": "Data Directory",
             "GameArgs": "Game Args",
-            "RefreshMods": "Refresh Descriptors Before Playing"
+            "RefreshMods": "Refresh Descriptors Before Playing",
+            "AutoConfigure": "Configure All..."
         },
         "Updates": {
             "Title": "Update Options",
@@ -305,7 +307,9 @@
             }
         },
         "Dialog": {
-            "Title": "Find game executable"
+            "ExeTitle": "Find game executable",
+            "GameRootTitle": "Find game root directory",
+            "UserDirTitle": "Find game data directory"
         }
     },
     "Notifications": {

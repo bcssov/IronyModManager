@@ -29,7 +29,7 @@ namespace IronyModManager.Services.Resolver
         /// <summary>
         /// The map
         /// </summary>
-        private readonly static Dictionary<string, Environment.SpecialFolder> map = new Dictionary<string, Environment.SpecialFolder>() {
+        private static readonly Dictionary<string, Environment.SpecialFolder> map = new Dictionary<string, Environment.SpecialFolder>() {
             { "%USER_DOCUMENTS%", Environment.SpecialFolder.MyDocuments },
             { "$LINUX_DATA_HOME", Environment.SpecialFolder.LocalApplicationData}
         };
