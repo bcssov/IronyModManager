@@ -252,6 +252,7 @@ namespace IronyModManager.Storage.Tests
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
+                LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true
             };
             storage.RegisterGame(game);
@@ -267,6 +268,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
         }
 
@@ -449,6 +451,7 @@ namespace IronyModManager.Storage.Tests
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
+                LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true
             };
             storage.RegisterGame(game);
@@ -465,6 +468,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             result.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
+            result.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             result.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
         }
 

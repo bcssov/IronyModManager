@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Updater;
@@ -59,6 +60,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
+
+        /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The notification action
@@ -112,6 +118,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -119,7 +126,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(ILogger logger, INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
+        public OptionsControlViewModel(Shared.MessageBus.IMessageBus messageBus, ILogger logger, INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
             this.gameService = gameService;
@@ -129,11 +136,25 @@ namespace IronyModManager.ViewModels.Controls
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
             this.logger = logger;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the automatic configure.
+        /// </summary>
+        /// <value>The automatic configure.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.AutoConfigure)]
+        public virtual string AutoConfigure { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the automatic configure command.
+        /// </summary>
+        /// <value>The automatic configure command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AutoConfigureCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the automatic update.
@@ -237,21 +258,41 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the navigate.
         /// </summary>
         /// <value>The navigate.</value>
-        [StaticLocalization(LocalizationResources.Options.Game.NavigateToExe)]
+        [StaticLocalization(LocalizationResources.Options.Game.NavigateTo)]
         public virtual string Navigate { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the navigate command.
+        /// Gets or sets the navigate directory command.
         /// </summary>
-        /// <value>The navigate command.</value>
-        public virtual ReactiveCommand<Unit, Unit> NavigateCommand { get; protected set; }
+        /// <value>The navigate directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateDirectoryCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the navigate title.
+        /// Gets or sets the navigate executable command.
         /// </summary>
-        /// <value>The navigate title.</value>
-        [StaticLocalization(LocalizationResources.Options.Dialog.Title)]
-        public virtual string NavigateTitle { get; protected set; }
+        /// <value>The navigate executable command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateExeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate executable title.
+        /// </summary>
+        /// <value>The navigate executable title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.ExeTitle)]
+        public virtual string NavigateExeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate game title.
+        /// </summary>
+        /// <value>The navigate game title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.GameRootTitle)]
+        public virtual string NavigateGameTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate user dir title.
+        /// </summary>
+        /// <value>The navigate user dir title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.UserDirTitle)]
+        public virtual string NavigateUserDirTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the options.
@@ -287,6 +328,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ResetArgsCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the reset directory command.
+        /// </summary>
+        /// <value>The reset directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the reset command.
         /// </summary>
         /// <value>The reset command.</value>
@@ -310,6 +357,13 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The update settings.</value>
         public virtual IUpdateSettings UpdateSettings { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the user directory.
+        /// </summary>
+        /// <value>The user directory.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.UserDirectory)]
+        public virtual string UserDirectory { get; protected set; }
 
         /// <summary>
         /// Gets or sets the content of the version.
@@ -368,7 +422,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
                     notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
                 }
-            }            
+            }
             CheckingForUpdates = false;
         }
 
@@ -418,35 +472,85 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = false;
             }).DisposeWith(disposables);
 
-            NavigateCommand = ReactiveCommand.CreateFromTask(async () =>
+            NavigateExeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 IsOpen = false;
-                var result = await fileDialogAction.OpenDialogAsync(NavigateTitle);
+                var result = await fileDialogAction.OpenDialogAsync(NavigateExeTitle);
                 IsOpen = true;
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     Game.ExecutableLocation = result;
-                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments) || string.IsNullOrWhiteSpace(Game.UserDirectory))
                     {
-                        Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                        var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                        if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                        {
+                            Game.LaunchArguments = defaultSettings.LaunchArguments;
+                        }
+                        if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                        {
+                            Game.UserDirectory = defaultSettings.UserDirectory;
+                        }
                     }
+                    SaveGame();
+                }
+            }).DisposeWith(disposables);
+
+            NavigateDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateUserDirTitle);
+                IsOpen = true;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    Game.UserDirectory = result;
                     SaveGame();
                 }
             }).DisposeWith(disposables);
 
             ResetExeCommand = ReactiveCommand.Create(() =>
             {
-                Game.ExecutableLocation = gameService.GetDefaultGameSettings(Game).ExecutableLocation;
+                var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                Game.ExecutableLocation = defaultSettings.ExecutableLocation;
                 if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
                 {
-                    Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                    Game.LaunchArguments = defaultSettings.LaunchArguments;
                 }
+                if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                {
+                    Game.UserDirectory = defaultSettings.UserDirectory;
+                }
+                SaveGame();
+            }).DisposeWith(disposables);
+
+            ResetDirectoryCommand = ReactiveCommand.Create(() =>
+            {
+                var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                Game.UserDirectory = defaultSettings.UserDirectory;
                 SaveGame();
             }).DisposeWith(disposables);
 
             ResetArgsCommand = ReactiveCommand.Create(() =>
             {
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+            }).DisposeWith(disposables);
+
+            AutoConfigureCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateGameTitle);
+                IsOpen = true;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    var settings = gameService.GetGameSettingsFromJson(Game, result);
+                    if (settings != null)
+                    {
+                        Game.UserDirectory = settings.UserDirectory;
+                        Game.ExecutableLocation = settings.ExecutableLocation;
+                        Game.LaunchArguments = settings.LaunchArguments;
+                        SaveGame();
+                    }
+                }
             }).DisposeWith(disposables);
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -524,7 +628,12 @@ namespace IronyModManager.ViewModels.Controls
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
-            gameService.Save(game);
+            bool dirChanged = game.UserDirectory != Game.UserDirectory;
+            game.UserDirectory = Game.UserDirectory;
+            if (gameService.Save(game) && dirChanged)
+            {
+                messageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
+            }
             SetGame(game);
         }
 

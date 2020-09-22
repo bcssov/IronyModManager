@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="IGame.cs" company="Mario">
 //     Mario
@@ -75,6 +75,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The name of the launcher settings file.</value>
         string LauncherSettingsFileName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the launcher settings prefix.
+        /// </summary>
+        /// <value>The launcher settings prefix.</value>
+        string LauncherSettingsPrefix { get; set; }
 
         /// <summary>
         /// Gets or sets the log location.

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Common
 // Author           : Mario
-// Created          : 09-07-2020
+// Created          : 09-22-2020
 //
 // Last Modified By : Mario
 // Last Modified On : 09-22-2020
 // ***********************************************************************
-// <copyright file="ActiveGameRequestEvent.cs" company="Mario">
+// <copyright file="GameUserDirectoryChangedEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -19,19 +19,19 @@ using IronyModManager.Shared.MessageBus;
 namespace IronyModManager.Common.Events
 {
     /// <summary>
-    /// Class ActiveGameRequestEvent.
+    /// Class GameUserDirectoryChangedEvent.
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
-    public class ActiveGameRequestEvent : IMessageBusEvent
+    public class GameUserDirectoryChangedEvent : IMessageBusEvent
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActiveGameRequestEvent" /> class.
+        /// Initializes a new instance of the <see cref="GameUserDirectoryChangedEvent"/> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        public ActiveGameRequestEvent(IGame game)
+        public GameUserDirectoryChangedEvent(IGame game)
         {
             Game = game;
         }

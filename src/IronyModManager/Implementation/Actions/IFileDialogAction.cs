@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="IFileDialogAction.cs" company="Mario">
 //     Mario
@@ -32,6 +32,13 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="extensions">The extensions.</param>
         /// <returns>Task&lt;System.String&gt;.</returns>
         Task<string> OpenDialogAsync(string title, string initialFileName = Shared.Constants.EmptyParam, params string[] extensions);
+
+        /// <summary>
+        /// Opens the folder dialog asynchronous.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        Task<string> OpenFolderDialogAsync(string title);
 
         /// <summary>
         /// Saves the dialog asynchronous.

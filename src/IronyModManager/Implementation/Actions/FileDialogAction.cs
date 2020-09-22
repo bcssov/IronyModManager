@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-28-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -62,6 +62,22 @@ namespace IronyModManager.Implementation.Actions
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             var file = result?.FirstOrDefault();
             return file;
+        }
+
+        /// <summary>
+        /// open folder dialog as an asynchronous operation.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        public async Task<string> OpenFolderDialogAsync(string title)
+        {
+            var dialog = new OpenFolderDialog()
+            {
+                Title = title,
+                Directory = GetInitialDirectory()
+            };
+            var result = await dialog.ShowAsync(Helpers.GetMainWindow());
+            return result;
         }
 
         /// <summary>

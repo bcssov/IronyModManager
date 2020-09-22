@@ -273,11 +273,13 @@
         "Close": "Schließen",
         "Game": {
             "Title": "Spieleinstellungen",
-            "NavigateToExe": "...",
+            "NavigateTo": "...",
             "Reset": "X",
             "GameExecutable": "Spiel ausführbar",
+            "UserDirectory": "Data Directory",
             "GameArgs": "Spiel Args",
-            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen"
+            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+            "AutoConfigure": "Alle konfigurieren..."
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
@@ -305,7 +307,9 @@
             }
         },
         "Dialog": {
-            "Title": "Finde eine ausführbare Spieldatei"
+            "ExeTitle": "Finde eine ausführbare Spieldatei",
+            "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
+            "UserDirTitle": "Spieldatenverzeichnis suchen"
         }
     },
     "Notifications": {

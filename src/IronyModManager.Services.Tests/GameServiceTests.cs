@@ -68,7 +68,7 @@ namespace IronyModManager.Services.Tests
                     SteamAppId = 2,
                     WorkshopDirectory = "workshop2",
                     ExecutableArgs = "args",
-                    ExecutablePath = "exePath.exe"
+                    ExecutablePath = "exePath.exe",
                 },
                 new GameType()
                 {
@@ -506,6 +506,30 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_default_user_dir_location.
+        /// </summary>
+        [Fact]
+        public void Should_return_default_user_dir_location()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                UserDirectory = "user-dir",
+                WorkshopDirectory = "test",
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultGameSettings(game);
+            args.UserDirectory.Should().Be("user-dir");
+        }
+
+        /// <summary>
         /// Defines the test method Should_return_default_exe_location.
         /// </summary>
         [Fact]
@@ -525,6 +549,28 @@ namespace IronyModManager.Services.Tests
             var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.ExecutableLocation.Should().Be("exePath.exe");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_stored_user_dir_location.
+        /// </summary>
+        [Fact]
+        public void Should_return_stored_user_dir_location()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 2,
+                IsSelected = true,
+                Type = "game 2",
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe"
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultGameSettings(game);
+            args.UserDirectory.Should().Be("user2");
         }
 
         /// <summary>
@@ -678,6 +724,59 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
             });
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_json_settings_data.
+        /// </summary>
+        [Fact]
+        public void Should_not_return_json_settings_data()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<IFileInfo>)null);
+            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetGameSettingsFromJson(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json"
+            }, "test");
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_json_settings_data.
+        /// </summary>
+        [Fact]
+        public void Should_return_json_settings_data()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var fileInfos = new List<IFileInfo>()
+            {
+                new IO.FileInfo()
+                {
+                    Content = new List<string>() { "{     \"exeArgs\": [        \"-gdpr-compliant\"    ],    \"exePath\": \"stellaris.exe\",    \"gameDataPath\": \"test\" }" },
+                    FileName = "continue_game.json",
+                    IsBinary = false
+                }
+            };
+            var reader = new Mock<IReader>();
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            var service = new GameService(reader.Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var result = service.GetGameSettingsFromJson(new Game()
+            {
+                Type = "game 2",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                LauncherSettingsFileName = "launcher.json"
+            }, "test");
+            result.UserDirectory.Should().Be("test");
+            result.ExecutableLocation.Should().Be("test\\stellaris.exe");
+            result.LaunchArguments.Should().Be("-gdpr-compliant");
         }
     }
 }
