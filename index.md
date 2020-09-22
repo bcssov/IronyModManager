@@ -14,6 +14,7 @@ Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
 * Latest stable version: [v1.5.53](https://github.com/bcssov/IronyModManager/releases/tag/v1.5.53).
+* Latest prerelease version: [v1.6.87-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.6.87-alpha).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
@@ -39,22 +40,22 @@ Made by LordOfLA
 
 ### Which file should I download?
 ##### Windows
-- Portable version: **win-x64.7z**
-- Installer version: **win-x64-setup.7z**
+- Portable version: **win-x64.zip**
+- Installer version: **win-x64-setup.zip**
 
 ##### Mac
-- Portable version: **osx-x64.7z**
+- Portable version: **osx-x64.zip**
 
 ##### Linux
-- Portable version: **linux-x64.7z**
+- Portable version: **linux-x64.zip**
 
 ### Run Instructions
 ##### Windows
-- Portable version: Download and unpack somewhere **win-x64.7z**, locate in the folder **IronyModManager.exe** and double click it.
-- Installer version: Unpack **win-x64-Setup.7z** and double click **win-x64-Setup.exe** and follow on screen instructions.
+- Portable version: Download and unpack somewhere **win-x64.zip**, locate in the folder **IronyModManager.exe** and double click it.
+- Installer version: Unpack **win-x64-Setup.zip** and double click **win-x64-Setup.exe** and follow on screen instructions.
 
 ##### Mac
-- Portable version: Extract the **osx.7z** file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
+- Portable version: Extract the **osx.zip** file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
 
 ##### Linux
-- Portable version: Extract the **linux.7z** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
+- Portable version: Extract the **linux.zip** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
