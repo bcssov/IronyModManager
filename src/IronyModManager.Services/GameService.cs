@@ -19,6 +19,7 @@ using AutoMapper;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
@@ -52,6 +53,11 @@ namespace IronyModManager.Services
         private const string SteamLaunchArgs = "steam://run/";
 
         /// <summary>
+        /// The path resolver
+        /// </summary>
+        private readonly PathResolver pathResolver;
+
+        /// <summary>
         /// The preferences service
         /// </summary>
         private readonly IPreferencesService preferencesService;
@@ -76,6 +82,7 @@ namespace IronyModManager.Services
         {
             this.preferencesService = preferencesService;
             this.reader = reader;
+            pathResolver = new PathResolver();
         }
 
         #endregion Constructors
@@ -116,6 +123,7 @@ namespace IronyModManager.Services
             {
                 model.ExecutableLocation = settings.ExecutablePath;
                 model.LaunchArguments = settings.ExecutableArgs;
+                model.UserDirectory = settings.UserDirectory;
             }
             else if (!string.IsNullOrWhiteSpace(game.WorkshopDirectory))
             {
@@ -127,24 +135,30 @@ namespace IronyModManager.Services
                 string settingsFile;
                 if (string.IsNullOrWhiteSpace(game.LauncherSettingsPrefix))
                 {
-                    settingsFile = Path.Combine(basePath, game.LauncherSettingsFileName);
+                    settingsFile = game.LauncherSettingsFileName;
                 }
                 else
                 {
-                    settingsFile = Path.Combine(basePath, game.LauncherSettingsPrefix, game.LauncherSettingsFileName);
+                    settingsFile = game.LauncherSettingsPrefix + game.LauncherSettingsFileName;
                 }
-                if (File.Exists(settingsFile))
+                var info = reader.Read(Path.Combine(basePath, settingsFile));
+                if (info?.Count() > 0)
                 {
-                    var text = File.ReadAllText(settingsFile);
+                    var text = string.Join(Environment.NewLine, info.FirstOrDefault().Content);
                     try
                     {
                         var settingsObject = JsonConvert.DeserializeObject<Models.LauncherSettings>(text);
                         model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
+                        model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
                     }
                     catch
                     {
                     }
                 }
+            }
+            if (string.IsNullOrWhiteSpace(model.UserDirectory))
+            {
+                model.UserDirectory = game.UserDirectory;
             }
             return model;
         }
@@ -185,6 +199,8 @@ namespace IronyModManager.Services
             {
                 model.LaunchArguments = $"{ContinueGameArgs} {model.LaunchArguments.Trim()}";
             }
+            model.UserDirectory = game.UserDirectory;
+            model.RefreshDescriptors = game.RefreshDescriptors;
             return model;
         }
 
@@ -332,7 +348,8 @@ namespace IronyModManager.Services
             game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
-            bool setExeLocation = true;
+            var setExeLocation = true;
+            var setUserDirLocation = true;
             if (gameSettings != null)
             {
                 game.RefreshDescriptors = gameSettings.RefreshDescriptors;
@@ -345,12 +362,28 @@ namespace IronyModManager.Services
                     setExeLocation = false;
                     game.ExecutableLocation = gameSettings.ExecutableLocation;
                 }
+                if (!string.IsNullOrWhiteSpace(gameSettings.UserDirectory))
+                {
+                    setUserDirLocation = false;
+                    game.UserDirectory = gameSettings.UserDirectory;
+                }
             }
-            if (setExeLocation)
+            if (setExeLocation || setUserDirLocation)
             {
                 var settings = GetDefaultGameSettings(game);
-                game.ExecutableLocation = settings.ExecutableLocation ?? string.Empty;
-                game.LaunchArguments = settings.LaunchArguments ?? string.Empty;
+                if (setExeLocation)
+                {
+                    game.ExecutableLocation = settings.ExecutableLocation ?? string.Empty;
+                    game.LaunchArguments = settings.LaunchArguments ?? string.Empty;
+                }
+                if (setUserDirLocation)
+                {
+                    game.UserDirectory = settings.UserDirectory;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(game.UserDirectory))
+            {
+                game.UserDirectory = gameType.UserDirectory;
             }
             return game;
         }
@@ -372,6 +405,7 @@ namespace IronyModManager.Services
             settings.ExecutableLocation = game.ExecutableLocation;
             settings.LaunchArguments = game.LaunchArguments;
             settings.RefreshDescriptors = game.RefreshDescriptors;
+            settings.UserDirectory = game.UserDirectory;
             StorageProvider.SetGameSettings(gameSettings);
         }
 

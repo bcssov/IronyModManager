@@ -426,9 +426,17 @@ namespace IronyModManager.ViewModels.Controls
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     Game.ExecutableLocation = result;
-                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments) || string.IsNullOrWhiteSpace(Game.UserDirectory))
                     {
-                        Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                        var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                        if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                        {
+                            Game.LaunchArguments = defaultSettings.LaunchArguments;
+                        }
+                        if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                        {
+                            Game.UserDirectory = defaultSettings.UserDirectory;
+                        }
                     }
                     SaveGame();
                 }
@@ -436,10 +444,15 @@ namespace IronyModManager.ViewModels.Controls
 
             ResetExeCommand = ReactiveCommand.Create(() =>
             {
-                Game.ExecutableLocation = gameService.GetDefaultGameSettings(Game).ExecutableLocation;
+                var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                Game.ExecutableLocation = defaultSettings.ExecutableLocation;
                 if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
                 {
-                    Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                    Game.LaunchArguments = defaultSettings.LaunchArguments;
+                }
+                if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                {
+                    Game.UserDirectory = defaultSettings.UserDirectory;
                 }
                 SaveGame();
             }).DisposeWith(disposables);

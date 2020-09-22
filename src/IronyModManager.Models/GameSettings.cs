@@ -4,7 +4,7 @@
 // Created          : 05-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-01-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="GameSettings.cs" company="Mario">
 //     Mario
@@ -51,6 +51,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The type.</value>
         public virtual string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the data directory.
+        /// </summary>
+        /// <value>The data directory.</value>
+        public virtual string UserDirectory { get; set; }
 
         #endregion Properties
     }
