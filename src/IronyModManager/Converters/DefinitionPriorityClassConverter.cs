@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-26-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityClassConverter.cs" company="Mario">
 //     Mario
@@ -51,25 +51,17 @@ namespace IronyModManager.Converters
                         return "PatchMod";
                     }
                     var clean = new List<IDefinition>();
-                    bool noPatchMod = true;
                     foreach (var item in col)
                     {
                         if (!service.IsPatchMod(item.ModName))
                         {
                             clean.Add(item);
                         }
-                        else
-                        {
-                            noPatchMod = false;
-                        }
                     }
-                    if (!noPatchMod)
+                    var priority = service.EvalDefinitionPriority(clean);
+                    if (priority?.Definition == definition)
                     {
-                        var priority = service.EvalDefinitionPriority(clean);
-                        if (priority?.Definition == definition)
-                        {
-                            return "CopiedDefinition";
-                        }
+                        return "CopiedDefinition";
                     }
                 }
             }

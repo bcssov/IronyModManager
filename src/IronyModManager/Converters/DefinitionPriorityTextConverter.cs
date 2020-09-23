@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-06-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverter.cs" company="Mario">
 //     Mario
@@ -52,35 +52,28 @@ namespace IronyModManager.Converters
                     {
                         var locManager = DIResolver.Get<ILocalizationManager>();
                         var clean = new List<IDefinition>();
-                        bool noPatchMod = true;
                         foreach (var item in col)
                         {
                             if (!service.IsPatchMod(item.ModName))
                             {
                                 clean.Add(item);
                             }
-                            else
-                            {
-                                noPatchMod = false;
-                            }
                         }
-                        if (!noPatchMod)
+
+                        var priority = service.EvalDefinitionPriority(clean);
+                        if (priority?.Definition == definition)
                         {
-                            var priority = service.EvalDefinitionPriority(clean);
-                            if (priority?.Definition == definition)
+                            var type = priority.PriorityType switch
                             {
-                                var type = priority.PriorityType switch
-                                {
-                                    DefinitionPriorityType.FIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.FIOS),
-                                    DefinitionPriorityType.LIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.LIOS),
-                                    DefinitionPriorityType.ModOrder => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Order),
-                                    DefinitionPriorityType.ModOverride => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Override),
-                                    _ => string.Empty
-                                };
-                                if (!string.IsNullOrWhiteSpace(type))
-                                {
-                                    return $"{definition.ModName} - {definition.Id} {type}";
-                                }
+                                DefinitionPriorityType.FIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.FIOS),
+                                DefinitionPriorityType.LIOS => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.LIOS),
+                                DefinitionPriorityType.ModOrder => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Order),
+                                DefinitionPriorityType.ModOverride => locManager.GetResource(LocalizationResources.Conflict_Solver.PriorityReason.Override),
+                                _ => string.Empty
+                            };
+                            if (!string.IsNullOrWhiteSpace(type))
+                            {
+                                return $"{definition.ModName} - {definition.Id} {type}";
                             }
                         }
                     }
