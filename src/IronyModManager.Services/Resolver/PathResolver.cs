@@ -49,7 +49,7 @@ namespace IronyModManager.Services.Resolver
             {
                 return path;
             }
-            var segments = path.StandardizeDirectorySeparator().Split(new char[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+            var segments = path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
             var newPath = new List<string>();
             foreach (var item in segments)
             {

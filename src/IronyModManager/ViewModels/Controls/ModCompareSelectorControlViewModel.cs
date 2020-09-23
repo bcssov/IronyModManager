@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -174,7 +174,7 @@ namespace IronyModManager.ViewModels.Controls
             ConflictPath = string.Empty;
             if (definition != null)
             {
-                if (!modPatchCollectionService.IsPatchMod(definition?.ModName))
+                if (!modPatchCollectionService.IsPatchMod(definition.ModName))
                 {
                     ConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
                 }

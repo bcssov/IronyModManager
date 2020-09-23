@@ -4,7 +4,7 @@
 // Created          : 09-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="DefinitionFileTooltipConverter.cs" company="Mario">
 //     Mario
@@ -56,7 +56,7 @@ namespace IronyModManager.Converters
                 {
                     service = DIResolver.Get<IModPatchCollectionService>();
                 }
-                if (!service.IsPatchMod(definition?.ModName))
+                if (!service.IsPatchMod(definition.ModName))
                 {
                     return definition.File;
                 }
