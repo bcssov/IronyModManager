@@ -52,7 +52,7 @@ Made by LordOfLA
 ### Run Instructions
 ##### Windows
 - Portable version: Download and unpack somewhere **win-x64.zip**, locate in the folder **IronyModManager.exe** and double click it.
-- Installer version: Unpack **win-x64-Setup.zip** and double click **win-x64-Setup.exe** and follow on screen instructions.
+- Installer version: Unpack **win-x64-setup.zip** and double click **win-x64-setup.exe** and follow on screen instructions.
 
 ##### Mac
 - Portable version: Extract the **osx.zip** file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
