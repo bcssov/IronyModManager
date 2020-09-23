@@ -4,6 +4,106 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.6.92-alpha</title>
+			<description>RELEASE INFO:
+				* Option screen tweaks
+				* Add ability to parse actual environment variable paths found in launcher settings json
+				* Center large popups
+				* Tweaks and fixes to image preview
+				CHANGES FROM v1.5:
+				* Add export order only option
+				* Add image preview
+				* Update checking (auto and manual update check)
+				* Auto update installation
+				* Incase steam game is being launched and steam is not running launch steam before starting the game
+				* Add resume saved game option
+				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
+				* Add ignore file syntax to ignore rules
+				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
+				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
+				* Fix actual conflict solver notification not showing
+				* Add context menu option to paste mod name order
+				* Add option to change game data directory
+				* Small bugfixes\improvements I've forgot to mention</description>
+			<pubDate>Wed, 23 Sep 2020 20:46:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.92-alpha/linux-x64.zip" sparkle:version="1.6.92.60745" sparkle:shortVersionString="1.6.92" length="72985113" sparkle:os="linux" type="application/zip" sparkle:signature="LYGMqJHkdKEfN30O+QUM1zSof5i+Y5/8np5t8q9YGQJ8ec22+PC2fzS2R5FL9CZoWFxiUx3OKr4HprTrM5GZAA=="/>
+		</item>
+		<item>
+			<title>1.6.92-alpha</title>
+			<description>RELEASE INFO:
+				* Option screen tweaks
+				* Add ability to parse actual environment variable paths found in launcher settings json
+				* Center large popups
+				* Tweaks and fixes to image preview
+				CHANGES FROM v1.5:
+				* Add export order only option
+				* Add image preview
+				* Update checking (auto and manual update check)
+				* Auto update installation
+				* Incase steam game is being launched and steam is not running launch steam before starting the game
+				* Add resume saved game option
+				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
+				* Add ignore file syntax to ignore rules
+				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
+				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
+				* Fix actual conflict solver notification not showing
+				* Add context menu option to paste mod name order
+				* Add option to change game data directory
+				* Small bugfixes\improvements I've forgot to mention</description>
+			<pubDate>Wed, 23 Sep 2020 20:46:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.92-alpha/osx-x64.zip" sparkle:version="1.6.92.60745" sparkle:shortVersionString="1.6.92" length="71788938" sparkle:os="osx" type="application/zip" sparkle:signature="SQX61BhKlqaR91qPF1d+LsE4gPWm79p57cdDs6wBJrKDdAl0MCCLq1H5RWMkOtcWByv+U/SI2oVdrn7WpFOwCg=="/>
+		</item>
+		<item>
+			<title>1.6.92-alpha</title>
+			<description>RELEASE INFO:
+				* Option screen tweaks
+				* Add ability to parse actual environment variable paths found in launcher settings json
+				* Center large popups
+				* Tweaks and fixes to image preview
+				CHANGES FROM v1.5:
+				* Add export order only option
+				* Add image preview
+				* Update checking (auto and manual update check)
+				* Auto update installation
+				* Incase steam game is being launched and steam is not running launch steam before starting the game
+				* Add resume saved game option
+				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
+				* Add ignore file syntax to ignore rules
+				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
+				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
+				* Fix actual conflict solver notification not showing
+				* Add context menu option to paste mod name order
+				* Add option to change game data directory
+				* Small bugfixes\improvements I've forgot to mention</description>
+			<pubDate>Wed, 23 Sep 2020 20:46:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.92-alpha/win-x64-setup.zip" sparkle:version="1.6.92.60745" sparkle:shortVersionString="1.6.92" length="46869688" sparkle:os="windows" type="application/zip" sparkle:signature="hanxq9cNUgY9JxYjlNQrZRcTMByKhu46wbeV35ztZJmm/JR8nR790H9TFiIzKCbTYK66lw/djyFnze+zqe1BAQ=="/>
+		</item>
+		<item>
+			<title>1.6.92-alpha</title>
+			<description>RELEASE INFO:
+				* Option screen tweaks
+				* Add ability to parse actual environment variable paths found in launcher settings json
+				* Center large popups
+				* Tweaks and fixes to image preview
+				CHANGES FROM v1.5:
+				* Add export order only option
+				* Add image preview
+				* Update checking (auto and manual update check)
+				* Auto update installation
+				* Incase steam game is being launched and steam is not running launch steam before starting the game
+				* Add resume saved game option
+				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
+				* Add ignore file syntax to ignore rules
+				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
+				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
+				* Fix actual conflict solver notification not showing
+				* Add context menu option to paste mod name order
+				* Add option to change game data directory
+				* Small bugfixes\improvements I've forgot to mention</description>
+			<pubDate>Wed, 23 Sep 2020 20:46:47 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.92-alpha/win-x64.zip" sparkle:version="1.6.92.60745" sparkle:shortVersionString="1.6.92" length="73905017" sparkle:os="windows" type="application/zip" sparkle:signature="mpO9IRQ9wOD+zZKRDd716FtRlkQYJjr5+lqszIwUURLfHNYi2EJRVqFAouNQADwNGidHaznI8RplCofUllpXBw=="/>
+		</item>
+		<item>
 			<title>1.6.87-alpha</title>
 			<description>CHANGES FROM v1.5:
 				* Add export order only option
