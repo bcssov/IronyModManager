@@ -4,13 +4,14 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="OptionsControlView.xaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Linq;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -57,6 +58,11 @@ namespace IronyModManager.Views.Controls
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
+            };
+            popup.Opened += (sender, args) =>
+            {
+                popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

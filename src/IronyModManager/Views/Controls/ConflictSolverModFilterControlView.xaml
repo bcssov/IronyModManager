@@ -7,9 +7,10 @@
   <Panel>
     <Button Content="{Binding ModFilter}" Command="{Binding ModFilterCommand}"
             BorderThickness="0,0,0,0" Background="Transparent"
-            Foreground="{DynamicResource IronyAccentBrush}"></Button>
-    <Popup PlacementMode="Bottom" IsOpen="{Binding IsOpen}"
-       Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+            Foreground="{DynamicResource IronyAccentBrush}" x:Name="openPopupButton"></Button>
+    <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsOpen}"
+       Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
+       PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <ListBox Items="{Binding Mods}" SelectedItems="{Binding SelectedMods}" SelectionMode="Multiple"

@@ -4,7 +4,7 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="PathResolver.cs" company="Mario">
 //     Mario
@@ -45,25 +45,43 @@ namespace IronyModManager.Services.Resolver
         /// <returns>System.String.</returns>
         public string Parse(string path)
         {
-            var segments = path.StandardizeDirectorySeparator().Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
-            if (segments.Any(s => map.ContainsKey(s.ToUpperInvariant())))
+            if (string.IsNullOrWhiteSpace(path))
             {
-                var newPath = new List<string>();
-                foreach (var item in segments)
-                {
-                    if (map.ContainsKey(item.ToUpperInvariant()))
-                    {
-                        var resolvedPath = Environment.GetFolderPath(map[item.ToUpperInvariant()]);
-                        newPath.Add(resolvedPath);
-                    }
-                    else
-                    {
-                        newPath.Add(item);
-                    }
-                }
-                return Path.Combine(newPath.ToArray());
+                return path;
             }
-            return path;
+            var segments = path.StandardizeDirectorySeparator().Split(new char[] { Path.DirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+            var newPath = new List<string>();
+            foreach (var item in segments)
+            {
+                if (map.ContainsKey(item.ToUpperInvariant()))
+                {
+                    var resolvedPath = Environment.GetFolderPath(map[item.ToUpperInvariant()]);
+                    newPath.Add(resolvedPath);
+                }
+                else
+                {
+                    newPath.Add(ResolveEnvironmentVariable(item));
+                }
+            }
+            return Path.Combine(newPath.ToArray());
+        }
+
+        /// <summary>
+        /// Resolves the environment variable.
+        /// </summary>
+        /// <param name="variable">The variable.</param>
+        /// <returns>System.String.</returns>
+        private string ResolveEnvironmentVariable(string variable)
+        {
+            if (variable.Contains("$") || variable.Contains("%"))
+            {
+                var path = Environment.ExpandEnvironmentVariables(variable);
+                return path;
+            }
+            else
+            {
+                return variable;
+            }
         }
 
         #endregion Methods
