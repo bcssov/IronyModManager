@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
+using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -124,6 +125,23 @@ namespace IronyModManager.IO.Readers
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
+                static byte[] tightData(Dds image)
+                {
+                    // Code from this PR (MIT licensed): https://github.com/hguy/dds-reader/pull/1/commits/ba751f0af4fc1c725842dc86d12ecf69f0c70108
+                    var tightStride = image.Width * image.BitsPerPixel / 8;
+                    if (image.Stride == tightStride)
+                    {
+                        return image.Data;
+                    }
+
+                    byte[] newData = new byte[image.Height * tightStride];
+                    for (int i = 0; i < image.Height; i++)
+                    {
+                        Buffer.BlockCopy(image.Data, i * image.Stride, newData, i * tightStride, tightStride);
+                    }
+
+                    return newData;
+                }
                 var stream = GetStream(rootPat, file);
                 if (stream != null)
                 {
@@ -132,29 +150,29 @@ namespace IronyModManager.IO.Readers
                     {
                         if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
                         {
-                            using var pfimImage = Pfim.Dds.Create(stream, new Pfim.PfimConfig());
+                            using var pfimImage = Dds.Create(stream, new PfimConfig());
                             if (pfimImage.Compressed)
                             {
                                 pfimImage.Decompress();
                             }
-                            if (pfimImage.Format == Pfim.ImageFormat.Rgba32)
+                            if (pfimImage.Format == ImageFormat.Rgba32)
                             {
                                 ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgra32>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
-                                image.SaveAsBmp(ms);
+                                using var image = Image.LoadPixelData<Bgra32>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                                await image.SaveAsPngAsync(ms);
                             }
-                            else if (pfimImage.Format == Pfim.ImageFormat.Rgb24)
+                            else if (pfimImage.Format == ImageFormat.Rgb24)
                             {
                                 ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgr24>(pfimImage.Data, pfimImage.Width, pfimImage.Height);
-                                image.SaveAsBmp(ms);
+                                using var image = Image.LoadPixelData<Bgr24>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                                await image.SaveAsPngAsync(ms);
                             }
                         }
                         else
                         {
                             ms = new MemoryStream();
                             using var image = await Image.LoadAsync(stream);
-                            await image.SaveAsBmpAsync(ms);
+                            await image.SaveAsPngAsync(ms);
                         }
                         if (ms != null && ms.CanSeek)
                         {
