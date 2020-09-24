@@ -62,6 +62,14 @@ licenseUrl:https://licenses.nuget.org/Apache-2.0
 license Type:Apache-2.0
 
 #########################
+Package:CommandLineParser
+Version:2.8.0
+project URL:https://github.com/commandlineparser/commandline
+Description:Terse syntax C# command line parser for .NET.  For FSharp support see CommandLineParser.FSharp.  The Command Line Parser Library offers to CLR applications a clean and concise API for manipulating command line arguments and related tasks.
+licenseUrl:https://aka.ms/deprecateLicenseUrl
+license Type:MIT
+
+#########################
 Package:CWTools
 Version:0.4.0-alpha4
 project URL:
@@ -164,6 +172,14 @@ licenseUrl:https://github.com/zone117x/MimeMapping/blob/master/LICENSE.md
 license Type:MIT
 
 #########################
+Package:MimeTypes
+Version:2.0.2
+project URL:https://github.com/khellang/MimeTypes
+Description:A simple lookup from file name/extension to MIME/media type, generated from Apache's mime.types.
+licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
+
+#########################
 Package:Moq
 Version:4.14.5
 project URL:https://github.com/moq/moq4
@@ -177,6 +193,14 @@ Version:3.2.31
 project URL:https://github.com/dotnet/Nerdbank.GitVersioning
 Description:Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well.
 licenseUrl:https://licenses.nuget.org/MIT
+license Type:MIT
+
+#########################
+Package:NetSparkle.New
+Version:2.0.0-preview20200906002
+project URL:https://github.com/NetSparkleUpdater/NetSparkle
+Description:NetSparkleUpdater/NetSparkle is a C# .NET software update framework that allows you to easily download installer files and update your C# .NET Framework or .NET Core software. Built-in UIs are available for WinForms, WPF, and Avalonia. You provide, somewhere on the internet, an XML appcast with software version information along with release notes in Markdown or HTML format. The NetSparkle framework then checks for an update in the background, displays the release notes to the user, and lets users download or skip the software update. The framework can also perform silent downloads so that you can present all of the UI yourself or set up your own silent software update system, as allowed by your software architecture. It was inspired by the Sparkle (https://sparkle-project.org/) project for Cocoa developers and the WinSparkle (https://winsparkle.org/) project (a Win32 port).
+licenseUrl:https://aka.ms/deprecateLicenseUrl
 license Type:MIT
 
 #########################
@@ -219,6 +243,22 @@ licenseUrl:https://github.com/NLog/NLog/blob/master/LICENSE.txt
 license Type:BSD 3-Clause "New" or "Revised" License
 
 #########################
+Package:Pfim
+Version:0.9.1
+project URL:https://nickbabcock.github.io/Pfim/
+Description:A simple and fast .NET Standard image decoder for targa (.tga) and direct draw surface (.dds) images
+licenseUrl:https://raw.githubusercontent.com/nickbabcock/Pfim/master/LICENSE.txt
+license Type:MIT
+
+#########################
+Package:Portable.BouncyCastle
+Version:1.8.6.7
+project URL:https://www.bouncycastle.org/csharp/
+Description:BouncyCastle portable version with support for .NET 4, .NET Standard 2.0
+licenseUrl:https://www.bouncycastle.org/csharp/licence.html
+license Type:Adapted MIT License
+
+#########################
 Package:ReactiveUI
 Version:11.5.35
 project URL:https://reactiveui.net/
@@ -259,8 +299,16 @@ licenseUrl:https://licenses.nuget.org/MIT
 license Type:MIT
 
 #########################
+Package:SixLabors.ImageSharp.Drawing
+Version:1.0.0-beta0010
+project URL:https://github.com/SixLabors/ImageSharp.Drawing
+Description:An extension to ImageSharp that allows the drawing of images, paths, and text.
+licenseUrl:https://licenses.nuget.org/Apache-2.0
+license Type:Apache-2.0
+
+#########################
 Package:SlimMessageBus.Host.Memory
-Version:1.8.2
+Version:1.9.0
 project URL:https://github.com/zarusz/SlimMessageBus
 Description:Simple provider for SlimMessageBus for in process message passing. Messages are stored in memory (state is transient).
 licenseUrl:https://licenses.nuget.org/Apache-2.0
@@ -276,7 +324,7 @@ license Type:MIT
 
 #########################
 Package:Splat.NLog
-Version:9.5.35
+Version:9.5.37
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
@@ -284,7 +332,7 @@ license Type:MIT
 
 #########################
 Package:Splat.SimpleInjector
-Version:9.5.35
+Version:9.5.37
 project URL:https://github.com/reactiveui/splat/
 Description:A library to make things cross-platform that should be.
 licenseUrl:https://licenses.nuget.org/MIT
