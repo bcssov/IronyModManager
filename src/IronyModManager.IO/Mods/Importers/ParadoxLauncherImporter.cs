@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-16-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="ParadoxLauncherImporter.cs" company="Mario">
 //     Mario
@@ -74,12 +74,12 @@ namespace IronyModManager.IO.Mods.Importers
                 var activeCollection = (await con.QueryAsync<Playsets>(p => p.IsActive == true, trace: trace)).FirstOrDefault();
                 if (activeCollection != null)
                 {
-                    var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.playsetId == activeCollection.id.ToString(), trace: trace);
+                    var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.playsetId == activeCollection.Id.ToString(), trace: trace);
                     if (collectionMods?.Count() > 0)
                     {
                         var mods = await con.QueryAllAsync<Models.Paradox.v2.Mods>(trace: trace);
                         var ordered = collectionMods.Where(p => p.Enabled).OrderBy(p => p.Position).ToList();
-                        var validMods = mods.Where(p => ordered.Any(m => m.modId.Equals(p.id.ToString()))).OrderBy(p => ordered.FindIndex(o => o.modId == p.id.ToString()));
+                        var validMods = mods.Where(p => ordered.Any(m => m.modId.Equals(p.Id.ToString()))).OrderBy(p => ordered.FindIndex(o => o.modId == p.Id.ToString()));
                         if (validMods.Count() > 0)
                         {
                             parameters.Mod.Name = activeCollection.Name;

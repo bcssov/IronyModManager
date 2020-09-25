@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -92,7 +92,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     var existingEntry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
                     if (existingEntry != null)
                     {
-                        gameData.ModsOrder.Remove(existingEntry.id);
+                        gameData.ModsOrder.Remove(existingEntry.Id);
                     }
                     var existingEnabledMod = dLCLoad.EnabledMods.FirstOrDefault(p => p.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
                     if (!string.IsNullOrWhiteSpace(existingEnabledMod))
@@ -150,9 +150,9 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 pdxMod = new ModRegistry()
                 {
-                    id = Guid.NewGuid()
+                    Id = Guid.NewGuid()
                 };
-                modRegistry.Add(pdxMod.id, pdxMod);
+                modRegistry.Add(pdxMod.Id, pdxMod);
             }
             else
             {
@@ -162,7 +162,7 @@ namespace IronyModManager.IO.Mods.Exporter
 
             // Populate game data
             var entry = modRegistry.Values.FirstOrDefault(p => p.GameRegistryId.Equals(mod.DescriptorFile, StringComparison.OrdinalIgnoreCase));
-            gameData.ModsOrder.Add(entry.id);
+            gameData.ModsOrder.Add(entry.Id);
 
             // Populate dlc
             if (isEnabled)

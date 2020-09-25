@@ -206,8 +206,8 @@
     <PackageReference Include="SimpleInjector" Version="5.0.3" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SmartFormat.NET" Version="2.5.2" />
-    <PackageReference Include="Splat.NLog" Version="9.5.37" />
-    <PackageReference Include="Splat.SimpleInjector" Version="9.5.37" />
+    <PackageReference Include="Splat.NLog" Version="9.5.49" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.5.49" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
