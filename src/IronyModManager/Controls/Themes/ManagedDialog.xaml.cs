@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -44,14 +44,24 @@ namespace IronyModManager.Controls.Themes
         #region Fields
 
         /// <summary>
+        /// The file name
+        /// </summary>
+        private readonly TextBox fileName;
+
+        /// <summary>
         /// The files view
         /// </summary>
-        private readonly ListBox _filesView;
+        private readonly ListBox filesView;
+
+        /// <summary>
+        /// The filter
+        /// </summary>
+        private readonly ComboBox filter;
 
         /// <summary>
         /// The quick links root
         /// </summary>
-        private readonly Control _quickLinksRoot;
+        private readonly Control quickLinksRoot;
 
         #endregion Fields
 
@@ -64,11 +74,12 @@ namespace IronyModManager.Controls.Themes
         {
             AvaloniaXamlLoader.Load(this);
             AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
-            _quickLinksRoot = this.FindControl<Control>("QuickLinks");
-            _filesView = this.FindControl<ListBox>("Files");
+            quickLinksRoot = this.FindControl<Control>("QuickLinks");
+            filesView = this.FindControl<ListBox>("Files");
             var locManager = DIResolver.Get<ILocalizationManager>();
-            var fileName = this.FindControl<TextBox>("fileName");
+            fileName = this.FindControl<TextBox>("fileName");
             fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
+            filter = this.FindControl<ComboBox>("filter");
             var correctingInput = false;
             fileName.PropertyChanged += (sender, args) =>
             {
@@ -154,7 +165,7 @@ namespace IronyModManager.Controls.Themes
 
             if (indexOfPreselected > 1)
             {
-                _filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
+                filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
             }
         }
 
@@ -167,10 +178,17 @@ namespace IronyModManager.Controls.Themes
         {
             async Task deselectItems()
             {
-                await Task.Delay(25);
-                if (_filesView.IsLogicalParentOf(e.Source as Control))
+                if (filesView.IsLogicalParentOf(e.Source as Control) && !filter.IsLogicalParentOf(e.Source as Control) && !fileName.IsLogicalParentOf(e.Source as Control))
                 {
-                    Model.SelectedItems.Clear();
+                    await Task.Delay(25);
+                    if (Model.SelectedItems?.Count > 0)
+                    {
+                        if (Model.SelectedItems.Any(p => p.Path.EndsWith(Model.FileName ?? string.Empty)))
+                        {
+                            Model.FileName = string.Empty;
+                        }
+                        Model.SelectedItems.Clear();
+                    }
                 }
             }
             if (!((e.Source as StyledElement)?.DataContext is ManagedDialogItemViewModel model))
@@ -184,7 +202,7 @@ namespace IronyModManager.Controls.Themes
                 Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
-            var isQuickLink = _quickLinksRoot.IsLogicalParentOf(e.Source as Control);
+            var isQuickLink = quickLinksRoot.IsLogicalParentOf(e.Source as Control);
 #pragma warning disable CS0618 // Type or member is obsolete
             // Yes, use doubletapped event... if only it would work properly.
             if (e.ClickCount == 2 || isQuickLink)
