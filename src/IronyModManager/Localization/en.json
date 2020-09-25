@@ -30,6 +30,10 @@
         "Volume": "{Size} Volume",
         "OK": "OK",
         "Cancel": "Cancel",
+        "Name": "Name",
+        "DateModified": "Date Modified",
+        "Type": "Type",
+        "Size": "Size",
         "Folders": {
             "Downloads": "Downloads",
             "Desktop": "Desktop",

@@ -51,6 +51,10 @@ namespace IronyModManager.Shared
             public const string Volume = Prefix + "Volume";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
+            public const string Name = Prefix + "Name";
+            public const string DateModified = Prefix + "DateModified";
+            public const string Type = Prefix + "Type";
+            public const string Size = Prefix + "Size";
             public static class Folders
             {
                 public const string Prefix = "FileDialog.Folders.";

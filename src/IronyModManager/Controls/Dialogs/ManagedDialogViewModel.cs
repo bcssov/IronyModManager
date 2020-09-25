@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-11-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogViewModel.cs" company="Avalonia">
 //     Avalonia
@@ -251,7 +251,7 @@ namespace IronyModManager.Controls.Dialogs
 
                 return -1;
             }
-            set => this.RaisePropertyChanged(nameof(QuickLinksSelectedIndex));
+            set => RaisePropertyChanged(nameof(QuickLinksSelectedIndex));
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace IronyModManager.Controls.Dialogs
             get => _selectedFilter;
             set
             {
-                this.RaiseAndSetIfChanged(ref _selectedFilter, value);
+                RaiseAndSetIfChanged(ref _selectedFilter, value);
                 Refresh();
             }
         }
@@ -302,7 +302,7 @@ namespace IronyModManager.Controls.Dialogs
             get => _showHiddenFiles;
             set
             {
-                this.RaiseAndSetIfChanged(ref _showHiddenFiles, value);
+                RaiseAndSetIfChanged(ref _showHiddenFiles, value);
                 Refresh();
             }
         }
@@ -451,7 +451,14 @@ namespace IronyModManager.Controls.Dialogs
         {
             if (SelectingFolder)
             {
-                CompleteRequested?.Invoke(new[] { Location });
+                if (SelectedItems.Count > 0)
+                {
+                    CompleteRequested?.Invoke(SelectedItems.Select(p => p.Path).ToArray());
+                }
+                else
+                {
+                    CompleteRequested?.Invoke(new[] { Location });
+                }
             }
             else if (_savingFile)
             {
@@ -522,7 +529,10 @@ namespace IronyModManager.Controls.Dialogs
                 {
                     if (SelectingFolder)
                     {
-                        SelectedItems.Clear();
+                        if (!_options.AllowDirectorySelection)
+                        {
+                            SelectedItems.Clear();
+                        }
                     }
                     else
                     {

@@ -30,6 +30,10 @@
         "Volume": "{Size} Volumen",
         "OK": "U redu",
         "Cancel": "Otkaži",
+        "Name": "Ime",
+        "DateModified": "Datum izmjene",
+        "Type": "Tip",
+        "Size": "Veličina",
         "Folders": {
             "Downloads": "Preuzimanja",
             "Desktop": "Desktop",

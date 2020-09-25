@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-07-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -21,7 +21,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Platform;
 using Avalonia.Platform;
 using IronyModManager.Controls.Themes;
@@ -99,7 +98,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <returns>System.String.</returns>
             public async Task<string> ShowFolderDialogAsync(OpenFolderDialog dialog, IWindowImpl parent)
             {
-                return (await ShowAsync(dialog, parent))?.FirstOrDefault();
+                return (await ShowAsync(dialog, parent, new ManagedFileDialogOptions() { AllowDirectorySelection = true }))?.FirstOrDefault();
             }
 
             /// <summary>
@@ -122,7 +121,7 @@ namespace IronyModManager.Controls.Dialogs
                     DataContext = model,
                     SizeToContent = SizeToContent.Width,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner
-                };                
+                };
 
                 dialog.Closed += delegate { model.Cancel(); };
 

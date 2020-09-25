@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -25,6 +25,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
@@ -93,6 +94,14 @@ namespace IronyModManager.Controls.Themes
             var ok = this.FindControl<Button>("ok");
             ok.Content = locManager.GetResource(LocalizationResources.FileDialog.OK);
             var cancel = this.FindControl<Button>("cancel");
+            var name = this.FindControl<TextBlock>("name");
+            name.Text = locManager.GetResource(LocalizationResources.FileDialog.Name);
+            var date = this.FindControl<TextBlock>("dateModified");
+            date.Text = locManager.GetResource(LocalizationResources.FileDialog.DateModified);
+            var type = this.FindControl<TextBlock>("type");
+            type.Text = locManager.GetResource(LocalizationResources.FileDialog.Type);
+            var size = this.FindControl<TextBlock>("size");
+            size.Text = locManager.GetResource(LocalizationResources.FileDialog.Size);
             cancel.Content = locManager.GetResource(LocalizationResources.FileDialog.Cancel);
         }
 
@@ -156,11 +165,25 @@ namespace IronyModManager.Controls.Themes
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
         private void OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
+            async Task deselectItems()
+            {
+                await Task.Delay(25);
+                if (_filesView.IsLogicalParentOf(e.Source as Control))
+                {
+                    Model.SelectedItems.Clear();
+                }
+            }
             if (!((e.Source as StyledElement)?.DataContext is ManagedDialogItemViewModel model))
             {
+                Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
-
+            // Right click now de selects stuff
+            if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
+            {
+                Dispatcher.UIThread.InvokeAsync(() => deselectItems());
+                return;
+            }
             var isQuickLink = _quickLinksRoot.IsLogicalParentOf(e.Source as Control);
 #pragma warning disable CS0618 // Type or member is obsolete
             // Yes, use doubletapped event... if only it would work properly.
