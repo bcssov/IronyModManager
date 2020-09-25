@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -420,7 +420,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var title = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Title);
                     var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
-                    notificationAction.ShowNotification(title, message, NotificationType.Info, 10);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info);
                 }
             }
             CheckingForUpdates = false;
