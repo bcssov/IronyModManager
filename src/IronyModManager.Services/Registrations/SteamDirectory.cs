@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-17-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using IronyModManager.Shared;
@@ -80,6 +81,11 @@ namespace IronyModManager.Services.Registrations
         private static readonly string SteamConfigVDF = PathHelper.MergePaths("config", "config.vdf");
 
         /// <summary>
+        /// The steam user data directory
+        /// </summary>
+        private static readonly string SteamUserDataDirectory = "userdata";
+
+        /// <summary>
         /// The steam workshop directory
         /// </summary>
         private static readonly string SteamWorkshopDirectory = PathHelper.MergePaths(SteamAppsDirectory, "workshop", "content");
@@ -134,6 +140,26 @@ namespace IronyModManager.Services.Registrations
                 }
             }
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the user data folders.
+        /// </summary>
+        /// <param name="appId">The application identifier.</param>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        public static IEnumerable<string> GetUserDataFolders(int appId)
+        {
+            var userDataFolders = new List<string>();
+            var steamInstallDirectory = GetSteamRootPath();
+            if (Directory.Exists(steamInstallDirectory))
+            {
+                var folders = Directory.EnumerateDirectories(Path.Combine(steamInstallDirectory, SteamUserDataDirectory)).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
+                if (folders.Count() > 0)
+                {
+                    userDataFolders.AddRange(folders);
+                }
+            }
+            return userDataFolders;
         }
 
         /// <summary>
