@@ -137,7 +137,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 return new Playsets()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.NewGuid().ToString(),
                     IsActive = true,
                     LoadOrder = CollectionSortType,
                     Name = GetCollectionName()
@@ -219,7 +219,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 pdxMod = new Models.Paradox.v2.Mods()
                 {
-                    Id = Guid.NewGuid()
+                    Id = Guid.NewGuid().ToString()
                 };
             }
             MapModData(pdxMod, mod);
@@ -325,8 +325,8 @@ namespace IronyModManager.IO.Mods.Exporter
                 return new PlaysetsMods()
                 {
                     Enabled = true,
-                    modId = mod.Id.ToString(),
-                    playsetId = collection.Id.ToString(),
+                    ModId = mod.Id,
+                    PlaysetId = collection.Id,
                     Position = formatPosition(position)
                 };
             }
@@ -339,14 +339,14 @@ namespace IronyModManager.IO.Mods.Exporter
 
             if (mods?.Count() > 0)
             {
-                var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.playsetId == collection.Id.ToString(), trace: trace);
+                var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.PlaysetId == collection.Id, trace: trace);
                 // Because it's readable for me in hex
                 int pos = 4096;
                 if (recreateCollection || collectionMods == null || collectionMods.Count() == 0)
                 {
                     if (recreateCollection)
                     {
-                        await con.DeleteAsync<PlaysetsMods>(p => p.playsetId == collection.Id.ToString(), transaction: transaction, trace: trace);
+                        await con.DeleteAsync<PlaysetsMods>(p => p.PlaysetId == collection.Id, transaction: transaction, trace: trace);
                     }
 
                     var toInsert = new List<PlaysetsMods>();
@@ -368,7 +368,7 @@ namespace IronyModManager.IO.Mods.Exporter
                     var bottom = new HashSet<PlaysetsMods>();
                     foreach (var item in mods)
                     {
-                        var existing = collectionMods.FirstOrDefault(p => p.modId == item.Id.ToString());
+                        var existing = collectionMods.FirstOrDefault(p => p.ModId == item.Id);
                         if (existing == null)
                         {
                             var newModOrder = mapMod(item, 0);
@@ -397,7 +397,7 @@ namespace IronyModManager.IO.Mods.Exporter
                         // Composite key, need to handle differently due to limitation in the ORM.
                         foreach (var item in toUpdate)
                         {
-                            await con.UpdateAsync(item, e => e.modId == item.modId && e.playsetId == item.playsetId, transaction: transaction, trace: trace);
+                            await con.UpdateAsync(item, e => e.ModId == item.ModId && e.PlaysetId == item.PlaysetId, transaction: transaction, trace: trace);
                         }
                     }
                     if (toInsert.Count > 0)

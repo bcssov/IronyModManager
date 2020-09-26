@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -240,6 +240,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
         public virtual bool IsContinueGameAllowed(IGame game)
         {
+            const string saveGames = "save games";
             var continueGameFile = Path.Combine(game.UserDirectory, ContinueGameFileName);
             var parsed = reader.Read(continueGameFile);
             if (parsed?.Count() == 1)
@@ -249,15 +250,37 @@ namespace IronyModManager.Services
                     var data = JsonConvert.DeserializeObject<Models.ContinueGame>(string.Join(Environment.NewLine, parsed.FirstOrDefault().Content));
                     var fileName = string.IsNullOrWhiteSpace(data.Filename) ? data.Title : data.Filename;
                     var path = Path.GetFileNameWithoutExtension(fileName);
-                    var saveDir = Path.GetDirectoryName(fileName).Replace("save games", string.Empty).StandardizeDirectorySeparator();
-                    string[] files;
+                    var saveDir = Path.GetDirectoryName(fileName).Replace(saveGames, string.Empty).StandardizeDirectorySeparator();
+                    var files = new List<string>();
                     if (!string.IsNullOrWhiteSpace(saveDir))
                     {
-                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games", saveDir.Trim(Path.DirectorySeparatorChar)), "*");
+                        var saves = new List<string>() { Path.Combine(game.UserDirectory, saveGames, saveDir.Trim(Path.DirectorySeparatorChar)) };
+                        foreach (var item in game.RemoteSteamUserDirectory)
+                        {
+                            saves.Add(Path.Combine(item, saveGames, saveDir.Trim(Path.DirectorySeparatorChar)));
+                        }
+                        foreach (var item in saves)
+                        {
+                            if (Directory.Exists(item))
+                            {
+                                files.AddRange(Directory.GetFiles(item, "*"));
+                            }
+                        }
                     }
                     else
                     {
-                        files = Directory.GetFiles(Path.Combine(game.UserDirectory, "save games"), "*");
+                        var saves = new List<string>() { Path.Combine(game.UserDirectory, saveGames) };
+                        foreach (var item in game.RemoteSteamUserDirectory)
+                        {
+                            saves.Add(Path.Combine(item, saveGames));
+                        }
+                        foreach (var item in saves)
+                        {
+                            if (Directory.Exists(item))
+                            {
+                                files.AddRange(Directory.GetFiles(item, "*"));
+                            }
+                        }
                     }
                     return files.Any(p => Path.GetFileNameWithoutExtension(p).Contains(path, StringComparison.OrdinalIgnoreCase));
                 }
@@ -368,6 +391,7 @@ namespace IronyModManager.Services
             game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
+            game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)

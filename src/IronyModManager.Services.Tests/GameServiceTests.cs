@@ -722,6 +722,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "game 2",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)),
+                RemoteSteamUserDirectory = new List<string>() { Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)) }
             });
             result.Should().BeTrue();
         }

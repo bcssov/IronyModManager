@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="Playsets.cs" company="Mario">
 //     Mario
@@ -30,8 +30,8 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        [Map("id"), PropertyHandler(typeof(StringToGuidHandler))]
-        public Guid Id { get; set; }
+        [Map("id"), Primary]
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is active.

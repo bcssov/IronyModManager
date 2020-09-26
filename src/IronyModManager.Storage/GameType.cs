@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -85,6 +85,12 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the remote steam user directory.
+        /// </summary>
+        /// <value>The remote steam user directory.</value>
+        public virtual IEnumerable<string> RemoteSteamUserDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the steam application identifier.

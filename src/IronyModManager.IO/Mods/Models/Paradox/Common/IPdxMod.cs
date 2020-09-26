@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="IPdxMod.cs" company="Mario">
 //     Mario
@@ -63,7 +63,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox
         /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
-        Guid Id { get; set; }
+        string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

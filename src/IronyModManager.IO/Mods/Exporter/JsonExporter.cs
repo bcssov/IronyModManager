@@ -56,7 +56,7 @@ namespace IronyModManager.IO.Mods.Exporter
             }
 
             // Remove invalid mods
-            var toRemove = new List<Guid>();
+            var toRemove = new List<string>();
             foreach (var pdxMod in modRegistry)
             {
                 if (pdxMod.Value.Status != Constants.Ready_to_play)
@@ -150,7 +150,7 @@ namespace IronyModManager.IO.Mods.Exporter
             {
                 pdxMod = new ModRegistry()
                 {
-                    Id = Guid.NewGuid()
+                    Id = Guid.NewGuid().ToString()
                 };
                 modRegistry.Add(pdxMod.Id, pdxMod);
             }
