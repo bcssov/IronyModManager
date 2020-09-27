@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="ModRegistry.cs" company="Mario">
 //     Mario
@@ -116,7 +116,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
         /// </summary>
         /// <value>The identifier.</value>
         [JsonProperty("id")]
-        public Guid id { get; set; } // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily
+        public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -221,13 +221,13 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
 
     /// <summary>
     /// Class ModRegistryCollection.
-    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.Guid, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
+    /// Implements the <see cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
     /// Implements the <see cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     /// </summary>
-    /// <seealso cref="System.Collections.Generic.Dictionary{System.Guid, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
+    /// <seealso cref="System.Collections.Generic.Dictionary{System.String, IronyModManager.IO.Mods.Models.Paradox.v1.ModRegistry}" />
     /// <seealso cref="IronyModManager.IO.Mods.Models.Paradox.Common.IPdxFormat" />
     [ExcludeFromCoverage("Skipping testing IO logic.")]
-    internal class ModRegistryCollection : Dictionary<Guid, ModRegistry>, IPdxFormat
+    internal class ModRegistryCollection : Dictionary<string, ModRegistry>, IPdxFormat
     {
     }
 }

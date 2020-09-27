@@ -4,7 +4,7 @@
 // Created          : 06-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-01-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="ShutdownState.cs" company="Mario">
 //     Mario
@@ -60,7 +60,7 @@ namespace IronyModManager.Implementation.AppState
         /// Waits the until free.
         /// </summary>
         /// <returns>Task.</returns>
-        public async Task WaitUntilFree()
+        public async Task WaitUntilFreeAsync()
         {
             await Task.Run(() =>
             {

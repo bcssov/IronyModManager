@@ -9,19 +9,33 @@
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
       <Panel Grid.Column="0">
         <controls:BoundClassBorder BoundClasses="{Binding TakeLeftClass}">
-          <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+          <Grid ColumnDefinitions="*" RowDefinitions="60,*,30">
+            <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="0" Grid.Row="0">
+              <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+              <TextBlock Text="{Binding LeftImageInfo}" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
+            </StackPanel>
+            <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+              <Image Source="{Binding LeftImage}" MaxWidth="{Binding LeftImage.Width}"
+                     MaxHeight="{Binding LeftImage.Height}"></Image>
+            </Panel>
             <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
-                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
           </Grid>
         </controls:BoundClassBorder>
       </Panel>
       <Panel Grid.Column="1">
         <controls:BoundClassBorder BoundClasses="{Binding TakeRightClass}">
-          <Grid ColumnDefinitions="*" RowDefinitions="2*,1*">
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+          <Grid ColumnDefinitions="*" RowDefinitions="60,*,30">
+            <StackPanel Orientation="Vertical" Spacing="5" Grid.Column="0" Grid.Row="0">
+              <TextBlock Text="{Binding BinaryFile}" HorizontalAlignment="Center"></TextBlock>
+              <TextBlock Text="{Binding RightImageInfo}" HorizontalAlignment="Center"></TextBlock>
+            </StackPanel>
+            <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+              <Image Source="{Binding RightImage}" MaxWidth="{Binding RightImage.Width}" 
+                     MaxHeight="{Binding RightImage.Height}"></Image>
+            </Panel>
             <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
-                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="1"></Button>
+                    IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
           </Grid>
         </controls:BoundClassBorder>
       </Panel>

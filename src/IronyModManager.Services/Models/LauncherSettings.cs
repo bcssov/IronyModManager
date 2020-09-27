@@ -4,7 +4,7 @@
 // Created          : 08-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="LauncherSettings.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace IronyModManager.Services.Registrations.Models
+namespace IronyModManager.Services.Models
 {
     /// <summary>
     /// Class LauncherSettings.

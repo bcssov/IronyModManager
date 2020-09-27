@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 09-16-2020
 // ***********************************************************************
 // <copyright file="AssemblyFinder.cs" company="Mario">
 //     Mario
@@ -26,6 +26,15 @@ namespace IronyModManager.DI.Assemblies
     /// </summary>
     internal static class AssemblyFinder
     {
+        #region Fields
+
+        /// <summary>
+        /// The excluded assemblies
+        /// </summary>
+        private static readonly string[] ExcludedAssemblies = new string[] { "IronyModManager.Updater" };
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -60,7 +69,7 @@ namespace IronyModManager.DI.Assemblies
             if (Directory.Exists(finderParams.Path))
             {
                 var files = new DirectoryInfo(finderParams.Path).GetFiles($"*{Constants.DllExtension}", finderParams.SearchOption)
-                .Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.OrdinalIgnoreCase)).OrderBy(p => p.Name).ToList();
+                .Where(p => p.Name.Contains(finderParams.AssemblyPatternMatch, StringComparison.OrdinalIgnoreCase) && !ExcludedAssemblies.Any(a => p.Name.Contains(a, StringComparison.OrdinalIgnoreCase))).OrderBy(p => p.Name).ToList();
 
                 var assemblies = new List<Assembly>();
 

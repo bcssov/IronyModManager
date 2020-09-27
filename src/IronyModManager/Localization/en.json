@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager: {AppVersion}",
+        "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
         "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
         "Shortcuts": {
@@ -30,6 +30,10 @@
         "Volume": "{Size} Volume",
         "OK": "OK",
         "Cancel": "Cancel",
+        "Name": "Name",
+        "DateModified": "Date Modified",
+        "Type": "Type",
+        "Size": "Size",
         "Folders": {
             "Downloads": "Downloads",
             "Desktop": "Desktop",
@@ -99,6 +103,11 @@
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "ExportToClipboard": "Copy Collection To Clipboard",
+        "ImportFromClipboard": {
+            "Title": "Import Mod Order From Clipboard",
+            "PromptTitle": "Overwrite Mod Order?",
+            "PromptMessage": "This will overwrite your mod collection mod order and mod selection. Proceed?"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Auto Focus: {State}",
             "On": "On",
@@ -113,6 +122,11 @@
             "Paradoxos": "Import From Paradoxos",
             "Paradox": "Import From Game",
             "ParadoxLauncher": "Import From Paradox Launcher",
+            "Close": "Close"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Export Order Only",
             "Close": "Close"
         },
         "MergeCollection": {
@@ -149,7 +163,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Launch Game",
+            "Launch": "Launch Game",
+            "Resume": "Resume Game",
             "LaunchError": {
                 "Title": "Cannot Launch Game",
                 "Message": "Failed to launch the game."
@@ -166,6 +181,7 @@
         "LeftSide": "Left Side",
         "RightSide": "Right Side",
         "BinaryFile": "Binary Content",
+        "ImageInfo": "Width: {Width} Height: {Height}",
         "TakeLeft": "Take Left",
         "TakeRight": "Take Right",
         "OK": "OK",
@@ -192,6 +208,10 @@
                 "OpenDirectory": "Open Directory",
                 "CustomPatch": "Copy To Custom Patch"
             }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Open File",
+            "OpenDirectory": "Open Directory"
         },
         "ContextMenu": {
             "CopyAll": "Copy All",
@@ -255,13 +275,45 @@
     "Options": {
         "Name": "Options",
         "Close": "Close",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Game Executable",
-        "GameArgs": "Game Args",
-        "RefreshMods": "Refresh Descriptors Before Playing",
+        "Game": {
+            "Title": "Game Options",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "GameExecutable": "Game Executable",
+            "UserDirectory": "Data Directory",
+            "GameArgs": "Game Args",
+            "RefreshMods": "Refresh Descriptors Before Playing",
+            "AutoConfigure": "Configure All..."
+        },
+        "Updates": {
+            "Title": "Update Options",
+            "AutoUpdates": "Check For Updates at Startup",
+            "CheckPrerelease": "Update To Prerelease Versions",
+            "CheckForUpdates": "Check For Updates",
+            "Install": "Install Updates",
+            "Version": "Version",
+            "Overlay": {
+                "UpdateDownloading": "Downloading Updates...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Unpacking updates and preparing to run installer..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Update Error",
+                "DownloadErrorMessage": "Error occurred while downloading updates, please see error log for more details."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatically Check For Updates",
+                "Message": "Irony would like your permission to check for updates at startup. Would you like Irony to notify you of updates automatically?"
+            },
+            "UpdateNotification": {
+                "Title": "Update Detected",
+                "Message": "Check the options screen for update details or click on this message."
+            }
+        },
         "Dialog": {
-            "Title": "Find game executable"
+            "ExeTitle": "Find game executable",
+            "GameRootTitle": "Find game root directory",
+            "UserDirTitle": "Find game data directory"
         }
     },
     "Notifications": {
@@ -324,6 +376,10 @@
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",
             "Message": "One or several mods have been updated. Conflict Solver might need updating."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "No Updates",
+            "Message": "There seem to be no updates available."
         }
     },
     "Mod_App_Actions": {

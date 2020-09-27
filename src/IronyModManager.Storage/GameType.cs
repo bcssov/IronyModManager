@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -69,6 +69,12 @@ namespace IronyModManager.Storage
         public virtual string LauncherSettingsFileName { get; set; }
 
         /// <summary>
+        /// Gets or sets the launcher settings prefix.
+        /// </summary>
+        /// <value>The launcher settings prefix.</value>
+        public virtual string LauncherSettingsPrefix { get; set; }
+
+        /// <summary>
         /// Gets or sets the log location.
         /// </summary>
         /// <value>The log location.</value>
@@ -79,6 +85,12 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the remote steam user directory.
+        /// </summary>
+        /// <value>The remote steam user directory.</value>
+        public virtual IEnumerable<string> RemoteSteamUserDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the steam application identifier.

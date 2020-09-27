@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,8 +13,9 @@
 // ***********************************************************************
 
 using System;
-using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -51,6 +52,16 @@ namespace IronyModManager.ViewModels.Controls
         private const string InvalidConflictSolverClass = "InvalidConflictSolver";
 
         /// <summary>
+        /// The steam launch
+        /// </summary>
+        private const string SteamLaunch = SteamProcess + ":";
+
+        /// <summary>
+        /// The steam process
+        /// </summary>
+        private const string SteamProcess = "steam";
+
+        /// <summary>
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
@@ -84,6 +95,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod definition patch load handler
         /// </summary>
         private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
+
+        /// <summary>
+        /// The game directory changed handler
+        /// </summary>
+        private readonly GameUserDirectoryChangedHandler gameDirectoryChangedHandler;
 
         /// <summary>
         /// The mod service
@@ -139,12 +155,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
+        /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
         public ModHolderControlViewModel(IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
-            ILogger logger)
+            GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
         {
             this.shutDownState = shutDownState;
             this.modService = modService;
@@ -157,6 +174,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionLoadHandler = modDefinitionLoadHandler;
             this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
+            this.gameDirectoryChangedHandler = gameDirectoryChangedHandler;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
         }
@@ -270,7 +288,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the launch game.
         /// </summary>
         /// <value>The launch game.</value>
-        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame.Name)]
+        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame.Launch)]
         public virtual string LaunchGame { get; protected set; }
 
         /// <summary>
@@ -285,6 +303,25 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mode title.</value>
         [StaticLocalization(LocalizationResources.Conflict_Solver.Modes.Title)]
         public virtual string ModeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the resume game.
+        /// </summary>
+        /// <value>The resume game.</value>
+        [StaticLocalization(LocalizationResources.Mod_Actions.LaunchGame.Resume)]
+        public virtual string ResumeGame { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the resume game command.
+        /// </summary>
+        /// <value>The resume game command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResumeGameCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [resume game visible].
+        /// </summary>
+        /// <value><c>true</c> if [resume game visible]; otherwise, <c>false</c>.</value>
+        public virtual bool ResumeGameVisible { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [show advanced features].
@@ -412,6 +449,36 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Evals the resume availability.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual void EvalResumeAvailability(IGame game = null)
+        {
+            if (game == null)
+            {
+                game = gameService.GetSelected();
+            }
+            if (game != null)
+            {
+                ResumeGameVisible = gameService.IsContinueGameAllowed(game);
+            }
+            else
+            {
+                ResumeGameVisible = false;
+            }
+        }
+
+        /// <summary>
+        /// eval resume availability loop as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task EvalResumeAvailabilityLoopAsync()
+        {
+            EvalResumeAvailability();
+            await Task.Delay(30000);           
+            await EvalResumeAvailabilityLoopAsync();
+        }
+
+        /// <summary>
         /// install mods as an asynchronous operation.
         /// </summary>
         protected virtual async Task InstallModsAsync()
@@ -431,6 +498,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            Task.Run(() => EvalResumeAvailabilityLoopAsync().ConfigureAwait(false));
+
             ShowAdvancedFeatures = (gameService.GetSelected()?.AdvancedFeaturesSupported).GetValueOrDefault();
             AnalyzeClass = string.Empty;
 
@@ -485,7 +554,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (game != null && CollectionMods.SelectedMods?.Count > 0 && CollectionMods.SelectedModCollection != null)
                 {
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFree();
+                    await shutDownState.WaitUntilFreeAsync();
                     modPatchCollectionService.ResetPatchStateCache();
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(CollectionMods.SelectedModCollection.Name);
                     if (mode == PatchStateMode.None)
@@ -501,12 +570,12 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
-            LaunchGameCommand = ReactiveCommand.CreateFromTask(async () =>
+            async Task launchGame(bool continueGame)
             {
                 var game = gameService.GetSelected();
                 if (game != null)
                 {
-                    var args = gameService.GetLaunchSettings(game);
+                    var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
                         if (game.RefreshDescriptors)
@@ -530,6 +599,17 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         else
                         {
+                            if (gameService.IsSteamGame(args))
+                            {
+                                // Check if process is running
+                                var processes = Process.GetProcesses();
+                                if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
+                                {
+                                    await appAction.OpenAsync(SteamLaunch);
+                                    // Artificial delay to allow steam to boot up
+                                    await Task.Delay(250);
+                                }
+                            }
                             if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
                             {
                                 await appAction.ExitAppAsync();
@@ -547,6 +627,16 @@ namespace IronyModManager.ViewModels.Controls
                             localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.NotSet.Message), NotificationType.Warning, 10);
                     }
                 }
+            }
+
+            LaunchGameCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await launchGame(false);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
+
+            ResumeGameCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await launchGame(true);
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
             AdvancedModeCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -572,9 +662,15 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
-                }
-                previousCollectionNotification = collectionName;
+                    previousCollectionNotification = collectionName;
+                }                
             };
+
+            gameDirectoryChangedHandler.Message.Subscribe(s =>
+            {
+                InstalledMods.RefreshMods();
+                EvalResumeAvailability(s.Game);
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
@@ -585,6 +681,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
+            EvalResumeAvailability(game);
             ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
             base.OnSelectedGameChanged(game);
         }

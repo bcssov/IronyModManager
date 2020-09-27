@@ -4,7 +4,7 @@
 // Created          : 09-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="ActiveGameRequestEvent.cs" company="Mario">
 //     Mario
@@ -28,7 +28,7 @@ namespace IronyModManager.Common.Events
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActiveGameRequestEvent"/> class.
+        /// Initializes a new instance of the <see cref="ActiveGameRequestEvent" /> class.
         /// </summary>
         /// <param name="game">The game.</param>
         public ActiveGameRequestEvent(IGame game)
@@ -50,7 +50,7 @@ namespace IronyModManager.Common.Events
         /// Gets a value indicating whether this instance is fire and forget.
         /// </summary>
         /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => false;
+        public bool IsFireAndForget => true;
 
         #endregion Properties
     }

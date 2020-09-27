@@ -51,6 +51,10 @@ namespace IronyModManager.Shared
             public const string Volume = Prefix + "Volume";
             public const string OK = Prefix + "OK";
             public const string Cancel = Prefix + "Cancel";
+            public const string Name = Prefix + "Name";
+            public const string DateModified = Prefix + "DateModified";
+            public const string Type = Prefix + "Type";
+            public const string Size = Prefix + "Size";
             public static class Folders
             {
                 public const string Prefix = "FileDialog.Folders.";
@@ -134,6 +138,13 @@ namespace IronyModManager.Shared
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public const string ExportToClipboard = Prefix + "ExportToClipboard";
+            public static class ImportFromClipboard
+            {
+                public const string Prefix = "Collection_Mods.ImportFromClipboard.";
+                public const string Title = Prefix + "Title";
+                public const string PromptTitle = Prefix + "PromptTitle";
+                public const string PromptMessage = Prefix + "PromptMessage";
+            }
             public static class JumpOnDragAndDrop
             {
                 public const string Prefix = "Collection_Mods.JumpOnDragAndDrop.";
@@ -154,6 +165,13 @@ namespace IronyModManager.Shared
                 public const string Paradoxos = Prefix + "Paradoxos";
                 public const string Paradox = Prefix + "Paradox";
                 public const string ParadoxLauncher = Prefix + "ParadoxLauncher";
+                public const string Close = Prefix + "Close";
+            }
+            public static class ExportOther
+            {
+                public const string Prefix = "Collection_Mods.ExportOther.";
+                public const string Title = Prefix + "Title";
+                public const string OrderOnly = Prefix + "OrderOnly";
                 public const string Close = Prefix + "Close";
             }
             public static class MergeCollection
@@ -204,7 +222,8 @@ namespace IronyModManager.Shared
             public static class LaunchGame
             {
                 public const string Prefix = "Mod_Actions.LaunchGame.";
-                public const string Name = Prefix + "Name";
+                public const string Launch = Prefix + "Launch";
+                public const string Resume = Prefix + "Resume";
                 public static class LaunchError
                 {
                     public const string Prefix = "Mod_Actions.LaunchGame.LaunchError.";
@@ -227,6 +246,7 @@ namespace IronyModManager.Shared
             public const string LeftSide = Prefix + "LeftSide";
             public const string RightSide = Prefix + "RightSide";
             public const string BinaryFile = Prefix + "BinaryFile";
+            public const string ImageInfo = Prefix + "ImageInfo";
             public const string TakeLeft = Prefix + "TakeLeft";
             public const string TakeRight = Prefix + "TakeRight";
             public const string OK = Prefix + "OK";
@@ -259,6 +279,12 @@ namespace IronyModManager.Shared
                     public const string OpenDirectory = Prefix + "OpenDirectory";
                     public const string CustomPatch = Prefix + "CustomPatch";
                 }
+            }
+            public static class CompareSelectorContextMenu
+            {
+                public const string Prefix = "Conflict_Solver.CompareSelectorContextMenu.";
+                public const string OpenFile = Prefix + "OpenFile";
+                public const string OpenDirectory = Prefix + "OpenDirectory";
             }
             public static class ContextMenu
             {
@@ -340,15 +366,59 @@ namespace IronyModManager.Shared
             public const string Prefix = "Options.";
             public const string Name = Prefix + "Name";
             public const string Close = Prefix + "Close";
-            public const string NavigateToExe = Prefix + "NavigateToExe";
-            public const string Reset = Prefix + "Reset";
-            public const string GameExecutable = Prefix + "GameExecutable";
-            public const string GameArgs = Prefix + "GameArgs";
-            public const string RefreshMods = Prefix + "RefreshMods";
+            public static class Game
+            {
+                public const string Prefix = "Options.Game.";
+                public const string Title = Prefix + "Title";
+                public const string NavigateTo = Prefix + "NavigateTo";
+                public const string Reset = Prefix + "Reset";
+                public const string GameExecutable = Prefix + "GameExecutable";
+                public const string UserDirectory = Prefix + "UserDirectory";
+                public const string GameArgs = Prefix + "GameArgs";
+                public const string RefreshMods = Prefix + "RefreshMods";
+                public const string AutoConfigure = Prefix + "AutoConfigure";
+            }
+            public static class Updates
+            {
+                public const string Prefix = "Options.Updates.";
+                public const string Title = Prefix + "Title";
+                public const string AutoUpdates = Prefix + "AutoUpdates";
+                public const string CheckPrerelease = Prefix + "CheckPrerelease";
+                public const string CheckForUpdates = Prefix + "CheckForUpdates";
+                public const string Install = Prefix + "Install";
+                public const string Version = Prefix + "Version";
+                public static class Overlay
+                {
+                    public const string Prefix = "Options.Updates.Overlay.";
+                    public const string UpdateDownloading = Prefix + "UpdateDownloading";
+                    public const string UpdateDownloadProgress = Prefix + "UpdateDownloadProgress";
+                    public const string UpdateInstalling = Prefix + "UpdateInstalling";
+                }
+                public static class Errors
+                {
+                    public const string Prefix = "Options.Updates.Errors.";
+                    public const string DownloadErrorTitle = Prefix + "DownloadErrorTitle";
+                    public const string DownloadErrorMessage = Prefix + "DownloadErrorMessage";
+                }
+                public static class AutoUpdatePrompts
+                {
+                    public const string Prefix = "Options.Updates.AutoUpdatePrompts.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class UpdateNotification
+                {
+                    public const string Prefix = "Options.Updates.UpdateNotification.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+            }
             public static class Dialog
             {
                 public const string Prefix = "Options.Dialog.";
-                public const string Title = Prefix + "Title";
+                public const string ExeTitle = Prefix + "ExeTitle";
+                public const string GameRootTitle = Prefix + "GameRootTitle";
+                public const string UserDirTitle = Prefix + "UserDirTitle";
             }
         }
         public static class Notifications
@@ -441,6 +511,12 @@ namespace IronyModManager.Shared
             public static class ConflictSolverUpdate
             {
                 public const string Prefix = "Notifications.ConflictSolverUpdate.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class NoUpdatesAvailable
+            {
+                public const string Prefix = "Notifications.NoUpdatesAvailable.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

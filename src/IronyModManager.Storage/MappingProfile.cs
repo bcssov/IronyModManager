@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Mario
@@ -44,7 +44,8 @@ namespace IronyModManager.Storage
             CreateMap<IPreferences, IPreferences>().ReverseMap();
             CreateMap<IWindowState, IWindowState>().ReverseMap();
             CreateMap<IAppState, IAppState>().ReverseMap();
-            CreateMap<IGameSettings, IGameSettings>();
+            CreateMap<IGameSettings, IGameSettings>().ReverseMap();
+            CreateMap<IUpdateSettings, IUpdateSettings>().ReverseMap();
         }
 
         #endregion Constructors

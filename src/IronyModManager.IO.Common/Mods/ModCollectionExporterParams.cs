@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-07-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporterParams.cs" company="Mario">
 //     Mario
@@ -25,6 +25,12 @@ namespace IronyModManager.IO.Common.Mods
     public class ModCollectionExporterParams
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [export mod order only].
+        /// </summary>
+        /// <value><c>true</c> if [export mod order only]; otherwise, <c>false</c>.</value>
+        public bool ExportModOrderOnly { get; set; }
 
         /// <summary>
         /// Gets or sets the file.

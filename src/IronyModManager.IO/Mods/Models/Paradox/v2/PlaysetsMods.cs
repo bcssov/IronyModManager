@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="PlaysetsMods.cs" company="Mario">
 //     Mario
@@ -34,18 +34,18 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets or sets the identifier.
+        /// Gets or sets the mod identifier.
         /// </summary>
-        /// <value>The identifier.</value>
-        [Map("modId")] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily. Also changed the type to string which is another reported issue when updating records using composite keys and property handler.
-        public string modId { get; set; }
+        /// <value>The mod identifier.</value>
+        [Map("modId")]
+        public string ModId { get; set; }
 
         /// <summary>
         /// Gets or sets the playset identifier.
         /// </summary>
         /// <value>The playset identifier.</value>
-        [Map("playsetId")] // TODO: It's a bug in the ORM mapper gotta lowercase property names temporarily. Also changed the type to string which is another reported issue when updating records using composite keys and property handler.
-        public string playsetId { get; set; }
+        [Map("playsetId")]
+        public string PlaysetId { get; set; }
 
         /// <summary>
         /// Gets or sets the position.

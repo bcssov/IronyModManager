@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
@@ -635,7 +636,7 @@ namespace IronyModManager.Services
             async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
             {
                 Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
-                var mods = GetCollectionMods();
+                var mods = GetCollectionMods(collectionName: collectionName);
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
@@ -1143,7 +1144,7 @@ namespace IronyModManager.Services
                         var validConflictsGroup = validConflicts.GroupBy(p => p.DefinitionSHA);
                         if (validConflictsGroup.Count() > 1)
                         {
-                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition);
+                            var filteredConflicts = validConflictsGroup.Select(p => EvalDefinitionPriority(p.OrderBy(m => modOrder.IndexOf(m.ModName))).Definition);
                             foreach (var item in filteredConflicts)
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
@@ -1256,15 +1257,13 @@ namespace IronyModManager.Services
                         {
                             name = $"{name}{Path.DirectorySeparatorChar}";
                         }
-                        if (ignoreRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)) && !includeRules.Any(x => name.StartsWith(x, StringComparison.OrdinalIgnoreCase)))
+                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileName))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileName)));
+                        foreach (var item in invalid)
                         {
-                            foreach (var item in topConflict.Children)
+                            if (!alreadyIgnored.Contains(item.Key))
                             {
-                                if (!alreadyIgnored.Contains(item.Key))
-                                {
-                                    alreadyIgnored.Add(item.Key);
-                                    ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
-                                }
+                                alreadyIgnored.Add(item.Key);
+                                ruleIgnoredDefinitions.AddToMap(conflictResult.Conflicts.GetByTypeAndId(item.Key).First());
                             }
                         }
                     }
@@ -1282,6 +1281,25 @@ namespace IronyModManager.Services
                 }
             }
             conflictResult.RuleIgnoredConflicts = ruleIgnoredDefinitions;
+        }
+
+        /// <summary>
+        /// Evals the wildcard.
+        /// </summary>
+        /// <param name="pattern">The pattern.</param>
+        /// <param name="content">The content.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected virtual bool EvalWildcard(string pattern, string content)
+        {
+            if (pattern.Contains("*") || pattern.Contains("?"))
+            {
+                var regex = $"^{Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".")}$";
+                return Regex.IsMatch(content, regex, RegexOptions.IgnoreCase);
+            }
+            else
+            {
+                return content.StartsWith(pattern, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         /// <summary>
@@ -1451,7 +1469,7 @@ namespace IronyModManager.Services
             {
                 return true;
             }
-            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.ModName.Equals(p.ModName) && a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
+            var cachedDiffs = cachedConflicts.Where(p => currentConflicts.Any(a => a.FileCI.Equals(p.FileCI) && a.DefinitionSHA.Equals(p.DefinitionSHA)));
             return cachedDiffs.Count() != cachedConflicts.Count();
         }
 

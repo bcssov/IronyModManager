@@ -4,7 +4,7 @@
 // Created          : 08-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="ObjectToBoolHandler.cs" company="Mario">
 //     Mario
@@ -44,9 +44,9 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v2.PropertyHandlers
             {
                 return Convert.ToInt32(input) > 0;
             }
-            else if (input is bool)
+            else if (input is bool boolean)
             {
-                return (bool)input;
+                return boolean;
             }
             else if (int.TryParse(input.ToString(), out var intResult))
             {

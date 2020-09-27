@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="IGameService.cs" company="Mario">
 //     Mario
@@ -40,17 +40,40 @@ namespace IronyModManager.Services.Common
         IGameSettings GetDefaultGameSettings(IGame game);
 
         /// <summary>
+        /// Gets the game settings from json.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>IGameSettings.</returns>
+        IGameSettings GetGameSettingsFromJson(IGame game, string path);
+
+        /// <summary>
         /// Gets the launch settings.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="appendContinueGame">if set to <c>true</c> [append continue game].</param>
         /// <returns>IGameSettings.</returns>
-        IGameSettings GetLaunchSettings(IGame game);
+        IGameSettings GetLaunchSettings(IGame game, bool appendContinueGame = false);
 
         /// <summary>
         /// Gets the selected.
         /// </summary>
         /// <returns>IGame.</returns>
         IGame GetSelected();
+
+        /// <summary>
+        /// Determines whether [is continue game allowed] [the specified game].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <returns><c>true</c> if [is continue game allowed] [the specified game]; otherwise, <c>false</c>.</returns>
+        bool IsContinueGameAllowed(IGame game);
+
+        /// <summary>
+        /// Determines whether [is steam game] [the specified settings].
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        /// <returns><c>true</c> if [is steam game] [the specified settings]; otherwise, <c>false</c>.</returns>
+        bool IsSteamGame(IGameSettings settings);
 
         /// <summary>
         /// Determines whether [is steam launch path] [the specified settings].

@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-08-2020
+// Last Modified On : 09-21-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The children.</value>
         ICollection<IHierarchicalDefinitions> Children { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        /// <value>The name of the file.</value>
+        string FileName { get; set; }
 
         /// <summary>
         /// Gets or sets the key.

@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-20-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -339,8 +339,9 @@ namespace IronyModManager.Services
         /// Gets the collection mods.
         /// </summary>
         /// <param name="mods">The mods.</param>
+        /// <param name="collectionName">Name of the collection.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null)
+        protected virtual IEnumerable<IMod> GetCollectionMods(IEnumerable<IMod> mods = null, string collectionName = Shared.Constants.EmptyParam)
         {
             if (mods == null)
             {
@@ -350,7 +351,16 @@ namespace IronyModManager.Services
             var collections = GetAllModCollectionsInternal();
             if (collections?.Count() > 0)
             {
-                var collection = collections.FirstOrDefault(p => p.IsSelected);
+                IModCollection collection;
+                if (!string.IsNullOrWhiteSpace(collectionName))
+                {
+                    collection = collections.FirstOrDefault(p => p.Name.Equals(collectionName, StringComparison.OrdinalIgnoreCase));
+                }
+                else
+                {
+                    collection = collections.FirstOrDefault(p => p.IsSelected);
+                }
+
                 if (collection != null)
                 {
                     foreach (var item in collection.Mods)

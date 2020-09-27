@@ -82,6 +82,9 @@
     <None Update="mod\fakemod\descriptor.mod">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="save games\save.sav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

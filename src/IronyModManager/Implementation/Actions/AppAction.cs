@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-17-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -33,7 +33,6 @@ namespace IronyModManager.Implementation.Actions
     [ExcludeFromCoverage("UI Actions are tested via functional testing.")]
     public class AppAction : IAppAction
     {
-
         #region Methods
 
         /// <summary>
@@ -58,6 +57,15 @@ namespace IronyModManager.Implementation.Actions
             {
                 ((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).Shutdown();
             });
+        }
+
+        /// <summary>
+        /// Gets the asynchronous.
+        /// </summary>
+        /// <returns>Task&lt;System.String&gt;.</returns>
+        public Task<string> GetAsync()
+        {
+            return Application.Current.Clipboard.GetTextAsync();
         }
 
         // Borrowed logic from here: https://github.com/AvaloniaUI/Avalonia/blob/master/src/Avalonia.Dialogs/AboutAvaloniaDialog.xaml.cs
@@ -104,7 +112,11 @@ namespace IronyModManager.Implementation.Actions
             {
                 if (string.IsNullOrWhiteSpace(args))
                 {
-                    Process.Start(path);
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        FileName = path,
+                        WorkingDirectory = Path.GetDirectoryName(path)
+                    });
                 }
                 else
                 {
@@ -145,6 +157,5 @@ namespace IronyModManager.Implementation.Actions
         }
 
         #endregion Methods
-
     }
 }

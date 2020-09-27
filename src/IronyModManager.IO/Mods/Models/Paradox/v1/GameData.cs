@@ -4,7 +4,7 @@
 // Created          : 03-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="GameData.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
         /// </summary>
         public GameData()
         {
-            ModsOrder = new List<Guid>();
+            ModsOrder = new List<string>();
         }
 
         #endregion Constructors
@@ -53,7 +53,7 @@ namespace IronyModManager.IO.Mods.Models.Paradox.v1
         /// </summary>
         /// <value>The mods order.</value>
         [JsonProperty("modsOrder")]
-        public List<Guid> ModsOrder { get; set; }
+        public List<string> ModsOrder { get; set; }
 
         #endregion Properties
     }

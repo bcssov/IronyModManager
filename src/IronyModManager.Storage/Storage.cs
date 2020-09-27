@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -188,7 +188,9 @@ namespace IronyModManager.Storage
                 game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
+                game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix ?? string.Empty;
                 game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
+                game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 Database.Games.Add(game);
                 return true;
             }

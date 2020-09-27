@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 09-24-2020
 // ***********************************************************************
 // <copyright file="ShortcutsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -57,6 +57,11 @@ namespace IronyModManager.Views.Controls
             popup.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
+            };
+            popup.Opened += (sender, args) =>
+            {
+                popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

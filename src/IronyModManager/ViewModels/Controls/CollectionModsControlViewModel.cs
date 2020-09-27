@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 09-22-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -261,6 +261,11 @@ namespace IronyModManager.ViewModels.Controls
             Default,
 
             /// <summary>
+            /// The default order only
+            /// </summary>
+            DefaultOrderOnly,
+
+            /// <summary>
             /// The paradoxos
             /// </summary>
             Paradoxos,
@@ -385,6 +390,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The hovered mod.</value>
         public virtual IMod HoveredMod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the import collection from clipboard.
+        /// </summary>
+        /// <value>The import collection from clipboard.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.ImportFromClipboard.Title)]
+        public virtual string ImportCollectionFromClipboard { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import collection from clipboard command.
+        /// </summary>
+        /// <value>The import collection from clipboard command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportCollectionFromClipboardCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the maximum order.
@@ -730,12 +748,13 @@ namespace IronyModManager.ViewModels.Controls
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
-        protected virtual async Task ExportCollectionAsync(string path)
+        /// <param name="providerType">Type of the provider.</param>
+        protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection));
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly));
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1015,6 +1034,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(v => v.ExportCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
                 Observable.Merge(ExportCollection.ExportCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.Default)),
+                    ExportCollection.ExportOrderOnlyCommand.Select(p => Tuple.Create(ImportActionType.Export, p, ImportProviderType.DefaultOrderOnly)),
                     ExportCollection.ImportCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Default)),
                     ExportCollection.ImportOtherParadoxosCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradoxos)),
                     ExportCollection.ImportOtherParadoxCommand.Select(p => Tuple.Create(ImportActionType.Import, p, ImportProviderType.Paradox)),
@@ -1025,7 +1045,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         if (s.Item1 == ImportActionType.Export)
                         {
-                            ExportCollectionAsync(s.Item2.Result).ConfigureAwait(true);
+                            ExportCollectionAsync(s.Item2.Result, s.Item3).ConfigureAwait(true);
                         }
                         else
                         {
@@ -1221,6 +1241,40 @@ namespace IronyModManager.ViewModels.Controls
                         sb.AppendLine(item.Name);
                     }
                     await appAction.CopyAsync(sb.ToString());
+                }
+            }).DisposeWith(disposables);
+
+            ImportCollectionFromClipboardCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var text = await appAction.GetAsync();
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    var modNames = text.SplitOnNewLine();
+                    if (modNames.Any(p => Mods.Any(m => m.Name.Equals(p, StringComparison.OrdinalIgnoreCase))))
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptTitle);
+                        var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
+                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
+                        {
+                            skipModCollectionSave = true;
+                            var mods = new List<IMod>();
+                            foreach (var item in Mods)
+                            {
+                                item.IsSelected = modNames.Any(p => p.Equals(item.Name));
+                                if (item.IsSelected)
+                                {
+                                    mods.Add(item);
+                                }
+                            }                            
+                            SetSelectedMods(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
+                            AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
+                            var state = appStateService.Get();
+                            InitSortersAndFilters(state);
+                            SaveSelectedCollection();
+                            RecognizeSortOrder(SelectedModCollection);
+                            skipModCollectionSave = false;
+                        }
+                    }
                 }
             }).DisposeWith(disposables);
 

@@ -11,9 +11,10 @@
             HorizontalAlignment="Center" MaxHeight="30"  Margin="0,0,10,0"></Button>
     <Panel HorizontalAlignment="Right">
       <Button Content="{Binding MergeOpen}" Command="{Binding MergeOpenCommand}"
-                  MaxHeight="30"  Margin="0,0,10,0"></Button>
-      <Popup PlacementMode="Bottom" IsOpen="{Binding IsMergeOpen}"
-             Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+                  MaxHeight="30"  Margin="0,0,10,0" x:Name="openPopupButton"></Button>
+      <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsMergeOpen}"
+             Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
+             PlacementTarget="{Binding #openPopupButton}">
         <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
           <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
             <TextBlock Text="{Binding MergeSelectMode}" Grid.Row="0" Grid.Column="0"

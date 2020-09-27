@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 09-24-2020
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlView.xaml.cs" company="Mario">
 //     Mario
@@ -53,10 +53,25 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            var popup = this.FindControl<Popup>("popup");
-            popup.Closed += (sender, args) =>
+            var popupImport = this.FindControl<Popup>("popupImport");
+            popupImport.Closed += (sender, args) =>
             {
                 ViewModel.ForceClose();
+            };
+            popupImport.Opened += (sender, args) =>
+            {
+                popupImport.Host.ConfigurePosition(popupImport.PlacementTarget, popupImport.PlacementMode, new Avalonia.Point(popupImport.HorizontalOffset, 15),
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
+            };
+            var popupExport = this.FindControl<Popup>("popupExport");
+            popupExport.Closed += (sender, args) =>
+            {
+                ViewModel.ForceClose();
+            };
+            popupExport.Opened += (sender, args) =>
+            {
+                popupExport.Host.ConfigurePosition(popupExport.PlacementTarget, popupExport.PlacementMode, new Avalonia.Point(popupExport.HorizontalOffset, 15),
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

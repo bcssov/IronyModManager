@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 09-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using SimpleInjector;
@@ -46,6 +47,8 @@ namespace IronyModManager.Services
             container.Register<IModCollectionService, ModCollectionService>();
             container.Register<IModPatchCollectionService, ModPatchCollectionService>();
             container.Register<IModMergeService, ModMergeService>();
+            container.Register<IUpdaterService, UpdaterService>();
+            container.RemoveMixedLifetimeWarning<IUpdaterService>();
         }
 
         #endregion Methods

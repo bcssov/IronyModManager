@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager: {AppVersion}",
+        "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
         "Shortcuts": {
@@ -30,6 +30,10 @@
         "Volume": "{Size} Volumen",
         "OK": "OK",
         "Cancel": "Stornieren",
+        "Name": "Name",
+        "DateModified": "Datum geändert",
+        "Type": "Typ",
+        "Size": "Größe",
         "Folders": {
             "Downloads": "Downloads",
             "Desktop": "Desktop",
@@ -99,6 +103,11 @@
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
+        "ImportFromClipboard": {
+            "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
+            "PromptTitle": "Mod-Reihenfolge überschreiben?",
+            "PromptMessage": "Dies überschreibt deine Mod-Sammlungs-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
             "On": "Auf",
@@ -113,6 +122,11 @@
             "Paradoxos": "Import aus Paradoxos",
             "Paradox": "Aus dem Spiel importieren",
             "ParadoxLauncher": "Import aus Paradox Launcher",
+            "Close": "Schließen"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Nur Bestellung exportieren",
             "Close": "Schließen"
         },
         "MergeCollection": {
@@ -149,7 +163,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Spiel startet",
+            "Launch": "Spiel startet",
+            "Resume": "Setzen Sie Gameg fort",
             "LaunchError": {
                 "Title": "Spiel kann nicht gestartet werden",
                 "Message": "Das Spiel konnte nicht gestartet werden."
@@ -166,6 +181,7 @@
         "LeftSide": "Linke Seite",
         "RightSide": "Rechte Seite",
         "BinaryFile": "Binärer Inhalt",
+        "ImageInfo": "Breite: {Width} Höhe: {Height}",
         "TakeLeft": "Biegen Sie links ab",
         "TakeRight": "Hier rechts",
         "OK": "In Ordnung",
@@ -192,6 +208,10 @@
                 "OpenDirectory": "Verzeichnis öffnen",
                 "CustomPatch": "In benutzerdefinierten Patch kopieren"
             }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Datei öffnen",
+            "OpenDirectory": "Verzeichnis öffnen"
         },
         "ContextMenu": {
             "CopyAll": "Kopiere alles",
@@ -255,13 +275,45 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Spiel ausführbar",
-        "GameArgs": "Spiel Args",
-        "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+        "Game": {
+            "Title": "Spieleinstellungen",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "GameExecutable": "Spiel ausführbar",
+            "UserDirectory": "Data Directory",
+            "GameArgs": "Spiel Args",
+            "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+            "AutoConfigure": "Alle konfigurieren..."
+        },
+        "Updates": {
+            "Title": "Aktualisierungsoptionen",
+            "AutoUpdates": "Beim Start nach Updates suchen",
+            "CheckPrerelease": "Update auf Vorabversionen",
+            "CheckForUpdates": "Auf Updates prüfen",
+            "Install": "Installiere Updates",
+            "Version": "Ausführung",
+            "Overlay": {
+                "UpdateDownloading": "Updates herunterladen...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Aktualisierungsfehler",
+                "DownloadErrorMessage": "Beim Herunterladen von Updates ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Fehlerprotokoll."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatisch nach Aktualisierungen suchen",
+                "Message": "Irony möchte, dass Sie beim Start nach Updates suchen. Möchten Sie, dass Irony Sie automatisch über Updates informiert?"
+            },
+            "UpdateNotification": {
+                "Title": "Update erkannt",
+                "Message": "Überprüfen Sie den Optionsbildschirm auf Aktualisierungsdetails oder klicken Sie auf diese Nachricht."
+            }
+        },
         "Dialog": {
-            "Title": "Finde eine ausführbare Spieldatei"
+            "ExeTitle": "Finde eine ausführbare Spieldatei",
+            "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
+            "UserDirTitle": "Spieldatenverzeichnis suchen"
         }
     },
     "Notifications": {
@@ -324,6 +376,10 @@
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",
             "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Keine Aktualisierungen",
+            "Message": "Es scheinen keine Updates verfügbar zu sein."
         }
     },
     "Mod_App_Actions": {

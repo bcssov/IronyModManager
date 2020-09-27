@@ -1,6 +1,6 @@
 ﻿{
     "App": {
-        "Title": "Irony Mod Manager: {AppVersion}",
+        "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
         "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
         "Shortcuts": {
@@ -30,6 +30,10 @@
         "Volume": "{Size} Volumen",
         "OK": "U redu",
         "Cancel": "Otkaži",
+        "Name": "Ime",
+        "DateModified": "Datum izmjene",
+        "Type": "Tip",
+        "Size": "Veličina",
         "Folders": {
             "Downloads": "Preuzimanja",
             "Desktop": "Desktop",
@@ -99,6 +103,11 @@
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
+        "ImportFromClipboard": {
+            "Title": "Uvezi mod redoslijed iz međuspremnika",
+            "PromptTitle": "Prebriši redoslijed modova?",
+            "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
             "On": "Uključen",
@@ -113,6 +122,11 @@
             "Paradoxos": "Uvezi iz Paradoxos",
             "Paradox": "Uvezi iz igre",
             "ParadoxLauncher": "Uvezi iz Paradox Launcher",
+            "Close": "Zatvori"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Izvezi redoslijed",
             "Close": "Zatvori"
         },
         "MergeCollection": {
@@ -149,7 +163,8 @@
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
         "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}%",
         "LaunchGame": {
-            "Name": "Pokreni igru",
+            "Launch": "Pokreni igru",
+            "Resume": "Nastavi igru",
             "LaunchError": {
                 "Title": "Nije moguće pokrenuti igru",
                 "Message": "Pokretanje igre nije uspjelo."
@@ -166,6 +181,7 @@
         "LeftSide": "Lijeva strana",
         "RightSide": "Desna strana",
         "BinaryFile": "Binarni sadržaj",
+        "ImageInfo": "Širina: {Width} Visina: {Height}",
         "TakeLeft": "Uzmi lijevo",
         "TakeRight": "Uzmi desno",
         "OK": "U redu",
@@ -192,6 +208,10 @@
                 "OpenDirectory": "Otvori direktorij",
                 "CustomPatch": "Kopiraj u prilagođenu zakrpu"
             }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Otvori datoteku",
+            "OpenDirectory": "Otvori direktorij"
         },
         "ContextMenu": {
             "CopyAll": "Kopiraj sve",
@@ -255,13 +275,45 @@
     "Options": {
         "Name": "Opcije",
         "Close": "Zatvori",
-        "NavigateToExe": "...",
-        "Reset": "X",
-        "GameExecutable": "Izvršna datoteka",
-        "GameArgs": "Argumenti",
-        "RefreshMods": "Osvježite deskriptore prije startanja igre",
+        "Game": {
+            "Title": "Title",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "GameExecutable": "Izvršna datoteka",
+            "UserDirectory": "Data Directory",
+            "GameArgs": "Argumenti",
+            "RefreshMods": "Osvježite deskriptore prije startanja igre",
+            "AutoConfigure": "Konfiguriraj sve..."
+        },
+        "Updates": {
+            "Title": "Mogućnosti ažuriranja",
+            "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
+            "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
+            "CheckForUpdates": "Provjeri ima li ažuriranja",
+            "Install": "Instaliraj ažuriranja",
+            "Version": "Verzija",
+            "Overlay": {
+                "UpdateDownloading": "Preuzimanje ažuriranja...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "Raspakiravanje ažuriranja i priprema za pokretanje instalacijskog programa..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Pogreška pri ažuriranju",
+                "DownloadErrorMessage": "Došlo je do pogreške prilikom preuzimanja ažuriranja, pogledajte detalje u zapisniku pogrešaka."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Automatski provjeri ažuriranja",
+                "Message": "Irony želi vaše dopuštenje da provjeri ima li ažuriranja prilikom pokretanja. Želite li da vas Irony automatski obavještava o novostima?"
+            },
+            "UpdateNotification": {
+                "Title": "UAžuriranje otkriveno",
+                "Message": "Pogledajte detalje o ažuriranju na zaslonu opcija ili kliknite ovu poruku."
+            }
+        },
         "Dialog": {
-            "Title": "Nađi izvršnu datoteku igre"
+            "ExeTitle": "Nađi izvršnu datoteku igre",
+            "GameRootTitle": "Pronađite osnovni direktorij igre",
+            "UserDirTitle": "Pronađite direktorij podataka o igri"
         }
     },
     "Notifications": {
@@ -324,6 +376,10 @@
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",
             "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Nema ažuriranja",
+            "Message": "Čini se da nema dostupnih ažuriranja."
         }
     },
     "Mod_App_Actions": {

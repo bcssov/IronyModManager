@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-11-2020
+// Last Modified On : 09-18-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Reactive.cs" company="Mario">
 //     Mario
@@ -36,7 +36,8 @@ namespace IronyModManager.DI
         private void RegisterReactiveServices(Container container)
         {
             Locator.CurrentMutable.UseNLogWithWrappingFullLogger();
-            container.RegisterWithoutTransientWarning<ViewModelActivator>();
+            container.Register<ViewModelActivator>();
+            container.RemoveTransientWarning<ViewModelActivator>();
         }
 
         #endregion Methods

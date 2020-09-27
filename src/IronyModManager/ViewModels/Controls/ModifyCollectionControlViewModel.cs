@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-01-2020
+// Last Modified On : 09-17-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -418,7 +418,7 @@ namespace IronyModManager.ViewModels.Controls
                     var copy = await GetMergedCollectionAsync();
 
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFree();
+                    await shutDownState.WaitUntilFreeAsync();
 
                     var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     while (savedCollection == null)
@@ -493,7 +493,7 @@ namespace IronyModManager.ViewModels.Controls
                     var copy = await GetMergedCollectionAsync();
 
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
-                    await shutDownState.WaitUntilFree();
+                    await shutDownState.WaitUntilFreeAsync();
 
                     var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     while (savedCollection == null)

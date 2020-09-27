@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -15,10 +15,12 @@ using System.Collections.Generic;
 using System;
 using System.IO;
 using IronyModManager.DI;
-using IronyModManager.Services.Registrations.Models;
+using IronyModManager.Services.Models;
+using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace IronyModManager.Services.Registrations
 {
@@ -30,6 +32,15 @@ namespace IronyModManager.Services.Registrations
     [ExcludeFromCoverage("Setup module.")]
     public class GameRegistration : PostStartup
     {
+        #region Fields
+
+        /// <summary>
+        /// The path resolver
+        /// </summary>
+        private PathResolver pathResolver;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -37,6 +48,7 @@ namespace IronyModManager.Services.Registrations
         /// </summary>
         public override void OnPostStartup()
         {
+            pathResolver = new PathResolver();
             var storage = DIResolver.Get<IStorageProvider>();
             var userDir = UserDirectory.GetDirectory();
             storage.RegisterGame(GetStellaris(userDir));
@@ -63,8 +75,10 @@ namespace IronyModManager.Services.Registrations
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
             game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsFileName;
+            game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsPrefix;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -85,8 +99,9 @@ namespace IronyModManager.Services.Registrations
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
             game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -96,7 +111,7 @@ namespace IronyModManager.Services.Registrations
         /// <param name="path">The path.</param>
         /// <param name="launcherFilename">The launcher filename.</param>
         /// <returns>System.String.</returns>
-        private ExecutableSettings GetExecutableSettings(string path, string launcherFilename)
+        private GameSettings GetExecutableSettings(string path, string launcherFilename)
         {
             if (File.Exists(Path.Combine(path, launcherFilename)))
             {
@@ -109,10 +124,11 @@ namespace IronyModManager.Services.Registrations
                         var exePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator();
                         if (File.Exists(exePath))
                         {
-                            return new ExecutableSettings()
+                            return new GameSettings()
                             {
                                 ExecutableArgs = string.Join(" ", settings.ExeArgs),
-                                ExecutablePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator()
+                                ExecutablePath = Path.Combine(path, settings.ExePath).StandardizeDirectorySeparator(),
+                                UserDir = pathResolver.Parse(settings.GameDataPath)
                             };
                         }
                     }
@@ -141,8 +157,9 @@ namespace IronyModManager.Services.Registrations
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
             game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -163,8 +180,10 @@ namespace IronyModManager.Services.Registrations
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
             game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsFileName;
+            game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsPrefix;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -185,8 +204,9 @@ namespace IronyModManager.Services.Registrations
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
+            game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = true;
-            MapExecutableSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -195,12 +215,16 @@ namespace IronyModManager.Services.Registrations
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
         /// <param name="settings">The settings.</param>
-        private void MapExecutableSettings(IGameType gameType, ExecutableSettings settings)
+        private void MapGameSettings(IGameType gameType, GameSettings settings)
         {
             if (settings != null && gameType != null)
             {
                 gameType.ExecutablePath = settings.ExecutablePath;
                 gameType.ExecutableArgs = settings.ExecutableArgs;
+                if (Directory.Exists(settings.UserDir))
+                {
+                    gameType.UserDirectory = settings.UserDir;
+                }
             }
         }
 
@@ -211,7 +235,7 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// Class ExecutableSettings.
         /// </summary>
-        private class ExecutableSettings
+        private class GameSettings
         {
             #region Properties
 
@@ -226,6 +250,12 @@ namespace IronyModManager.Services.Registrations
             /// </summary>
             /// <value>The executable path.</value>
             public string ExecutablePath { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user dir.
+            /// </summary>
+            /// <value>The user dir.</value>
+            public string UserDir { get; set; }
 
             #endregion Properties
         }

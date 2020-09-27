@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -62,7 +62,7 @@ namespace IronyModManager.Services.Tests
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService)
         {
-            return new ModService(new Cache(),null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -798,6 +798,85 @@ namespace IronyModManager.Services.Tests
             var result = service.EvalAchievementCompatibility(new List<IMod>() { mod });
             result.Should().Be(true);
             mod.AchievementStatus.Should().Be(AchievementStatus.Compatible);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_return_mod_image_stream.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_return_mod_image_stream()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var mapper = new Mock<IMapper>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.FileName
+                };
+            });
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            SetupMockCase(reader, modParser);
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            var result = await service.GetImageStreamAsync("test", "test");
+            result.Should().BeNull();
+
+            result = await service.GetImageStreamAsync(string.Empty, "test");
+            result.Should().BeNull();
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_return_mod_image_stream",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop",
+                ChecksumFolders = new List<string>() { "common", "events" }
+            });
+
+            result = await service.GetImageStreamAsync("test", string.Empty);
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_mod_image_stream.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_mod_image_stream()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var mapper = new Mock<IMapper>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.FileName
+                };
+            });
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_return_mod_image_stream",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop",
+                ChecksumFolders = new List<string>() { "common", "events" }
+            });
+
+            SetupMockCase(reader, modParser);
+            reader.Setup(p => p.GetImageStreamAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new MemoryStream()));
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            var result = await service.GetImageStreamAsync("1", "test");
+            result.Should().NotBeNull();
         }
     }
 }

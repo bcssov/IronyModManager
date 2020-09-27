@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 09-23-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -15,9 +15,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
+using Pfim;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace IronyModManager.IO.Readers
 {
@@ -29,6 +33,16 @@ namespace IronyModManager.IO.Readers
     public class Reader : IReader
     {
         #region Fields
+
+        /// <summary>
+        /// The DDS extension
+        /// </summary>
+        private const string DDSExtension = ".dds";
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
 
         /// <summary>
         /// The readers
@@ -43,9 +57,11 @@ namespace IronyModManager.IO.Readers
         /// Initializes a new instance of the <see cref="Reader" /> class.
         /// </summary>
         /// <param name="readers">The readers.</param>
-        public Reader(IEnumerable<IFileReader> readers)
+        /// <param name="logger">The logger.</param>
+        public Reader(IEnumerable<IFileReader> readers, ILogger logger)
         {
             this.readers = readers;
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -95,6 +111,87 @@ namespace IronyModManager.IO.Readers
             if (reader != null)
             {
                 return reader.GetFiles(path);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPat">The root pat.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>MemoryStream.</returns>
+        public async Task<MemoryStream> GetImageStreamAsync(string rootPat, string file)
+        {
+            if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+            {
+                static byte[] tightData(Dds image)
+                {
+                    // Code from this PR (MIT licensed): https://github.com/hguy/dds-reader/pull/1/commits/ba751f0af4fc1c725842dc86d12ecf69f0c70108
+                    var tightStride = image.Width * image.BitsPerPixel / 8;
+                    if (image.Stride == tightStride)
+                    {
+                        return image.Data;
+                    }
+
+                    byte[] newData = new byte[image.Height * tightStride];
+                    for (int i = 0; i < image.Height; i++)
+                    {
+                        Buffer.BlockCopy(image.Data, i * image.Stride, newData, i * tightStride, tightStride);
+                    }
+
+                    return newData;
+                }
+                var stream = GetStream(rootPat, file);
+                if (stream != null)
+                {
+                    MemoryStream ms = null;
+                    try
+                    {
+                        if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
+                        {
+                            using var pfimImage = Dds.Create(stream, new PfimConfig());
+                            if (pfimImage.Compressed)
+                            {
+                                pfimImage.Decompress();
+                            }
+                            if (pfimImage.Format == ImageFormat.Rgba32)
+                            {
+                                ms = new MemoryStream();
+                                using var image = Image.LoadPixelData<Bgra32>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                                await image.SaveAsPngAsync(ms);
+                            }
+                            else if (pfimImage.Format == ImageFormat.Rgb24)
+                            {
+                                ms = new MemoryStream();
+                                using var image = Image.LoadPixelData<Bgr24>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                                await image.SaveAsPngAsync(ms);
+                            }
+                        }
+                        else
+                        {
+                            ms = new MemoryStream();
+                            using var image = await Image.LoadAsync(stream);
+                            await image.SaveAsPngAsync(ms);
+                        }
+                        if (ms != null && ms.CanSeek)
+                        {
+                            ms.Seek(0, SeekOrigin.Begin);
+                        }
+                        return ms;
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex);
+                        ms.Close();
+                        await ms.DisposeAsync();
+                    }
+                    finally
+                    {
+                        stream.Close();
+                        await stream.DisposeAsync();
+                    }
+                }
             }
             return null;
         }

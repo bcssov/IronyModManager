@@ -68,13 +68,14 @@
       </StackPanel>
     </DockPanel>
 
-    <DropDown DockPanel.Dock="Bottom"
+    <ComboBox DockPanel.Dock="Bottom"
               IsVisible="{Binding ShowFilters}"
               Items="{Binding Filters}"
               SelectedItem="{Binding SelectedFilter}"
-              Margin="0 5 0 0" />
+              Margin="0 5 0 0" x:Name="filter" />
 
-    <TextBox x:Name="fileName" Text="{Binding FileName}" Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />
+    <TextBox x:Name="fileName" Text="{Binding FileName}" 
+             Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />
 
     <ListBox Margin="0 0 5 5" BorderBrush="Transparent" x:Name="QuickLinks" Items="{Binding QuickLinks}"
              SelectedIndex="{Binding QuickLinksSelectedIndex}"
@@ -102,13 +103,13 @@
           <ColumnDefinition Width="200" SharedSizeGroup="Size" />
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" />
-        <TextBlock Grid.Column="2" Text="Name" />
+        <TextBlock Grid.Column="2" Text="Name" x:Name="name"/>
         <GridSplitter Grid.Column="3" />
-        <TextBlock Grid.Column="4" Text="Date Modified" />
+        <TextBlock Grid.Column="4" Text="Date Modified" x:Name="dateModified" />
         <GridSplitter Grid.Column="5" />
-        <TextBlock Grid.Column="6" Text="Type" />
+        <TextBlock Grid.Column="6" Text="Type" x:Name="type"/>
         <GridSplitter Grid.Column="7" />
-        <TextBlock Grid.Column="8" Text="Size" />
+        <TextBlock Grid.Column="8" Text="Size" x:Name="size"/>
       </Grid>
       <ListBox x:Name="Files"
            VirtualizationMode="Simple"

@@ -7,23 +7,55 @@
   <Panel>
     <Button Content="{Binding Options}" Command="{Binding OptionsCommand}"
             BorderThickness="0,0,0,0" Background="Transparent"
-            Foreground="{DynamicResource IronyAccentBrush}"></Button>
-    <Popup PlacementMode="Bottom" IsOpen="{Binding IsOpen}"
-           Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup">
+            Foreground="{DynamicResource IronyAccentBrush}" x:Name="openPopupButton"></Button>
+    <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsOpen}"
+           Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
+           PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-          <Grid ColumnDefinitions="3*,3*,1*,1*" RowDefinitions="1*,1*,1*" Grid.Row="0">
-            <TextBlock Text="{Binding GameExecutable}" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-            <TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" MaxWidth="120" Grid.Column="1" Grid.Row="0"></TextBox>
-            <Button Content="{Binding Navigate}" Command="{Binding NavigateCommand}" Grid.Column="2" Grid.Row="0"></Button>
-            <Button Content="{Binding Reset}" Command="{Binding ResetExeCommand}" Grid.Column="3" Grid.Row="0"></Button>
-            <TextBlock Margin="0,5" Text="{Binding GameArgs}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-            <TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="120" Grid.Column="1" Grid.Row="1"></TextBox>
-            <Button Margin="0,5" Content="{Binding Reset}" Command="{Binding ResetArgsCommand}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"></Button>
-            <CheckBox Content="{Binding RefreshDescriptors}" IsChecked="{Binding Game.RefreshDescriptors}"
-                      Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="2"></CheckBox>
-          </Grid>
-          <Panel Grid.Row="1" Margin="0,5">
+        <Grid RowDefinitions="1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
+          <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="0">
+            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+              <TextBlock Text="{Binding GameOptions}" FontSize="14"></TextBlock>
+            </Border>
+            <Grid ColumnDefinitions="3*,3*,1*,1*" RowDefinitions="1*,1*,1*,1*,1*">
+              <Button Content="{Binding AutoConfigure}" Command="{Binding AutoConfigureCommand}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"></Button>
+              <TextBlock Text="{Binding GameExecutable}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+              <TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Margin="0,5,0,0" MaxWidth="180" Grid.Column="1" Grid.Row="1"></TextBox>
+              <Button Content="{Binding Navigate}" Command="{Binding NavigateExeCommand}" Margin="0,5,0,0" Grid.Column="2" Grid.Row="1"></Button>
+              <Button Content="{Binding Reset}" Command="{Binding ResetExeCommand}" Margin="0,5,0,0" Grid.Column="3" Grid.Row="1"></Button>
+              <TextBlock Margin="0,5" Text="{Binding GameArgs}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+              <TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="180" Grid.Column="1" Grid.Row="2"></TextBox>
+              <Button Margin="0,5" Content="{Binding Reset}" Command="{Binding ResetArgsCommand}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"></Button>
+              <TextBlock Text="{Binding UserDirectory}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+              <TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="180" Grid.Column="1" Grid.Row="3"></TextBox>
+              <Button Content="{Binding Navigate}" Command="{Binding NavigateDirectoryCommand}" Grid.Column="2" Grid.Row="3"></Button>
+              <Button Content="{Binding Reset}" Command="{Binding ResetDirectoryCommand}" Grid.Column="3" Grid.Row="3"></Button>
+              <CheckBox Margin="0,5,0,0" Content="{Binding RefreshDescriptors}" IsChecked="{Binding Game.RefreshDescriptors}"
+                        Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="4"></CheckBox>
+            </Grid>
+          </StackPanel>
+          <StackPanel Orientation="Vertical" Spacing="10" Grid.Row="1" Margin="0,20,0,0">
+            <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
+              <TextBlock Text="{Binding UpdateOptions}" FontSize="14"></TextBlock>
+            </Border>
+            <Grid RowDefinitions="1*,1*,1*,1*">
+              <CheckBox Content="{Binding AutoUpdate}" IsChecked="{Binding UpdateSettings.AutoUpdates}" Grid.Row="0"></CheckBox>
+              <CheckBox Content="{Binding CheckForPrerelease}" IsChecked="{Binding UpdateSettings.CheckForPrerelease}" Grid.Row="1"></CheckBox>
+              <Button Margin="0,5" Content="{Binding CheckForUpdates}" Command="{Binding CheckForUpdatesCommand}" Grid.Row="2"></Button>
+              <Grid Grid.Row="3" RowDefinitions="1*,1*,1*" IsVisible="{Binding UpdateInfoVisible}">
+                <Grid Grid.Row="0" ColumnDefinitions="1*,4*">
+                  <TextBlock Text="{Binding VersionTitle}" VerticalAlignment="Center" Grid.Column="0"></TextBlock>
+                  <TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></TextBox>
+                </Grid>
+                <TextBox Text="{Binding Changelog}" IsReadOnly="True"
+                         MaxHeight="200" Grid.Row="1"
+                         MaxWidth="320" ScrollViewer.HorizontalScrollBarVisibility="Auto"></TextBox>
+                <Button Margin="0,5" Content="{Binding InstallUpdates}"
+                        Command="{Binding InstallUpdatesCommand}" Grid.Row="2"></Button>
+              </Grid>
+            </Grid>
+          </StackPanel>
+          <Panel Grid.Row="2" Margin="0,5">
             <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
           </Panel>
         </Grid>

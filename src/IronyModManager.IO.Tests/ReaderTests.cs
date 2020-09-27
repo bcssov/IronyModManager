@@ -13,9 +13,11 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using IronyModManager.DI;
 using IronyModManager.IO.Common;
@@ -47,7 +49,7 @@ namespace IronyModManager.IO.Tests
         [Fact]
         public void Selects_correct_reader()
         {
-            var reader = new Reader(new List<IFileReader>() { new Reader1(), new Reader2() });
+            var reader = new Reader(new List<IFileReader>() { new Reader1(), new Reader2() }, new Logger());
             var result = reader.Read("fake1");
             result.Count().Should().Be(1);
             result.First().FileName.Should().Be("fake1_result");
@@ -175,6 +177,29 @@ namespace IronyModManager.IO.Tests
             var reader = DIResolver.Get<IReader>();
             var result = reader.GetFiles(TestPath);
             result.Count().Should().BeGreaterThan(0);
+        }
+
+#if FUNCTIONAL_TEST
+        [Fact]
+#else
+        /// <summary>
+        /// Defines the test method Disk_stream_read_test.
+        /// </summary>
+        [Fact(Skip = "This is for functional testing only")]
+#endif
+        public async Task Image_stream_test()
+        {
+            DISetup.SetupContainer();
+
+            var reader = DIResolver.Get<IReader>();
+            var result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
+            result.Should().NotBeNull();            
+
+            result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.tga");
+            result.Should().NotBeNull();            
+
+            result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.png");
+            result.Should().NotBeNull();            
         }
 
 #if FUNCTIONAL_TEST

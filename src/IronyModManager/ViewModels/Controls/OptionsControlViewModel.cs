@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 09-25-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -16,13 +16,18 @@ using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Updater;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
+using SmartFormat;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -47,14 +52,59 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly Shared.MessageBus.IMessageBus messageBus;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The updater
+        /// </summary>
+        private readonly IUpdater updater;
+
+        /// <summary>
+        /// The updater service
+        /// </summary>
+        private readonly IUpdaterService updaterService;
+
+        /// <summary>
         /// The arguments changed
         /// </summary>
         private IDisposable argsChanged;
 
         /// <summary>
-        /// The is reloading
+        /// The automatic update changed
         /// </summary>
-        private bool isReloading = false;
+        private IDisposable autoUpdateChanged;
+
+        /// <summary>
+        /// The check for prerelease changed
+        /// </summary>
+        private IDisposable checkForPrereleaseChanged;
+
+        /// <summary>
+        /// The is game reloading
+        /// </summary>
+        private bool isGameReloading = false;
+
+        /// <summary>
+        /// The is update reloading
+        /// </summary>
+        private bool isUpdateReloading = false;
 
         /// <summary>
         /// The refresh descriptors changed
@@ -68,17 +118,82 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="updater">The updater.</param>
+        /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IGameService gameService, IFileDialogAction fileDialogAction)
+        public OptionsControlViewModel(Shared.MessageBus.IMessageBus messageBus, ILogger logger, INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
+            IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
             this.gameService = gameService;
             this.fileDialogAction = fileDialogAction;
+            this.updaterService = updaterService;
+            this.updater = updater;
+            this.localizationManager = localizationManager;
+            this.notificationAction = notificationAction;
+            this.logger = logger;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the automatic configure.
+        /// </summary>
+        /// <value>The automatic configure.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.AutoConfigure)]
+        public virtual string AutoConfigure { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the automatic configure command.
+        /// </summary>
+        /// <value>The automatic configure command.</value>
+        public virtual ReactiveCommand<Unit, Unit> AutoConfigureCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the automatic update.
+        /// </summary>
+        /// <value>The automatic update.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.AutoUpdates)]
+        public virtual string AutoUpdate { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the changelog.
+        /// </summary>
+        /// <value>The changelog.</value>
+        public virtual string Changelog { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for prerelease.
+        /// </summary>
+        /// <value>The check for prerelease.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.CheckPrerelease)]
+        public virtual string CheckForPrerelease { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for updates.
+        /// </summary>
+        /// <value>The check for updates.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.CheckForUpdates)]
+        public virtual string CheckForUpdates { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the check for updates command.
+        /// </summary>
+        /// <value>The check for updates command.</value>
+        public virtual ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [checking for updates].
+        /// </summary>
+        /// <value><c>true</c> if [checking for updates]; otherwise, <c>false</c>.</value>
+        public virtual bool CheckingForUpdates { get; protected set; }
 
         /// <summary>
         /// Gets or sets the close.
@@ -103,15 +218,35 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the game arguments.
         /// </summary>
         /// <value>The game arguments.</value>
-        [StaticLocalization(LocalizationResources.Options.GameArgs)]
+        [StaticLocalization(LocalizationResources.Options.Game.GameArgs)]
         public virtual string GameArgs { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game executable.
         /// </summary>
         /// <value>The game executable.</value>
-        [StaticLocalization(LocalizationResources.Options.GameExecutable)]
+        [StaticLocalization(LocalizationResources.Options.Game.GameExecutable)]
         public virtual string GameExecutable { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the game options.
+        /// </summary>
+        /// <value>The game options.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.Title)]
+        public virtual string GameOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the install updates.
+        /// </summary>
+        /// <value>The install updates.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Install)]
+        public virtual string InstallUpdates { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the install updates command.
+        /// </summary>
+        /// <value>The install updates command.</value>
+        public virtual ReactiveCommand<Unit, Unit> InstallUpdatesCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is open.
@@ -123,21 +258,41 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the navigate.
         /// </summary>
         /// <value>The navigate.</value>
-        [StaticLocalization(LocalizationResources.Options.NavigateToExe)]
+        [StaticLocalization(LocalizationResources.Options.Game.NavigateTo)]
         public virtual string Navigate { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the navigate command.
+        /// Gets or sets the navigate directory command.
         /// </summary>
-        /// <value>The navigate command.</value>
-        public virtual ReactiveCommand<Unit, Unit> NavigateCommand { get; protected set; }
+        /// <value>The navigate directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateDirectoryCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the navigate title.
+        /// Gets or sets the navigate executable command.
         /// </summary>
-        /// <value>The navigate title.</value>
-        [StaticLocalization(LocalizationResources.Options.Dialog.Title)]
-        public virtual string NavigateTitle { get; protected set; }
+        /// <value>The navigate executable command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateExeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate executable title.
+        /// </summary>
+        /// <value>The navigate executable title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.ExeTitle)]
+        public virtual string NavigateExeTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate game title.
+        /// </summary>
+        /// <value>The navigate game title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.GameRootTitle)]
+        public virtual string NavigateGameTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate user dir title.
+        /// </summary>
+        /// <value>The navigate user dir title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.UserDirTitle)]
+        public virtual string NavigateUserDirTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the options.
@@ -156,14 +311,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the refresh descriptors.
         /// </summary>
         /// <value>The refresh descriptors.</value>
-        [StaticLocalization(LocalizationResources.Options.RefreshMods)]
+        [StaticLocalization(LocalizationResources.Options.Game.RefreshMods)]
         public virtual string RefreshDescriptors { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
-        [StaticLocalization(LocalizationResources.Options.Reset)]
+        [StaticLocalization(LocalizationResources.Options.Game.Reset)]
         public virtual string Reset { get; protected set; }
 
         /// <summary>
@@ -173,10 +328,55 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ResetArgsCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the reset directory command.
+        /// </summary>
+        /// <value>The reset directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the reset command.
         /// </summary>
         /// <value>The reset command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetExeCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [update information visible].
+        /// </summary>
+        /// <value><c>true</c> if [update information visible]; otherwise, <c>false</c>.</value>
+        public virtual bool UpdateInfoVisible { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the update options.
+        /// </summary>
+        /// <value>The update options.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Title)]
+        public virtual string UpdateOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the update settings.
+        /// </summary>
+        /// <value>The update settings.</value>
+        public virtual IUpdateSettings UpdateSettings { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the user directory.
+        /// </summary>
+        /// <value>The user directory.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.UserDirectory)]
+        public virtual string UserDirectory { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the content of the version.
+        /// </summary>
+        /// <value>The content of the version.</value>
+        public virtual string VersionContent { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the version title.
+        /// </summary>
+        /// <value>The version title.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.Version)]
+        public virtual string VersionTitle { get; protected set; }
 
         #endregion Properties
 
@@ -191,12 +391,76 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// check for updates as an asynchronous operation.
+        /// </summary>
+        /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
+        protected virtual async Task CheckForUpdatesAsync(bool autoUpdateCheck = false)
+        {
+            CheckingForUpdates = true;
+            UpdateInfoVisible = false;
+            var updatesAvailable = await updater.CheckForUpdatesAsync();
+            if (updatesAvailable)
+            {
+                Changelog = updater.GetChangeLog();
+                VersionContent = updater.GetVersion();
+                UpdateInfoVisible = true;
+                var openState = IsOpen;
+                IsOpen = false;
+                IsOpen = openState;
+                if (autoUpdateCheck)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.UpdateNotification.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info, 30, onClick: () => { IsOpen = true; });
+                }
+            }
+            else
+            {
+                if (!autoUpdateCheck)
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Notifications.NoUpdatesAvailable.Message);
+                    notificationAction.ShowNotification(title, message, NotificationType.Info);
+                }
+            }
+            CheckingForUpdates = false;
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
             SetGame(gameService.GetSelected());
+            var updateSettings = updaterService.Get();
+            if (updateSettings.AutoUpdates == null)
+            {
+                async Task showPrompt()
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.AutoUpdatePrompts.Message);
+                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info))
+                    {
+                        updateSettings.AutoUpdates = true;
+                        SaveUpdateSettings();
+                        await CheckForUpdatesAsync(true);
+                    }
+                    else
+                    {
+                        updateSettings.AutoUpdates = false;
+                        SaveUpdateSettings();
+                    }
+                }
+                showPrompt().ConfigureAwait(false);
+            }
+            else if (updateSettings.AutoUpdates.GetValueOrDefault())
+            {
+                CheckForUpdatesAsync(true).ConfigureAwait(false);
+            }
+            SetUpdateSettings(updateSettings);
+
+            var updateCheckAllowed = this.WhenAnyValue(p => p.CheckingForUpdates, v => !v);
 
             OptionsCommand = ReactiveCommand.Create(() =>
             {
@@ -208,35 +472,138 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = false;
             }).DisposeWith(disposables);
 
-            NavigateCommand = ReactiveCommand.CreateFromTask(async () =>
+            NavigateExeCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 IsOpen = false;
-                var result = await fileDialogAction.OpenDialogAsync(NavigateTitle);
+                var result = await fileDialogAction.OpenDialogAsync(NavigateExeTitle);
                 IsOpen = true;
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     Game.ExecutableLocation = result;
-                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                    if (string.IsNullOrWhiteSpace(Game.LaunchArguments) || string.IsNullOrWhiteSpace(Game.UserDirectory))
                     {
-                        Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                        var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                        if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
+                        {
+                            Game.LaunchArguments = defaultSettings.LaunchArguments;
+                        }
+                        if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                        {
+                            Game.UserDirectory = defaultSettings.UserDirectory;
+                        }
                     }
-                    Save();
+                    SaveGame();
+                }
+            }).DisposeWith(disposables);
+
+            NavigateDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateUserDirTitle);
+                IsOpen = true;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    Game.UserDirectory = result;
+                    SaveGame();
                 }
             }).DisposeWith(disposables);
 
             ResetExeCommand = ReactiveCommand.Create(() =>
             {
-                Game.ExecutableLocation = gameService.GetDefaultGameSettings(Game).ExecutableLocation;
+                var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                Game.ExecutableLocation = defaultSettings.ExecutableLocation;
                 if (string.IsNullOrWhiteSpace(Game.LaunchArguments))
                 {
-                    Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+                    Game.LaunchArguments = defaultSettings.LaunchArguments;
                 }
-                Save();
+                if (string.IsNullOrWhiteSpace(Game.UserDirectory))
+                {
+                    Game.UserDirectory = defaultSettings.UserDirectory;
+                }
+                SaveGame();
+            }).DisposeWith(disposables);
+
+            ResetDirectoryCommand = ReactiveCommand.Create(() =>
+            {
+                var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                Game.UserDirectory = defaultSettings.UserDirectory;
+                SaveGame();
             }).DisposeWith(disposables);
 
             ResetArgsCommand = ReactiveCommand.Create(() =>
             {
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+            }).DisposeWith(disposables);
+
+            AutoConfigureCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateGameTitle);
+                IsOpen = true;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    var settings = gameService.GetGameSettingsFromJson(Game, result);
+                    if (settings != null)
+                    {
+                        Game.UserDirectory = settings.UserDirectory;
+                        Game.ExecutableLocation = settings.ExecutableLocation;
+                        Game.LaunchArguments = settings.LaunchArguments;
+                        SaveGame();
+                    }
+                }
+            }).DisposeWith(disposables);
+
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                await CheckForUpdatesAsync();
+                IsOpen = true;
+            }, updateCheckAllowed).DisposeWith(disposables);
+
+            var downloadingUpdates = false;
+            var installingUpdates = false;
+            InstallUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                downloadingUpdates = true;
+                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading));
+                if (await updater.DownloadUpdateAsync())
+                {
+                    downloadingUpdates = false;
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
+                    installingUpdates = true;
+                    await updater.InstallUpdateAsync();
+                    installingUpdates = false;
+                    await TriggerOverlayAsync(false);
+                }
+                else
+                {
+                    downloadingUpdates = false;
+                    await TriggerOverlayAsync(false);
+                }
+            }).DisposeWith(disposables);
+
+            updater.Error.Subscribe(s =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorTitle);
+                var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorMessage);
+                logger.Error(s);
+                notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
+                TriggerOverlay(false);
+            }).DisposeWith(disposables);
+
+            updater.Progress.Subscribe(s =>
+            {
+                if (downloadingUpdates)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
+                    TriggerOverlay(true, message, progress);
+                }
+                else if (installingUpdates)
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
+                    TriggerOverlay(true, message, progress);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -255,14 +622,31 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves this instance.
         /// </summary>
-        protected virtual void Save()
+        protected virtual void SaveGame()
         {
             var game = gameService.GetSelected();
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
-            gameService.Save(game);
+            bool dirChanged = game.UserDirectory != Game.UserDirectory;
+            game.UserDirectory = Game.UserDirectory;
+            if (gameService.Save(game) && dirChanged)
+            {
+                messageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
+            }
             SetGame(game);
+        }
+
+        /// <summary>
+        /// Saves the update settings.
+        /// </summary>
+        protected virtual void SaveUpdateSettings()
+        {
+            var settings = updaterService.Get();
+            settings.AutoUpdates = UpdateSettings.AutoUpdates;
+            settings.CheckForPrerelease = UpdateSettings.CheckForPrerelease;
+            updaterService.Save(settings);
+            SetUpdateSettings(settings);
         }
 
         /// <summary>
@@ -271,19 +655,41 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected virtual void SetGame(IGame game)
         {
-            isReloading = true;
+            isGameReloading = true;
             argsChanged?.Dispose();
             refreshDescriptorsChanged?.Dispose();
             Game = game;
-            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isReloading).Subscribe(s =>
+            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
             {
-                Save();
+                SaveGame();
             }).DisposeWith(Disposables);
-            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isReloading).Subscribe(s =>
+            refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isGameReloading).Subscribe(s =>
             {
-                Save();
+                SaveGame();
             }).DisposeWith(Disposables);
-            isReloading = false;
+            isGameReloading = false;
+        }
+
+        /// <summary>
+        /// Sets the update settings.
+        /// </summary>
+        /// <param name="updateSettings">The update settings.</param>
+        protected virtual void SetUpdateSettings(IUpdateSettings updateSettings)
+        {
+            isUpdateReloading = true;
+            autoUpdateChanged?.Dispose();
+            checkForPrereleaseChanged?.Dispose();
+            UpdateSettings = updateSettings;
+            autoUpdateChanged = this.WhenAnyValue(p => p.UpdateSettings.AutoUpdates).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            checkForPrereleaseChanged = this.WhenAnyValue(p => p.UpdateSettings.CheckForPrerelease).Where(v => !isUpdateReloading).Subscribe(s =>
+            {
+                UpdateInfoVisible = false;
+                SaveUpdateSettings();
+            }).DisposeWith(Disposables);
+            isUpdateReloading = false;
         }
 
         #endregion Methods

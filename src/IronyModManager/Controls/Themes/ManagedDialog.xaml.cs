@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-16-2020
+// Last Modified On : 09-26-2020
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -25,6 +25,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Localization;
@@ -43,14 +44,24 @@ namespace IronyModManager.Controls.Themes
         #region Fields
 
         /// <summary>
+        /// The file name
+        /// </summary>
+        private readonly TextBox fileName;
+
+        /// <summary>
         /// The files view
         /// </summary>
-        private readonly ListBox _filesView;
+        private readonly ListBox filesView;
+
+        /// <summary>
+        /// The filter
+        /// </summary>
+        private readonly ComboBox filter;
 
         /// <summary>
         /// The quick links root
         /// </summary>
-        private readonly Control _quickLinksRoot;
+        private readonly Control quickLinksRoot;
 
         #endregion Fields
 
@@ -63,11 +74,12 @@ namespace IronyModManager.Controls.Themes
         {
             AvaloniaXamlLoader.Load(this);
             AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
-            _quickLinksRoot = this.FindControl<Control>("QuickLinks");
-            _filesView = this.FindControl<ListBox>("Files");
+            quickLinksRoot = this.FindControl<Control>("QuickLinks");
+            filesView = this.FindControl<ListBox>("Files");
             var locManager = DIResolver.Get<ILocalizationManager>();
-            var fileName = this.FindControl<TextBox>("fileName");
+            fileName = this.FindControl<TextBox>("fileName");
             fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
+            filter = this.FindControl<ComboBox>("filter");
             var correctingInput = false;
             fileName.PropertyChanged += (sender, args) =>
             {
@@ -93,6 +105,14 @@ namespace IronyModManager.Controls.Themes
             var ok = this.FindControl<Button>("ok");
             ok.Content = locManager.GetResource(LocalizationResources.FileDialog.OK);
             var cancel = this.FindControl<Button>("cancel");
+            var name = this.FindControl<TextBlock>("name");
+            name.Text = locManager.GetResource(LocalizationResources.FileDialog.Name);
+            var date = this.FindControl<TextBlock>("dateModified");
+            date.Text = locManager.GetResource(LocalizationResources.FileDialog.DateModified);
+            var type = this.FindControl<TextBlock>("type");
+            type.Text = locManager.GetResource(LocalizationResources.FileDialog.Type);
+            var size = this.FindControl<TextBlock>("size");
+            size.Text = locManager.GetResource(LocalizationResources.FileDialog.Size);
             cancel.Content = locManager.GetResource(LocalizationResources.FileDialog.Cancel);
         }
 
@@ -145,7 +165,7 @@ namespace IronyModManager.Controls.Themes
 
             if (indexOfPreselected > 1)
             {
-                _filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
+                filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
             }
         }
 
@@ -156,12 +176,33 @@ namespace IronyModManager.Controls.Themes
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
         private void OnPointerPressed(object sender, PointerPressedEventArgs e)
         {
+            async Task deselectItems()
+            {
+                if (filesView.IsLogicalParentOf(e.Source as Control) && !filter.IsLogicalParentOf(e.Source as Control) && !fileName.IsLogicalParentOf(e.Source as Control))
+                {
+                    await Task.Delay(25);
+                    if (Model.SelectedItems?.Count > 0)
+                    {
+                        if (Model.SelectedItems.Any(p => p.Path.EndsWith(Model.FileName ?? string.Empty)))
+                        {
+                            Model.FileName = string.Empty;
+                        }
+                        Model.SelectedItems.Clear();
+                    }
+                }
+            }
             if (!((e.Source as StyledElement)?.DataContext is ManagedDialogItemViewModel model))
             {
+                Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
-
-            var isQuickLink = _quickLinksRoot.IsLogicalParentOf(e.Source as Control);
+            // Right click now de selects stuff
+            if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
+            {
+                Dispatcher.UIThread.InvokeAsync(() => deselectItems());
+                return;
+            }
+            var isQuickLink = quickLinksRoot.IsLogicalParentOf(e.Source as Control);
 #pragma warning disable CS0618 // Type or member is obsolete
             // Yes, use doubletapped event... if only it would work properly.
             if (e.ClickCount == 2 || isQuickLink)

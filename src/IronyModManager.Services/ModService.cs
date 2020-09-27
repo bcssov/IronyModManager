@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 09-13-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -166,6 +166,38 @@ namespace IronyModManager.Services
                 }
             }
             return await ModWriter.ApplyModsAsync(applyModParams);
+        }
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="modName">Name of the mod.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        public virtual Task<MemoryStream> GetImageStreamAsync(string modName, string path)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(modName))
+            {
+                return Task.FromResult((MemoryStream)null);
+            }
+            var mods = GetInstalledModsInternal(game, false);
+            return GetImageStreamAsync(mods.FirstOrDefault(p => p.Name.Equals(modName)), path);
+        }
+
+        /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        public virtual Task<MemoryStream> GetImageStreamAsync(IMod mod, string path)
+        {
+            if (mod != null && !string.IsNullOrWhiteSpace(path))
+            {
+                return Reader.GetImageStreamAsync(mod.FullPath, path);
+            }
+            return Task.FromResult((MemoryStream)null);
         }
 
         /// <summary>
