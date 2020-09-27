@@ -4,11 +4,8 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.6.101-rc</title>
-			<description>RELEASE INFO:
-				* Detect steam cloud saves when evaluating whether resume game should be visible
-				* Fix #120
-				CHANGES FROM v1.5:
+			<title>1.6.104</title>
+			<description>CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -23,15 +20,12 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sat, 26 Sep 2020 12:02:40 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.101-rc/linux-x64.rar" sparkle:version="1.6.101.2516" sparkle:shortVersionString="1.6.101" length="58380431" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="kIQ0sXV63P7iJesxtXVIAurFuHAsaysav00GbG8Q3+6Ic8+/a5rVUNE5upI7reRhsrMEzNnQernAXwOeGC5yCQ=="/>
+			<pubDate>Sun, 27 Sep 2020 13:37:45 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/linux-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="58381870" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="OJ0QCEYn5sxeD6xg0d/GqBCjfOlBRRbDQ6/AGhz2vxqTvmpoKmWwpllgfV1SxdIDVer7Ue5HwuGpdOsZSGKGDQ=="/>
 		</item>
 		<item>
-			<title>1.6.101-rc</title>
-			<description>RELEASE INFO:
-				* Detect steam cloud saves when evaluating whether resume game should be visible
-				* Fix #120
-				CHANGES FROM v1.5:
+			<title>1.6.104</title>
+			<description>CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -46,15 +40,12 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sat, 26 Sep 2020 12:02:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.101-rc/osx-x64.rar" sparkle:version="1.6.101.2516" sparkle:shortVersionString="1.6.101" length="57628515" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="zQYPNTpsmYQqdn1kozDDvEvJmy79hjdo8jaNiVL0hsVAfG5NdjoiTZg+ffwtpemEHMjcyQTHnVCB1vvyHmM6AA=="/>
+			<pubDate>Sun, 27 Sep 2020 13:37:49 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/osx-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="57629955" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Fr3hywhPA8U17JaBzPYb/UVJHBIWdJ0gQEJW0DIZi4zkIxknWwJnKar9vmKyg3CZ+WNPA1IqlA5meXZ3O50bDA=="/>
 		</item>
 		<item>
-			<title>1.6.101-rc</title>
-			<description>RELEASE INFO:
-				* Detect steam cloud saves when evaluating whether resume game should be visible
-				* Fix #120
-				CHANGES FROM v1.5:
+			<title>1.6.104</title>
+			<description>CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -69,15 +60,12 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sat, 26 Sep 2020 12:02:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.101-rc/win-x64-setup.rar" sparkle:version="1.6.101.2516" sparkle:shortVersionString="1.6.101" length="46919233" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="JgUyenYHMF/eZ4x2+1esA3sXRZtMxt78Tyow18/aWQa7gfdfKPtNf6Bpmz09JAzHblaOQ0E0aAGchXQ8usmLCw=="/>
+			<pubDate>Sun, 27 Sep 2020 13:37:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/win-x64-setup.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="46921593" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="VSqHnlcFyze+jso4YfEB36WDjTc0mFMCFRCVQ49I33c27b6mhvg8tNizz14zACreovt4r2yAsDyJ9FECam1KAg=="/>
 		</item>
 		<item>
-			<title>1.6.101-rc</title>
-			<description>RELEASE INFO:
-				* Detect steam cloud saves when evaluating whether resume game should be visible
-				* Fix #120
-				CHANGES FROM v1.5:
+			<title>1.6.104</title>
+			<description>CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -92,8 +80,8 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sat, 26 Sep 2020 12:02:47 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.101-rc/win-x64.rar" sparkle:version="1.6.101.2516" sparkle:shortVersionString="1.6.101" length="60274354" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="8T7VdVvgHJbP6q1fiEFqBaftImhiVzSPKX2kTHuiEZWwXxyYMDfN+stq6P8OwyC9sK+A0mWxhagGIyHfEaQzAA=="/>
+			<pubDate>Sun, 27 Sep 2020 13:37:52 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/win-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="60275751" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="L5o8YR15JXer4X+kh2/Zf2MqgcFnVGrIJxPj2+tt30Lv85tMDFLFaHuyw58dgrirH7t6K0ep6I4AdnEMZhAYDw=="/>
 		</item>
 	</channel>
 </rss>
