@@ -4,8 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.6.104</title>
-			<description>CHANGES FROM v1.5:
+			<title>1.6.106</title>
+			<description>RELEASE INFO:
+				* Fix faulty detection of steam games when launching game via Irony
+				CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -20,12 +22,14 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sun, 27 Sep 2020 13:37:45 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/linux-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="58381870" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="OJ0QCEYn5sxeD6xg0d/GqBCjfOlBRRbDQ6/AGhz2vxqTvmpoKmWwpllgfV1SxdIDVer7Ue5HwuGpdOsZSGKGDQ=="/>
+			<pubDate>Mon, 28 Sep 2020 06:32:23 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/linux-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="58380639" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="e7iLykqmbsSXxPz0Xxv6i6JjyMSQcU4kapESm8r5cmyONlvxTJav4vft1RvOZYiuh/gJQLyEUKfmo3fk5f4sAw=="/>
 		</item>
 		<item>
-			<title>1.6.104</title>
-			<description>CHANGES FROM v1.5:
+			<title>1.6.106</title>
+			<description>RELEASE INFO:
+				* Fix faulty detection of steam games when launching game via Irony
+				CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -40,12 +44,14 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sun, 27 Sep 2020 13:37:49 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/osx-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="57629955" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Fr3hywhPA8U17JaBzPYb/UVJHBIWdJ0gQEJW0DIZi4zkIxknWwJnKar9vmKyg3CZ+WNPA1IqlA5meXZ3O50bDA=="/>
+			<pubDate>Mon, 28 Sep 2020 06:32:26 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/osx-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="57628851" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="gEHJN8MJULCL+zc72uDKYU5XzrtK/pUE5GwLVzaImb21jUWUCSbCnrLd7PmokmMo+i/qTu5jCuHB0iYDewHOBA=="/>
 		</item>
 		<item>
-			<title>1.6.104</title>
-			<description>CHANGES FROM v1.5:
+			<title>1.6.106</title>
+			<description>RELEASE INFO:
+				* Fix faulty detection of steam games when launching game via Irony
+				CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -60,12 +66,14 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sun, 27 Sep 2020 13:37:55 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/win-x64-setup.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="46921593" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="VSqHnlcFyze+jso4YfEB36WDjTc0mFMCFRCVQ49I33c27b6mhvg8tNizz14zACreovt4r2yAsDyJ9FECam1KAg=="/>
+			<pubDate>Mon, 28 Sep 2020 06:32:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/win-x64-setup.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="46925937" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="m1AudqlhwMLuT6PGeLUYZcdAqRec3Jbxnqv67mxeC/nLpDkeSlpIOPAejDli2osiULiRWQhYB/0ubtn4lPnvBA=="/>
 		</item>
 		<item>
-			<title>1.6.104</title>
-			<description>CHANGES FROM v1.5:
+			<title>1.6.106</title>
+			<description>RELEASE INFO:
+				* Fix faulty detection of steam games when launching game via Irony
+				CHANGES FROM v1.5:
 				* Add export order only option
 				* Add image preview
 				* Update checking (auto and manual update check)
@@ -80,8 +88,8 @@
 				* Add context menu option to paste mod name order
 				* Add option to change game data directory
 				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Sun, 27 Sep 2020 13:37:52 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.104/win-x64.rar" sparkle:version="1.6.104.3533" sparkle:shortVersionString="1.6.104" length="60275751" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="L5o8YR15JXer4X+kh2/Zf2MqgcFnVGrIJxPj2+tt30Lv85tMDFLFaHuyw58dgrirH7t6K0ep6I4AdnEMZhAYDw=="/>
+			<pubDate>Mon, 28 Sep 2020 06:32:30 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/win-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="60274669" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="X6tU9bZ/DwCKDSCoeIjyKEzaXn+I3BBPZmtzBiln8S8/9j2OXhEP7WJCQ3YyJYETUpsAzPnkgvLDcAtQYoKHAA=="/>
 		</item>
 	</channel>
 </rss>
