@@ -69,6 +69,7 @@ namespace IronyModManager.Services.Tests
                     WorkshopDirectory = "workshop2",
                     ExecutableArgs = "args",
                     ExecutablePath = "exePath.exe",
+                    BaseGameDirectory = "exePath"
                 },
                 new GameType()
                 {
@@ -637,7 +638,8 @@ namespace IronyModManager.Services.Tests
         {
             var gameSettings = new GameSettings()
             {
-                ExecutableLocation = "test.exe"
+                ExecutableLocation = "test.exe",
+                Type = "game 2"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
@@ -662,7 +664,8 @@ namespace IronyModManager.Services.Tests
         {
             var gameSettings = new GameSettings()
             {
-                ExecutableLocation = "exePath.exe"
+                ExecutableLocation = "exePath.exe",
+                Type = "game 2"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
