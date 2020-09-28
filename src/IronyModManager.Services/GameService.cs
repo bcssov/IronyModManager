@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 09-28-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -221,6 +221,7 @@ namespace IronyModManager.Services
             }
             model.UserDirectory = game.UserDirectory;
             model.RefreshDescriptors = game.RefreshDescriptors;
+            model.Type = game.Type;
             return model;
         }
 
@@ -299,10 +300,10 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is steam game] [the specified settings]; otherwise, <c>false</c>.</returns>
         public virtual bool IsSteamGame(IGameSettings settings)
         {
-            var game = GetSelected();
-            var gameExe = (game.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
+            var game = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(settings.Type));
+            var baseGameDirectory = (game.BaseGameDirectory ?? string.Empty).StandardizeDirectorySeparator();
             var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
-            return gameExe.Equals(settingsExe);
+            return !string.IsNullOrWhiteSpace(baseGameDirectory) && !string.IsNullOrWhiteSpace(settingsExe) && settingsExe.StartsWith(baseGameDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
