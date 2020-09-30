@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-22-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -561,7 +561,8 @@ namespace IronyModManager.ViewModels.Controls
                 var mods = await Task.Run(() => modService.GetInstalledMods(game));
                 await Task.Run(async () =>
                 {
-                    await EvalAchievementCompatibilityAsync(mods).ConfigureAwait(false);
+                    await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);
+                    EvalAchievementCompatibility(mods);
                 });
                 await Task.Delay(100);
                 Mods = mods.ToObservableCollection();
@@ -647,12 +648,11 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// eval achievement compatibility as an asynchronous operation.
+        /// Evals the achievement compatibility.
         /// </summary>
         /// <param name="mods">The mods.</param>
-        protected virtual async Task EvalAchievementCompatibilityAsync(IEnumerable<IMod> mods)
+        protected virtual void EvalAchievementCompatibility(IEnumerable<IMod> mods)
         {
-            await modService.PopulateModFilesAsync(mods);
             modService.EvalAchievementCompatibility(mods);
         }
 
@@ -864,6 +864,15 @@ namespace IronyModManager.ViewModels.Controls
             Bind(game);
 
             base.OnSelectedGameChanged(game);
+        }
+
+        /// <summary>
+        /// eval achievement compatibility as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        protected virtual async Task PopulateModFilesAsyncAsync(IEnumerable<IMod> mods)
+        {
+            await modService.PopulateModFilesAsync(mods);
         }
 
         /// <summary>
