@@ -109,6 +109,15 @@
             "PromptTitle": "Prebriši redoslijed modova?",
             "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
         },
+        "FileHash": {
+            "Export": "Izvoz hashova kolekcije",
+            "Import": "Provjerite hashove kolekcije",
+            "DialogTitleExport": "Odaberite mjesto za izvoz izvješća",
+            "DialogTitleImport": "Odaberite json izvješće za uvoz",
+            "ExportOverlay": "Pričekajte dok se izvozi...",
+            "ImportOverlay": "Pričekajte dok se verificira...",
+            "Progress": "{Progress}"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
             "On": "Uključen",
@@ -381,6 +390,10 @@
         "NoUpdatesAvailable": {
             "Title": "Nema ažuriranja",
             "Message": "Čini se da nema dostupnih ažuriranja."
+        },
+        "ReportExported": {
+            "Title": "Izvješće izvezeno",
+            "Message": "Izvješće je izvezeno."
         }
     },
     "Mod_App_Actions": {

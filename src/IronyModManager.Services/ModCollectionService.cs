@@ -205,8 +205,9 @@ namespace IronyModManager.Services
         {
             if (!string.IsNullOrWhiteSpace(path) && mods?.Count() > 0)
             {
+                var game = GameService.GetSelected();
                 var reports = new List<IModHashReport>();
-                var total = mods.SelectMany(p => p.Files).Count();
+                var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
                 var progress = 0;
                 var lastPercentage = 0;
                 foreach (var mod in mods)
@@ -214,7 +215,7 @@ namespace IronyModManager.Services
                     var report = GetModelInstance<IModHashReport>();
                     report.Name = mod.Name;
                     var hashReports = new List<IModHashFileReport>();
-                    foreach (var item in mod.Files)
+                    foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
                     {
                         var info = Reader.GetFileInfo(mod.FullPath, item);
                         if (info != null)

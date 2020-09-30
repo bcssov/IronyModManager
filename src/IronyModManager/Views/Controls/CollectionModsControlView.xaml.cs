@@ -194,6 +194,25 @@ namespace IronyModManager.Views.Controls
                                         Header = "-"
                                     }
                                 };
+                                var counterOffset = 5;
+                                if (ViewModel.CanExportModHashReport)
+                                {
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.ExportReport,
+                                        Command = ViewModel.ExportReportCommand
+                                    });
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = ViewModel.ImportReport,
+                                        Command = ViewModel.ImportReportCommand
+                                    });
+                                    menuItems.Add(new MenuItem()
+                                    {
+                                        Header = "-"
+                                    });
+                                    counterOffset += 3;
+                                }
                                 if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
                                 {
                                     menuItems.Add(new MenuItem()
@@ -214,13 +233,13 @@ namespace IronyModManager.Views.Controls
                                         Header = ViewModel.OpenInSteam,
                                         Command = ViewModel.OpenInSteamCommand
                                     };
-                                    if (menuItems.Count == 5)
+                                    if (menuItems.Count == counterOffset)
                                     {
                                         menuItems.Add(menuItem);
                                     }
                                     else
                                     {
-                                        menuItems.Insert(6, menuItem);
+                                        menuItems.Insert(counterOffset + 1, menuItem);
                                     }
                                 }
                                 if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
@@ -230,13 +249,13 @@ namespace IronyModManager.Views.Controls
                                         Header = ViewModel.OpenInAssociatedApp,
                                         Command = ViewModel.OpenInAssociatedAppCommand
                                     };
-                                    if (menuItems.Count == 5)
+                                    if (menuItems.Count == counterOffset)
                                     {
                                         menuItems.Add(menuItem);
                                     }
                                     else
                                     {
-                                        menuItems.Insert(5, menuItem);
+                                        menuItems.Insert(counterOffset, menuItem);
                                     }
                                 }
                                 grid.ContextMenu.Items = menuItems;

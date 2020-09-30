@@ -109,6 +109,15 @@
             "PromptTitle": "Mod-Reihenfolge überschreiben?",
             "PromptMessage": "Dies überschreibt deine Mod-Sammlungs-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
         },
+        "FileHash": {
+            "Export": "Sammlungshashes exportieren",
+            "Import": "Überprüfen Sie die Sammlungshashes",
+            "DialogTitleExport": "Wählen Sie aus, wohin der Bericht exportiert werden soll",
+            "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
+            "ExportOverlay": "Bitte warten Sie beim Exportieren...",
+            "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
+            "Progress": "{Progress}"
+        },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
             "On": "Auf",
@@ -381,6 +390,10 @@
         "NoUpdatesAvailable": {
             "Title": "Keine Aktualisierungen",
             "Message": "Es scheinen keine Updates verfügbar zu sein."
+        },
+        "ReportExported": {
+            "Title": "Bericht exportiert",
+            "Message": "Bericht wurde exportiert."
         }
     },
     "Mod_App_Actions": {

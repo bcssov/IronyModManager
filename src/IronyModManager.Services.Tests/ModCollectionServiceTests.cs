@@ -867,11 +867,17 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                GameFolders = new List<string>() { "test" }
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IModHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IModHashReport> report, string path) =>
             {
-                if (report.Count() == 1 && report.FirstOrDefault().Reports.Count() == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
+                if (report.Count() == 1 && report.FirstOrDefault().Reports.Count() == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test\\test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
                 {
                     return true;
                 }
@@ -892,7 +898,7 @@ namespace IronyModManager.Services.Tests
                 new Mod()
                 {
                     Name = "test",
-                    Files = new List<string>() {"test"}
+                    Files = new List<string>() {"test\\test"}
                 } }, "test");
             result.Should().BeTrue();
         }
@@ -936,7 +942,7 @@ namespace IronyModManager.Services.Tests
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
             {
-                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport" } } ; 
+                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport" } };
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
