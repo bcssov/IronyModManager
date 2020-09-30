@@ -1,0 +1,413 @@
+﻿{
+    "App": {
+        "Title": "Irony Mod Manager: v{AppVersion}",
+        "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭...",
+        "WaitBackgroundOperationMessage": "请等待后台任务完成",
+        "Shortcuts": {
+            "Name": "快捷菜单",
+            "Wiki": "Wiki",
+            "Logs": "日志",
+            "ErrorLog": "错误日志",
+            "Close": "关闭"
+        }
+    },
+    "FatalError": {
+        "Message": "发生了未经处理的异常，程序即将关闭",
+        "Title": "错误",
+        "Header": "严重错误"
+    },
+    "SavingError": {
+        "Title": "保存失败",
+        "Message": "无法读写Mod文件，请将这个错误发送到Github Issue并附上错误日志"
+    },
+    "Prompt": {
+        "Yes": "是",
+        "No": "否"
+    },
+    "FileDialog": {
+        "FileName": "文件名",
+        "ShowHiddenFiles": "显示隐藏文件",
+        "Volume": "容量 {Size}",
+        "OK": "确定",
+        "Cancel": "取消",
+        "Name": "名称",
+        "DateModified": "修改日期",
+        "Type": "类型",
+        "Size": "大小",
+        "Folders": {
+            "Downloads": "下载",
+            "Desktop": "桌面",
+            "Documents": "文档",
+            "Music": "音乐",
+            "Videos": "视频",
+            "Pictures": "图片"
+        }
+    },
+    "Languages": {
+        "Name": "语言"
+    },
+    "Themes": {
+        "Name": "主题",
+        "Light": "亮色",
+        "Dark": "暗色",
+        "MaterialDark": "黑色",
+        "MaterialLightGreen": "亮绿",
+        "MaterialDeepPurple": "深紫",
+        "Restart_Title": "需要重启",
+        "Restart_Header": "应用程序需要重启",
+        "Restart_Message": "应用程序需要重启来应用新的主题. 是否现在重启?"
+    },
+    "Games": {
+        "Name": "游戏",
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
+    },
+    "Installed_Mods": {
+        "Name": "已安装Mods",
+        "Filter": "过滤Mods",
+        "Selected": "选择",
+        "Mod_Name": "Mod名称",
+        "Supported_Version": "支持的版本",
+        "LoadingMods": "正在加载Mod数据...",
+        "RefreshingModList": "正在刷新Mods列表...",
+        "InvalidMods": {
+            "Title": "检测到无效Mod",
+            "Message": "下列Mod缺失:{NewLine}{Mods}.{NewLine}{NewLine}是否删除对应的说明文件?"
+        }
+    },
+    "Collection_Mods": {
+        "Name": "Mod整合包",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "确定",
+        "Cancel": "取消",
+        "Watermark": "输入整合包名称",
+        "Delete_Title": "删除此整合包?",
+        "Delete_Header": "确认删除操作",
+        "Delete_Message": "即将删除 {CollectionName}，请确认",
+        "Export": "导出",
+        "Import": "导入",
+        "Export_Dialog_Title": "导出整合包",
+        "Import_Dialog_Title": "导入整合包",
+        "Overlay_Exporting_Message": "正在导出整合包...",
+        "Overlay_Importing_Message": "正在导入整合包...",
+        "Filter": "搜索Mods",
+        "Selected": "选择",
+        "Mod_Name": "Mod名称",
+        "Order": "顺序",
+        "Rename": "重命名",
+        "Duplicate": "创建整合包副本",
+        "Overlay_Rename_Message": "正在重命名...",
+        "Overlay_Duplicate_Message": "正在创建整合包副本...",
+        "ExportToClipboard": "复制整合包到剪贴板",
+        "ImportFromClipboard": {
+            "Title": "从剪贴板导入整合包",
+            "PromptTitle": "覆盖整合包",
+            "PromptMessage": "此操作将会覆盖你Mod加载顺序与选择的Mod，请确认"
+        },
+        "JumpOnDragAndDrop": {
+            "Title": "自动选择: {State}",
+            "On": "开启",
+            "Off": "关闭"
+        },
+        "ImportPrompt": {
+            "Title": "整合包已存在",
+            "Message": "整合包已存在, 是否覆盖?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "从Paradoxos导入",
+            "Paradox": "从游戏导入",
+            "ParadoxLauncher": "从Paradox 启动器导入",
+            "Close": "关闭"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "仅导出Mod加载顺序",
+            "Close": "关闭"
+        },
+        "MergeCollection": {
+            "Name": "合并",
+            "MergedCollectionSuffix": "(已合并)",
+            "Overlay_Progress": "进度 {Count}/{TotalCount}: {PercentDone}%",
+            "Options": {
+                "Title": "选择模式",
+                "Basic": "基础",
+                "Advanced": "高级",
+                "Close": "关闭"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "正在加载Mod数据...",
+                "Overlay_Analyzing_Definitions": "正在分析Mod数据...",
+                "Overlay_Merging_Collection": "正在合并整合包..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "正在收集Mod信息...",
+                "Overlay_Writting_Files": "正在写入文件..."
+            },
+            "OverwritePrompt": {
+                "Title": "覆盖现有整合包?",
+                "Message": "同名的整合包已存在，是否覆盖?"
+            }
+        }
+    },
+    "Mod_Actions": {
+        "Apply": "加载此整合包",
+        "Overlay_Apply_Message": "正在加载整合包...",
+        "Conflict": "冲突处理",
+        "Overlay_Conflict_Solver_Loading_Definitions": "正在加载Mod数据...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析Mod冲突...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突...",
+        "Overlay_Conflict_Solver_Progress": "进度 {Count}/{TotalCount}: {PercentDone}%",
+        "LaunchGame": {
+            "Launch": "启动游戏",
+            "Resume": "继续游戏",
+            "LaunchError": {
+                "Title": "无法启动游戏",
+                "Message": "启动失败."
+            },
+            "NotSet": {
+                "Title": "找不到游戏",
+                "Message": "请在-选项-里面设置游戏的路径"
+            }
+        }
+    },
+    "Conflict_Solver": {
+        "Back": "返回",
+        "ConflictedObjects": "冲突",
+        "LeftSide": "左侧",
+        "RightSide": "右侧",
+        "BinaryFile": "二进制文件",
+        "ImageInfo": "宽度: {Width} 高度: {Height}",
+        "TakeLeft": "选择左侧文件",
+        "TakeRight": "选择右侧文件",
+        "OK": "确定",
+        "Cancel": "取消",
+        "Resolve": "标记冲突已处理",
+        "Ignore": "忽略冲突",
+        "IgnoreRules": "忽略规则",
+        "OverlayResolve": "正在处理冲突...",
+        "NextConflict": "下一个冲突",
+        "PrevConflict": "上一个冲突",
+        "ConflictCount": "冲突数: {Count}",
+      "PriorityReason": {
+        "FIOS": "(FIOS)",
+        "LIOS": "(LIOS)",
+        "Order": "(Load Order)",
+        "Override": "(Override)"
+      },
+        "InvalidConflicts": {
+            "Name": "无效代码",
+            "Error": "错误位置：行：{Line} 列：{Column} 文件: {File}.{NewLine}请将此错误汇报到此Mod的作者: {ModName}.{NewLine}{NewLine} 错误信息：{NewLine}{NewLine}{Message}",
+            "ErrorNoLine": "错误文件: {File}.{NewLine}请将此错误汇报到此Mod的作者: {ModName}.{NewLine}{NewLine}错误信息：{NewLine}{NewLine}{Message}",
+            "ContextMenu": {
+                "OpenFile": "打开文件",
+                "OpenDirectory": "打开目录",
+                "CustomPatch": "复制到自定义补丁"
+            }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "打开文件",
+            "OpenDirectory": "打开目录"
+        },
+        "ContextMenu": {
+            "CopyAll": "复制所有",
+            "CopyThis": "复制此行",
+            "CopyThisAfterLine": "复制此行之后所有",
+            "CopyThisBeforeLine": "复制此行之前所有",
+            "MoveUp": "上移",
+            "MoveDown": "下移",
+            "Edit": "编辑",
+            "CopyText": "复制文本",
+            "Delete": "删除",
+            "Undo": "撤销",
+            "Redo": "重做"
+        },
+        "EditorContextMenu": {
+            "Copy": "复制",
+            "Cut": "剪切",
+            "Delete": "删除",
+            "Paste": "黏贴",
+            "Undo": "撤销",
+            "Redo": "重做",
+            "SelectAll": "全选"
+        },
+        "Modes": {
+            "Title": "选择模式",
+            "Default": "默认",
+            "Advanced": "高级",
+            "Close": "关闭"
+        },
+        "ModFilter": {
+            "Title": "Mod过滤",
+            "Close": "关闭"
+        },
+        "ResetConflicts": {
+            "Title": "重新标记冲突",
+            "Resolved": "已处理",
+            "Ignored": "忽略",
+            "Custom": "自定义",
+            "Close": "关闭",
+            "Reset": "标记冲突"
+        },
+        "DBSearch": {
+            "Title": "搜索数据库",
+            "Watermark": "输入搜索式",
+            "Close": "关闭",
+            "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "自定义补丁",
+            "Load": "加载",
+            "Path": "路径",
+            "Save": "保存",
+            "Close": "关闭"
+        }
+    },
+    "ConflictIgnore": {
+        "Save": "保存",
+        "Cancel": "取消",
+        "Watermark": "使用 # 标记注释，每行一条规则"
+    },
+    "Options": {
+        "Name": "选项",
+        "Close": "关闭",
+        "Game": {
+            "Title": "游戏选项",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "GameExecutable": "游戏可执行文件",
+            "UserDirectory": "游戏存档目录",
+            "GameArgs": "启动参数",
+            "RefreshMods": "启动前刷新Mod Descriptor",
+            "AutoConfigure": "设置所有..."
+        },
+        "Updates": {
+            "Title": "更新选项",
+            "AutoUpdates": "启动时检查更新",
+            "CheckPrerelease": "更新到预览版",
+            "CheckForUpdates": "检查更新",
+            "Install": "安装更新",
+            "Version": "版本",
+            "Overlay": {
+                "UpdateDownloading": "正在下载更新...",
+                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateInstalling": "正在解压文件，准备安装..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "更新失败",
+                "DownloadErrorMessage": "下载更新失败，查看错误日志以获取详情."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "自动检查更新",
+                "Message": "Irony 需要你授权在启动时进行更新检查. 是否允许 Irony 在有更新时提醒你?"
+            },
+            "UpdateNotification": {
+                "Title": "有新版本",
+                "Message": "在-选项-查看更新详情，或者点击本消息"
+            }
+        },
+        "Dialog": {
+            "ExeTitle": "选择游戏可执行文件",
+            "GameRootTitle": "选择游戏目录",
+            "UserDirTitle": "选择存档目录"
+        }
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "已创建整合包",
+            "Message": "{CollectionName} 已创建"
+        },
+        "CollectionDeleted": {
+            "Title": "已删除整合包",
+            "Message": "{CollectionName} 已删除"
+        },
+        "CollectionExists": {
+            "Title": "整合包已存在",
+            "Message": "{CollectionName} 已存在"
+        },
+        "CollectionExported": {
+            "Title": "整合包已导出",
+            "Message": "{CollectionName} 已导出"
+        },
+        "CollectionImported": {
+            "Title": "已导入整合包",
+            "Message": "{CollectionName} 已导入"
+        },
+        "CollectionApplied": {
+            "Title": "整合包已加载",
+            "Message": "{CollectionName} 已加载"
+        },
+        "CollectionNotApplied": {
+            "Title": "没有加载",
+            "Message": "{CollectionName} 没有加载"
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Descriptors 已刷新",
+            "Message": "Descriptors 已刷新"
+        },
+        "DescriptorsLocked": {
+            "Title": "Descriptors 已锁定",
+            "Message": "Descriptors 已锁定"
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Descriptors 已解锁",
+            "Message": "Descriptors 已解锁"
+        },
+        "NewDescriptorsChecked": {
+            "Title": "检查新Mods完成",
+            "Message": "检查新Mods完成"
+        },
+        "CollectionRenamed": {
+            "Title": "已重命名整合包",
+            "Message": "已重命名整合包"
+        },
+        "CollectionDuplicated": {
+            "Title": "已创建整合包副本",
+            "Message": "已创建整合包副本"
+        },
+        "CollectionMerged": {
+            "Title": "整合包已合并",
+            "Message": "整合包已合并"
+        },
+        "ConflictSolverUpdate": {
+            "Title": "冲突处理需要更新",
+            "Message": "一个或多个Mod已更新，冲突处理刷新数据"
+        },
+        "NoUpdatesAvailable": {
+            "Title": "没有更新",
+            "Message": "没有可用更新"
+        }
+    },
+    "Mod_App_Actions": {
+        "OpenInSteam": "在Steam中打开",
+        "Open": "打开Mod链接",
+        "Copy": "复制Mod链接",
+        "OpenInAssociatedApp": "打开Mod目录/文件"
+    },
+    "Descriptor_Actions": {
+        "CheckNew": "检查新Mods",
+        "Delete": "删除并重载",
+        "Delete_All": "删除并重载所有",
+        "Lock": "锁定",
+        "Lock_All": "锁定所有",
+        "Unlock": "解锁",
+        "Unlock_All": "解锁所有"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod兼容成就",
+        "NotAchievementCompatible": "Mod不兼容成就"
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
+    }
+}
