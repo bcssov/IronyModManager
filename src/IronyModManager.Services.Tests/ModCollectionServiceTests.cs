@@ -912,6 +912,12 @@ namespace IronyModManager.Services.Tests
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                GameFolders = new List<string>() { "test" }
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
@@ -925,7 +931,12 @@ namespace IronyModManager.Services.Tests
             DISetup.SetupContainer();
 
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ImportHashReportAsync("test");
+            var result = await service.ImportHashReportAsync(new List<IMod>() {
+                new Mod()
+                {
+                    Name = "test",
+                    Files = new List<string>() {"test\\test"}
+                } }, "test");
             result.Should().BeNull();
         }
 
@@ -933,27 +944,134 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_import_hash.
         /// </summary>
         [Fact]
-        public async Task Should_import_hash()
+        public async Task Should_import_hash_from_both_sources()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var mapper = new Mock<IMapper>();
             var gameService = new Mock<IGameService>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                GameFolders = new List<string>() { "test" }
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
             {
-                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport" } };
+                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\1", Hash = "2" } };
+                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
+            {
+                FileName = "2",
+                ContentSHA = "3"
+            });
             DISetup.SetupContainer();
 
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
-            var result = await service.ImportHashReportAsync("test");
+            var result = await service.ImportHashReportAsync(new List<IMod>() {
+                new Mod()
+                {
+                    Name = "testreport",
+                    Files = new List<string>() {"test\\test"}
+                } }, "test");
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count().Should().Be(2);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_import_hash_with_diff_only.
+        /// </summary>
+        [Fact]
+        public async Task Should_import_hash_with_diff_only()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                GameFolders = new List<string>() { "test" }
+            });
+            var modExport = new Mock<IModCollectionExporter>();
+            var hashExport = new Mock<IModReportExporter>();
+            hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
+            {
+                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\test", Hash = "2" } };
+                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
+            });
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
+            {
+                FileName = "2",
+                ContentSHA = "3"
+            });
+            DISetup.SetupContainer();
+
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportHashReportAsync(new List<IMod>() {
+                new Mod()
+                {
+                    Name = "testreport",
+                    Files = new List<string>() {"test\\test"}
+                } }, "test");
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count().Should().Be(1);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_import_hash_when_hashes_same.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_import_hash_when_hashes_same()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "no-items",
+                UserDirectory = "C:\\fake",
+                GameFolders = new List<string>() { "test" }
+            });
+            var modExport = new Mock<IModCollectionExporter>();
+            var hashExport = new Mock<IModReportExporter>();
+            hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
+            {
+                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\test", Hash = "2" } };
+                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
+            });
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var reader = new Mock<IReader>();
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
+            {
+                FileName = "2",
+                ContentSHA = "2"
+            });
+            DISetup.SetupContainer();
+
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var result = await service.ImportHashReportAsync(new List<IMod>() {
+                new Mod()
+                {
+                    Name = "testreport",
+                    Files = new List<string>() {"test\\test"}
+                } }, "test");
+            result.Should().NotBeNull();
+            result.Count().Should().Be(0);
         }
     }
 }

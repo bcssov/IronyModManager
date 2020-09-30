@@ -38,7 +38,7 @@ namespace IronyModManager.Models
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        public IEnumerable<IModHashFileReport> Reports { get; set; } = new List<IModHashFileReport>();
+        public IList<IModHashFileReport> Reports { get; set; } = new List<IModHashFileReport>();
 
         #endregion Properties
     }

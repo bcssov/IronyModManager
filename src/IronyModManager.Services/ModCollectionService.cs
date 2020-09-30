@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -205,37 +206,7 @@ namespace IronyModManager.Services
         {
             if (!string.IsNullOrWhiteSpace(path) && mods?.Count() > 0)
             {
-                var game = GameService.GetSelected();
-                var reports = new List<IModHashReport>();
-                var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
-                var progress = 0;
-                var lastPercentage = 0;
-                foreach (var mod in mods)
-                {
-                    var report = GetModelInstance<IModHashReport>();
-                    report.Name = mod.Name;
-                    var hashReports = new List<IModHashFileReport>();
-                    foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
-                    {
-                        var info = Reader.GetFileInfo(mod.FullPath, item);
-                        if (info != null)
-                        {
-                            var fileReport = GetModelInstance<IModHashFileReport>();
-                            fileReport.File = item;
-                            fileReport.Hash = info.ContentSHA;
-                            hashReports.Add(fileReport);
-                        }
-                        progress++;
-                        var percentage = GetProgressPercentage(total, progress);
-                        if (percentage != lastPercentage)
-                        {
-                            await messageBus.PublishAsync(new ModReportExportEvent(percentage));
-                        }
-                        lastPercentage = percentage;
-                    }
-                    report.Reports = hashReports;
-                    reports.Add(report);
-                }
+                var reports = await ParseReportAsync(mods);
                 return await modReportExporter.ExportAsync(reports, path);
             }
             return false;
@@ -330,9 +301,56 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        public virtual Task<IEnumerable<IModHashReport>> ImportHashReportAsync(string path)
+        public virtual async Task<IEnumerable<IModHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
         {
-            return modReportExporter.ImportAsync(path);
+            var currentReports = await ParseReportAsync(mods);
+            var importedReports = await modReportExporter.ImportAsync(path);
+            if (importedReports != null)
+            {
+                static void compareReports(List<IModHashReport> reports, IEnumerable<IModHashReport> firstReports, IEnumerable<IModHashReport> secondReports)
+                {
+                    foreach (var first in firstReports)
+                    {
+                        if (!secondReports.Any(p => p.Name.Equals(first.Name)))
+                        {
+                            if (!reports.Any(p => p.Name.Equals(first.Name)))
+                            {
+                                reports.Add(first);
+                            }
+                            continue;
+                        }
+                        foreach (var item in first.Reports)
+                        {
+                            var secondReport = secondReports.FirstOrDefault(p => p.Name.Equals(first.Name));
+                            if (!secondReport.Reports.Any(p => p.File.Equals(item.File) && p.Hash.Equals(item.Hash)))
+                            {
+                                var report = reports.FirstOrDefault(p => p.Name.Equals(first.Name));
+                                if (report == null)
+                                {
+                                    report = DIResolver.Get<IModHashReport>();
+                                    report.Name = first.Name;
+                                    reports.Add(report);
+                                }
+                                if (report.Reports == null)
+                                {
+                                    report.Reports = new List<IModHashFileReport>();
+                                }
+                                if (!report.Reports.Any(p => p.File.Equals(item.File)))
+                                {
+                                    var hashReport = DIResolver.Get<IModHashFileReport>();
+                                    hashReport.File = item.File;
+                                    report.Reports.Add(hashReport);
+                                }
+                            }
+                        }
+                    }
+                }
+                var reports = new List<IModHashReport>();
+                compareReports(reports, currentReports, importedReports);
+                compareReports(reports, importedReports, currentReports);
+                return reports;
+            }
+            return null;
         }
 
         /// <summary>
@@ -472,6 +490,47 @@ namespace IronyModManager.Services
                 return null;
             }
             return await performImport(game);
+        }
+
+        /// <summary>
+        /// parse report as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>IEnumerable&lt;IModHashReport&gt;.</returns>
+        protected virtual async Task<IEnumerable<IModHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
+        {
+            var game = GameService.GetSelected();
+            var reports = new List<IModHashReport>();
+            var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
+            var progress = 0;
+            var lastPercentage = 0;
+            foreach (var mod in mods)
+            {
+                var report = GetModelInstance<IModHashReport>();
+                report.Name = mod.Name;
+                var hashReports = new List<IModHashFileReport>();
+                foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
+                {
+                    var info = Reader.GetFileInfo(mod.FullPath, item);
+                    if (info != null)
+                    {
+                        var fileReport = GetModelInstance<IModHashFileReport>();
+                        fileReport.File = item;
+                        fileReport.Hash = info.ContentSHA;
+                        hashReports.Add(fileReport);
+                    }
+                    progress++;
+                    var percentage = GetProgressPercentage(total, progress);
+                    if (percentage != lastPercentage)
+                    {
+                        await messageBus.PublishAsync(new ModReportExportEvent(percentage));
+                    }
+                    lastPercentage = percentage;
+                }
+                report.Reports = hashReports;
+                reports.Add(report);
+            }
+            return reports;
         }
 
         #endregion Methods
