@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="IModCollectionService.cs" company="Mario">
 //     Mario
@@ -57,6 +57,14 @@ namespace IronyModManager.Services.Common
         Task<bool> ExportAsync(string file, IModCollection modCollection, bool exportOrderOnly = false);
 
         /// <summary>
+        /// Exports the hash report asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path);
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -82,6 +90,13 @@ namespace IronyModManager.Services.Common
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
         Task<IModCollection> ImportAsync(string file);
+
+        /// <summary>
+        /// Imports the hash report asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>IEnumerable&lt;IModHashReport&gt;.</returns>
+        Task<IEnumerable<IModHashReport>> ImportHashReportAsync(string path);
 
         /// <summary>
         /// Imports the paradox asynchronous.

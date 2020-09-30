@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -22,7 +22,9 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared.Cache;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -44,9 +46,19 @@ namespace IronyModManager.Services
         private static readonly object serviceLock = new { };
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The mod collection exporter
         /// </summary>
         private readonly IModCollectionExporter modCollectionExporter;
+
+        /// <summary>
+        /// The mod report exporter
+        /// </summary>
+        private readonly IModReportExporter modReportExporter;
 
         #endregion Fields
 
@@ -55,6 +67,8 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCollectionService" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
+        /// <param name="modReportExporter">The mod report exporter.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
@@ -64,10 +78,12 @@ namespace IronyModManager.Services
         /// <param name="modCollectionExporter">The mod collection exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModCollectionService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
+        public ModCollectionService(IMessageBus messageBus, IModReportExporter modReportExporter, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders, IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService, IModCollectionExporter modCollectionExporter,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.messageBus = messageBus;
+            this.modReportExporter = modReportExporter;
             this.modCollectionExporter = modCollectionExporter;
         }
 
@@ -180,6 +196,51 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// export hash report as an asynchronous operation.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> ExportHashReportAsync(IEnumerable<IMod> mods, string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path) && mods?.Count() > 0)
+            {
+                var reports = new List<IModHashReport>();
+                var total = mods.SelectMany(p => p.Files).Count();
+                var progress = 0;
+                var lastPercentage = 0;
+                foreach (var mod in mods)
+                {
+                    var report = GetModelInstance<IModHashReport>();
+                    report.Name = mod.Name;
+                    var hashReports = new List<IModHashFileReport>();
+                    foreach (var item in mod.Files)
+                    {
+                        var info = Reader.GetFileInfo(mod.FullPath, item);
+                        if (info != null)
+                        {
+                            var fileReport = GetModelInstance<IModHashFileReport>();
+                            fileReport.File = item;
+                            fileReport.Hash = info.ContentSHA;
+                            hashReports.Add(fileReport);
+                        }
+                        progress++;
+                        var percentage = GetProgressPercentage(total, progress);
+                        if (percentage != lastPercentage)
+                        {
+                            await messageBus.PublishAsync(new ModReportExportEvent(percentage));
+                        }
+                        lastPercentage = percentage;
+                    }
+                    report.Reports = hashReports;
+                    reports.Add(report);
+                }
+                return await modReportExporter.ExportAsync(reports, path);
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Gets the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -264,6 +325,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Imports the hash report asynchronous.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
+        public virtual Task<IEnumerable<IModHashReport>> ImportHashReportAsync(string path)
+        {
+            return modReportExporter.ImportAsync(path);
+        }
+
+        /// <summary>
         /// import paradox as an asynchronous operation.
         /// </summary>
         /// <returns>Task&lt;IModCollection&gt;.</returns>
@@ -329,6 +400,27 @@ namespace IronyModManager.Services
                 collections.Add(collection);
                 return StorageProvider.SetModCollections(collections);
             }
+        }
+
+        /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Int32.</returns>
+        protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 100)
+        {
+            var perc = Convert.ToInt32(processed / total * 100);
+            if (perc < 1)
+            {
+                perc = 1;
+            }
+            else if (perc > maxPerc)
+            {
+                perc = maxPerc;
+            }
+            return perc;
         }
 
         /// <summary>

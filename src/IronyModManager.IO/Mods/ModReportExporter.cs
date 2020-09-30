@@ -36,14 +36,14 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The logger
         /// </summary>
-        private ILogger logger;
+        private readonly ILogger logger;
 
         #endregion Fields
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModReportExporter"/> class.
+        /// Initializes a new instance of the <see cref="ModReportExporter" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public ModReportExporter(ILogger logger)
@@ -81,7 +81,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashFileReport&gt;&gt;.</returns>
-        public async Task<IEnumerable<IModHashFileReport>> ImportAsync(string path)
+        public async Task<IEnumerable<IModHashReport>> ImportAsync(string path)
         {
             if (File.Exists(path))
             {
@@ -90,7 +90,7 @@ namespace IronyModManager.IO.Mods
                 {
                     try
                     {
-                        var result = JsonDISerializer.Deserialize<IEnumerable<IModHashFileReport>>(json);
+                        var result = JsonDISerializer.Deserialize<IEnumerable<IModHashReport>>(json);
                         return result;
                     }
                     catch (Exception ex)

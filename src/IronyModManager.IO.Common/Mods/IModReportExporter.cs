@@ -37,8 +37,8 @@ namespace IronyModManager.IO.Common.Mods
         /// Imports the asynchronous.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IModHashFileReport&gt;&gt;.</returns>
-        Task<IEnumerable<IModHashFileReport>> ImportAsync(string path);
+        /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
+        Task<IEnumerable<IModHashReport>> ImportAsync(string path);
 
         #endregion Methods
     }
