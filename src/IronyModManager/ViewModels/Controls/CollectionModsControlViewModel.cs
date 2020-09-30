@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -309,6 +309,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [allow mod selection]; otherwise, <c>false</c>.</value>
         public virtual bool AllowModSelection { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can export mod hash report.
+        /// </summary>
+        /// <value><c>true</c> if this instance can export mod hash report; otherwise, <c>false</c>.</value>
+        public virtual bool CanExportModHashReport { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [collection jump on position change].
@@ -1265,7 +1271,7 @@ namespace IronyModManager.ViewModels.Controls
                                 {
                                     mods.Add(item);
                                 }
-                            }                            
+                            }
                             SetSelectedMods(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
                             AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                             var state = appStateService.Get();

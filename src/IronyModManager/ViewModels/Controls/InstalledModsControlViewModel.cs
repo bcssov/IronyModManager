@@ -287,6 +287,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> LockDescriptorCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [mod file population in completed].
+        /// </summary>
+        /// <value><c>true</c> if [mod file population in completed]; otherwise, <c>false</c>.</value>
+        public virtual bool ModFilePopulationInCompleted { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -555,6 +561,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 game = gameService.GetSelected();
             }
+            ModFilePopulationInCompleted = false;
             ActiveGame = game;
             if (game != null)
             {
@@ -562,6 +569,7 @@ namespace IronyModManager.ViewModels.Controls
                 await Task.Run(async () =>
                 {
                     await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);
+                    ModFilePopulationInCompleted = true;
                     EvalAchievementCompatibility(mods);
                 });
                 await Task.Delay(100);

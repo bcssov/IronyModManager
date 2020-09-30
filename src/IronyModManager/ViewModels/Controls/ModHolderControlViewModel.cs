@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -67,6 +67,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppAction appAction;
 
         /// <summary>
+        /// The game directory changed handler
+        /// </summary>
+        private readonly GameUserDirectoryChangedHandler gameDirectoryChangedHandler;
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -95,11 +100,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod definition patch load handler
         /// </summary>
         private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
-
-        /// <summary>
-        /// The game directory changed handler
-        /// </summary>
-        private readonly GameUserDirectoryChangedHandler gameDirectoryChangedHandler;
 
         /// <summary>
         /// The mod service
@@ -474,7 +474,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task EvalResumeAvailabilityLoopAsync()
         {
             EvalResumeAvailability();
-            await Task.Delay(30000);           
+            await Task.Delay(30000);
             await EvalResumeAvailabilityLoopAsync();
         }
 
@@ -663,13 +663,18 @@ namespace IronyModManager.ViewModels.Controls
                     notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Title),
                         localizationManager.GetResource(LocalizationResources.Notifications.ConflictSolverUpdate.Message), NotificationType.Warning, 30);
                     previousCollectionNotification = collectionName;
-                }                
+                }
             };
 
             gameDirectoryChangedHandler.Message.Subscribe(s =>
             {
                 InstalledMods.RefreshMods();
                 EvalResumeAvailability(s.Game);
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.InstalledMods.ModFilePopulationInCompleted).Subscribe(s =>
+            {
+                CollectionMods.CanExportModHashReport = s;
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

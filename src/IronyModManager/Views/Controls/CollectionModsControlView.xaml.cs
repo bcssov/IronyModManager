@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -280,6 +280,16 @@ namespace IronyModManager.Views.Controls
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
             {
                 setMaxValue();
+            }).DisposeWith(Disposables);
+
+            var previousHashState = false;
+            this.WhenAnyValue(v => v.ViewModel.CanExportModHashReport).Subscribe(s =>
+            {
+                if (s != previousHashState)
+                {
+                    cachedMenuItems = new Dictionary<object, List<MenuItem>>();
+                }
+                previousHashState = s;
             }).DisposeWith(Disposables);
 
             modList.LayoutUpdated += (sender, args) =>
