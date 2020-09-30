@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-18-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="ILocalizationManager.cs" company="Mario">
 //     Mario
@@ -29,6 +29,14 @@ namespace IronyModManager.Localization
         /// <param name="key">The key.</param>
         /// <returns>System.String.</returns>
         string GetResource(string key);
+
+        /// <summary>
+        /// Gets the resource.
+        /// </summary>
+        /// <param name="locale">The locale.</param>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        string GetResource(string locale, string key);
 
         #endregion Methods
     }

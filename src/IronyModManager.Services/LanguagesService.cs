@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-12-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.Localization;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -34,6 +35,11 @@ namespace IronyModManager.Services
     public class LanguagesService : BaseService, ILanguagesService
     {
         #region Fields
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
 
         /// <summary>
         /// The preferences service
@@ -52,14 +58,17 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguagesService" /> class.
         /// </summary>
+        /// <param name="localizationManager">The localization manager.</param>
         /// <param name="resourceProvider">The resource provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public LanguagesService(IDefaultLocalizationResourceProvider resourceProvider, IPreferencesService preferencesService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public LanguagesService(ILocalizationManager localizationManager, IDefaultLocalizationResourceProvider resourceProvider,
+            IPreferencesService preferencesService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.resourceProvider = resourceProvider;
             this.preferencesService = preferencesService;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -180,6 +189,7 @@ namespace IronyModManager.Services
             model.IsSelected = currentLocale.Equals(locale, StringComparison.OrdinalIgnoreCase);
             model.Abrv = locale;
             model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";
+            model.Font = localizationManager.GetResource(locale, LocalizationResources.App.FontFamily);
             return model;
         }
 

@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-23-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="Language.cs" company="Mario">
 //     Mario
@@ -33,6 +33,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The abrv.</value>
         public virtual string Abrv { get; set; }
+
+        /// <summary>
+        /// Gets or sets the font.
+        /// </summary>
+        /// <value>The font.</value>
+        public virtual string Font { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
