@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-08-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="SortOrderControlViewModel.cs" company="Mario">
 //     Mario
@@ -82,6 +82,17 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            base.OnLocaleChanged(newLocale, oldLocale);
+            MapSortOrder(SortOrder);
+        }
 
         /// <summary>
         /// Sets the sort order.

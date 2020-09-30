@@ -2,7 +2,7 @@
 <SyntaxDefinition name="PDXScript" extensions=".txt" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
   <Color name="Comment" foreground="SlateGray" />
   <Color name="String" foreground="PaleGreen" />
-  <Color name="Number" foreground="Red" />
+  <Color name="Number" foreground="Orange" />
   <Color name="Keywords" foreground="LightBlue" />
   <Color name="Assignment" foreground="Yellow" />
   <RuleSet ignoreCase="true">

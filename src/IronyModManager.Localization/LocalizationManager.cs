@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -75,11 +75,22 @@ namespace IronyModManager.Localization
         /// <returns>System.String.</returns>
         public virtual string GetResource(string key)
         {
-            var resource = TryGetCachedResource(CurrentLocale.CultureName, key);
+            return GetResource(CurrentLocale.CultureName, key);
+        }
+
+        /// <summary>
+        /// Gets the resource.
+        /// </summary>
+        /// <param name="locale">The locale.</param>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        public string GetResource(string locale, string key)
+        {
+            var resource = TryGetCachedResource(locale, key);
             if (resource == null)
             {
-                CacheLocalization(CurrentLocale.CultureName);
-                resource = TryGetCachedResource(CurrentLocale.CultureName, key);
+                CacheLocalization(locale);
+                resource = TryGetCachedResource(locale, key);
             }
 
             return resource;

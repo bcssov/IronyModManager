@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭...",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",
@@ -193,12 +194,12 @@
         "NextConflict": "下一个冲突",
         "PrevConflict": "上一个冲突",
         "ConflictCount": "冲突数: {Count}",
-      "PriorityReason": {
-        "FIOS": "(FIOS)",
-        "LIOS": "(LIOS)",
-        "Order": "(Load Order)",
-        "Override": "(Override)"
-      },
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Load Order)",
+            "Override": "(Override)"
+        },
         "InvalidConflicts": {
             "Name": "无效代码",
             "Error": "错误位置：行：{Line} 列：{Column} 文件: {File}.{NewLine}请将此错误汇报到此Mod的作者: {ModName}.{NewLine}{NewLine} 错误信息：{NewLine}{NewLine}{Message}",

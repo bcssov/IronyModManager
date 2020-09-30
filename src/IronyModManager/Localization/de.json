@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
