@@ -116,7 +116,8 @@
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
             "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
-            "Progress": "{Progress}%"
+            "Progress": "{Progress}%",
+            "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
@@ -394,6 +395,10 @@
         "ReportExported": {
             "Title": "Bericht exportiert",
             "Message": "Bericht wurde exportiert."
+        },
+        "ReportValid": {
+            "Title": "Datei-Hash-Übereinstimmung",
+            "Message": "Alle Datei-Hashes scheinen übereinzustimmen."
         }
     },
     "Mod_App_Actions": {

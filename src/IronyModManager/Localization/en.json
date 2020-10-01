@@ -116,7 +116,8 @@
             "DialogTitleImport": "Select json report to import",
             "ExportOverlay": "Please wait while exporting...",
             "ImportOverlay": "Please wait while verifying...",
-            "Progress": "{Progress}%"
+            "Progress": "{Progress}%",
+            "Close": "Close"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto Focus: {State}",
@@ -394,6 +395,10 @@
         "ReportExported": {
             "Title": "Report Exported",
             "Message": "Report has been exported."
+        },
+        "ReportValid": {
+            "Title": "File Hash Match",
+            "Message": "All file hashes seem to match."
         }
     },
     "Mod_App_Actions": {

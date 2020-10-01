@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -172,6 +172,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modReportView">The mod report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
@@ -188,7 +189,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
@@ -210,6 +211,7 @@ namespace IronyModManager.ViewModels.Controls
             this.messageBus = messageBus;
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
+            ModReportView = modReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
         }
@@ -488,6 +490,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod order.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Order)]
         public virtual string ModOrder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod report view.
+        /// </summary>
+        /// <value>The mod report view.</value>
+        public virtual ModHashReportControlViewModel ModReportView { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
@@ -1342,6 +1350,21 @@ namespace IronyModManager.ViewModels.Controls
                 var path = await fileDialogAction.OpenDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
+                    registerReportHandlers();
+                    var reports = await modCollectionService.ImportHashReportAsync(SelectedMods, path);
+                    if (reports?.Count() > 0)
+                    {
+                        await TriggerOverlayAsync(false);
+                        ModReportView.SetParameters(reports);
+                    }
+                    else
+                    {
+                        await TriggerOverlayAsync(false);
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
+                            localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
+                    }                  
+                    reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);
 

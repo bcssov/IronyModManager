@@ -116,7 +116,8 @@
             "DialogTitleImport": "Odaberite json izvješće za uvoz",
             "ExportOverlay": "Pričekajte dok se izvozi...",
             "ImportOverlay": "Pričekajte dok se verificira...",
-            "Progress": "{Progress}%"
+            "Progress": "{Progress}%",
+            "Close": "Zatvori"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
@@ -394,6 +395,10 @@
         "ReportExported": {
             "Title": "Izvješće izvezeno",
             "Message": "Izvješće je izvezeno."
+        },
+        "ReportValid": {
+            "Title": "Hashevi dateoteka se podudaraju",
+            "Message": "Svi hashevi se podudaraju."
         }
     },
     "Mod_App_Actions": {

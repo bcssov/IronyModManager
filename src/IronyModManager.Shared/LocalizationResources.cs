@@ -156,6 +156,7 @@ namespace IronyModManager.Shared
                 public const string ExportOverlay = Prefix + "ExportOverlay";
                 public const string ImportOverlay = Prefix + "ImportOverlay";
                 public const string Progress = Prefix + "Progress";
+                public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop
             {
@@ -535,6 +536,12 @@ namespace IronyModManager.Shared
             public static class ReportExported
             {
                 public const string Prefix = "Notifications.ReportExported.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ReportValid
+            {
+                public const string Prefix = "Notifications.ReportValid.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

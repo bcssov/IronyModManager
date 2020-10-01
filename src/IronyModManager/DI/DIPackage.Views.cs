@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -59,6 +59,7 @@ namespace IronyModManager.DI
             container.Register<ConflictSolverDBSearchControlView>();
             container.Register<ConflictSolverCustomConflictsControlView>();
             container.Register<ShortcutsControlView>();
+            container.Register<ModHashReportControlView>();
         }
 
         #endregion Methods

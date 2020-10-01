@@ -116,7 +116,8 @@
             "DialogTitleImport": "选择要导入的JSON报告",
             "ExportOverlay": "汇出时请稍候...",
             "ImportOverlay": "请等待验证...",
-            "Progress": "{Progress}%"
+            "Progress": "{Progress}%",
+            "Close": "关闭"
         },
         "JumpOnDragAndDrop": {
             "Title": "自动选择: {State}",
@@ -394,6 +395,10 @@
         "ReportExported": {
             "Title": "报告已导出",
             "Message": "报告已导出."
+        },
+        "ReportValid": {
+            "Title": "文件哈希匹配",
+            "Message": "所有文件散列似乎都匹配."
         }
     },
     "Mod_App_Actions": {
