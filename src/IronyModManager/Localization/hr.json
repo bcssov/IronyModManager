@@ -116,7 +116,7 @@
             "DialogTitleImport": "Odaberite json izvješće za uvoz",
             "ExportOverlay": "Pričekajte dok se izvozi...",
             "ImportOverlay": "Pričekajte dok se verificira...",
-            "Progress": "{Progress}"
+            "Progress": "{Progress}%"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",

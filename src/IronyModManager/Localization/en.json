@@ -116,7 +116,7 @@
             "DialogTitleImport": "Select json report to import",
             "ExportOverlay": "Please wait while exporting...",
             "ImportOverlay": "Please wait while verifying...",
-            "Progress": "{Progress}"
+            "Progress": "{Progress}%"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto Focus: {State}",

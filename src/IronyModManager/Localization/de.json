@@ -116,7 +116,7 @@
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
             "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
-            "Progress": "{Progress}"
+            "Progress": "{Progress}%"
         },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
