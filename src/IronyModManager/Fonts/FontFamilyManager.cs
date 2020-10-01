@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="FontFamilyManager.cs" company="Mario">
 //     Mario
@@ -31,6 +31,11 @@ namespace IronyModManager.Fonts
         /// </summary>
         private readonly IEnumerable<IFontFamily> fontFamilies;
 
+        /// <summary>
+        /// The system fonts
+        /// </summary>
+        private List<SystemFontFamily> systemFonts;
+
         #endregion Fields
 
         #region Constructors
@@ -42,6 +47,7 @@ namespace IronyModManager.Fonts
         public FontFamilyManager(IEnumerable<IFontFamily> fontFamilies)
         {
             this.fontFamilies = fontFamilies;
+            systemFonts = new List<SystemFontFamily>();
         }
 
         #endregion Constructors
@@ -55,7 +61,18 @@ namespace IronyModManager.Fonts
         /// <returns>IFontFamily.</returns>
         public IFontFamily ResolveFontFamily(string fontName)
         {
-            return fontFamilies.First(p => p.Name.Equals(fontName, StringComparison.OrdinalIgnoreCase));
+            var font = fontFamilies.FirstOrDefault(p => p.Name.Equals(fontName, StringComparison.OrdinalIgnoreCase));
+            if (font == null)
+            {
+                SystemFontFamily systemFont = systemFonts.FirstOrDefault(p => p.Name.Equals(fontName));
+                if (systemFont == null)
+                {
+                    systemFont = new SystemFontFamily(fontName);
+                    systemFonts.Add(systemFont);
+                }
+                return systemFont;
+            }
+            return font;
         }
 
         #endregion Methods
