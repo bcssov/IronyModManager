@@ -294,6 +294,7 @@
             "UserDirectory": "游戏存档目录",
             "GameArgs": "启动参数",
             "RefreshMods": "启动前刷新Mod Descriptor",
+            "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置所有..."
         },
         "Updates": {

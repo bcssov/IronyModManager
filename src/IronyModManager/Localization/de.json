@@ -294,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Spiel Args",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+            "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
             "AutoConfigure": "Alle konfigurieren..."
         },
         "Updates": {

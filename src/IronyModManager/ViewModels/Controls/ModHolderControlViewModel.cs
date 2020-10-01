@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -589,7 +589,10 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             if (await appAction.OpenAsync(args.ExecutableLocation))
                             {
-                                await appAction.ExitAppAsync();
+                                if (game.CloseAppAfterGameLaunch)
+                                {
+                                    await appAction.ExitAppAsync();
+                                }
                             }
                             else
                             {
@@ -612,7 +615,10 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
                             {
-                                await appAction.ExitAppAsync();
+                                if (game.CloseAppAfterGameLaunch)
+                                {
+                                    await appAction.ExitAppAsync();
+                                }
                             }
                             else
                             {

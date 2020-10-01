@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-28-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -221,6 +221,7 @@ namespace IronyModManager.Services
             }
             model.UserDirectory = game.UserDirectory;
             model.RefreshDescriptors = game.RefreshDescriptors;
+            model.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             model.Type = game.Type;
             return model;
         }
@@ -393,10 +394,12 @@ namespace IronyModManager.Services
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
+            game.CloseAppAfterGameLaunch = true;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)
             {
+                game.CloseAppAfterGameLaunch = gameSettings.CloseAppAfterGameLaunch.GetValueOrDefault(true);
                 game.RefreshDescriptors = gameSettings.RefreshDescriptors;
                 if (!string.IsNullOrWhiteSpace(gameSettings.LaunchArguments))
                 {
@@ -449,6 +452,7 @@ namespace IronyModManager.Services
             }
             settings.ExecutableLocation = game.ExecutableLocation;
             settings.LaunchArguments = game.LaunchArguments;
+            settings.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             settings.RefreshDescriptors = game.RefreshDescriptors;
             settings.UserDirectory = game.UserDirectory;
             StorageProvider.SetGameSettings(gameSettings);

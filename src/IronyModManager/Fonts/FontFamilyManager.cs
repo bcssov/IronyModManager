@@ -34,7 +34,7 @@ namespace IronyModManager.Fonts
         /// <summary>
         /// The system fonts
         /// </summary>
-        private List<SystemFontFamily> systemFonts;
+        private readonly List<SystemFontFamily> systemFonts;
 
         #endregion Fields
 
