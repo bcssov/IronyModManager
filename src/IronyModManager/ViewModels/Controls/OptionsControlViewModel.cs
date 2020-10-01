@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -95,6 +95,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The check for prerelease changed
         /// </summary>
         private IDisposable checkForPrereleaseChanged;
+
+        /// <summary>
+        /// The close game changed
+        /// </summary>
+        private IDisposable closeGameChanged;
 
         /// <summary>
         /// The is game reloading
@@ -201,6 +206,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The close.</value>
         [StaticLocalization(LocalizationResources.Options.Close)]
         public virtual string Close { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the close application after game launch.
+        /// </summary>
+        /// <value>The close application after game launch.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.CloseAfterLaunch)]
+        public virtual string CloseAppAfterGameLaunch { get; protected set; }
 
         /// <summary>
         /// Gets or sets the close command.
@@ -628,6 +640,7 @@ namespace IronyModManager.ViewModels.Controls
             game.ExecutableLocation = Game.ExecutableLocation;
             game.LaunchArguments = Game.LaunchArguments;
             game.RefreshDescriptors = Game.RefreshDescriptors;
+            game.CloseAppAfterGameLaunch = Game.CloseAppAfterGameLaunch;
             bool dirChanged = game.UserDirectory != Game.UserDirectory;
             game.UserDirectory = Game.UserDirectory;
             if (gameService.Save(game) && dirChanged)
@@ -658,12 +671,17 @@ namespace IronyModManager.ViewModels.Controls
             isGameReloading = true;
             argsChanged?.Dispose();
             refreshDescriptorsChanged?.Dispose();
+            closeGameChanged?.Dispose();
             Game = game;
             argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
             refreshDescriptorsChanged = this.WhenAnyValue(p => p.Game.RefreshDescriptors).Where(p => !isGameReloading).Subscribe(s =>
+            {
+                SaveGame();
+            }).DisposeWith(Disposables);
+            closeGameChanged = this.WhenAnyValue(p => p.Game.CloseAppAfterGameLaunch).Where(p => !isGameReloading).Subscribe(s =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);

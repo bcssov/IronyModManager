@@ -389,6 +389,7 @@ namespace IronyModManager.Shared
                 public const string UserDirectory = Prefix + "UserDirectory";
                 public const string GameArgs = Prefix + "GameArgs";
                 public const string RefreshMods = Prefix + "RefreshMods";
+                public const string CloseAfterLaunch = Prefix + "CloseAfterLaunch";
                 public const string AutoConfigure = Prefix + "AutoConfigure";
             }
             public static class Updates

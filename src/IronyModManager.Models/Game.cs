@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -47,6 +47,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The checksum folders.</value>
         public virtual IEnumerable<string> ChecksumFolders { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [close application after game launch].
+        /// </summary>
+        /// <value><c>true</c> if [close application after game launch]; otherwise, <c>false</c>.</value>
+        public virtual bool CloseAppAfterGameLaunch { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.

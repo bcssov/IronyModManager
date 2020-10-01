@@ -294,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
+            "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
             "AutoConfigure": "Konfiguriraj sve..."
         },
         "Updates": {

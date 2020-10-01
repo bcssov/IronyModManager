@@ -294,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Game Args",
             "RefreshMods": "Refresh Descriptors Before Playing",
+            "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All..."
         },
         "Updates": {
