@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -207,7 +207,10 @@ namespace IronyModManager
             var languageListener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
             languageListener.SubscribeObservable(x =>
             {
-                SetFontFamily(Helpers.GetMainWindow(), x.Locale);
+                var window = (MainWindow)Helpers.GetMainWindow();
+                window.ViewModel.TriggerManualOverlay(true, string.Empty);
+                SetFontFamily(window, x.Locale);
+                window.ViewModel.TriggerManualOverlay(false, string.Empty);
             });
         }
 
