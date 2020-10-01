@@ -109,6 +109,16 @@
             "PromptTitle": "覆盖整合包",
             "PromptMessage": "此操作将会覆盖你Mod加载顺序与选择的Mod，请确认"
         },
+        "FileHash": {
+            "Export": "导出收集哈希",
+            "Import": "验证收集哈希",
+            "DialogTitleExport": "选择导出报告的位置",
+            "DialogTitleImport": "选择要导入的JSON报告",
+            "ExportOverlay": "汇出时请稍候...",
+            "ImportOverlay": "请等待验证...",
+            "Progress": "{Progress}%",
+            "Close": "关闭"
+        },
         "JumpOnDragAndDrop": {
             "Title": "自动选择: {State}",
             "On": "开启",
@@ -381,6 +391,14 @@
         "NoUpdatesAvailable": {
             "Title": "没有更新",
             "Message": "没有可用更新"
+        },
+        "ReportExported": {
+            "Title": "报告已导出",
+            "Message": "报告已导出."
+        },
+        "ReportValid": {
+            "Title": "文件哈希匹配",
+            "Message": "所有文件散列似乎都匹配."
         }
     },
     "Mod_App_Actions": {

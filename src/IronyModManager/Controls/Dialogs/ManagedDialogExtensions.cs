@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -24,6 +24,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Platform;
 using Avalonia.Platform;
 using IronyModManager.Controls.Themes;
+using IronyModManager.DI;
+using IronyModManager.Fonts;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls.Dialogs
@@ -113,6 +116,11 @@ namespace IronyModManager.Controls.Dialogs
                 var model = new ManagedDialogViewModel((FileSystemDialog)d,
                     options ?? new ManagedFileDialogOptions());
 
+                var langService = DIResolver.Get<ILanguagesService>();
+                var language = langService.GetSelected();
+                var fontResolver = DIResolver.Get<IFontFamilyManager>();
+                var font = fontResolver.ResolveFontFamily(language.Font);
+
                 var dialog = new T
                 {
                     Icon = StaticResources.GetAppIcon(),
@@ -120,7 +128,8 @@ namespace IronyModManager.Controls.Dialogs
                     Title = d.Title,
                     DataContext = model,
                     SizeToContent = SizeToContent.Width,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    FontFamily = font.GetFontFamily()
                 };
 
                 dialog.Closed += delegate { model.Cancel(); };

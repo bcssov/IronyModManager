@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="FileDialogAction.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -61,6 +62,10 @@ namespace IronyModManager.Implementation.Actions
             }
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
             var file = result?.FirstOrDefault();
+            if (File.Exists(file))
+            {
+                return file;
+            }
             return file;
         }
 
@@ -77,7 +82,11 @@ namespace IronyModManager.Implementation.Actions
                 Directory = GetInitialDirectory()
             };
             var result = await dialog.ShowAsync(Helpers.GetMainWindow());
-            return result;
+            if (Directory.Exists(result))
+            {
+                return result;
+            }
+            return string.Empty;
         }
 
         /// <summary>

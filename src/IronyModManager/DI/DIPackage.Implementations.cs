@@ -61,6 +61,7 @@ namespace IronyModManager.DI
             container.RemoveMixedLifetimeWarning<IAppAction>();
             container.Register<UpdateUnpackProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<GameUserDirectoryChangedHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModReportExportHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Collection.Register(typeof(IFontFamily), new List<Type>()
             {
                 typeof(NotoSansFontFamily), typeof(NotoSansSCFontFamily)
