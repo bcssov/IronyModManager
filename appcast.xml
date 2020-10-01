@@ -4,6 +4,50 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.7.26-alpha</title>
+			<description>CHANGES FROM v1.6:
+				* Add chinese translation (thanks to Windmill-City)
+				* Switch to custom noto font
+				* UI readjusted due to new font
+				* Add mod collection file hash verification (intended use case is for MP gameplay)
+				* Add option to not close Irony after launching game (per game setting)</description>
+			<pubDate>Thu, 01 Oct 2020 20:22:28 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/linux-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="72122442" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="S82gpPcN3qqwKNY3n+2/qelFwJ97IP5dUVNZbDziSV41cShA9mmkrnqs1yOB2WBsC806wHScTXKrbVgnbrWlDQ=="/>
+		</item>
+		<item>
+			<title>1.7.26-alpha</title>
+			<description>CHANGES FROM v1.6:
+				* Add chinese translation (thanks to Windmill-City)
+				* Switch to custom noto font
+				* UI readjusted due to new font
+				* Add mod collection file hash verification (intended use case is for MP gameplay)
+				* Add option to not close Irony after launching game (per game setting)</description>
+			<pubDate>Thu, 01 Oct 2020 20:22:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/osx-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="71370429" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="zKVZyI/v1mJCAJR19pxN+BkXT+xyx4C0910gwXTpI9J/JoDH4xyjNbOup0LwuHJ2eRK88N8zwgFK4tE+RuUvAA=="/>
+		</item>
+		<item>
+			<title>1.7.26-alpha</title>
+			<description>CHANGES FROM v1.6:
+				* Add chinese translation (thanks to Windmill-City)
+				* Switch to custom noto font
+				* UI readjusted due to new font
+				* Add mod collection file hash verification (intended use case is for MP gameplay)
+				* Add option to not close Irony after launching game (per game setting)</description>
+			<pubDate>Thu, 01 Oct 2020 20:22:41 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/win-x64-setup.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="61042595" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="rFcK5w4g4zWKCg0qjCvb7KbE1DaODSIJxKOxh6DnqfI/vRWm/2XOZRPA5TaAtjYkeTuEmQ20WZfjXs6bXoh+Cg=="/>
+		</item>
+		<item>
+			<title>1.7.26-alpha</title>
+			<description>CHANGES FROM v1.6:
+				* Add chinese translation (thanks to Windmill-City)
+				* Switch to custom noto font
+				* UI readjusted due to new font
+				* Add mod collection file hash verification (intended use case is for MP gameplay)
+				* Add option to not close Irony after launching game (per game setting)</description>
+			<pubDate>Thu, 01 Oct 2020 20:22:37 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/win-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="74016156" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="HAYXc0FS0nSMEaxf5fRHv90tMH7v1s7yQOukhaXWbs5z5fvKZETI0XTCyugSLA1dsPoajZnPfMg8ExW7k1FiAQ=="/>
+		</item>
+		<item>
 			<title>1.6.106</title>
 			<description>RELEASE INFO:
 				* Fix faulty detection of steam games when launching game via Irony
