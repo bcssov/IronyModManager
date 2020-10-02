@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-02-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -206,7 +206,20 @@ namespace IronyModManager.Services
         {
             if (!string.IsNullOrWhiteSpace(path) && mods?.Count() > 0)
             {
-                var reports = await ParseReportAsync(mods);
+                var modExport = mods.ToList();
+                var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
+                var patchModName = GenerateCollectionPatchName(collection.Name);
+                var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
+                var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
+                if (patchMod != null)
+                {
+                    if (patchMod.Files == null || patchMod.Files.Count() == 0)
+                    {
+                        await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
+                    }
+                    modExport.Add(patchMod);
+                }
+                var reports = await ParseReportAsync(modExport);
                 return await modReportExporter.ExportAsync(reports, path);
             }
             return false;
@@ -299,11 +312,25 @@ namespace IronyModManager.Services
         /// <summary>
         /// Imports the hash report asynchronous.
         /// </summary>
+        /// <param name="mods">The mods.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IModHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
         {
-            var currentReports = await ParseReportAsync(mods);
+            var modExport = mods.ToList();
+            var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
+            var patchModName = GenerateCollectionPatchName(collection.Name);
+            var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
+            var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
+            if (patchMod != null)
+            {
+                if (patchMod.Files == null || patchMod.Files.Count() == 0)
+                {
+                    await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
+                }
+                modExport.Add(patchMod);
+            }
+            var currentReports = await ParseReportAsync(modExport);
             var importedReports = await modReportExporter.ImportAsync(path);
             if (importedReports != null)
             {

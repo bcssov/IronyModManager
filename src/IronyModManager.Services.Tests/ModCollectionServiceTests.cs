@@ -873,6 +873,20 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = "C:\\fake",
                 GameFolders = new List<string>() { "test" }
             });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "no-items"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IModHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IModHashReport> report, string path) =>
@@ -918,6 +932,20 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = "C:\\fake",
                 GameFolders = new List<string>() { "test" }
             });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "no-items"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
@@ -954,6 +982,20 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items",
                 UserDirectory = "C:\\fake",
                 GameFolders = new List<string>() { "test" }
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "no-items"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
             });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
@@ -1000,6 +1042,20 @@ namespace IronyModManager.Services.Tests
                 UserDirectory = "C:\\fake",
                 GameFolders = new List<string>() { "test" }
             });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "no-items"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
@@ -1044,6 +1100,20 @@ namespace IronyModManager.Services.Tests
                 Type = "no-items",
                 UserDirectory = "C:\\fake",
                 GameFolders = new List<string>() { "test" }
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "no-items"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
             });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
