@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-02-2020
 // ***********************************************************************
 // <copyright file="BaseFontFamily.cs" company="Mario">
 //     Mario
@@ -45,7 +45,7 @@ namespace IronyModManager.Fonts
         /// Gets the resource URI.
         /// </summary>
         /// <value>The resource URI.</value>
-        public string ResourceUri => $"resm:IronyModManager.Fonts.{Folder}?assembly=IronyModManager#{Name}";
+        public string ResourceUri => $"font://Fonts/{Folder}#{Name}";
 
         /// <summary>
         /// Gets the folder.

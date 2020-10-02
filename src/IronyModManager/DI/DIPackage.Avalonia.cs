@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-06-2020
+// Last Modified On : 10-02-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Avalonia.cs" company="Mario">
 //     Mario
@@ -37,10 +37,12 @@ namespace IronyModManager.DI
         /// <param name="container">The container.</param>
         private void RegisterAvaloniaServices(Container container)
         {
-            Locator.CurrentMutable.RegisterConstant(new AvaloniaActivationForViewFetcher(), typeof(IActivationForViewFetcher));
-            Locator.CurrentMutable.RegisterConstant(new AutoDataTemplateBindingHook(), typeof(IPropertyBindingHook));
-            container.Register<IActivationForViewFetcher, AvaloniaActivationForViewFetcher>();
-            container.Register<IPropertyBindingHook, AutoDataTemplateBindingHook>();
+            var viewFetcher = new AvaloniaActivationForViewFetcher();
+            var dataTemplate = new AutoDataTemplateBindingHook();
+            Locator.CurrentMutable.RegisterConstant(viewFetcher, typeof(IActivationForViewFetcher));
+            Locator.CurrentMutable.RegisterConstant(dataTemplate, typeof(IPropertyBindingHook));
+            container.RegisterInstance<IActivationForViewFetcher>(viewFetcher);
+            container.RegisterInstance<IPropertyBindingHook>(dataTemplate);
             Avalonia.Logging.Logger.Sink = new AvaloniaLogger();
         }
 
