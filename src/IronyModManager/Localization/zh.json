@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭...",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",
@@ -108,6 +109,16 @@
             "PromptTitle": "覆盖整合包",
             "PromptMessage": "此操作将会覆盖你Mod加载顺序与选择的Mod，请确认"
         },
+        "FileHash": {
+            "Export": "导出收集哈希",
+            "Import": "验证收集哈希",
+            "DialogTitleExport": "选择导出报告的位置",
+            "DialogTitleImport": "选择要导入的JSON报告",
+            "ExportOverlay": "汇出时请稍候...",
+            "ImportOverlay": "请等待验证...",
+            "Progress": "{Progress}%",
+            "Close": "关闭"
+        },
         "JumpOnDragAndDrop": {
             "Title": "自动选择: {State}",
             "On": "开启",
@@ -193,12 +204,12 @@
         "NextConflict": "下一个冲突",
         "PrevConflict": "上一个冲突",
         "ConflictCount": "冲突数: {Count}",
-      "PriorityReason": {
-        "FIOS": "(FIOS)",
-        "LIOS": "(LIOS)",
-        "Order": "(Load Order)",
-        "Override": "(Override)"
-      },
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Load Order)",
+            "Override": "(Override)"
+        },
         "InvalidConflicts": {
             "Name": "无效代码",
             "Error": "错误位置：行：{Line} 列：{Column} 文件: {File}.{NewLine}请将此错误汇报到此Mod的作者: {ModName}.{NewLine}{NewLine} 错误信息：{NewLine}{NewLine}{Message}",
@@ -283,6 +294,7 @@
             "UserDirectory": "游戏存档目录",
             "GameArgs": "启动参数",
             "RefreshMods": "启动前刷新Mod Descriptor",
+            "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置所有..."
         },
         "Updates": {
@@ -380,6 +392,14 @@
         "NoUpdatesAvailable": {
             "Title": "没有更新",
             "Message": "没有可用更新"
+        },
+        "ReportExported": {
+            "Title": "报告已导出",
+            "Message": "报告已导出."
+        },
+        "ReportValid": {
+            "Title": "文件哈希匹配",
+            "Message": "所有文件散列似乎都匹配."
         }
     },
     "Mod_App_Actions": {

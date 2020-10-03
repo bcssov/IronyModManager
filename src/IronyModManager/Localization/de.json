@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird. App wird heruntergefahren, sobald es abgeschlossen ist...",
         "WaitBackgroundOperationMessage": "Bitte warten Sie, bis eine Hintergrundoperation ausgeführt wird.",
@@ -107,6 +108,16 @@
             "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
             "PromptTitle": "Mod-Reihenfolge überschreiben?",
             "PromptMessage": "Dies überschreibt deine Mod-Sammlungs-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
+        },
+        "FileHash": {
+            "Export": "Sammlungshashes exportieren",
+            "Import": "Überprüfen Sie die Sammlungshashes",
+            "DialogTitleExport": "Wählen Sie aus, wohin der Bericht exportiert werden soll",
+            "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
+            "ExportOverlay": "Bitte warten Sie beim Exportieren...",
+            "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
+            "Progress": "{Progress}%",
+            "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {
             "Title": "Autofokus: {State}",
@@ -283,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Spiel Args",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
+            "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
             "AutoConfigure": "Alle konfigurieren..."
         },
         "Updates": {
@@ -380,6 +392,14 @@
         "NoUpdatesAvailable": {
             "Title": "Keine Aktualisierungen",
             "Message": "Es scheinen keine Updates verfügbar zu sein."
+        },
+        "ReportExported": {
+            "Title": "Bericht exportiert",
+            "Message": "Bericht wurde exportiert."
+        },
+        "ReportValid": {
+            "Title": "Datei-Hash-Übereinstimmung",
+            "Message": "Alle Datei-Hashes scheinen übereinzustimmen."
         }
     },
     "Mod_App_Actions": {

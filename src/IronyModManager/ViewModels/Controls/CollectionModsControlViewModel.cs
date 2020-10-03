@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -65,6 +66,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppStateService appStateService;
 
         /// <summary>
+        /// The file dialog action
+        /// </summary>
+        private readonly IFileDialogAction fileDialogAction;
+
+        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -88,6 +94,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The mod report export handler
+        /// </summary>
+        private readonly ModReportExportHandler modReportExportHandler;
 
         /// <summary>
         /// The mod service
@@ -161,6 +172,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modReportView">The mod report view.</param>
+        /// <param name="modReportExportHandler">The mod report export handler.</param>
+        /// <param name="fileDialogAction">The file dialog action.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
         /// <param name="appStateService">The application state service.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
@@ -175,7 +189,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
@@ -195,6 +209,9 @@ namespace IronyModManager.ViewModels.Controls
             this.gameService = gameService;
             this.modPatchCollectionService = modPatchCollectionService;
             this.messageBus = messageBus;
+            this.fileDialogAction = fileDialogAction;
+            this.modReportExportHandler = modReportExportHandler;
+            ModReportView = modReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
         }
@@ -311,6 +328,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool AllowModSelection { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance can export mod hash report.
+        /// </summary>
+        /// <value><c>true</c> if this instance can export mod hash report; otherwise, <c>false</c>.</value>
+        public virtual bool CanExportModHashReport { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [collection jump on position change].
         /// </summary>
         /// <value><c>true</c> if [collection jump on position change]; otherwise, <c>false</c>.</value>
@@ -386,6 +409,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the export report.
+        /// </summary>
+        /// <value>The export report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.Export)]
+        public virtual string ExportReport { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export report command.
+        /// </summary>
+        /// <value>The export report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportReportCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the hovered mod.
         /// </summary>
         /// <value>The hovered mod.</value>
@@ -403,6 +439,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The import collection from clipboard command.</value>
         public virtual ReactiveCommand<Unit, Unit> ImportCollectionFromClipboardCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import report.
+        /// </summary>
+        /// <value>The import report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.Import)]
+        public virtual string ImportReport { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the import report command.
+        /// </summary>
+        /// <value>The import report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ImportReportCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the maximum order.
@@ -441,6 +490,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod order.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Order)]
         public virtual string ModOrder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the mod report view.
+        /// </summary>
+        /// <value>The mod report view.</value>
+        public virtual ModHashReportControlViewModel ModReportView { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
@@ -1265,7 +1320,7 @@ namespace IronyModManager.ViewModels.Controls
                                 {
                                     mods.Add(item);
                                 }
-                            }                            
+                            }
                             SetSelectedMods(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
                             AllModsEnabled = SelectedMods?.Count() > 0 && SelectedMods.All(p => p.IsSelected);
                             var state = appStateService.Get();
@@ -1275,6 +1330,59 @@ namespace IronyModManager.ViewModels.Controls
                             skipModCollectionSave = false;
                         }
                     }
+                }
+            }).DisposeWith(disposables);
+
+            IDisposable reportDisposable = null;
+
+            void registerReportHandlers()
+            {
+                reportDisposable = modReportExportHandler.Message.Subscribe(s =>
+                {
+                    TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage }));
+                }).DisposeWith(disposables);
+            }
+
+            ImportReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleImport);
+                var path = await fileDialogAction.OpenDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
+                    registerReportHandlers();
+                    var reports = await modCollectionService.ImportHashReportAsync(SelectedMods, path);
+                    if (reports?.Count() > 0)
+                    {
+                        await TriggerOverlayAsync(false);
+                        ModReportView.SetParameters(reports);
+                    }
+                    else
+                    {
+                        await TriggerOverlayAsync(false);
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
+                            localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
+                    }                  
+                    reportDisposable?.Dispose();
+                }
+            }).DisposeWith(disposables);
+
+            ExportReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
+                var path = await fileDialogAction.SaveDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    registerReportHandlers();
+                    if (await modCollectionService.ExportHashReportAsync(SelectedMods, path))
+                    {
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
+                            localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
+                    }
+                    await TriggerOverlayAsync(false);
+                    reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);
 

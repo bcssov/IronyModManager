@@ -7,8 +7,8 @@
         x:Class="IronyModManager.Views.MainWindow"
         Icon="/Assets/logo.ico"
         Title="Irony Mod Manager"
-        MinWidth="800"
-        MinHeight="480"
+        MinWidth="960"
+        MinHeight="500"
         SizeToContent="Manual"
         WindowStartupLocation="Manual"
         ShowInTaskbar="True">

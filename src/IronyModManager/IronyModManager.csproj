@@ -201,7 +201,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20200906002" />
-    <PackageReference Include="NLog" Version="4.7.4" />
+    <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="ReactiveUI" Version="11.5.35" />
     <PackageReference Include="SimpleInjector" Version="5.0.3" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
@@ -360,6 +360,24 @@
     <None Update="Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Update="Fonts\NotoSansSC\NotoSansSC-Bold.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\NotoSansSC\NotoSansSC-Regular.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\NotoSansSC\OFL.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\NotoSans\LICENSE.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\NotoSans\NotoSans-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\NotoSans\NotoSans-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Localization\de.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

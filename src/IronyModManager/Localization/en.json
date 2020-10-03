@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
         "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
@@ -107,6 +108,16 @@
             "Title": "Import Mod Order From Clipboard",
             "PromptTitle": "Overwrite Mod Order?",
             "PromptMessage": "This will overwrite your mod collection mod order and mod selection. Proceed?"
+        },
+        "FileHash": {
+            "Export": "Export Collection Hashes",
+            "Import": "Verify Collection Hashes",
+            "DialogTitleExport": "Select where to export report",
+            "DialogTitleImport": "Select json report to import",
+            "ExportOverlay": "Please wait while exporting...",
+            "ImportOverlay": "Please wait while verifying...",
+            "Progress": "{Progress}%",
+            "Close": "Close"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto Focus: {State}",
@@ -283,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Game Args",
             "RefreshMods": "Refresh Descriptors Before Playing",
+            "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All..."
         },
         "Updates": {
@@ -380,6 +392,14 @@
         "NoUpdatesAvailable": {
             "Title": "No Updates",
             "Message": "There seem to be no updates available."
+        },
+        "ReportExported": {
+            "Title": "Report Exported",
+            "Message": "Report has been exported."
+        },
+        "ReportValid": {
+            "Title": "File Hash Match",
+            "Message": "All file hashes seem to match."
         }
     },
     "Mod_App_Actions": {

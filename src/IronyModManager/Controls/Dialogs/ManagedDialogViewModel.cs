@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 09-30-2020
 // ***********************************************************************
 // <copyright file="ManagedDialogViewModel.cs" company="Avalonia">
 //     Avalonia
@@ -156,6 +156,7 @@ namespace IronyModManager.Controls.Dialogs
                     {
                         SelectionMode = SelectionMode.Multiple;
                     }
+                    FileName = ofd.InitialFileName;
                 }
             }
 

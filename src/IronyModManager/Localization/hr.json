@@ -1,5 +1,6 @@
 ﻿{
     "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
         "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
@@ -107,6 +108,16 @@
             "Title": "Uvezi mod redoslijed iz međuspremnika",
             "PromptTitle": "Prebriši redoslijed modova?",
             "PromptMessage": "Ovo će prebrisati redoslijed i odabir modova. Nastaviti?"
+        },
+        "FileHash": {
+            "Export": "Izvoz hashova kolekcije",
+            "Import": "Provjerite hashove kolekcije",
+            "DialogTitleExport": "Odaberite mjesto za izvoz izvješća",
+            "DialogTitleImport": "Odaberite json izvješće za uvoz",
+            "ExportOverlay": "Pričekajte dok se izvozi...",
+            "ImportOverlay": "Pričekajte dok se verificira...",
+            "Progress": "{Progress}%",
+            "Close": "Zatvori"
         },
         "JumpOnDragAndDrop": {
             "Title": "Auto fokus: {State}",
@@ -283,6 +294,7 @@
             "UserDirectory": "Data Directory",
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
+            "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
             "AutoConfigure": "Konfiguriraj sve..."
         },
         "Updates": {
@@ -380,6 +392,14 @@
         "NoUpdatesAvailable": {
             "Title": "Nema ažuriranja",
             "Message": "Čini se da nema dostupnih ažuriranja."
+        },
+        "ReportExported": {
+            "Title": "Izvješće izvezeno",
+            "Message": "Izvješće je izvezeno."
+        },
+        "ReportValid": {
+            "Title": "Hashevi dateoteka se podudaraju",
+            "Message": "Svi hashevi se podudaraju."
         }
     },
     "Mod_App_Actions": {

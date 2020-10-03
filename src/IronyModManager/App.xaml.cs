@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using Avalonia.Markup.Xaml.Styling;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
+using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
@@ -162,9 +163,32 @@ namespace IronyModManager
         {
             var resolver = DIResolver.Get<IViewResolver>();
             var mainWindow = DIResolver.Get<MainWindow>();
+            SetFontFamily(mainWindow);
             var vm = (MainWindowViewModel)resolver.ResolveViewModel<MainWindow>();
             mainWindow.DataContext = vm;
             desktop.MainWindow = mainWindow;
+        }
+
+        /// <summary>
+        /// Sets the font family.
+        /// </summary>
+        /// <param name="mainWindow">The main window.</param>
+        /// <param name="locale">The locale.</param>
+        private void SetFontFamily(Window mainWindow, string locale = Shared.Constants.EmptyParam)
+        {
+            var langService = DIResolver.Get<ILanguagesService>();
+            ILanguage language;
+            if (string.IsNullOrWhiteSpace(locale))
+            {
+                language = langService.GetSelected();
+            }
+            else
+            {
+                language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
+            }
+            var fontResolver = DIResolver.Get<IFontFamilyManager>();
+            var font = fontResolver.ResolveFontFamily(language.Font);
+            mainWindow.FontFamily = font.GetFontFamily();
         }
 
         /// <summary>
@@ -175,10 +199,18 @@ namespace IronyModManager
             var currentTheme = DIResolver.Get<IThemeService>().GetSelected();
             themeSetter(this, currentTheme);
 
-            var listener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
-            listener.SubscribeObservable(x =>
+            var themeListener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
+            themeListener.SubscribeObservable(x =>
             {
                 OnThemeChanged().ConfigureAwait(true);
+            });
+            var languageListener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            languageListener.SubscribeObservable(x =>
+            {
+                var window = (MainWindow)Helpers.GetMainWindow();
+                window.ViewModel.TriggerManualOverlay(true, string.Empty);
+                SetFontFamily(window, x.Locale);
+                window.ViewModel.TriggerManualOverlay(false, string.Empty);
             });
         }
 

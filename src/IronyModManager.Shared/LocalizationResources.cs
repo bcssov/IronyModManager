@@ -11,6 +11,7 @@ namespace IronyModManager.Shared
         public static class App
         {
             public const string Prefix = "App.";
+            public const string FontFamily = Prefix + "FontFamily";
             public const string Title = Prefix + "Title";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
             public const string WaitBackgroundOperationMessage = Prefix + "WaitBackgroundOperationMessage";
@@ -144,6 +145,18 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string PromptTitle = Prefix + "PromptTitle";
                 public const string PromptMessage = Prefix + "PromptMessage";
+            }
+            public static class FileHash
+            {
+                public const string Prefix = "Collection_Mods.FileHash.";
+                public const string Export = Prefix + "Export";
+                public const string Import = Prefix + "Import";
+                public const string DialogTitleExport = Prefix + "DialogTitleExport";
+                public const string DialogTitleImport = Prefix + "DialogTitleImport";
+                public const string ExportOverlay = Prefix + "ExportOverlay";
+                public const string ImportOverlay = Prefix + "ImportOverlay";
+                public const string Progress = Prefix + "Progress";
+                public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop
             {
@@ -376,6 +389,7 @@ namespace IronyModManager.Shared
                 public const string UserDirectory = Prefix + "UserDirectory";
                 public const string GameArgs = Prefix + "GameArgs";
                 public const string RefreshMods = Prefix + "RefreshMods";
+                public const string CloseAfterLaunch = Prefix + "CloseAfterLaunch";
                 public const string AutoConfigure = Prefix + "AutoConfigure";
             }
             public static class Updates
@@ -517,6 +531,18 @@ namespace IronyModManager.Shared
             public static class NoUpdatesAvailable
             {
                 public const string Prefix = "Notifications.NoUpdatesAvailable.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ReportExported
+            {
+                public const string Prefix = "Notifications.ReportExported.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class ReportValid
+            {
+                public const string Prefix = "Notifications.ReportValid.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

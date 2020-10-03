@@ -4,7 +4,7 @@
 // Created          : 05-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 10-01-2020
 // ***********************************************************************
 // <copyright file="GameSettings.cs" company="Mario">
 //     Mario
@@ -27,6 +27,12 @@ namespace IronyModManager.Models
     public class GameSettings : BaseModel, IGameSettings
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [close application after game launch].
+        /// </summary>
+        /// <value><c>null</c> if [close application after game launch] contains no value, <c>true</c> if [close application after game launch]; otherwise, <c>false</c>.</value>
+        public virtual bool? CloseAppAfterGameLaunch { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.

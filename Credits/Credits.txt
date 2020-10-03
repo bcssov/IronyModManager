@@ -1,4 +1,18 @@
 #########################
+Package:Noto Sans Font
+project URL:https://fonts.google.com/specimen/Noto+Sans
+Description:Noto Font
+licenseUrl:http://www.apache.org/licenses/LICENSE-2.0
+license Type:Apache-2.0
+
+#########################
+Package:Noto Sans Font SC
+project URL:https://fonts.google.com/specimen/Noto+Sans+SC
+Description:Noto Font sc
+licenseUrl:https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL
+license Type:SIL Open Font License 1.1
+
+#########################
 Package:Avalonia.IconPacks
 project URL:https://github.com/ahopper/Avalonia.IconPacks
 Description:Import of Visual Studio image library and MahApps.Metro.IconPacks for Avalonia 
