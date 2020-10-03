@@ -4,136 +4,60 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.26-alpha</title>
-			<description>CHANGES FROM v1.6:
+			<title>1.7.30</title>
+			<description>RELEASE INFO:
+				* Fonts are no longer embedded
+				* File hash check now takes into account irony patch mod as well
+				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Thu, 01 Oct 2020 20:22:28 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/linux-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="72122442" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="S82gpPcN3qqwKNY3n+2/qelFwJ97IP5dUVNZbDziSV41cShA9mmkrnqs1yOB2WBsC806wHScTXKrbVgnbrWlDQ=="/>
+			<pubDate>Sat, 03 Oct 2020 20:22:50 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/linux-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="72230891" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="bcAKtWV5UvPxx8BA98JlPne2nZsc3TFBBhXie9mLXC8E59WRNSRlHMAqYZIe2ZL0/noPLfv6jbqwah8c6XQLAA=="/>
 		</item>
 		<item>
-			<title>1.7.26-alpha</title>
-			<description>CHANGES FROM v1.6:
+			<title>1.7.30</title>
+			<description>RELEASE INFO:
+				* Fonts are no longer embedded
+				* File hash check now takes into account irony patch mod as well
+				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Thu, 01 Oct 2020 20:22:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/osx-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="71370429" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="zKVZyI/v1mJCAJR19pxN+BkXT+xyx4C0910gwXTpI9J/JoDH4xyjNbOup0LwuHJ2eRK88N8zwgFK4tE+RuUvAA=="/>
+			<pubDate>Sat, 03 Oct 2020 20:22:53 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/osx-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="71478941" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="DnBrvoDOdW5X/iCxLkRWIU4qGKEX/aXfjDVtgO7OIesxm6FZST4m0XX6t0fOkYZB9HyP3FUTmurVRLI6x+CmDw=="/>
 		</item>
 		<item>
-			<title>1.7.26-alpha</title>
-			<description>CHANGES FROM v1.6:
+			<title>1.7.30</title>
+			<description>RELEASE INFO:
+				* Fonts are no longer embedded
+				* File hash check now takes into account irony patch mod as well
+				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Thu, 01 Oct 2020 20:22:41 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/win-x64-setup.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="61042595" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="rFcK5w4g4zWKCg0qjCvb7KbE1DaODSIJxKOxh6DnqfI/vRWm/2XOZRPA5TaAtjYkeTuEmQ20WZfjXs6bXoh+Cg=="/>
+			<pubDate>Sat, 03 Oct 2020 20:23:01 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/win-x64-setup.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="59328292" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="BhgRpZqcaMF0brkaSkFcVafTbdUO7OdlPi+vbuFi2aXv053XiAawIW0aEHWN24p+kcDiaiLH4nYbo/fXkB45Cw=="/>
 		</item>
 		<item>
-			<title>1.7.26-alpha</title>
-			<description>CHANGES FROM v1.6:
+			<title>1.7.30</title>
+			<description>RELEASE INFO:
+				* Fonts are no longer embedded
+				* File hash check now takes into account irony patch mod as well
+				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Thu, 01 Oct 2020 20:22:37 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.26-alpha/win-x64.rar" sparkle:version="1.7.26.31036" sparkle:shortVersionString="1.7.26" length="74016156" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="HAYXc0FS0nSMEaxf5fRHv90tMH7v1s7yQOukhaXWbs5z5fvKZETI0XTCyugSLA1dsPoajZnPfMg8ExW7k1FiAQ=="/>
-		</item>
-		<item>
-			<title>1.6.106</title>
-			<description>RELEASE INFO:
-				* Fix faulty detection of steam games when launching game via Irony
-				CHANGES FROM v1.5:
-				* Add export order only option
-				* Add image preview
-				* Update checking (auto and manual update check)
-				* Auto update installation
-				* Incase steam game is being launched and steam is not running launch steam before starting the game
-				* Add resume saved game option
-				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
-				* Add ignore file syntax to ignore rules
-				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
-				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
-				* Fix actual conflict solver notification not showing
-				* Add context menu option to paste mod name order
-				* Add option to change game data directory
-				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Mon, 28 Sep 2020 06:32:23 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/linux-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="58380639" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="e7iLykqmbsSXxPz0Xxv6i6JjyMSQcU4kapESm8r5cmyONlvxTJav4vft1RvOZYiuh/gJQLyEUKfmo3fk5f4sAw=="/>
-		</item>
-		<item>
-			<title>1.6.106</title>
-			<description>RELEASE INFO:
-				* Fix faulty detection of steam games when launching game via Irony
-				CHANGES FROM v1.5:
-				* Add export order only option
-				* Add image preview
-				* Update checking (auto and manual update check)
-				* Auto update installation
-				* Incase steam game is being launched and steam is not running launch steam before starting the game
-				* Add resume saved game option
-				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
-				* Add ignore file syntax to ignore rules
-				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
-				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
-				* Fix actual conflict solver notification not showing
-				* Add context menu option to paste mod name order
-				* Add option to change game data directory
-				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Mon, 28 Sep 2020 06:32:26 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/osx-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="57628851" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="gEHJN8MJULCL+zc72uDKYU5XzrtK/pUE5GwLVzaImb21jUWUCSbCnrLd7PmokmMo+i/qTu5jCuHB0iYDewHOBA=="/>
-		</item>
-		<item>
-			<title>1.6.106</title>
-			<description>RELEASE INFO:
-				* Fix faulty detection of steam games when launching game via Irony
-				CHANGES FROM v1.5:
-				* Add export order only option
-				* Add image preview
-				* Update checking (auto and manual update check)
-				* Auto update installation
-				* Incase steam game is being launched and steam is not running launch steam before starting the game
-				* Add resume saved game option
-				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
-				* Add ignore file syntax to ignore rules
-				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
-				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
-				* Fix actual conflict solver notification not showing
-				* Add context menu option to paste mod name order
-				* Add option to change game data directory
-				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Mon, 28 Sep 2020 06:32:33 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/win-x64-setup.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="46925937" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="m1AudqlhwMLuT6PGeLUYZcdAqRec3Jbxnqv67mxeC/nLpDkeSlpIOPAejDli2osiULiRWQhYB/0ubtn4lPnvBA=="/>
-		</item>
-		<item>
-			<title>1.6.106</title>
-			<description>RELEASE INFO:
-				* Fix faulty detection of steam games when launching game via Irony
-				CHANGES FROM v1.5:
-				* Add export order only option
-				* Add image preview
-				* Update checking (auto and manual update check)
-				* Auto update installation
-				* Incase steam game is being launched and steam is not running launch steam before starting the game
-				* Add resume saved game option
-				* Fix threading issue where Irony did not properly mark a patch collection as valid but instead as invalid
-				* Add ignore file syntax to ignore rules
-				* Add tooltip indicator showing where the file is from in mod compare selector (conflict solver)
-				* Add context menu options in mod compare selector to open definition files\directories (conflict solver)
-				* Fix actual conflict solver notification not showing
-				* Add context menu option to paste mod name order
-				* Add option to change game data directory
-				* Small bugfixes\improvements I've forgot to mention</description>
-			<pubDate>Mon, 28 Sep 2020 06:32:30 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.6.106/win-x64.rar" sparkle:version="1.6.106.11299" sparkle:shortVersionString="1.6.106" length="60274669" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="X6tU9bZ/DwCKDSCoeIjyKEzaXn+I3BBPZmtzBiln8S8/9j2OXhEP7WJCQ3YyJYETUpsAzPnkgvLDcAtQYoKHAA=="/>
+			<pubDate>Sat, 03 Oct 2020 20:22:57 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/win-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="74124728" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="qf0VvEOEzTq7m+kWQr7FPiNsz5y4h4gQ0DiikPEklsuObQLjst8A+2oSc/l+xgrCSkbR0Xf6M6RljAoYkAuiCQ=="/>
 		</item>
 	</channel>
 </rss>
