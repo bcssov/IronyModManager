@@ -4,7 +4,7 @@
     <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}"/>
     <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
-    <Setter Property="Padding" Value="4"/>
+    <Setter Property="Padding" Value="2"/>
     <Setter Property="Template">
       <ControlTemplate>
         <controls:MinMaxButtonSpinner Name="PART_MinMax_Spinner"
@@ -27,6 +27,7 @@
                        ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
             <TextBox Name="PART_TextBox"
                      BorderThickness="0"
+                     VerticalAlignment="Center"
                      Background="{TemplateBinding Background}"
                      BorderBrush="{TemplateBinding BorderBrush}"
                      Foreground="{DynamicResource ThemeForegroundBrush}"
@@ -45,7 +46,7 @@
     </Setter>
   </Style>
   <Style Selector="controls|MinMaxNumericUpDown /template/ TextBox#PART_TextBox">
-    <Setter Property="Margin" Value="4"/>
+    <Setter Property="Margin" Value="2"/>
     <Setter Property="MinWidth" Value="20"/>
   </Style>
 </Styles>
