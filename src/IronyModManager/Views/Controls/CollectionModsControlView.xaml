@@ -47,8 +47,8 @@
               <Grid ColumnDefinitions="2*,3*">
                 <ContentControl Content="{Binding ExportCollection}" MaxHeight="30" Grid.Column="0"></ContentControl>
                 <ContentControl Content="{Binding ModifyCollection}" MaxHeight="30" Grid.Column="1"></ContentControl>
-              </Grid>              
-            </Panel>            
+              </Grid>
+            </Panel>
             <Panel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
               <DockPanel HorizontalAlignment="Right">
                 <Button Content="{Binding Remove}" MaxHeight="30"
@@ -84,7 +84,7 @@
               </Grid.ColumnDefinitions>
               <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
                 <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}"
-                          Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,0"></CheckBox>
+                          Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,-7,0,0"></CheckBox>
               </Border>
               <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
                 <TextBlock Text="{Binding ModSelected}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
