@@ -4,60 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.30</title>
+			<title>1.7.34</title>
 			<description>RELEASE INFO:
-				* Fonts are no longer embedded
-				* File hash check now takes into account irony patch mod as well
+				* Fix enable all positioning in mod management table(s)
+				* Make more room for mods in collection mods area
+				* Increase achievements icon size
+				* Switch release for Linux from rar to zip (due to lack of availability of software which can properly open up rar files)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sat, 03 Oct 2020 20:22:50 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/linux-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="72230891" sparkle:os="linux" type="application/x-rar-compressed" sparkle:signature="bcAKtWV5UvPxx8BA98JlPne2nZsc3TFBBhXie9mLXC8E59WRNSRlHMAqYZIe2ZL0/noPLfv6jbqwah8c6XQLAA=="/>
+			<pubDate>Sun, 04 Oct 2020 14:14:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.34/osx-x64.rar" sparkle:version="1.7.34.36124" sparkle:shortVersionString="1.7.34" length="71480213" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="gJMlyS5jJYW+MkT78V0nI4K2CTsZMLdekgbGhsLlVKz/rWBGV5dMM6KtYH5XiFPr5RhwgTYdTpNGIXmOZl2/CA=="/>
 		</item>
 		<item>
-			<title>1.7.30</title>
+			<title>1.7.34</title>
 			<description>RELEASE INFO:
-				* Fonts are no longer embedded
-				* File hash check now takes into account irony patch mod as well
+				* Fix enable all positioning in mod management table(s)
+				* Make more room for mods in collection mods area
+				* Increase achievements icon size
+				* Switch release for Linux from rar to zip (due to lack of availability of software which can properly open up rar files)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sat, 03 Oct 2020 20:22:53 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/osx-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="71478941" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="DnBrvoDOdW5X/iCxLkRWIU4qGKEX/aXfjDVtgO7OIesxm6FZST4m0XX6t0fOkYZB9HyP3FUTmurVRLI6x+CmDw=="/>
+			<pubDate>Sun, 04 Oct 2020 14:14:35 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.34/win-x64-setup.rar" sparkle:version="1.7.34.36124" sparkle:shortVersionString="1.7.34" length="59318922" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="OMbTJiWGAOh2nvBxIm+pPp7/nuGxHuSmjv9TfEXLjeiqalsKhjSQ1bldlMHbwR0iNHVxPhrVmOpSYhDzkAeoDw=="/>
 		</item>
 		<item>
-			<title>1.7.30</title>
+			<title>1.7.34</title>
 			<description>RELEASE INFO:
-				* Fonts are no longer embedded
-				* File hash check now takes into account irony patch mod as well
+				* Fix enable all positioning in mod management table(s)
+				* Make more room for mods in collection mods area
+				* Increase achievements icon size
+				* Switch release for Linux from rar to zip (due to lack of availability of software which can properly open up rar files)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sat, 03 Oct 2020 20:23:01 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/win-x64-setup.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="59328292" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="BhgRpZqcaMF0brkaSkFcVafTbdUO7OdlPi+vbuFi2aXv053XiAawIW0aEHWN24p+kcDiaiLH4nYbo/fXkB45Cw=="/>
+			<pubDate>Sun, 04 Oct 2020 14:14:31 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.34/win-x64.rar" sparkle:version="1.7.34.36124" sparkle:shortVersionString="1.7.34" length="74125981" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="jg0MYwfj9nH8moZDxE/etkdBSUs/xmqbyotzEGp7WcUAt3Gl3xBQb90a+aMt1Jdl4AXw7jovbdpleRNcG41qCA=="/>
 		</item>
 		<item>
-			<title>1.7.30</title>
+			<title>1.7.34</title>
 			<description>RELEASE INFO:
-				* Fonts are no longer embedded
-				* File hash check now takes into account irony patch mod as well
+				* Fix enable all positioning in mod management table(s)
+				* Make more room for mods in collection mods area
+				* Increase achievements icon size
+				* Switch release for Linux from rar to zip (due to lack of availability of software which can properly open up rar files)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sat, 03 Oct 2020 20:22:57 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.30/win-x64.rar" sparkle:version="1.7.30.53914" sparkle:shortVersionString="1.7.30" length="74124728" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="qf0VvEOEzTq7m+kWQr7FPiNsz5y4h4gQ0DiikPEklsuObQLjst8A+2oSc/l+xgrCSkbR0Xf6M6RljAoYkAuiCQ=="/>
+			<pubDate>Sun, 04 Oct 2020 14:14:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.34/linux-x64.zip" sparkle:version="1.7.34.36124" sparkle:shortVersionString="1.7.34" length="88472537" sparkle:os="linux" type="application/zip" sparkle:signature="jX0H+/1Rt6vkoLX+PEn65dOFoKBYqqiOBXPSeuP41fut3mHGfu2H/N5Jt7PAog5TqDAAlUw2MbmasAhv+sfTBg=="/>
 		</item>
 	</channel>
 </rss>
