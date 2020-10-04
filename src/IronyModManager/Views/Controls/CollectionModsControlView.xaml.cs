@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-04-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -272,7 +272,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetOrderParameters()
         {
-            void setMaxValue()
+            void setMaxValue(bool setMargin = false)
             {
                 var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
                 foreach (var item in listboxItems)
@@ -285,6 +285,20 @@ namespace IronyModManager.Views.Controls
                         {
                             orderCtrl.Minimum = 1;
                             orderCtrl.Maximum = ViewModel.MaxOrder;
+                            if (setMargin)
+                            {
+                                var left = 0;
+                                var right = 0;
+                                if (orderCtrl.Bounds.Width > 100)
+                                {
+                                    right = 10;
+                                }
+                                else
+                                {
+                                    left = 6;
+                                }
+                                orderCtrl.Margin = new Avalonia.Thickness(left, 0, right, 0);
+                            }
                         }
                     }
                 }
@@ -313,7 +327,7 @@ namespace IronyModManager.Views.Controls
 
             modList.LayoutUpdated += (sender, args) =>
             {
-                setMaxValue();
+                setMaxValue(true);
             };
         }
 

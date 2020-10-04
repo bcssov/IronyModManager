@@ -79,7 +79,6 @@
                 <ColumnDefinition MaxWidth="50" Width="1.5*" />
                 <ColumnDefinition MaxWidth="100" Width="2*" />
                 <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="5*" />
               </Grid.ColumnDefinitions>
               <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
@@ -92,9 +91,7 @@
               <Border BorderThickness="1,1,0,0" Grid.Column="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
                 <TextBlock Text="{Binding ModOrder}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-5,0,0"></TextBlock>
               </Border>
-              <Border BorderThickness="0,1,0,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
-              </Border>
-              <Border BorderThickness="1,1,1,0" Grid.Column="4" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+              <Border BorderThickness="1,1,1,0" Grid.Column="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
                 <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
               </Border>
             </Grid>
@@ -111,7 +108,6 @@
                       <ColumnDefinition MaxWidth="50" Width="1.5*" />
                       <ColumnDefinition MaxWidth="100" Width="2*" />
                       <ColumnDefinition Width="2*" />
-                      <ColumnDefinition Width="8" />
                       <ColumnDefinition Width="5*" />
                     </Grid.ColumnDefinitions>
                     <Grid.ContextMenu>
@@ -120,18 +116,19 @@
                     </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
-                                            Grid.Column="2" MaxHeight="40" HorizontalAlignment="Stretch"></controls:MinMaxNumericUpDown>
-                    <Grid Grid.Column="4" ColumnDefinitions="9*,1*">
-                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Grid.Column="0"></TextBlock>
-                      <Panel Grid.Column="1" HorizontalAlignment="Right">
+                                            Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,4,0"></controls:MinMaxNumericUpDown>
+                    <Grid Grid.Column="3" ColumnDefinitions="*,14">
+                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center" 
+                                 TextWrapping="Wrap" Grid.Column="0" Margin="8,0,0,0"></TextBlock>
+                      <Panel Grid.Column="1">
                         <!-- Because Avalonia sucks in this regard, that's why -->
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
-                          <DrawingPresenter VerticalAlignment="Center" Width="13" Height="13" Drawing="{DynamicResource Icons.Achievements}"
+                          <DrawingPresenter VerticalAlignment="Center" Width="14" Height="14" Drawing="{DynamicResource Icons.Achievements}"
                                             controls:IronyToolTip.Tip="{Binding Path=DataContext.AchievementCompatible, ElementName=collectionMods}"
                                             controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
                         </controls:IronyToolTip>
                         <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0" IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusNotCompatibleConverter}}">
-                          <DrawingPresenter VerticalAlignment="Center" Width="13" Height="13" Drawing="{DynamicResource Icons.NoAchievements}"
+                          <DrawingPresenter VerticalAlignment="Center" Width="14" Height="14" Drawing="{DynamicResource Icons.NoAchievements}"
                                             controls:IronyToolTip.Tip="{Binding Path=DataContext.NotAchievementCompatible, ElementName=collectionMods}"
                                             controls:IronyToolTip.ShowDelay="0" controls:IronyToolTip.ReactToParent="true" />
                         </controls:IronyToolTip>

@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 10-04-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -141,19 +141,24 @@ namespace Irony.AppCastGenerator
                 return;
             }
 
-            var search = $"*.{opts.Extension}";
-
-            if (opts.SourceBinaryDirectory == ".")
+            List<string> binaries = new List<string>();
+            foreach (var item in opts.Extension.Split(",", StringSplitOptions.RemoveEmptyEntries))
             {
-                opts.SourceBinaryDirectory = Environment.CurrentDirectory;
-            }
+                var search = $"*.{item}";
 
-            var binaries = Directory.GetFiles(opts.SourceBinaryDirectory, search);
+                if (opts.SourceBinaryDirectory == ".")
+                {
+                    opts.SourceBinaryDirectory = Environment.CurrentDirectory;
+                }
 
-            if (binaries.Length == 0)
-            {
-                Console.WriteLine($"No files founds matching {search} in {opts.SourceBinaryDirectory}", Color.Yellow);
-                Environment.Exit(1);
+                var files = Directory.GetFiles(opts.SourceBinaryDirectory, search);
+
+                if (files.Length == 0)
+                {
+                    Console.WriteLine($"No files founds matching {search} in {opts.SourceBinaryDirectory}", Color.Yellow);
+                    Environment.Exit(1);
+                }
+                binaries.AddRange(files);
             }
 
             var outputDirectory = opts.SourceBinaryDirectory;
