@@ -34,7 +34,7 @@
           </Grid.ColumnDefinitions>
           <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
             <CheckBox IsEnabled="{Binding AllowModSelection}" IsChecked="{Binding AllModsEnabled}"
-                      Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,0"></CheckBox>
+                      Command="{Binding EnableAllCommand}" HorizontalAlignment="Left" Margin="6,-7,0,0"></CheckBox>
           </Border>
           <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
