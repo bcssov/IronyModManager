@@ -272,7 +272,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetOrderParameters()
         {
-            void setMaxValue(bool setMargin = false)
+            void setNumericProperties(bool setMargin = false)
             {
                 var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
                 foreach (var item in listboxItems)
@@ -306,13 +306,13 @@ namespace IronyModManager.Views.Controls
 
             ViewModel.ModReordered += (args) =>
             {
-                setMaxValue();
+                setNumericProperties();
                 FocusOrderTextboxAsync(args).ConfigureAwait(true);
             };
 
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
             {
-                setMaxValue();
+                setNumericProperties();
             }).DisposeWith(Disposables);
 
             var previousHashState = false;
@@ -327,7 +327,7 @@ namespace IronyModManager.Views.Controls
 
             modList.LayoutUpdated += (sender, args) =>
             {
-                setMaxValue(true);
+                setNumericProperties(true);
             };
         }
 
