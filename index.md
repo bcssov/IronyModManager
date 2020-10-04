@@ -13,7 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
-* Latest stable version: [v1.7.30](https://github.com/bcssov/IronyModManager/releases/tag/v1.7.30).
+* Latest stable version: [v1.7.34](https://github.com/bcssov/IronyModManager/releases/tag/v1.7.34).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
@@ -46,7 +46,7 @@ Made by LordOfLA
 - Portable version: **osx-x64.rar**
 
 ##### Linux
-- Portable version: **linux-x64.rar**
+- Portable version: **linux-x64.zip**
 
 ### Run Instructions
 ##### Windows
@@ -57,4 +57,4 @@ Made by LordOfLA
 - Portable version: Extract the **osx.rar** file to a location you want Irony installed to. Open Terminal.app and cd to the directory you installed to. Run ```chmod +x IronyModManager```. That will allow you to execute the app. Then you can either start the app in Terminal.app with the command ```./IronyModManger``` (the ./ are important!) or double-click the file in Finder.
 
 ##### Linux
-- Portable version: Extract the **linux.rar** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
+- Portable version: Extract the **linux.zip** file somewhere that you'd like to have Irony installed. Navigate to the folder where you extracted Irony and run the ```chmod +x IronyModManager``` command. That will allow you to execute the app. Finally you can run the app using the ```./IronyModManager``` command.
