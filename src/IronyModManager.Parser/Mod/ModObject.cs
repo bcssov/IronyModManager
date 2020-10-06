@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ModObject.cs" company="Mario">
 //     Mario
@@ -27,20 +27,6 @@ namespace IronyModManager.Parser.Mod
         #region Properties
 
         /// <summary>
-        /// Gets or sets the replace path.
-        /// </summary>
-        /// <value>The replace path.</value>
-        [DescriptorProperty("replace_path")]
-        public string ReplacePath { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user dir.
-        /// </summary>
-        /// <value>The user dir.</value>
-        [DescriptorProperty("user_dir")]
-        public string UserDir { get; set; }
-
-        /// <summary>
         /// Gets or sets the dependencies.
         /// </summary>
         /// <value>The dependencies.</value>
@@ -51,7 +37,7 @@ namespace IronyModManager.Parser.Mod
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        [DescriptorProperty("path", "archive", ".zip")]
+        [DescriptorProperty("path", "archive", ".zip", ".bin")]
         public string FileName { get; set; }
 
         /// <summary>
@@ -76,11 +62,25 @@ namespace IronyModManager.Parser.Mod
         public long? RemoteId { get; set; }
 
         /// <summary>
+        /// Gets or sets the replace path.
+        /// </summary>
+        /// <value>The replace path.</value>
+        [DescriptorProperty("replace_path")]
+        public string ReplacePath { get; set; }
+
+        /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>The tags.</value>
         [DescriptorProperty("tags")]
         public IEnumerable<string> Tags { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user dir.
+        /// </summary>
+        /// <value>The user dir.</value>
+        [DescriptorProperty("user_dir")]
+        public string UserDir { get; set; }
 
         /// <summary>
         /// Gets or sets the version.

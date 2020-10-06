@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -103,7 +103,8 @@ namespace IronyModManager.Views.Controls
                                         Command = ViewModel.OpenFileCommand
                                     }
                                 };
-                                if (!ViewModel.ConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                                if (!ViewModel.ConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) &&
+                                    !ViewModel.ConflictPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
                                 {
                                     menuItems.Add(new MenuItem()
                                     {
