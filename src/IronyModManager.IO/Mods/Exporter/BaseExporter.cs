@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="BaseExporter.cs" company="Mario">
 //     Mario
@@ -76,7 +76,8 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <param name="mod">The mod.</param>
         protected virtual void MapPdxPath(IPdxMod pdxMod, IMod mod)
         {
-            if (mod.FileName.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+            if (mod.FileName.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) ||
+                mod.FileName.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
             {
                 pdxMod.ArchivePath = mod.FileName;
                 if (mod.Source != ModSource.Local)

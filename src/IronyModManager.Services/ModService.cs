@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -315,7 +315,7 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         protected virtual IEnumerable<IMod> GetAllModDescriptors(string path, ModSource modSource)
         {
-            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}") : new string[] { };
+            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : new string[] { };
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : new string[] { };
             var mods = new List<IMod>();
 
@@ -413,7 +413,7 @@ namespace IronyModManager.Services
                 {
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
-                    var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}");
+                    var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(directory, $"*{Shared.Constants.BinExtension}"));
                     if (zipFiles.Count() > 0)
                     {
                         foreach (var zip in zipFiles)
