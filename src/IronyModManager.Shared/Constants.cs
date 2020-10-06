@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -23,6 +23,16 @@ namespace IronyModManager.Shared
     public class Constants
     {
         #region Fields
+
+        /// <summary>
+        /// The bin extension
+        /// </summary>
+        public const string BinExtension = "." + BinExtensionWithoutDot;
+
+        /// <summary>
+        /// The bin extension without dot
+        /// </summary>
+        public const string BinExtensionWithoutDot = "bin";
 
         /// <summary>
         /// The default application culture

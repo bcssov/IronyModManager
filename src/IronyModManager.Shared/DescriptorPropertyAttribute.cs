@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-11-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="DescriptorPropertyAttribute.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Shared
 {
@@ -33,6 +34,7 @@ namespace IronyModManager.Shared
         public DescriptorPropertyAttribute(string propertyName)
         {
             PropertyName = propertyName;
+            AlternateNameEndsWithCondition = new List<string>();
         }
 
         /// <summary>
@@ -41,10 +43,10 @@ namespace IronyModManager.Shared
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="alternatePropertyName">Name of the alternate property.</param>
         /// <param name="alternateNameEndsWithCondition">The alternate name ends with condition.</param>
-        public DescriptorPropertyAttribute(string propertyName, string alternatePropertyName, string alternateNameEndsWithCondition) : this(propertyName)
+        public DescriptorPropertyAttribute(string propertyName, string alternatePropertyName, params string[] alternateNameEndsWithCondition) : this(propertyName)
         {
             AlternatePropertyName = alternatePropertyName;
-            AlternateNameEndsWithCondition = alternateNameEndsWithCondition;
+            AlternateNameEndsWithCondition = alternateNameEndsWithCondition != null ? alternateNameEndsWithCondition.ToList() : new List<string>();
         }
 
         #endregion Constructors
@@ -55,7 +57,7 @@ namespace IronyModManager.Shared
         /// Gets the alternate name ends with condition.
         /// </summary>
         /// <value>The alternate name ends with condition.</value>
-        public string AlternateNameEndsWithCondition { get; }
+        public IEnumerable<string> AlternateNameEndsWithCondition { get; }
 
         /// <summary>
         /// Gets the name of the alternate property.

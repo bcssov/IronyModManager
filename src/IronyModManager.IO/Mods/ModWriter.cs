@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -252,7 +252,7 @@ namespace IronyModManager.IO.Mods
                     {
                         if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
                         {
-                            if (!string.IsNullOrWhiteSpace(attr.AlternateNameEndsWithCondition) && val.ToString().EndsWith(attr.AlternateNameEndsWithCondition, StringComparison.OrdinalIgnoreCase))
+                            if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
                             {
                                 await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
                             }

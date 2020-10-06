@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -794,7 +794,7 @@ namespace IronyModManager.Services
                 var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
                 if (mod != null && !string.IsNullOrWhiteSpace(mod.FullPath))
                 {
-                    if (mod.FullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase))
+                    if (mod.FullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || mod.FullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
                     {
                         return mod.FullPath;
                     }

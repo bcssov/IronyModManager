@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-22-2020
+// Last Modified On : 10-06-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -62,7 +62,7 @@ namespace IronyModManager.IO.Readers
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public virtual bool CanRead(string path)
         {
-            return File.Exists(path) && path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase);
+            return File.Exists(path) && (path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || path.EndsWith(Constants.BinExtension, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
