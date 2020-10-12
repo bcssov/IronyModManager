@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -167,13 +167,20 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            async Task setOverlayProperties(OverlayProgressEvent e)
+            {
+                // artificial delay so the UI does not appear frozen
+                await Task.Delay(1);
+                OverlayMessage = e.Message;
+                OverlayVisible = e.IsVisible;
+                OverlayMessageProgress = e.MessageProgress;
+                HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+            }
+
             overlayDisposable?.Dispose();
             overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
             {
-                OverlayMessage = s.Message;
-                OverlayVisible = s.IsVisible;
-                OverlayMessageProgress = s.MessageProgress;
-                HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
+                setOverlayProperties(s).ConfigureAwait(false);
             }).DisposeWith(disposables);
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>

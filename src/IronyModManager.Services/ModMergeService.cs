@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -181,7 +181,7 @@ namespace IronyModManager.Services
                     total += customConflicts.Count();
                 }
 
-                var lastPercentage = 0;
+                double lastPercentage = 0;
                 int processed = 0;
 
                 foreach (var file in conflictResult.CustomConflicts.GetAllFileKeys())
@@ -537,8 +537,8 @@ namespace IronyModManager.Services
             await PopulateModFilesInternalAsync(collectionMods);
             await messageBus.PublishAsync(new ModFileMergeProgressEvent(1, 100));
 
-            var totalFiles = collectionMods.Where(p => p.Files != null).Select(p => p.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count();
-            var lastPercentage = 0;
+            var totalFiles = collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files.Where(f => game.GameFolders.Any(s => f.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count();
+            double lastPercentage = 0;
             var processed = 0;
             foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
             {
@@ -569,9 +569,9 @@ namespace IronyModManager.Services
         /// <param name="processed">The processed.</param>
         /// <param name="maxPerc">The maximum perc.</param>
         /// <returns>System.Int32.</returns>
-        protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 100)
+        protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
         {
-            var perc = Convert.ToInt32(processed / total * 100);
+            var perc = Math.Round((processed / total * 100), 2);
             if (perc < 1)
             {
                 perc = 1;

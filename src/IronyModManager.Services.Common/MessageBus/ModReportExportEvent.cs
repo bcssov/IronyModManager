@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModReportExportEvent.cs" company="Mario">
 //     Mario
@@ -26,10 +26,10 @@ namespace IronyModManager.Services.Common.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModReportExportEvent"/> class.
+        /// Initializes a new instance of the <see cref="ModReportExportEvent" /> class.
         /// </summary>
         /// <param name="progress">The progress.</param>
-        public ModReportExportEvent(int progress) : base(progress)
+        public ModReportExportEvent(double progress) : base(progress)
         {
         }
 

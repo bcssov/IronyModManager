@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModDefinitionProcessEvent.cs" company="Mario">
 //     Mario
@@ -30,7 +30,7 @@ namespace IronyModManager.Services.Common.MessageBus
         /// Initializes a new instance of the <see cref="ModDefinitionProcessEvent" /> class.
         /// </summary>
         /// <param name="percentage">if set to <c>true</c> [percentage].</param>
-        public ModDefinitionProcessEvent(int percentage)
+        public ModDefinitionProcessEvent(double percentage)
         {
             Percentage = percentage;
         }
@@ -49,7 +49,7 @@ namespace IronyModManager.Services.Common.MessageBus
         /// Gets or sets the percentage.
         /// </summary>
         /// <value>The percentage.</value>
-        public int Percentage { get; }
+        public double Percentage { get; }
 
         #endregion Properties
     }

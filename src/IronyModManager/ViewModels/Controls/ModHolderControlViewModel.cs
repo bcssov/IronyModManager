@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -360,7 +360,7 @@ namespace IronyModManager.ViewModels.Controls
 
             var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
             {
-                PercentDone = 0,
+                PercentDone = "0.00",
                 Count = 1,
                 TotalCount = 3
             });
@@ -709,7 +709,7 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = s.Percentage,
+                    PercentDone = s.Percentage.ToString("F"),
                     Count = 1,
                     TotalCount = 3
                 });
@@ -722,7 +722,7 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = s.Percentage,
+                    PercentDone = s.Percentage.ToString("F"),
                     Count = 2,
                     TotalCount = 3
                 });
@@ -735,7 +735,7 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
-                    PercentDone = s.Percentage,
+                    PercentDone = s.Percentage.ToString("F"),
                     Count = 3,
                     TotalCount = 3
                 });

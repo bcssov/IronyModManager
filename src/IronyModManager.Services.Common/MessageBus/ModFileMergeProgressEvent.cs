@@ -4,7 +4,7 @@
 // Created          : 08-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModFileMergeProgressEvent.cs" company="Mario">
 //     Mario
@@ -26,11 +26,11 @@ namespace IronyModManager.Services.Common.MessageBus
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModFileMergeProgressEvent"/> class.
+        /// Initializes a new instance of the <see cref="ModFileMergeProgressEvent" /> class.
         /// </summary>
         /// <param name="step">The step.</param>
         /// <param name="percentage">The percentage.</param>
-        public ModFileMergeProgressEvent(int step, int percentage) : base(percentage)
+        public ModFileMergeProgressEvent(int step, double percentage) : base(percentage)
         {
             Step = step;
         }
