@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModDefinitionAnalyzeEvent.cs" company="Mario">
 //     Mario
@@ -31,7 +31,7 @@ namespace IronyModManager.Services.Common.MessageBus
         /// Initializes a new instance of the <see cref="ModDefinitionAnalyzeEvent" /> class.
         /// </summary>
         /// <param name="percentage">if set to <c>true</c> [percentage].</param>
-        public ModDefinitionAnalyzeEvent(int percentage) : base(percentage)
+        public ModDefinitionAnalyzeEvent(double percentage) : base(percentage)
         {
         }
 

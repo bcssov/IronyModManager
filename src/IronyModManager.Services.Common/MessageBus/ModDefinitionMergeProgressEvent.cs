@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModDefinitionMergeProgressEvent.cs" company="Mario">
 //     Mario
@@ -29,7 +29,7 @@ namespace IronyModManager.Services.Common.MessageBus
         /// Initializes a new instance of the <see cref="ModDefinitionMergeProgressEvent" /> class.
         /// </summary>
         /// <param name="percentage">if set to <c>true</c> [percentage].</param>
-        public ModDefinitionMergeProgressEvent(int percentage) : base(percentage)
+        public ModDefinitionMergeProgressEvent(double percentage) : base(percentage)
         {
         }
 

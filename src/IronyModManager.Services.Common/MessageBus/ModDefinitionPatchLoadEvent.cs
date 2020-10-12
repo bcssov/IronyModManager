@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModDefinitionPatchLoadEvent.cs" company="Mario">
 //     Mario
@@ -29,7 +29,7 @@ namespace IronyModManager.Services.Common.MessageBus
         /// Initializes a new instance of the <see cref="ModDefinitionPatchLoadEvent" /> class.
         /// </summary>
         /// <param name="percentage">if set to <c>true</c> [percentage].</param>
-        public ModDefinitionPatchLoadEvent(int percentage) : base(percentage)
+        public ModDefinitionPatchLoadEvent(double percentage) : base(percentage)
         {
         }
 

@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -438,7 +438,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = 0,
+                        PercentDone = "0.00",
                         Count = 1,
                         TotalCount = 3
                     });
@@ -506,7 +506,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = 0,
+                        PercentDone = "0.00",
                         Count = 1,
                         TotalCount = 2
                     });
@@ -564,7 +564,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Loading_Definitions);
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = s.Percentage,
+                        PercentDone = s.Percentage.ToString("F"),
                         Count = 1,
                         TotalCount = 3
                     });
@@ -580,7 +580,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Analyzing_Definitions);
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = s.Percentage,
+                        PercentDone = s.Percentage.ToString("F"),
                         Count = 2,
                         TotalCount = 3
                     });
@@ -596,7 +596,7 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Merging_Collection);
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = s.Percentage,
+                        PercentDone = s.Percentage.ToString("F"),
                         Count = 3,
                         TotalCount = 3
                     });
@@ -620,7 +620,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = s.Percentage,
+                        PercentDone = s.Percentage.ToString("F"),
                         Count = s.Step,
                         TotalCount = 2
                     });

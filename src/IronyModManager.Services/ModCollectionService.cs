@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-02-2020
+// Last Modified On : 10-12-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -455,9 +455,9 @@ namespace IronyModManager.Services
         /// <param name="processed">The processed.</param>
         /// <param name="maxPerc">The maximum perc.</param>
         /// <returns>System.Int32.</returns>
-        protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 100)
+        protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
         {
-            var perc = Convert.ToInt32(processed / total * 100);
+            var perc = Math.Round((processed / total * 100), 2);
             if (perc < 1)
             {
                 perc = 1;
@@ -530,7 +530,7 @@ namespace IronyModManager.Services
             var reports = new List<IModHashReport>();
             var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
             var progress = 0;
-            var lastPercentage = 0;
+            double lastPercentage = 0;
             foreach (var mod in mods)
             {
                 var report = GetModelInstance<IModHashReport>();
