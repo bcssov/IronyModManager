@@ -116,7 +116,7 @@
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
             "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
-            "Progress": "{Progress}%",
+            "Progress": "{Progress}",
             "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {
@@ -143,7 +143,7 @@
         "MergeCollection": {
             "Name": "Verschmelzen",
             "MergedCollectionSuffix": "(Zusammengeführt)",
-            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+            "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Auswahlmodus",
                 "Basic": "Basic",
@@ -172,7 +172,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
-        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}%",
+        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "Spiel startet",
             "Resume": "Setzen Sie Gameg fort",
@@ -306,7 +306,7 @@
             "Version": "Ausführung",
             "Overlay": {
                 "UpdateDownloading": "Updates herunterladen...",
-                "UpdateDownloadProgress": "{Progress}%",
+                "UpdateDownloadProgress": "{Progress}",
                 "UpdateInstalling": "Updates entpacken und Installationsprogramm vorbereiten..."
             },
             "Errors": {

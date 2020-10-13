@@ -64,13 +64,7 @@ namespace IronyModManager.ViewModels
             ConflictSolver = DIResolver.Get<MainConflictSolverControlViewModel>();
             writingStateOperationHandler = DIResolver.Get<WritingStateOperationHandler>();
             overlayProgressHandler = DIResolver.Get<OverlayProgressHandler>();
-            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
-            {
-                OverlayMessage = s.Message;
-                OverlayVisible = s.IsVisible;
-                OverlayMessageProgress = s.MessageProgress;
-                HasProgress = !string.IsNullOrWhiteSpace(s.MessageProgress);
-            });
+            BindOverlay();
         }
 
         #endregion Constructors
@@ -162,36 +156,46 @@ namespace IronyModManager.ViewModels
         }
 
         /// <summary>
+        /// Binds the overlay.
+        /// </summary>
+        protected virtual void BindOverlay()
+        {
+            async Task setOverlayProperties(OverlayProgressEvent e)
+            {
+                await Task.Delay(1);
+                if (e.IsVisible != OverlayVisible)
+                {
+                    OverlayVisible = e.IsVisible;
+                }
+                if (e.Message != OverlayMessage)
+                {
+                    OverlayMessage = e.Message;
+                }
+                if (e.MessageProgress != OverlayMessageProgress)
+                {
+                    OverlayMessageProgress = e.MessageProgress;
+                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+                }
+            }
+            overlayDisposable?.Dispose();
+            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
+            {
+                setOverlayProperties(s).ConfigureAwait(false);
+            });
+            if (Disposables != null)
+            {
+                overlayDisposable.DisposeWith(Disposables);
+            }
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            async Task setOverlayProperties(OverlayProgressEvent e)
-            {
-                if (e.IsVisible != OverlayVisible)
-                {
-                    OverlayMessage = e.Message;
-                    OverlayVisible = e.IsVisible;
-                    OverlayMessageProgress = e.MessageProgress;
-                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
-                }
-                else
-                {
-                    // artificial delay so the UI does not appear frozen
-                    await Task.Delay(1);
-                    OverlayMessage = e.Message;
-                    OverlayVisible = e.IsVisible;
-                    OverlayMessageProgress = e.MessageProgress;
-                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
-                }
-            }
+            BindOverlay();
 
-            overlayDisposable?.Dispose();
-            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
-            {
-                setOverlayProperties(s).ConfigureAwait(false);
-            }).DisposeWith(disposables);
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>
                 {
