@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="SystemFontFamily.cs" company="Mario">
 //     Mario
@@ -24,10 +24,19 @@ namespace IronyModManager.Fonts
     /// <seealso cref="IronyModManager.Fonts.IFontFamily" />
     public class SystemFontFamily : IFontFamily
     {
+        #region Fields
+
+        /// <summary>
+        /// The instance
+        /// </summary>
+        private FontFamily instance;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SystemFontFamily"/> class.
+        /// Initializes a new instance of the <see cref="SystemFontFamily" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public SystemFontFamily(string name)
@@ -61,7 +70,11 @@ namespace IronyModManager.Fonts
         /// <returns>FontFamily.</returns>
         public FontFamily GetFontFamily()
         {
-            return new FontFamily(Name);
+            if (instance == null)
+            {
+                instance = new FontFamily(Name);
+            }
+            return instance;
         }
 
         #endregion Methods
