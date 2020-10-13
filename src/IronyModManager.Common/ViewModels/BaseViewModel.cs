@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-12-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -183,7 +183,7 @@ namespace IronyModManager.Common.ViewModels
                 Message = message,
                 MessageProgress = progress
             };
-            await MessageBus.PublishAsync(args);
+            await MessageBus.PublishAsync(args).ConfigureAwait(false);
             await Task.Run(() =>
             {
                 ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1340,7 +1340,7 @@ namespace IronyModManager.ViewModels.Controls
                 reportDisposable = modReportExportHandler.Message.Subscribe(s =>
                 {
                     TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage }));
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
                 }).DisposeWith(disposables);
             }
 
@@ -1363,7 +1363,7 @@ namespace IronyModManager.ViewModels.Controls
                         await TriggerOverlayAsync(false);
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
-                    }                  
+                    }
                     reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);

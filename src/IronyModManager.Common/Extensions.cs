@@ -4,7 +4,7 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-24-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -25,7 +25,7 @@ namespace IronyModManager.Common
     /// <summary>
     /// Class Extensions.
     /// </summary>
-    [ExcludeFromCoverage("Excluding extension methods.")] 
+    [ExcludeFromCoverage("Excluding extension methods.")]
     public static class Extensions
     {
         #region Methods
@@ -191,6 +191,26 @@ namespace IronyModManager.Common
         public static AvaloniaList<T> ToAvaloniaList<T>(this IEnumerable<T> col)
         {
             return new AvaloniaList<T>(col);
+        }
+
+        /// <summary>
+        /// Converts to localizedpercentage.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>System.String.</returns>
+        public static string ToLocalizedPercentage(this int number)
+        {
+            return (number / 100).ToString("P");
+        }
+
+        /// <summary>
+        /// Converts to localizedpercentage.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>System.String.</returns>
+        public static string ToLocalizedPercentage(this double number)
+        {
+            return (number / 100).ToString("P");
         }
 
         /// <summary>

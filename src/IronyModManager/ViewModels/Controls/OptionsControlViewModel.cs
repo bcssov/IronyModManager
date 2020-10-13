@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -28,6 +28,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
+using IronyModManager.Common;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -607,13 +608,13 @@ namespace IronyModManager.ViewModels.Controls
                 if (downloadingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
                     TriggerOverlay(true, message, progress);
                 }
                 else if (installingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
-                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s });
+                    var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
                     TriggerOverlay(true, message, progress);
                 }
             }).DisposeWith(disposables);
