@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-12-2020
+// Last Modified On : 10-13-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -169,12 +169,22 @@ namespace IronyModManager.ViewModels
         {
             async Task setOverlayProperties(OverlayProgressEvent e)
             {
-                // artificial delay so the UI does not appear frozen
-                await Task.Delay(1);
-                OverlayMessage = e.Message;
-                OverlayVisible = e.IsVisible;
-                OverlayMessageProgress = e.MessageProgress;
-                HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+                if (e.IsVisible != OverlayVisible)
+                {
+                    OverlayMessage = e.Message;
+                    OverlayVisible = e.IsVisible;
+                    OverlayMessageProgress = e.MessageProgress;
+                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+                }
+                else
+                {
+                    // artificial delay so the UI does not appear frozen
+                    await Task.Delay(1);
+                    OverlayMessage = e.Message;
+                    OverlayVisible = e.IsVisible;
+                    OverlayMessageProgress = e.MessageProgress;
+                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+                }
             }
 
             overlayDisposable?.Dispose();
