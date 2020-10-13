@@ -4,60 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.40</title>
+			<title>1.7.43</title>
 			<description>RELEASE INFO:
-				* Show more accurate progress percentage (so people stop complaining it's stuck at certain percentage)
-				* Fix basic merge progress calculation (LINQ typo)
+				* Fix overlay now being sometimes stuck
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Mon, 12 Oct 2020 20:18:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.40/osx-x64.rar" sparkle:version="1.7.40.53597" sparkle:shortVersionString="1.7.40" length="71479110" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="kUaTkFYTjjQUK5dHVq4311KBlpzZmfqHjyaKMCpK5JTOHVccMHrOeysTI5XfRSxNkJMwOke2xINR+LkGGJHPBQ=="/>
+			<pubDate>Tue, 13 Oct 2020 20:44:21 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/osx-x64.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="71483882" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="b9TX8Uv1jOlkP8kOtHwsqDr0HwAHD+gJHZPIR4rUNUffCZLxWgHvyjPfAs/joEj11+t9q4voIpL+BGSkNMSDDg=="/>
 		</item>
 		<item>
-			<title>1.7.40</title>
+			<title>1.7.43</title>
 			<description>RELEASE INFO:
-				* Show more accurate progress percentage (so people stop complaining it's stuck at certain percentage)
-				* Fix basic merge progress calculation (LINQ typo)
+				* Fix overlay now being sometimes stuck
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Mon, 12 Oct 2020 20:18:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.40/win-x64-setup.rar" sparkle:version="1.7.40.53597" sparkle:shortVersionString="1.7.40" length="59318722" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="8xSz0eC2514s2bYIz3PFfyqUB4k+vZPIeR3clri1ujrl2WNk9+9xmKS4X9iBexvQkD9ozBjPlsTz+dO88gsYBA=="/>
+			<pubDate>Tue, 13 Oct 2020 20:44:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/win-x64-setup.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="59320070" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="1hSKImO0aV+nkJaZ/3WHYXuwtmXOT9wrOSwcLVWS3Ycz7VLa3AYV3pQzPZ/3k5nlMhi/ME2wk4OS6o+FN0RFBw=="/>
 		</item>
 		<item>
-			<title>1.7.40</title>
+			<title>1.7.43</title>
 			<description>RELEASE INFO:
-				* Show more accurate progress percentage (so people stop complaining it's stuck at certain percentage)
-				* Fix basic merge progress calculation (LINQ typo)
+				* Fix overlay now being sometimes stuck
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Mon, 12 Oct 2020 20:18:17 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.40/win-x64.rar" sparkle:version="1.7.40.53597" sparkle:shortVersionString="1.7.40" length="74124895" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="YEoh/NRwBLBCTA9uRSpY1TGZKFjN5ESOdtohJftJf3Dxcx9ya2n07RV1ztBlhx3Rymgz4hyvTGzHIQXUaSjZAA=="/>
+			<pubDate>Tue, 13 Oct 2020 20:44:25 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/win-x64.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="74129658" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="860mAwTSOr28u1JJ0AJ0kwC7kYvhsxfsrIAFc2IsdZv/Ks0LPDzWU+lNtEmRRG1w4NRidebQYMohKSjO8fJ0Cg=="/>
 		</item>
 		<item>
-			<title>1.7.40</title>
+			<title>1.7.43</title>
 			<description>RELEASE INFO:
-				* Show more accurate progress percentage (so people stop complaining it's stuck at certain percentage)
-				* Fix basic merge progress calculation (LINQ typo)
+				* Fix overlay now being sometimes stuck
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Mon, 12 Oct 2020 20:18:11 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.40/linux-x64.zip" sparkle:version="1.7.40.53597" sparkle:shortVersionString="1.7.40" length="88473167" sparkle:os="linux" type="application/zip" sparkle:signature="/1gX2KqeXuOMhKrrffJEI78lmXOB4xtFLO62EtooXZxJBMAupEfMBfkqu4IrXSV+TkqNtr+aByNgab3Dz/maAQ=="/>
+			<pubDate>Tue, 13 Oct 2020 20:44:20 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/linux-x64.zip" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="88473252" sparkle:os="linux" type="application/zip" sparkle:signature="9i0BxhtQAw1rUBVaa114uRwSKLH5raH8KyVTTReLA0RXLTxZPKrsicnYjmMqi2pjWfiFfWJUO9nPZS7xrIrdBg=="/>
 		</item>
 	</channel>
 </rss>
