@@ -309,7 +309,7 @@ namespace IronyModManager.Controls
             if (!IsReadOnly)
             {
                 var spin = !e.UsingMouseWheel;
-                if (!MinMaxAllowSpin)
+                if (MinMaxAllowSpin)
                 {
                     spin |= (textBox != null) && textBox.IsFocused;
                 }
