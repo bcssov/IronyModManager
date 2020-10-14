@@ -4,56 +4,64 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.43</title>
+			<title>1.7.44</title>
 			<description>RELEASE INFO:
-				* Fix overlay now being sometimes stuck
+				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
+				* Add clipping of values to numeric up down textbox
+				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Tue, 13 Oct 2020 20:44:21 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/osx-x64.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="71483882" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="b9TX8Uv1jOlkP8kOtHwsqDr0HwAHD+gJHZPIR4rUNUffCZLxWgHvyjPfAs/joEj11+t9q4voIpL+BGSkNMSDDg=="/>
+			<pubDate>Wed, 14 Oct 2020 05:39:08 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/osx-x64.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="71483399" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="9ghy2XK0Zu+xicBLS1j8FrynJ6RqXKDedC62iFpFrsFXBuFo1uWdnKgoEbIeA6dZLTS3qyT6CKd2dlAQsmU0CA=="/>
 		</item>
 		<item>
-			<title>1.7.43</title>
+			<title>1.7.44</title>
 			<description>RELEASE INFO:
-				* Fix overlay now being sometimes stuck
+				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
+				* Add clipping of values to numeric up down textbox
+				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Tue, 13 Oct 2020 20:44:29 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/win-x64-setup.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="59320070" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="1hSKImO0aV+nkJaZ/3WHYXuwtmXOT9wrOSwcLVWS3Ycz7VLa3AYV3pQzPZ/3k5nlMhi/ME2wk4OS6o+FN0RFBw=="/>
+			<pubDate>Wed, 14 Oct 2020 05:39:16 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/win-x64-setup.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="59328248" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="I3zfQ3C7yQEjo2i2aKnaU5fugueoXFLamkY/iyMWpYOU0/fOpv9JPAx4XM4T4LgwmfEfFcAd4ngtdoKkRoklCw=="/>
 		</item>
 		<item>
-			<title>1.7.43</title>
+			<title>1.7.44</title>
 			<description>RELEASE INFO:
-				* Fix overlay now being sometimes stuck
+				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
+				* Add clipping of values to numeric up down textbox
+				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Tue, 13 Oct 2020 20:44:25 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/win-x64.rar" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="74129658" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="860mAwTSOr28u1JJ0AJ0kwC7kYvhsxfsrIAFc2IsdZv/Ks0LPDzWU+lNtEmRRG1w4NRidebQYMohKSjO8fJ0Cg=="/>
+			<pubDate>Wed, 14 Oct 2020 05:39:12 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/win-x64.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="74129169" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="HsrCAoTJU/Sk61ecpxjaoow5axIJRn0TAsiwFFTpPtzqcPDp7AyLx8uItCIu+fDharB4yLSCWCLKcb5yrcSbAw=="/>
 		</item>
 		<item>
-			<title>1.7.43</title>
+			<title>1.7.44</title>
 			<description>RELEASE INFO:
-				* Fix overlay now being sometimes stuck
+				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
+				* Add clipping of values to numeric up down textbox
+				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Tue, 13 Oct 2020 20:44:20 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.43/linux-x64.zip" sparkle:version="1.7.43.44013" sparkle:shortVersionString="1.7.43" length="88473252" sparkle:os="linux" type="application/zip" sparkle:signature="9i0BxhtQAw1rUBVaa114uRwSKLH5raH8KyVTTReLA0RXLTxZPKrsicnYjmMqi2pjWfiFfWJUO9nPZS7xrIrdBg=="/>
+			<pubDate>Wed, 14 Oct 2020 05:39:06 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/linux-x64.zip" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="88473936" sparkle:os="linux" type="application/zip" sparkle:signature="oeP612CstfGdXeaqvxZA3dcTtKig6YpvDo/H92miOJRG2P6+Q+jtDNxOHNeytriTBdyzKkItRffkgjtLFjxFDw=="/>
 		</item>
 	</channel>
 </rss>
