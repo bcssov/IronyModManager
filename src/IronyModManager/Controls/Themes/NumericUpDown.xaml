@@ -16,7 +16,7 @@
                        AllowSpin="{TemplateBinding MinMaxAllowSpin}"
                        ShowButtonSpinner="{TemplateBinding MinMaxShowButtonSpinner}"
                        ButtonSpinnerLocation="{TemplateBinding MinMaxButtonSpinnerLocation}">
-          <ButtonSpinner Name="PART_Spinner"
+          <controls:NumericButtonSpinner Name="PART_Spinner"
                        Background="{TemplateBinding Background}"
                        BorderThickness="0"
                        BorderBrush="{TemplateBinding BorderBrush}"
@@ -40,7 +40,7 @@
                      TextAlignment="Center"
                      TextWrapping="NoWrap">
             </TextBox>
-          </ButtonSpinner>
+          </controls:NumericButtonSpinner>
         </controls:MinMaxButtonSpinner>
       </ControlTemplate>
     </Setter>
