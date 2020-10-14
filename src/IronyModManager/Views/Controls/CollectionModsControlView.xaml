@@ -115,10 +115,10 @@
                       </ContextMenu>
                     </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
-                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}"
+                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" AllowSpin="False" MinMaxAllowSpin="False"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,4,0"></controls:MinMaxNumericUpDown>
                     <Grid Grid.Column="3" ColumnDefinitions="*,14">
-                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center" 
+                      <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
                                  TextWrapping="Wrap" Grid.Column="0" Margin="8,0,0,0"></TextBlock>
                       <Panel Grid.Column="1">
                         <!-- Because Avalonia sucks in this regard, that's why -->

@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 10-14-2020
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -50,6 +50,11 @@ namespace IronyModManager.Controls
         /// Defines the <see cref="ShowButtonSpinner" /> property.
         /// </summary>
         public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
+
+        /// <summary>
+        /// The spinner
+        /// </summary>
+        private Spinner minMaxSpinner;
 
         /// <summary>
         /// The spinner
@@ -179,10 +184,19 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown(e);
-            if (e.Handled)
+            switch (e.Key)
             {
-                SetValidSpinDirection();
+                case Key.Enter:
+                    base.OnKeyDown(e);
+                    if (e.Handled)
+                    {
+                        SetValidSpinDirection();
+                    }
+                    break;
+
+                default:
+                    e.Handled = true;
+                    break;
             }
         }
 
@@ -232,13 +246,21 @@ namespace IronyModManager.Controls
         {
             base.OnTemplateApplied(e);
             // Would be kinda great if avalonia guys exposed some of these private properties. Not very customizable with this...
+            if (minMaxSpinner != null)
+            {
+                minMaxSpinner.Spin -= OnMinMaxSpinnerSpin;
+            }
+            minMaxSpinner = e.NameScope.Find<Spinner>("PART_MinMax_Spinner");
+            if (minMaxSpinner != null)
+            {
+                minMaxSpinner.Spin += OnMinMaxSpinnerSpin;
+            }
+
             if (spinner != null)
             {
                 spinner.Spin -= OnSpinnerSpin;
             }
-
-            spinner = e.NameScope.Find<Spinner>("PART_MinMax_Spinner");
-
+            spinner = e.NameScope.Find<Spinner>("PART_Spinner");
             if (spinner != null)
             {
                 spinner.Spin += OnSpinnerSpin;
@@ -256,10 +278,13 @@ namespace IronyModManager.Controls
         /// <param name="newValue">The new value.</param>
         protected override void OnTextChanged(string oldValue, string newValue)
         {
-            base.OnTextChanged(oldValue, newValue);
-            if (IsInitialized)
+            if (!(textBox != null && textBox.IsFocused))
             {
-                SetValidSpinDirection();
+                base.OnTextChanged(oldValue, newValue);
+                if (IsInitialized)
+                {
+                    SetValidSpinDirection();
+                }
             }
         }
 
@@ -275,34 +300,56 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
-        /// Handles the <see cref="E:SpinnerSpin" /> event.
+        /// Handles the <see cref="E:MinMaxSpinnerSpin" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="SpinEventArgs" /> instance containing the event data.</param>
-        private void OnSpinnerSpin(object sender, SpinEventArgs e)
+        private void OnMinMaxSpinnerSpin(object sender, SpinEventArgs e)
         {
-            if (MinMaxAllowSpin && !IsReadOnly)
+            if (!IsReadOnly)
             {
                 var spin = !e.UsingMouseWheel;
-                spin |= ((textBox != null) && textBox.IsFocused);
+                if (!MinMaxAllowSpin)
+                {
+                    spin |= (textBox != null) && textBox.IsFocused;
+                }
 
                 if (spin)
                 {
                     e.Handled = true;
                     if (e.Direction == SpinDirection.Increase)
                     {
-                        if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Increase) == ValidSpinDirections.Increase)
+                        if (minMaxSpinner == null || (minMaxSpinner.ValidSpinDirection & ValidSpinDirections.Increase) == ValidSpinDirections.Increase)
                         {
                             Value = Maximum;
                         }
                     }
                     else
                     {
-                        if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Decrease) == ValidSpinDirections.Decrease)
+                        if (minMaxSpinner == null || (minMaxSpinner.ValidSpinDirection & ValidSpinDirections.Decrease) == ValidSpinDirections.Decrease)
                         {
                             Value = Minimum;
                         }
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:SpinnerSpin" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="SpinEventArgs" /> instance containing the event data.</param>
+        private void OnSpinnerSpin(object sender, SpinEventArgs e)
+        {
+            if (!AllowSpin && !IsReadOnly)
+            {
+                var spin = !e.UsingMouseWheel;
+
+                if (spin)
+                {
+                    e.Handled = true;
+                    OnSpin(e);
                 }
             }
         }
@@ -327,9 +374,9 @@ namespace IronyModManager.Controls
                 }
             }
 
-            if (spinner != null)
+            if (minMaxSpinner != null)
             {
-                spinner.ValidSpinDirection = validDirections;
+                minMaxSpinner.ValidSpinDirection = validDirections;
             }
         }
 
