@@ -4,64 +4,60 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.44</title>
+			<title>1.7.47</title>
 			<description>RELEASE INFO:
-				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
-				* Add clipping of values to numeric up down textbox
-				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
+				* Fix linux\mac os publish procedures
+				* Further optimize publish procedure to reduce package size
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 14 Oct 2020 05:39:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/osx-x64.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="71483399" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="9ghy2XK0Zu+xicBLS1j8FrynJ6RqXKDedC62iFpFrsFXBuFo1uWdnKgoEbIeA6dZLTS3qyT6CKd2dlAQsmU0CA=="/>
+			<pubDate>Fri, 16 Oct 2020 20:26:39 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/osx-x64.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="62607624" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="f3Z6LtQzs/kbT20X3JTRf8Tb02d35TTBIT9tcnnf4gOKwRfIPYZTjY1IKhml7/FEhDQCsl0Al+jZ/NH4SyqzAg=="/>
 		</item>
 		<item>
-			<title>1.7.44</title>
+			<title>1.7.47</title>
 			<description>RELEASE INFO:
-				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
-				* Add clipping of values to numeric up down textbox
-				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
+				* Fix linux\mac os publish procedures
+				* Further optimize publish procedure to reduce package size
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 14 Oct 2020 05:39:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/win-x64-setup.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="59328248" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="I3zfQ3C7yQEjo2i2aKnaU5fugueoXFLamkY/iyMWpYOU0/fOpv9JPAx4XM4T4LgwmfEfFcAd4ngtdoKkRoklCw=="/>
+			<pubDate>Fri, 16 Oct 2020 20:26:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/win-x64-setup.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="54313938" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="1k/akByzvgUvn1Hd5baLhUVQxaa5wLAizvDWAHVhS8+uT1adMsuurD9DQOJfiKm6+eITaL4yZRnbM5STqmeQCw=="/>
 		</item>
 		<item>
-			<title>1.7.44</title>
+			<title>1.7.47</title>
 			<description>RELEASE INFO:
-				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
-				* Add clipping of values to numeric up down textbox
-				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
+				* Fix linux\mac os publish procedures
+				* Further optimize publish procedure to reduce package size
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 14 Oct 2020 05:39:12 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/win-x64.rar" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="74129169" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="HsrCAoTJU/Sk61ecpxjaoow5axIJRn0TAsiwFFTpPtzqcPDp7AyLx8uItCIu+fDharB4yLSCWCLKcb5yrcSbAw=="/>
+			<pubDate>Fri, 16 Oct 2020 20:26:43 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/win-x64.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="65257099" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="+/FutoRNUIAVLYMo32v5YSL8t8LHCoGx2BUhxBwxh+LgDGJgs3eUu2bQoz3L1b6tKO7YJAIs3lOcc5i0PE87Dg=="/>
 		</item>
 		<item>
-			<title>1.7.44</title>
+			<title>1.7.47</title>
 			<description>RELEASE INFO:
-				* Turn off hotkeys for numeric up down textbox (they caused more issues than they were worth)
-				* Add clipping of values to numeric up down textbox
-				* Positions are only updated on enter key being hit on the numeric up down textbox or when lost focus (event debounce caused more trouble than it was worth)
+				* Fix linux\mac os publish procedures
+				* Further optimize publish procedure to reduce package size
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 14 Oct 2020 05:39:06 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.44/linux-x64.zip" sparkle:version="1.7.44.42503" sparkle:shortVersionString="1.7.44" length="88473936" sparkle:os="linux" type="application/zip" sparkle:signature="oeP612CstfGdXeaqvxZA3dcTtKig6YpvDo/H92miOJRG2P6+Q+jtDNxOHNeytriTBdyzKkItRffkgjtLFjxFDw=="/>
+			<pubDate>Fri, 16 Oct 2020 20:26:38 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/linux-x64.zip" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="77750801" sparkle:os="linux" type="application/zip" sparkle:signature="b7eFKeFbJ8rqGvMmCOBlCJZ+8kPY3uPrNTVUm24mGULtGSyHwX+ZTvpEFqCHSffFdA83GJDYvs46NRuzwqtRAw=="/>
 		</item>
 	</channel>
 </rss>
