@@ -4,60 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.47</title>
+			<title>1.7.49</title>
 			<description>RELEASE INFO:
-				* Fix linux\mac os publish procedures
-				* Further optimize publish procedure to reduce package size
+				* Irony doesn't crash anymore if it encounters an invalid image extension (courtesy of modders who cannot use proper extensions)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Fri, 16 Oct 2020 20:26:39 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/osx-x64.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="62607624" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="f3Z6LtQzs/kbT20X3JTRf8Tb02d35TTBIT9tcnnf4gOKwRfIPYZTjY1IKhml7/FEhDQCsl0Al+jZ/NH4SyqzAg=="/>
+			<pubDate>Sun, 18 Oct 2020 00:39:48 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.49/osx-x64.rar" sparkle:version="1.7.49.15289" sparkle:shortVersionString="1.7.49" length="62608123" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="i6uWgYC2GXcEDB+N0NGaLHWSzKXu1y4VqfFVRRWgiSBSyTbDXGexrlYS4O3zPiNHly3mEE5tdSO44V0HxjMbDg=="/>
 		</item>
 		<item>
-			<title>1.7.47</title>
+			<title>1.7.49</title>
 			<description>RELEASE INFO:
-				* Fix linux\mac os publish procedures
-				* Further optimize publish procedure to reduce package size
+				* Irony doesn't crash anymore if it encounters an invalid image extension (courtesy of modders who cannot use proper extensions)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Fri, 16 Oct 2020 20:26:46 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/win-x64-setup.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="54313938" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="1k/akByzvgUvn1Hd5baLhUVQxaa5wLAizvDWAHVhS8+uT1adMsuurD9DQOJfiKm6+eITaL4yZRnbM5STqmeQCw=="/>
+			<pubDate>Sun, 18 Oct 2020 00:39:55 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.49/win-x64-setup.rar" sparkle:version="1.7.49.15289" sparkle:shortVersionString="1.7.49" length="54351153" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="Q+iJ7RNAtASEJizY/b08DaaKZxj0C4xPSVpNdY8IcqpT4949z0SZA/30M5hGr5LVeav0qzxwhJrgIrtf6rt2Aw=="/>
 		</item>
 		<item>
-			<title>1.7.47</title>
+			<title>1.7.49</title>
 			<description>RELEASE INFO:
-				* Fix linux\mac os publish procedures
-				* Further optimize publish procedure to reduce package size
+				* Irony doesn't crash anymore if it encounters an invalid image extension (courtesy of modders who cannot use proper extensions)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Fri, 16 Oct 2020 20:26:43 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/win-x64.rar" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="65257099" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="+/FutoRNUIAVLYMo32v5YSL8t8LHCoGx2BUhxBwxh+LgDGJgs3eUu2bQoz3L1b6tKO7YJAIs3lOcc5i0PE87Dg=="/>
+			<pubDate>Sun, 18 Oct 2020 00:39:51 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.49/win-x64.rar" sparkle:version="1.7.49.15289" sparkle:shortVersionString="1.7.49" length="65254391" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="4kbHxIzja/EvBRz7BY3YUaSp6msghtevzIxEJnNTkEJpFabCK4Ohd3sPoqMkDle+Gw3m2YihecDgnYEo477uDA=="/>
 		</item>
 		<item>
-			<title>1.7.47</title>
+			<title>1.7.49</title>
 			<description>RELEASE INFO:
-				* Fix linux\mac os publish procedures
-				* Further optimize publish procedure to reduce package size
+				* Irony doesn't crash anymore if it encounters an invalid image extension (courtesy of modders who cannot use proper extensions)
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Fri, 16 Oct 2020 20:26:38 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.47/linux-x64.zip" sparkle:version="1.7.47.13635" sparkle:shortVersionString="1.7.47" length="77750801" sparkle:os="linux" type="application/zip" sparkle:signature="b7eFKeFbJ8rqGvMmCOBlCJZ+8kPY3uPrNTVUm24mGULtGSyHwX+ZTvpEFqCHSffFdA83GJDYvs46NRuzwqtRAw=="/>
+			<pubDate>Sun, 18 Oct 2020 00:39:46 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.49/linux-x64.zip" sparkle:version="1.7.49.15289" sparkle:shortVersionString="1.7.49" length="77748599" sparkle:os="linux" type="application/zip" sparkle:signature="oPVUOHSW7cTlNcH4n9enz9dPoSety6sIkjToedrMEzjTSjUm/SoPgW3PUqi0TGY3gLSLRa6c43TnRI9ZvJ+7Bw=="/>
 		</item>
 	</channel>
 </rss>
