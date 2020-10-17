@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 10-18-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -142,37 +142,78 @@ namespace IronyModManager.IO.Readers
 
                     return newData;
                 }
+                static async Task<MemoryStream> getDDS(Stream stream)
+                {
+                    MemoryStream ms = null;
+                    using var pfimImage = Dds.Create(stream, new PfimConfig());
+                    if (pfimImage.Compressed)
+                    {
+                        pfimImage.Decompress();
+                    }
+                    if (pfimImage.Format == ImageFormat.Rgba32)
+                    {
+                        ms = new MemoryStream();
+                        using var image = Image.LoadPixelData<Bgra32>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                        await image.SaveAsPngAsync(ms);
+                    }
+                    else if (pfimImage.Format == ImageFormat.Rgb24)
+                    {
+                        ms = new MemoryStream();
+                        using var image = Image.LoadPixelData<Bgr24>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
+                        await image.SaveAsPngAsync(ms);
+                    }
+                    return ms;
+                }
+                static async Task<MemoryStream> getOther(Stream stream)
+                {
+                    var ms = new MemoryStream();
+                    using var image = await Image.LoadAsync(stream);
+                    await image.SaveAsPngAsync(ms);
+                    return ms;
+                }
                 var stream = GetStream(rootPat, file);
                 if (stream != null)
                 {
                     MemoryStream ms = null;
                     try
                     {
+                        bool tryOtherFormat = true;
                         if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
                         {
-                            using var pfimImage = Dds.Create(stream, new PfimConfig());
-                            if (pfimImage.Compressed)
+                            try
                             {
-                                pfimImage.Decompress();
+                                ms = await getDDS(stream);
+                                tryOtherFormat = false;
                             }
-                            if (pfimImage.Format == ImageFormat.Rgba32)
+                            catch (Exception ex)
                             {
-                                ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgra32>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                                await image.SaveAsPngAsync(ms);
-                            }
-                            else if (pfimImage.Format == ImageFormat.Rgb24)
-                            {
-                                ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgr24>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                                await image.SaveAsPngAsync(ms);
+                                logger.Error(ex);
+                                if (ms != null)
+                                {
+                                    ms.Close();
+                                    await ms.DisposeAsync();
+                                }
                             }
                         }
-                        else
+                        if (tryOtherFormat)
                         {
-                            ms = new MemoryStream();
-                            using var image = await Image.LoadAsync(stream);
-                            await image.SaveAsPngAsync(ms);
+                            try
+                            {
+                                if (stream != null && stream.CanSeek)
+                                {
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                }
+                                ms = await getOther(stream);
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.Error(ex);
+                                if (ms != null)
+                                {
+                                    ms.Close();
+                                    await ms.DisposeAsync();
+                                }
+                            }
                         }
                         if (ms != null && ms.CanSeek)
                         {
@@ -183,8 +224,11 @@ namespace IronyModManager.IO.Readers
                     catch (Exception ex)
                     {
                         logger.Error(ex);
-                        ms.Close();
-                        await ms.DisposeAsync();
+                        if (ms != null)
+                        {
+                            ms.Close();
+                            await ms.DisposeAsync();
+                        }
                     }
                     finally
                     {
