@@ -4,7 +4,7 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -200,7 +200,7 @@ namespace IronyModManager.Common
         /// <returns>System.String.</returns>
         public static string ToLocalizedPercentage(this int number)
         {
-            return (number / 100).ToString("P");
+            return (Convert.ToDouble(number) / 100).ToString("P");
         }
 
         /// <summary>
