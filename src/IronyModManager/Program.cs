@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-02-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -50,7 +50,9 @@ namespace IronyModManager
 # if DEBUG
                     if (!Design.IsDesignMode)
                     {
+                        StaticResources.IsVerifyingContainer = true;
                         DIContainer.Verify();
+                        StaticResources.IsVerifyingContainer = false;
                     }
 #endif
                 }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?

@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -35,11 +35,26 @@ namespace IronyModManager
         private static Bitmap iconBitmap;
 
         /// <summary>
+        /// The updater path
+        /// </summary>
+        private static string updaterPath;
+
+        /// <summary>
         /// The window icon
         /// </summary>
         private static WindowIcon windowIcon;
 
         #endregion Fields
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is verifying container.
+        /// </summary>
+        /// <value><c>true</c> if this instance is verifying container; otherwise, <c>false</c>.</value>
+        public static bool IsVerifyingContainer { get; set; }
+
+        #endregion Properties
 
         #region Methods
 
@@ -77,18 +92,22 @@ namespace IronyModManager
         /// <returns>System.String.</returns>
         public static string GetUpdaterPath()
         {
-            string companyPart = string.Empty;
-            string appNamePart = string.Empty;
+            if (string.IsNullOrWhiteSpace(updaterPath))
+            {
+                string companyPart = string.Empty;
+                string appNamePart = string.Empty;
 
-            var entryAssembly = Assembly.GetEntryAssembly();
-            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
-            if (!string.IsNullOrEmpty(companyAttribute.Company))
-                companyPart = $"{companyAttribute.Company}\\";
-            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
-            if (!string.IsNullOrEmpty(titleAttribute.Title))
-                appNamePart = $"{titleAttribute.Title}-Updater\\";
+                var entryAssembly = Assembly.GetEntryAssembly();
+                var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
+                if (!string.IsNullOrEmpty(companyAttribute.Company))
+                    companyPart = $"{companyAttribute.Company}\\";
+                var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+                if (!string.IsNullOrEmpty(titleAttribute.Title))
+                    appNamePart = $"{titleAttribute.Title}-Updater\\";
 
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
+                updaterPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
+            }
+            return updaterPath;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-18-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -199,7 +199,7 @@ namespace IronyModManager.IO.Readers
                         {
                             try
                             {
-                                if (stream != null && stream.CanSeek)
+                                if (stream.CanSeek)
                                 {
                                     stream.Seek(0, SeekOrigin.Begin);
                                 }
