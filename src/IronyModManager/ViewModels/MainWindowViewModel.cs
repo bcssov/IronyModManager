@@ -4,21 +4,22 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
-using System.Linq;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Shared;
 
@@ -35,9 +36,24 @@ namespace IronyModManager.ViewModels
         #region Fields
 
         /// <summary>
+        /// The overlay stack
+        /// </summary>
+        protected readonly List<OverlayQueue> overlayStack = new List<OverlayQueue>();
+
+        /// <summary>
+        /// The loop running
+        /// </summary>
+        protected bool loopRunning = false;
+
+        /// <summary>
         /// The overlay progress handler
         /// </summary>
         private readonly OverlayProgressHandler overlayProgressHandler;
+
+        /// <summary>
+        /// The queue lock
+        /// </summary>
+        private readonly object queueLock = new { };
 
         /// <summary>
         /// The writing state operation handler
@@ -64,7 +80,10 @@ namespace IronyModManager.ViewModels
             ConflictSolver = DIResolver.Get<MainConflictSolverControlViewModel>();
             writingStateOperationHandler = DIResolver.Get<WritingStateOperationHandler>();
             overlayProgressHandler = DIResolver.Get<OverlayProgressHandler>();
-            BindOverlay();
+            if (!StaticResources.IsVerifyingContainer)
+            {
+                BindOverlay();
+            }
         }
 
         #endregion Constructors
@@ -130,8 +149,11 @@ namespace IronyModManager.ViewModels
         /// <param name="message">The message.</param>
         public void TriggerManualOverlay(bool isVisible, string message)
         {
-            OverlayMessage = message;
-            OverlayVisible = isVisible;
+            QueueOverlay(new OverlayProgressEvent()
+            {
+                IsVisible = isVisible,
+                Message = message
+            });
         }
 
         /// <summary>
@@ -158,33 +180,29 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Binds the overlay.
         /// </summary>
-        protected virtual void BindOverlay()
+        protected void BindOverlay()
         {
-            async Task setOverlayProperties(OverlayProgressEvent e)
-            {
-                await Task.Delay(1);
-                if (e.IsVisible != OverlayVisible)
-                {
-                    OverlayVisible = e.IsVisible;
-                }
-                if (e.Message != OverlayMessage)
-                {
-                    OverlayMessage = e.Message;
-                }
-                if (e.MessageProgress != OverlayMessageProgress)
-                {
-                    OverlayMessageProgress = e.MessageProgress;
-                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
-                }
-            }
+            InitOverlayLoop();
             overlayDisposable?.Dispose();
             overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
             {
-                setOverlayProperties(s).ConfigureAwait(false);
+                QueueOverlay(s);
             });
             if (Disposables != null)
             {
                 overlayDisposable.DisposeWith(Disposables);
+            }
+        }
+
+        /// <summary>
+        /// Initializes the overlay loop.
+        /// </summary>
+        protected void InitOverlayLoop()
+        {
+            if (!loopRunning)
+            {
+                loopRunning = true;
+                Task.Run(() => OverlayLoopAsync().ConfigureAwait(false));
             }
         }
 
@@ -225,6 +243,108 @@ namespace IronyModManager.ViewModels
             base.OnActivated(disposables);
         }
 
+        /// <summary>
+        /// overlay loop as an asynchronous operation.
+        /// </summary>
+        protected async Task OverlayLoopAsync()
+        {
+            void setOverlayProperties(OverlayProgressEvent e)
+            {
+                if (e.IsVisible != OverlayVisible)
+                {
+                    OverlayVisible = e.IsVisible;
+                }
+                if (e.Message != OverlayMessage)
+                {
+                    OverlayMessage = e.Message;
+                }
+                if (e.MessageProgress != OverlayMessageProgress)
+                {
+                    OverlayMessageProgress = e.MessageProgress;
+                    HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
+                }
+            }
+            await Task.Delay(2);
+            lock (queueLock)
+            {
+                var now = DateTime.Now;
+                if (overlayStack.Any(p => now >= p.DateAdded))
+                {
+                    OverlayQueue overlay = null;
+                    var overlays = overlayStack.Where(p => now >= p.DateAdded).OrderBy(p => p.DateAdded).ToList();
+                    if (overlays.Count() > 0)
+                    {
+                        if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
+                        {
+                            foreach (var item in overlays)
+                            {
+                                overlay = item;
+                                overlayStack.Remove(item);
+                                if (item.Event.IsVisible != OverlayVisible)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in overlays)
+                            {
+                                overlayStack.Remove(item);
+                            }
+                            overlay = overlays.LastOrDefault();
+                        }
+                        if (overlay != null)
+                        {
+                            setOverlayProperties(overlay.Event);
+                        }
+                    }
+                }
+            }
+            await OverlayLoopAsync();
+        }
+
+        /// <summary>
+        /// Queues the overlay.
+        /// </summary>
+        /// <param name="e">The e.</param>
+        protected void QueueOverlay(OverlayProgressEvent e)
+        {
+            lock (queueLock)
+            {
+                if (!overlayStack.Any(p => p.Event == e))
+                {
+                    overlayStack.Add(new OverlayQueue() { Event = e, DateAdded = DateTime.Now });
+                }
+            }
+        }
+
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class OverlayQueue.
+        /// </summary>
+        protected class OverlayQueue
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the date added.
+            /// </summary>
+            /// <value>The date added.</value>
+            public DateTime DateAdded { get; set; }
+
+            /// <summary>
+            /// Gets or sets the event.
+            /// </summary>
+            /// <value>The event.</value>
+            public OverlayProgressEvent Event { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }
