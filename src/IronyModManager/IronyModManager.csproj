@@ -184,7 +184,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.12" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-    <PackageReference Include="Material.Avalonia" Version="0.9.0" />
+    <PackageReference Include="Material.Avalonia" Version="[0.9.0]" allowedVersions="[0.9.0]" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.6.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />

@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -32,6 +32,11 @@ namespace IronyModManager.Updater
         /// </summary>
         private const string SettingsPath = "..\\update-settings.json";
 
+        /// <summary>
+        /// The update folders
+        /// </summary>
+        private static readonly string[] UpdateFolders = new string[] { "linux-x64", "osx-x64", "win-x64", "win-x64-setup" };
+
         #endregion Fields
 
         #region Methods
@@ -43,6 +48,21 @@ namespace IronyModManager.Updater
         {
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             MainAsync().Wait();
+        }
+
+        /// <summary>
+        /// Cleanups the failed updates.
+        /// </summary>
+        private static void CleanupFailedUpdates()
+        {
+            foreach (var folder in UpdateFolders)
+            {
+                var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, folder);
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+            }
         }
 
         /// <summary>
@@ -160,6 +180,9 @@ namespace IronyModManager.Updater
                 Console.WriteLine("Already updated closing...");
                 return;
             }
+            Console.WriteLine("Cleaning updates...");
+            CleanupFailedUpdates();
+            Console.WriteLine("Updates cleaned...");
             Console.WriteLine("Copying updates...");
             try
             {
