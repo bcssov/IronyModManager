@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 10-21-2020
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
@@ -68,6 +68,11 @@ namespace IronyModManager.IO.Updater
                 return string.Empty;
             }
             var extractPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+            // Cleanup path were extracting to
+            if (Directory.Exists(extractPath))
+            {
+                Directory.Delete(extractPath, true);
+            }
             using var fileStream = File.OpenRead(path);
             using var reader = ArchiveFactory.Open(fileStream);
             var all = reader.Entries.Where(entry => !entry.IsDirectory);
