@@ -6,7 +6,7 @@
 		<item>
 			<title>1.7.53</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and linux (it's embarrasing... now let's move on)
+				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
 				* Fix update progress indicator
 				* Add overlay loop queue logic (performance optimization)
 				CHANGES FROM v1.6:
@@ -21,7 +21,7 @@
 		<item>
 			<title>1.7.53</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and linux (it's embarrasing... now let's move on)
+				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
 				* Fix update progress indicator
 				* Add overlay loop queue logic (performance optimization)
 				CHANGES FROM v1.6:
@@ -36,7 +36,7 @@
 		<item>
 			<title>1.7.53</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and linux (it's embarrasing... now let's move on)
+				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
 				* Fix update progress indicator
 				* Add overlay loop queue logic (performance optimization)
 				CHANGES FROM v1.6:
@@ -51,7 +51,7 @@
 		<item>
 			<title>1.7.53</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and linux (it's embarrasing... now let's move on)
+				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
 				* Fix update progress indicator
 				* Add overlay loop queue logic (performance optimization)
 				CHANGES FROM v1.6:
