@@ -171,7 +171,6 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         /// <exception cref="ArgumentNullException">Game.</exception>
         /// <exception cref="ArgumentNullException">Definitions.</exception>
-        /// <exception cref="ArgumentNullException">Game.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
