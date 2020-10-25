@@ -639,9 +639,9 @@ namespace IronyModManager.IO.Mods
                             LastCachedPath = statePath,
                             PatchState = cached
                         };
+                        await Task.WhenAll(tasks);
                         cache.Set(CacheStatePrefix, CacheStateKey, cachedItem);
                         cache.Set(CacheStatePrefix, CacheExternalCodeKey, externallyLoadedCode.Distinct().ToHashSet());
-                        await Task.WhenAll(tasks);
                     }
                 }
                 mutex.Dispose();
