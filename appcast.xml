@@ -4,64 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.53</title>
+			<title>1.7.56</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
-				* Fix update progress indicator
-				* Add overlay loop queue logic (performance optimization)
+				* Fix an occasional crash during conflict solving analysis phase
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 21 Oct 2020 19:30:09 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.53/osx-x64.rar" sparkle:version="1.7.53.53245" sparkle:shortVersionString="1.7.53" length="62605299" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="ntZnXjCX+MAfe10YtrbC5sjfDNXZe4QeiLIjhVjtqoMezhVlL1+u52KsMkmohw+9ljF/eysl9HdPzo2aDWg/Aw=="/>
+			<pubDate>Sun, 25 Oct 2020 01:54:29 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.56/osx-x64.rar" sparkle:version="1.7.56.18298" sparkle:shortVersionString="1.7.56" length="62604538" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="DNktn1Iy0BXA7zY9kUIm1guFtjNdxAMpVT55Nf78qPbMs6VQz1hhTyTPpjwv1OelYKC8a2CL1fzwWps/bKeDBQ=="/>
 		</item>
 		<item>
-			<title>1.7.53</title>
+			<title>1.7.56</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
-				* Fix update progress indicator
-				* Add overlay loop queue logic (performance optimization)
+				* Fix an occasional crash during conflict solving analysis phase
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 21 Oct 2020 19:30:16 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.53/win-x64-setup.rar" sparkle:version="1.7.53.53245" sparkle:shortVersionString="1.7.53" length="54363162" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="PpzY3UcRBeSqVav4pBemFKhdFwp+2T5465L9UyR/4Uuq7pUyRdzkV4j5xl8BctfC9nroddmz5CGts/sk3hXEBw=="/>
+			<pubDate>Sun, 25 Oct 2020 01:54:36 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.56/win-x64-setup.rar" sparkle:version="1.7.56.18298" sparkle:shortVersionString="1.7.56" length="54358902" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="NFn2AkeYu4ssjtoE/dj7KevkyGj52uDHn1UUFDalgGxVZgjlo0RrVM7VZqNje4jW77vL4HYWWwXLpyvxqsHQBw=="/>
 		</item>
 		<item>
-			<title>1.7.53</title>
+			<title>1.7.56</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
-				* Fix update progress indicator
-				* Add overlay loop queue logic (performance optimization)
+				* Fix an occasional crash during conflict solving analysis phase
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 21 Oct 2020 19:30:13 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.53/win-x64.rar" sparkle:version="1.7.53.53245" sparkle:shortVersionString="1.7.53" length="65251161" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="0QfAekF1n0lK4SsGhle3qMSU8x9GjS3OUG1AqxwFfiCAAQKs7cxlHFvBVHImcvRZERbWNd2uQ86ePGLB2ZljDg=="/>
+			<pubDate>Sun, 25 Oct 2020 01:54:33 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.56/win-x64.rar" sparkle:version="1.7.56.18298" sparkle:shortVersionString="1.7.56" length="65250498" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="lplcphP+Nqm9PG9+0cm+nu3yVff6NItflJC8iUld3kLz7w+ZCj2eUes359wn2Bi/I94i/QNz8L6Z4AiBejajBw=="/>
 		</item>
 		<item>
-			<title>1.7.53</title>
+			<title>1.7.56</title>
 			<description>RELEASE INFO:
-				* Fix broken update packages for windows and osx (it's embarrasing... now let's move on)
-				* Fix update progress indicator
-				* Add overlay loop queue logic (performance optimization)
+				* Fix an occasional crash during conflict solving analysis phase
 				CHANGES FROM v1.6:
 				* Add chinese translation (thanks to Windmill-City)
 				* Switch to custom noto font
 				* UI readjusted due to new font
 				* Add mod collection file hash verification (intended use case is for MP gameplay)
 				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Wed, 21 Oct 2020 19:30:08 +02:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.53/linux-x64.zip" sparkle:version="1.7.53.53245" sparkle:shortVersionString="1.7.53" length="77754816" sparkle:os="linux" type="application/zip" sparkle:signature="9jK6e3o815Yzt84OSQLI3PZn9Zdrr8MVP2U3sDrd7pKlzTNdFH7ocPhTLaKaW6k31oXtY27HH2XqDERZBMv6BQ=="/>
+			<pubDate>Sun, 25 Oct 2020 01:54:27 +02:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.56/linux-x64.zip" sparkle:version="1.7.56.18298" sparkle:shortVersionString="1.7.56" length="77755043" sparkle:os="linux" type="application/zip" sparkle:signature="u+bCFPIZSlANjvHf9iNw+H/a3+rrBXdunsGCQLk4JejNcb196arbQGhnRI3oTYZavsu2LTaSvFEvFYbdBmlPBQ=="/>
 		</item>
 	</channel>
 </rss>
