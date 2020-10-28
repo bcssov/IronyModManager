@@ -8,11 +8,29 @@
     <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsOpen}"
            Topmost="False" ObeyScreenEdges="True" StaysOpen="True" x:Name="popup">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="*,30" Background="{DynamicResource IronyBackgroundPopupBrush}" Width="600" Height="400">
-          <TreeView Grid.Column="0" Grid.Row="0" ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="tree">
-          </TreeView>
+        <Grid ColumnDefinitions="1*,1*" RowDefinitions="*,30"
+              Background="{DynamicResource IronyBackgroundPopupBrush}" Width="800" Height="400">
+          <ListBox Items="{Binding Reports}"
+                   SelectedItem="{Binding SelectedReport}"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                   SelectionMode="Single" Width="300" Grid.Row="0" Grid.Column="0">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <ListBox Items="{Binding SelectedReport.Reports}"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                   SelectionMode="Single" Width="500" Grid.Row="0" Grid.Column="1">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Display}" TextWrapping="Wrap"></TextBlock>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
           <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
-                                   Grid.Row="1" Grid.Column="0" MaxHeight="30"></Button>
+                                   Grid.Row="1" Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="2"></Button>
         </Grid>
       </Border>
     </Popup>

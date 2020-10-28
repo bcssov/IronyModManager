@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-28-2020
 // ***********************************************************************
 // <copyright file="ModHashReportControlView.axaml.cs" company="Mario">
 //     Mario
@@ -76,36 +76,6 @@ namespace IronyModManager.Views.Controls
                 {
                     ViewModel.ForceClose();
                 });
-            }).DisposeWith(disposables);
-            var tree = this.FindControl<TreeView>("tree");
-            this.WhenAnyValue(p => p.ViewModel.Reports).SubscribeObservable(reports =>
-            {
-                var ds = new List<TreeViewItem>();
-                // Why is this set in code behind you ask? Because tree view control needs fixing... much fixing...
-                if (reports?.Count() > 0)
-                {
-                    foreach (var report in reports)
-                    {
-                        if (report.Reports.Count > 0)
-                        {
-                            var treeViewItem = new TreeViewItem()
-                            {
-                                Header = report.Name
-                            };
-                            var children = new List<TreeViewItem>();
-                            foreach (var item in report.Reports)
-                            {
-                                children.Add(new TreeViewItem()
-                                {
-                                    Header = item.File
-                                });
-                            }
-                            treeViewItem.Items = children;
-                            ds.Add(treeViewItem);
-                        }
-                    }
-                }
-                tree.Items = ds;
             }).DisposeWith(disposables);
         }
 
