@@ -81,16 +81,6 @@ namespace IronyModManager.Platform.x11
         private readonly bool _popup;
 
         /// <summary>
-        /// The popup parent
-        /// </summary>
-        private readonly IWindowImpl _popupParent;
-
-        /// <summary>
-        /// The touch
-        /// </summary>
-        private readonly TouchDevice _touch;
-
-        /// <summary>
         /// The transient children
         /// </summary>
         private readonly HashSet<X11Window> _transientChildren = new HashSet<X11Window>();
@@ -217,7 +207,7 @@ namespace IronyModManager.Platform.x11
             _popup = popupParent != null;
             _x11 = platform.Info;
             _mouse = new MouseDevice();
-            _touch = new TouchDevice();
+            TouchDevice = new TouchDevice();
             _keyboard = platform.KeyboardDevice;
 
             var glfeature = AvaloniaLocator.Current.GetService<IWindowingPlatformGlFeature>();
@@ -496,7 +486,7 @@ namespace IronyModManager.Platform.x11
         /// Gets the touch device.
         /// </summary>
         /// <value>The touch device.</value>
-        public TouchDevice TouchDevice => _touch;
+        public TouchDevice TouchDevice { get; }
 
         /// <summary>
         /// Gets or sets the state of the window.
@@ -933,7 +923,7 @@ namespace IronyModManager.Platform.x11
                 _handle = IntPtr.Zero;
                 Closed?.Invoke();
                 _mouse.Dispose();
-                _touch.Dispose();
+                TouchDevice.Dispose();
             }
 
             if (_useRenderWindow && _renderHandle != IntPtr.Zero)
