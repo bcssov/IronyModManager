@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-01-2020
+// Last Modified On : 10-29-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -71,12 +71,12 @@ namespace IronyModManager.Parser.Mod
             var data = codeParser.ParseScriptWithoutValidation(lines);
             if (data.Error == null && data.Values?.Count() > 0)
             {
-                obj.ReplacePath = GetValue<string>(data.Values, "replace_path");
-                obj.UserDir = GetValue<string>(data.Values, "user_dir");
-                obj.FileName = GetValue<string>(data.Values, "path", "archive");
-                obj.Picture = GetValue<string>(data.Values, "picture");
-                obj.Name = GetValue<string>(data.Values, "name");
-                obj.Version = GetValue<string>(data.Values, "supported_version", "version");
+                obj.ReplacePath = GetValue<string>(data.Values, "replace_path") ?? string.Empty;
+                obj.UserDir = GetValue<string>(data.Values, "user_dir") ?? string.Empty;
+                obj.FileName = GetValue<string>(data.Values, "path", "archive") ?? string.Empty;
+                obj.Picture = GetValue<string>(data.Values, "picture") ?? string.Empty;
+                obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
+                obj.Version = GetValue<string>(data.Values, "supported_version", "version") ?? string.Empty;
                 obj.Tags = GetValues<string>(data.Values, "tags");
                 obj.RemoteId = GetValue<long?>(data.Values, "remote_file_id");
                 obj.Dependencies = GetValues<string>(data.Values, "dependencies");
