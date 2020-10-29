@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 10-28-2020
 // ***********************************************************************
 // <copyright file="ModHashReportControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using IronyModManager.Common.ViewModels;
@@ -56,7 +57,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        public virtual IEnumerable<IModHashReport> Reports { get; protected set; }
+        public virtual IEnumerable<ModHashReport> Reports { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the selected report.
+        /// </summary>
+        /// <value>The selected report.</value>
+        public virtual ModHashReport SelectedReport { get; protected set; }
 
         #endregion Properties
 
@@ -76,7 +83,19 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="reports">The reports.</param>
         public virtual void SetParameters(IEnumerable<IModHashReport> reports)
         {
-            Reports = reports;
+            var converted = new List<ModHashReport>();
+            if (reports?.Count() > 0)
+            {
+                foreach (var item in reports)
+                {
+                    converted.Add(new ModHashReport(item));
+                }
+            }
+            Reports = converted;
+            if (converted.Count > 0)
+            {
+                SelectedReport = converted.FirstOrDefault();
+            }
             IsOpen = true;
         }
 
@@ -95,5 +114,101 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class ModFileHashReport.
+        /// </summary>
+        public class ModFileHashReport
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ModFileHashReport"/> class.
+            /// </summary>
+            /// <param name="item">The item.</param>
+            public ModFileHashReport(IModHashFileReport item)
+            {
+                File = item?.File;
+                Hash = item?.Hash;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets the display.
+            /// </summary>
+            /// <value>The display.</value>
+            public string Display
+            {
+                get
+                {
+                    return $"{File} ({Hash})";
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets the file.
+            /// </summary>
+            /// <value>The file.</value>
+            public string File { get; set; }
+
+            /// <summary>
+            /// Gets or sets the hash.
+            /// </summary>
+            /// <value>The hash.</value>
+            public string Hash { get; set; }
+
+            #endregion Properties
+        }
+
+        /// <summary>
+        /// Class ModHashReport.
+        /// </summary>
+        public class ModHashReport
+        {
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ModHashReport"/> class.
+            /// </summary>
+            /// <param name="item">The item.</param>
+            public ModHashReport(IModHashReport item)
+            {
+                Name = item?.Name;
+                var reports = new List<ModFileHashReport>();
+                if (item?.Reports?.Count() > 0)
+                {
+                    foreach (var report in item.Reports)
+                    {
+                        reports.Add(new ModFileHashReport(report));
+                    }
+                }
+                Reports = reports;
+            }
+
+            #endregion Constructors
+
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the name.
+            /// </summary>
+            /// <value>The name.</value>
+            public string Name { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reports.
+            /// </summary>
+            /// <value>The reports.</value>
+            public IList<ModFileHashReport> Reports { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

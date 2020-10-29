@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 10-28-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1335,11 +1335,11 @@ namespace IronyModManager.ViewModels.Controls
 
             IDisposable reportDisposable = null;
 
-            void registerReportHandlers()
+            void registerReportHandlers(bool useImportOverlay = false)
             {
                 reportDisposable = modReportExportHandler.Message.Subscribe(s =>
                 {
-                    TriggerOverlay(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
+                    TriggerOverlay(true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
                         Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
                 }).DisposeWith(disposables);
             }
@@ -1351,7 +1351,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
-                    registerReportHandlers();
+                    registerReportHandlers(true);
                     var reports = await modCollectionService.ImportHashReportAsync(SelectedMods, path);
                     if (reports?.Count() > 0)
                     {

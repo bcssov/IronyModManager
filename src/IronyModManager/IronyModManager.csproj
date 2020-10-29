@@ -184,7 +184,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.12" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.6" />
-    <PackageReference Include="Material.Avalonia" Version="[0.9.0]" allowedVersions="[0.9.0]" />
+    <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
     <PackageReference Include="MessageBox.Avalonia" Version="0.9.6.1" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />
@@ -196,18 +196,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.31">
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20200906002" />
     <PackageReference Include="NLog" Version="4.7.5" />
-    <PackageReference Include="ReactiveUI" Version="11.5.35" />
-    <PackageReference Include="SimpleInjector" Version="5.0.3" />
+    <PackageReference Include="ReactiveUI" Version="12.1.1" />
+    <PackageReference Include="SimpleInjector" Version="5.1.0" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
     <PackageReference Include="SmartFormat.NET" Version="2.5.2" />
-    <PackageReference Include="Splat.NLog" Version="9.5.49" />
-    <PackageReference Include="Splat.SimpleInjector" Version="9.5.49" />
+    <PackageReference Include="Splat.NLog" Version="9.6.1" />
+    <PackageReference Include="Splat.SimpleInjector" Version="9.6.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
     <PackageReference Include="Syroot.Windows.IO.KnownFolders" Version="1.2.3" />
   </ItemGroup>
@@ -216,6 +216,7 @@
     <ProjectReference Include="..\IronyModManager.DI\IronyModManager.DI.csproj" />
     <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
     <ProjectReference Include="..\IronyModManager.Models.Common\IronyModManager.Models.Common.csproj" />
+    <ProjectReference Include="..\IronyModManager.Platform\IronyModManager.Platform.csproj" />
     <ProjectReference Include="..\IronyModManager.Services.Common\IronyModManager.Services.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>

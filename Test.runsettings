@@ -27,6 +27,7 @@
               <Exclude>
                 <!-- DI Module is excluded due to the static nature of the project. Unit tests won't help much here even if architecture was different -->
                 <ModulePath>.*di.*</ModulePath>
+                <ModulePath>.*platform.*</ModulePath>
                 <!-- Barely managed to get it working -->
                 <ModulePath>.*xunit.*</ModulePath>
                 <ModulePath>.*dynamicdata.*</ModulePath>
