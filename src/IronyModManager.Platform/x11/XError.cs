@@ -12,14 +12,12 @@
 // <summary>Rip of Avalonia.x11 so that I don't have to upgrade to 0.10 at this time</summary>
 // ***********************************************************************
 using System;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
     /// <summary>
     /// Class XError.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal static class XError
     {
         #region Fields
@@ -50,8 +48,6 @@ namespace IronyModManager.Platform.x11
         /// Throws the last error.
         /// </summary>
         /// <param name="desc">The desc.</param>
-        /// <exception cref="IronyModManager.Platform.x11.X11Exception"></exception>
-        /// <exception cref="IronyModManager.Platform.x11.X11Exception"></exception>
         /// <exception cref="IronyModManager.Platform.x11.X11Exception"></exception>
         public static void ThrowLastError(string desc)
         {

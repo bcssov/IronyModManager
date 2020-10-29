@@ -17,7 +17,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Input.Platform;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -27,7 +26,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Input.Platform.IClipboard" />
     /// </summary>
     /// <seealso cref="Avalonia.Input.Platform.IClipboard" />
-    [ExcludeFromCoverage("External component.")]
     internal class X11Clipboard : IClipboard
     {
         #region Fields

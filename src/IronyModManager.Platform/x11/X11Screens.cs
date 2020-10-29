@@ -18,7 +18,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -26,7 +25,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Interface IX11Screens
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal interface IX11Screens
     {
         #region Properties
@@ -43,7 +41,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class X11Screen.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal class X11Screen
     {
         #region Fields
@@ -147,7 +144,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.IScreenImpl" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IScreenImpl" />
-    [ExcludeFromCoverage("External component.")]
     internal class X11Screens : IScreenImpl
     {
         #region Fields
@@ -425,7 +421,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class X11ScreensUserSettings.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal class X11ScreensUserSettings
     {
         #region Properties

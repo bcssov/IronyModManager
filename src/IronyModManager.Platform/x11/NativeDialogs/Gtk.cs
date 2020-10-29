@@ -16,7 +16,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Interop;
-using IronyModManager.Shared;
 
 // ReSharper disable IdentifierTypo
 namespace IronyModManager.Platform.x11.NativeDialogs
@@ -24,7 +23,6 @@ namespace IronyModManager.Platform.x11.NativeDialogs
     /// <summary>
     /// Enum GtkFileChooserAction
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal enum GtkFileChooserAction
     {
         /// <summary>
@@ -47,7 +45,6 @@ namespace IronyModManager.Platform.x11.NativeDialogs
     /// <summary>
     /// Enum GtkResponseType
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal enum GtkResponseType
     {
         /// <summary>

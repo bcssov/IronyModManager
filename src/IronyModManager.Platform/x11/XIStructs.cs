@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Runtime.InteropServices;
-using IronyModManager.Shared;
 using Bool = System.Boolean;
 
 // ReSharper disable IdentifierTypo
@@ -27,7 +26,6 @@ namespace IronyModManager.Platform.x11
     /// Enum XiDeviceEventFlags
     /// </summary>
     [Flags]
-    [ExcludeFromCoverage("External component.")]
     public enum XiDeviceEventFlags : int
     {
         /// <summary>
@@ -44,7 +42,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Enum XiDeviceClass
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal enum XiDeviceClass
     {
         /// <summary>

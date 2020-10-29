@@ -14,7 +14,6 @@
 using System;
 using Avalonia;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
@@ -23,7 +22,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.IPlatformSettings" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IPlatformSettings" />
-    [ExcludeFromCoverage("External component.")]
     internal class PlatformSettingsStub : IPlatformSettings
     {
         #region Properties

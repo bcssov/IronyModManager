@@ -20,7 +20,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Platform;
 using Avalonia.Platform;
 using Avalonia.Platform.Interop;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.NativeDialogs.Glib;
 using static IronyModManager.Platform.x11.NativeDialogs.Gtk;
 
@@ -32,7 +31,6 @@ namespace IronyModManager.Platform.x11.NativeDialogs
     /// Implements the <see cref="Avalonia.Controls.Platform.ISystemDialogImpl" />
     /// </summary>
     /// <seealso cref="Avalonia.Controls.Platform.ISystemDialogImpl" />
-    [ExcludeFromCoverage("External component.")]
     internal class GtkSystemDialog : ISystemDialogImpl
     {
         #region Fields

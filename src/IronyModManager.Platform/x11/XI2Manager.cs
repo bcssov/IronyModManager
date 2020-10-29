@@ -17,7 +17,6 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -25,7 +24,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Interface IXI2Client
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal interface IXI2Client
     {
         #region Properties

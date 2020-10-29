@@ -18,7 +18,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Avalonia.Platform;
 using Avalonia.Threading;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -28,7 +27,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.IPlatformThreadingInterface" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IPlatformThreadingInterface" />
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class X11PlatformThreading : IPlatformThreadingInterface
     {
         #region Fields

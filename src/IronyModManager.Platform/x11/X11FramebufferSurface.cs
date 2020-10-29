@@ -15,7 +15,6 @@
 using System;
 using Avalonia.Controls.Platform.Surfaces;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -25,7 +24,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Controls.Platform.Surfaces.IFramebufferPlatformSurface" />
     /// </summary>
     /// <seealso cref="Avalonia.Controls.Platform.Surfaces.IFramebufferPlatformSurface" />
-    [ExcludeFromCoverage("External component.")]
     public class X11FramebufferSurface : IFramebufferPlatformSurface
     {
         #region Fields

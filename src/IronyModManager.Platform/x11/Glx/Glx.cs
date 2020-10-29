@@ -17,7 +17,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Avalonia.OpenGL;
 using Avalonia.Platform.Interop;
-using IronyModManager.Shared;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 
@@ -28,7 +27,6 @@ namespace IronyModManager.Platform.x11.Glx
     /// Implements the <see cref="Avalonia.OpenGL.GlInterfaceBase" />
     /// </summary>
     /// <seealso cref="Avalonia.OpenGL.GlInterfaceBase" />
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class GlxInterface : GlInterfaceBase
     {
         #region Fields

@@ -15,7 +15,6 @@
 using System;
 using Avalonia;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -25,7 +24,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.ILockedFramebuffer" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.ILockedFramebuffer" />
-    [ExcludeFromCoverage("External component.")]
     internal class X11Framebuffer : ILockedFramebuffer
     {
         #region Fields

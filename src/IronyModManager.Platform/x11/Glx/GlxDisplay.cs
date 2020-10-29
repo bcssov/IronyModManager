@@ -15,7 +15,6 @@ using System;
 using System.Linq;
 using Avalonia;
 using Avalonia.OpenGL;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.Glx.GlxConsts;
 
 namespace IronyModManager.Platform.x11.Glx
@@ -25,7 +24,6 @@ namespace IronyModManager.Platform.x11.Glx
     /// Implements the <see cref="Avalonia.OpenGL.IGlDisplay" />
     /// </summary>
     /// <seealso cref="Avalonia.OpenGL.IGlDisplay" />
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class GlxDisplay : IGlDisplay
     {
         #region Fields
@@ -34,11 +32,6 @@ namespace IronyModManager.Platform.x11.Glx
         /// The fbconfig
         /// </summary>
         private readonly IntPtr _fbconfig;
-
-        /// <summary>
-        /// The visual
-        /// </summary>
-        private readonly XVisualInfo* _visual;
 
         /// <summary>
         /// The X11
@@ -95,7 +88,7 @@ namespace IronyModManager.Platform.x11.Glx
                     if (_fbconfig == IntPtr.Zero || visual->depth == 32)
                     {
                         _fbconfig = ptr[c];
-                        _visual = visual;
+                        VisualInfo = visual;
                         if (visual->depth == 32)
                             break;
                     }
@@ -108,7 +101,7 @@ namespace IronyModManager.Platform.x11.Glx
             if (_fbconfig == IntPtr.Zero)
                 throw new OpenGlException("Unable to choose FBConfig");
 
-            if (_visual == null)
+            if (VisualInfo == null)
                 throw new OpenGlException("Unable to get visual info from FBConfig");
             if (Glx.GetFBConfigAttrib(_x11.Display, _fbconfig, GLX_SAMPLES, out var samples) == 0)
                 SampleCount = samples;
@@ -194,7 +187,7 @@ namespace IronyModManager.Platform.x11.Glx
         /// Gets the visual information.
         /// </summary>
         /// <value>The visual information.</value>
-        public XVisualInfo* VisualInfo => _visual;
+        public XVisualInfo* VisualInfo { get; }
 
         #endregion Properties
 

@@ -13,12 +13,14 @@
 // ***********************************************************************
 using IronyModManager.Shared;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable IdentifierTypo
+// ReSharper disable CommentTypo
 namespace IronyModManager.Platform.x11
 {
     /// <summary>
     /// Enum X11Key
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal enum X11Key
     {
         /// <summary>

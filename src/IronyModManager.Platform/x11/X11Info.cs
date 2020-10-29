@@ -14,7 +14,6 @@
 
 using System;
 using System.Linq;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -23,7 +22,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class X11Info.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class X11Info
     {
         #region Constructors

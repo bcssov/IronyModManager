@@ -11,6 +11,7 @@
 // </copyright>
 // <summary>Rip of Avalonia.x11 so that I don't have to upgrade to 0.10 at this time</summary>
 // ***********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,6 @@ using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using IronyModManager.Platform.x11.Glx;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 // ReSharper disable IdentifierTypo
@@ -45,7 +45,6 @@ namespace IronyModManager.Platform.x11
     /// <seealso cref="Avalonia.Platform.IPopupImpl" />
     /// <seealso cref="IronyModManager.Platform.x11.IXI2Client" />
     /// <seealso cref="Avalonia.Controls.Platform.ITopLevelImplWithNativeMenuExporter" />
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class X11Window : IWindowImpl, IPopupImpl, IXI2Client, ITopLevelImplWithNativeMenuExporter
     {
         #region Fields
@@ -79,6 +78,11 @@ namespace IronyModManager.Platform.x11
         /// The popup
         /// </summary>
         private readonly bool _popup;
+
+        /// <summary>
+        /// The touch
+        /// </summary>
+        private readonly TouchDevice _touch;
 
         /// <summary>
         /// The transient children
@@ -207,7 +211,7 @@ namespace IronyModManager.Platform.x11
             _popup = popupParent != null;
             _x11 = platform.Info;
             _mouse = new MouseDevice();
-            TouchDevice = new TouchDevice();
+            _touch = new TouchDevice();
             _keyboard = platform.KeyboardDevice;
 
             var glfeature = AvaloniaLocator.Current.GetService<IWindowingPlatformGlFeature>();
@@ -486,7 +490,7 @@ namespace IronyModManager.Platform.x11
         /// Gets the touch device.
         /// </summary>
         /// <value>The touch device.</value>
-        public TouchDevice TouchDevice { get; }
+        public TouchDevice TouchDevice => _touch;
 
         /// <summary>
         /// Gets or sets the state of the window.
@@ -923,7 +927,7 @@ namespace IronyModManager.Platform.x11
                 _handle = IntPtr.Zero;
                 Closed?.Invoke();
                 _mouse.Dispose();
-                TouchDevice.Dispose();
+                _touch.Dispose();
             }
 
             if (_useRenderWindow && _renderHandle != IntPtr.Zero)

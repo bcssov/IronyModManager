@@ -19,7 +19,6 @@ using Avalonia;
 using Avalonia.Controls.Platform.Surfaces;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
@@ -30,7 +29,6 @@ namespace IronyModManager.Platform.x11
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IWindowIconImpl" />
     /// <seealso cref="Avalonia.Controls.Platform.Surfaces.IFramebufferPlatformSurface" />
-    [ExcludeFromCoverage("External component.")]
     internal unsafe class X11IconData : IWindowIconImpl, IFramebufferPlatformSurface
     {
         #region Fields

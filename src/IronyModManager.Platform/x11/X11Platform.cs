@@ -25,7 +25,6 @@ using Avalonia.Platform;
 using Avalonia.Rendering;
 using IronyModManager.Platform.x11.Glx;
 using IronyModManager.Platform.x11.NativeDialogs;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 namespace IronyModManager.Platform.x11
@@ -33,7 +32,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class X11PlatformExtensions.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     public static class X11PlatformExtensions
     {
         #region Methods
@@ -67,7 +65,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.IWindowingPlatform" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IWindowingPlatform" />
-    [ExcludeFromCoverage("External component.")]
     internal class AvaloniaX11Platform : IWindowingPlatform
     {
         #region Fields

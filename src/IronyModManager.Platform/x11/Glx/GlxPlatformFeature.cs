@@ -15,7 +15,6 @@ using System;
 using Avalonia;
 using Avalonia.Logging;
 using Avalonia.OpenGL;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11.Glx
 {
@@ -24,7 +23,6 @@ namespace IronyModManager.Platform.x11.Glx
     /// Implements the <see cref="Avalonia.OpenGL.IWindowingPlatformGlFeature" />
     /// </summary>
     /// <seealso cref="Avalonia.OpenGL.IWindowingPlatformGlFeature" />
-    [ExcludeFromCoverage("External component.")]
     internal class GlxGlPlatformFeature : IWindowingPlatformGlFeature
     {
         #region Properties

@@ -15,7 +15,6 @@ using System;
 using System.Reactive.Disposables;
 using System.Threading;
 using Avalonia.OpenGL;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11.Glx
 {
@@ -24,7 +23,6 @@ namespace IronyModManager.Platform.x11.Glx
     /// Implements the <see cref="Avalonia.OpenGL.IGlContext" />
     /// </summary>
     /// <seealso cref="Avalonia.OpenGL.IGlContext" />
-    [ExcludeFromCoverage("External component.")]
     internal class GlxContext : IGlContext
     {
         #region Fields

@@ -18,7 +18,6 @@ using Avalonia;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
@@ -29,7 +28,6 @@ namespace IronyModManager.Platform.x11
     /// </summary>
     /// <seealso cref="Avalonia.Rendering.IRenderer" />
     /// <seealso cref="Avalonia.Rendering.IRenderLoopTask" />
-    [ExcludeFromCoverage("External component.")]
     public class X11ImmediateRendererProxy : IRenderer, IRenderLoopTask
     {
         #region Fields

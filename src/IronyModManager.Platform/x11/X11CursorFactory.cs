@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Input;
 using Avalonia.Platform;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
@@ -26,7 +25,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="Avalonia.Platform.IStandardCursorFactory" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IStandardCursorFactory" />
-    [ExcludeFromCoverage("External component.")]
     internal class X11CursorFactory : IStandardCursorFactory
     {
         #region Fields

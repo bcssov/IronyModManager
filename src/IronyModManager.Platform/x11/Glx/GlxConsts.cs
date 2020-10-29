@@ -6,21 +6,18 @@
 // Last Modified By : Mario
 // Last Modified On : 10-29-2020
 // ***********************************************************************
-// <copyright file="GlxConsts.cs" company="Avalonia">
+// <copyright file="Glx.cs" company="Avalonia">
 //     Avalonia
 // </copyright>
 // <summary>Rip of Avalonia.x11 so that I don't have to upgrade to 0.10 at this time</summary>
 // ***********************************************************************l
 #pragma warning disable 414
 
-using IronyModManager.Shared;
-
 namespace IronyModManager.Platform.x11.Glx
 {
     /// <summary>
     /// Class GlxConsts.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal class GlxConsts
     {
         #region Fields

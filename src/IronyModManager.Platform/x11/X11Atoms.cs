@@ -36,7 +36,6 @@
 //
 using System;
 using System.Linq;
-using IronyModManager.Shared;
 using static IronyModManager.Platform.x11.XLib;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Global
@@ -55,7 +54,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class X11Atoms.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal class X11Atoms
     {
         #region Fields

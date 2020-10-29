@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using Avalonia;
-using IronyModManager.Shared;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
@@ -31,7 +30,6 @@ namespace IronyModManager.Platform.x11
     /// <summary>
     /// Class XLib.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal static unsafe class XLib
     {
         #region Fields

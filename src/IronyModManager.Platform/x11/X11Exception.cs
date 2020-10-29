@@ -12,7 +12,6 @@
 // <summary>Rip of Avalonia.x11 so that I don't have to upgrade to 0.10 at this time</summary>
 // ***********************************************************************
 using System;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
@@ -21,7 +20,6 @@ namespace IronyModManager.Platform.x11
     /// Implements the <see cref="System.Exception" />
     /// </summary>
     /// <seealso cref="System.Exception" />
-    [ExcludeFromCoverage("External component.")]
     public class X11Exception : Exception
     {
         #region Constructors

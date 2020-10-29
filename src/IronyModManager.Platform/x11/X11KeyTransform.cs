@@ -14,14 +14,12 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Input;
-using IronyModManager.Shared;
 
 namespace IronyModManager.Platform.x11
 {
     /// <summary>
     /// Class X11KeyTransform.
     /// </summary>
-    [ExcludeFromCoverage("External component.")]
     internal static class X11KeyTransform
     {
         #region Fields
