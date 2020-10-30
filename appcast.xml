@@ -4,48 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.36</title>
-			<description>CHANGES FROM v1.7:
+			<title>1.8.37</title>
+			<description>RELEASE INFO:
+				* Hash report shows both hashes now
+				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Fri, 30 Oct 2020 03:18:36 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/osx-x64.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="62749310" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Z4NpPYF9hl/Ei+sWErMOD4eCn5GKhW8QU95Ss0XxTz9J8qYURALgWCEUVXWRAHoCahdeeGUYt6paxfeMJX6dCw=="/>
+			<pubDate>Fri, 30 Oct 2020 17:02:35 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.37/osx-x64.rar" sparkle:version="1.8.37.38664" sparkle:shortVersionString="1.8.37" length="62751218" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="6WfxkIuPmKDx/I+nZ5RnfNfK/3Z0m+/z1CiTa1mRDmgIVXKymzPb+HRuarAkzUiJdLkObyUJhiBFxYs2ErZwDg=="/>
 		</item>
 		<item>
-			<title>1.8.36</title>
-			<description>CHANGES FROM v1.7:
+			<title>1.8.37</title>
+			<description>RELEASE INFO:
+				* Hash report shows both hashes now
+				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Fri, 30 Oct 2020 03:18:43 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/win-x64-setup.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="54467371" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="vNTuRxF0T6UGikq2T3RwLk7gLoeYSYBSShqtsJnm1YfkFjH4UP6nckJfhhmlfYV4REY2UjIr7nPRhPK5X5NVAg=="/>
+			<pubDate>Fri, 30 Oct 2020 17:02:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.37/win-x64-setup.rar" sparkle:version="1.8.37.38664" sparkle:shortVersionString="1.8.37" length="54458936" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="hSLyPNXwKRR0acGUiyh8TioXnSuWoSsMw/P1UNKtD/imkz4D2S4mnnOWhiTYs4EBR4H9hdVXqhGVpN7tpGjFAQ=="/>
 		</item>
 		<item>
-			<title>1.8.36</title>
-			<description>CHANGES FROM v1.7:
+			<title>1.8.37</title>
+			<description>RELEASE INFO:
+				* Hash report shows both hashes now
+				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Fri, 30 Oct 2020 03:18:40 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/win-x64.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="65395227" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="eY+N1f1Hqmv0rM82PPGWA2xASwWgTpdlomyvu6z5IXTvlQSCKSN60b/WD2QjARvkkOY5MZ6Ti8PU/t9qIr5iAg=="/>
+			<pubDate>Fri, 30 Oct 2020 17:02:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.37/win-x64.rar" sparkle:version="1.8.37.38664" sparkle:shortVersionString="1.8.37" length="65397391" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="9TwZRJN00MG5aDJF20mEfWEWfw+gtMc2eXGPm5NodNpoHdzrk3A16ZgDNRM/nd5fb2FE5Wh6Ad/yFkY3erWLCg=="/>
 		</item>
 		<item>
-			<title>1.8.36</title>
-			<description>CHANGES FROM v1.7:
+			<title>1.8.37</title>
+			<description>RELEASE INFO:
+				* Hash report shows both hashes now
+				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Fri, 30 Oct 2020 03:18:34 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/linux-x64.zip" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="77924338" sparkle:os="linux" type="application/zip" sparkle:signature="7RPtTQQrThdlGNODMPospGdi+RnMSnn40Omkc5kO3FPqbO7HNOF3Y3pXhf11jho8QIX82LHEK3NhO5Vh9llKCg=="/>
+			<pubDate>Fri, 30 Oct 2020 17:02:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.37/linux-x64.zip" sparkle:version="1.8.37.38664" sparkle:shortVersionString="1.8.37" length="77924718" sparkle:os="linux" type="application/zip" sparkle:signature="7O8RV/Lsm4Bo5lmyf4F+i556clkpedPRrf/y1bvkHethwyNkPf7sKO92wrq38Yj7DNne5Pz+d8nOcD78Ct1UCw=="/>
 		</item>
 	</channel>
 </rss>
