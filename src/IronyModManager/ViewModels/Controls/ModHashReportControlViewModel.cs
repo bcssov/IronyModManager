@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2020
+// Last Modified On : 10-30-2020
 // ***********************************************************************
 // <copyright file="ModHashReportControlViewModel.cs" company="Mario">
 //     Mario
@@ -125,13 +125,14 @@ namespace IronyModManager.ViewModels.Controls
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ModFileHashReport"/> class.
+            /// Initializes a new instance of the <see cref="ModFileHashReport" /> class.
             /// </summary>
             /// <param name="item">The item.</param>
             public ModFileHashReport(IModHashFileReport item)
             {
                 File = item?.File;
                 Hash = item?.Hash;
+                SecondHash = item?.SecondHash;
             }
 
             #endregion Constructors
@@ -146,7 +147,22 @@ namespace IronyModManager.ViewModels.Controls
             {
                 get
                 {
-                    return $"{File} ({Hash})";
+                    if (!string.IsNullOrWhiteSpace(Hash) && !string.IsNullOrWhiteSpace(SecondHash))
+                    {
+                        return $"{File} ({Hash} - {SecondHash})";
+                    }
+                    else if (!string.IsNullOrWhiteSpace(Hash))
+                    {
+                        return $"{File} ({Hash})";
+                    }
+                    else if (!string.IsNullOrWhiteSpace(SecondHash))
+                    {
+                        return $"{File} ({SecondHash})";
+                    }
+                    else
+                    {
+                        return File;
+                    }
                 }
             }
 
@@ -162,6 +178,12 @@ namespace IronyModManager.ViewModels.Controls
             /// <value>The hash.</value>
             public string Hash { get; set; }
 
+            /// <summary>
+            /// Gets or sets the second hash.
+            /// </summary>
+            /// <value>The second hash.</value>
+            public string SecondHash { get; set; }
+
             #endregion Properties
         }
 
@@ -173,7 +195,7 @@ namespace IronyModManager.ViewModels.Controls
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ModHashReport"/> class.
+            /// Initializes a new instance of the <see cref="ModHashReport" /> class.
             /// </summary>
             /// <param name="item">The item.</param>
             public ModHashReport(IModHashReport item)

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-12-2020
+// Last Modified On : 10-30-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -366,6 +366,12 @@ namespace IronyModManager.Services
                                 {
                                     var hashReport = DIResolver.Get<IModHashFileReport>();
                                     hashReport.File = item.File;
+                                    hashReport.Hash = item.Hash;
+                                    var secondHash = secondReport.Reports.FirstOrDefault(p => p.File.Equals(item.File));
+                                    if (secondHash != null)
+                                    {
+                                        hashReport.SecondHash = secondHash.Hash;
+                                    }
                                     report.Reports.Add(hashReport);
                                 }
                             }
