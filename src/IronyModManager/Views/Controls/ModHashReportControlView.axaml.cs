@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2020
+// Last Modified On : 10-30-2020
 // ***********************************************************************
 // <copyright file="ModHashReportControlView.axaml.cs" company="Mario">
 //     Mario
@@ -17,13 +17,9 @@ using System.Reactive.Disposables;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using IronyModManager.Common;
-using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
-using ReactiveUI;
 
 namespace IronyModManager.Views.Controls
 {
@@ -69,14 +65,6 @@ namespace IronyModManager.Views.Controls
                 popup.Host.ConfigurePosition(window, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, verticalOffset),
                     Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Top, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None);
             };
-            MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
-            .SubscribeObservable(x =>
-            {
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    ViewModel.ForceClose();
-                });
-            }).DisposeWith(disposables);
         }
 
         /// <summary>

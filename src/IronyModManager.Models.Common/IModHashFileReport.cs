@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 10-30-2020
 // ***********************************************************************
 // <copyright file="IModHashFileReport.cs" company="Mario">
 //     Mario
@@ -36,6 +36,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The hash.</value>
         string Hash { get; set; }
+
+        /// <summary>
+        /// Gets or sets the second hash.
+        /// </summary>
+        /// <value>The second hash.</value>
+        string SecondHash { get; set; }
 
         #endregion Properties
     }
