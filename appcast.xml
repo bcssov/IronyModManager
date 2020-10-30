@@ -4,56 +4,48 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.7.57</title>
-			<description>RELEASE INFO:
-				* Fix patch exporter caching issue
-				CHANGES FROM v1.6:
-				* Add chinese translation (thanks to Windmill-City)
-				* Switch to custom noto font
-				* UI readjusted due to new font
-				* Add mod collection file hash verification (intended use case is for MP gameplay)
-				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sun, 25 Oct 2020 06:35:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.57/osx-x64.rar" sparkle:version="1.7.57.29603" sparkle:shortVersionString="1.7.57" length="62603900" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="nYO2/6807nzcDVc5G8eRLPAd3E4N9ZK00hPoXm+/hZgkyNCXUOJZ09/mMazWvOIiiminhgr71w8lcqAiYzSqBw=="/>
+			<title>1.8.36</title>
+			<description>CHANGES FROM v1.7:
+				* Various bugfixes
+				* Upgrade dependencies
+				* Show more information in hash report and optimize performance by switching to listbox controls
+				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+				* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Fri, 30 Oct 2020 03:18:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/osx-x64.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="62749310" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Z4NpPYF9hl/Ei+sWErMOD4eCn5GKhW8QU95Ss0XxTz9J8qYURALgWCEUVXWRAHoCahdeeGUYt6paxfeMJX6dCw=="/>
 		</item>
 		<item>
-			<title>1.7.57</title>
-			<description>RELEASE INFO:
-				* Fix patch exporter caching issue
-				CHANGES FROM v1.6:
-				* Add chinese translation (thanks to Windmill-City)
-				* Switch to custom noto font
-				* UI readjusted due to new font
-				* Add mod collection file hash verification (intended use case is for MP gameplay)
-				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sun, 25 Oct 2020 06:36:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.57/win-x64-setup.rar" sparkle:version="1.7.57.29603" sparkle:shortVersionString="1.7.57" length="54352822" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="7FWtdCbJqtjZ0pJwd0IoOCX5I9Izx43Mdk1ZEQEz6ivvBBjSAMhrxuASevLLjbvRFPEDMaR0aBEEbWPqJx12Bg=="/>
+			<title>1.8.36</title>
+			<description>CHANGES FROM v1.7:
+				* Various bugfixes
+				* Upgrade dependencies
+				* Show more information in hash report and optimize performance by switching to listbox controls
+				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+				* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Fri, 30 Oct 2020 03:18:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/win-x64-setup.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="54467371" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="vNTuRxF0T6UGikq2T3RwLk7gLoeYSYBSShqtsJnm1YfkFjH4UP6nckJfhhmlfYV4REY2UjIr7nPRhPK5X5NVAg=="/>
 		</item>
 		<item>
-			<title>1.7.57</title>
-			<description>RELEASE INFO:
-				* Fix patch exporter caching issue
-				CHANGES FROM v1.6:
-				* Add chinese translation (thanks to Windmill-City)
-				* Switch to custom noto font
-				* UI readjusted due to new font
-				* Add mod collection file hash verification (intended use case is for MP gameplay)
-				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sun, 25 Oct 2020 06:36:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.57/win-x64.rar" sparkle:version="1.7.57.29603" sparkle:shortVersionString="1.7.57" length="65249819" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="BRaWY6ioNN+HxORr6hKWTfWz65eI0DAlETCel1DSlPfPpcUXRBMC2oqBfEz6DnBT13YIC+PVn/S9InYiMtvsCg=="/>
+			<title>1.8.36</title>
+			<description>CHANGES FROM v1.7:
+				* Various bugfixes
+				* Upgrade dependencies
+				* Show more information in hash report and optimize performance by switching to listbox controls
+				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+				* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Fri, 30 Oct 2020 03:18:40 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/win-x64.rar" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="65395227" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="eY+N1f1Hqmv0rM82PPGWA2xASwWgTpdlomyvu6z5IXTvlQSCKSN60b/WD2QjARvkkOY5MZ6Ti8PU/t9qIr5iAg=="/>
 		</item>
 		<item>
-			<title>1.7.57</title>
-			<description>RELEASE INFO:
-				* Fix patch exporter caching issue
-				CHANGES FROM v1.6:
-				* Add chinese translation (thanks to Windmill-City)
-				* Switch to custom noto font
-				* UI readjusted due to new font
-				* Add mod collection file hash verification (intended use case is for MP gameplay)
-				* Add option to not close Irony after launching game (per game setting)</description>
-			<pubDate>Sun, 25 Oct 2020 06:35:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.7.57/linux-x64.zip" sparkle:version="1.7.57.29603" sparkle:shortVersionString="1.7.57" length="77755028" sparkle:os="linux" type="application/zip" sparkle:signature="mPRtIu2Gn4a3bqZWbOUuybEjz7IAJhJLfMqZFFCcnuZCsFWR2dOJW8BSzgbsoxQ7K03hyu68unPD5ufDWjOjCg=="/>
+			<title>1.8.36</title>
+			<description>CHANGES FROM v1.7:
+				* Various bugfixes
+				* Upgrade dependencies
+				* Show more information in hash report and optimize performance by switching to listbox controls
+				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+				* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Fri, 30 Oct 2020 03:18:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.36/linux-x64.zip" sparkle:version="1.8.36.65095" sparkle:shortVersionString="1.8.36" length="77924338" sparkle:os="linux" type="application/zip" sparkle:signature="7RPtTQQrThdlGNODMPospGdi+RnMSnn40Omkc5kO3FPqbO7HNOF3Y3pXhf11jho8QIX82LHEK3NhO5Vh9llKCg=="/>
 		</item>
 	</channel>
 </rss>
