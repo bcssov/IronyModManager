@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 10-31-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
@@ -28,7 +29,7 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
-using IronyModManager.Common;
+using Avalonia;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -143,6 +144,7 @@ namespace IronyModManager.ViewModels.Controls
             this.notificationAction = notificationAction;
             this.logger = logger;
             this.messageBus = messageBus;
+            UpdaterMargin = new Thickness(0, 20, 0, 0);
         }
 
         #endregion Constructors
@@ -353,6 +355,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ResetExeCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [show game options].
+        /// </summary>
+        /// <value><c>true</c> if [show game options]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowGameOptions { get; protected set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [update information visible].
         /// </summary>
         /// <value><c>true</c> if [update information visible]; otherwise, <c>false</c>.</value>
@@ -390,6 +398,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The version title.</value>
         [StaticLocalization(LocalizationResources.Options.Updates.Version)]
         public virtual string VersionTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the updater margin.
+        /// </summary>
+        /// <value>The updater margin.</value>
+        public virtual Thickness UpdaterMargin { get; protected set; }
 
         #endregion Properties
 
@@ -686,6 +700,8 @@ namespace IronyModManager.ViewModels.Controls
             {
                 SaveGame();
             }).DisposeWith(Disposables);
+            ShowGameOptions = game != null;
+            UpdaterMargin = new Thickness(0, ShowGameOptions ? 20 : 0, 0, 0);
             isGameReloading = false;
         }
 
