@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-14-2020
+// Last Modified On : 11-01-2020
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -49,6 +49,15 @@ namespace IronyModManager.Parser
             { $"{Common.Constants.Scripts.OpenObject} ", Common.Constants.Scripts.OpenObject.ToString() },
             { $" {Common.Constants.Scripts.CloseObject}", Common.Constants.Scripts.CloseObject.ToString() },
             { $"{Common.Constants.Scripts.CloseObject} ", Common.Constants.Scripts.CloseObject.ToString() },
+        };
+
+        /// <summary>
+        /// The code terminator map
+        /// </summary>
+        protected static readonly Dictionary<string, string> codeTerminatorMap = new Dictionary<string, string>()
+        {
+            { $"{Common.Constants.Scripts.OpenObject}", $" {Common.Constants.Scripts.OpenObject} " },
+            { $"{Common.Constants.Scripts.CloseObject}", $" {Common.Constants.Scripts.CloseObject} " }
         };
 
         /// <summary>
@@ -239,6 +248,67 @@ namespace IronyModManager.Parser
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Cleans the comments.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        protected string CleanComments(string line)
+        {
+            if (line.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0)
+            {
+                var sb = new StringBuilder();
+                var split = line.Split(Common.Constants.Scripts.ScriptCommentId);
+                var counter = 0;
+                var count = split.Count();
+                var quoteCount = 0;
+                foreach (var item in split)
+                {
+                    counter++;
+                    var previousQuoteCount = quoteCount;
+                    quoteCount += item.Count(p => p == Common.Constants.Scripts.Quote);
+                    if (counter == 1)
+                    {
+                        sb.Append(item);
+                    }
+                    else
+                    {
+                        var quoteIndex = item.IndexOf(Common.Constants.Scripts.Quote);
+                        if (quoteIndex > -1 && quoteCount == 2 && previousQuoteCount > 0)
+                        {
+                            sb.Append($"#{item.Substring(0, quoteIndex + 1)}");
+                            break;
+                        }
+                        else if (counter < count && previousQuoteCount > 0)
+                        {
+                            sb.Append($"#{item}");
+                        }
+                    }
+                }
+                return sb.ToString().Trim(Common.Constants.Scripts.ScriptCommentId);
+            }
+            return line;
+        }
+
+        /// <summary>
+        /// Formats the code terminators.
+        /// </summary>
+        /// <param name="line">The line.</param>
+        /// <returns>System.String.</returns>
+        protected string FormatCodeTerminators(string line)
+        {
+            if (string.IsNullOrEmpty(line))
+            {
+                return string.Empty;
+            }
+            var cleaned = string.Join(' ', line.Trim().Replace("\t", " ").Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            foreach (var item in codeTerminatorMap)
+            {
+                cleaned = cleaned.Replace(item.Key, item.Value).Trim();
+            }
+            return cleaned;
         }
 
         /// <summary>
@@ -590,7 +660,7 @@ namespace IronyModManager.Parser
         {
             var result = new List<IScriptElement>();
             var validCodeLines = lines.Where(p => !string.IsNullOrWhiteSpace(p) && !p.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId.ToString()))
-                .Select(p => p.IndexOf(Common.Constants.Scripts.ScriptCommentId) > 0 ? p.Substring(0, p.IndexOf(Common.Constants.Scripts.ScriptCommentId)) : p);
+                .Select(p => FormatCodeTerminators(CleanComments(p)));
             var code = string.Join(Environment.NewLine, validCodeLines).ToList();
             for (int i = 0; i < code.Count(); i++)
             {

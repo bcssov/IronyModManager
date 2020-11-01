@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-25-2020
+// Last Modified On : 11-01-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -812,7 +812,12 @@ namespace IronyModManager.IO.Mods
                     item.File = fileName;
                     tasks.Add(retry.RetryActionAsync(async () =>
                     {
-                        await File.WriteAllTextAsync(outPath, item.Code, infoProvider.GetEncoding(item));
+                        var code = item.Code;
+                        if (!code.EndsWith(Environment.NewLine))
+                        {
+                            code += Environment.NewLine;
+                        }
+                        await File.WriteAllTextAsync(outPath, code, infoProvider.GetEncoding(item));
                         return true;
                     }));
                     await evalZeroByteFiles(item, infoProvider, fileName);
