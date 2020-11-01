@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-04-2020
+// Last Modified On : 11-01-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -190,14 +190,14 @@ namespace IronyModManager.Parser.Common
             public const char ScriptCommentId = '#';
 
             /// <summary>
-            /// The square open bracket
-            /// </summary>
-            public const char SquareOpenBracket = '[';
-
-            /// <summary>
             /// The square close bracket
             /// </summary>
             public const char SquareCloseBracket = ']';
+
+            /// <summary>
+            /// The square open bracket
+            /// </summary>
+            public const char SquareOpenBracket = '[';
 
             /// <summary>
             /// The variable prefix
@@ -207,7 +207,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The terminators
             /// </summary>
-            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject, ScriptCommentId };
+            public static readonly char[] CodeTerminators = new char[] { OpenObject, CloseObject };
 
             /// <summary>
             /// The generic key ids
