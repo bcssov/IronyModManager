@@ -4,56 +4,56 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.39</title>
+			<title>1.8.41</title>
 			<description>RELEASE INFO:
-				* Fix CTD by hiding game options if no game is selected
+				* Fix GUI parser issues which also resolve many issues related to advanced merge
 				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 31 Oct 2020 03:35:44 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.39/osx-x64.rar" sparkle:version="1.8.39.40057" sparkle:shortVersionString="1.8.39" length="62748585" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="UqsVAbAQ6q3NQB2fHQUktdsUaDCGDhy36Oypdv9/6eg5G6Y6o5knTms+UkALXwTsMme2NXce2p29ghuzqRXnDw=="/>
+			<pubDate>Sun, 01 Nov 2020 21:20:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.41/osx-x64.rar" sparkle:version="1.8.41.8587" sparkle:shortVersionString="1.8.41" length="62748285" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="EFdyTexOEEyGxZ2cvfqfCJcWkkxUXJiiiUJb273TFHqdJw1iInNM/ccxaAdXIc+NCQzjPQP/4LM4qnVkUjCQAg=="/>
 		</item>
 		<item>
-			<title>1.8.39</title>
+			<title>1.8.41</title>
 			<description>RELEASE INFO:
-				* Fix CTD by hiding game options if no game is selected
+				* Fix GUI parser issues which also resolve many issues related to advanced merge
 				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 31 Oct 2020 03:35:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.39/win-x64-setup.rar" sparkle:version="1.8.39.40057" sparkle:shortVersionString="1.8.39" length="54454004" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="uf+U5SmDdSy7XwpB2PNUYlk5IhozSzVFupKalNHgLQyAmhAyRiWkWjEWDP85C1xHJIzpwoA1vMtMff5FBu1DDA=="/>
+			<pubDate>Sun, 01 Nov 2020 21:20:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.41/win-x64-setup.rar" sparkle:version="1.8.41.8587" sparkle:shortVersionString="1.8.41" length="54463629" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="DF94wczBv2n6p+y4QwB+8Up3fP6LVcS0QwS7EZ8sVYLRUD3qqAEcncDME2qElWmtd870QaYeESJ+xtN90979Bg=="/>
 		</item>
 		<item>
-			<title>1.8.39</title>
+			<title>1.8.41</title>
 			<description>RELEASE INFO:
-				* Fix CTD by hiding game options if no game is selected
+				* Fix GUI parser issues which also resolve many issues related to advanced merge
 				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 31 Oct 2020 03:35:47 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.39/win-x64.rar" sparkle:version="1.8.39.40057" sparkle:shortVersionString="1.8.39" length="65394692" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="JlsacRyOPtS3BUc1hb9qiL1ZR5b5vOspdNUKYNcCQ02CK8xabZVfUWvJGrJZr5oepFFtuBTXfFWpyyAUxiPDBg=="/>
+			<pubDate>Sun, 01 Nov 2020 21:20:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.41/win-x64.rar" sparkle:version="1.8.41.8587" sparkle:shortVersionString="1.8.41" length="65394369" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="iH6Oc83VSoiHIu46PRTbSQar7TDmFDBCaQmGC9257TJPElVnEMn8YEKF1CI4KVNXCY4lrl12c1Al5MPMEfmBBw=="/>
 		</item>
 		<item>
-			<title>1.8.39</title>
+			<title>1.8.41</title>
 			<description>RELEASE INFO:
-				* Fix CTD by hiding game options if no game is selected
+				* Fix GUI parser issues which also resolve many issues related to advanced merge
 				CHANGES FROM v1.7:
 				* Various bugfixes
 				* Upgrade dependencies
 				* Show more information in hash report and optimize performance by switching to listbox controls
 				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 31 Oct 2020 03:35:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.39/linux-x64.zip" sparkle:version="1.8.39.40057" sparkle:shortVersionString="1.8.39" length="77924890" sparkle:os="linux" type="application/zip" sparkle:signature="pFxvBz+eymbETwKxxf9yZmTMgI75XO12NENvOLAGBClndnnnrGD4PDpAJSDTyWQThaZNBlmiXBxmxauI7yEODA=="/>
+			<pubDate>Sun, 01 Nov 2020 21:20:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.41/linux-x64.zip" sparkle:version="1.8.41.8587" sparkle:shortVersionString="1.8.41" length="77925135" sparkle:os="linux" type="application/zip" sparkle:signature="1toyaoyJvzpy8AeVj/abYtirhDatrvroaNAPNHgwm1dKF3nBS+vjpDHsQEPJ/s5dnofOLW+bGouOhZmYBX5CBA=="/>
 		</item>
 	</channel>
 </rss>
