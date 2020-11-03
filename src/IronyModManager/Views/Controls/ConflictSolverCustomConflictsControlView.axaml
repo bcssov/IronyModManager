@@ -25,7 +25,7 @@
                                  Foreground="{DynamicResource IronyForegroundBrush}"
                                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"
                                  TextBlock.FontSize="14" Document="{Binding Document}" ShowLineNumbers="True"
-                                 Width="300" Height="400" />
+                                 Width="800" Height="500" />
           </Panel>
           <Panel Grid.Row="2" Margin="0,5">
             <Button Content="{Binding Save}" Command="{Binding SaveCommand}" HorizontalAlignment="Left"></Button>
