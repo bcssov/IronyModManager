@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -96,11 +96,16 @@ namespace IronyModManager.Parser.Generic
             string prevId = string.Empty;
             foreach (var line in args.Lines)
             {
-                if (string.IsNullOrWhiteSpace(line) || line.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     continue;
                 }
-                var lang = GetLanguageId(line);
+                var cleaned = line.Trim().Trim('\t');
+                if (cleaned.Trim().StartsWith(Common.Constants.Scripts.ScriptCommentId))
+                {
+                    continue;
+                }
+                var lang = GetLanguageId(cleaned);
                 if (!string.IsNullOrWhiteSpace(lang))
                 {
                     selectedLanguage = lang;
@@ -109,16 +114,16 @@ namespace IronyModManager.Parser.Generic
                 {
                     if (string.IsNullOrWhiteSpace(lang))
                     {
-                        var message = ValidateKey(line, prevId);
+                        var message = ValidateKey(cleaned, prevId);
                         if (string.IsNullOrWhiteSpace(message))
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{line}";
-                            def.OriginalCode = line;
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{cleaned}";
+                            def.OriginalCode = cleaned;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            def.Id = GetKey(line, Common.Constants.Localization.YmlSeparator.ToString());
+                            def.Id = GetKey(cleaned, Common.Constants.Localization.YmlSeparator.ToString());
                             prevId = def.Id;
                             def.ValueType = Common.ValueType.SpecialVariable;
                             def.Tags.Add(def.Id.ToLowerInvariant());
