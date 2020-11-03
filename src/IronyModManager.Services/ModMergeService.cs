@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-12-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -372,10 +372,13 @@ namespace IronyModManager.Services
                                 {
                                     var def = definitionGroup.FirstOrDefault();
                                     if (def.ValueType == Parser.Common.ValueType.Namespace)
-                                    {
-                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(def.Code))))
+                                    {                                        
+                                        foreach (var item in definitionGroup.Where(p => p.ValueType == Parser.Common.ValueType.Namespace))
                                         {
-                                            exportDefinitions.Add(CopyDefinition(def));
+                                            if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(item.Code))))
+                                            {
+                                                exportDefinitions.Add(CopyDefinition(item));
+                                            }
                                         }
                                     }
                                     else if (def.ValueType == Parser.Common.ValueType.Variable)
