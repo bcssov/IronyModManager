@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -117,7 +117,7 @@ namespace IronyModManager.Parser.Generic
             // This type is a bit different and only will conflict in filenames.
             var def = GetDefinitionInstance();
             MapDefinitionFromArgs(ConstructArgs(args, def));
-            def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines);
+            def.OriginalCode = def.Code = string.Join(Environment.NewLine, args.Lines.Where(p => !string.IsNullOrWhiteSpace(p)));
             def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             if (fileNameTag)
             {

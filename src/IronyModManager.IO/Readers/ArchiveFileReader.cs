@@ -230,7 +230,7 @@ namespace IronyModManager.IO.Readers
                             var text = streamReader.ReadToEnd();
                             streamReader.Close();
                             info.IsBinary = false;
-                            info.Content = text.SplitOnNewLine();
+                            info.Content = text.SplitOnNewLine(false);
                             info.ContentSHA = text.CalculateSHA();
                         }
                         else
@@ -268,7 +268,7 @@ namespace IronyModManager.IO.Readers
                         var text = streamReader.ReadToEnd();
                         streamReader.Close();
                         info.IsBinary = false;
-                        info.Content = text.SplitOnNewLine();
+                        info.Content = text.SplitOnNewLine(false);
                         info.ContentSHA = text.CalculateSHA();
                     }
                     else

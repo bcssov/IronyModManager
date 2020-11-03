@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="ModFileReader.cs" company="Mario">
 //     Mario
@@ -83,7 +83,7 @@ namespace IronyModManager.IO.Readers
                     var content = File.ReadAllText(file);
                     info.FileName = relativePath;
                     info.IsBinary = false;
-                    info.Content = content.SplitOnNewLine();
+                    info.Content = content.SplitOnNewLine(false);
                     info.ContentSHA = content.CalculateSHA();
                     result.Add(info);
                 }

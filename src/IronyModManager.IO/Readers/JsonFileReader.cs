@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="JsonFileReader.cs" company="Mario">
 //     Mario
@@ -78,7 +78,7 @@ namespace IronyModManager.IO.Readers
                 var info = DIResolver.Get<IFileInfo>();
                 info.FileName = path;
                 info.IsBinary = false;
-                info.Content = content.SplitOnNewLine();
+                info.Content = content.SplitOnNewLine(false);
                 info.ContentSHA = content.CalculateSHA();
                 result.Add(info);
                 return result;

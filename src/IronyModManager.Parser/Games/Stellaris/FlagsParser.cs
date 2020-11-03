@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -90,7 +90,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             }
 
             var def = GetDefinitionInstance();
-            def.OriginalCode = def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines) : string.Empty;
+            def.OriginalCode = def.Code = args.Lines != null ? string.Join(Environment.NewLine, args.Lines.Where(p => !string.IsNullOrWhiteSpace(p))) : string.Empty;
             if (Constants.ImageExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
             {
                 def.Id = Path.GetFileNameWithoutExtension(args.File).ToLowerInvariant();

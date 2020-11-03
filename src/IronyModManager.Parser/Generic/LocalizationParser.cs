@@ -119,7 +119,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{cleaned}";
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine} {cleaned}";
                             def.OriginalCode = cleaned;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
