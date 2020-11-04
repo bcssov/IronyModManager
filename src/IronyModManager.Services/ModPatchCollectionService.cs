@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -324,6 +324,7 @@ namespace IronyModManager.Services
                             copy.CodeSeparator = item.CodeSeparator;
                             copy.CodeTag = item.CodeTag;
                             copy.OriginalModName = item.OriginalModName;
+                            copy.Variables = item.Variables;
                             indexedDefinitions.AddToMap(copy);
                             searchNeedsRefresh = true;
                         }
@@ -1594,6 +1595,11 @@ namespace IronyModManager.Services
                         var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
                         var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                         var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
+                        var allVars = namespaces.Concat(variables);
+                        if (allVars.Count() > 0)
+                        {
+                            definition.Variables = allVars.ToList();
+                        }
                         if (string.IsNullOrWhiteSpace(definition.CodeTag))
                         {
                             StringBuilder sb = new StringBuilder();

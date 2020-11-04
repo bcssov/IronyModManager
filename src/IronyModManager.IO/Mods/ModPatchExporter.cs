@@ -691,6 +691,7 @@ namespace IronyModManager.IO.Mods
             newInstance.Order = original.Order;
             newInstance.OriginalModName = original.OriginalModName;
             newInstance.DiskFile = original.DiskFile;
+            newInstance.Variables = original.Variables;
             return newInstance;
         }
 

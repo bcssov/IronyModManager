@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -537,6 +537,13 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The type of the value.</value>
         public Common.ValueType ValueType { get; set; }
 
+        /// <summary>
+        /// Gets or sets the variables.
+        /// </summary>
+        /// <value>The variables.</value>
+        [JsonIgnore]
+        public IEnumerable<IDefinition> Variables { get; set; }
+
         #endregion Properties
 
         #region Methods
@@ -578,7 +585,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Order) => Order,
                 nameof(DiskFile) => DiskFile,
                 nameof(OriginalModName) => OriginalModName,
-                _ => Id,
+                nameof(Variables) => Variables,
+                _ => Id
             };
         }
 

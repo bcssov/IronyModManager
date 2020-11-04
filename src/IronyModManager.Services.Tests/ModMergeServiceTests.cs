@@ -497,15 +497,6 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
             var parserManager = new Mock<IParserManager>();
-            var resultDef = new Definition()
-            {
-                OriginalCode = "test = {testfakeoverwritten}",
-                Code = "test = {testfakeoverwritten}",
-                File = "events\\fake.txt",
-                ModName = "a",
-                Id = "test1"
-            };
-            parserManager.Setup(p => p.Parse(It.IsAny<ParserManagerArgs>())).Returns(new List<IDefinition>() { resultDef });
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult((IPatchState)new PatchState()
             {
                 ConflictHistory = new List<IDefinition>()
@@ -588,6 +579,7 @@ namespace IronyModManager.Services.Tests
             {
                 new Definition()
                 {
+                    OriginalCode = "test = {testfakeoverwritten}",
                     Code = "test = {testfakeoverwritten}",
                     File = "events\\fake.txt",
                     ModName = "a",

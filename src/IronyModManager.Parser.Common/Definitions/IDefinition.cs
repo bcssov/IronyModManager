@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -201,6 +201,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The type of the value.</value>
         ValueType ValueType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the variables.
+        /// </summary>
+        /// <value>The variables.</value>
+        IEnumerable<IDefinition> Variables { get; set; }
 
         #endregion Properties
     }
