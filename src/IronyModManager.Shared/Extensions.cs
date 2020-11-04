@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-01-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -71,6 +71,26 @@ namespace IronyModManager.Shared
         }
 
         /// <summary>
+        /// Generates the short file name hash identifier.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="maxLength">The maximum length.</param>
+        /// <returns>System.String.</returns>
+        public static string GenerateShortFileNameHashId(this string value, int maxLength = 2)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+            var hash = value.CalculateSHA().GenerateValidFileName();
+            if (hash.Length > maxLength)
+            {
+                return hash.Substring(0, maxLength);
+            }
+            return hash;
+        }
+
+        /// <summary>
         /// Generates the name of the valid file.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -84,6 +104,16 @@ namespace IronyModManager.Shared
             var fileName = Path.GetInvalidFileNameChars().Aggregate(value, (current, character) => current.Replace(character.ToString(), string.Empty));
             fileName = emptyStringCharacters.Aggregate(fileName, (a, b) => a.Replace(b, "_"));
             return fileName;
+        }
+
+        /// <summary>
+        /// Replaces the new line.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        public static string ReplaceNewLine(this string value)
+        {
+            return value.Replace("\r", string.Empty).Replace("\n", string.Empty);
         }
 
         /// <summary>

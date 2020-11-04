@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="ModMergeDefinitionExporterParameters.cs" company="Mario">
 //     Mario
@@ -43,12 +43,6 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The game.</value>
         public string Game { get; set; }
-
-        /// <summary>
-        /// Gets or sets the patch definitions.
-        /// </summary>
-        /// <value>The patch definitions.</value>
-        public IEnumerable<IDefinition> PatchDefinitions { get; set; }
 
         #endregion Properties
     }

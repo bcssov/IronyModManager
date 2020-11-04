@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using IronyModManager.DI;
@@ -108,7 +109,13 @@ namespace IronyModManager.Parser.Generic
                 var lang = GetLanguageId(cleaned);
                 if (!string.IsNullOrWhiteSpace(lang))
                 {
+                    // Fix mods that have one language id in file and other in filename... Why?
                     selectedLanguage = lang;
+                    var fileLanguage = GetLanguageIdFromFileName(args.File);
+                    if (!string.IsNullOrWhiteSpace(fileLanguage) && selectedLanguage != fileLanguage)
+                    {
+                        selectedLanguage = fileLanguage;
+                    }
                 }
                 if (!string.IsNullOrWhiteSpace(selectedLanguage))
                 {
@@ -119,7 +126,7 @@ namespace IronyModManager.Parser.Generic
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            def.Code = $"{selectedLanguage}:{Environment.NewLine}{cleaned}";
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine} {cleaned}";
                             def.OriginalCode = cleaned;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
@@ -154,6 +161,21 @@ namespace IronyModManager.Parser.Generic
         {
             var lang = Common.Constants.Localization.Locales.FirstOrDefault(s => line.StartsWith(s, StringComparison.OrdinalIgnoreCase));
             return lang;
+        }
+
+        /// <summary>
+        /// Gets the name of the language identifier from file.
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetLanguageIdFromFileName(string filename)
+        {
+            var locale = Common.Constants.Localization.Locales.FirstOrDefault(p => filename.EndsWith($"{p}.yml", StringComparison.OrdinalIgnoreCase));
+            if (locale == null)
+            {
+                locale = Common.Constants.Localization.LocaleFolders.FirstOrDefault(p => filename.Contains($"{Path.DirectorySeparatorChar}{p}{Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase));
+            }
+            return locale;
         }
 
         /// <summary>

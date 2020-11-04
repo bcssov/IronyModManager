@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -70,6 +70,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The dependencies.</value>
         IEnumerable<string> Dependencies { get; set; }
+
+        /// <summary>
+        /// Gets or sets the disk file.
+        /// </summary>
+        /// <value>The disk file.</value>
+        string DiskFile { get; set; }
 
         /// <summary>
         /// Gets or sets the error column.
@@ -140,6 +146,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The original code.</value>
         [JsonIgnore]
         string OriginalCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the original mod.
+        /// </summary>
+        /// <value>The name of the original mod.</value>
+        string OriginalModName { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten file names.

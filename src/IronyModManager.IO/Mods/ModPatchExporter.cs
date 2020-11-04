@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -252,7 +252,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="loadExternalCode">if set to <c>true</c> [load external code].</param>
-        /// <returns>IPatchState.</returns>
+        /// <returns>Task&lt;IPatchState&gt;.</returns>
         public async Task<IPatchState> GetPatchStateAsync(ModPatchExporterParameters parameters, bool loadExternalCode = true)
         {
             return await GetPatchStateInternalAsync(parameters, loadExternalCode);
@@ -395,6 +395,7 @@ namespace IronyModManager.IO.Mods
                     item.ModPath = item.ModPath.StandardizeDirectorySeparator();
                     item.OverwrittenFileNames = standardizeArray(item.OverwrittenFileNames);
                     item.Type = item.Type.StandardizeDirectorySeparator();
+                    item.DiskFile = item.DiskFile.StandardizeDirectorySeparator();
                 }
             }
         }
@@ -688,6 +689,8 @@ namespace IronyModManager.IO.Mods
             newInstance.CodeSeparator = original.CodeSeparator;
             newInstance.CodeTag = original.CodeTag;
             newInstance.Order = original.Order;
+            newInstance.OriginalModName = original.OriginalModName;
+            newInstance.DiskFile = original.DiskFile;
             return newInstance;
         }
 
@@ -769,11 +772,11 @@ namespace IronyModManager.IO.Mods
             List<bool> results = new List<bool>();
             var validDefinitions = definitions.Where(p => p.ValueType != Parser.Common.ValueType.Namespace && p.ValueType != Parser.Common.ValueType.Variable);
             var retry = new RetryStrategy();
-            async Task evalZeroByteFiles(IDefinition definition, IDefinitionInfoProvider infoProvider, string fileName)
+            async Task evalZeroByteFiles(IDefinition definition, IDefinitionInfoProvider infoProvider, string fileName, string diskFile)
             {
                 if (mode == FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles)
                 {
-                    var emptyFileNames = definition.OverwrittenFileNames.Where(p => p != fileName);
+                    var emptyFileNames = definition.OverwrittenFileNames.Where(p => p != fileName && p != diskFile);
                     foreach (var emptyFile in emptyFileNames)
                     {
                         var emptyPath = Path.Combine(patchRootPath, emptyFile);
@@ -791,17 +794,29 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
+                    string diskFile = string.Empty;
                     string fileName = string.Empty;
                     fileName = mode switch
                     {
                         FileNameGeneration.GenerateFileName => infoProvider.GetFileName(item),
-                        _ => item.File,
+                        _ => item.File
                     };
-                    var outPath = Path.Combine(patchRootPath, fileName);
+                    diskFile = mode switch
+                    {
+                        FileNameGeneration.GenerateFileName => infoProvider.GetDiskFileName(item),
+                        _ => !string.IsNullOrWhiteSpace(item.DiskFile) ? item.DiskFile : item.File
+                    };
+                    // For backwards compatibility when filename was used
+                    var altFileName = Path.Combine(patchRootPath, fileName);
+                    if (diskFile != fileName && File.Exists(altFileName))
+                    {
+                        File.Delete(altFileName);
+                    }
+                    var outPath = Path.Combine(patchRootPath, diskFile);
                     if (checkIfFileExists && File.Exists(outPath))
                     {
                         // Zero byte files could still not be present
-                        await evalZeroByteFiles(item, infoProvider, fileName);
+                        await evalZeroByteFiles(item, infoProvider, fileName, diskFile);
                         continue;
                     }
                     if (!Directory.Exists(Path.GetDirectoryName(outPath)))
@@ -809,7 +824,8 @@ namespace IronyModManager.IO.Mods
                         Directory.CreateDirectory(Path.GetDirectoryName(outPath));
                     }
                     // Update filename
-                    item.File = fileName;
+                    item.DiskFile = diskFile;
+                    item.File = fileName;                   
                     tasks.Add(retry.RetryActionAsync(async () =>
                     {
                         var code = item.Code;
@@ -820,7 +836,7 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, code, infoProvider.GetEncoding(item));
                         return true;
                     }));
-                    await evalZeroByteFiles(item, infoProvider, fileName);
+                    await evalZeroByteFiles(item, infoProvider, fileName, diskFile);
                     results.Add(true);
                 }
                 else

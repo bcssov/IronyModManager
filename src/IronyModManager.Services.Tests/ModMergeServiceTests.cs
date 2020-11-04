@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -26,6 +26,7 @@ using IronyModManager.IO.Mods.Models;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
+using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
@@ -63,11 +64,12 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var modMergeExporter = new Mock<IModMergeExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
             infoProvider.Setup(p => p.DefinitionUsesFIOSRules(It.IsAny<IDefinition>())).Returns(true);
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -113,6 +115,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var parserManager = new Mock<IParserManager>();
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult((IPatchState)new PatchState()
             {
                 ConflictHistory = new List<IDefinition>()
@@ -174,7 +177,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -231,6 +234,7 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var parserManager = new Mock<IParserManager>();
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult((IPatchState)new PatchState()
             {
                 ConflictHistory = new List<IDefinition>()
@@ -292,7 +296,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -353,6 +357,16 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var parserManager = new Mock<IParserManager>();
+            var resultDef = new Definition()
+            {
+                Code = "test = {testfakestate}",
+                OriginalCode = "test = {testfakestate}",
+                File = "events\\fake.txt",
+                ModName = "a",
+                Id = "test1"
+            };
+            parserManager.Setup(p => p.Parse(It.IsAny<ParserManagerArgs>())).Returns(new List<IDefinition>() { resultDef });
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult((IPatchState)new PatchState()
             {
                 ConflictHistory = new List<IDefinition>()
@@ -380,7 +394,7 @@ namespace IronyModManager.Services.Tests
             var modMergeExporter = new Mock<IModMergeExporter>();
             modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
-                definition = p.PatchDefinitions.FirstOrDefault();
+                definition = p.Definitions.FirstOrDefault();
                 return Task.FromResult(true);
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -433,7 +447,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -482,6 +496,16 @@ namespace IronyModManager.Services.Tests
             var gameService = new Mock<IGameService>();
             var mapper = new Mock<IMapper>();
             var modPatchExporter = new Mock<IModPatchExporter>();
+            var parserManager = new Mock<IParserManager>();
+            var resultDef = new Definition()
+            {
+                OriginalCode = "test = {testfakeoverwritten}",
+                Code = "test = {testfakeoverwritten}",
+                File = "events\\fake.txt",
+                ModName = "a",
+                Id = "test1"
+            };
+            parserManager.Setup(p => p.Parse(It.IsAny<ParserManagerArgs>())).Returns(new List<IDefinition>() { resultDef });
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult((IPatchState)new PatchState()
             {
                 ConflictHistory = new List<IDefinition>()
@@ -490,7 +514,7 @@ namespace IronyModManager.Services.Tests
             var modMergeExporter = new Mock<IModMergeExporter>();
             modMergeExporter.Setup(p => p.ExportDefinitionsAsync(It.IsAny<ModMergeDefinitionExporterParameters>())).Returns((ModMergeDefinitionExporterParameters p) =>
             {
-                definition = p.PatchDefinitions.FirstOrDefault();
+                definition = p.Definitions.FirstOrDefault();
                 return Task.FromResult(true);
             });
             var infoProvider = new Mock<IDefinitionInfoProvider>();
@@ -543,7 +567,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -604,9 +628,10 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var modMergeExporter = new Mock<IModMergeExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -633,6 +658,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var modMergeExporter = new Mock<IModMergeExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
                 Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
@@ -640,7 +666,7 @@ namespace IronyModManager.Services.Tests
                 WorkshopDirectory = "C:\\Fake"
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -667,6 +693,7 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
             var modMergeExporter = new Mock<IModMergeExporter>();
             var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
 
             modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
@@ -716,7 +743,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-12-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using IronyModManager.DI;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
@@ -59,6 +60,11 @@ namespace IronyModManager.Services
         /// </summary>
         private readonly IModPatchExporter modPatchExporter;
 
+        /// <summary>
+        /// The parser manager
+        /// </summary>
+        private readonly IParserManager parserManager;
+
         #endregion Fields
 
         #region Constructors
@@ -66,6 +72,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModMergeService" /> class.
         /// </summary>
+        /// <param name="parserManager">The parser manager.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="modPatchExporter">The mod patch exporter.</param>
@@ -77,12 +84,13 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModMergeService(ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
+        public ModMergeService(IParserManager parserManager, ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
             IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.parserManager = parserManager;
             this.messageBus = messageBus;
             this.modMergeExporter = modMergeExporter;
             this.modPatchExporter = modPatchExporter;
@@ -107,13 +115,85 @@ namespace IronyModManager.Services
                 text = text.Replace(" ", string.Empty).Replace("\t", string.Empty).Trim();
                 return text;
             }
+            static string getNextVariableName(List<IDefinition> exportDefinitons, IDefinition definition)
+            {
+                var count = exportDefinitons.Where(p => p.Id.Equals(definition.Id, StringComparison.OrdinalIgnoreCase)).Count() + 1;
+                var name = $"{definition.Id}_{count}";
+                while (exportDefinitons.Any(p => p.Id.Equals(name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    count++;
+                    name = $"{definition.Id}_{count}";
+                }
+                return name;
+            }
+            void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def, IEnumerable<IDefinition> namespaces)
+            {
+                if (namespaces.Count() > 0)
+                {
+                    foreach (var name in namespaces.Where(p => p.ModName.Equals(def.ModName)))
+                    {
+                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                        {
+                            var copy = CopyDefinition(name);
+                            copy.CodeTag = def.CodeTag;
+                            copy.CodeSeparator = def.CodeSeparator;
+                            exportDefinitions.Add(copy);
+                        }
+                    }
+                }
+            }
+            void parseVariables(List<IDefinition> exportDefinitions, IDefinition def, string[] originalCode, IEnumerable<IDefinition> variables)
+            {
+                if (variables.Count() > 0)
+                {
+                    foreach (var variable in variables.Where(p => p.ModName.Equals(def.ModName)))
+                    {
+                        if (originalCode.Contains(variable.Id))
+                        {
+                            var copy = CopyDefinition(variable);
+                            var oldId = copy.Id;
+                            copy.Id = getNextVariableName(exportDefinitions, variable);
+                            copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                            copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                            copy.CodeTag = def.CodeTag;
+                            copy.CodeSeparator = def.CodeSeparator;
+                            exportDefinitions.Add(copy);
+                            def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                            def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        }
+                    }
+                }
+            }
+            void parseResolvedOrConflicted(HashSet<string> dumpedIds, List<IDefinition> exportDefinitions, IDefinition copy)
+            {
+                var parsed = parserManager.Parse(new Parser.Common.Args.ParserManagerArgs()
+                {
+                    ContentSHA = copy.ContentSHA,
+                    File = copy.File,
+                    GameType = GameService.GetSelected().Type,
+                    Lines = copy.Code.SplitOnNewLine(false),
+                    ModDependencies = copy.Dependencies,
+                    ModName = copy.ModName
+                });
+                var others = parsed.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                var variables = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                var namespaces = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                foreach (var other in others)
+                {
+                    var originalCode = other.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                    parseNameSpaces(exportDefinitions, other, namespaces);
+                    parseVariables(exportDefinitions, other, originalCode, variables);
+                    dumpedIds.Add(other.TypeAndId);
+                    exportDefinitions.Add(CopyDefinition(other));
+                }
+            }
 
             var game = GameService.GetSelected();
             if (game == null)
             {
                 return null;
             }
-            var total = conflictResult.AllConflicts.GetAllFileKeys().Count();
+            var total = conflictResult.AllConflicts.GetAll().Count(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
             if (conflictResult.AllConflicts.GetAll().Count() > 0)
             {
                 var allMods = GetInstalledModsInternal(game, false).ToList();
@@ -195,7 +275,7 @@ namespace IronyModManager.Services
                         Game = game.Type
                     });
                     processed++;
-                    var percentage = GetProgressPercentage(total, processed, 100);
+                    var percentage = GetProgressPercentage(total, processed, 99.9);
                     if (lastPercentage != percentage)
                     {
                         await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(percentage));
@@ -204,56 +284,36 @@ namespace IronyModManager.Services
                 }
 
                 var dumpedIds = new HashSet<string>();
+                var fileCount = conflictResult.AllConflicts.GetAllFileKeys().Count();
+                var counter = 0;
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
                 {
+                    counter++;
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
                     if (definitions.Count() > 0)
                     {
                         var exportDefinitions = new List<IDefinition>();
-                        var exportSingleDefinitions = new List<IDefinition>();
-                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId))
+                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault().ValueType != Parser.Common.ValueType.Namespace && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Variable))
                         {
-                            // This is because we want to dump localization items regularly and then dump replacement overrides in localization\replace directory.
-                            var canDumpRegular = true;
                             // Orphans are placed under resolved items during analysis so no need to check them
                             var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             if (resolved.Count() > 0 || overwritten.Count() > 0)
                             {
-                                if (file.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    canDumpRegular = !file.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase);
-                                }
-                                else
-                                {
-                                    canDumpRegular = false;
-                                }
                                 // Resolved takes priority, since if an item was resolved no need to use the overwritten code
                                 // Also fetch the code from the patch state.json object to get the latest version of the code to dump
                                 if (resolved.Count() > 0)
                                 {
                                     foreach (var item in resolved)
                                     {
-                                        var copy = CopyDefinition(item);
-                                        if (copy.ValueType != Parser.Common.ValueType.Binary)
+                                        if (!dumpedIds.Contains(item.TypeAndId))
                                         {
-                                            copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
-                                        }
-                                        if (copy.ValueType != Parser.Common.ValueType.Namespace && copy.ValueType != Parser.Common.ValueType.Variable)
-                                        {
-                                            if (!dumpedIds.Contains(copy.TypeAndId))
+                                            var copy = CopyDefinition(item);
+                                            if (copy.ValueType != Parser.Common.ValueType.Binary)
                                             {
-                                                exportSingleDefinitions.Add(copy);
-                                                // Only resolved localization items need this check
-                                                if (!canDumpRegular)
-                                                {
-                                                    dumpedIds.Add(copy.TypeAndId);
-                                                }
+                                                copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
                                             }
-                                        }
-                                        else
-                                        {
-                                            exportSingleDefinitions.Add(copy);
+                                            parseResolvedOrConflicted(dumpedIds, exportDefinitions, copy);
                                         }
                                     }
                                 }
@@ -261,32 +321,26 @@ namespace IronyModManager.Services
                                 {
                                     foreach (var item in overwritten)
                                     {
-                                        var copy = CopyDefinition(item);
-                                        if (copy.ValueType != Parser.Common.ValueType.Namespace && copy.ValueType != Parser.Common.ValueType.Variable)
+                                        if (!dumpedIds.Contains(item.TypeAndId))
                                         {
-                                            if (!dumpedIds.Contains(copy.TypeAndId))
-                                            {
-                                                exportSingleDefinitions.Add(copy);
-                                                dumpedIds.Add(copy.TypeAndId);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            exportSingleDefinitions.Add(copy);
+                                            var copy = CopyDefinition(item);
+                                            parseResolvedOrConflicted(dumpedIds, exportDefinitions, copy);
                                         }
                                     }
                                 }
                             }
-                            if (canDumpRegular)
+                            else
                             {
                                 // Check if this is a conflict so we can then perform evaluation of which definition would win based on current order
+                                var files = new List<string>();
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
+                                IDefinition priorityDef;
+                                bool allowDuplicate = false;
                                 if (conflicted.Count() > 0)
                                 {
-                                    IDefinition priorityDef;
+                                    files.AddRange(conflicted.Select(p => p.File));
                                     // More then 1 per file in a mod?
                                     var modGroups = conflicted.GroupBy(p => p.ModName);
-                                    bool allowDuplicate = false;
                                     if (modGroups.Any(p => p.GroupBy(p => p.FileCI).Count() > 1))
                                     {
                                         allowDuplicate = true;
@@ -314,87 +368,49 @@ namespace IronyModManager.Services
                                     {
                                         priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                     }
-                                    if (priorityDef != null)
-                                    {
-                                        if (allowDuplicate)
-                                        {
-                                            exportDefinitions.Add(CopyDefinition(priorityDef));
-                                            dumpedIds.Add(priorityDef.TypeAndId);
-                                        }
-                                        else
-                                        {
-                                            if (priorityDef.ValueType != Parser.Common.ValueType.Namespace && priorityDef.ValueType != Parser.Common.ValueType.Variable)
-                                            {
-                                                if (!dumpedIds.Contains(priorityDef.TypeAndId))
-                                                {
-                                                    exportDefinitions.Add(CopyDefinition(priorityDef));
-                                                    dumpedIds.Add(priorityDef.TypeAndId);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                exportDefinitions.Add(CopyDefinition(priorityDef));
-                                            }
-                                        }
-                                        // grab variables from all files
-                                        var files = conflicted.Select(p => p.File);
-                                        foreach (var item in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
-                                        {
-                                            var otherConflicts = conflictResult.AllConflicts.GetByFile(item);
-                                            var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                                            var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                                            foreach (var name in namespaces.Where(p => p.ModName.Equals(priorityDef.ModName)))
-                                            {
-                                                if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
-                                                {
-                                                    var copy = CopyDefinition(name);
-                                                    copy.CodeTag = priorityDef.CodeTag;
-                                                    copy.CodeSeparator = priorityDef.CodeSeparator;
-                                                    exportDefinitions.Add(copy);
-                                                }
-                                            }
-                                            foreach (var variable in variables.Where(p => p.ModName.Equals(priorityDef.ModName)))
-                                            {
-                                                var hits = exportDefinitions.Where(p => p.Id == variable.Id && p.ValueType == Parser.Common.ValueType.Variable);
-                                                if (hits.Count() > 0)
-                                                {
-                                                    exportDefinitions.RemoveAll(p => hits.Contains(p));
-                                                }
-                                                var copy = CopyDefinition(variable);
-                                                copy.CodeTag = priorityDef.CodeTag;
-                                                copy.CodeSeparator = priorityDef.CodeSeparator;
-                                                exportDefinitions.Add(copy);
-                                            }
-                                        }
-                                    }
                                 }
                                 else
                                 {
-                                    var def = definitionGroup.FirstOrDefault();
-                                    if (def.ValueType == Parser.Common.ValueType.Namespace)
+                                    priorityDef = definitionGroup.FirstOrDefault();
+                                    files.Add(priorityDef.File);
+                                }
+                                if (priorityDef != null)
+                                {
+                                    IDefinition priorityDefCopy = null;
+                                    if (allowDuplicate)
                                     {
-                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(def.Code))))
-                                        {
-                                            exportDefinitions.Add(CopyDefinition(def));
-                                        }
+                                        priorityDefCopy = CopyDefinition(priorityDef);
+                                        exportDefinitions.Add(priorityDefCopy);
+                                        dumpedIds.Add(priorityDef.TypeAndId);
                                     }
-                                    else if (def.ValueType == Parser.Common.ValueType.Variable)
+                                    else if (!dumpedIds.Contains(priorityDef.TypeAndId))
                                     {
-                                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Variable && p.Id.Equals(def.Id)))
-                                        {
-                                            exportDefinitions.Add(CopyDefinition(def));
-                                        }
+                                        priorityDefCopy = CopyDefinition(priorityDef);
+                                        exportDefinitions.Add(priorityDefCopy);
+                                        dumpedIds.Add(priorityDef.TypeAndId);
                                     }
-                                    else
+                                    if (priorityDefCopy != null)
                                     {
-                                        if (!dumpedIds.Contains(def.TypeAndId))
+                                        var originalCode = priorityDefCopy.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                                        // grab variables from all files
+                                        foreach (var groupedFile in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
                                         {
-                                            exportDefinitions.Add(CopyDefinition(def));
-                                            dumpedIds.Add(def.TypeAndId);
+                                            var otherConflicts = conflictResult.AllConflicts.GetByFile(groupedFile);
+                                            var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                                            var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                                            parseNameSpaces(exportDefinitions, priorityDefCopy, namespaces);
+                                            parseVariables(exportDefinitions, priorityDefCopy, originalCode, variables);
                                         }
                                     }
                                 }
                             }
+                            processed += definitionGroup.Count();
+                            var percentage = GetProgressPercentage(total, processed, 99.9);
+                            if (lastPercentage != percentage)
+                            {
+                                await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(percentage));
+                            }
+                            lastPercentage = percentage;
                         }
 
                         // Prevent exporting only namespaces or variables?
@@ -403,7 +419,7 @@ namespace IronyModManager.Services
                             exportDefinitions.Clear();
                         }
                         // Something to export?
-                        if (exportDefinitions.Count > 0 || exportSingleDefinitions.Count > 0)
+                        if (exportDefinitions.Count > 0)
                         {
                             IDefinition merged = null;
                             if (exportDefinitions.Count > 0)
@@ -453,17 +469,13 @@ namespace IronyModManager.Services
                             {
                                 ExportPath = exportPath,
                                 Definitions = merged != null ? PopulateModPath(new List<IDefinition>() { merged }, collectionMods) : null,
-                                PatchDefinitions = PopulateModPath(exportSingleDefinitions, collectionMods),
                                 Game = game.Type
                             });
+                            if (counter >= fileCount)
+                            {
+                                await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(100));
+                            }
                         }
-                        processed++;
-                        var percentage = GetProgressPercentage(total, processed, 100);
-                        if (lastPercentage != percentage)
-                        {
-                            await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(percentage));
-                        }
-                        lastPercentage = percentage;
                     }
                 }
 
@@ -571,10 +583,10 @@ namespace IronyModManager.Services
         /// <returns>System.Int32.</returns>
         protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
         {
-            var perc = Math.Round((processed / total * 100), 2);
-            if (perc < 1)
+            var perc = Math.Round(processed / total * 100, 2);
+            if (perc < 0)
             {
-                perc = 1;
+                perc = 0;
             }
             else if (perc > maxPerc)
             {
