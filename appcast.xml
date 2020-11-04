@@ -4,68 +4,60 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.48</title>
+			<title>1.8.49</title>
 			<description>RELEASE INFO:
-				* Fix language parser failing to recognize language type in yml files due to indentation
-				* Incrase width and height of custom patch window
-				* Allow CWTools to report proper lines in invalid definitions section by performing any code stripping after CWTools processing
-				* Big improvements to advanced merge (is slower but more accurate)
-				CHANGES FROM v1.7:
-				* Various bugfixes
-				* Upgrade dependencies
-				* Show more information in hash report and optimize performance by switching to listbox controls
-				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 03:42:14 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.48/osx-x64.rar" sparkle:version="1.8.48.23744" sparkle:shortVersionString="1.8.48" length="62748752" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="n7fAHuU7u9uYwTJvwFkqkuRF0fDUZSACX5GFMUjPoUOEX4mnBXPN70eOHryHSH8PiLnEwtfL14y7pETygBYUCw=="/>
+* Drastically improve advanced merge performance
+
+CHANGES FROM v1.7:
+* Various bugfixes
+* Upgrade dependencies
+* Show more information in hash report and optimize performance by switching to listbox controls
+* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Wed, 04 Nov 2020 13:52:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/osx-x64.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="62749640" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="ccwtkrsoGNOcbWJm0rmYzk911ep5G0kgzDzVHENu0I8Ao+rPXvbqThbWfD+H+LnXPRSoiMsCIRf8sw1/WywPDw=="/>
 		</item>
 		<item>
-			<title>1.8.48</title>
+			<title>1.8.49</title>
 			<description>RELEASE INFO:
-				* Fix language parser failing to recognize language type in yml files due to indentation
-				* Incrase width and height of custom patch window
-				* Allow CWTools to report proper lines in invalid definitions section by performing any code stripping after CWTools processing
-				* Big improvements to advanced merge (is slower but more accurate)
-				CHANGES FROM v1.7:
-				* Various bugfixes
-				* Upgrade dependencies
-				* Show more information in hash report and optimize performance by switching to listbox controls
-				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 03:42:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.48/win-x64-setup.rar" sparkle:version="1.8.48.23744" sparkle:shortVersionString="1.8.48" length="54459509" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="hAb3O5G7cRsQPqsX2jUGeGsqtpyWSh5HhhE6u2OaIxyVExDsZt3+6BCkkoQvmhL4C0Ip8teYx9DppNoeLdfMBA=="/>
+* Drastically improve advanced merge performance
+
+CHANGES FROM v1.7:
+* Various bugfixes
+* Upgrade dependencies
+* Show more information in hash report and optimize performance by switching to listbox controls
+* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Wed, 04 Nov 2020 13:52:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/win-x64-setup.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="54464992" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="Zi9r0ki2ExBuB1YwutUXjuAlpi07wzdtycB2SGeCVPXIKXH5qaXrD/AnXp+aAbQzc+dz3Mfo+i64xA2dNVb+Dg=="/>
 		</item>
 		<item>
-			<title>1.8.48</title>
+			<title>1.8.49</title>
 			<description>RELEASE INFO:
-				* Fix language parser failing to recognize language type in yml files due to indentation
-				* Incrase width and height of custom patch window
-				* Allow CWTools to report proper lines in invalid definitions section by performing any code stripping after CWTools processing
-				* Big improvements to advanced merge (is slower but more accurate)
-				CHANGES FROM v1.7:
-				* Various bugfixes
-				* Upgrade dependencies
-				* Show more information in hash report and optimize performance by switching to listbox controls
-				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 03:42:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.48/win-x64.rar" sparkle:version="1.8.48.23744" sparkle:shortVersionString="1.8.48" length="65394879" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="FNgfSl3uImyeo2cW1hTEWtrPUL76htrc2OmKuf2pF8KGUuhKdOZHHSU3MlseZB00mHTja+4DuNzTpO3Av4puCQ=="/>
+* Drastically improve advanced merge performance
+
+CHANGES FROM v1.7:
+* Various bugfixes
+* Upgrade dependencies
+* Show more information in hash report and optimize performance by switching to listbox controls
+* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Wed, 04 Nov 2020 13:52:50 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/win-x64.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="65395746" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="7M9s5iVDHZ6fwvTY/lZNfHy8NCrgfiEiBbWXSMM+rtzomaPnUiOEM9bP5epNVG6arARXop8uP7lrp4aNLyaxAw=="/>
 		</item>
 		<item>
-			<title>1.8.48</title>
+			<title>1.8.49</title>
 			<description>RELEASE INFO:
-				* Fix language parser failing to recognize language type in yml files due to indentation
-				* Incrase width and height of custom patch window
-				* Allow CWTools to report proper lines in invalid definitions section by performing any code stripping after CWTools processing
-				* Big improvements to advanced merge (is slower but more accurate)
-				CHANGES FROM v1.7:
-				* Various bugfixes
-				* Upgrade dependencies
-				* Show more information in hash report and optimize performance by switching to listbox controls
-				* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-				* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 03:42:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.48/linux-x64.zip" sparkle:version="1.8.48.23744" sparkle:shortVersionString="1.8.48" length="77927541" sparkle:os="linux" type="application/zip" sparkle:signature="y6ewV/W5KH+CpJS/lxNTYjQQH1tYPweeuTSUiB+Ph02+C6Qy5wWi1jvjzhs7KKgpyxC1rDhoQelBdUySkIF/CA=="/>
+* Drastically improve advanced merge performance
+
+CHANGES FROM v1.7:
+* Various bugfixes
+* Upgrade dependencies
+* Show more information in hash report and optimize performance by switching to listbox controls
+* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
+* Update Stellaris parser map for Stellaris v2.8</description>
+			<pubDate>Wed, 04 Nov 2020 13:52:45 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/linux-x64.zip" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="77927518" sparkle:os="linux" type="application/zip" sparkle:signature="gFrVE54XWHBAosCRm16S4ROmWYq9sheja/m0odzKZndoVqjciYgx8ZjAfbGd02+990Dtg+W8NgCU+1Kc81Y7DA=="/>
 		</item>
 	</channel>
 </rss>
