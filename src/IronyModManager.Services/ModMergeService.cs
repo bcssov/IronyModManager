@@ -126,11 +126,12 @@ namespace IronyModManager.Services
                 }
                 return name;
             }
-            void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def, IEnumerable<IDefinition> namespaces)
+            void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def)
             {
+                var namespaces = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
                 if (namespaces.Count() > 0)
                 {
-                    foreach (var name in namespaces.Where(p => p.ModName.Equals(def.ModName)))
+                    foreach (var name in namespaces)
                     {
                         if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
                         {
@@ -142,49 +143,24 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            void parseVariables(List<IDefinition> exportDefinitions, IDefinition def, string[] originalCode, IEnumerable<IDefinition> variables)
+            void parseVariables(List<IDefinition> exportDefinitions, IDefinition def)
             {
+                var variables = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
                 if (variables.Count() > 0)
                 {
-                    foreach (var variable in variables.Where(p => p.ModName.Equals(def.ModName)))
+                    foreach (var variable in variables)
                     {
-                        if (originalCode.Contains(variable.Id))
-                        {
-                            var copy = CopyDefinition(variable);
-                            var oldId = copy.Id;
-                            copy.Id = getNextVariableName(exportDefinitions, variable);
-                            copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                            copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                            copy.CodeTag = def.CodeTag;
-                            copy.CodeSeparator = def.CodeSeparator;
-                            exportDefinitions.Add(copy);
-                            def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                            def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                        }
+                        var copy = CopyDefinition(variable);
+                        var oldId = copy.Id;
+                        copy.Id = getNextVariableName(exportDefinitions, variable);
+                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        copy.CodeTag = def.CodeTag;
+                        copy.CodeSeparator = def.CodeSeparator;
+                        exportDefinitions.Add(copy);
+                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
                     }
-                }
-            }
-            void parseResolvedOrConflicted(HashSet<string> dumpedIds, List<IDefinition> exportDefinitions, IDefinition copy)
-            {
-                var parsed = parserManager.Parse(new Parser.Common.Args.ParserManagerArgs()
-                {
-                    ContentSHA = copy.ContentSHA,
-                    File = copy.File,
-                    GameType = GameService.GetSelected().Type,
-                    Lines = copy.Code.SplitOnNewLine(false),
-                    ModDependencies = copy.Dependencies,
-                    ModName = copy.ModName
-                });
-                var others = parsed.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
-                var variables = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                var namespaces = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                foreach (var other in others)
-                {
-                    var originalCode = other.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                    parseNameSpaces(exportDefinitions, other, namespaces);
-                    parseVariables(exportDefinitions, other, originalCode, variables);
-                    dumpedIds.Add(other.TypeAndId);
-                    exportDefinitions.Add(CopyDefinition(other));
                 }
             }
 
@@ -312,8 +288,31 @@ namespace IronyModManager.Services
                                             if (copy.ValueType != Parser.Common.ValueType.Binary)
                                             {
                                                 copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
+                                                var parsed = parserManager.Parse(new Parser.Common.Args.ParserManagerArgs()
+                                                {
+                                                    ContentSHA = copy.ContentSHA,
+                                                    File = copy.File,
+                                                    GameType = GameService.GetSelected().Type,
+                                                    Lines = copy.Code.SplitOnNewLine(false),
+                                                    ModDependencies = copy.Dependencies,
+                                                    ModName = copy.ModName
+                                                });
+                                                var others = parsed.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                                                foreach (var other in others)
+                                                {
+                                                    var variables = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace);
+                                                    other.Variables = variables;
+                                                    parseNameSpaces(exportDefinitions, other);
+                                                    parseVariables(exportDefinitions, other);
+                                                    dumpedIds.Add(other.TypeAndId);
+                                                    exportDefinitions.Add(CopyDefinition(other));
+                                                }
                                             }
-                                            parseResolvedOrConflicted(dumpedIds, exportDefinitions, copy);
+                                            else
+                                            {
+                                                dumpedIds.Add(copy.TypeAndId);
+                                                exportDefinitions.Add(copy);
+                                            }
                                         }
                                     }
                                 }
@@ -324,7 +323,13 @@ namespace IronyModManager.Services
                                         if (!dumpedIds.Contains(item.TypeAndId))
                                         {
                                             var copy = CopyDefinition(item);
-                                            parseResolvedOrConflicted(dumpedIds, exportDefinitions, copy);
+                                            if (copy?.Variables?.Count() > 0)
+                                            {
+                                                parseNameSpaces(exportDefinitions, copy);
+                                                parseVariables(exportDefinitions, copy);
+                                            }
+                                            dumpedIds.Add(copy.TypeAndId);
+                                            exportDefinitions.Add(copy);
                                         }
                                     }
                                 }
@@ -389,18 +394,10 @@ namespace IronyModManager.Services
                                         exportDefinitions.Add(priorityDefCopy);
                                         dumpedIds.Add(priorityDef.TypeAndId);
                                     }
-                                    if (priorityDefCopy != null)
+                                    if (priorityDefCopy?.Variables?.Count() > 0)
                                     {
-                                        var originalCode = priorityDefCopy.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                                        // grab variables from all files
-                                        foreach (var groupedFile in files.GroupBy(p => p.ToLowerInvariant()).Select(p => p.First()))
-                                        {
-                                            var otherConflicts = conflictResult.AllConflicts.GetByFile(groupedFile);
-                                            var variables = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                                            var namespaces = otherConflicts.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                                            parseNameSpaces(exportDefinitions, priorityDefCopy, namespaces);
-                                            parseVariables(exportDefinitions, priorityDefCopy, originalCode, variables);
-                                        }
+                                        parseNameSpaces(exportDefinitions, priorityDefCopy);
+                                        parseVariables(exportDefinitions, priorityDefCopy);
                                     }
                                 }
                             }
@@ -460,10 +457,13 @@ namespace IronyModManager.Services
                                         }
                                     }
                                 }
-                                merged = MergeDefinitions(exportDefinitions.OrderBy(p => p.Order));
+                                var variables = exportDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace).OrderBy(p => p.Id);
+                                var other = exportDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace).OrderBy(p => p.Order);
+                                merged = MergeDefinitions(variables.Concat(other));
                                 // Preserve proper file casing
                                 var conflicts = conflictResult.AllConflicts.GetByFile(file);
                                 merged.File = conflicts.FirstOrDefault().File;
+                                merged.DiskFile = conflicts.FirstOrDefault().DiskFile;
                             }
                             await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
                             {
