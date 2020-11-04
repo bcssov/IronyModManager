@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -56,6 +56,11 @@ namespace IronyModManager.Parser.Definitions
         /// The definition sha
         /// </summary>
         private string definitionSHA = string.Empty;
+
+        /// <summary>
+        /// The disk file
+        /// </summary>
+        private string diskFile = string.Empty;
 
         /// <summary>
         /// The external definition sha
@@ -258,6 +263,23 @@ namespace IronyModManager.Parser.Definitions
         public IEnumerable<string> Dependencies { get; set; }
 
         /// <summary>
+        /// Gets or sets the disk file.
+        /// </summary>
+        /// <value>The disk file.</value>
+        public string DiskFile
+        {
+            get
+            {
+                return diskFile;
+            }
+            set
+            {
+                var val = value ?? string.Empty;
+                diskFile = val;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the error column.
         /// </summary>
         /// <value>The error column.</value>
@@ -395,6 +417,12 @@ namespace IronyModManager.Parser.Definitions
                 originalCode = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name of the original mod.
+        /// </summary>
+        /// <value>The name of the original mod.</value>
+        public string OriginalModName { get; set; }
 
         /// <summary>
         /// Gets or sets the overwritten file names.
@@ -548,6 +576,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(OriginalCode) => originalCode,
                 nameof(Tags) => Tags,
                 nameof(Order) => Order,
+                nameof(DiskFile) => DiskFile,
+                nameof(OriginalModName) => OriginalModName,
                 _ => Id,
             };
         }

@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -73,6 +73,72 @@ namespace IronyModManager.IO.Mods.InfoProviders
         }
 
         /// <summary>
+        /// Generates the name of the file.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="requestDiskFileName">if set to <c>true</c> [request true file name].</param>
+        /// <param name="originalFileName">Name of the original file.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GenerateFileName(IDefinition definition, bool requestDiskFileName, string originalFileName = Shared.Constants.EmptyParam)
+        {
+            string getFIOSName(IDefinition definition, string fileName)
+            {
+                if (requestDiskFileName)
+                {
+                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(originalFileName) ? fileName.GenerateShortFileNameHashId() : originalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                }
+                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
+            }
+
+            string getLIOSFileName(IDefinition definition, string fileName)
+            {
+                if (requestDiskFileName)
+                {
+                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(originalFileName) ? fileName.GenerateShortFileNameHashId() : originalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                }
+                return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+            }
+
+            EnsureValidType(definition);
+            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
+            string proposedFileName = string.Empty;
+            if (definition.ValueType == Parser.Common.ValueType.WholeTextFile)
+            {
+                return definition.File;
+            }
+            else if (FIOSPaths.Any(p => definition.ParentDirectory.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+            {
+                proposedFileName = getFIOSName(definition, fileName);
+                return EnsureRuleEnforced(definition, proposedFileName, true);
+            }
+            else if (definition.ParentDirectory.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                if (definition.ParentDirectory.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
+                {
+                    proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                    return EnsureRuleEnforced(definition, proposedFileName, false);
+                }
+                else
+                {
+                    return Path.Combine(definition.ParentDirectory, Shared.Constants.LocalizationReplaceDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                }
+            }
+            proposedFileName = getLIOSFileName(definition, fileName);
+            return EnsureRuleEnforced(definition, proposedFileName, false);
+        }
+
+        /// <summary>
+        /// Gets the name of the disk file.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="originalFileName">Name of the original file.</param>
+        /// <returns>System.String.</returns>
+        public string GetDiskFileName(IDefinition definition, string originalFileName = Shared.Constants.EmptyParam)
+        {
+            return GenerateFileName(definition, true, originalFileName);
+        }
+
+        /// <summary>
         /// Gets the encoding.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -94,32 +160,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <returns>System.String.</returns>
         public virtual string GetFileName(IDefinition definition)
         {
-            EnsureValidType(definition);
-            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
-            string proposedFileName = string.Empty;
-            if (definition.ValueType == Parser.Common.ValueType.WholeTextFile)
-            {
-                return definition.File;
-            }
-            else if (FIOSPaths.Any(p => definition.ParentDirectory.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
-            {
-                proposedFileName = Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
-                return EnsureRuleEnforced(definition, proposedFileName, true);
-            }
-            else if (definition.ParentDirectory.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
-            {
-                if (definition.ParentDirectory.Contains(Shared.Constants.LocalizationReplaceDirectory, StringComparison.OrdinalIgnoreCase))
-                {
-                    proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
-                    return EnsureRuleEnforced(definition, proposedFileName, false);
-                }
-                else
-                {
-                    return Path.Combine(definition.ParentDirectory, Shared.Constants.LocalizationReplaceDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
-                }
-            }
-            proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
-            return EnsureRuleEnforced(definition, proposedFileName, false);
+            return GenerateFileName(definition, false);
         }
 
         /// <summary>

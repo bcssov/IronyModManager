@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -460,13 +460,13 @@ namespace IronyModManager.Services
         /// <param name="total">The total.</param>
         /// <param name="processed">The processed.</param>
         /// <param name="maxPerc">The maximum perc.</param>
-        /// <returns>System.Int32.</returns>
+        /// <returns>System.Double.</returns>
         protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
         {
-            var perc = Math.Round((processed / total * 100), 2);
-            if (perc < 1)
+            var perc = Math.Round(processed / total * 100, 2);
+            if (perc < 0)
             {
-                perc = 1;
+                perc = 0;
             }
             else if (perc > maxPerc)
             {

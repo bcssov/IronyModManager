@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2020
+// Last Modified On : 11-04-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -75,8 +75,7 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException("ExportPath.");
             }
-            var invalidDefs = (parameters.Definitions == null || parameters.Definitions.Count() == 0) &&
-                (parameters.PatchDefinitions == null || parameters.PatchDefinitions.Count() == 0);
+            var invalidDefs = parameters.Definitions == null || parameters.Definitions.Count() == 0;
             if (invalidDefs)
             {
                 throw new ArgumentNullException("Definitions.");
@@ -88,13 +87,6 @@ namespace IronyModManager.IO.Mods
                 results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
                     parameters.ExportPath));
                 results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
-                    parameters.ExportPath, parameters.Game));
-            }
-            if (parameters.PatchDefinitions?.Count() > 0)
-            {
-                results.Add(await CopyBinariesAsync(parameters.PatchDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
-                    parameters.ExportPath));
-                results.Add(await WriteTextContentAsync(parameters.PatchDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
                     parameters.ExportPath, parameters.Game));
             }
             return results.All(p => p);
@@ -267,9 +259,7 @@ namespace IronyModManager.IO.Mods
                 var infoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(game));
                 if (infoProvider != null)
                 {
-                    bool overwrittenFiles = item.OverwrittenFileNames.Count(p => p != item.File) > 0;
-                    string fileName = item.File;
-                    var outPath = Path.Combine(exportPath, fileName);
+                    var outPath = Path.Combine(exportPath, !string.IsNullOrWhiteSpace(item.DiskFile) ? item.DiskFile : item.File);
                     if (File.Exists(outPath))
                     {
                         File.Delete(outPath);
@@ -288,19 +278,6 @@ namespace IronyModManager.IO.Mods
                         await File.WriteAllTextAsync(outPath, code, infoProvider.GetEncoding(item));
                         return true;
                     }));
-                    if (overwrittenFiles)
-                    {
-                        var emptyFileNames = item.OverwrittenFileNames.Where(p => p != fileName);
-                        foreach (var emptyFile in emptyFileNames)
-                        {
-                            var emptyPath = Path.Combine(exportPath, emptyFile);
-                            await retry.RetryActionAsync(async () =>
-                            {
-                                await File.WriteAllTextAsync(emptyPath, string.Empty, infoProvider.GetEncoding(item));
-                                return true;
-                            });
-                        }
-                    }
                     results.Add(true);
                 }
                 else

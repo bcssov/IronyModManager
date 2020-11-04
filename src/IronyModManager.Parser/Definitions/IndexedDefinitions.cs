@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -115,6 +115,10 @@ namespace IronyModManager.Parser.Definitions
             MapKeys(typeKeys, definition.Type);
             MapKeys(typeAndIdKeys, ConstructKey(definition.Type, definition.Id));
             MapKeys(allFileKeys, definition.FileCI);
+            if (!string.IsNullOrWhiteSpace(definition.DiskFile))
+            {
+                MapKeys(allFileKeys, definition.DiskFile.ToLowerInvariant());
+            }
             if (definition.OverwrittenFileNames?.Count > 0)
             {
                 foreach (var item in definition.OverwrittenFileNames)

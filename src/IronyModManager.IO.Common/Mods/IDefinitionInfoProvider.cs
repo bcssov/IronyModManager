@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -48,6 +48,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="definition">The definition.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool DefinitionUsesFIOSRules(IDefinition definition);
+
+        /// <summary>
+        /// Gets the name of the disk file.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="originalFileName">Name of the original file.</param>
+        /// <returns>System.String.</returns>
+        string GetDiskFileName(IDefinition definition, string originalFileName = Shared.Constants.EmptyParam);
 
         /// <summary>
         /// Gets the encoding.

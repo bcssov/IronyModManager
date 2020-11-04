@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 11-03-2020
 // ***********************************************************************
 // <copyright file="Unpacker.cs" company="Mario">
 //     Mario
@@ -103,9 +103,9 @@ namespace IronyModManager.IO.Updater
         protected virtual int GetProgressPercentage(double total, double processed, int maxPerc = 100)
         {
             var perc = Convert.ToInt32(processed / total * 100);
-            if (perc < 1)
+            if (perc < 0)
             {
-                perc = 1;
+                perc = 0;
             }
             else if (perc > maxPerc)
             {
