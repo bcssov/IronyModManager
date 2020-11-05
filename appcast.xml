@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.49</title>
+			<title>1.8.51</title>
 			<description>RELEASE INFO:
-* Drastically improve advanced merge performance
+* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +14,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 13:52:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/osx-x64.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="62749640" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="ccwtkrsoGNOcbWJm0rmYzk911ep5G0kgzDzVHENu0I8Ao+rPXvbqThbWfD+H+LnXPRSoiMsCIRf8sw1/WywPDw=="/>
+			<pubDate>Thu, 05 Nov 2020 18:30:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/osx-x64.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="62749347" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="1EDhLAhELsRhqlwa/PtoNS9mk5hnV06PNbL6aiOt3nU/h8kCrPXkCkhTeLIBjualRkf7zlIaas4C6nckw9QvCQ=="/>
 		</item>
 		<item>
-			<title>1.8.49</title>
+			<title>1.8.51</title>
 			<description>RELEASE INFO:
-* Drastically improve advanced merge performance
+* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +28,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 13:52:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/win-x64-setup.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="54464992" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="Zi9r0ki2ExBuB1YwutUXjuAlpi07wzdtycB2SGeCVPXIKXH5qaXrD/AnXp+aAbQzc+dz3Mfo+i64xA2dNVb+Dg=="/>
+			<pubDate>Thu, 05 Nov 2020 18:31:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/win-x64-setup.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="54466626" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="FIyBbKQewMzYcYZ3O92LtEwyPaHdDWhsmYE5RHeaTkSY/LUtYyjbAxh7vvhko/OoYgc0JP7VjD63c2Ps3TtbCA=="/>
 		</item>
 		<item>
-			<title>1.8.49</title>
+			<title>1.8.51</title>
 			<description>RELEASE INFO:
-* Drastically improve advanced merge performance
+* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +42,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 13:52:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/win-x64.rar" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="65395746" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="7M9s5iVDHZ6fwvTY/lZNfHy8NCrgfiEiBbWXSMM+rtzomaPnUiOEM9bP5epNVG6arARXop8uP7lrp4aNLyaxAw=="/>
+			<pubDate>Thu, 05 Nov 2020 18:30:57 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/win-x64.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="65395616" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="TBNusBddJavHIGEq5c/YIjRprvfbLFzFUkSog1PjMGzdMSpKdwqRGinj/3QHlVFD+zAYAGgAUDqGXa5UgeNeCA=="/>
 		</item>
 		<item>
-			<title>1.8.49</title>
+			<title>1.8.51</title>
 			<description>RELEASE INFO:
-* Drastically improve advanced merge performance
+* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +56,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 04 Nov 2020 13:52:45 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.49/linux-x64.zip" sparkle:version="1.8.49.13109" sparkle:shortVersionString="1.8.49" length="77927518" sparkle:os="linux" type="application/zip" sparkle:signature="gFrVE54XWHBAosCRm16S4ROmWYq9sheja/m0odzKZndoVqjciYgx8ZjAfbGd02+990Dtg+W8NgCU+1Kc81Y7DA=="/>
+			<pubDate>Thu, 05 Nov 2020 18:30:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/linux-x64.zip" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="77927713" sparkle:os="linux" type="application/zip" sparkle:signature="t2r6wsbjgVrnmrU7/z33Sk5Gd/ZCzVa67vgSmRausb4yjbUwPGzby6WRBb2yRER2iW4mXrt0yZrZwgyGaclwAg=="/>
 		</item>
 	</channel>
 </rss>
