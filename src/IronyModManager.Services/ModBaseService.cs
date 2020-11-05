@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-05-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -246,7 +246,15 @@ namespace IronyModManager.Services
                             });
                         }
                     }
-                    var uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.First());
+                    IEnumerable<DefinitionEval> uniqueDefinitions;
+                    if (isFios)
+                    {
+                        uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First());
+                    }
+                    else
+                    {
+                        uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last());
+                    }
                     if (uniqueDefinitions.Count() == 1 && overrideSkipped)
                     {
                         result.Definition = definitionEvals.First().Definition;
