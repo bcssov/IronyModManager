@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.51</title>
+			<title>1.8.52</title>
 			<description>RELEASE INFO:
-* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
+* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +14,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 05 Nov 2020 18:30:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/osx-x64.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="62749347" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="1EDhLAhELsRhqlwa/PtoNS9mk5hnV06PNbL6aiOt3nU/h8kCrPXkCkhTeLIBjualRkf7zlIaas4C6nckw9QvCQ=="/>
+			<pubDate>Sat, 07 Nov 2020 02:46:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/osx-x64.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="62750081" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="XBUDR5d8I7v78es/B56DWy/wv1sDHI4pl2LVRHUC6LCDEFESG9MERAutBiKo/qCtx6yi3QmaETPz2jiKZUtYBw=="/>
 		</item>
 		<item>
-			<title>1.8.51</title>
+			<title>1.8.52</title>
 			<description>RELEASE INFO:
-* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
+* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +28,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 05 Nov 2020 18:31:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/win-x64-setup.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="54466626" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="FIyBbKQewMzYcYZ3O92LtEwyPaHdDWhsmYE5RHeaTkSY/LUtYyjbAxh7vvhko/OoYgc0JP7VjD63c2Ps3TtbCA=="/>
+			<pubDate>Sat, 07 Nov 2020 02:46:20 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/win-x64-setup.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="54470247" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="525ns7mw+MguDQQhQwoGbJNuYFn65L+5y8CBF6Zh/4SdFxTWX8NoS+XXkDEJQvik2kVzlXQMo6PlZ7TKMdUOCA=="/>
 		</item>
 		<item>
-			<title>1.8.51</title>
+			<title>1.8.52</title>
 			<description>RELEASE INFO:
-* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
+* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +42,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 05 Nov 2020 18:30:57 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/win-x64.rar" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="65395616" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="TBNusBddJavHIGEq5c/YIjRprvfbLFzFUkSog1PjMGzdMSpKdwqRGinj/3QHlVFD+zAYAGgAUDqGXa5UgeNeCA=="/>
+			<pubDate>Sat, 07 Nov 2020 02:46:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/win-x64.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="65395791" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="fk/cqcCKEqTOLzDk6siCP1Jfa/mGr77iZGjXk3SldloScNCjS85Ba862Dff9fP6J6wsx0d5ismGgRTlUUWXOAw=="/>
 		</item>
 		<item>
-			<title>1.8.51</title>
+			<title>1.8.52</title>
 			<description>RELEASE INFO:
-* Fix rare instance where Irony falsely identified definition usage in game (in instances where multiple definitions were present in the game mod in different files)
+* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +56,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 05 Nov 2020 18:30:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.51/linux-x64.zip" sparkle:version="1.8.51.39058" sparkle:shortVersionString="1.8.51" length="77927713" sparkle:os="linux" type="application/zip" sparkle:signature="t2r6wsbjgVrnmrU7/z33Sk5Gd/ZCzVa67vgSmRausb4yjbUwPGzby6WRBb2yRER2iW4mXrt0yZrZwgyGaclwAg=="/>
+			<pubDate>Sat, 07 Nov 2020 02:46:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/linux-x64.zip" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="77927795" sparkle:os="linux" type="application/zip" sparkle:signature="w99oomE+AMEIVAvObC3RuRczkVTRnqZ4fFQHIHhhT7k+7LSJltvBeLPjHq5wDTsLJmHX7vUdlv8xPbmgqZuFBw=="/>
 		</item>
 	</channel>
 </rss>
