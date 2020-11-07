@@ -142,7 +142,7 @@
         },
         "MergeCollection": {
             "Name": "合并",
-            "MergedCollectionSuffix": "(已合并)",
+            "MergedCollectionSuffix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "进度 {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "选择模式",
