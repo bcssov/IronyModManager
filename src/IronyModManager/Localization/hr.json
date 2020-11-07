@@ -142,7 +142,7 @@
         },
         "MergeCollection": {
             "Name": "Spoji",
-            "MergedCollectionSuffix": "(Spojeno)",
+            "MergedCollectionSuffix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Odaberi način",

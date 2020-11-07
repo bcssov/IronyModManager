@@ -142,7 +142,7 @@
         },
         "MergeCollection": {
             "Name": "Merge",
-            "MergedCollectionSuffix": "(Merged)",
+            "MergedCollectionSuffix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Select mode",
