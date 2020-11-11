@@ -273,7 +273,7 @@
 	},
 	{
 		"DirectoryPath": "common\\random_names",
-		"PreferredParser": "GenericKeyParser"
+		"PreferredParser": "StellarisWholeTextParser"
 	},
 	{
 		"DirectoryPath": "common\\random_names\\base",
