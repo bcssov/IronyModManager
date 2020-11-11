@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-11-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -263,10 +263,13 @@ namespace IronyModManager.Parser
             if (definitions?.Count() > 0)
             {
                 int order = 0;
-                foreach (var item in definitions.Where(p => p.ValueType != Common.ValueType.Variable && p.ValueType != Common.ValueType.Namespace))
+                foreach (var item in definitions)
                 {
-                    order++;
-                    item.Order = order;
+                    if (item.ValueType != Common.ValueType.Variable && item.ValueType != Common.ValueType.Namespace)
+                    {
+                        order++;
+                        item.Order = order;
+                    }
                     item.UsedParser = parserName;
                 }
             }
