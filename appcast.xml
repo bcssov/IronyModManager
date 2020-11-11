@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.52</title>
+			<title>1.8.54</title>
 			<description>RELEASE INFO:
-* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
+* Stellaris random_names are treated as file conflicts instead of definition based
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +14,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 07 Nov 2020 02:46:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/osx-x64.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="62750081" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="XBUDR5d8I7v78es/B56DWy/wv1sDHI4pl2LVRHUC6LCDEFESG9MERAutBiKo/qCtx6yi3QmaETPz2jiKZUtYBw=="/>
+			<pubDate>Wed, 11 Nov 2020 17:07:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.54/osx-x64.rar" sparkle:version="1.8.54.59523" sparkle:shortVersionString="1.8.54" length="62748307" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="t1dhx5amJF/QuZRubdTT0t0pXbc3Tpvb2DG3vjadF2fcPvV+vgdN5xf06vIRR/+MCvkoe8wAPxjGemBsooLgAw=="/>
 		</item>
 		<item>
-			<title>1.8.52</title>
+			<title>1.8.54</title>
 			<description>RELEASE INFO:
-* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
+* Stellaris random_names are treated as file conflicts instead of definition based
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +28,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 07 Nov 2020 02:46:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/win-x64-setup.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="54470247" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="525ns7mw+MguDQQhQwoGbJNuYFn65L+5y8CBF6Zh/4SdFxTWX8NoS+XXkDEJQvik2kVzlXQMo6PlZ7TKMdUOCA=="/>
+			<pubDate>Wed, 11 Nov 2020 17:07:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.54/win-x64-setup.rar" sparkle:version="1.8.54.59523" sparkle:shortVersionString="1.8.54" length="54472506" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="q+cPuf/7t02XmSOmL1F6D2272vZji7ZhICP3dkIUQh/lRocfvrU4Fjcpbwfum+9GaWMw+gwHJO/Rbitb02MPDw=="/>
 		</item>
 		<item>
-			<title>1.8.52</title>
+			<title>1.8.54</title>
 			<description>RELEASE INFO:
-* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
+* Stellaris random_names are treated as file conflicts instead of definition based
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +42,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 07 Nov 2020 02:46:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/win-x64.rar" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="65395791" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="fk/cqcCKEqTOLzDk6siCP1Jfa/mGr77iZGjXk3SldloScNCjS85Ba862Dff9fP6J6wsx0d5ismGgRTlUUWXOAw=="/>
+			<pubDate>Wed, 11 Nov 2020 17:07:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.54/win-x64.rar" sparkle:version="1.8.54.59523" sparkle:shortVersionString="1.8.54" length="65394776" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="LYa/5MaCn+N8tdFZLXQ1SfDVdhMnb1LI2O3CQtdEuvQkOq7usvJWJR/jlQ2Ps9g9CAs3GyrxsQob4pl3YbOVAg=="/>
 		</item>
 		<item>
-			<title>1.8.52</title>
+			<title>1.8.54</title>
 			<description>RELEASE INFO:
-* Change merged collection name suffix for Chinese translation (according to reports it generates an invalid path due to this)
+* Stellaris random_names are treated as file conflicts instead of definition based
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +56,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 07 Nov 2020 02:46:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.52/linux-x64.zip" sparkle:version="1.8.52.52412" sparkle:shortVersionString="1.8.52" length="77927795" sparkle:os="linux" type="application/zip" sparkle:signature="w99oomE+AMEIVAvObC3RuRczkVTRnqZ4fFQHIHhhT7k+7LSJltvBeLPjHq5wDTsLJmHX7vUdlv8xPbmgqZuFBw=="/>
+			<pubDate>Wed, 11 Nov 2020 17:07:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.54/linux-x64.zip" sparkle:version="1.8.54.59523" sparkle:shortVersionString="1.8.54" length="77931814" sparkle:os="linux" type="application/zip" sparkle:signature="nXOdIO4tYjd6NUTPjiU7eLPYYicFyuWuh32wtTslUKTF147T3/7V79eO/Y5X95Zn3sYZ1EKRtHHadlS/Z+jIAQ=="/>
 		</item>
 	</channel>
 </rss>
