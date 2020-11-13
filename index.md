@@ -13,7 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
 
 ### Download
-* Latest stable version: [v1.8.54](https://github.com/bcssov/IronyModManager/releases/tag/v1.8.54).
+* Latest stable version: [v1.8.55](https://github.com/bcssov/IronyModManager/releases/tag/v1.8.55).
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
