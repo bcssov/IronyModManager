@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-20-2020
+// Last Modified On : 11-14-2020
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -120,7 +120,7 @@ namespace IronyModManager.Implementation.Updater
                 SecurityProtocolType = System.Net.SecurityProtocolType.Tls12,
                 AppCastHandler = new IronyAppCast(isInstallerVersion, updaterService),
                 Configuration = new UpdaterConfiguration(new EntryAssemblyAccessor()),
-                TmpDownloadFilePath = StaticResources.GetUpdaterPath()
+                TmpDownloadFilePath = StaticResources.GetUpdaterPath().FirstOrDefault()
             };
             updater.DownloadStarted += (sender, path) =>
             {
@@ -221,7 +221,7 @@ namespace IronyModManager.Implementation.Updater
                     IsInstaller = isInstallerVersion,
                     Path = AppDomain.CurrentDomain.BaseDirectory
                 };
-                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
+                await File.WriteAllTextAsync(Path.Combine(StaticResources.GetUpdaterPath().FirstOrDefault(), Constants.UpdateSettings), JsonConvert.SerializeObject(updateSettings));
                 return !string.IsNullOrWhiteSpace(updatePath) || lastException == null; // In case file is already downloaded
             }
             busy = false;
