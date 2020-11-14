@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-17-2020
+// Last Modified On : 11-14-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -37,9 +37,9 @@ namespace IronyModManager.Storage
         #region Fields
 
         /// <summary>
-        /// The root path
+        /// The root paths
         /// </summary>
-        private static string _rootPath = string.Empty;
+        private static string[] rootPaths = null;
 
         /// <summary>
         /// The storage item
@@ -54,15 +54,16 @@ namespace IronyModManager.Storage
         /// Gets the root path.
         /// </summary>
         /// <value>The root path.</value>
-        private static string RootPath
+        private static string[] RootPaths
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_rootPath))
+                if (rootPaths == null)
                 {
-                    _rootPath = InitPath();
+                    var col = new List<string>() { InitPath(true), InitPath(false) };
+                    rootPaths = col.Distinct().ToArray();
                 }
-                return _rootPath;
+                return rootPaths;
             }
         }
 
@@ -118,8 +119,9 @@ namespace IronyModManager.Storage
         /// <summary>
         /// Initializes the path.
         /// </summary>
+        /// <param name="useProperSeparator">if set to <c>true</c> [use proper separator].</param>
         /// <returns>System.String.</returns>
-        private static string InitPath()
+        private static string InitPath(bool useProperSeparator = true)
         {
             string companyPart = string.Empty;
             string appNamePart = string.Empty;
@@ -127,10 +129,28 @@ namespace IronyModManager.Storage
             var entryAssembly = Assembly.GetEntryAssembly();
             var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
             if (!string.IsNullOrEmpty(companyAttribute.Company))
-                companyPart = $"{companyAttribute.Company}\\";
+            {
+                if (useProperSeparator)
+                {
+                    companyPart = $"{companyAttribute.Company}\\";
+                }
+                else
+                {
+                    companyPart = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+                }
+            }
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute.Title))
-                appNamePart = $"{titleAttribute.Title}\\";
+            {
+                if (useProperSeparator)
+                {
+                    appNamePart = $"{titleAttribute.Title}\\";
+                }
+                else
+                {
+                    appNamePart = $"{titleAttribute.Title}{Path.DirectorySeparatorChar}";
+                }
+            }
 
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
         }
@@ -174,29 +194,40 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
-            var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
-            var path = Path.Combine(RootPath, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
-            if (File.Exists(path))
+            foreach (var root in RootPaths)
             {
-                return path;
-            }
-            if (lookForOlderVersion)
-            {
-                if (storageItem == null && Directory.Exists(RootPath))
+                var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
+                var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
+                if (File.Exists(path))
                 {
-                    var dbs = new List<StorageItem>();
-                    foreach (var item in Directory.EnumerateFiles(RootPath, $"*{Shared.Constants.JsonExtension}"))
+                    return path;
+                }
+                if (lookForOlderVersion)
+                {
+                    if (storageItem == null && Directory.Exists(root))
                     {
-                        if (item.Contains("_", StringComparison.OrdinalIgnoreCase))
+                        var dbs = new List<StorageItem>();
+                        foreach (var item in Directory.EnumerateFiles(root, $"*{Shared.Constants.JsonExtension}"))
                         {
-                            var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
-                            if (Version.TryParse(versionData, out var parsedVersion))
+                            if (item.Contains("_", StringComparison.OrdinalIgnoreCase))
                             {
-                                dbs.Add(new StorageItem()
+                                var versionData = item.Split("_", StringSplitOptions.RemoveEmptyEntries)[1].Replace(Shared.Constants.JsonExtension, string.Empty).Trim();
+                                if (Version.TryParse(versionData, out var parsedVersion))
                                 {
-                                    FileName = item,
-                                    Version = parsedVersion
-                                });
+                                    dbs.Add(new StorageItem()
+                                    {
+                                        FileName = item,
+                                        Version = parsedVersion
+                                    });
+                                }
+                                else
+                                {
+                                    dbs.Add(new StorageItem()
+                                    {
+                                        FileName = item,
+                                        Version = new Version(0, 0, 0, 0)
+                                    });
+                                }
                             }
                             else
                             {
@@ -207,23 +238,16 @@ namespace IronyModManager.Storage
                                 });
                             }
                         }
-                        else
-                        {
-                            dbs.Add(new StorageItem()
-                            {
-                                FileName = item,
-                                Version = new Version(0, 0, 0, 0)
-                            });
-                        }
+                        storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
                     }
-                    storageItem = dbs.OrderByDescending(p => p.Version).FirstOrDefault();
+                    if (storageItem != null)
+                    {
+                        return storageItem.FileName;
+                    }
                 }
-                if (storageItem != null)
-                {
-                    return storageItem.FileName;
-                }
+                return path;
             }
-            return path;
+            return string.Empty;
         }
 
         #endregion Methods

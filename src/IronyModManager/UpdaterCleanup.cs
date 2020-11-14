@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 11-14-2020
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
@@ -44,30 +44,32 @@ namespace IronyModManager
         /// </summary>
         private async Task CleanupUpdaterAsync()
         {
-            var path = StaticResources.GetUpdaterPath();
-            if (Directory.Exists(path))
+            foreach (var path in StaticResources.GetUpdaterPath())
             {
-                bool cleanup = true;
-                var settingsFileName = Path.Combine(path, Constants.UpdateSettings);
-                if (File.Exists(settingsFileName))
+                if (Directory.Exists(path))
                 {
-                    var fileInfo = new FileInfo(settingsFileName);
-                    var text = await File.ReadAllTextAsync(settingsFileName);
-                    var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
-                    // At least 72 since last update to cleanup
-                    cleanup = (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
-                }
-                if (cleanup)
-                {
-                    await Task.Delay(5000);
-                    try
+                    bool cleanup = true;
+                    var settingsFileName = Path.Combine(path, Constants.UpdateSettings);
+                    if (File.Exists(settingsFileName))
                     {
-                        Directory.Delete(path, true);
+                        var fileInfo = new FileInfo(settingsFileName);
+                        var text = await File.ReadAllTextAsync(settingsFileName);
+                        var settings = JsonConvert.DeserializeObject<UpdateSettings>(text);
+                        // At least 72 since last update to cleanup
+                        cleanup = (settings.Updated || settings.IsInstaller) && fileInfo.LastWriteTime <= DateTime.Now.AddHours(-72);
                     }
-                    catch (Exception ex)
+                    if (cleanup)
                     {
-                        var logger = DIResolver.Get<ILogger>();
-                        logger.Error(ex);
+                        await Task.Delay(5000);
+                        try
+                        {
+                            Directory.Delete(path, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            var logger = DIResolver.Get<ILogger>();
+                            logger.Error(ex);
+                        }
                     }
                 }
             }
