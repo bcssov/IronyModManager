@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.56</title>
+			<title>1.8.57</title>
 			<description>RELEASE INFO:
-* Allow some extra time to allow the overlay queue to finish
+* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +14,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 19:39:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.56/osx-x64.rar" sparkle:version="1.8.56.24471" sparkle:shortVersionString="1.8.56" length="62749459" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="ToHqN7EDpSQKsioiconsQ96xVxrt5CT7IWr6vQzPGxKrL+1tCra34IXNGl6sIJELG7wXXEAB3SN2ztjAq0EcBw=="/>
+			<pubDate>Sat, 14 Nov 2020 23:36:14 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/osx-x64.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="62751172" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="wyejyPz5kJuGzHByxrzSJXnW4UitFMxisnqv9UBbCbRV+mS9zhhNpUPSAERCAkzFyT/QIC1cAhcN92CbHek0Bg=="/>
 		</item>
 		<item>
-			<title>1.8.56</title>
+			<title>1.8.57</title>
 			<description>RELEASE INFO:
-* Allow some extra time to allow the overlay queue to finish
+* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +28,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 19:39:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.56/win-x64-setup.rar" sparkle:version="1.8.56.24471" sparkle:shortVersionString="1.8.56" length="54458508" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="aPaUxhByuudyOimvQCe99vD3jhRuRjDmP2JTp+5b1LF0lve3o/nYUnu6lz9oeKFiqBw9d4+wzXjKnIJsVX5PDA=="/>
+			<pubDate>Sat, 14 Nov 2020 23:36:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/win-x64-setup.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="54460994" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="YaG62jZzBZlTC7Rw5L4bZSnPomnOXh1hPRqM7TpBKNT2jVlmGuA8/2Xup1InXuGdIdZQ1cQIwldZmaSRF5hlBQ=="/>
 		</item>
 		<item>
-			<title>1.8.56</title>
+			<title>1.8.57</title>
 			<description>RELEASE INFO:
-* Allow some extra time to allow the overlay queue to finish
+* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +42,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 19:39:45 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.56/win-x64.rar" sparkle:version="1.8.56.24471" sparkle:shortVersionString="1.8.56" length="65396142" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="7qEmRp8gDDzxMhB7EviZD954AbwF7q4BMgweJmonInfjlfppF/L8nwUW/T3dVobLeXU3sbu40LH0ynAY9iZiAw=="/>
+			<pubDate>Sat, 14 Nov 2020 23:36:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/win-x64.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="65397645" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="lFtpoP/I+EQUfpgMhYaM0KvohAQICeQs3/TVo7LWFLWa9JVKN5mUsev2GwBiteb65RBzJTIv3C9k248q+cDxDg=="/>
 		</item>
 		<item>
-			<title>1.8.56</title>
+			<title>1.8.57</title>
 			<description>RELEASE INFO:
-* Allow some extra time to allow the overlay queue to finish
+* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +56,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 19:39:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.56/linux-x64.zip" sparkle:version="1.8.56.24471" sparkle:shortVersionString="1.8.56" length="77931893" sparkle:os="linux" type="application/zip" sparkle:signature="dS0KpKIaDVnX7f1hxVnA/m20K6jfX97S7XcjZNIQ16jvVLi5MA/B5zfWixVn6GlOvdc1gqBhVTWxxsnhAE5rAA=="/>
+			<pubDate>Sat, 14 Nov 2020 23:36:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/linux-x64.zip" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="77932301" sparkle:os="linux" type="application/zip" sparkle:signature="YQTWa7Wp06eLR2LN6S/SafF14jtBumqeaha6459V+2WOMNGQJbTb4zKwAxtiQK00rnMoEG+bBTtMHrB7kC4MAQ=="/>
 		</item>
 	</channel>
 </rss>
