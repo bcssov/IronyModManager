@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 11-14-2020
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -267,7 +267,7 @@ namespace IronyModManager.ViewModels
             await Task.Delay(2);
             lock (queueLock)
             {
-                var now = DateTime.Now;
+                var now = DateTime.Now.AddMilliseconds(250);
                 if (overlayStack.Any(p => now >= p.DateAdded))
                 {
                     OverlayQueue overlay = null;
@@ -276,13 +276,17 @@ namespace IronyModManager.ViewModels
                     {
                         if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
                         {
+                            bool overlaySet = false;
                             foreach (var item in overlays)
                             {
-                                overlay = item;
+                                if (!overlaySet)
+                                {
+                                    overlay = item;
+                                }
                                 overlayStack.Remove(item);
                                 if (item.Event.IsVisible != OverlayVisible)
                                 {
-                                    break;
+                                    overlaySet = true;
                                 }
                             }
                         }
