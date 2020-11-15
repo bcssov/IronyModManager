@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 11-15-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -513,8 +513,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     AllowModSelection = true;
                     InstalledMods.AllowModSelection = true;
-                    CollectionMods.AllowModSelection = true;
-                    InstallModsAsync().ConfigureAwait(true);
+                    CollectionMods.AllowModSelection = true;                    
                 }
                 else
                 {
@@ -522,6 +521,7 @@ namespace IronyModManager.ViewModels.Controls
                     InstalledMods.AllowModSelection = false;
                     CollectionMods.AllowModSelection = false;
                 }
+                InstallModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.InstalledMods.Mods).Subscribe(v =>
