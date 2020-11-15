@@ -4,9 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.57</title>
+			<title>1.8.58</title>
 			<description>RELEASE INFO:
-* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
+* Mod list will refresh now regardless whether a collection is active or not or exists or not
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +14,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 23:36:14 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/osx-x64.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="62751172" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="wyejyPz5kJuGzHByxrzSJXnW4UitFMxisnqv9UBbCbRV+mS9zhhNpUPSAERCAkzFyT/QIC1cAhcN92CbHek0Bg=="/>
+			<pubDate>Sun, 15 Nov 2020 01:54:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/osx-x64.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="62751172" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="7WU2dBpoUyYhLciG2EL2Y1z6BilrwYlFP8OjPaRuWnCR70vIoPxZkNnvPTJANQUipT9e8pl3lOjUTJ/lzZybDQ=="/>
 		</item>
 		<item>
-			<title>1.8.57</title>
+			<title>1.8.58</title>
 			<description>RELEASE INFO:
-* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
+* Mod list will refresh now regardless whether a collection is active or not or exists or not
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +28,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 23:36:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/win-x64-setup.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="54460994" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="YaG62jZzBZlTC7Rw5L4bZSnPomnOXh1hPRqM7TpBKNT2jVlmGuA8/2Xup1InXuGdIdZQ1cQIwldZmaSRF5hlBQ=="/>
+			<pubDate>Sun, 15 Nov 2020 01:54:26 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/win-x64-setup.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="54465717" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="qCB6OtpfjVGpCHe56tmiP1SKjDu7Kr/icJXkr7ftuCib/aMlIoYCHaj3QtdDCSmVVDfSRGCI8npctIEMz0o5BA=="/>
 		</item>
 		<item>
-			<title>1.8.57</title>
+			<title>1.8.58</title>
 			<description>RELEASE INFO:
-* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
+* Mod list will refresh now regardless whether a collection is active or not or exists or not
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +42,13 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 23:36:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/win-x64.rar" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="65397645" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="lFtpoP/I+EQUfpgMhYaM0KvohAQICeQs3/TVo7LWFLWa9JVKN5mUsev2GwBiteb65RBzJTIv3C9k248q+cDxDg=="/>
+			<pubDate>Sun, 15 Nov 2020 01:54:22 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/win-x64.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="65397875" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="bQ9fhy+o6sM7CHUgPO4SNYO0+naNMC308UNBHlh26dIvYGbMeDaG/4CQIVSQAYItqPcR83pXIauI5Dwna2wYDQ=="/>
 		</item>
 		<item>
-			<title>1.8.57</title>
+			<title>1.8.58</title>
 			<description>RELEASE INFO:
-* Fix Linux\OSX autoupdate (If on Linux\OSX please download manually as there's a good chance autoupdate will fail for you)
+* Mod list will refresh now regardless whether a collection is active or not or exists or not
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +56,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sat, 14 Nov 2020 23:36:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.57/linux-x64.zip" sparkle:version="1.8.57.21511" sparkle:shortVersionString="1.8.57" length="77932301" sparkle:os="linux" type="application/zip" sparkle:signature="YQTWa7Wp06eLR2LN6S/SafF14jtBumqeaha6459V+2WOMNGQJbTb4zKwAxtiQK00rnMoEG+bBTtMHrB7kC4MAQ=="/>
+			<pubDate>Sun, 15 Nov 2020 01:54:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/linux-x64.zip" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="77932208" sparkle:os="linux" type="application/zip" sparkle:signature="JB23yp5tnFLV+WX/RVwkXKMQ6Q2++0qrsGs00zKdrOHlFunpgOfk55vdz9qG79alLNwmEWIRA2edXksWMk5+DA=="/>
 		</item>
 	</channel>
 </rss>
