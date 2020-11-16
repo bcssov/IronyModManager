@@ -176,6 +176,7 @@
         "LaunchGame": {
             "Launch": "启动游戏",
             "Resume": "继续游戏",
+            "Overlay": "正在启动游戏，请稍候...",
             "LaunchError": {
                 "Title": "无法启动游戏",
                 "Message": "启动失败."
