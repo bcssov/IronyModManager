@@ -176,6 +176,7 @@
         "LaunchGame": {
             "Launch": "Pokreni igru",
             "Resume": "Nastavi igru",
+            "Overlay": "Pokretanje igre, pričekajte...",
             "LaunchError": {
                 "Title": "Nije moguće pokrenuti igru",
                 "Message": "Pokretanje igre nije uspjelo."

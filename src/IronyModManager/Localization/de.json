@@ -176,6 +176,7 @@
         "LaunchGame": {
             "Launch": "Spiel startet",
             "Resume": "Setzen Sie Gameg fort",
+            "Overlay": "Spiel starten, bitte warten...",
             "LaunchError": {
                 "Title": "Spiel kann nicht gestartet werden",
                 "Message": "Das Spiel konnte nicht gestartet werden."
