@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.58</title>
+			<title>1.8.60</title>
 			<description>RELEASE INFO:
-* Mod list will refresh now regardless whether a collection is active or not or exists or not
+* Fix linux issue with regards to opening mod folder location(s) which had whitespace in its path
+* Fix linux issue with Irony being unable to launch steam (in cases where it needed to)
+* Add overlay message to launch game
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -14,13 +16,15 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sun, 15 Nov 2020 01:54:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/osx-x64.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="62751172" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="7WU2dBpoUyYhLciG2EL2Y1z6BilrwYlFP8OjPaRuWnCR70vIoPxZkNnvPTJANQUipT9e8pl3lOjUTJ/lzZybDQ=="/>
+			<pubDate>Mon, 16 Nov 2020 19:33:45 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.60/osx-x64.rar" sparkle:version="1.8.60.40817" sparkle:shortVersionString="1.8.60" length="62753700" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Ga19didVVEYHCtdU6WCfxqIo48JQJEN8BOSIO/bsgUL+6EH/8nF414RjS2Jts+o+uOndjzFFZa2muetWYgKsBg=="/>
 		</item>
 		<item>
-			<title>1.8.58</title>
+			<title>1.8.60</title>
 			<description>RELEASE INFO:
-* Mod list will refresh now regardless whether a collection is active or not or exists or not
+* Fix linux issue with regards to opening mod folder location(s) which had whitespace in its path
+* Fix linux issue with Irony being unable to launch steam (in cases where it needed to)
+* Add overlay message to launch game
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -28,13 +32,15 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sun, 15 Nov 2020 01:54:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/win-x64-setup.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="54465717" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="qCB6OtpfjVGpCHe56tmiP1SKjDu7Kr/icJXkr7ftuCib/aMlIoYCHaj3QtdDCSmVVDfSRGCI8npctIEMz0o5BA=="/>
+			<pubDate>Mon, 16 Nov 2020 19:33:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.60/win-x64-setup.rar" sparkle:version="1.8.60.40817" sparkle:shortVersionString="1.8.60" length="54459439" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="fcui7imKW7SE+I26eEoD8hQF+Pn9JZOpum1gTMkV5WFy5davf0wGBhBcz7ELgjcaymn5jrm5POvxO/2eCDuSCw=="/>
 		</item>
 		<item>
-			<title>1.8.58</title>
+			<title>1.8.60</title>
 			<description>RELEASE INFO:
-* Mod list will refresh now regardless whether a collection is active or not or exists or not
+* Fix linux issue with regards to opening mod folder location(s) which had whitespace in its path
+* Fix linux issue with Irony being unable to launch steam (in cases where it needed to)
+* Add overlay message to launch game
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -42,13 +48,15 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sun, 15 Nov 2020 01:54:22 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/win-x64.rar" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="65397875" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="bQ9fhy+o6sM7CHUgPO4SNYO0+naNMC308UNBHlh26dIvYGbMeDaG/4CQIVSQAYItqPcR83pXIauI5Dwna2wYDQ=="/>
+			<pubDate>Mon, 16 Nov 2020 19:33:48 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.60/win-x64.rar" sparkle:version="1.8.60.40817" sparkle:shortVersionString="1.8.60" length="65400436" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="A3cGWP/BpHFj6iz0x4DnMx4/a5qg3XpW2TZ2C7HKS5K+7iBdD4sPS2GRxWe+k56QtnZKL5Boc4UbyYEWGm2FBg=="/>
 		</item>
 		<item>
-			<title>1.8.58</title>
+			<title>1.8.60</title>
 			<description>RELEASE INFO:
-* Mod list will refresh now regardless whether a collection is active or not or exists or not
+* Fix linux issue with regards to opening mod folder location(s) which had whitespace in its path
+* Fix linux issue with Irony being unable to launch steam (in cases where it needed to)
+* Add overlay message to launch game
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -56,8 +64,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Sun, 15 Nov 2020 01:54:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.58/linux-x64.zip" sparkle:version="1.8.58.59059" sparkle:shortVersionString="1.8.58" length="77932208" sparkle:os="linux" type="application/zip" sparkle:signature="JB23yp5tnFLV+WX/RVwkXKMQ6Q2++0qrsGs00zKdrOHlFunpgOfk55vdz9qG79alLNwmEWIRA2edXksWMk5+DA=="/>
+			<pubDate>Mon, 16 Nov 2020 19:33:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.60/linux-x64.zip" sparkle:version="1.8.60.40817" sparkle:shortVersionString="1.8.60" length="77933039" sparkle:os="linux" type="application/zip" sparkle:signature="umQeLB5wGpebySy2otKDQd3pa1WIGAWXZ7b7bew0y6sVxV5MSZ3TNjy0Otj1BLEuu13clhr8n23m/b+3+Gb4CQ=="/>
 		</item>
 	</channel>
 </rss>
