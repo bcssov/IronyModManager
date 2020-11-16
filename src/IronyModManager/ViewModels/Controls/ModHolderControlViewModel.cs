@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-15-2020
+// Last Modified On : 11-16-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
@@ -33,7 +34,6 @@ using IronyModManager.Shared;
 using IronyModManager.Shared.MessageBus.Events;
 using ReactiveUI;
 using SmartFormat;
-using IronyModManager.Common;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -55,7 +55,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The steam launch
         /// </summary>
-        private const string SteamLaunch = SteamProcess + ":";
+        private const string SteamLaunch = SteamProcess + "://open/main";
 
         /// <summary>
         /// The steam process
@@ -408,7 +408,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// apply collection as an asynchronous operation.
         /// </summary>
-        protected virtual async Task ApplyCollectionAsync()
+        /// <param name="showOverlay">if set to <c>true</c> [show overlay].</param>
+        protected virtual async Task ApplyCollectionAsync(bool showOverlay = true)
         {
             if (ApplyingCollection)
             {
@@ -417,7 +418,10 @@ namespace IronyModManager.ViewModels.Controls
             ApplyingCollection = true;
             if (CollectionMods.SelectedModCollection != null)
             {
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
+                if (showOverlay)
+                {
+                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Apply_Message));
+                }
                 var notificationType = NotificationType.Success;
                 try
                 {
@@ -444,7 +448,10 @@ namespace IronyModManager.ViewModels.Controls
                     logger.Error(ex);
                     notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
                 }
-                await TriggerOverlayAsync(false);
+                if (showOverlay)
+                {
+                    await TriggerOverlayAsync(false);
+                }
             }
             ApplyingCollection = false;
         }
@@ -513,7 +520,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     AllowModSelection = true;
                     InstalledMods.AllowModSelection = true;
-                    CollectionMods.AllowModSelection = true;                    
+                    CollectionMods.AllowModSelection = true;
                 }
                 else
                 {
@@ -571,6 +578,31 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }, allowModSelectionEnabled).DisposeWith(disposables);
 
+            async Task<bool> ensureSteamIsRunning(IGameSettings args)
+            {
+                if (gameService.IsSteamGame(args))
+                {
+                    // Check if process is running
+                    var processes = Process.GetProcesses();
+                    if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        await appAction.OpenAsync(SteamLaunch);
+                        var attempts = 0;
+                        while (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            if (attempts > 3)
+                            {
+                                break;
+                            }
+                            await Task.Delay(3000);
+                            processes = Process.GetProcesses();
+                            attempts++;
+                        }
+                    }
+                }
+                return true;
+            }
+
             async Task launchGame(bool continueGame)
             {
                 var game = gameService.GetSelected();
@@ -579,12 +611,13 @@ namespace IronyModManager.ViewModels.Controls
                     var args = gameService.GetLaunchSettings(game, continueGame);
                     if (!string.IsNullOrWhiteSpace(args.ExecutableLocation))
                     {
+                        await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.Overlay));
                         if (game.RefreshDescriptors)
                         {
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
                             await modService.InstallModsAsync();
                         }
-                        await ApplyCollectionAsync();
+                        await ApplyCollectionAsync(false);
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
                         if (gameService.IsSteamLaunchPath(args))
                         {
@@ -599,21 +632,12 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
                                     localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                await TriggerOverlayAsync(false);
                             }
                         }
                         else
                         {
-                            if (gameService.IsSteamGame(args))
-                            {
-                                // Check if process is running
-                                var processes = Process.GetProcesses();
-                                if (!processes.Any(p => p.ProcessName.Equals(SteamProcess, StringComparison.OrdinalIgnoreCase)))
-                                {
-                                    await appAction.OpenAsync(SteamLaunch);
-                                    // Artificial delay to allow steam to boot up
-                                    await Task.Delay(250);
-                                }
-                            }
+                            await ensureSteamIsRunning(args);
                             if (await appAction.RunAsync(args.ExecutableLocation, args.LaunchArguments))
                             {
                                 if (game.CloseAppAfterGameLaunch)
@@ -625,6 +649,7 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Title),
                                     localizationManager.GetResource(LocalizationResources.Mod_Actions.LaunchGame.LaunchError.Message), NotificationType.Error, 10);
+                                await TriggerOverlayAsync(false);
                             }
                         }
                     }

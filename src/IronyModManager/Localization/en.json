@@ -176,6 +176,7 @@
         "LaunchGame": {
             "Launch": "Launch Game",
             "Resume": "Resume Game",
+            "Overlay": "Launching game, please wait...",
             "LaunchError": {
                 "Title": "Cannot Launch Game",
                 "Message": "Failed to launch the game."

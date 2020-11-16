@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 11-16-2020
 // ***********************************************************************
 // <copyright file="AppAction.cs" company="Mario">
 //     Mario
@@ -80,7 +80,8 @@ namespace IronyModManager.Implementation.Actions
             {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
-                    ShellExec($"xdg-open {command}");
+                    var linuxCommand = $"\"{command}\"";
+                    ShellExec($"xdg-open {linuxCommand}");
                 }
                 else
                 {
@@ -148,7 +149,6 @@ namespace IronyModManager.Implementation.Actions
                 {
                     FileName = "/bin/sh",
                     Arguments = $"-c \"{escapedArgs}\"",
-                    RedirectStandardOutput = true,
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     WindowStyle = ProcessWindowStyle.Hidden
