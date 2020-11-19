@@ -4,7 +4,7 @@
 // Created          : 07-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-10-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="OverlayProgressEvent.cs" company="Mario">
 //     Mario
@@ -27,6 +27,12 @@ namespace IronyModManager.Common.Events
     public class OverlayProgressEvent : IMessageBusEvent
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>The identifier.</value>
+        public long Id { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is fire and forget.

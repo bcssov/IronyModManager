@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-28-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -25,6 +25,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -170,7 +171,8 @@ namespace IronyModManager.Views
                 shutdownRequested = true;
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var message = locManager.GetResource(LocalizationResources.App.BackgroundOperationMessage);
-                ViewModel.TriggerManualOverlay(true, message);
+                var id = DIResolver.Get<IIDGenerator>().GetNextId();
+                ViewModel.TriggerManualOverlay(id, true, message);
             }
             base.OnClosing(e);
         }

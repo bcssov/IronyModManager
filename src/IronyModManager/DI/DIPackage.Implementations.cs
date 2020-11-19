@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
 using IronyModManager.Shared;
@@ -67,6 +68,7 @@ namespace IronyModManager.DI
                 typeof(NotoSansFontFamily), typeof(NotoSansSCFontFamily)
             }, SimpleInjector.Lifestyle.Singleton);
             container.Register<IFontFamilyManager, FontFamilyManager>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IIDGenerator, IDGenerator>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

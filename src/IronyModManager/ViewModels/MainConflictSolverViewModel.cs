@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -55,6 +56,11 @@ namespace IronyModManager.ViewModels
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
 
         /// <summary>
         /// The localization manager
@@ -93,6 +99,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
         /// </summary>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="mergeViewer">The merge viewer.</param>
@@ -106,13 +113,14 @@ namespace IronyModManager.ViewModels
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public MainConflictSolverControlViewModel(IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
+        public MainConflictSolverControlViewModel(IIDGenerator idGenerator, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
             ConflictSolverDBSearchControlViewModel dbSearch, ConflictSolverCustomConflictsControlViewModel customConflicts,
             ILogger logger, INotificationAction notificationAction, IAppAction appAction)
         {
+            this.idGenerator = idGenerator;
             this.modPatchCollectionService = modPatchCollectionService;
             this.localizationManager = localizationManager;
             this.logger = logger;
@@ -856,7 +864,8 @@ namespace IronyModManager.ViewModels
                         break;
                     }
                 }
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.OverlayResolve));
+                var id = idGenerator.GetNextId();
+                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.OverlayResolve));
                 IDefinition patchDefinition = null;
                 if (!IsBinaryConflict)
                 {
@@ -939,7 +948,7 @@ namespace IronyModManager.ViewModels
                         SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
                     }
                 }
-                await TriggerOverlayAsync(false);
+                await TriggerOverlayAsync(id, false);
             }
             ResolvingConflict = false;
         }

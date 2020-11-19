@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="BaseViewModel.cs" company="Mario">
 //     Mario
@@ -160,25 +160,28 @@ namespace IronyModManager.Common.ViewModels
         /// <summary>
         /// Triggers the overlay.
         /// </summary>
+        /// <param name="id">The identifier.</param>
         /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
         /// <param name="message">The message.</param>
         /// <param name="progress">The progress.</param>
-        protected virtual void TriggerOverlay(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
+        protected virtual void TriggerOverlay(long id, bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
-            TriggerOverlayAsync(isVisible, message, progress).ConfigureAwait(false);
+            TriggerOverlayAsync(id, isVisible, message, progress).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Triggers the overlay asynchronous.
         /// </summary>
+        /// <param name="id">The identifier.</param>
         /// <param name="isVisible">if set to <c>true</c> [is visible].</param>
         /// <param name="message">The message.</param>
         /// <param name="progress">The progress.</param>
         /// <returns>Task.</returns>
-        protected virtual async Task TriggerOverlayAsync(bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
+        protected virtual async Task TriggerOverlayAsync(long id, bool isVisible, string message = Constants.EmptyParam, string progress = Constants.EmptyParam)
         {
             var args = new OverlayProgressEvent()
             {
+                Id = id,
                 IsVisible = isVisible,
                 Message = message,
                 MessageProgress = progress

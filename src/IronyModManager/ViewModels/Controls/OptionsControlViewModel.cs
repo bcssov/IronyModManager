@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-31-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -30,6 +30,7 @@ using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
 using Avalonia;
+using IronyModManager.Implementation.Overlay;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -118,6 +119,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
 
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
+
         #endregion Fields
 
         #region Constructors
@@ -125,6 +131,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
@@ -133,7 +140,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(Shared.MessageBus.IMessageBus messageBus, ILogger logger, INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
+        public OptionsControlViewModel(IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger, 
+            INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
             this.gameService = gameService;
@@ -144,6 +152,7 @@ namespace IronyModManager.ViewModels.Controls
             this.notificationAction = notificationAction;
             this.logger = logger;
             this.messageBus = messageBus;
+            this.idGenerator = idGenerator;
             UpdaterMargin = new Thickness(0, 20, 0, 0);
         }
 
@@ -588,23 +597,25 @@ namespace IronyModManager.ViewModels.Controls
 
             var downloadingUpdates = false;
             var installingUpdates = false;
+            long messageId = 0;
             InstallUpdatesCommand = ReactiveCommand.CreateFromTask(async () =>
             {
+                messageId = idGenerator.GetNextId();
                 downloadingUpdates = true;
-                await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading));
+                await TriggerOverlayAsync(messageId, true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading));
                 if (await updater.DownloadUpdateAsync())
                 {
                     downloadingUpdates = false;
-                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
+                    await TriggerOverlayAsync(messageId, true, localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling));
                     installingUpdates = true;
                     await updater.InstallUpdateAsync();
                     installingUpdates = false;
-                    await TriggerOverlayAsync(false);
+                    await TriggerOverlayAsync(messageId, false);
                 }
                 else
                 {
                     downloadingUpdates = false;
-                    await TriggerOverlayAsync(false);
+                    await TriggerOverlayAsync(messageId, false);
                 }
             }).DisposeWith(disposables);
 
@@ -614,7 +625,7 @@ namespace IronyModManager.ViewModels.Controls
                 var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorMessage);
                 logger.Error(s);
                 notificationAction.ShowNotification(title, message, NotificationType.Error, 30);
-                TriggerOverlay(false);
+                TriggerOverlay(messageId, false);
             }).DisposeWith(disposables);
 
             updater.Progress.Subscribe(s =>
@@ -623,13 +634,13 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloading);
                     var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
-                    TriggerOverlay(true, message, progress);
+                    TriggerOverlay(messageId, true, message, progress);
                 }
                 else if (installingUpdates)
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateInstalling);
                     var progress = Smart.Format(localizationManager.GetResource(LocalizationResources.Options.Updates.Overlay.UpdateDownloadProgress), new { Progress = s.ToLocalizedPercentage() });
-                    TriggerOverlay(true, message, progress);
+                    TriggerOverlay(messageId, true, message, progress);
                 }
             }).DisposeWith(disposables);
 

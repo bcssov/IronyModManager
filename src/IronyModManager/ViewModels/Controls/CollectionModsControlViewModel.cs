@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-28-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -29,6 +29,7 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -165,6 +166,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private bool skipReorder = false;
 
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
+
         #endregion Fields
 
         #region Constructors
@@ -172,6 +178,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modReportView">The mod report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
@@ -189,12 +196,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
         {
+            this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
             AddNewCollection = addNewCollection;
@@ -806,14 +814,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="providerType">Type of the provider.</param>
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
-            await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
+            var id = idGenerator.GetNextId();
+            await TriggerOverlayAsync(id ,true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
             await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly));
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
-            await TriggerOverlayAsync(false);
+            await TriggerOverlayAsync(id, false);
         }
 
         /// <summary>
@@ -900,7 +909,8 @@ namespace IronyModManager.ViewModels.Controls
                 return Task.FromResult((IModCollection)null);
             }
 
-            await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
+            var id = idGenerator.GetNextId();
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Importing_Message));
             var importData = type switch
             {
                 ImportProviderType.Paradoxos => await modCollectionService.ImportParadoxosAsync(path),
@@ -910,7 +920,7 @@ namespace IronyModManager.ViewModels.Controls
             };
             if (importData == null)
             {
-                await TriggerOverlayAsync(false);
+                await TriggerOverlayAsync(id, false);
                 return;
             }
             bool proceed;
@@ -942,7 +952,7 @@ namespace IronyModManager.ViewModels.Controls
                     notificationAction.ShowNotification(title, message, NotificationType.Success);
                 }
             }
-            await TriggerOverlayAsync(false);
+            await TriggerOverlayAsync(id, false);
         }
 
         /// <summary>
@@ -1050,11 +1060,12 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 async Task handleRenamePatchCollection()
                                 {
-                                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                                    var id = idGenerator.GetNextId();
+                                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                                     await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
                                     successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
-                                    await TriggerOverlayAsync(false);
+                                    await TriggerOverlayAsync(id, false);
                                     await Dispatcher.UIThread.InvokeAsync(() =>
                                     {
                                         notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
@@ -1335,11 +1346,11 @@ namespace IronyModManager.ViewModels.Controls
 
             IDisposable reportDisposable = null;
 
-            void registerReportHandlers(bool useImportOverlay = false)
+            void registerReportHandlers(long id, bool useImportOverlay = false)
             {
                 reportDisposable = modReportExportHandler.Message.Subscribe(s =>
                 {
-                    TriggerOverlay(true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
+                    TriggerOverlay(id, true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
                         Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
                 }).DisposeWith(disposables);
             }
@@ -1350,17 +1361,18 @@ namespace IronyModManager.ViewModels.Controls
                 var path = await fileDialogAction.OpenDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
-                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
-                    registerReportHandlers(true);
+                    var id = idGenerator.GetNextId();
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
+                    registerReportHandlers(id, true);
                     var reports = await modCollectionService.ImportHashReportAsync(SelectedMods, path);
                     if (reports?.Count() > 0)
                     {
-                        await TriggerOverlayAsync(false);
+                        await TriggerOverlayAsync(id, false);
                         ModReportView.SetParameters(reports);
                     }
                     else
                     {
-                        await TriggerOverlayAsync(false);
+                        await TriggerOverlayAsync(id, false);
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportValid.Message), NotificationType.Success);
                     }
@@ -1374,14 +1386,15 @@ namespace IronyModManager.ViewModels.Controls
                 var path = await fileDialogAction.SaveDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);
                 if (!string.IsNullOrWhiteSpace(path))
                 {
-                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
-                    registerReportHandlers();
+                    var id = idGenerator.GetNextId();
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    registerReportHandlers(id);
                     if (await modCollectionService.ExportHashReportAsync(SelectedMods, path))
                     {
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
                     }
-                    await TriggerOverlayAsync(false);
+                    await TriggerOverlayAsync(id, false);
                     reportDisposable?.Dispose();
                 }
             }).DisposeWith(disposables);
