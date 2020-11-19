@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-13-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -24,6 +24,7 @@ using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -48,6 +49,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
 
         /// <summary>
         /// The localization manager
@@ -124,11 +130,12 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
+        /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel"/> class.
         /// </summary>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
-        /// <param name="modDefinitionMergeProgressHandler">The mod merge progress handler.</param>
+        /// <param name="modDefinitionMergeProgressHandler">The mod definition merge progress handler.</param>
         /// <param name="modFileMergeProgressHandler">The mod file merge progress handler.</param>
         /// <param name="shutDownState">State of the shut down.</param>
         /// <param name="gameService">The game service.</param>
@@ -137,7 +144,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public ModifyCollectionControlViewModel(ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
+        public ModifyCollectionControlViewModel(IIDGenerator idGenerator, ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
             ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionMergeProgressHandler modDefinitionMergeProgressHandler,
             ModFileMergeProgressHandler modFileMergeProgressHandler, IShutDownState shutDownState, IGameService gameService, IModMergeService modMergeService,
             IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService,
@@ -154,6 +161,7 @@ namespace IronyModManager.ViewModels.Controls
             this.shutDownState = shutDownState;
             this.modFileMergeProgressHandler = modFileMergeProgressHandler;
             this.notificationAction = notificationAction;
+            this.idGenerator = idGenerator;
         }
 
         #endregion Constructors
@@ -389,9 +397,10 @@ namespace IronyModManager.ViewModels.Controls
                     var copy = CopyCollection(ActiveCollection.Name);
                     if (modCollectionService.Save(copy))
                     {
-                        await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
+                        var id = idGenerator.GetNextId();
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                         await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, copy.Name);
-                        await TriggerOverlayAsync(false);
+                        await TriggerOverlayAsync(id, false);
                         return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.Success);
                     }
                     else
@@ -418,7 +427,8 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var copy = await GetMergedCollectionAsync();
 
-                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    var id = idGenerator.GetNextId();
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFreeAsync();
 
                     var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
@@ -428,7 +438,7 @@ namespace IronyModManager.ViewModels.Controls
                         savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     }
 
-                    SubscribeToProgressReports(disposables, true);
+                    SubscribeToProgressReports(id, disposables, true);
 
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(ActiveCollection.Name);
                     if (mode == PatchStateMode.None)
@@ -444,7 +454,7 @@ namespace IronyModManager.ViewModels.Controls
                         TotalCount = 3
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Loading_Definitions);
-                    await TriggerOverlayAsync(true, message, overlayProgress);
+                    await TriggerOverlayAsync(id, true, message, overlayProgress);
 
                     modPatchCollectionService.ResetPatchStateCache();
                     var definitions = await Task.Run(() =>
@@ -467,7 +477,7 @@ namespace IronyModManager.ViewModels.Controls
                     }).ConfigureAwait(false);
                     copy.Mods = new List<string>() { mergeMod.DescriptorFile };
 
-                    await TriggerOverlayAsync(false);
+                    await TriggerOverlayAsync(id, false);
 
                     definitionAnalyzeLoadHandler?.Dispose();
                     definitionLoadHandler?.Dispose();
@@ -492,8 +502,9 @@ namespace IronyModManager.ViewModels.Controls
                 if (ActiveCollection != null)
                 {
                     var copy = await GetMergedCollectionAsync();
+                    var id = idGenerator.GetNextId();
 
-                    await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
                     await shutDownState.WaitUntilFreeAsync();
 
                     var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
@@ -503,7 +514,7 @@ namespace IronyModManager.ViewModels.Controls
                         savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     }
 
-                    SubscribeToProgressReports(disposables, false);
+                    SubscribeToProgressReports(id, disposables, false);
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
@@ -512,7 +523,7 @@ namespace IronyModManager.ViewModels.Controls
                         TotalCount = 2
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Gathering_Mod_Info);
-                    await TriggerOverlayAsync(true, message, overlayProgress);
+                    await TriggerOverlayAsync(id, true, message, overlayProgress);
 
                     var mergeMod = await Task.Run(async () =>
                     {
@@ -520,7 +531,7 @@ namespace IronyModManager.ViewModels.Controls
                     }).ConfigureAwait(false);
                     copy.Mods = new List<string>() { mergeMod.DescriptorFile };
 
-                    await TriggerOverlayAsync(false);
+                    await TriggerOverlayAsync(id, false);
                     fileMergeProgressHandler?.Dispose();
 
                     modCollectionService.Delete(copy.Name);
@@ -553,9 +564,10 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Subscribes to progress reports.
         /// </summary>
+        /// <param name="id">The identifier.</param>
         /// <param name="disposables">The disposables.</param>
         /// <param name="advancedMerge">if set to <c>true</c> [advanced merge].</param>
-        protected virtual void SubscribeToProgressReports(CompositeDisposable disposables, bool advancedMerge)
+        protected virtual void SubscribeToProgressReports(long id, CompositeDisposable disposables, bool advancedMerge)
         {
             definitionLoadHandler?.Dispose();
             if (advancedMerge)
@@ -569,7 +581,7 @@ namespace IronyModManager.ViewModels.Controls
                         Count = 1,
                         TotalCount = 3
                     });
-                    TriggerOverlay(true, message, overlayProgress);
+                    TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
 
@@ -585,7 +597,7 @@ namespace IronyModManager.ViewModels.Controls
                         Count = 2,
                         TotalCount = 3
                     });
-                    TriggerOverlay(true, message, overlayProgress);
+                    TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
 
@@ -601,7 +613,7 @@ namespace IronyModManager.ViewModels.Controls
                         Count = 3,
                         TotalCount = 3
                     });
-                    TriggerOverlay(true, message, overlayProgress);
+                    TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
 
@@ -625,7 +637,7 @@ namespace IronyModManager.ViewModels.Controls
                         Count = s.Step,
                         TotalCount = 2
                     });
-                    TriggerOverlay(true, message, overlayProgress);
+                    TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
         }

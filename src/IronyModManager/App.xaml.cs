@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -25,6 +25,7 @@ using IronyModManager.Common.Events;
 using IronyModManager.DI;
 using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -204,13 +205,15 @@ namespace IronyModManager
             {
                 OnThemeChanged().ConfigureAwait(true);
             });
+            var idGenerator = DIResolver.Get<IIDGenerator>();
             var languageListener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
             languageListener.SubscribeObservable(x =>
             {
                 var window = (MainWindow)Helpers.GetMainWindow();
-                window.ViewModel.TriggerManualOverlay(true, string.Empty);
+                var id = idGenerator.GetNextId();
+                window.ViewModel.TriggerManualOverlay(id, true, string.Empty);
                 SetFontFamily(window, x.Locale);
-                window.ViewModel.TriggerManualOverlay(false, string.Empty);
+                window.ViewModel.TriggerManualOverlay(id, false, string.Empty);
             });
         }
 

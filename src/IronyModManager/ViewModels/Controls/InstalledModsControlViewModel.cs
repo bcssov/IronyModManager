@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 11-19-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
@@ -74,6 +75,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
+
+        /// <summary>
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
@@ -115,6 +121,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="InstalledModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="modService">The mod service.</param>
@@ -125,11 +132,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="filterMods">The filter mods.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public InstalledModsControlViewModel(IGameService gameService, ILocalizationManager localizationManager,
+        public InstalledModsControlViewModel(IIDGenerator idGenerator, IGameService gameService, ILocalizationManager localizationManager,
             IModService modService, IAppStateService appStateService, SortOrderControlViewModel modSelectedSortOrder,
             SortOrderControlViewModel modNameSortOrder, SortOrderControlViewModel modVersionSortOrder,
             SearchModsControlViewModel filterMods, IAppAction appAction, INotificationAction notificationAction)
         {
+            this.idGenerator = idGenerator;
             this.modService = modService;
             this.gameService = gameService;
             this.appStateService = appStateService;
@@ -556,7 +564,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>Task.</returns>
         protected virtual async Task BindAsync(IGame game = null)
         {
-            await TriggerOverlayAsync(true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
+            var id = idGenerator.GetNextId();
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
             if (game == null)
             {
                 game = gameService.GetSelected();
@@ -608,7 +617,7 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
-            await TriggerOverlayAsync(false);
+            await TriggerOverlayAsync(id, false);
         }
 
         /// <summary>
@@ -627,13 +636,14 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual async Task CheckNewModsAsync()
         {
-            await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+            var id = idGenerator.GetNextId();
+            await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
             await modService.InstallModsAsync();
             RefreshMods();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
             var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
             notificationAction.ShowNotification(title, message, NotificationType.Info);
-            await TriggerOverlayAsync(false);
+            await TriggerOverlayAsync(id, false);
         }
 
         /// <summary>
@@ -644,14 +654,15 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (mods?.Count() > 0)
             {
-                await TriggerOverlayAsync(true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
+                var id = idGenerator.GetNextId();
+                await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
                 await modService.InstallModsAsync();
                 RefreshMods();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
                 notificationAction.ShowNotification(title, message, NotificationType.Info);
-                await TriggerOverlayAsync(false);
+                await TriggerOverlayAsync(id, false);
             }
         }
 
