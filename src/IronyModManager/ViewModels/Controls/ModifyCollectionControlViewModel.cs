@@ -518,7 +518,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = "0.00",
+                        PercentDone = 0.ToLocalizedPercentage(),
                         Count = 1,
                         TotalCount = 2
                     });
