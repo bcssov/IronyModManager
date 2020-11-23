@@ -4,10 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.62</title>
+			<title>1.8.68</title>
 			<description>RELEASE INFO:
-* Assign overlay messages unique ids to keep track of them (to know whether to purge all message queues or not)
-* Some Linux distros are being a royal pain in regards to overlay calculation (should be fixed now)
+* Fix Irony not properly cleaning up its patch mod stuff
+* Various conflict solver analysis fixes and improvements
+* Various advanced merge fixes
+* Actually fix Linux updates now (they were still broken). If on Linux you might still manually have to download this update, sorry about that.
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -15,14 +17,16 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 19 Nov 2020 22:20:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.62/osx-x64.rar" sparkle:version="1.8.62.61057" sparkle:shortVersionString="1.8.62" length="62757253" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="uEGK18aIg56RF9pp/sHQiXwaEZQEKs4b5wWZqgeTtCrO5/aZufiPldatCqgjifUVk8zbnVI1Rddpoaj2rLwlDw=="/>
+			<pubDate>Mon, 23 Nov 2020 20:06:54 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.68/osx-x64.rar" sparkle:version="1.8.68.21969" sparkle:shortVersionString="1.8.68" length="62756211" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="HS7dcP5gXWCFE2woATSMCqs/3mG2bSh6ioZ8LhVfY1SPnQGyFE9tWJb5fzGKqYvJ4o9bGfCfi5MwBIaXgHzGCg=="/>
 		</item>
 		<item>
-			<title>1.8.62</title>
+			<title>1.8.68</title>
 			<description>RELEASE INFO:
-* Assign overlay messages unique ids to keep track of them (to know whether to purge all message queues or not)
-* Some Linux distros are being a royal pain in regards to overlay calculation (should be fixed now)
+* Fix Irony not properly cleaning up its patch mod stuff
+* Various conflict solver analysis fixes and improvements
+* Various advanced merge fixes
+* Actually fix Linux updates now (they were still broken). If on Linux you might still manually have to download this update, sorry about that.
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -30,14 +34,16 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 19 Nov 2020 22:20:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.62/win-x64-setup.rar" sparkle:version="1.8.62.61057" sparkle:shortVersionString="1.8.62" length="54476420" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="4hY0Vvbf4VGVXJpxJCkPFVQQ2PkEkpkziMfPSl1LfE2Tt+Tdg0x+urcOUmdRTMiy7amA+87xrb88I/6pvuyABg=="/>
+			<pubDate>Mon, 23 Nov 2020 20:07:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.68/win-x64-setup.rar" sparkle:version="1.8.68.21969" sparkle:shortVersionString="1.8.68" length="54463059" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="jvtwWwKUWWmjjl6MxJLsVcphwOhICQ1Bg9FfGS2WxD4B2ui6O7+gKqKXNG7u/+uAdaUnwViT+6EACqChEbBNDQ=="/>
 		</item>
 		<item>
-			<title>1.8.62</title>
+			<title>1.8.68</title>
 			<description>RELEASE INFO:
-* Assign overlay messages unique ids to keep track of them (to know whether to purge all message queues or not)
-* Some Linux distros are being a royal pain in regards to overlay calculation (should be fixed now)
+* Fix Irony not properly cleaning up its patch mod stuff
+* Various conflict solver analysis fixes and improvements
+* Various advanced merge fixes
+* Actually fix Linux updates now (they were still broken). If on Linux you might still manually have to download this update, sorry about that.
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -45,14 +51,16 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 19 Nov 2020 22:20:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.62/win-x64.rar" sparkle:version="1.8.62.61057" sparkle:shortVersionString="1.8.62" length="65403837" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="/KLcAZdmRBnixya7TZxCo1iRmYyPlULMUKRYAiXRiethSSCHzlXGblYaEFEvCG3f8D4FjuDb6tOulutSkXFyAg=="/>
+			<pubDate>Mon, 23 Nov 2020 20:06:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.68/win-x64.rar" sparkle:version="1.8.68.21969" sparkle:shortVersionString="1.8.68" length="65402403" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="neGWFNNj3bPSEjf9TDg5YYyVixD5yfKH/v7eLtem4BXBAu9hq2q4xT7R/DvUQZ8zUtpU9gNgDmnXGh7MrMkfAw=="/>
 		</item>
 		<item>
-			<title>1.8.62</title>
+			<title>1.8.68</title>
 			<description>RELEASE INFO:
-* Assign overlay messages unique ids to keep track of them (to know whether to purge all message queues or not)
-* Some Linux distros are being a royal pain in regards to overlay calculation (should be fixed now)
+* Fix Irony not properly cleaning up its patch mod stuff
+* Various conflict solver analysis fixes and improvements
+* Various advanced merge fixes
+* Actually fix Linux updates now (they were still broken). If on Linux you might still manually have to download this update, sorry about that.
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -60,8 +68,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Thu, 19 Nov 2020 22:20:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.62/linux-x64.zip" sparkle:version="1.8.62.61057" sparkle:shortVersionString="1.8.62" length="77934435" sparkle:os="linux" type="application/zip" sparkle:signature="ky/LKv5YYfmdRNwxMP2Z3QNdGkrPBMX2Ij3r6/gOHSpTEDTXZTnOJxqhbsZpROB4mNIIzye27zELfJtrs9d0Dw=="/>
+			<pubDate>Mon, 23 Nov 2020 20:06:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.68/linux-x64.zip" sparkle:version="1.8.68.21969" sparkle:shortVersionString="1.8.68" length="77935061" sparkle:os="linux" type="application/zip" sparkle:signature="ek6pxxksEcEGsEcPeFDSljns0jy/VrE1tQjQGgfYvMYqF5M7xJ+aDXMVnpxAm71DnZVJZF6+WyDalvQxgSCDAw=="/>
 		</item>
 	</channel>
 </rss>
