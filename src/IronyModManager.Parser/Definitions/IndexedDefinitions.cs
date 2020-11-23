@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser.Definitions
         public IndexedDefinitions()
         {
             definitions = new ConcurrentIndexedList<IDefinition>(nameof(IDefinition.FileCI), nameof(IDefinition.Type),
-                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectoryCI), nameof(IDefinition.ValueType));
+                nameof(IDefinition.TypeAndId), nameof(IDefinition.ParentDirectoryCI), nameof(IDefinition.ValueType), nameof(IDefinition.DiskFileCI));
             fileKeys = new HashSet<string>();
             typeAndIdKeys = new HashSet<string>();
             typeKeys = new HashSet<string>();
@@ -204,6 +204,16 @@ namespace IronyModManager.Parser.Definitions
         public IEnumerable<string> GetAllTypeKeys()
         {
             return typeKeys.ToHashSet();
+        }
+
+        /// <summary>
+        /// Gets the by disk file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        public IEnumerable<IDefinition> GetByDiskFile(string file)
+        {
+            return definitions.GetAllByNameNoLock(nameof(IDefinition.DiskFileCI), file.ToLowerInvariant());
         }
 
         /// <summary>

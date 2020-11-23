@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -86,6 +86,11 @@ namespace IronyModManager.Parser.Definitions
         /// The original code
         /// </summary>
         private string originalCode = string.Empty;
+
+        /// <summary>
+        /// The original file name
+        /// </summary>
+        private string originalFileName = string.Empty;
 
         /// <summary>
         /// The overwritten file names
@@ -276,8 +281,15 @@ namespace IronyModManager.Parser.Definitions
             {
                 var val = value ?? string.Empty;
                 diskFile = val;
+                DiskFileCI = val.ToLowerInvariant();
             }
         }
+
+        /// <summary>
+        /// Gets the disk file ci.
+        /// </summary>
+        /// <value>The disk file ci.</value>
+        public string DiskFileCI { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the error column.
@@ -415,6 +427,22 @@ namespace IronyModManager.Parser.Definitions
             set
             {
                 originalCode = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the original file.
+        /// </summary>
+        /// <value>The name of the original file.</value>
+        public string OriginalFileName
+        {
+            get
+            {
+                return originalFileName;
+            }
+            set
+            {
+                originalFileName = value ?? string.Empty;
             }
         }
 
@@ -586,6 +614,8 @@ namespace IronyModManager.Parser.Definitions
                 nameof(DiskFile) => DiskFile,
                 nameof(OriginalModName) => OriginalModName,
                 nameof(Variables) => Variables,
+                nameof(DiskFileCI) => DiskFileCI,
+                nameof(OriginalFileName) => OriginalFileName,
                 _ => Id
             };
         }

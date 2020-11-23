@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -690,6 +690,7 @@ namespace IronyModManager.IO.Mods
             newInstance.CodeTag = original.CodeTag;
             newInstance.Order = original.Order;
             newInstance.OriginalModName = original.OriginalModName;
+            newInstance.OriginalFileName = original.OriginalFileName;
             newInstance.DiskFile = original.DiskFile;
             newInstance.Variables = original.Variables;
             return newInstance;
@@ -826,7 +827,7 @@ namespace IronyModManager.IO.Mods
                     }
                     // Update filename
                     item.DiskFile = diskFile;
-                    item.File = fileName;                   
+                    item.File = fileName;
                     tasks.Add(retry.RetryActionAsync(async () =>
                     {
                         var code = item.Code;
