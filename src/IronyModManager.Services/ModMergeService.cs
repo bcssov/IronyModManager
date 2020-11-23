@@ -418,7 +418,6 @@ namespace IronyModManager.Services
                         // Something to export?
                         if (exportDefinitions.Count > 0)
                         {
-                            IDefinition merged = null;
                             var groupedMods = exportDefinitions.GroupBy(p => p.ModName);
                             if (groupedMods.Count() > 1)
                             {
@@ -454,20 +453,23 @@ namespace IronyModManager.Services
                                         }
                                     }
                                 }
-                                var variables = exportDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace).OrderBy(p => p.Id);
-                                var other = exportDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace).OrderBy(p => p.Order);
-                                merged = MergeDefinitions(variables.Concat(other));
-                                // Preserve proper file casing
-                                var conflicts = conflictResult.AllConflicts.GetByFile(file);
-                                merged.File = conflicts.FirstOrDefault().File;
-                                merged.DiskFile = conflicts.FirstOrDefault().DiskFile;
                             }
-                            await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
+                            var variables = exportDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace).OrderBy(p => p.Id);
+                            var other = exportDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace).OrderBy(p => p.Order);
+                            var merged = MergeDefinitions(variables.Concat(other));
+                            // Preserve proper file casing
+                            var conflicts = conflictResult.AllConflicts.GetByFile(file);
+                            merged.File = conflicts.FirstOrDefault().File;
+                            merged.DiskFile = conflicts.FirstOrDefault().DiskFile;
+                            if (merged != null)
                             {
-                                ExportPath = exportPath,
-                                Definitions = merged != null ? PopulateModPath(new List<IDefinition>() { merged }, collectionMods) : null,
-                                Game = game.Type
-                            });
+                                await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
+                                {
+                                    ExportPath = exportPath,
+                                    Definitions = PopulateModPath(new List<IDefinition>() { merged }, collectionMods),
+                                    Game = game.Type
+                                });
+                            }
                             if (counter >= fileCount)
                             {
                                 await messageBus.PublishAsync(new ModDefinitionMergeProgressEvent(100));
