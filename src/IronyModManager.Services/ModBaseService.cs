@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-05-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -171,6 +171,7 @@ namespace IronyModManager.Services
             newDefinition.CodeTag = definition.CodeTag;
             newDefinition.Order = definition.Order;
             newDefinition.OriginalModName = definition.OriginalModName;
+            newDefinition.OriginalFileName = definition.OriginalFileName;
             newDefinition.DiskFile = definition.DiskFile;
             newDefinition.Variables = definition.Variables;
             return newDefinition;

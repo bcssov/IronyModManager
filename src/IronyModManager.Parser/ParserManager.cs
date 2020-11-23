@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-11-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -111,6 +111,7 @@ namespace IronyModManager.Parser
                 definition.Type = GetType(args.File);
                 definition.ModName = args.ModName;
                 definition.OriginalModName = args.ModName;
+                definition.OriginalFileName = args.File;
                 definition.UsedParser = string.Empty;
                 definition.ValueType = Common.ValueType.EmptyFile;
                 return new List<IDefinition>() { definition };

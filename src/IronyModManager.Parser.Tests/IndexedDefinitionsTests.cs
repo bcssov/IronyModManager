@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-25-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitionsTests.cs" company="Mario">
 //     Mario
@@ -131,6 +131,43 @@ namespace IronyModManager.Parser.Tests
                 }
             }
             match.Should().Be(defs.Where(s => s.File == "file").Count());
+        }
+
+        /// <summary>
+        /// Defines the test method Returns_by_disk_file.
+        /// </summary>
+        [Fact]
+        public void Returns_by_disk_file()
+        {
+            DISetup.SetupContainer();
+            var defs = new List<IDefinition>();
+            for (int i = 0; i < 10; i++)
+            {
+                defs.Add(new Definition()
+                {
+                    Code = i.ToString(),
+                    ContentSHA = i.ToString(),
+                    Dependencies = new List<string> { i.ToString() },
+                    File = i < 5 ? "file" : i.ToString(),
+                    DiskFile = i < 5 ? "diskfile" : i.ToString(),
+                    Id = i.ToString(),
+                    ModName = i.ToString(),
+                    Type = i.ToString()
+                });
+            }
+            var service = new IndexedDefinitions();
+            service.InitMap(defs);
+            var results = service.GetByDiskFile("diskfile");
+            results.Count().Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
+            int match = 0;
+            foreach (var item in defs.Where(s => s.DiskFile == "diskfile"))
+            {
+                if (results.Contains(item))
+                {
+                    match++;
+                }
+            }
+            match.Should().Be(defs.Where(s => s.DiskFile == "diskfile").Count());
         }
 
         /// <summary>

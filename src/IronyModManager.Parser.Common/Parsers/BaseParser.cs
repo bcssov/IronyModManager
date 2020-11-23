@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -268,6 +268,7 @@ namespace IronyModManager.Parser.Common.Parsers
             args.Definition.Dependencies = args.Args.ModDependencies;
             args.Definition.ModName = args.Args.ModName;
             args.Definition.OriginalModName = args.Args.ModName;
+            args.Definition.OriginalFileName = args.Args.File;
             args.Definition.File = args.Args.File;
             args.Definition.Type = FormatType(args.Args.File, args.TypeOverride);
         }

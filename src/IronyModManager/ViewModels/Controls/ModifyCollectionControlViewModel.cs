@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -130,7 +130,7 @@ namespace IronyModManager.ViewModels.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel"/> class.
+        /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
@@ -466,7 +466,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         if (definitions != null)
                         {
-                            return modPatchCollectionService.FindConflicts(definitions, ActiveCollection.Mods.ToList(), mode);
+                            return modPatchCollectionService.FindConflicts(definitions, SelectedMods.Select(p => p.Name).ToList(), mode);
                         }
                         return null;
                     }).ConfigureAwait(false);

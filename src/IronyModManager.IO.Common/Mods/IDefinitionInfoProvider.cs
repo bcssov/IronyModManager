@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="IDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -53,9 +53,8 @@ namespace IronyModManager.IO.Common.Mods
         /// Gets the name of the disk file.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <param name="originalFileName">Name of the original file.</param>
         /// <returns>System.String.</returns>
-        string GetDiskFileName(IDefinition definition, string originalFileName = Shared.Constants.EmptyParam);
+        string GetDiskFileName(IDefinition definition);
 
         /// <summary>
         /// Gets the encoding.
