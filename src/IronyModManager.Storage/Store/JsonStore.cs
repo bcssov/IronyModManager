@@ -130,7 +130,7 @@ namespace IronyModManager.Storage
             var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
             if (!string.IsNullOrEmpty(companyAttribute.Company))
             {
-                if (useProperSeparator)
+                if (!useProperSeparator)
                 {
                     companyPart = $"{companyAttribute.Company}\\";
                 }
@@ -142,7 +142,7 @@ namespace IronyModManager.Storage
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute.Title))
             {
-                if (useProperSeparator)
+                if (!useProperSeparator)
                 {
                     appNamePart = $"{titleAttribute.Title}\\";
                 }
@@ -199,7 +199,7 @@ namespace IronyModManager.Storage
             {
                 var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
                 var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
-                if (string.IsNullOrWhiteSpace(path))
+                if (string.IsNullOrWhiteSpace(mainPath))
                 {
                     mainPath = path;
                 }

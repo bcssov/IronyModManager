@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -103,7 +103,7 @@ namespace IronyModManager
                 var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
                 if (!string.IsNullOrEmpty(companyAttribute.Company))
                 {
-                    if (useProperSeparator)
+                    if (!useProperSeparator)
                     {
                         companyPart = $"{companyAttribute.Company}\\";
                     }
@@ -115,7 +115,7 @@ namespace IronyModManager
                 var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
                 if (!string.IsNullOrEmpty(titleAttribute.Title))
                 {
-                    if (useProperSeparator)
+                    if (!useProperSeparator)
                     {
                         appNamePart = $"{titleAttribute.Title}-Updater\\";
                     }
