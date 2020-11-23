@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -130,7 +130,7 @@ namespace IronyModManager.Storage
             var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
             if (!string.IsNullOrEmpty(companyAttribute.Company))
             {
-                if (useProperSeparator)
+                if (!useProperSeparator)
                 {
                     companyPart = $"{companyAttribute.Company}\\";
                 }
@@ -142,7 +142,7 @@ namespace IronyModManager.Storage
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
             if (!string.IsNullOrEmpty(titleAttribute.Title))
             {
-                if (useProperSeparator)
+                if (!useProperSeparator)
                 {
                     appNamePart = $"{titleAttribute.Title}\\";
                 }
@@ -194,10 +194,15 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private string GetFilePath(string id, bool lookForOlderVersion = false)
         {
+            string mainPath = string.Empty;
             foreach (var root in RootPaths)
             {
                 var version = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location);
                 var path = Path.Combine(root, $"{id}_{version.FileMajorPart}.{version.FileMinorPart}{Shared.Constants.JsonExtension}");
+                if (string.IsNullOrWhiteSpace(mainPath))
+                {
+                    mainPath = path;
+                }
                 if (File.Exists(path))
                 {
                     return path;
@@ -245,9 +250,8 @@ namespace IronyModManager.Storage
                         return storageItem.FileName;
                     }
                 }
-                return path;
             }
-            return string.Empty;
+            return mainPath;
         }
 
         #endregion Methods

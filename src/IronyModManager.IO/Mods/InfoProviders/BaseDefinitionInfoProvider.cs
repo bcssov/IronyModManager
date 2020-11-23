@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -77,15 +77,14 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// </summary>
         /// <param name="definition">The definition.</param>
         /// <param name="requestDiskFileName">if set to <c>true</c> [request true file name].</param>
-        /// <param name="originalFileName">Name of the original file.</param>
         /// <returns>System.String.</returns>
-        public virtual string GenerateFileName(IDefinition definition, bool requestDiskFileName, string originalFileName = Shared.Constants.EmptyParam)
+        public virtual string GenerateFileName(IDefinition definition, bool requestDiskFileName)
         {
             string getFIOSName(IDefinition definition, string fileName)
             {
                 if (requestDiskFileName)
                 {
-                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(originalFileName) ? fileName.GenerateShortFileNameHashId() : originalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                    return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? fileName.GenerateShortFileNameHashId() : definition.OriginalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
                 }
                 return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
             }
@@ -94,7 +93,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
             {
                 if (requestDiskFileName)
                 {
-                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(originalFileName) ? fileName.GenerateShortFileNameHashId() : originalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                    return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? fileName.GenerateShortFileNameHashId() : definition.OriginalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
                 }
                 return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
             }
@@ -131,11 +130,10 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// Gets the name of the disk file.
         /// </summary>
         /// <param name="definition">The definition.</param>
-        /// <param name="originalFileName">Name of the original file.</param>
         /// <returns>System.String.</returns>
-        public string GetDiskFileName(IDefinition definition, string originalFileName = Shared.Constants.EmptyParam)
+        public string GetDiskFileName(IDefinition definition)
         {
-            return GenerateFileName(definition, true, originalFileName);
+            return GenerateFileName(definition, true);
         }
 
         /// <summary>

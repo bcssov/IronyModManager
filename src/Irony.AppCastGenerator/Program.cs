@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-04-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -233,10 +233,8 @@ namespace Irony.AppCastGenerator
 
                 Console.WriteLine("Writing appcast to {0}", appcastFileName);
 
-                using (var w = XmlWriter.Create(appcastFileName, new XmlWriterSettings { NewLineChars = "\n", Encoding = new UTF8Encoding(false) }))
-                {
-                    appcastXmlDocument.Save(w);
-                }
+                using var w = XmlWriter.Create(appcastFileName, new XmlWriterSettings { NewLineChars = "\n", Encoding = new UTF8Encoding(false) });
+                appcastXmlDocument.Save(w);
             }
             catch (Exception e)
             {

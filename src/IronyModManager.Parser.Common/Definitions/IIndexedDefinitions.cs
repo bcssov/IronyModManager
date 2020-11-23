@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-07-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="IIndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -62,6 +62,13 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         IEnumerable<string> GetAllTypeKeys();
+
+        /// <summary>
+        /// Gets the by disk file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        IEnumerable<IDefinition> GetByDiskFile(string file);
 
         /// <summary>
         /// Gets the by file.

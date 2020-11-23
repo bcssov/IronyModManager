@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -324,6 +324,7 @@ namespace IronyModManager.Services
                             copy.CodeSeparator = item.CodeSeparator;
                             copy.CodeTag = item.CodeTag;
                             copy.OriginalModName = item.OriginalModName;
+                            copy.OriginalFileName = item.OriginalFileName;
                             copy.Variables = item.Variables;
                             indexedDefinitions.AddToMap(copy);
                             searchNeedsRefresh = true;
@@ -408,7 +409,6 @@ namespace IronyModManager.Services
                 {
                     var newDefinition = CopyDefinition(definition);
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(GameService.GetSelected().Type));
-                    var originalFileName = definition.File;
                     newDefinition.File = Path.Combine(definition.ParentDirectory, definition.Id.GenerateValidFileName() + Path.GetExtension(definition.File));
                     var overwrittenFileNames = definition.OverwrittenFileNames;
                     foreach (var file in definitions.SelectMany(p => p.OverwrittenFileNames))
@@ -416,7 +416,7 @@ namespace IronyModManager.Services
                         overwrittenFileNames.Add(file);
                     }
                     newDefinition.OverwrittenFileNames = overwrittenFileNames.Distinct().ToList();
-                    newDefinition.DiskFile = provider.GetDiskFileName(newDefinition, originalFileName);
+                    newDefinition.DiskFile = provider.GetDiskFileName(newDefinition);
                     newDefinition.File = provider.GetFileName(newDefinition);
                     overwrittenDefs.Add(definition.TypeAndId, newDefinition);
                 }
@@ -852,16 +852,33 @@ namespace IronyModManager.Services
             {
                 foreach (var file in patchFiles.Distinct())
                 {
-                    if (conflicts.CustomConflicts.ExistsByFile(file) &&
-                        conflicts.OrphanConflicts.ExistsByFile(file) &&
-                        conflicts.OverwrittenConflicts.ExistsByFile(file) &&
-                        conflicts.ResolvedConflicts.ExistsByFile(file))
+                    var cleaned = false;
+                    if (!conflicts.CustomConflicts.ExistsByFile(file) &&
+                        !conflicts.OrphanConflicts.ExistsByFile(file) &&
+                        !conflicts.OverwrittenConflicts.ExistsByFile(file) &&
+                        !conflicts.ResolvedConflicts.ExistsByFile(file))
                     {
-                        await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                        cleaned = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
                         {
                             RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
                             Path = file
                         });
+                    }
+                    if (!cleaned)
+                    {
+                        var resolved = conflicts.ResolvedConflicts.GetByDiskFile(file);
+                        if (resolved.Count() > 0)
+                        {
+                            var overwritten = conflicts.OverwrittenConflicts.GetByTypeAndId(resolved.FirstOrDefault().TypeAndId);
+                            if (overwritten.Count() > 0 && overwritten.FirstOrDefault().DiskFileCI != resolved.FirstOrDefault().DiskFileCI)
+                            {
+                                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                                {
+                                    RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                                    Path = overwritten.FirstOrDefault().DiskFile
+                                });
+                            }
+                        }
                     }
                     processed++;
                     var perc = GetProgressPercentage(total, processed, maxProgress);
@@ -1000,8 +1017,12 @@ namespace IronyModManager.Services
 
                     var conflicts = GetModelInstance<IConflictResult>();
                     conflicts.AllConflicts = conflictResult.AllConflicts;
-                    conflicts.Conflicts = conflictResult.Conflicts;
-                    conflicts.OrphanConflicts = conflictResult.OrphanConflicts;
+                    var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
+                    conflictsIndex.InitMap(conflictResult.Conflicts.GetAll(), true);
+                    conflicts.Conflicts = conflictsIndex;
+                    var orphanIndex = DIResolver.Get<IIndexedDefinitions>();
+                    orphanIndex.InitMap(conflictResult.OrphanConflicts.GetAll(), false);
+                    conflicts.OrphanConflicts = orphanIndex;
                     conflicts.ResolvedConflicts = resolvedIndex;
                     var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
                     ignoredIndex.InitMap(ignoredConflicts, true);
@@ -1403,6 +1424,18 @@ namespace IronyModManager.Services
                             RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                             PatchName = patchName
                         });
+                        if (exportResult)
+                        {
+                            var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definition.TypeAndId);
+                            if (overwritten.Count() > 0 && overwritten.FirstOrDefault().DiskFileCI != definition.DiskFileCI)
+                            {
+                                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                                {
+                                    RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                                    Path = overwritten.FirstOrDefault().DiskFile
+                                });
+                            }
+                        }
                     }
 
                     var stateResult = await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
