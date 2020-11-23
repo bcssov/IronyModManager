@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-23-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -129,7 +129,7 @@ namespace IronyModManager.Services
             void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def)
             {
                 var namespaces = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                if (namespaces.Count() > 0)
+                if (namespaces?.Count() > 0)
                 {
                     foreach (var name in namespaces)
                     {
@@ -146,7 +146,7 @@ namespace IronyModManager.Services
             void parseVariables(List<IDefinition> exportDefinitions, IDefinition def)
             {
                 var variables = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                if (variables.Count() > 0)
+                if (variables?.Count() > 0)
                 {
                     foreach (var variable in variables)
                     {
@@ -269,7 +269,7 @@ namespace IronyModManager.Services
                     if (definitions.Count() > 0)
                     {
                         var exportDefinitions = new List<IDefinition>();
-                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault().ValueType != Parser.Common.ValueType.Namespace && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Variable))
+                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault() != null && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Namespace && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Variable))
                         {
                             // Orphans are placed under resolved items during analysis so no need to check them
                             var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
@@ -323,7 +323,7 @@ namespace IronyModManager.Services
                                         if (!dumpedIds.Contains(item.TypeAndId))
                                         {
                                             var copy = CopyDefinition(item);
-                                            if (copy?.Variables?.Count() > 0)
+                                            if (copy.Variables?.Count() > 0)
                                             {
                                                 parseNameSpaces(exportDefinitions, copy);
                                                 parseVariables(exportDefinitions, copy);
@@ -419,41 +419,38 @@ namespace IronyModManager.Services
                         if (exportDefinitions.Count > 0)
                         {
                             IDefinition merged = null;
-                            if (exportDefinitions.Count > 0)
+                            var groupedMods = exportDefinitions.GroupBy(p => p.ModName);
+                            if (groupedMods.Count() > 1)
                             {
-                                var groupedMods = exportDefinitions.GroupBy(p => p.ModName);
-                                if (groupedMods.Count() > 1)
+                                var topGroup = groupedMods.OrderByDescending(p => p.Count()).FirstOrDefault();
+                                foreach (var groupedMod in groupedMods.Where(p => p.Key != topGroup.Key))
                                 {
-                                    var topGroup = groupedMods.OrderByDescending(p => p.Count()).FirstOrDefault();
-                                    foreach (var groupedMod in groupedMods.Where(p => p.Key != topGroup.Key))
+                                    foreach (var item in groupedMod)
                                     {
-                                        foreach (var item in groupedMod)
+                                        var allConflicts = conflictResult.AllConflicts.GetByTypeAndId(item.TypeAndId).Where(p => p.ModName.Equals(topGroup.Key));
+                                        if (allConflicts.Count() > 1)
                                         {
-                                            var allConflicts = conflictResult.AllConflicts.GetByTypeAndId(item.TypeAndId).Where(p => p.ModName.Equals(topGroup.Key));
-                                            if (allConflicts.Count() > 1)
+                                            var match = allConflicts.FirstOrDefault(p => p.FileCI.Equals(item.FileCI));
+                                            if (match != null)
                                             {
-                                                var match = allConflicts.FirstOrDefault(p => p.FileCI.Equals(item.FileCI));
-                                                if (match != null)
+                                                item.Order = match.Order;
+                                            }
+                                            else
+                                            {
+                                                var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                                                if (infoProvider.DefinitionUsesFIOSRules(item))
                                                 {
-                                                    item.Order = match.Order;
+                                                    item.Order = allConflicts.OrderBy(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
                                                 }
                                                 else
                                                 {
-                                                    var infoProvider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
-                                                    if (infoProvider.DefinitionUsesFIOSRules(item))
-                                                    {
-                                                        item.Order = allConflicts.OrderBy(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
-                                                    }
-                                                    else
-                                                    {
-                                                        item.Order = allConflicts.OrderByDescending(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
-                                                    }
+                                                    item.Order = allConflicts.OrderByDescending(p => p.File, StringComparer.Ordinal).FirstOrDefault().Order;
                                                 }
                                             }
-                                            else if (allConflicts.Count() == 1)
-                                            {
-                                                item.Order = allConflicts.FirstOrDefault().Order;
-                                            }
+                                        }
+                                        else if (allConflicts.Count() == 1)
+                                        {
+                                            item.Order = allConflicts.FirstOrDefault().Order;
                                         }
                                     }
                                 }
