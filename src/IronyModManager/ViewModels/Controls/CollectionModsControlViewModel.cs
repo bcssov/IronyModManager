@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,7 +21,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
@@ -75,6 +74,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
 
         /// <summary>
         /// The localization manager
@@ -165,11 +169,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The skip reorder
         /// </summary>
         private bool skipReorder = false;
-
-        /// <summary>
-        /// The identifier generator
-        /// </summary>
-        private readonly IIDGenerator idGenerator;
 
         #endregion Fields
 
@@ -815,10 +814,10 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
-            await TriggerOverlayAsync(id ,true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
+            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Exporting_Message));
             var collection = modCollectionService.Get(SelectedModCollection.Name);
             AssignModCollectionNames(collection);
-            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly));
+            await Task.Run(async () => await modCollectionService.ExportAsync(path, collection, providerType == ImportProviderType.DefaultOrderOnly).ConfigureAwait(false)).ConfigureAwait(false);
             var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Title);
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
@@ -1042,6 +1041,8 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         case CommandState.Success:
                             skipModCollectionSave = true;
+                            var id = idGenerator.GetNextId();
+                            TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
                             if (Mods != null)
                             {
                                 foreach (var mod in Mods)
@@ -1060,21 +1061,20 @@ namespace IronyModManager.ViewModels.Controls
                             {
                                 async Task handleRenamePatchCollection()
                                 {
-                                    var id = idGenerator.GetNextId();
-                                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
-                                    await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                    await Task.Run(async () =>
+                                    {
+                                        await modPatchCollectionService.RenamePatchCollectionAsync(AddNewCollection.RenamingCollection.Name, result.Result).ConfigureAwait(false);
+                                    }).ConfigureAwait(false);
                                     successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Title);
                                     successMessage = localizationManager.GetResource(LocalizationResources.Notifications.CollectionRenamed.Message);
                                     await TriggerOverlayAsync(id, false);
-                                    await Dispatcher.UIThread.InvokeAsync(() =>
-                                    {
-                                        notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
-                                    });
+                                    notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
                                 }
                                 handleRenamePatchCollection().ConfigureAwait(true);
                             }
                             else
                             {
+                                TriggerOverlay(id, false);
                                 successTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Title);
                                 successMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionCreated.Message), notification);
                                 notificationAction.ShowNotification(successTitle, successMessage, NotificationType.Success);
@@ -1490,7 +1490,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (modCollectionService.Delete(collectionName))
                 {
                     modPatchCollectionService.InvalidatePatchModState(collectionName);
-                    await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName));
+                    await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName).ConfigureAwait(false)).ConfigureAwait(false);
                     var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
                     var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
                     notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);

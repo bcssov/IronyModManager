@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -15,11 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json.Serialization;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using Newtonsoft.Json;
 
 namespace IronyModManager.Parser.Definitions
 {
@@ -571,6 +571,11 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The variables.</value>
         [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        public bool ExistsInLastFile { get; set; } = true;
 
         #endregion Properties
 

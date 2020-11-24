@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -398,8 +398,11 @@ namespace IronyModManager.ViewModels.Controls
                     if (modCollectionService.Save(copy))
                     {
                         var id = idGenerator.GetNextId();
-                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Rename_Message));
-                        await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, copy.Name);
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.Overlay_Duplicate_Message));
+                        await Task.Run(async () =>
+                        {
+                            await modPatchCollectionService.CopyPatchCollectionAsync(ActiveCollection.Name, copy.Name).ConfigureAwait(false);
+                        }).ConfigureAwait(false);
                         await TriggerOverlayAsync(id, false);
                         return new CommandResult<ModifyAction>(ModifyAction.Duplicate, CommandState.Success);
                     }
@@ -518,7 +521,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
-                        PercentDone = "0.00",
+                        PercentDone = 0.ToLocalizedPercentage(),
                         Count = 1,
                         TotalCount = 2
                     });

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -153,13 +153,13 @@ namespace IronyModManager.Services
                         var copy = CopyDefinition(variable);
                         var oldId = copy.Id;
                         copy.Id = getNextVariableName(exportDefinitions, variable);
-                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
                         copy.CodeTag = def.CodeTag;
                         copy.CodeSeparator = def.CodeSeparator;
                         exportDefinitions.Add(copy);
-                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
                     }
                 }
             }
@@ -262,7 +262,7 @@ namespace IronyModManager.Services
                 var dumpedIds = new HashSet<string>();
                 var fileCount = conflictResult.AllConflicts.GetAllFileKeys().Count();
                 var counter = 0;
-                foreach (var file in conflictResult.AllConflicts.GetAllFileKeys())
+                foreach (var file in conflictResult.AllConflicts.GetAllFileKeys().OrderBy(p => p))
                 {
                     counter++;
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);

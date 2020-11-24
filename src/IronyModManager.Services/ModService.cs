@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -246,18 +246,22 @@ namespace IronyModManager.Services
                     Path = Shared.Constants.ModDirectory
                 });
                 var tasks = new List<Task>();
-                foreach (var diff in diffs)
+                foreach (var diff in diffs.GroupBy(p => p.DescriptorFile))
                 {
-                    if (IsPatchModInternal(diff))
+                    var localDiff = diff.FirstOrDefault();
+                    if (IsPatchModInternal(localDiff))
                     {
                         continue;
                     }
-                    tasks.Add(ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                    tasks.Add(Task.Run(async () =>
                     {
-                        Mod = diff,
-                        RootDirectory = game.UserDirectory,
-                        Path = diff.DescriptorFile
-                    }, IsPatchModInternal(diff)));
+                        await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                        {
+                            Mod = localDiff,
+                            RootDirectory = game.UserDirectory,
+                            Path = localDiff.DescriptorFile
+                        }, IsPatchModInternal(localDiff));
+                    }));
                 }
                 if (tasks.Count > 0)
                 {

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -113,7 +113,7 @@ namespace IronyModManager.Shared
         /// <returns>System.String.</returns>
         public static string ReplaceNewLine(this string value)
         {
-            return value.Replace("\r", string.Empty).Replace("\n", string.Empty);
+            return value.Replace("\r", string.Empty).Replace("\n", " ");
         }
 
         /// <summary>

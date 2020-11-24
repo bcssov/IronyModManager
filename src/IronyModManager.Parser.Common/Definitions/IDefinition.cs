@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -100,6 +100,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The error message.</value>
         string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        bool ExistsInLastFile { get; set; }
 
         /// <summary>
         /// Gets or sets the file.
@@ -218,6 +224,7 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Gets or sets the variables.
         /// </summary>
         /// <value>The variables.</value>
+        [JsonIgnore]
         IEnumerable<IDefinition> Variables { get; set; }
 
         #endregion Properties
