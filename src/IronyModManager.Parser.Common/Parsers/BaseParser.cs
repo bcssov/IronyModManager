@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -442,17 +442,21 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
                     bool typeAssigned = false;
-                    if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                    var op = item.Operator ?? string.Empty;
+                    if (op.Equals(Constants.Scripts.EqualsOperator.ToString()))
                     {
-                        typeAssigned = true;
-                        definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
-                        definition.ValueType = ValueType.Namespace;
-                    }
-                    else if (item.Key.StartsWith(Constants.Scripts.VariableId))
-                    {
-                        typeAssigned = true;
-                        definition.Id = TrimId(item.Key);
-                        definition.ValueType = ValueType.Variable;
+                        if (item.Key.StartsWith(Constants.Scripts.Namespace, StringComparison.OrdinalIgnoreCase))
+                        {
+                            typeAssigned = true;
+                            definition.Id = $"{Path.GetFileNameWithoutExtension(args.File)}-{TrimId(item.Key)}";
+                            definition.ValueType = ValueType.Namespace;
+                        }
+                        else if (item.Key.StartsWith(Constants.Scripts.VariableId))
+                        {
+                            typeAssigned = true;
+                            definition.Id = TrimId(item.Key);
+                            definition.ValueType = ValueType.Variable;
+                        }
                     }
                     if (typeAssigned)
                     {

@@ -153,13 +153,13 @@ namespace IronyModManager.Services
                         var copy = CopyDefinition(variable);
                         var oldId = copy.Id;
                         copy.Id = getNextVariableName(exportDefinitions, variable);
-                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        copy.Code = string.Join(" ", copy.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        copy.OriginalCode = string.Join(" ", copy.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
                         copy.CodeTag = def.CodeTag;
                         copy.CodeSeparator = def.CodeSeparator;
                         exportDefinitions.Add(copy);
-                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
-                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) && p.ReplaceNewLine().Trim() == oldId ? p.Replace(oldId, copy.Id) : p));
+                        def.Code = string.Join(" ", def.Code.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
+                        def.OriginalCode = string.Join(" ", def.OriginalCode.Split(" ", StringSplitOptions.None).Select(p => p.Contains(oldId) ? string.Join(Environment.NewLine, p.SplitOnNewLine(false).Select(s => s.Trim() == oldId ? s.Replace(oldId, copy.Id) : s)) : p));
                     }
                 }
             }

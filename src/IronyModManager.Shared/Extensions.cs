@@ -113,7 +113,7 @@ namespace IronyModManager.Shared
         /// <returns>System.String.</returns>
         public static string ReplaceNewLine(this string value)
         {
-            return value.Replace("\r", " ").Replace("\n", " ");
+            return value.Replace("\r", string.Empty).Replace("\n", " ");
         }
 
         /// <summary>
