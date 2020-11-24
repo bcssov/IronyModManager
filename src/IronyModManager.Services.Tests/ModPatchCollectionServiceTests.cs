@@ -944,7 +944,8 @@ namespace IronyModManager.Services.Tests
                 AllConflicts = all,
                 Conflicts = all,
                 OrphanConflicts = orphan,
-                ResolvedConflicts = resolved
+                ResolvedConflicts = resolved,
+                OverwrittenConflicts = orphan
             };
             var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
             result.Should().BeTrue();
@@ -2808,7 +2809,8 @@ namespace IronyModManager.Services.Tests
                 Conflicts = all,
                 OrphanConflicts = orphan,
                 ResolvedConflicts = resolved,
-                CustomConflicts = custom
+                CustomConflicts = custom,
+                OverwrittenConflicts = custom
             };
             var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "1" }, "colname");
             result.Should().BeTrue();
