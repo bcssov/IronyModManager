@@ -571,6 +571,11 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The variables.</value>
         [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        public bool ExistsInLastFile { get; set; } = true;
 
         #endregion Properties
 

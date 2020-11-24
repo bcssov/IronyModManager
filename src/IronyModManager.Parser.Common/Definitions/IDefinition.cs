@@ -102,6 +102,12 @@ namespace IronyModManager.Parser.Common.Definitions
         string ErrorMessage { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        bool ExistsInLastFile { get; set; }
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>

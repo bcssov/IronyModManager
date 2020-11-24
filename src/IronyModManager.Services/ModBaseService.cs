@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -174,6 +174,7 @@ namespace IronyModManager.Services
             newDefinition.OriginalFileName = definition.OriginalFileName;
             newDefinition.DiskFile = definition.DiskFile;
             newDefinition.Variables = definition.Variables;
+            newDefinition.ExistsInLastFile = definition.ExistsInLastFile;
             return newDefinition;
         }
 
@@ -215,72 +216,76 @@ namespace IronyModManager.Services
             var result = GetModelInstance<IPriorityDefinitionResult>();
             if (game != null && definitions?.Count() > 1)
             {
-                var definitionEvals = new List<DefinitionEval>();
-                var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
-                bool isFios = false;
-                if (provider != null)
+                var validDefinitions = definitions.Where(p => p.ExistsInLastFile).ToList();
+                if (validDefinitions.Count() > 0)
                 {
-                    bool overrideSkipped = false;
-                    isFios = provider.DefinitionUsesFIOSRules(definitions.First());
-                    foreach (var item in definitions)
+                    var definitionEvals = new List<DefinitionEval>();
+                    var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
+                    bool isFios = false;
+                    if (provider != null)
                     {
-                        var hasOverrides = definitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
-                        if (hasOverrides)
+                        bool overrideSkipped = false;
+                        isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
+                        foreach (var item in validDefinitions)
                         {
-                            overrideSkipped = true;
-                            continue;
-                        }
-                        if (isFios)
-                        {
-                            definitionEvals.Add(new DefinitionEval()
+                            var hasOverrides = validDefinitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                            if (hasOverrides)
                             {
-                                Definition = item,
-                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
-                            });
-                        }
-                        else
-                        {
-                            definitionEvals.Add(new DefinitionEval()
-                            {
-                                Definition = item,
-                                FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
-                            });
-                        }
-                    }
-                    IEnumerable<DefinitionEval> uniqueDefinitions;
-                    if (isFios)
-                    {
-                        uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First());
-                    }
-                    else
-                    {
-                        uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last());
-                    }
-                    if (uniqueDefinitions.Count() == 1 && overrideSkipped)
-                    {
-                        result.Definition = definitionEvals.First().Definition;
-                        result.PriorityType = DefinitionPriorityType.ModOverride;
-                    }
-                    else if (uniqueDefinitions.Count() > 1)
-                    {
-                        // Has same filenames?
-                        if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
-                        {
-                            result.Definition = uniqueDefinitions.Last().Definition;
-                            result.PriorityType = DefinitionPriorityType.ModOrder;
-                        }
-                        else
-                        {
-                            // Using FIOS or LIOS?
+                                overrideSkipped = true;
+                                continue;
+                            }
                             if (isFios)
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
-                                result.PriorityType = DefinitionPriorityType.FIOS;
+                                definitionEvals.Add(new DefinitionEval()
+                                {
+                                    Definition = item,
+                                    FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
+                                });
                             }
                             else
                             {
-                                result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
-                                result.PriorityType = DefinitionPriorityType.LIOS;
+                                definitionEvals.Add(new DefinitionEval()
+                                {
+                                    Definition = item,
+                                    FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
+                                });
+                            }
+                        }
+                        IEnumerable<DefinitionEval> uniqueDefinitions;
+                        if (isFios)
+                        {
+                            uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).First());
+                        }
+                        else
+                        {
+                            uniqueDefinitions = definitionEvals.GroupBy(p => p.Definition.ModName).Select(p => p.OrderBy(f => Path.GetFileNameWithoutExtension(f.FileName), StringComparer.Ordinal).Last());
+                        }
+                        if (uniqueDefinitions.Count() == 1 && overrideSkipped)
+                        {
+                            result.Definition = definitionEvals.First().Definition;
+                            result.PriorityType = DefinitionPriorityType.ModOverride;
+                        }
+                        else if (uniqueDefinitions.Count() > 1)
+                        {
+                            // Has same filenames?
+                            if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
+                            {
+                                result.Definition = uniqueDefinitions.Last().Definition;
+                                result.PriorityType = DefinitionPriorityType.ModOrder;
+                            }
+                            else
+                            {
+                                // Using FIOS or LIOS?
+                                if (isFios)
+                                {
+                                    result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).First().Definition;
+                                    result.PriorityType = DefinitionPriorityType.FIOS;
+                                }
+                                else
+                                {
+                                    result.Definition = uniqueDefinitions.OrderBy(p => Path.GetFileNameWithoutExtension(p.FileName), StringComparer.Ordinal).Last().Definition;
+                                    result.PriorityType = DefinitionPriorityType.LIOS;
+                                }
                             }
                         }
                     }

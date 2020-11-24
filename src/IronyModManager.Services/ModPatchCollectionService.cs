@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1147,6 +1147,17 @@ namespace IronyModManager.Services
         /// <param name="fileConflictCache">The file conflict cache.</param>
         protected virtual void EvalDefinitions(IIndexedDefinitions indexedDefinitions, HashSet<IDefinition> conflicts, IEnumerable<IDefinition> definitions, IList<string> modOrder, PatchStateMode patchStateMode, Dictionary<string, bool> fileConflictCache)
         {
+            bool existsInLastFile(IDefinition definition)
+            {
+                var result = true;
+                var fileDefs = indexedDefinitions.GetByFile(definition.FileCI);
+                var lastMod = fileDefs.GroupBy(p => p.ModName).Select(p => p.First()).OrderByDescending(p => modOrder.IndexOf(p.ModName)).FirstOrDefault();
+                if (lastMod != null)
+                {
+                    result = fileDefs.Any(p => p.ModName.Equals(lastMod.ModName) && p.TypeAndId.Equals(definition.TypeAndId));
+                }
+                return result;
+            }
             var validDefinitions = new HashSet<IDefinition>();
             foreach (var item in definitions.Where(p => IsValidDefinitionType(p)))
             {
@@ -1191,6 +1202,7 @@ namespace IronyModManager.Services
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
                                 {
+                                    item.ExistsInLastFile = existsInLastFile(item);
                                     conflicts.Add(item);
                                 }
                             }
@@ -1211,6 +1223,7 @@ namespace IronyModManager.Services
                             {
                                 if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                 {
+                                    def.ExistsInLastFile = existsInLastFile(def);
                                     conflicts.Add(def);
                                 }
                             }
@@ -1230,6 +1243,7 @@ namespace IronyModManager.Services
                                     fileConflictCache.TryAdd(def.FileCI, true);
                                     if (!conflicts.Contains(def) && IsValidDefinitionType(def))
                                     {
+                                        def.ExistsInLastFile = existsInLastFile(def);
                                         conflicts.Add(def);
                                     }
                                 }
