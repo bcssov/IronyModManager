@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -218,6 +218,7 @@ namespace IronyModManager.Parser.Common.Definitions
         /// Gets or sets the variables.
         /// </summary>
         /// <value>The variables.</value>
+        [JsonIgnore]
         IEnumerable<IDefinition> Variables { get; set; }
 
         #endregion Properties
