@@ -459,10 +459,10 @@ namespace IronyModManager.Services
                             var merged = MergeDefinitions(variables.Concat(other));
                             // Preserve proper file casing
                             var conflicts = conflictResult.AllConflicts.GetByFile(file);
-                            merged.File = conflicts.FirstOrDefault().File;
-                            merged.DiskFile = conflicts.FirstOrDefault().DiskFile;
                             if (merged != null)
                             {
+                                merged.File = conflicts.FirstOrDefault().File;
+                                merged.DiskFile = conflicts.FirstOrDefault().DiskFile;
                                 await modMergeExporter.ExportDefinitionsAsync(new ModMergeDefinitionExporterParameters()
                                 {
                                     ExportPath = exportPath,
