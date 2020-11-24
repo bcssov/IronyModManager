@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 11-24-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -656,6 +656,10 @@ namespace IronyModManager.ViewModels.Controls
                                 if (game.CloseAppAfterGameLaunch)
                                 {
                                     await appAction.ExitAppAsync();
+                                }
+                                else
+                                {
+                                    await TriggerOverlayAsync(id, false);
                                 }
                             }
                             else
