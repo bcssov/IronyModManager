@@ -262,9 +262,7 @@ namespace IronyModManager.Services
                 var dumpedIds = new HashSet<string>();
                 var fileCount = conflictResult.AllConflicts.GetAllFileKeys().Count();
                 var counter = 0;
-                var fileKeys = conflictResult.AllConflicts.GetAllFileKeys();
-                var orderedFiles = fileKeys.OrderBy(p => p.ToLowerInvariant()).ToList();
-                foreach (var file in fileKeys.OrderBy(p => orderedFiles.IndexOf(p.ToLowerInvariant())))
+                foreach (var file in conflictResult.AllConflicts.GetAllFileKeys().OrderBy(p => p))
                 {
                     counter++;
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
