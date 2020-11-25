@@ -4,7 +4,7 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.8.79</title>
+			<title>1.8.80</title>
 			<description>RELEASE INFO:
 * Prevent UI thread from being locked while installing mods
 * Small localization fixes
@@ -13,6 +13,8 @@
 * Fix issue with overlay not being removed when launching game (but not closing Irony)
 * Conflict Solver and Advanced Merge fixes
 * Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
+* Remove legacy Advanced Mod Merge code which caused definition selection issues
+* Fix additional Conflict Solver edge cases
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -20,11 +22,11 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Tue, 24 Nov 2020 23:02:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.79/osx-x64.rar" sparkle:version="1.8.79.53796" sparkle:shortVersionString="1.8.79" length="62758008" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="v4llQ1x37wALDzm1R5wZl5x8PkwMwDkGagEz+OAEx1J+gB2PU380ZBgy64BUi8b38aE5/wu2eN7h9YWmRYjiBw=="/>
+			<pubDate>Wed, 25 Nov 2020 06:09:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/osx-x64.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="62759134" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="S9DWk/soLCrC/caW6h4DjNjH4mKxSDMAeQmq1dRTt6ixD8QUz7GPWYLZbYoNx9pvswMMgtCuRjvVjWA8uv6bBg=="/>
 		</item>
 		<item>
-			<title>1.8.79</title>
+			<title>1.8.80</title>
 			<description>RELEASE INFO:
 * Prevent UI thread from being locked while installing mods
 * Small localization fixes
@@ -33,6 +35,8 @@ CHANGES FROM v1.7:
 * Fix issue with overlay not being removed when launching game (but not closing Irony)
 * Conflict Solver and Advanced Merge fixes
 * Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
+* Remove legacy Advanced Mod Merge code which caused definition selection issues
+* Fix additional Conflict Solver edge cases
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -40,11 +44,11 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Tue, 24 Nov 2020 23:02:40 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.79/win-x64-setup.rar" sparkle:version="1.8.79.53796" sparkle:shortVersionString="1.8.79" length="54452432" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="F2fU2JWIipup/etcQcUvIHJLLRh9vKxnGgHDIx4VY2awrAjT7Z4S3VjY1khFXnXQjxIgyS1Yftvr4Bm2YhrdBA=="/>
+			<pubDate>Wed, 25 Nov 2020 06:09:30 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/win-x64-setup.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="54482375" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="xoYHMcy7lk/Oilmjd6QsXsjpbLiWrEBXvvbxOr5ORrXGA7aROdLNuJ1y+FfYmLzcW96YRsoMrMCu7ugAqcu3Cg=="/>
 		</item>
 		<item>
-			<title>1.8.79</title>
+			<title>1.8.80</title>
 			<description>RELEASE INFO:
 * Prevent UI thread from being locked while installing mods
 * Small localization fixes
@@ -53,6 +57,8 @@ CHANGES FROM v1.7:
 * Fix issue with overlay not being removed when launching game (but not closing Irony)
 * Conflict Solver and Advanced Merge fixes
 * Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
+* Remove legacy Advanced Mod Merge code which caused definition selection issues
+* Fix additional Conflict Solver edge cases
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -60,11 +66,11 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Tue, 24 Nov 2020 23:02:36 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.79/win-x64.rar" sparkle:version="1.8.79.53796" sparkle:shortVersionString="1.8.79" length="65404283" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="JHaTAtSCCbu1LnbzK1x2Hi9qRVNvJFMhE5wWhaIoG9h9QkYl4hffqeFe8hPkMNT+mVtoyQTat+bnHRU80aUqDg=="/>
+			<pubDate>Wed, 25 Nov 2020 06:09:27 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/win-x64.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="65405488" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="UfLR/aq7hTyPqxrv8jtm/qiCGnFoI1PkgzEBgCpcFecSVvtXjznzLV3HL/77yIMBA793MGnVWZL4s5ajLQz2Cw=="/>
 		</item>
 		<item>
-			<title>1.8.79</title>
+			<title>1.8.80</title>
 			<description>RELEASE INFO:
 * Prevent UI thread from being locked while installing mods
 * Small localization fixes
@@ -73,6 +79,8 @@ CHANGES FROM v1.7:
 * Fix issue with overlay not being removed when launching game (but not closing Irony)
 * Conflict Solver and Advanced Merge fixes
 * Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
+* Remove legacy Advanced Mod Merge code which caused definition selection issues
+* Fix additional Conflict Solver edge cases
 
 CHANGES FROM v1.7:
 * Various bugfixes
@@ -80,8 +88,8 @@ CHANGES FROM v1.7:
 * Show more information in hash report and optimize performance by switching to listbox controls
 * Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
 * Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Tue, 24 Nov 2020 23:02:31 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.79/linux-x64.zip" sparkle:version="1.8.79.53796" sparkle:shortVersionString="1.8.79" length="77937170" sparkle:os="linux" type="application/zip" sparkle:signature="OkQzz2nYwuFdSuTgC1mTzaLo4tqPiNUz2fbO7Z7VF37hRK8qpB4whj54b4IKVBjEPSf13HR956y9w9Ru4U8aCQ=="/>
+			<pubDate>Wed, 25 Nov 2020 06:09:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/linux-x64.zip" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="77937054" sparkle:os="linux" type="application/zip" sparkle:signature="sPJheeWj1212pUpCxmdHGphU2+1wg8JrE5yHpBVy/4V+EwhiC0CjgUzG9GycyrhRpXx7SWPyeXStlTQJSxVvBA=="/>
 		</item>
 	</channel>
 </rss>
