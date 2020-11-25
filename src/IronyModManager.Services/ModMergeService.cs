@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 11-25-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -337,58 +337,20 @@ namespace IronyModManager.Services
                             else
                             {
                                 // Check if this is a conflict so we can then perform evaluation of which definition would win based on current order
-                                var files = new List<string>();
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 IDefinition priorityDef;
-                                bool allowDuplicate = false;
                                 if (conflicted.Count() > 0)
                                 {
-                                    files.AddRange(conflicted.Select(p => p.File));
-                                    // More then 1 per file in a mod?
-                                    var modGroups = conflicted.GroupBy(p => p.ModName);
-                                    if (modGroups.Any(p => p.GroupBy(p => p.FileCI).Count() > 1))
-                                    {
-                                        allowDuplicate = true;
-                                        var validDefinitions = new List<IDefinition>();
-                                        foreach (var modGroup in modGroups)
-                                        {
-                                            if (modGroup.GroupBy(p => p.FileCI).Count() > 1)
-                                            {
-                                                foreach (var item in modGroup)
-                                                {
-                                                    if (item.FileCI.Equals(file.ToLowerInvariant()))
-                                                    {
-                                                        validDefinitions.Add(item);
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                validDefinitions.AddRange(modGroup);
-                                            }
-                                        }
-                                        priorityDef = EvalDefinitionPriorityInternal(validDefinitions.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
-                                    }
-                                    else
-                                    {
-                                        priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
-                                    }
+                                    priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                 }
                                 else
                                 {
                                     priorityDef = definitionGroup.FirstOrDefault();
-                                    files.Add(priorityDef.File);
                                 }
                                 if (priorityDef != null)
                                 {
                                     IDefinition priorityDefCopy = null;
-                                    if (allowDuplicate)
-                                    {
-                                        priorityDefCopy = CopyDefinition(priorityDef);
-                                        exportDefinitions.Add(priorityDefCopy);
-                                        dumpedIds.Add(priorityDef.TypeAndId);
-                                    }
-                                    else if (!dumpedIds.Contains(priorityDef.TypeAndId))
+                                    if (!dumpedIds.Contains(priorityDef.TypeAndId))
                                     {
                                         priorityDefCopy = CopyDefinition(priorityDef);
                                         exportDefinitions.Add(priorityDefCopy);

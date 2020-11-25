@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 11-25-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1169,7 +1169,7 @@ namespace IronyModManager.Services
                 if (processed.Contains(def) || conflicts.Contains(def))
                 {
                     continue;
-                }
+                }                
                 var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id).Where(p => IsValidDefinitionType(p));
                 foreach (var conflict in allConflicts)
                 {
@@ -1189,6 +1189,19 @@ namespace IronyModManager.Services
                             var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
                             if (hasOverrides && patchStateMode == PatchStateMode.Default)
                             {
+                                var existing = allConflicts.Where(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
+                                if (existing.Count() > 0)
+                                {
+                                    var fileNames = conflict.AdditionalFileNames;
+                                    foreach (var item in existing.Where(p => p != null))
+                                    {
+                                        foreach (var fileName in item.AdditionalFileNames)
+                                        {
+                                            fileNames.Add(fileName);
+                                        }
+                                    }
+                                    conflict.AdditionalFileNames = fileNames;
+                                }
                                 continue;
                             }
                             validConflicts.Add(conflict);
@@ -1202,6 +1215,19 @@ namespace IronyModManager.Services
                             {
                                 if (!conflicts.Contains(item) && IsValidDefinitionType(item))
                                 {
+                                    var shaMatches = validConflictsGroup.FirstOrDefault(p => p.Key == item.DefinitionSHA);
+                                    if (shaMatches.Count() > 1)
+                                    {
+                                        var fileNames = item.AdditionalFileNames;
+                                        foreach (var shaMatch in shaMatches.Where(p => p != item))
+                                        {
+                                            foreach (var fileName in shaMatch.AdditionalFileNames)
+                                            {
+                                                fileNames.Add(fileName);
+                                            }
+                                        }
+                                        item.AdditionalFileNames = fileNames;
+                                    }
                                     item.ExistsInLastFile = existsInLastFile(item);
                                     conflicts.Add(item);
                                 }
