@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-25-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -219,7 +219,7 @@ namespace IronyModManager.Services
                 var validDefinitions = definitions.Where(p => p.ExistsInLastFile).ToList();
                 if (validDefinitions.Count() == 1)
                 {
-                    result.Definition = validDefinitions?.FirstOrDefault();
+                    result.Definition = validDefinitions.FirstOrDefault();
                     // If it's the only valid one assume load order is responsible
                     result.PriorityType = DefinitionPriorityType.ModOrder;
                 }
