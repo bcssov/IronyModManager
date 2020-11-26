@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -169,21 +169,21 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">Game.</exception>
-        /// <exception cref="ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">parameters - Game.</exception>
+        /// <exception cref="ArgumentNullException">parameters - Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.Game))
             {
-                throw new ArgumentNullException("Game.");
+                throw new ArgumentNullException(nameof(parameters), "Game.");
             }
-            var definitionsInvalid = (parameters.Definitions == null || parameters.Definitions.Count() == 0) &&
-                (parameters.OrphanConflicts == null || parameters.OrphanConflicts.Count() == 0) &&
-                (parameters.OverwrittenConflicts == null || parameters.OverwrittenConflicts.Count() == 0) &&
-                (parameters.CustomConflicts == null || parameters.CustomConflicts.Count() == 0);
+            var definitionsInvalid = (parameters.Definitions == null || !parameters.Definitions.Any()) &&
+                (parameters.OrphanConflicts == null || !parameters.OrphanConflicts.Any()) &&
+                (parameters.OverwrittenConflicts == null || !parameters.OverwrittenConflicts.Any()) &&
+                (parameters.CustomConflicts == null || !parameters.CustomConflicts.Any());
             if (definitionsInvalid)
             {
-                throw new ArgumentNullException("Definitions.");
+                throw new ArgumentNullException(nameof(parameters), "Definitions.");
             }
             var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
             if (definitionInfoProvider != null)
@@ -373,7 +373,7 @@ namespace IronyModManager.IO.Mods
         {
             static IList<string> standardizeArray(IList<string> paths)
             {
-                if (paths?.Count() > 0)
+                if (paths?.Count > 0)
                 {
                     var newPaths = new List<string>();
                     foreach (var item in paths)
@@ -432,7 +432,7 @@ namespace IronyModManager.IO.Mods
                 if (Shared.Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
                 {
                     var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
-                    var file = string.Join(".", segments.Take(segments.Count() - 1));
+                    var file = string.Join(".", segments.Take(segments.Length - 1));
                     foreach (var item in Shared.Constants.ImageExtensions)
                     {
                         stream = reader.GetStream(def.ModPath, file + item);
@@ -475,7 +475,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
+        private static async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
         {
             var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
             var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
@@ -513,7 +513,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="path">The path.</param>
         /// <param name="patchName">Name of the patch.</param>
         /// <returns>System.String.</returns>
-        private string GetPatchRootPath(string path, string patchName)
+        private static string GetPatchRootPath(string path, string patchName)
         {
             return Path.Combine(path, patchName);
         }
@@ -662,7 +662,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="original">The original.</param>
         /// <param name="includeCode">if set to <c>true</c> [include code].</param>
         /// <returns>IDefinition.</returns>
-        private IDefinition MapDefinition(IDefinition original, bool includeCode)
+        private static IDefinition MapDefinition(IDefinition original, bool includeCode)
         {
             var newInstance = DIResolver.Get<IDefinition>();
             if (includeCode)
@@ -703,7 +703,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="originals">The originals.</param>
         /// <param name="includeCode">if set to <c>true</c> [include code].</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        private IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
+        private static IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
         {
             var col = new List<IDefinition>();
             if (originals != null)
@@ -722,7 +722,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="source">The source.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        private void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
+        private static void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
         {
             destination.ConflictHistory = MapDefinitions(source.ConflictHistory, includeCode);
             destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);

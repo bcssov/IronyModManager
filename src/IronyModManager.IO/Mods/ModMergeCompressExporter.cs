@@ -38,14 +38,14 @@ namespace IronyModManager.IO.Mods
         private static readonly object objectLock = new { };
 
         /// <summary>
+        /// The queue
+        /// </summary>
+        private readonly ConcurrentDictionary<long, IWritableArchive> queue;
+
+        /// <summary>
         /// The identifier
         /// </summary>
         private long id = 0;
-
-        /// <summary>
-        /// The queue
-        /// </summary>
-        private ConcurrentDictionary<long, IWritableArchive> queue;
 
         #endregion Fields
 

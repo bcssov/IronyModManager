@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-25-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -51,6 +51,11 @@ namespace IronyModManager.Services
         private readonly IMessageBus messageBus;
 
         /// <summary>
+        /// The mod merge compress exporter
+        /// </summary>
+        private readonly IModMergeCompressExporter modMergeCompressExporter;
+
+        /// <summary>
         /// The mod merge exporter
         /// </summary>
         private readonly IModMergeExporter modMergeExporter;
@@ -72,6 +77,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModMergeService" /> class.
         /// </summary>
+        /// <param name="modMergeCompressExporter">The mod merge compress exporter.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
@@ -84,12 +90,13 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModMergeService(IParserManager parserManager, ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
+        public ModMergeService(IModMergeCompressExporter modMergeCompressExporter, IParserManager parserManager, ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
             IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.modMergeCompressExporter = modMergeCompressExporter;
             this.parserManager = parserManager;
             this.messageBus = messageBus;
             this.modMergeExporter = modMergeExporter;
@@ -170,7 +177,7 @@ namespace IronyModManager.Services
                 return null;
             }
             var total = conflictResult.AllConflicts.GetAll().Count(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
-            if (conflictResult.AllConflicts.GetAll().Count() > 0)
+            if (conflictResult.AllConflicts.GetAll().Any())
             {
                 var allMods = GetInstalledModsInternal(game, false).ToList();
                 var mergeCollectionPath = collectionName.GenerateValidFileName();
@@ -232,7 +239,7 @@ namespace IronyModManager.Services
                 conflictResult.CustomConflicts = customConflictsIndex;
                 var conflictHistoryIndex = DIResolver.Get<IIndexedDefinitions>();
                 conflictHistoryIndex.InitMap(conflictHistory);
-                if (customConflicts.Count() > 0)
+                if (customConflicts.Any())
                 {
                     total += customConflicts.Count();
                 }
@@ -266,7 +273,7 @@ namespace IronyModManager.Services
                 {
                     counter++;
                     var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
-                    if (definitions.Count() > 0)
+                    if (definitions.Any())
                     {
                         var exportDefinitions = new List<IDefinition>();
                         foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault() != null && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Namespace && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Variable))
@@ -274,11 +281,11 @@ namespace IronyModManager.Services
                             // Orphans are placed under resolved items during analysis so no need to check them
                             var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                             var overwritten = conflictResult.OverwrittenConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
-                            if (resolved.Count() > 0 || overwritten.Count() > 0)
+                            if (resolved.Any() || overwritten.Any())
                             {
                                 // Resolved takes priority, since if an item was resolved no need to use the overwritten code
                                 // Also fetch the code from the patch state.json object to get the latest version of the code to dump
-                                if (resolved.Count() > 0)
+                                if (resolved.Any())
                                 {
                                     foreach (var item in resolved)
                                     {
@@ -339,7 +346,7 @@ namespace IronyModManager.Services
                                 // Check if this is a conflict so we can then perform evaluation of which definition would win based on current order
                                 var conflicted = conflictResult.Conflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
                                 IDefinition priorityDef;
-                                if (conflicted.Count() > 0)
+                                if (conflicted.Any())
                                 {
                                     priorityDef = EvalDefinitionPriorityInternal(conflicted.OrderBy(p => modOrder.IndexOf(p.ModName))).Definition;
                                 }
@@ -583,7 +590,7 @@ namespace IronyModManager.Services
                 {
                     var closingTag = Shared.Constants.CodeSeparators.ClosingSeparators.Map[separator];
                     sb.AppendLine($"{codeTag} = {separator}");
-                    if (lines.Count() == 0)
+                    if (!lines.Any())
                     {
                         foreach (var item in variables)
                         {

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -69,7 +69,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -177,7 +177,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -296,7 +296,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -447,7 +447,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -558,7 +558,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -623,7 +623,7 @@ namespace IronyModManager.Services.Tests
             var parserManager = new Mock<IParserManager>();
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -658,7 +658,7 @@ namespace IronyModManager.Services.Tests
                 WorkshopDirectory = "C:\\Fake"
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -735,7 +735,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 

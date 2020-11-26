@@ -253,7 +253,7 @@ namespace IronyModManager.IO.Mods
                 var val = prop.GetValue(parameters.Mod, null);
                 if (val is IEnumerable<string> col)
                 {
-                    if (col.Count() > 0)
+                    if (col.Any())
                     {
                         await sw.WriteLineAsync($"{attr.PropertyName}={{");
                         foreach (var item in col)
