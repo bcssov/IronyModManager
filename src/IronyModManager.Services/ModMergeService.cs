@@ -617,7 +617,7 @@ namespace IronyModManager.Services
             var newPatchName = GenerateCollectionPatchName(collectionName);
             var renamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(patchName, newPatchName) };
 
-            var totalFiles = (collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files.Where(f => game.GameFolders.Any(s => f.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count() * 2) + collectionMods.Count;
+            var totalFiles = (collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files.Where(f => game.GameFolders.Any(s => f.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count() * 2) + (collectionMods.Count * 2);
             double lastPercentage = 0;
             var processed = 0;
             async void modMergeCompressExporter_ProcessedFile(object sender, EventArgs e)
@@ -708,6 +708,7 @@ namespace IronyModManager.Services
                 PatchName = newPatchName,
                 RenamePairs = renamePairs
             });
+            await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, 100));
 
             Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
             return exportedMods;
