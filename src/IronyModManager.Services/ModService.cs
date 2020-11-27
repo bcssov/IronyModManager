@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -319,8 +319,8 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
         protected virtual IEnumerable<IMod> GetAllModDescriptors(string path, ModSource modSource)
         {
-            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : new string[] { };
-            var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : new string[] { };
+            var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
+            var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
             var mods = new List<IMod>();
 
             static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
@@ -404,21 +404,21 @@ namespace IronyModManager.Services
                 }
                 mods.Add(mod);
             }
-            if (files.Count() > 0)
+            if (files.Any())
             {
                 foreach (var file in files)
                 {
                     parseModFiles(file, modSource, false);
                 }
             }
-            if (directories.Count() > 0)
+            if (directories.Any())
             {
                 foreach (var directory in directories)
                 {
                     var modSourceOverride = directory.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).
                             LastOrDefault().Contains(Constants.Paradox_mod_id, StringComparison.OrdinalIgnoreCase) ? ModSource.Paradox : modSource;
                     var zipFiles = Directory.EnumerateFiles(directory, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(directory, $"*{Shared.Constants.BinExtension}"));
-                    if (zipFiles.Count() > 0)
+                    if (zipFiles.Any())
                     {
                         foreach (var zip in zipFiles)
                         {
@@ -443,7 +443,9 @@ namespace IronyModManager.Services
         protected virtual long GetSteamModId(string path, bool isDirectory = false)
         {
             var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
+#pragma warning disable CA1806 // Do not ignore method results
             long.TryParse(name.Replace(Constants.Steam_mod_id, string.Empty), out var id);
+#pragma warning restore CA1806 // Do not ignore method results
             return id;
         }
 

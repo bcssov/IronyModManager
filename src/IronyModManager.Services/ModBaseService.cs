@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -217,13 +217,13 @@ namespace IronyModManager.Services
             if (game != null && definitions?.Count() > 1)
             {
                 var validDefinitions = definitions.Where(p => p.ExistsInLastFile).ToList();
-                if (validDefinitions.Count() == 1)
+                if (validDefinitions.Count == 1)
                 {
                     result.Definition = validDefinitions.FirstOrDefault();
                     // If it's the only valid one assume load order is responsible
                     result.PriorityType = DefinitionPriorityType.ModOrder;
                 }
-                else if (validDefinitions.Count() > 1)
+                else if (validDefinitions.Count > 1)
                 {
                     var definitionEvals = new List<DefinitionEval>();
                     var provider = DefinitionInfoProviders.FirstOrDefault(p => p.CanProcess(game.Type));
@@ -351,7 +351,7 @@ namespace IronyModManager.Services
                 return new List<IModCollection>();
             }
             var collections = StorageProvider.GetModCollections().Where(s => s.Game.Equals(game.Type));
-            if (collections.Count() > 0)
+            if (collections.Any())
             {
                 return collections.OrderBy(p => p.Name);
             }
@@ -410,7 +410,7 @@ namespace IronyModManager.Services
         {
             if (game == null)
             {
-                throw new ArgumentNullException("game");
+                throw new ArgumentNullException(nameof(game));
             }
             var mods = Cache.Get<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods));
             if (mods != null)
@@ -423,7 +423,7 @@ namespace IronyModManager.Services
                 var installedMods = Reader.Read(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory));
                 if (installedMods?.Count() > 0)
                 {
-                    foreach (var installedMod in installedMods.Where(p => p.Content.Count() > 0))
+                    foreach (var installedMod in installedMods.Where(p => p.Content.Any()))
                     {
                         var mod = Mapper.Map<IMod>(ModParser.Parse(installedMod.Content));
                         if (ignorePatchMods && IsPatchModInternal(mod))
@@ -523,7 +523,9 @@ namespace IronyModManager.Services
         protected virtual long GetPdxModId(string path, bool isDirectory = false)
         {
             var name = !isDirectory ? Path.GetFileNameWithoutExtension(path) : path;
+#pragma warning disable CA1806 // Do not ignore method results
             long.TryParse(name.Replace(Constants.Paradox_mod_id, string.Empty), out var id);
+#pragma warning restore CA1806 // Do not ignore method results
             return id;
         }
 
