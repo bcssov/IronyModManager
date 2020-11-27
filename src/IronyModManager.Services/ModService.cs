@@ -23,7 +23,6 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
-using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
@@ -358,12 +357,12 @@ namespace IronyModManager.Services
                 Path = Path.Combine(Shared.Constants.ModDirectory, folder)
             }, true);
             var mods = GetInstalledModsInternal(game, false);
-            if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Equals(fullPath)))
+            if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
             {
-                var mod = mods.FirstOrDefault(p => p.FullPath.Equals(fullPath));
+                var mod = mods.Where(p => p.FullPath.Contains(fullPath));
                 if (mod != null)
                 {
-                    await DeleteDescriptorsInternalAsync(new List<IMod>() { mod });
+                    await DeleteDescriptorsInternalAsync(mod);
                 }
             }
             return result;
