@@ -4,6 +4,50 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.9.43-rc</title>
+			<description>CHANGES FROM v1.8:
+* Upgrade to net5
+* Upgrade dependencies
+* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
+* Add new merge type called compress which zips all mod files into local mod directory
+* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
+			<pubDate>Fri, 27 Nov 2020 21:21:57 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/osx-x64.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="62889073" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="iQCaloS9R/F2m2vwOaN1qrWTUax+yqonZT70P2OD4C1aIhn+8Ego69cDPXDivAUenidFhkBiCmKceHfqEsDfBQ=="/>
+		</item>
+		<item>
+			<title>1.9.43-rc</title>
+			<description>CHANGES FROM v1.8:
+* Upgrade to net5
+* Upgrade dependencies
+* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
+* Add new merge type called compress which zips all mod files into local mod directory
+* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
+			<pubDate>Fri, 27 Nov 2020 21:22:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/win-x64-setup.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="54473152" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="PLqZpr4XkOdrcyRwNoQWkrOeGR0S/tEjueutXrCReyWnEitscL4kgYYwuYSxbeySqdeYJfxcHEd4UxctP6gxBg=="/>
+		</item>
+		<item>
+			<title>1.9.43-rc</title>
+			<description>CHANGES FROM v1.8:
+* Upgrade to net5
+* Upgrade dependencies
+* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
+* Add new merge type called compress which zips all mod files into local mod directory
+* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
+			<pubDate>Fri, 27 Nov 2020 21:22:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/win-x64.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="65198778" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="FRttmKIyxuYFENVhhARSsDSoIwwTq798eEoOHs2QvdkQRILoz1hmlnzSt2+b//5oJwjRJMUySHlxaNQxuPbIAw=="/>
+		</item>
+		<item>
+			<title>1.9.43-rc</title>
+			<description>CHANGES FROM v1.8:
+* Upgrade to net5
+* Upgrade dependencies
+* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
+* Add new merge type called compress which zips all mod files into local mod directory
+* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
+			<pubDate>Fri, 27 Nov 2020 21:21:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/linux-x64.zip" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="78011464" sparkle:os="linux" type="application/zip" sparkle:signature="jafIZhZmAZ0sk5oMKhGI9Yxi64/Jpnp7ElbVuQpCF2HgjTycgVtSf2D9Ag36XldhfJFijG7VLm7blZrZImqsCA=="/>
+		</item>
+		<item>
 			<title>1.8.80</title>
 			<description>RELEASE INFO:
 * Prevent UI thread from being locked while installing mods
