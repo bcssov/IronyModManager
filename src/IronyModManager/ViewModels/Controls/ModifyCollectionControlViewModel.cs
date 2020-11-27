@@ -425,6 +425,7 @@ namespace IronyModManager.ViewModels.Controls
                 skipNameCheck = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info);
             }
             var copy = CopyCollection(requestedName, skipNameCheck);
+            copy.MergedFolderName = copy.Name.GenerateValidFileName();
             return copy;
         }
 

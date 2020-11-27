@@ -165,6 +165,14 @@ namespace IronyModManager.Services
                     Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 }
             }
+            else
+            {
+                // Remove left over descriptor
+                if (allMods.Any(p => p.Name.Equals(mod.Name)))
+                {
+                    await DeleteDescriptorsInternalAsync(new List<IMod>() { mod });
+                }
+            }
             return await ModWriter.ApplyModsAsync(applyModParams);
         }
 
@@ -302,6 +310,25 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Mods the directory exists asynchronous.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ModDirectoryExistsAsync(string folder)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            return ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, folder)
+            });
+        }
+
+        /// <summary>
         /// populate mod files as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -309,6 +336,25 @@ namespace IronyModManager.Services
         public virtual Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods)
         {
             return PopulateModFilesInternalAsync(mods);
+        }
+
+        /// <summary>
+        /// Purges the mod directory asynchronous.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> PurgeModDirectoryAsync(string folder)
+        {
+            var game = GameService.GetSelected();
+            if (game == null)
+            {
+                return Task.FromResult(false);
+            }
+            return ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, folder)
+            }, true);
         }
 
         /// <summary>
