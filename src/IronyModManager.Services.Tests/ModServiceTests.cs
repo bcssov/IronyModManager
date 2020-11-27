@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -58,7 +58,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="modWriter">The mod writer.</param>
         /// <param name="gameService">The game service.</param>
         /// <returns>ModService.</returns>
-        private ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
+        private static ModService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService)
         {
@@ -70,7 +70,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         /// <param name="reader">The reader.</param>
         /// <param name="modParser">The mod parser.</param>
-        private void SetupMockCase(Mock<IReader> reader, Mock<IModParser> modParser)
+        private static void SetupMockCase(Mock<IReader> reader, Mock<IModParser> modParser)
         {
             var fileInfos = new List<IFileInfo>()
             {

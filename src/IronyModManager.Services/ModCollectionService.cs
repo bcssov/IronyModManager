@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -148,7 +148,7 @@ namespace IronyModManager.Services
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
-                if (collections.Count() > 0)
+                if (collections.Count > 0)
                 {
                     var existing = collections.FirstOrDefault(p => p.Game.Equals(game.Type) && p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (existing != null)
@@ -213,7 +213,7 @@ namespace IronyModManager.Services
                 var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
                 if (patchMod != null)
                 {
-                    if (patchMod.Files == null || patchMod.Files.Count() == 0)
+                    if (patchMod.Files == null || !patchMod.Files.Any())
                     {
                         await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
                     }
@@ -324,7 +324,7 @@ namespace IronyModManager.Services
             var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
             if (patchMod != null)
             {
-                if (patchMod.Files == null || patchMod.Files.Count() == 0)
+                if (patchMod.Files == null || !patchMod.Files.Any())
                 {
                     await PopulateModFilesInternalAsync(new List<IMod>() { patchMod });
                 }
@@ -424,7 +424,7 @@ namespace IronyModManager.Services
         {
             if (collection == null || string.IsNullOrWhiteSpace(collection.Game))
             {
-                throw new ArgumentNullException("collection");
+                throw new ArgumentNullException(nameof(collection));
             }
             var game = GameService.GetSelected();
             if (game == null)
@@ -434,7 +434,7 @@ namespace IronyModManager.Services
             lock (serviceLock)
             {
                 var collections = StorageProvider.GetModCollections().ToList();
-                if (collections.Count() > 0)
+                if (collections.Count > 0)
                 {
                     var existing = collections.FirstOrDefault(p => p.Name.Equals(collection.Name, StringComparison.OrdinalIgnoreCase) && p.Game.Equals(collection.Game));
                     if (existing != null)
