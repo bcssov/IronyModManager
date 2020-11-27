@@ -142,12 +142,14 @@
         },
         "MergeCollection": {
             "Name": "合并",
-            "MergedCollectionSuffix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "进度 {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "选择模式",
                 "Basic": "基础",
                 "Advanced": "高级",
+                "Compress": "压缩",
                 "Close": "关闭"
             },
             "Advanced": {
@@ -158,6 +160,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "正在收集Mod信息...",
                 "Overlay_Writting_Files": "正在写入文件..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "正在收集Mod信息...",
+                "Overlay_Compressing_Files": "正在写入文件..."
             },
             "OverwritePrompt": {
                 "Title": "覆盖现有整合包?",

@@ -142,12 +142,14 @@
         },
         "MergeCollection": {
             "Name": "Merge",
-            "MergedCollectionSuffix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Select mode",
                 "Basic": "Basic",
                 "Advanced": "Advanced",
+                "Compress": "Compress",
                 "Close": "Close"
             },
             "Advanced": {
@@ -158,6 +160,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
                 "Overlay_Writting_Files": "Please wait while merging the mod collection..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
+                "Overlay_Compressing_Files": "Please wait while merging the mod collection..."
             },
             "OverwritePrompt": {
                 "Title": "Overwrite existing collection?",

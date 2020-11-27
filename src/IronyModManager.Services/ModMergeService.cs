@@ -625,10 +625,11 @@ namespace IronyModManager.Services
             foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
             {
                 var queueId = modMergeCompressExporter.Start();
+                var streams = new List<Stream>();
                 foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
                 {
                     processed++;
-                    using var stream = Reader.GetStream(collectionMod.FullPath, file);
+                    var stream = Reader.GetStream(collectionMod.FullPath, file);
                     if (stream != null)
                     {
                         await Task.Run(() =>
@@ -641,8 +642,7 @@ namespace IronyModManager.Services
                             });
                         });
                     }
-                    stream.Close();
-                    await stream.DisposeAsync();
+                    streams.Add(stream);
                     var percentage = GetProgressPercentage(totalFiles, processed, 99.9);
                     if (lastPercentage != percentage)
                     {
@@ -650,12 +650,13 @@ namespace IronyModManager.Services
                     }
                     lastPercentage = percentage;
                 }
-                var newMod = cloneMod(collectionMod, Path.Combine(mergeCollectionPath, $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}"));
-                using var ms = new MemoryStream();
+                var newMod = cloneMod(collectionMod, Path.Combine(mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
+                var ms = new MemoryStream();
                 await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
                 {
                     Mod = newMod
                 }, ms);
+                ms.Seek(0, SeekOrigin.Begin);
                 await Task.Run(() =>
                 {
                     modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
@@ -665,11 +666,20 @@ namespace IronyModManager.Services
                         Stream = ms
                     });
                 });
-                ms.Close();
-                await ms.DisposeAsync();
-                modMergeCompressExporter.Finalize(queueId, Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath, $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}"));
+                streams.Add(ms);
+                modMergeCompressExporter.Finalize(queueId, Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
                 renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
                 exportedMods.Add(newMod);
+                var tasks = new List<Task>();
+                foreach (var item in streams)
+                {
+                    tasks.Add(Task.Run(async () =>
+                    {
+                        item.Close();
+                        await item.DisposeAsync();
+                    }));
+                }
+                await Task.WhenAll(tasks);
             }
 
             await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, 99.9));
