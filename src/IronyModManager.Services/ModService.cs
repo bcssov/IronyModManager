@@ -23,6 +23,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
@@ -343,18 +344,29 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> PurgeModDirectoryAsync(string folder)
+        public virtual async Task<bool> PurgeModDirectoryAsync(string folder)
         {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
-            return ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            var fullPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, folder);
+            var result = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
                 RootDirectory = game.UserDirectory,
                 Path = Path.Combine(Shared.Constants.ModDirectory, folder)
             }, true);
+            var mods = GetInstalledModsInternal(game, false);
+            if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Equals(fullPath)))
+            {
+                var mod = mods.FirstOrDefault(p => p.FullPath.Equals(fullPath));
+                if (mod != null)
+                {
+                    await DeleteDescriptorsInternalAsync(new List<IMod>() { mod });
+                }
+            }
+            return result;
         }
 
         /// <summary>

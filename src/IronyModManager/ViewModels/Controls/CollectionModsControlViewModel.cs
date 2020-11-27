@@ -1015,13 +1015,13 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            RemoveCommand = ReactiveCommand.Create(() =>
-            {
-                if (SelectedModCollection != null)
-                {
-                    RemoveCollectionAsync(SelectedModCollection.Name).ConfigureAwait(true);
-                }
-            }, allowModSelectionEnabled).DisposeWith(disposables);
+            RemoveCommand = ReactiveCommand.CreateFromTask(async () =>
+           {
+               if (SelectedModCollection != null)
+               {
+                   await RemoveCollectionAsync(SelectedModCollection.Name);
+               }
+           }, allowModSelectionEnabled).DisposeWith(disposables);
 
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
@@ -1487,13 +1487,37 @@ namespace IronyModManager.ViewModels.Controls
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.Delete_Message), noti);
             if (await notificationAction.ShowPromptAsync(title, header, message, NotificationType.Info))
             {
+                var collection = modCollectionService.Get(collectionName);
+                bool deleteMergedMod = false;
+                if (!string.IsNullOrWhiteSpace(collection?.MergedFolderName) && await modService.ModDirectoryExistsAsync(collection.MergedFolderName))
+                {
+                    deleteMergedMod = await notificationAction.ShowPromptAsync(localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteTitle),
+                        localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteHeader),
+                        localizationManager.GetResource(LocalizationResources.Collection_Mods.DeleteMerge.DeleteMessage), NotificationType.Info);
+                }
                 if (modCollectionService.Delete(collectionName))
                 {
                     modPatchCollectionService.InvalidatePatchModState(collectionName);
-                    await Task.Run(async () => await modPatchCollectionService.CleanPatchCollectionAsync(collectionName).ConfigureAwait(false)).ConfigureAwait(false);
-                    var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
-                    var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title), noti);
-                    notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                    await Task.Run(async () =>
+                    {
+                        await modPatchCollectionService.CleanPatchCollectionAsync(collectionName).ConfigureAwait(false);
+                        if (deleteMergedMod)
+                        {
+                            await modService.PurgeModDirectoryAsync(collection.MergedFolderName);
+                        }
+                    }).ConfigureAwait(false);
+                    if (deleteMergedMod)
+                    {
+                        var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Title);
+                        var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
+                        notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                    }
+                    else
+                    {
+                        var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Title);
+                        var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
+                        notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                    }
                     LoadModCollections();
                 }
             }
@@ -1532,6 +1556,7 @@ namespace IronyModManager.ViewModels.Controls
                 collection.Name = SelectedModCollection.Name;
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
+                collection.MergedFolderName = SelectedModCollection.MergedFolderName;
                 if (modCollectionService.Save(collection))
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();

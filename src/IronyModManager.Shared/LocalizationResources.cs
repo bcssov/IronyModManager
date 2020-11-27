@@ -139,6 +139,13 @@ namespace IronyModManager.Shared
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public const string ExportToClipboard = Prefix + "ExportToClipboard";
+            public static class DeleteMerge
+            {
+                public const string Prefix = "Collection_Mods.DeleteMerge.";
+                public const string DeleteTitle = Prefix + "DeleteTitle";
+                public const string DeleteHeader = Prefix + "DeleteHeader";
+                public const string DeleteMessage = Prefix + "DeleteMessage";
+            }
             public static class ImportFromClipboard
             {
                 public const string Prefix = "Collection_Mods.ImportFromClipboard.";
@@ -456,6 +463,12 @@ namespace IronyModManager.Shared
             public static class CollectionDeleted
             {
                 public const string Prefix = "Notifications.CollectionDeleted.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionAndModDeleted
+            {
+                public const string Prefix = "Notifications.CollectionAndModDeleted.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
