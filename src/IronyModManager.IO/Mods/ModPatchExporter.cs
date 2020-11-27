@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -401,6 +401,136 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
+        /// copy path mod internal as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
+        {
+            var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+            var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
+            if (Directory.Exists(oldPath))
+            {
+                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
+                foreach (var item in files)
+                {
+                    var info = new System.IO.FileInfo(item);
+                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase).TrimStart(Path.DirectorySeparatorChar));
+                    if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
+                    }
+                    info.CopyTo(destinationPath, true);
+                }
+                var backups = new List<string>() { Path.Combine(newPath, StateName), Path.Combine(newPath, StateBackup) };
+                foreach (var item in backups)
+                {
+                    if (File.Exists(item))
+                    {
+                        var text = await File.ReadAllTextAsync(item);
+                        foreach (var renamePair in parameters.RenamePairs)
+                        {
+                            text = text.Replace($"\"{renamePair.Key}\"", $"\"{renamePair.Value}\"");
+                        }
+                        await File.WriteAllTextAsync(item, text);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the patch root path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <returns>System.String.</returns>
+        private static string GetPatchRootPath(string path, string patchName)
+        {
+            return Path.Combine(path, patchName);
+        }
+
+        /// <summary>
+        /// Maps the definition.
+        /// </summary>
+        /// <param name="original">The original.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        /// <returns>IDefinition.</returns>
+        private static IDefinition MapDefinition(IDefinition original, bool includeCode)
+        {
+            var newInstance = DIResolver.Get<IDefinition>();
+            if (includeCode)
+            {
+                // Most don't require except conflict history. Further reduces the json.
+                newInstance.Code = original.Code;
+            }
+            newInstance.ContentSHA = original.ContentSHA;
+            newInstance.DefinitionSHA = original.DefinitionSHA;
+            newInstance.Dependencies = original.Dependencies;
+            newInstance.File = original.File;
+            newInstance.Id = original.Id;
+            newInstance.ModName = original.ModName;
+            newInstance.Type = original.Type;
+            newInstance.UsedParser = original.UsedParser;
+            newInstance.ValueType = original.ValueType;
+            newInstance.ErrorColumn = original.ErrorColumn;
+            newInstance.ErrorLine = original.ErrorLine;
+            newInstance.ErrorMessage = original.ErrorMessage;
+            newInstance.GeneratedFileNames = original.GeneratedFileNames;
+            newInstance.AdditionalFileNames = original.AdditionalFileNames;
+            newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
+            newInstance.OriginalCode = original.OriginalCode;
+            newInstance.CodeSeparator = original.CodeSeparator;
+            newInstance.CodeTag = original.CodeTag;
+            newInstance.Order = original.Order;
+            newInstance.OriginalModName = original.OriginalModName;
+            newInstance.OriginalFileName = original.OriginalFileName;
+            newInstance.DiskFile = original.DiskFile;
+            newInstance.Variables = original.Variables;
+            newInstance.ExistsInLastFile = original.ExistsInLastFile;
+            return newInstance;
+        }
+
+        /// <summary>
+        /// Maps the definitions.
+        /// </summary>
+        /// <param name="originals">The originals.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
+        private static IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
+        {
+            var col = new List<IDefinition>();
+            if (originals != null)
+            {
+                foreach (var original in originals)
+                {
+                    col.Add(MapDefinition(original, includeCode));
+                }
+            }
+            return col;
+        }
+
+        /// <summary>
+        /// Maps the state of the patch.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
+        private static void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
+        {
+            destination.ConflictHistory = MapDefinitions(source.ConflictHistory, includeCode);
+            destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);
+            destination.IgnoreConflictPaths = source.IgnoreConflictPaths;
+            destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
+            destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
+            destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
+            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
+            destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
+            destination.Mode = source.Mode;
+        }
+
+        /// <summary>
         /// Copies the binaries asynchronous.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
@@ -468,54 +598,6 @@ namespace IronyModManager.IO.Mods
                 }
             }
             return true;
-        }
-
-        /// <summary>
-        /// copy path mod internal as an asynchronous operation.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
-        {
-            var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
-            var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
-            if (Directory.Exists(oldPath))
-            {
-                var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
-                foreach (var item in files)
-                {
-                    var info = new System.IO.FileInfo(item);
-                    var destinationPath = Path.Combine(newPath, info.FullName.Replace(oldPath, string.Empty, StringComparison.OrdinalIgnoreCase).TrimStart(Path.DirectorySeparatorChar));
-                    if (!Directory.Exists(Path.GetDirectoryName(destinationPath)))
-                    {
-                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath));
-                    }
-                    info.CopyTo(destinationPath, true);
-                }
-                var backups = new List<string>() { Path.Combine(newPath, StateName), Path.Combine(newPath, StateBackup) };
-                foreach (var item in backups)
-                {
-                    if (File.Exists(item))
-                    {
-                        var text = await File.ReadAllTextAsync(item);
-                        text = text.Replace($"\"{parameters.ModPath}\"", $"\"{parameters.PatchName}\"");
-                        await File.WriteAllTextAsync(item, text);
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Gets the patch root path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="patchName">Name of the patch.</param>
-        /// <returns>System.String.</returns>
-        private static string GetPatchRootPath(string path, string patchName)
-        {
-            return Path.Combine(path, patchName);
         }
 
         /// <summary>
@@ -654,85 +736,6 @@ namespace IronyModManager.IO.Mods
                 return result;
             }
             return null;
-        }
-
-        /// <summary>
-        /// Maps the definition.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        /// <returns>IDefinition.</returns>
-        private static IDefinition MapDefinition(IDefinition original, bool includeCode)
-        {
-            var newInstance = DIResolver.Get<IDefinition>();
-            if (includeCode)
-            {
-                // Most don't require except conflict history. Further reduces the json.
-                newInstance.Code = original.Code;
-            }
-            newInstance.ContentSHA = original.ContentSHA;
-            newInstance.DefinitionSHA = original.DefinitionSHA;
-            newInstance.Dependencies = original.Dependencies;
-            newInstance.File = original.File;
-            newInstance.Id = original.Id;
-            newInstance.ModName = original.ModName;
-            newInstance.Type = original.Type;
-            newInstance.UsedParser = original.UsedParser;
-            newInstance.ValueType = original.ValueType;
-            newInstance.ErrorColumn = original.ErrorColumn;
-            newInstance.ErrorLine = original.ErrorLine;
-            newInstance.ErrorMessage = original.ErrorMessage;
-            newInstance.GeneratedFileNames = original.GeneratedFileNames;
-            newInstance.AdditionalFileNames = original.AdditionalFileNames;
-            newInstance.OverwrittenFileNames = original.OverwrittenFileNames;
-            newInstance.OriginalCode = original.OriginalCode;
-            newInstance.CodeSeparator = original.CodeSeparator;
-            newInstance.CodeTag = original.CodeTag;
-            newInstance.Order = original.Order;
-            newInstance.OriginalModName = original.OriginalModName;
-            newInstance.OriginalFileName = original.OriginalFileName;
-            newInstance.DiskFile = original.DiskFile;
-            newInstance.Variables = original.Variables;
-            newInstance.ExistsInLastFile = original.ExistsInLastFile;
-            return newInstance;
-        }
-
-        /// <summary>
-        /// Maps the definitions.
-        /// </summary>
-        /// <param name="originals">The originals.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        private static IEnumerable<IDefinition> MapDefinitions(IEnumerable<IDefinition> originals, bool includeCode)
-        {
-            var col = new List<IDefinition>();
-            if (originals != null)
-            {
-                foreach (var original in originals)
-                {
-                    col.Add(MapDefinition(original, includeCode));
-                }
-            }
-            return col;
-        }
-
-        /// <summary>
-        /// Maps the state of the patch.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="includeCode">if set to <c>true</c> [include code].</param>
-        private static void MapPatchState(IPatchState source, IPatchState destination, bool includeCode)
-        {
-            destination.ConflictHistory = MapDefinitions(source.ConflictHistory, includeCode);
-            destination.Conflicts = MapDefinitions(source.Conflicts, includeCode);
-            destination.IgnoreConflictPaths = source.IgnoreConflictPaths;
-            destination.IgnoredConflicts = MapDefinitions(source.IgnoredConflicts, includeCode);
-            destination.OrphanConflicts = MapDefinitions(source.OrphanConflicts, includeCode);
-            destination.ResolvedConflicts = MapDefinitions(source.ResolvedConflicts, includeCode);
-            destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
-            destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
-            destination.Mode = source.Mode;
         }
 
         /// <summary>

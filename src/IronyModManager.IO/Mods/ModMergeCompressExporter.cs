@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -67,26 +67,28 @@ namespace IronyModManager.IO.Mods
         /// Adds the file.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <exception cref="NullReferenceException">parameters</exception>
+        /// <exception cref="ArgumentNullException">parameters</exception>
         public void AddFile(ModMergeCompressExporterParameters parameters)
         {
             if (parameters == null)
             {
-                throw new NullReferenceException("parameters");
+                throw new ArgumentNullException(nameof(parameters));
             }
             queue.TryGetValue(parameters.QueueId, out var value);
-            value.AddEntry(parameters.FileName, parameters.Stream, true);
+            value.AddEntry(parameters.FileName, parameters.Stream, false);
         }
 
         /// <summary>
         /// Finalizes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="exportPath">The export path.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool Finalize(long id)
+        public bool Finalize(long id, string exportPath)
         {
             if (queue.TryRemove(id, out var value))
             {
+                value.SaveTo(exportPath, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
                 value.Dispose();
                 return true;
             }

@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-25-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -235,7 +235,8 @@ namespace IronyModManager.Services
             {
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 ModPath = oldPatchName,
-                PatchName = newPathName
+                PatchName = newPathName,
+                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPathName) }
             });
         }
 
@@ -731,8 +732,9 @@ namespace IronyModManager.Services
             {
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 ModPath = oldPatchName,
-                PatchName = newPathName
-            });
+                PatchName = newPathName,
+                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPathName) }
+            }); ;
         }
 
         /// <summary>
@@ -1169,7 +1171,7 @@ namespace IronyModManager.Services
                 if (processed.Contains(def) || conflicts.Contains(def))
                 {
                     continue;
-                }                
+                }
                 var allConflicts = indexedDefinitions.GetByTypeAndId(def.Type, def.Id).Where(p => IsValidDefinitionType(p));
                 foreach (var conflict in allConflicts)
                 {

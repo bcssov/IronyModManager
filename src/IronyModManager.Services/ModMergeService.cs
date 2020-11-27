@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -540,6 +540,149 @@ namespace IronyModManager.Services
                 }
             }
             return mod;
+        }
+
+        /// <summary>
+        /// merge compress collection as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="copiedNamePrefix">The copied name prefix.</param>
+        /// <returns>IEnumerable&lt;IMod&gt;.</returns>
+        public virtual async Task<IEnumerable<IMod>> MergeCompressCollectionAsync(string collectionName, string copiedNamePrefix)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return null;
+            }
+
+            IMod cloneMod(IMod mod, string fileName)
+            {
+                var newMod = DIResolver.Get<IMod>();
+                newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
+                newMod.FileName = GetModDirectory(game, fileName).Replace("\\", "/");
+                newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
+                newMod.Source = ModSource.Local;
+                newMod.Version = mod.Version;
+                newMod.FullPath = GetModDirectory(game, fileName);
+                newMod.RemoteId = mod.RemoteId;
+                newMod.Picture = mod.Picture;
+                newMod.ReplacePath = mod.ReplacePath;
+                newMod.Tags = mod.Tags;
+                newMod.UserDir = mod.UserDir;
+                var dependencies = mod.Dependencies;
+                if (dependencies != null && dependencies.Any())
+                {
+                    var newDependencies = new List<string>();
+                    foreach (var item in dependencies)
+                    {
+                        newDependencies.Add($"{copiedNamePrefix} {item}");
+                    }
+                    newMod.Dependencies = newDependencies;
+                }
+                return newMod;
+            }
+
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var collectionMods = GetCollectionMods(allMods).ToList();
+            if (collectionMods.Count == 0)
+            {
+                return null;
+            }
+            var mergeCollectionPath = collectionName.GenerateValidFileName();
+            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+            }, true);
+            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Shared.Constants.ModDirectory
+            });
+            await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
+            {
+                RootDirectory = game.UserDirectory,
+                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+            });
+
+            var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
+            var patchName = GenerateCollectionPatchName(collection.Name);
+            var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
+
+            await messageBus.PublishAsync(new ModCompressMergeProgressEvent(1, 0));
+            await PopulateModFilesInternalAsync(collectionMods);
+            await messageBus.PublishAsync(new ModCompressMergeProgressEvent(1, 100));
+
+            var newPatchName = GenerateCollectionPatchName(collectionName);
+            var renamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(patchName, newPatchName) };
+
+            var totalFiles = collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files.Where(f => game.GameFolders.Any(s => f.StartsWith(s, StringComparison.OrdinalIgnoreCase)))).Count();
+            double lastPercentage = 0;
+            var processed = 0;
+            var exportedMods = new List<IMod>();
+
+            foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
+            {
+                var queueId = modMergeCompressExporter.Start();
+                foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
+                {
+                    processed++;
+                    using var stream = Reader.GetStream(collectionMod.FullPath, file);
+                    if (stream != null)
+                    {
+                        await Task.Run(() =>
+                        {
+                            modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                            {
+                                FileName = file,
+                                QueueId = queueId,
+                                Stream = stream
+                            });
+                        });
+                    }
+                    stream.Close();
+                    await stream.DisposeAsync();
+                    var percentage = GetProgressPercentage(totalFiles, processed, 99.9);
+                    if (lastPercentage != percentage)
+                    {
+                        await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, percentage));
+                    }
+                    lastPercentage = percentage;
+                }
+                var newMod = cloneMod(collectionMod, Path.Combine(mergeCollectionPath, $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}"));
+                using var ms = new MemoryStream();
+                await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
+                {
+                    Mod = newMod
+                }, ms);
+                await Task.Run(() =>
+                {
+                    modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                    {
+                        FileName = Shared.Constants.DescriptorFile,
+                        QueueId = queueId,
+                        Stream = ms
+                    });
+                });
+                ms.Close();
+                await ms.DisposeAsync();
+                modMergeCompressExporter.Finalize(queueId, Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath, $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}"));
+                renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
+                exportedMods.Add(newMod);
+            }
+
+            await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, 99.9));
+            await modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters()
+            {
+                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                ModPath = patchName,
+                PatchName = newPatchName,
+                RenamePairs = renamePairs
+            });
+
+            Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+            return exportedMods;
         }
 
         /// <summary>

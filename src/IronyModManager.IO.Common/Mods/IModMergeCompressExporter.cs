@@ -4,7 +4,7 @@
 // Created          : 11-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="IModMergeCompressExporter.cs" company="Mario">
 //     Mario
@@ -31,8 +31,9 @@ namespace IronyModManager.IO.Common.Mods
         /// Finalizes the specified identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
+        /// <param name="exportPath">The export path.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Finalize(long id);
+        bool Finalize(long id, string exportPath);
 
         /// <summary>
         /// Starts this instance.
