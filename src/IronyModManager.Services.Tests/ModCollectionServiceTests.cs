@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="gameService">The game service.</param>
-        private void SetupMockCase(Mock<IStorageProvider> storageProvider, Mock<IGameService> gameService)
+        private static void SetupMockCase(Mock<IStorageProvider> storageProvider, Mock<IGameService> gameService)
         {
             var collections = new List<IModCollection>()
             {
@@ -891,7 +891,7 @@ namespace IronyModManager.Services.Tests
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IModHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IModHashReport> report, string path) =>
             {
-                if (report.Count() == 1 && report.FirstOrDefault().Reports.Count() == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test\\test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
+                if (report.Count() == 1 && report.FirstOrDefault().Reports.Count == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test\\test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
                 {
                     return true;
                 }
@@ -1024,7 +1024,7 @@ namespace IronyModManager.Services.Tests
                 } }, "test");
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
-            result.FirstOrDefault().Reports.Count().Should().Be(2);
+            result.FirstOrDefault().Reports.Count.Should().Be(2);
         }
 
         /// <summary>
@@ -1083,7 +1083,7 @@ namespace IronyModManager.Services.Tests
                 } }, "test");
             result.Should().NotBeNull();
             result.Count().Should().Be(1);
-            result.FirstOrDefault().Reports.Count().Should().Be(1);
+            result.FirstOrDefault().Reports.Count.Should().Be(1);
         }
 
         /// <summary>

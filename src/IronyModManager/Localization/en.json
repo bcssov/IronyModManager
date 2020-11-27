@@ -104,6 +104,11 @@
         "Overlay_Rename_Message": "Please wait while performing rename operation...",
         "Overlay_Duplicate_Message": "Please wait while performing duplicate operation...",
         "ExportToClipboard": "Copy Collection To Clipboard",
+        "DeleteMerge": {
+            "DeleteTitle": "Delete Merged Mod?",
+            "DeleteHeader": "Confirm merge mod deletion",
+            "DeleteMessage": "Existence of merged mod has been detected, do you want to delete it as well?"
+        },
         "ImportFromClipboard": {
             "Title": "Import Mod Order From Clipboard",
             "PromptTitle": "Overwrite Mod Order?",
@@ -343,6 +348,10 @@
         "CollectionDeleted": {
             "Title": "Collection Deleted",
             "Message": "{CollectionName} has been deleted."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Collection and Merged Mods Deleted",
+            "Message": "{CollectionName} and merged mods have been deleted."
         },
         "CollectionExists": {
             "Title": "Collection Exists",

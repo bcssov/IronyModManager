@@ -508,7 +508,7 @@ namespace IronyModManager.ViewModels
                     {
                         topLevelConflicts = conflicts.Where(p => p.Name.Equals(topLevelResolvedConflicts.Name));
                     }
-                    if (topLevelConflicts.Count() > 0)
+                    if (topLevelConflicts.Any())
                     {
                         foreach (var topLevelConflict in topLevelConflicts)
                         {
@@ -555,7 +555,7 @@ namespace IronyModManager.ViewModels
                 }
                 HierarchalConflicts = conflicts.ToObservableCollection();
                 NumberOfConflictsCaption = Smart.Format(localizationManager.GetResource(LocalizationResources.Conflict_Solver.ConflictCount), new { Count = conflicts.Where(p => p.Key != InvalidKey).SelectMany(p => p.Children).Count() });
-                if (HierarchalConflicts.Count() > 0 && SelectedParentConflict == null)
+                if (HierarchalConflicts.Any() && SelectedParentConflict == null)
                 {
                     SelectedParentConflict = HierarchalConflicts.FirstOrDefault();
                 }
@@ -671,7 +671,7 @@ namespace IronyModManager.ViewModels
                 }
                 else
                 {
-                    if (HierarchalConflicts == null || HierarchalConflicts.Count() == 0)
+                    if (HierarchalConflicts == null || !HierarchalConflicts.Any())
                     {
                         ModCompareSelector.Reset();
                         BinaryMergeViewer.Reset();
@@ -902,7 +902,7 @@ namespace IronyModManager.ViewModels
                         {
                             await FilterHierarchalConflictsAsync(Conflicts);
                             IHierarchicalDefinitions selectedConflict = null;
-                            if (conflictParentIdx.HasValue && HierarchalConflicts.Count() > 0)
+                            if (conflictParentIdx.HasValue && HierarchalConflicts.Any())
                             {
                                 foreach (var item in HierarchalConflicts)
                                 {
@@ -943,7 +943,7 @@ namespace IronyModManager.ViewModels
                     {
                         parentIdx = 0;
                     }
-                    if (HierarchalConflicts.Count() > 0)
+                    if (HierarchalConflicts.Any())
                     {
                         SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
                     }

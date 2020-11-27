@@ -104,6 +104,11 @@
         "Overlay_Rename_Message": "正在重命名...",
         "Overlay_Duplicate_Message": "正在创建整合包副本...",
         "ExportToClipboard": "复制整合包到剪贴板",
+        "DeleteMerge": {
+            "DeleteTitle": "删除合并的Mod？",
+            "DeleteHeader": "确认合并国防部删除",
+            "DeleteMessage": "已检测到合并mod的存在，是否也要删除它？"
+        },
         "ImportFromClipboard": {
             "Title": "从剪贴板导入整合包",
             "PromptTitle": "覆盖整合包",
@@ -343,6 +348,10 @@
         "CollectionDeleted": {
             "Title": "已删除整合包",
             "Message": "{CollectionName} 已删除"
+        },
+        "CollectionAndModDeleted": {
+            "Title": "收集和合并的模组已删除",
+            "Message": "{CollectionName} 和合并的国防部已被删除"
         },
         "CollectionExists": {
             "Title": "整合包已存在",

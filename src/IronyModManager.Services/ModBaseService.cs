@@ -234,7 +234,7 @@ namespace IronyModManager.Services
                         isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
                         foreach (var item in validDefinitions)
                         {
-                            var hasOverrides = validDefinitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                            var hasOverrides = validDefinitions.Any(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(item.ModName)));
                             if (hasOverrides)
                             {
                                 overrideSkipped = true;
@@ -445,7 +445,7 @@ namespace IronyModManager.Services
                         {
                             if (Path.IsPathFullyQualified(mod.FileName))
                             {
-                                mod.FullPath = mod.FileName;
+                                mod.FullPath = mod.FileName.StandardizeDirectorySeparator();
                             }
                             else
                             {
@@ -454,11 +454,11 @@ namespace IronyModManager.Services
                                 var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
                                 if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
                                 {
-                                    mod.FullPath = userDirectoryMod;
+                                    mod.FullPath = userDirectoryMod.StandardizeDirectorySeparator();
                                 }
                                 else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
                                 {
-                                    mod.FullPath = workshopDirectoryMod;
+                                    mod.FullPath = workshopDirectoryMod.StandardizeDirectorySeparator();
                                 }
                             }
                         }
@@ -493,7 +493,7 @@ namespace IronyModManager.Services
         protected virtual string GetModDirectory(IGame game, string patchName)
         {
             var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
-            return path;
+            return path.StandardizeDirectorySeparator();
         }
 
         /// <summary>

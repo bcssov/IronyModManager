@@ -104,6 +104,11 @@
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
+        "DeleteMerge": {
+            "DeleteTitle": "Zusammengeführten Mod löschen?",
+            "DeleteHeader": "Bestätigen Sie das Löschen des Merge-Mods",
+            "DeleteMessage": "Das Vorhandensein eines zusammengeführten Mods wurde erkannt. Möchten Sie ihn auch löschen?"
+        },
         "ImportFromClipboard": {
             "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
             "PromptTitle": "Mod-Reihenfolge überschreiben?",
@@ -343,6 +348,10 @@
         "CollectionDeleted": {
             "Title": "Sammlung gelöscht",
             "Message": "{CollectionName} wurde gelöscht."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Sammlung und zusammengeführte Mods gelöscht",
+            "Message": "{CollectionName} und zusammengeführte Mods wurden gelöscht."
         },
         "CollectionExists": {
             "Title": "Sammlung existiert",
