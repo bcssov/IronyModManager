@@ -397,7 +397,7 @@ namespace IronyModManager.Services
                     var all = item.Select(p => p);
                     foreach (var def in all)
                     {
-                        var hasOverrides = all.Any(p => (p.Dependencies?.Any(p => p.Equals(def.ModName))).GetValueOrDefault());
+                        var hasOverrides = all.Any(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(def.ModName)));
                         if (!hasOverrides || patchStateMode == PatchStateMode.Advanced)
                         {
                             valid.Add(def);
@@ -1188,10 +1188,10 @@ namespace IronyModManager.Services
                             {
                                 continue;
                             }
-                            var hasOverrides = allConflicts.Any(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
+                            var hasOverrides = allConflicts.Any(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
                             if (hasOverrides && patchStateMode == PatchStateMode.Default)
                             {
-                                var existing = allConflicts.Where(p => (p.Dependencies?.Any(p => p.Equals(conflict.ModName))).GetValueOrDefault());
+                                var existing = allConflicts.Where(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(conflict.ModName)));
                                 if (existing.Any())
                                 {
                                     var fileNames = conflict.AdditionalFileNames;

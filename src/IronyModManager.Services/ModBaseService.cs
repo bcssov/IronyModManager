@@ -234,7 +234,7 @@ namespace IronyModManager.Services
                         isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
                         foreach (var item in validDefinitions)
                         {
-                            var hasOverrides = validDefinitions.Any(p => (p.Dependencies?.Any(p => p.Equals(item.ModName))).GetValueOrDefault());
+                            var hasOverrides = validDefinitions.Any(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(item.ModName)));
                             if (hasOverrides)
                             {
                                 overrideSkipped = true;
