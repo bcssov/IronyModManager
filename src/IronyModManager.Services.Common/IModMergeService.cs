@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="IModMergeService.cs" company="Mario">
 //     Mario
@@ -40,6 +40,14 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;IMod&gt;.</returns>
         Task<IMod> MergeCollectionByFilesAsync(string collectionName);
+
+        /// <summary>
+        /// Merges the compress collection asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="copiedNamePrefix">The copied name prefix.</param>
+        /// <returns>Task&lt;IEnumerable&lt;IMod&gt;&gt;.</returns>
+        Task<IEnumerable<IMod>> MergeCompressCollectionAsync(string collectionName, string copiedNamePrefix);
 
         #endregion Methods
     }

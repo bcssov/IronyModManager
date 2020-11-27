@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -69,6 +69,7 @@ namespace IronyModManager.DI
             }, SimpleInjector.Lifestyle.Singleton);
             container.Register<IFontFamilyManager, FontFamilyManager>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IIDGenerator, IDGenerator>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModCompressMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

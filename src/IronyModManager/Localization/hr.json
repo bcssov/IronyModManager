@@ -142,12 +142,14 @@
         },
         "MergeCollection": {
             "Name": "Spoji",
-            "MergedCollectionSuffix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Spojeno {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Odaberi način",
                 "Basic": "Osnovno",
                 "Advanced": "Napredno",
+                "Compress": "Kompresiraj",
                 "Close": "Zatvori"
             },
             "Advanced": {
@@ -156,8 +158,12 @@
                 "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
             },
             "Basic": {
-                "Overlay_Gathering_Mod_Info": "Priječaj dok se skupljaju mod informacije...",
+                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
                 "Overlay_Writting_Files": "Pričekaj dok se spaja kolekcija..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
+                "Overlay_Compressing_Files": "Pričekaj dok se spaja kolekcija..."
             },
             "OverwritePrompt": {
                 "Title": "Prebriši postojeću kolekciju?",

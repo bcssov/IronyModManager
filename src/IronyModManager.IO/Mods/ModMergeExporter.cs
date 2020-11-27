@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -67,18 +67,18 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">ExportPath.</exception>
-        /// <exception cref="ArgumentNullException">Definitions.</exception>
+        /// <exception cref="ArgumentNullException">parameters - ExportPath.</exception>
+        /// <exception cref="ArgumentNullException">parameters - Definitions.</exception>
         public async Task<bool> ExportDefinitionsAsync(ModMergeDefinitionExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.ExportPath))
             {
-                throw new ArgumentNullException("ExportPath.");
+                throw new ArgumentNullException(nameof(parameters), "ExportPath.");
             }
-            var invalidDefs = parameters.Definitions == null || parameters.Definitions.Count() == 0;
+            var invalidDefs = parameters.Definitions == null || !parameters.Definitions.Any();
             if (invalidDefs)
             {
-                throw new ArgumentNullException("Definitions.");
+                throw new ArgumentNullException(nameof(parameters), "Definitions.");
             }
 
             var results = new List<bool>();
@@ -97,22 +97,22 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">ExportPath.</exception>
-        /// <exception cref="ArgumentNullException">ExportFile.</exception>
-        /// <exception cref="ArgumentNullException">RootModPath</exception>
+        /// <exception cref="ArgumentNullException">parameters - ExportPath.</exception>
+        /// <exception cref="ArgumentNullException">parameters - ExportFile.</exception>
+        /// <exception cref="ArgumentNullException">parameters - RootModPath</exception>
         public Task<bool> ExportFilesAsync(ModMergeFileExporterParameters parameters)
         {
             if (string.IsNullOrWhiteSpace(parameters.ExportPath))
             {
-                throw new ArgumentNullException("ExportPath.");
+                throw new ArgumentNullException(nameof(parameters), "ExportPath.");
             }
             if (string.IsNullOrWhiteSpace(parameters.ExportFile))
             {
-                throw new ArgumentNullException("ExportFile.");
+                throw new ArgumentNullException(nameof(parameters), "ExportFile.");
             }
             if (string.IsNullOrWhiteSpace(parameters.RootModPath))
             {
-                throw new ArgumentNullException("RootModPath");
+                throw new ArgumentNullException(nameof(parameters), "RootModPath");
             }
             return CopyStreamAsync(parameters.RootModPath, parameters.ExportFile, parameters.ExportPath);
         }
@@ -144,7 +144,7 @@ namespace IronyModManager.IO.Mods
                 if (Shared.Constants.ImageExtensions.Any(s => def.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
                 {
                     var segments = def.File.Split(".", StringSplitOptions.RemoveEmptyEntries);
-                    var file = string.Join(".", segments.Take(segments.Count() - 1));
+                    var file = string.Join(".", segments.Take(segments.Length - 1));
                     foreach (var item in Shared.Constants.ImageExtensions)
                     {
                         stream = reader.GetStream(def.ModPath, file + item);
@@ -212,7 +212,7 @@ namespace IronyModManager.IO.Mods
             if (Shared.Constants.ImageExtensions.Any(s => modFile.EndsWith(s, StringComparison.OrdinalIgnoreCase)) && stream == null)
             {
                 var segments = modFile.Split(".", StringSplitOptions.RemoveEmptyEntries);
-                var file = string.Join(".", segments.Take(segments.Count() - 1));
+                var file = string.Join(".", segments.Take(segments.Length - 1));
                 foreach (var item in Shared.Constants.ImageExtensions)
                 {
                     stream = reader.GetStream(modPath, file + item);

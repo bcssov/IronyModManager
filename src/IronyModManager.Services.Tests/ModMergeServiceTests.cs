@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModMergeServiceTests.cs" company="Mario">
 //     Mario
@@ -69,7 +69,7 @@ namespace IronyModManager.Services.Tests
             infoProvider.Setup(p => p.CanProcess(It.IsAny<string>())).Returns(true);
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -177,7 +177,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -296,7 +296,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -447,7 +447,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -558,7 +558,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -623,7 +623,7 @@ namespace IronyModManager.Services.Tests
             var parserManager = new Mock<IParserManager>();
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -658,7 +658,7 @@ namespace IronyModManager.Services.Tests
                 WorkshopDirectory = "C:\\Fake"
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
@@ -735,13 +735,170 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var service = new ModMergeService(parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
             var result = await service.MergeCollectionByFilesAsync("test");
 
             result.Should().NotBeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_create_merge_compress_mods_due_to_no_game_set.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_create_merge_compress_mods_due_to_no_game_set()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCompressCollectionAsync("test", "test");
+
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_create_merge_compress_mods_due_to_no_collection_name.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_create_merge_compress_mods_due_to_no_collection_name()
+        {
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
+            });
+
+            var service = new ModMergeService(null, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCompressCollectionAsync(string.Empty, "test");
+
+            result.Should().BeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_create_merge_compress_mods.
+        /// </summary>
+        [Fact]
+        public async Task Should_create_merge_compress_mods()
+        {
+            DISetup.SetupContainer();
+
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            var modMergeExporter = new Mock<IModMergeExporter>();
+            var infoProvider = new Mock<IDefinitionInfoProvider>();
+            var parserManager = new Mock<IParserManager>();
+            var compressExporter = new Mock<IModMergeCompressExporter>();
+            bool isValid = false;
+
+            compressExporter.Setup(p => p.Start()).Returns(1);
+            compressExporter.Setup(p => p.AddFile(It.IsAny<ModMergeCompressExporterParameters>())).Callback((ModMergeCompressExporterParameters p) =>
+            {
+                if (p.QueueId.Equals(1) && p.FileName.Equals("descriptor.mod"))
+                {
+                    isValid = true;
+                }
+            });
+            compressExporter.Setup(p => p.Finalize(It.IsAny<long>(), It.IsAny<string>())).Returns(true);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_create_file_merge_mod",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\Fake"
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fakemod.mod"},
+                    Name = "test",
+                    Game = "Should_create_file_merge_mod"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            var fileInfos = new List<IFileInfo>()
+            {
+                new FileInfo()
+                {
+                    Content = new List<string>() { "a" },
+                    FileName = "fakemod.mod",
+                    IsBinary = false
+                }
+            };
+            reader.Setup(s => s.Read(It.IsAny<string>(), It.IsAny<IEnumerable<string>>())).Returns(fileInfos);
+            modParser.Setup(s => s.Parse(It.IsAny<IEnumerable<string>>())).Returns((IEnumerable<string> values) =>
+            {
+                return new ModObject()
+                {
+                    FileName = values.First(),
+                    Name = values.First()
+                };
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+
+
+            var service = new ModMergeService(compressExporter.Object, parserManager.Object, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+                new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
+                modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
+
+            var result = await service.MergeCompressCollectionAsync("test", "test");
+
+            result.Should().NotBeNull();
+            result.Count().Should().Be(1);
+            isValid.Should().BeTrue();
         }
     }
 }

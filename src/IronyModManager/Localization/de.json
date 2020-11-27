@@ -142,12 +142,14 @@
         },
         "MergeCollection": {
             "Name": "Verschmelzen",
-            "MergedCollectionSuffix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Zusammengeführt {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Auswahlmodus",
                 "Basic": "Basic",
                 "Advanced": "Fortgeschrittene",
+                "Compress": "Komprimieren",
                 "Close": "Schließen"
             },
             "Advanced": {
@@ -158,6 +160,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
+                "Overlay_Compressing_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
             },
             "OverwritePrompt": {
                 "Title": "Bestehende Sammlung überschreiben?",
