@@ -12,13 +12,15 @@
 // <summary></summary>
 // ***********************************************************************
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Linq;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.Shared;
 using SharpCompress.Archives;
 using SharpCompress.Common;
+using SharpCompress.Writers.Zip;
 
 namespace IronyModManager.IO.Mods
 {
@@ -61,6 +63,15 @@ namespace IronyModManager.IO.Mods
 
         #endregion Constructors
 
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed file].
+        /// </summary>
+        public event EventHandler ProcessedFile;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
@@ -88,7 +99,18 @@ namespace IronyModManager.IO.Mods
         {
             if (queue.TryRemove(id, out var value))
             {
-                value.SaveTo(exportPath, new SharpCompress.Writers.WriterOptions(CompressionType.Deflate));
+                // Need to do this manually as SharpCompress doesn't raise events
+                using var stream = new System.IO.FileInfo(exportPath).Open(FileMode.Create, FileAccess.Write);
+                using var writer = new ZipWriter(stream, new ZipWriterOptions(CompressionType.Deflate));
+                foreach (var item in value.Entries.Where(p => !p.IsDirectory))
+                {
+                    using var entryStream = item.OpenEntryStream();
+                    writer.Write(item.Key, entryStream, item.LastModifiedTime);
+                    if (ProcessedFile != null)
+                    {
+                        ProcessedFile?.Invoke(this, EventArgs.Empty);
+                    }
+                }
                 value.Dispose();
                 return true;
             }

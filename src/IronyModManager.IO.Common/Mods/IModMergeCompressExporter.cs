@@ -12,6 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System;
+
 namespace IronyModManager.IO.Common.Mods
 {
     /// <summary>
@@ -19,6 +21,15 @@ namespace IronyModManager.IO.Common.Mods
     /// </summary>
     public interface IModMergeCompressExporter
     {
+        #region Events
+
+        /// <summary>
+        /// Occurs when [processed file].
+        /// </summary>
+        public event EventHandler ProcessedFile;
+
+        #endregion Events
+
         #region Methods
 
         /// <summary>
