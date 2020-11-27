@@ -646,7 +646,7 @@ namespace IronyModManager.Services
                     var percentage = GetProgressPercentage(totalFiles, processed, 99.9);
                     if (lastPercentage != percentage)
                     {
-                        await messageBus.PublishAsync(new ModFileMergeProgressEvent(2, percentage));
+                        await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, percentage));
                     }
                     lastPercentage = percentage;
                 }
