@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 11-29-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1506,11 +1506,14 @@ namespace IronyModManager.ViewModels.Controls
                             await modService.PurgeModDirectoryAsync(collection.MergedFolderName);
                         }
                     }).ConfigureAwait(false);
+                    LoadModCollections();
                     if (deleteMergedMod)
                     {
+                        NeedsModListRefresh = true;
                         var notificationTitle = localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Title);
                         var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionAndModDeleted.Message), noti);
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
+                        NeedsModListRefresh = false;
                     }
                     else
                     {
@@ -1518,7 +1521,6 @@ namespace IronyModManager.ViewModels.Controls
                         var notificationMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionDeleted.Message), noti);
                         notificationAction.ShowNotification(notificationTitle, notificationMessage, NotificationType.Success);
                     }
-                    LoadModCollections();
                 }
             }
         }
