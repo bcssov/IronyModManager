@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 11-29-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -209,11 +209,10 @@ namespace IronyModManager.Services
             {
                 await DeleteDescriptorsInternalAsync(new List<IMod> { mod });
             }
-            await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+            return await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
                 RootDirectory = GetModDirectory(game, patchName)
             }, true);
-            return true;
         }
 
         /// <summary>

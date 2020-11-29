@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 11-29-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -528,6 +528,8 @@ namespace IronyModManager.ViewModels.Controls
                         return null;
                     }).ConfigureAwait(false);
 
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
+
                     var mergeMod = await Task.Run(async () =>
                     {
                         return await modMergeService.MergeCollectionByDefinitionsAsync(conflicts, SelectedMods.Select(p => p.Name).ToList(), copy.Name).ConfigureAwait(false);
@@ -582,6 +584,8 @@ namespace IronyModManager.ViewModels.Controls
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Gathering_Mod_Info);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
 
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
+
                     var mergeMod = await Task.Run(async () =>
                     {
                         return await modMergeService.MergeCollectionByFilesAsync(copy.Name);
@@ -632,6 +636,8 @@ namespace IronyModManager.ViewModels.Controls
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Gathering_Mod_Info);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
                     var mergeMods = await Task.Run(async () =>
                     {
