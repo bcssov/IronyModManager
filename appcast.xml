@@ -4,136 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.9.43-rc</title>
-			<description>CHANGES FROM v1.8:
+			<title>1.9.48</title>
+			<description>RELEASE INFO:
+* Fix #155
+* Ensure that merged patch collection is deleted before merging a new collection
+* Refresh mod list upon deleting merged mods via delete collection
+
+CHANGES FROM v1.8:
 * Upgrade to net5
 * Upgrade dependencies
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 27 Nov 2020 21:21:57 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/osx-x64.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="62889073" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="iQCaloS9R/F2m2vwOaN1qrWTUax+yqonZT70P2OD4C1aIhn+8Ego69cDPXDivAUenidFhkBiCmKceHfqEsDfBQ=="/>
+			<pubDate>Sun, 29 Nov 2020 16:30:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/osx-x64.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="62886322" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="awF+IXRaaUuFru4NIgM7Gu2t0bOH8cYxE0MwYG06jfY2fOeK4fRpCcuuKai9ZRDx8jbz+AVyeIwLJdy4BflBCQ=="/>
 		</item>
 		<item>
-			<title>1.9.43-rc</title>
-			<description>CHANGES FROM v1.8:
+			<title>1.9.48</title>
+			<description>RELEASE INFO:
+* Fix #155
+* Ensure that merged patch collection is deleted before merging a new collection
+* Refresh mod list upon deleting merged mods via delete collection
+
+CHANGES FROM v1.8:
 * Upgrade to net5
 * Upgrade dependencies
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 27 Nov 2020 21:22:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/win-x64-setup.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="54473152" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="PLqZpr4XkOdrcyRwNoQWkrOeGR0S/tEjueutXrCReyWnEitscL4kgYYwuYSxbeySqdeYJfxcHEd4UxctP6gxBg=="/>
+			<pubDate>Sun, 29 Nov 2020 16:30:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/win-x64-setup.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="54476375" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="oKWJMqceDiC9BSUrH5PLRMyvImd4r6xqbSz2PZJ9FeClxLP5YcyICAVDEGmlAEu/d1O5Noek59hMk4aKgmueCg=="/>
 		</item>
 		<item>
-			<title>1.9.43-rc</title>
-			<description>CHANGES FROM v1.8:
+			<title>1.9.48</title>
+			<description>RELEASE INFO:
+* Fix #155
+* Ensure that merged patch collection is deleted before merging a new collection
+* Refresh mod list upon deleting merged mods via delete collection
+
+CHANGES FROM v1.8:
 * Upgrade to net5
 * Upgrade dependencies
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 27 Nov 2020 21:22:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/win-x64.rar" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="65198778" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="FRttmKIyxuYFENVhhARSsDSoIwwTq798eEoOHs2QvdkQRILoz1hmlnzSt2+b//5oJwjRJMUySHlxaNQxuPbIAw=="/>
+			<pubDate>Sun, 29 Nov 2020 16:30:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/win-x64.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="65196106" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="n9rzd0nZO5rQLXyzyDDNDJlimeemY7kamsVo9huDz/CJSHLSZyeqcOaZwjha6RRn7UeVC7/CBoYRSNEj/VbFDQ=="/>
 		</item>
 		<item>
-			<title>1.9.43-rc</title>
-			<description>CHANGES FROM v1.8:
+			<title>1.9.48</title>
+			<description>RELEASE INFO:
+* Fix #155
+* Ensure that merged patch collection is deleted before merging a new collection
+* Refresh mod list upon deleting merged mods via delete collection
+
+CHANGES FROM v1.8:
 * Upgrade to net5
 * Upgrade dependencies
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 27 Nov 2020 21:21:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.43-rc/linux-x64.zip" sparkle:version="1.9.43.43990" sparkle:shortVersionString="1.9.43" length="78011464" sparkle:os="linux" type="application/zip" sparkle:signature="jafIZhZmAZ0sk5oMKhGI9Yxi64/Jpnp7ElbVuQpCF2HgjTycgVtSf2D9Ag36XldhfJFijG7VLm7blZrZImqsCA=="/>
-		</item>
-		<item>
-			<title>1.8.80</title>
-			<description>RELEASE INFO:
-* Prevent UI thread from being locked while installing mods
-* Small localization fixes
-* Speed up UI when renaming\duplicating large collections
-* Fix notification CTD when invoking from an invalid thread
-* Fix issue with overlay not being removed when launching game (but not closing Irony)
-* Conflict Solver and Advanced Merge fixes
-* Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
-* Remove legacy Advanced Mod Merge code which caused definition selection issues
-* Fix additional Conflict Solver edge cases
-
-CHANGES FROM v1.7:
-* Various bugfixes
-* Upgrade dependencies
-* Show more information in hash report and optimize performance by switching to listbox controls
-* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 25 Nov 2020 06:09:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/osx-x64.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="62759134" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="S9DWk/soLCrC/caW6h4DjNjH4mKxSDMAeQmq1dRTt6ixD8QUz7GPWYLZbYoNx9pvswMMgtCuRjvVjWA8uv6bBg=="/>
-		</item>
-		<item>
-			<title>1.8.80</title>
-			<description>RELEASE INFO:
-* Prevent UI thread from being locked while installing mods
-* Small localization fixes
-* Speed up UI when renaming\duplicating large collections
-* Fix notification CTD when invoking from an invalid thread
-* Fix issue with overlay not being removed when launching game (but not closing Irony)
-* Conflict Solver and Advanced Merge fixes
-* Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
-* Remove legacy Advanced Mod Merge code which caused definition selection issues
-* Fix additional Conflict Solver edge cases
-
-CHANGES FROM v1.7:
-* Various bugfixes
-* Upgrade dependencies
-* Show more information in hash report and optimize performance by switching to listbox controls
-* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 25 Nov 2020 06:09:30 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/win-x64-setup.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="54482375" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="xoYHMcy7lk/Oilmjd6QsXsjpbLiWrEBXvvbxOr5ORrXGA7aROdLNuJ1y+FfYmLzcW96YRsoMrMCu7ugAqcu3Cg=="/>
-		</item>
-		<item>
-			<title>1.8.80</title>
-			<description>RELEASE INFO:
-* Prevent UI thread from being locked while installing mods
-* Small localization fixes
-* Speed up UI when renaming\duplicating large collections
-* Fix notification CTD when invoking from an invalid thread
-* Fix issue with overlay not being removed when launching game (but not closing Irony)
-* Conflict Solver and Advanced Merge fixes
-* Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
-* Remove legacy Advanced Mod Merge code which caused definition selection issues
-* Fix additional Conflict Solver edge cases
-
-CHANGES FROM v1.7:
-* Various bugfixes
-* Upgrade dependencies
-* Show more information in hash report and optimize performance by switching to listbox controls
-* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 25 Nov 2020 06:09:27 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/win-x64.rar" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="65405488" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="UfLR/aq7hTyPqxrv8jtm/qiCGnFoI1PkgzEBgCpcFecSVvtXjznzLV3HL/77yIMBA793MGnVWZL4s5ajLQz2Cw=="/>
-		</item>
-		<item>
-			<title>1.8.80</title>
-			<description>RELEASE INFO:
-* Prevent UI thread from being locked while installing mods
-* Small localization fixes
-* Speed up UI when renaming\duplicating large collections
-* Fix notification CTD when invoking from an invalid thread
-* Fix issue with overlay not being removed when launching game (but not closing Irony)
-* Conflict Solver and Advanced Merge fixes
-* Fix definition priority evaluation in cases where a definition was overwritten by a file and no longer present
-* Remove legacy Advanced Mod Merge code which caused definition selection issues
-* Fix additional Conflict Solver edge cases
-
-CHANGES FROM v1.7:
-* Various bugfixes
-* Upgrade dependencies
-* Show more information in hash report and optimize performance by switching to listbox controls
-* Hopefully fix GUI corruption in linux workspaces (without upgrading avalonia to latest version)
-* Update Stellaris parser map for Stellaris v2.8</description>
-			<pubDate>Wed, 25 Nov 2020 06:09:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.8.80/linux-x64.zip" sparkle:version="1.8.80.269" sparkle:shortVersionString="1.8.80" length="77937054" sparkle:os="linux" type="application/zip" sparkle:signature="sPJheeWj1212pUpCxmdHGphU2+1wg8JrE5yHpBVy/4V+EwhiC0CjgUzG9GycyrhRpXx7SWPyeXStlTQJSxVvBA=="/>
+			<pubDate>Sun, 29 Nov 2020 16:29:59 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/linux-x64.zip" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="78011327" sparkle:os="linux" type="application/zip" sparkle:signature="1XdWE5tYd82//xuQE8ByzIZ9IvIIHxQmYSBdrayktVIzbo2AlzFh60Q5NxkWe7AfehXrH1WRA1NU2Lud856XBA=="/>
 		</item>
 	</channel>
 </rss>
