@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -91,6 +91,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The name of the patch.</value>
         public string PatchName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rename pairs.
+        /// </summary>
+        /// <value>The rename pairs.</value>
+        public List<KeyValuePair<string, string>> RenamePairs { get; set; }
 
         /// <summary>
         /// Gets or sets the resolved conflicts.

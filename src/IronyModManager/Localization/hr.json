@@ -104,6 +104,11 @@
         "Overlay_Rename_Message": "Pričekajte dok se izvrši preimenovanje...",
         "Overlay_Duplicate_Message": "Pričekajte dok se izvrši dupliciranje...",
         "ExportToClipboard": "Kopiraj kolekciju u međuspremnik",
+        "DeleteMerge": {
+            "DeleteTitle": "Želiš li izbrisati spojeni mod?",
+            "DeleteHeader": "Potvrdi brisanje spojenog moda",
+            "DeleteMessage": "Otkriveno je postojanje spojenog moda, želite li ga također obrisati?"
+        },
         "ImportFromClipboard": {
             "Title": "Uvezi mod redoslijed iz međuspremnika",
             "PromptTitle": "Prebriši redoslijed modova?",
@@ -142,12 +147,14 @@
         },
         "MergeCollection": {
             "Name": "Spoji",
-            "MergedCollectionSuffix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Spojeno {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Odaberi način",
                 "Basic": "Osnovno",
                 "Advanced": "Napredno",
+                "Compress": "Kompresiraj",
                 "Close": "Zatvori"
             },
             "Advanced": {
@@ -156,8 +163,12 @@
                 "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
             },
             "Basic": {
-                "Overlay_Gathering_Mod_Info": "Priječaj dok se skupljaju mod informacije...",
+                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
                 "Overlay_Writting_Files": "Pričekaj dok se spaja kolekcija..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
+                "Overlay_Compressing_Files": "Pričekaj dok se spaja kolekcija..."
             },
             "OverwritePrompt": {
                 "Title": "Prebriši postojeću kolekciju?",
@@ -337,6 +348,10 @@
         "CollectionDeleted": {
             "Title": "Kolekcija obrisana",
             "Message": "{CollectionName} je obrisana."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Kolekcija i spojeni modovi obrisani",
+            "Message": "{CollectionName} i spojeni modovi su obrisani."
         },
         "CollectionExists": {
             "Title": "Kolekcija postoji",

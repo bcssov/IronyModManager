@@ -139,6 +139,13 @@ namespace IronyModManager.Shared
             public const string Overlay_Rename_Message = Prefix + "Overlay_Rename_Message";
             public const string Overlay_Duplicate_Message = Prefix + "Overlay_Duplicate_Message";
             public const string ExportToClipboard = Prefix + "ExportToClipboard";
+            public static class DeleteMerge
+            {
+                public const string Prefix = "Collection_Mods.DeleteMerge.";
+                public const string DeleteTitle = Prefix + "DeleteTitle";
+                public const string DeleteHeader = Prefix + "DeleteHeader";
+                public const string DeleteMessage = Prefix + "DeleteMessage";
+            }
             public static class ImportFromClipboard
             {
                 public const string Prefix = "Collection_Mods.ImportFromClipboard.";
@@ -191,7 +198,8 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Collection_Mods.MergeCollection.";
                 public const string Name = Prefix + "Name";
-                public const string MergedCollectionSuffix = Prefix + "MergedCollectionSuffix";
+                public const string MergedCollectionPrefix = Prefix + "MergedCollectionPrefix";
+                public const string MergeCompressModPrefix = Prefix + "MergeCompressModPrefix";
                 public const string Overlay_Progress = Prefix + "Overlay_Progress";
                 public static class Options
                 {
@@ -199,6 +207,7 @@ namespace IronyModManager.Shared
                     public const string Title = Prefix + "Title";
                     public const string Basic = Prefix + "Basic";
                     public const string Advanced = Prefix + "Advanced";
+                    public const string Compress = Prefix + "Compress";
                     public const string Close = Prefix + "Close";
                 }
                 public static class Advanced
@@ -213,6 +222,12 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.Basic.";
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
                     public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
+                }
+                public static class Compress
+                {
+                    public const string Prefix = "Collection_Mods.MergeCollection.Compress.";
+                    public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
+                    public const string Overlay_Compressing_Files = Prefix + "Overlay_Compressing_Files";
                 }
                 public static class OverwritePrompt
                 {
@@ -448,6 +463,12 @@ namespace IronyModManager.Shared
             public static class CollectionDeleted
             {
                 public const string Prefix = "Notifications.CollectionDeleted.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionAndModDeleted
+            {
+                public const string Prefix = "Notifications.CollectionAndModDeleted.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

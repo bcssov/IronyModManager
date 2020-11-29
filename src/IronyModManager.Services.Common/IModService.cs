@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -103,11 +103,25 @@ namespace IronyModManager.Services.Common
         Task<bool> LockDescriptorsAsync(IEnumerable<IMod> mods, bool isLocked);
 
         /// <summary>
+        /// Mods the directory exists asynchronous.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> ModDirectoryExistsAsync(string folder);
+
+        /// <summary>
         /// Populates the mod files asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> PopulateModFilesAsync(IEnumerable<IMod> mods);
+
+        /// <summary>
+        /// Purges the mod directory asynchronous.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PurgeModDirectoryAsync(string folder);
 
         #endregion Methods
     }

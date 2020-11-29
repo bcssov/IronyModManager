@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <Description>Irony Mod Manager Services Component</Description>
     <Copyright>Mario</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -230,45 +230,56 @@ namespace IronyModManager.IO.Mods
             async Task<bool> writeDescriptor(string fullPath)
             {
                 using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
-                using var sw = new StreamWriter(fs);
-                var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
-                foreach (var prop in props)
-                {
-                    var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
-                    var val = prop.GetValue(parameters.Mod, null);
-                    if (val is IEnumerable<string> col)
-                    {
-                        if (col.Count() > 0)
-                        {
-                            await sw.WriteLineAsync($"{attr.PropertyName}={{");
-                            foreach (var item in col)
-                            {
-                                await sw.WriteLineAsync($"\t\"{item}\"");
-                            }
-                            await sw.WriteLineAsync("}");
-                        }
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
-                        {
-                            if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
-                            {
-                                await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
-                            }
-                            else
-                            {
-                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
-                            }
-                        }
-                    }
-                }
-                await sw.FlushAsync();
-                return true;
+                return await WriteDescriptorToStreamAsync(parameters, fs);
             }
 
             var retry = new RetryStrategy();
             return await retry.RetryActionAsync(writeDescriptors);
+        }
+
+        /// <summary>
+        /// write descriptor to stream as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public async Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream)
+        {
+            using var sw = new StreamWriter(stream, leaveOpen: true);
+            var props = parameters.Mod.GetType().GetProperties().Where(p => Attribute.IsDefined(p, typeof(DescriptorPropertyAttribute)));
+            foreach (var prop in props)
+            {
+                var attr = Attribute.GetCustomAttribute(prop, typeof(DescriptorPropertyAttribute), true) as DescriptorPropertyAttribute;
+                var val = prop.GetValue(parameters.Mod, null);
+                if (val is IEnumerable<string> col)
+                {
+                    if (col.Any())
+                    {
+                        await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                        foreach (var item in col)
+                        {
+                            await sw.WriteLineAsync($"\t\"{item}\"");
+                        }
+                        await sw.WriteLineAsync("}");
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(val != null ? val.ToString() : string.Empty))
+                    {
+                        if (attr.AlternateNameEndsWithCondition?.Count() > 0 && attr.AlternateNameEndsWithCondition.Any(p => val.ToString().EndsWith(p, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            await sw.WriteLineAsync($"{attr.AlternatePropertyName}=\"{val}\"");
+                        }
+                        else
+                        {
+                            await sw.WriteLineAsync($"{attr.PropertyName}=\"{val}\"");
+                        }
+                    }
+                }
+            }
+            await sw.FlushAsync();
+            return true;
         }
 
         #endregion Methods

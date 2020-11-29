@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-20-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace IronyModManager.IO.Common.Mods
@@ -82,6 +83,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="writeDescriptorInModDirectory">if set to <c>true</c> [write descriptor in mod directory].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> WriteDescriptorAsync(ModWriterParameters parameters, bool writeDescriptorInModDirectory);
+
+        /// <summary>
+        /// Writes the descriptor to stream asynchronous.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> WriteDescriptorToStreamAsync(ModWriterParameters parameters, Stream stream);
 
         #endregion Methods
     }

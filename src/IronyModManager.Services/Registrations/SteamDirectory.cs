@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 11-26-2020
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -154,7 +154,7 @@ namespace IronyModManager.Services.Registrations
             if (Directory.Exists(steamInstallDirectory))
             {
                 var folders = Directory.EnumerateDirectories(Path.Combine(steamInstallDirectory, SteamUserDataDirectory)).Where(p => Directory.Exists(Path.Combine(p, appId.ToString(), "remote"))).Select(p => Path.Combine(p, appId.ToString(), "remote"));
-                if (folders.Count() > 0)
+                if (folders.Any())
                 {
                     userDataFolders.AddRange(folders);
                 }
@@ -249,11 +249,14 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string GetSteamWindowsRootPath()
         {
+#pragma warning disable CA1416 // Validate platform compatibility
+            // I know it's supported only on windows hence the OS detection.
             var key = ReadSteamWindowsRegistryKey(Registry.CurrentUser);
             if (string.IsNullOrWhiteSpace(key))
             {
                 key = ReadSteamWindowsRegistryKey(Registry.LocalMachine);
             }
+#pragma warning restore CA1416 // Validate platform compatibility
             return key;
         }
 
@@ -310,6 +313,7 @@ namespace IronyModManager.Services.Registrations
         /// <returns>System.String.</returns>
         private static string ReadSteamWindowsRegistryKey(RegistryKey registryKey)
         {
+#pragma warning disable CA1416 // Validate platform compatibility
             using var key = registryKey.OpenSubKey(SteamRegistryPath);
             if (key != null)
             {
@@ -317,6 +321,7 @@ namespace IronyModManager.Services.Registrations
                 if (value != null)
                     return value.ToString();
             }
+#pragma warning restore CA1416 // Validate platform compatibility
             return string.Empty;
         }
 

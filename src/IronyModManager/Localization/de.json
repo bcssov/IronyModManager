@@ -104,6 +104,11 @@
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
         "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
+        "DeleteMerge": {
+            "DeleteTitle": "Zusammengeführten Mod löschen?",
+            "DeleteHeader": "Bestätigen Sie das Löschen des Merge-Mods",
+            "DeleteMessage": "Das Vorhandensein eines zusammengeführten Mods wurde erkannt. Möchten Sie ihn auch löschen?"
+        },
         "ImportFromClipboard": {
             "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
             "PromptTitle": "Mod-Reihenfolge überschreiben?",
@@ -142,12 +147,14 @@
         },
         "MergeCollection": {
             "Name": "Verschmelzen",
-            "MergedCollectionSuffix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergedCollectionPrefix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Zusammengeführt {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Auswahlmodus",
                 "Basic": "Basic",
                 "Advanced": "Fortgeschrittene",
+                "Compress": "Komprimieren",
                 "Close": "Schließen"
             },
             "Advanced": {
@@ -158,6 +165,10 @@
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writting_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
+                "Overlay_Compressing_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
             },
             "OverwritePrompt": {
                 "Title": "Bestehende Sammlung überschreiben?",
@@ -337,6 +348,10 @@
         "CollectionDeleted": {
             "Title": "Sammlung gelöscht",
             "Message": "{CollectionName} wurde gelöscht."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Sammlung und zusammengeführte Mods gelöscht",
+            "Message": "{CollectionName} und zusammengeführte Mods wurden gelöscht."
         },
         "CollectionExists": {
             "Title": "Sammlung existiert",

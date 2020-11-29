@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 11-29-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -66,6 +66,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IModCollectionService modCollectionService;
 
         /// <summary>
+        /// The mod compress merge progress handler
+        /// </summary>
+        private readonly ModCompressMergeProgressHandler modCompressMergeProgressHandler;
+
+        /// <summary>
         /// The mod definition analyze handler
         /// </summary>
         private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
@@ -94,6 +99,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModService modService;
 
         /// <summary>
         /// The notification action
@@ -125,6 +135,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable fileMergeProgressHandler = null;
 
+        /// <summary>
+        /// The mod compress progress handler
+        /// </summary>
+        private IDisposable modCompressProgressHandler = null;
+
         #endregion Fields
 
         #region Constructors
@@ -132,7 +147,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="modService">The mod service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
+        /// <param name="modCompressMergeProgressHandler">The mod compress merge progress handler.</param>
         /// <param name="modDefinitionAnalyzeHandler">The mod definition analyze handler.</param>
         /// <param name="modDefinitionLoadHandler">The mod definition load handler.</param>
         /// <param name="modDefinitionMergeProgressHandler">The mod definition merge progress handler.</param>
@@ -144,8 +161,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public ModifyCollectionControlViewModel(IIDGenerator idGenerator, ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler,
-            ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionMergeProgressHandler modDefinitionMergeProgressHandler,
+        public ModifyCollectionControlViewModel(IModService modService, IIDGenerator idGenerator, ModCompressMergeProgressHandler modCompressMergeProgressHandler,
+            ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionMergeProgressHandler modDefinitionMergeProgressHandler,
             ModFileMergeProgressHandler modFileMergeProgressHandler, IShutDownState shutDownState, IGameService gameService, IModMergeService modMergeService,
             IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService,
             ILocalizationManager localizationManager, INotificationAction notificationAction)
@@ -162,11 +179,34 @@ namespace IronyModManager.ViewModels.Controls
             this.modFileMergeProgressHandler = modFileMergeProgressHandler;
             this.notificationAction = notificationAction;
             this.idGenerator = idGenerator;
+            this.modCompressMergeProgressHandler = modCompressMergeProgressHandler;
+            this.modService = modService;
         }
 
         #endregion Constructors
 
         #region Enums
+
+        /// <summary>
+        /// Enum MergeType
+        /// </summary>
+        public enum MergeType
+        {
+            /// <summary>
+            /// The basic
+            /// </summary>
+            Basic,
+
+            /// <summary>
+            /// The advanced
+            /// </summary>
+            Advanced,
+
+            /// <summary>
+            /// The compress
+            /// </summary>
+            Compress
+        }
 
         /// <summary>
         /// Enum ModifyAction
@@ -219,9 +259,9 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> DuplicateCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance is open.
+        /// Gets or sets a value indicating whether this instance is merge open.
         /// </summary>
-        /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
+        /// <value><c>true</c> if this instance is merge open; otherwise, <c>false</c>.</value>
         public virtual bool IsMergeOpen { get; protected set; }
 
         /// <summary>
@@ -262,6 +302,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The merge close command.</value>
         public virtual ReactiveCommand<Unit, Unit> MergeCloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge compress.
+        /// </summary>
+        /// <value>The merge compress.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.MergeCollection.Options.Compress)]
+        public virtual string MergeCompress { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the merge compress command.
+        /// </summary>
+        /// <value>The merge compress command.</value>
+        public virtual ReactiveCommand<Unit, CommandResult<ModifyAction>> MergeCompressCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the merge open.
@@ -361,8 +414,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <returns>IModCollection.</returns>
         protected virtual async Task<IModCollection> GetMergedCollectionAsync()
         {
-            var suffix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionSuffix);
-            var requestedName = $"{ActiveCollection.Name} {suffix}";
+            string prefix = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix);
+            var requestedName = $"{prefix} {ActiveCollection.Name}";
             var exists = modCollectionService.GetAll().Any(p => p.Name.Equals(requestedName, StringComparison.OrdinalIgnoreCase));
             bool skipNameCheck = false;
             if (exists)
@@ -372,6 +425,7 @@ namespace IronyModManager.ViewModels.Controls
                 skipNameCheck = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info);
             }
             var copy = CopyCollection(requestedName, skipNameCheck);
+            copy.MergedFolderName = copy.Name.GenerateValidFileName();
             return copy;
         }
 
@@ -441,7 +495,7 @@ namespace IronyModManager.ViewModels.Controls
                         savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     }
 
-                    SubscribeToProgressReports(id, disposables, true);
+                    SubscribeToProgressReports(id, disposables, MergeType.Advanced);
 
                     var mode = await modPatchCollectionService.GetPatchStateModeAsync(ActiveCollection.Name);
                     if (mode == PatchStateMode.None)
@@ -473,6 +527,8 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         return null;
                     }).ConfigureAwait(false);
+
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
                     var mergeMod = await Task.Run(async () =>
                     {
@@ -517,7 +573,7 @@ namespace IronyModManager.ViewModels.Controls
                         savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
                     }
 
-                    SubscribeToProgressReports(id, disposables, false);
+                    SubscribeToProgressReports(id, disposables, MergeType.Basic);
 
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
@@ -527,6 +583,8 @@ namespace IronyModManager.ViewModels.Controls
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Gathering_Mod_Info);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
 
                     var mergeMod = await Task.Run(async () =>
                     {
@@ -539,6 +597,63 @@ namespace IronyModManager.ViewModels.Controls
 
                     modCollectionService.Delete(copy.Name);
                     modPatchCollectionService.InvalidatePatchModState(copy.Name);
+                    if (modCollectionService.Save(copy))
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
+                    }
+                    else
+                    {
+                        return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Failed);
+                    }
+                }
+                return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.NotExecuted);
+            }, allowModSelectionEnabled).DisposeWith(disposables);
+
+            MergeCompressCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (ActiveCollection != null)
+                {
+                    var copy = await GetMergedCollectionAsync();
+                    var id = idGenerator.GetNextId();
+
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.App.WaitBackgroundOperationMessage));
+                    await shutDownState.WaitUntilFreeAsync();
+
+                    var savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    while (savedCollection == null)
+                    {
+                        await Task.Delay(25);
+                        savedCollection = modCollectionService.GetAll().FirstOrDefault(p => p.IsSelected);
+                    }
+
+                    SubscribeToProgressReports(id, disposables, MergeType.Compress);
+
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    {
+                        PercentDone = 0.ToLocalizedPercentage(),
+                        Count = 1,
+                        TotalCount = 2
+                    });
+                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Gathering_Mod_Info);
+                    await TriggerOverlayAsync(id, true, message, overlayProgress);
+
+                    await modPatchCollectionService.CleanPatchCollectionAsync(copy.Name);
+
+                    var mergeMods = await Task.Run(async () =>
+                    {
+                        return await modMergeService.MergeCompressCollectionAsync(copy.Name, Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergeCompressModPrefix), new
+                        {
+                            Name = copy.Name.Replace($"{localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.MergedCollectionPrefix)} ", string.Empty)
+                        }));
+                    }).ConfigureAwait(false);
+                    copy.Mods = mergeMods.Select(p => p.DescriptorFile).ToList();
+
+                    await TriggerOverlayAsync(id, false);
+                    fileMergeProgressHandler?.Dispose();
+
+                    modCollectionService.Delete(copy.Name);
+                    modPatchCollectionService.InvalidatePatchModState(copy.Name);
+                    await modService.InstallModsAsync();
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);
@@ -569,11 +684,16 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="disposables">The disposables.</param>
-        /// <param name="advancedMerge">if set to <c>true</c> [advanced merge].</param>
-        protected virtual void SubscribeToProgressReports(long id, CompositeDisposable disposables, bool advancedMerge)
+        /// <param name="mergeType">Type of the merge.</param>
+        protected virtual void SubscribeToProgressReports(long id, CompositeDisposable disposables, MergeType mergeType)
         {
             definitionLoadHandler?.Dispose();
-            if (advancedMerge)
+            definitionAnalyzeLoadHandler?.Dispose();
+            definitionMergeProgressHandler?.Dispose();
+            fileMergeProgressHandler?.Dispose();
+            modCompressProgressHandler?.Dispose();
+
+            if (mergeType == MergeType.Advanced)
             {
                 definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
                 {
@@ -586,11 +706,6 @@ namespace IronyModManager.ViewModels.Controls
                     });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
-            }
-
-            definitionAnalyzeLoadHandler?.Dispose();
-            if (advancedMerge)
-            {
                 definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Analyzing_Definitions);
@@ -602,11 +717,6 @@ namespace IronyModManager.ViewModels.Controls
                     });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
-            }
-
-            definitionMergeProgressHandler?.Dispose();
-            if (advancedMerge)
-            {
                 definitionMergeProgressHandler = modDefinitionMergeProgressHandler.Message.Subscribe(s =>
                 {
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Merging_Collection);
@@ -619,9 +729,7 @@ namespace IronyModManager.ViewModels.Controls
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
             }
-
-            fileMergeProgressHandler?.Dispose();
-            if (!advancedMerge)
+            else if (mergeType == MergeType.Basic)
             {
                 fileMergeProgressHandler = modFileMergeProgressHandler.Message.Subscribe(s =>
                 {
@@ -633,6 +741,28 @@ namespace IronyModManager.ViewModels.Controls
                     else
                     {
                         message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Basic.Overlay_Writting_Files);
+                    }
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    {
+                        PercentDone = s.Percentage.ToLocalizedPercentage(),
+                        Count = s.Step,
+                        TotalCount = 2
+                    });
+                    TriggerOverlay(id, true, message, overlayProgress);
+                }).DisposeWith(disposables);
+            }
+            else
+            {
+                modCompressProgressHandler = modCompressMergeProgressHandler.Message.Subscribe(s =>
+                {
+                    string message;
+                    if (s.Step == 1)
+                    {
+                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Gathering_Mod_Info);
+                    }
+                    else
+                    {
+                        message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Compress.Overlay_Compressing_Files);
                     }
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {

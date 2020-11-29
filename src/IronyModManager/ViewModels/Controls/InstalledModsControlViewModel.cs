@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 11-27-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -585,14 +585,14 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = mods.ToObservableCollection();
                 AllMods = Mods.ToHashSet();
                 var invalidMods = AllMods.Where(p => !p.IsValid);
-                if (invalidMods.Count() > 0)
+                if (invalidMods.Any())
                 {
                     await RemoveInvalidModsPromptAsync(invalidMods).ConfigureAwait(false);
                 }
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = Mods.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
-                AllModsEnabled = FilteredMods.Where(p => p.IsValid).Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
 
                 if (Disposables != null)
                 {
@@ -627,7 +627,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             checkingState = true;
             await Task.Delay(50);
-            AllModsEnabled = FilteredMods.Where(p => p.IsValid).Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+            AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
             checkingState = false;
         }
 
@@ -798,7 +798,7 @@ namespace IronyModManager.ViewModels.Controls
                 var searchString = FilterMods.Text ?? string.Empty;
                 FilteredMods = Mods?.Where(p => p.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase) ||
                     (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(searchString))).ToObservableCollection();
-                AllModsEnabled = FilteredMods?.Where(p => p.IsValid).Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                AllModsEnabled = FilteredMods != null && FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                 ApplyDefaultSort();
                 SaveState();
             }).DisposeWith(disposables);
@@ -813,7 +813,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         item.IsSelected = !enabled;
                     }
-                    AllModsEnabled = FilteredMods.Where(p => p.IsValid).Count() > 0 && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    AllModsEnabled = FilteredMods.Where(p => p.IsValid).Any() && FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     PerformingEnableAll = false;
                 }
             }).DisposeWith(disposables);
