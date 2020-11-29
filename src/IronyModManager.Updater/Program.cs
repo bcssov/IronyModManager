@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 11-29-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="Mario">
 //     Mario
@@ -30,7 +30,7 @@ namespace IronyModManager.Updater
         /// <summary>
         /// The settings path
         /// </summary>
-        private const string SettingsPath = "..\\update-settings.json";
+        private static readonly string SettingsPath = ".." + Path.DirectorySeparatorChar + "update-settings.json";
 
         /// <summary>
         /// The update folders
