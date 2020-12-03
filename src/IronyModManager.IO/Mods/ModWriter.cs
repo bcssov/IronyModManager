@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -255,12 +255,22 @@ namespace IronyModManager.IO.Mods
                 {
                     if (col.Any())
                     {
-                        await sw.WriteLineAsync($"{attr.PropertyName}={{");
-                        foreach (var item in col)
+                        if (attr.KeyedArray)
                         {
-                            await sw.WriteLineAsync($"\t\"{item}\"");
+                            foreach (var item in col)
+                            {
+                                await sw.WriteLineAsync($"{attr.PropertyName}=\"{item}\"");
+                            }
                         }
-                        await sw.WriteLineAsync("}");
+                        else
+                        {
+                            await sw.WriteLineAsync($"{attr.PropertyName}={{");
+                            foreach (var item in col)
+                            {
+                                await sw.WriteLineAsync($"\t\"{item}\"");
+                            }
+                            await sw.WriteLineAsync("}");
+                        }
                     }
                 }
                 else
