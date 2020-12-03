@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -116,8 +116,8 @@ namespace IronyModManager.Models
         /// Gets or sets the replace path.
         /// </summary>
         /// <value>The replace path.</value>
-        [DescriptorProperty("replace_path")]
-        public string ReplacePath { get; set; }
+        [DescriptorProperty("replace_path", true)]
+        public IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
@@ -136,8 +136,8 @@ namespace IronyModManager.Models
         /// Gets or sets the user dir.
         /// </summary>
         /// <value>The user dir.</value>
-        [DescriptorProperty("user_dir")]
-        public string UserDir { get; set; }
+        [DescriptorProperty("user_dir", true)]
+        public IEnumerable<string> UserDir { get; set; }
 
         /// <summary>
         /// Gets or sets the version.

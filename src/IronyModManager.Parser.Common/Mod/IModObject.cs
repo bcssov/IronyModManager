@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="IModObject.cs" company="Mario">
 //     Mario
@@ -57,7 +57,7 @@ namespace IronyModManager.Parser.Common.Mod
         /// Gets or sets the replace path.
         /// </summary>
         /// <value>The replace path.</value>
-        string ReplacePath { get; set; }
+        IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>
         /// Gets or sets the tags.
@@ -69,7 +69,7 @@ namespace IronyModManager.Parser.Common.Mod
         /// Gets or sets the user dir.
         /// </summary>
         /// <value>The user dir.</value>
-        string UserDir { get; set; }
+        IEnumerable<string> UserDir { get; set; }
 
         /// <summary>
         /// Gets or sets the version.

@@ -64,8 +64,10 @@ namespace IronyModManager.Parser.Tests
             result.Tags.First().Should().Be("Gameplay");
             result.Tags.Last().Should().Be("Fixes");
             result.Version.Should().Be("2.5.*");
-            result.UserDir.Should().Be("dir");
-            result.ReplacePath.Should().Be("replace");
+            result.UserDir.Count().Should().Be(1);
+            result.UserDir.FirstOrDefault().Should().Be("dir");
+            result.ReplacePath.Count().Should().Be(1);
+            result.ReplacePath.FirstOrDefault().Should().Be("replace");
         }
 
         /// <summary>
