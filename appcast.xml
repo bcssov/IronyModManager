@@ -4,11 +4,9 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.9.48</title>
+			<title>1.9.50</title>
 			<description>RELEASE INFO:
-* Fix #155
-* Ensure that merged patch collection is deleted before merging a new collection
-* Refresh mod list upon deleting merged mods via delete collection
+* Fix handling of replace_dir in mod descriptors (how consistently inconsistent)
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -16,15 +14,13 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sun, 29 Nov 2020 16:30:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/osx-x64.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="62886322" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="awF+IXRaaUuFru4NIgM7Gu2t0bOH8cYxE0MwYG06jfY2fOeK4fRpCcuuKai9ZRDx8jbz+AVyeIwLJdy4BflBCQ=="/>
+			<pubDate>Thu, 03 Dec 2020 20:13:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.50/osx-x64.rar" sparkle:version="1.9.50.63549" sparkle:shortVersionString="1.9.50" length="62887229" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="/879zZftQAYXt8PD55anP54Iz3eIgWYhhKpQs0sHOCQvkGOTJPP85rA9FKti1rsMX2QD8cBQIrLdunH61/CPAg=="/>
 		</item>
 		<item>
-			<title>1.9.48</title>
+			<title>1.9.50</title>
 			<description>RELEASE INFO:
-* Fix #155
-* Ensure that merged patch collection is deleted before merging a new collection
-* Refresh mod list upon deleting merged mods via delete collection
+* Fix handling of replace_dir in mod descriptors (how consistently inconsistent)
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -32,15 +28,13 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sun, 29 Nov 2020 16:30:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/win-x64-setup.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="54476375" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="oKWJMqceDiC9BSUrH5PLRMyvImd4r6xqbSz2PZJ9FeClxLP5YcyICAVDEGmlAEu/d1O5Noek59hMk4aKgmueCg=="/>
+			<pubDate>Thu, 03 Dec 2020 20:13:43 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.50/win-x64-setup.rar" sparkle:version="1.9.50.63549" sparkle:shortVersionString="1.9.50" length="54472180" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="XQbE1xFeNYedIUhvbBvHaxzyFNb4GR5Uj1oBwiZc3FGB+nrIz+mwMEd8f/4IpG00V9Gf97qzKBmfY3ga+AJqDg=="/>
 		</item>
 		<item>
-			<title>1.9.48</title>
+			<title>1.9.50</title>
 			<description>RELEASE INFO:
-* Fix #155
-* Ensure that merged patch collection is deleted before merging a new collection
-* Refresh mod list upon deleting merged mods via delete collection
+* Fix handling of replace_dir in mod descriptors (how consistently inconsistent)
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -48,15 +42,13 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sun, 29 Nov 2020 16:30:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/win-x64.rar" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="65196106" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="n9rzd0nZO5rQLXyzyDDNDJlimeemY7kamsVo9huDz/CJSHLSZyeqcOaZwjha6RRn7UeVC7/CBoYRSNEj/VbFDQ=="/>
+			<pubDate>Thu, 03 Dec 2020 20:13:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.50/win-x64.rar" sparkle:version="1.9.50.63549" sparkle:shortVersionString="1.9.50" length="65196527" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="zpFcrRiORS30nfErx9oWtoFl3Rmt12vAo8uyuVG6kkBRpPbsIZfDVaGPKDj5FlRZe6Q6GjIdqRGSUIKi4fwODA=="/>
 		</item>
 		<item>
-			<title>1.9.48</title>
+			<title>1.9.50</title>
 			<description>RELEASE INFO:
-* Fix #155
-* Ensure that merged patch collection is deleted before merging a new collection
-* Refresh mod list upon deleting merged mods via delete collection
+* Fix handling of replace_dir in mod descriptors (how consistently inconsistent)
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -64,8 +56,8 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sun, 29 Nov 2020 16:29:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.48/linux-x64.zip" sparkle:version="1.9.48.4565" sparkle:shortVersionString="1.9.48" length="78011327" sparkle:os="linux" type="application/zip" sparkle:signature="1XdWE5tYd82//xuQE8ByzIZ9IvIIHxQmYSBdrayktVIzbo2AlzFh60Q5NxkWe7AfehXrH1WRA1NU2Lud856XBA=="/>
+			<pubDate>Thu, 03 Dec 2020 20:13:34 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.50/linux-x64.zip" sparkle:version="1.9.50.63549" sparkle:shortVersionString="1.9.50" length="78012078" sparkle:os="linux" type="application/zip" sparkle:signature="bcAqI0rTXbepe3OvCMBAI6rWCKDySHZc9ayIMm1tDbmVFQldzHjmg3hm2Y/Ssb8LlByPO7Ha5AS+6/ub9FL3Dw=="/>
 		</item>
 	</channel>
 </rss>
