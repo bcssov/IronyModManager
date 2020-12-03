@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -71,8 +71,8 @@ namespace IronyModManager.Parser.Mod
             var data = codeParser.ParseScriptWithoutValidation(lines);
             if (data.Error == null && data.Values?.Count() > 0)
             {
-                obj.ReplacePath = GetValue<string>(data.Values, "replace_path") ?? string.Empty;
-                obj.UserDir = GetValue<string>(data.Values, "user_dir") ?? string.Empty;
+                obj.ReplacePath = GetKeyedValues<string>(data.Values, "replace_path");
+                obj.UserDir = GetKeyedValues<string>(data.Values, "user_dir");
                 obj.FileName = GetValue<string>(data.Values, "path", "archive") ?? string.Empty;
                 obj.Picture = GetValue<string>(data.Values, "picture") ?? string.Empty;
                 obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
@@ -82,6 +82,26 @@ namespace IronyModManager.Parser.Mod
                 obj.Dependencies = GetValues<string>(data.Values, "dependencies");
             }
             return obj;
+        }
+
+        /// <summary>
+        /// Gets the converter.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>TypeConverter.</returns>
+        private static TypeConverter GetConverter<T>()
+        {
+            TypeConverter converter;
+            if (converters.ContainsKey(typeof(T)))
+            {
+                converter = converters[typeof(T)];
+            }
+            else
+            {
+                converter = TypeDescriptor.GetConverter(typeof(T));
+                converters.TryAdd(typeof(T), converter);
+            }
+            return converter;
         }
 
         /// <summary>
@@ -98,23 +118,42 @@ namespace IronyModManager.Parser.Mod
         }
 
         /// <summary>
-        /// Gets the converter.
+        /// Gets the keyed values.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <returns>TypeConverter.</returns>
-        private TypeConverter GetConverter<T>()
+        /// <param name="elements">The elements.</param>
+        /// <param name="keys">The keys.</param>
+        /// <returns>IEnumerable&lt;T&gt;.</returns>
+        private IEnumerable<T> GetKeyedValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
         {
-            TypeConverter converter;
-            if (converters.ContainsKey(typeof(T)))
+            // One thing consistent about Paradox is that they're inconsistent
+            var type = typeof(List<>).MakeGenericType(typeof(T));
+            var result = (IList)Activator.CreateInstance(type);
+
+            foreach (var key in keys)
             {
-                converter = converters[typeof(T)];
+                var values = elements.Where(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+                if (values?.Count() > 0)
+                {
+                    foreach (var value in values)
+                    {
+                        if (!string.IsNullOrWhiteSpace(value.Value))
+                        {
+                            result.Add(Convert<T>(value.Value));
+                        }
+                    }
+                }
+                if (result.Count > 0)
+                {
+                    break;
+                }
             }
-            else
+
+            if (result.Count > 0)
             {
-                converter = TypeDescriptor.GetConverter(typeof(T));
-                converters.TryAdd(typeof(T), converter);
+                return (IEnumerable<T>)result;
             }
-            return converter;
+            return null;
         }
 
         /// <summary>
@@ -160,6 +199,10 @@ namespace IronyModManager.Parser.Mod
                             result.Add(Convert<T>(item.Key));
                         }
                     }
+                }
+                if (result.Count > 0)
+                {
+                    break;
                 }
             }
             if (result.Count > 0)

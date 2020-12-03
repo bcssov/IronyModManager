@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="DescriptorPropertyAttribute.cs" company="Mario">
 //     Mario
@@ -31,6 +31,16 @@ namespace IronyModManager.Shared
         /// Initializes a new instance of the <see cref="DescriptorPropertyAttribute" /> class.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
+        /// <param name="keyedArray">if set to <c>true</c> [keyed array].</param>
+        public DescriptorPropertyAttribute(string propertyName, bool keyedArray) : this(propertyName)
+        {
+            KeyedArray = keyedArray;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DescriptorPropertyAttribute" /> class.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
         public DescriptorPropertyAttribute(string propertyName)
         {
             PropertyName = propertyName;
@@ -43,7 +53,7 @@ namespace IronyModManager.Shared
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="alternatePropertyName">Name of the alternate property.</param>
         /// <param name="alternateNameEndsWithCondition">The alternate name ends with condition.</param>
-        public DescriptorPropertyAttribute(string propertyName, string alternatePropertyName, params string[] alternateNameEndsWithCondition) : this(propertyName)
+        public DescriptorPropertyAttribute(string propertyName, string alternatePropertyName, params string[] alternateNameEndsWithCondition) : this(propertyName, false)
         {
             AlternatePropertyName = alternatePropertyName;
             AlternateNameEndsWithCondition = alternateNameEndsWithCondition != null ? alternateNameEndsWithCondition.ToList() : new List<string>();
@@ -64,6 +74,12 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <value>The name of the alternate property.</value>
         public string AlternatePropertyName { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [keyed array].
+        /// </summary>
+        /// <value><c>true</c> if [keyed array]; otherwise, <c>false</c>.</value>
+        public bool KeyedArray { get; }
 
         /// <summary>
         /// Gets the name of the property.
