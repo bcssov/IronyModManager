@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
@@ -158,7 +159,8 @@ namespace IronyModManager.Services
                 {
                     Mod = mod,
                     RootDirectory = game.UserDirectory,
-                    Path = mod.DescriptorFile
+                    Path = mod.DescriptorFile,
+                    LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                 }, IsPatchModInternal(mod)))
                 {
                     applyModParams.TopPriorityMods = new List<IMod>() { mod };
@@ -267,7 +269,8 @@ namespace IronyModManager.Services
                         {
                             Mod = localDiff,
                             RootDirectory = game.UserDirectory,
-                            Path = localDiff.DescriptorFile
+                            Path = localDiff.DescriptorFile,
+                            LockDescriptor = CheckIfModShouldBeLocked(game, localDiff)
                         }, IsPatchModInternal(localDiff));
                     }));
                 }
@@ -296,12 +299,16 @@ namespace IronyModManager.Services
                 var tasks = new List<Task>();
                 foreach (var item in mods)
                 {
-                    var task = ModWriter.SetDescriptorLockAsync(new ModWriterParameters()
+                    // Cannot lock\unlock mandatory local zipped mods
+                    if (!CheckIfModShouldBeLocked(game, item))
                     {
-                        Mod = item,
-                        RootDirectory = game.UserDirectory
-                    }, isLocked);
-                    tasks.Add(task);
+                        var task = ModWriter.SetDescriptorLockAsync(new ModWriterParameters()
+                        {
+                            Mod = item,
+                            RootDirectory = game.UserDirectory
+                        }, isLocked);
+                        tasks.Add(task);
+                    }
                 }
                 await Task.WhenAll(tasks);
                 return true;
@@ -413,6 +420,7 @@ namespace IronyModManager.Services
                 }
                 var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
                 mod.FileName = path.Replace("\\", "/");
+                mod.FullPath = path.StandardizeDirectorySeparator();
                 mod.Source = source;
                 var cleanedPath = path;
                 if (!isDirectory)

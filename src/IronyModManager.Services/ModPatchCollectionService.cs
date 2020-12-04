@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1418,7 +1418,8 @@ namespace IronyModManager.Services
                     {
                         Mod = mod,
                         RootDirectory = game.UserDirectory,
-                        Path = mod.DescriptorFile
+                        Path = mod.DescriptorFile,
+                        LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
                     Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
@@ -1889,7 +1890,8 @@ namespace IronyModManager.Services
                         {
                             Mod = mod,
                             RootDirectory = game.UserDirectory,
-                            Path = mod.DescriptorFile
+                            Path = mod.DescriptorFile,
+                            LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                         }, IsPatchMod(mod));
                         allMods.Add(mod);
                         Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));

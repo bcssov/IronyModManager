@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-01-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModWriterParameters.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.IO.Common.Mods
         /// </summary>
         /// <value>The enabled mods.</value>
         public IReadOnlyCollection<IMod> EnabledMods { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [lock descriptor].
+        /// </summary>
+        /// <value><c>true</c> if [lock descriptor]; otherwise, <c>false</c>.</value>
+        public bool LockDescriptor { get; set; }
 
         /// <summary>
         /// Gets or sets the mod.

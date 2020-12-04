@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -129,6 +129,22 @@ namespace IronyModManager.Services
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Checks if mod should be locked.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="mod">The mod.</param>
+        /// <returns>bool.</returns>
+        protected virtual bool CheckIfModShouldBeLocked(IGame game, IMod mod)
+        {
+            if (game != null && mod != null)
+            {
+                var fullPath = mod.FullPath ?? string.Empty;
+                return IsPatchModInternal(mod.Name) || (mod.Source == ModSource.Local && fullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) && fullPath.StartsWith(game.UserDirectory));
+            }
+            return false;
+        }
 
         /// <summary>
         /// Constructs the mods cache key.
@@ -405,7 +421,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        /// <exception cref="ArgumentNullException">game</exception>
+        /// <exception cref="ArgumentNullException">nameof(game)</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
             if (game == null)
