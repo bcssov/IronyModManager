@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -220,6 +220,17 @@ namespace IronyModManager.IO.Mods
                 // If needed I've got a much more complex serializer, it is written for Kerbal Space Program but the structure seems to be the same though this is much more simpler
                 var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
                 await writeDescriptor(fullPath);
+                // Attempt to fix issues where the game decides to delete local zipped mod descriptors (I'm assuming this happens to all pdx games)
+                if (parameters.LockDescriptor)
+                {
+                    if (File.Exists(fullPath))
+                    {
+                        _ = new System.IO.FileInfo(fullPath)
+                        {
+                            IsReadOnly = true
+                        };
+                    }
+                }
                 if (writeDescriptorInModDirectory)
                 {
                     var modPath = Path.Combine(parameters.Mod.FileName, Shared.Constants.DescriptorFile);

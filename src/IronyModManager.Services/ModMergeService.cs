@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-04-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -209,7 +209,8 @@ namespace IronyModManager.Services
                 {
                     Mod = mod,
                     RootDirectory = game.UserDirectory,
-                    Path = mod.DescriptorFile
+                    Path = mod.DescriptorFile,
+                    LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                 }, true);
                 Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
 
@@ -500,7 +501,8 @@ namespace IronyModManager.Services
             {
                 Mod = mod,
                 RootDirectory = game.UserDirectory,
-                Path = mod.DescriptorFile
+                Path = mod.DescriptorFile,
+                LockDescriptor = CheckIfModShouldBeLocked(game, mod)
             }, true);
             Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
 
