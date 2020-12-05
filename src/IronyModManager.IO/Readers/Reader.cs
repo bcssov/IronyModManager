@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -76,11 +76,13 @@ namespace IronyModManager.IO.Readers
         /// <returns>IFileInfo.</returns>
         public IFileInfo GetFileInfo(string rootPath, string file)
         {
-            using var stream = GetStream(rootPath, file);
+            var fileInfo = GetStreamInternal(rootPath, file);
+            using var stream = fileInfo.Item1;
             if (stream != null)
             {
                 var info = DIResolver.Get<IFileInfo>();
                 info.FileName = file;
+                info.IsReadOnly = fileInfo.Item2;
                 if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
                     using var streamReader = new StreamReader(stream, true);
@@ -248,12 +250,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         public Stream GetStream(string rootPath, string file)
         {
-            var reader = readers.FirstOrDefault(r => r.CanRead(rootPath));
-            if (reader != null)
-            {
-                return reader.GetStream(rootPath, file);
-            }
-            return null;
+            return GetStreamInternal(rootPath, file).Item1;
         }
 
         /// <summary>
@@ -270,6 +267,22 @@ namespace IronyModManager.IO.Readers
                 return reader.Read(path, allowedPaths);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Gets the stream internal.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>(System.IO.Stream, bool).</returns>
+        private (Stream, bool) GetStreamInternal(string rootPath, string file)
+        {
+            var reader = readers.FirstOrDefault(r => r.CanRead(rootPath));
+            if (reader != null)
+            {
+                return reader.GetStream(rootPath, file);
+            }
+            return (null, false);
         }
 
         #endregion Methods

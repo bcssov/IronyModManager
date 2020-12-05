@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="FileInfo.cs" company="Mario">
 //     Mario
@@ -51,6 +51,12 @@ namespace IronyModManager.IO
         /// </summary>
         /// <value><c>true</c> if this instance is binary; otherwise, <c>false</c>.</value>
         public bool IsBinary { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is read only.
+        /// </summary>
+        /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
+        public bool IsReadOnly { get; set; }
 
         #endregion Properties
     }

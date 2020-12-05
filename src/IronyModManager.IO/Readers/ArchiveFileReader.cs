@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -116,7 +116,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual Stream GetStream(string rootPath, string file)
+        public virtual (Stream, bool) GetStream(string rootPath, string file)
         {
             static MemoryStream readStream(Stream entryStream)
             {
@@ -183,13 +183,13 @@ namespace IronyModManager.IO.Readers
 
             try
             {
-                return getUsingReaderFactory();
+                return (getUsingReaderFactory(), false);
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 // Falling back to archive factory
-                return getUsingArchiveFactory();
+                return (getUsingArchiveFactory(), false);
             }
         }
 
@@ -219,6 +219,7 @@ namespace IronyModManager.IO.Readers
                             continue;
                         }
                         var info = DIResolver.Get<IFileInfo>();
+                        info.IsReadOnly = false;
                         using var entryStream = reader.OpenEntryStream();
                         using var memoryStream = new MemoryStream();
                         entryStream.CopyTo(memoryStream);

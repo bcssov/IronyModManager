@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModFileReader.cs" company="Mario">
 //     Mario
@@ -59,7 +59,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
         /// <exception cref="NotSupportedException"></exception>
-        public virtual Stream GetStream(string rootPath, string file)
+        public virtual (Stream, bool) GetStream(string rootPath, string file)
         {
             throw new NotSupportedException();
         }
@@ -73,13 +73,14 @@ namespace IronyModManager.IO.Readers
         public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
         {
             var files = Directory.GetFiles(path, "*.mod", SearchOption.TopDirectoryOnly);
-            if (files?.Count() > 0)
+            if (files?.Length > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
                 {
                     var relativePath = file.Replace(path, string.Empty).Trim(Path.DirectorySeparatorChar);
                     var info = DIResolver.Get<IFileInfo>();
+                    info.IsReadOnly = new System.IO.FileInfo(file).IsReadOnly;
                     var content = File.ReadAllText(file);
                     info.FileName = relativePath;
                     info.IsBinary = false;

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -63,7 +63,7 @@ namespace IronyModManager.IO
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public virtual Stream GetStream(string rootPath, string file)
+        public virtual (Stream, bool) GetStream(string rootPath, string file)
         {
             static FileStream readStream(string path)
             {
@@ -74,9 +74,9 @@ namespace IronyModManager.IO
             if (file.StartsWith("*"))
             {
                 var files = Directory.EnumerateFiles(rootPath, file, SearchOption.TopDirectoryOnly);
-                if (files.Count() > 0)
+                if (files.Any())
                 {
-                    return readStream(files.First());
+                    return (readStream(files.First()), new System.IO.FileInfo(files.First()).IsReadOnly);
                 }
             }
             else
@@ -84,10 +84,10 @@ namespace IronyModManager.IO
                 var fullPath = Path.Combine(rootPath, file);
                 if (File.Exists(fullPath))
                 {
-                    return readStream(fullPath);
+                    return (readStream(fullPath), new System.IO.FileInfo(fullPath).IsReadOnly);
                 }
             }
-            return null;
+            return (null, false);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace IronyModManager.IO
         public virtual IReadOnlyCollection<IFileInfo> Read(string path, IEnumerable<string> allowedPaths)
         {
             var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
-            if (files?.Count() > 0)
+            if (files?.Length > 0)
             {
                 var result = new List<IFileInfo>();
                 foreach (var file in files)
@@ -112,6 +112,7 @@ namespace IronyModManager.IO
                         continue;
                     }
                     var info = DIResolver.Get<IFileInfo>();
+                    info.IsReadOnly = new System.IO.FileInfo(file).IsReadOnly;
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
                     if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))

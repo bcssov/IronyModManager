@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -421,7 +421,7 @@ namespace IronyModManager.Services
         /// <param name="game">The game.</param>
         /// <param name="ignorePatchMods">if set to <c>true</c> [ignore patch mods].</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        /// <exception cref="ArgumentNullException">nameof(game)</exception>
+        /// <exception cref="ArgumentNullException">game</exception>
         protected virtual IEnumerable<IMod> GetInstalledModsInternal(IGame game, bool ignorePatchMods)
         {
             if (game == null)
@@ -446,6 +446,7 @@ namespace IronyModManager.Services
                         {
                             continue;
                         }
+                        mod.IsLocked = installedMod.IsReadOnly;
                         mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
                         mod.Source = GetModSource(installedMod);
                         if (mod.Source == ModSource.Paradox)

@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -653,7 +653,7 @@ namespace IronyModManager.ViewModels.Controls
 
                     modCollectionService.Delete(copy.Name);
                     modPatchCollectionService.InvalidatePatchModState(copy.Name);
-                    await modService.InstallModsAsync();
+                    await modService.InstallModsAsync(null);
                     if (modCollectionService.Save(copy))
                     {
                         return new CommandResult<ModifyAction>(ModifyAction.Merge, CommandState.Success);

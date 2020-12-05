@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="JsonFileReader.cs" company="Mario">
 //     Mario
@@ -58,7 +58,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
         /// <exception cref="NotSupportedException"></exception>
-        public Stream GetStream(string rootPath, string file)
+        public (Stream, bool) GetStream(string rootPath, string file)
         {
             throw new NotSupportedException();
         }
@@ -76,6 +76,7 @@ namespace IronyModManager.IO.Readers
                 var result = new List<IFileInfo>();
                 var content = File.ReadAllText(path);
                 var info = DIResolver.Get<IFileInfo>();
+                info.IsReadOnly = new System.IO.FileInfo(path).IsReadOnly;
                 info.FileName = path;
                 info.IsBinary = false;
                 info.Content = content.SplitOnNewLine(false);

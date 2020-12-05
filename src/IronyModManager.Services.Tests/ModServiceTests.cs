@@ -420,7 +420,7 @@ namespace IronyModManager.Services.Tests
 
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
-            var result = await service.InstallModsAsync();
+            var result = await service.InstallModsAsync(null);
             result.Should().BeFalse();
         }
 
@@ -457,7 +457,7 @@ namespace IronyModManager.Services.Tests
                 };
             });
 
-            var result = await service.InstallModsAsync();
+            var result = await service.InstallModsAsync(null);
             result.Should().BeFalse();
         }
 
@@ -515,8 +515,76 @@ namespace IronyModManager.Services.Tests
                  };
              });
 
-            var result = await service.InstallModsAsync();
+            var result = await service.InstallModsAsync(null);
             result.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Should_install_lockable_mods()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            bool lockSet = false;
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            SetupMockCase(reader, modParser);
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Should_install_mods",
+                UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                WorkshopDirectory = "C:\\workshop"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns((ModWriterParameters mwp, bool wdf) =>
+            {
+                if (mwp.LockDescriptor)
+                {
+                    lockSet = true;
+                }
+                return Task.FromResult(true);
+            });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns((string root, string path) =>
+            {
+                var sb = new System.Text.StringBuilder(115);
+                sb.AppendLine(@"path=""c:/fake""");
+                sb.AppendLine(@"name=""Fake""");
+                sb.AppendLine(@"picture=""thumbnail.png""");
+                sb.AppendLine(@"tags={");
+                sb.AppendLine(@"	""Gameplay""");
+                sb.AppendLine(@"	""Fixes""");
+                sb.AppendLine(@"}");
+                sb.AppendLine(@"supported_version=""2.6.*""");
+
+                return new FileInfo()
+                {
+                    Content = sb.ToString().SplitOnNewLine(),
+                    ContentSHA = "test",
+                    FileName = "fake.mod",
+                    IsBinary = false
+                };
+            });
+
+            var result = await service.InstallModsAsync(new List<IMod> { new Mod()
+            {
+                DescriptorFile = "mod/fake.mod",
+                IsLocked = true
+            }}); ;
+            result.Should().BeTrue();
+            lockSet.Should().BeTrue();
         }
 
         /// <summary>

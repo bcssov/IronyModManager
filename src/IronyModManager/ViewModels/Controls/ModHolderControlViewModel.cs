@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -502,7 +502,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual async Task InstallModsAsync()
         {
-            if (await modService.InstallModsAsync())
+            if (await modService.InstallModsAsync(InstalledMods.Mods))
             {
                 if (InstalledMods.IsActivated)
                 {
@@ -628,7 +628,7 @@ namespace IronyModManager.ViewModels.Controls
                         if (game.RefreshDescriptors)
                         {
                             await modService.DeleteDescriptorsAsync(InstalledMods.Mods);
-                            await modService.InstallModsAsync();
+                            await modService.InstallModsAsync(InstalledMods.Mods);
                         }
                         await ApplyCollectionAsync(id, false);
                         await MessageBus.PublishAsync(new LaunchingGameEvent(game.Type));
