@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="IFileReader.cs" company="Mario">
 //     Mario
@@ -44,7 +44,7 @@ namespace IronyModManager.IO.Common.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        Stream GetStream(string rootPath, string file);
+        (Stream, bool) GetStream(string rootPath, string file);
 
         /// <summary>
         /// Reads the specified path.

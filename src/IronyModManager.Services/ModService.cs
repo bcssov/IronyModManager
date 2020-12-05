@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -227,8 +227,9 @@ namespace IronyModManager.Services
         /// <summary>
         /// install mods as an asynchronous operation.
         /// </summary>
+        /// <param name="statusToRetain">The status to retain.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> InstallModsAsync()
+        public virtual async Task<bool> InstallModsAsync(IEnumerable<IMod> statusToRetain)
         {
             var game = GameService.GetSelected();
             if (game == null)
@@ -265,13 +266,22 @@ namespace IronyModManager.Services
                     }
                     tasks.Add(Task.Run(async () =>
                     {
+                        bool shouldLock = CheckIfModShouldBeLocked(game, localDiff);
+                        if (statusToRetain != null && !shouldLock)
+                        {
+                            var mod = statusToRetain.FirstOrDefault(p => p.DescriptorFile.Equals(localDiff.DescriptorFile, StringComparison.OrdinalIgnoreCase));
+                            if (mod != null)
+                            {
+                                shouldLock = mod.IsLocked;
+                            }
+                        }
                         await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                         {
                             Mod = localDiff,
                             RootDirectory = game.UserDirectory,
                             Path = localDiff.DescriptorFile,
-                            LockDescriptor = CheckIfModShouldBeLocked(game, localDiff)
-                        }, IsPatchModInternal(localDiff));
+                            LockDescriptor = shouldLock
+                        }, IsPatchModInternal(localDiff)); ;
                     }));
                 }
                 if (tasks.Count > 0)
@@ -307,6 +317,7 @@ namespace IronyModManager.Services
                             Mod = item,
                             RootDirectory = game.UserDirectory
                         }, isLocked);
+                        item.IsLocked = isLocked;
                         tasks.Add(task);
                     }
                 }
@@ -367,7 +378,7 @@ namespace IronyModManager.Services
             if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
             {
                 var mod = mods.Where(p => p.FullPath.Contains(fullPath));
-                if (mod != null)
+                if (mod.Any())
                 {
                     await DeleteDescriptorsInternalAsync(mod);
                 }
@@ -421,6 +432,7 @@ namespace IronyModManager.Services
                 var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
                 mod.FileName = path.Replace("\\", "/");
                 mod.FullPath = path.StandardizeDirectorySeparator();
+                mod.IsLocked = fileInfo.IsReadOnly;
                 mod.Source = source;
                 var cleanedPath = path;
                 if (!isDirectory)

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -65,13 +65,19 @@ namespace IronyModManager.Models
         /// Gets or sets the full path.
         /// </summary>
         /// <value>The full path.</value>
-        public string FullPath { get; set; }
+        public virtual string FullPath { get; set; }
 
         /// <summary>
         /// Gets or sets the game.
         /// </summary>
         /// <value>The game.</value>
         public virtual string Game { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is locked.
+        /// </summary>
+        /// <value><c>true</c> if this instance is locked; otherwise, <c>false</c>.</value>
+        public virtual bool IsLocked { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is selected.
@@ -83,7 +89,7 @@ namespace IronyModManager.Models
         /// Returns true if ... is valid.
         /// </summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
-        public bool IsValid { get; set; }
+        public virtual bool IsValid { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -117,7 +123,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The replace path.</value>
         [DescriptorProperty("replace_path", true)]
-        public IEnumerable<string> ReplacePath { get; set; }
+        public virtual IEnumerable<string> ReplacePath { get; set; }
 
         /// <summary>
         /// Gets or sets the source.
@@ -137,7 +143,7 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The user dir.</value>
         [DescriptorProperty("user_dir", true)]
-        public IEnumerable<string> UserDir { get; set; }
+        public virtual IEnumerable<string> UserDir { get; set; }
 
         /// <summary>
         /// Gets or sets the version.

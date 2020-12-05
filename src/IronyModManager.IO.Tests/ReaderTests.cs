@@ -193,13 +193,13 @@ namespace IronyModManager.IO.Tests
 
             var reader = DIResolver.Get<IReader>();
             var result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.dds");
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
 
             result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.tga");
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
 
             result = await reader.GetImageStreamAsync(TestPath, @"gfx\interface\buttons\asl_text_button.png");
-            result.Should().NotBeNull();            
+            result.Should().NotBeNull();
         }
 
 #if FUNCTIONAL_TEST
@@ -256,12 +256,12 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>Stream.</returns>
-            public Stream GetStream(string rootPath, string file)
+            public (Stream, bool) GetStream(string rootPath, string file)
             {
                 var ms = new MemoryStream();
                 var sw = new StreamWriter(ms);
                 sw.Write("fake1");
-                return ms;
+                return (ms, false);
             }
 
             /// <summary>
@@ -314,12 +314,12 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>Stream.</returns>
-            public Stream GetStream(string rootPath, string file)
+            public (Stream, bool) GetStream(string rootPath, string file)
             {
                 var ms = new MemoryStream();
                 var sw = new StreamWriter(ms);
                 sw.Write("fake1");
-                return ms;
+                return (ms, false);
             }
 
             /// <summary>

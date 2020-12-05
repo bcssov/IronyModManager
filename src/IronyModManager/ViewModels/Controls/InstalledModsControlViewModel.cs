@@ -638,7 +638,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var id = idGenerator.GetNextId();
             await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
-            await modService.InstallModsAsync();
+            await modService.InstallModsAsync(Mods);
             RefreshMods();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
             var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
@@ -657,7 +657,7 @@ namespace IronyModManager.ViewModels.Controls
                 var id = idGenerator.GetNextId();
                 await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
-                await modService.InstallModsAsync();
+                await modService.InstallModsAsync(Mods);
                 RefreshMods();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
