@@ -4,12 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.9.55</title>
+			<title>1.9.58</title>
 			<description>RELEASE INFO:
-* Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
-* Thread compress merge (limit to 4 threads max)
-* Fix some minor mod merge progress calculation bugs
-* Descriptor refresh now retains mod descriptor lock state
+* Fix compress merge mod order being messed up since 1.9.55
+* Fix being unable to write to descriptors introduced with mandatory locking of descriptors
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -17,16 +15,14 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sat, 05 Dec 2020 03:58:10 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/osx-x64.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="62893199" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="rBlGa9tZneg9cykk8mA1ViJ6cE+0GnN/PZtV/yZ4Uauodv8WNL5YUQaYSBW3Qjpu2akpHUdGgGBGw7e6o55KBQ=="/>
+			<pubDate>Sat, 05 Dec 2020 18:33:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.58/osx-x64.rar" sparkle:version="1.9.58.34590" sparkle:shortVersionString="1.9.58" length="62893325" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="vkOfrjDa84vGMJ/g45rJ3cyPsScoTYb9YO59yAZg79fynZyqSo1rfKJP0nUv0ZzyzxqOwxL79O0dSfpWXF3uBw=="/>
 		</item>
 		<item>
-			<title>1.9.55</title>
+			<title>1.9.58</title>
 			<description>RELEASE INFO:
-* Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
-* Thread compress merge (limit to 4 threads max)
-* Fix some minor mod merge progress calculation bugs
-* Descriptor refresh now retains mod descriptor lock state
+* Fix compress merge mod order being messed up since 1.9.55
+* Fix being unable to write to descriptors introduced with mandatory locking of descriptors
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -34,16 +30,14 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sat, 05 Dec 2020 03:58:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/win-x64-setup.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="54465103" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="VFfH1J89nNmlrMAAd8ahF0LXzMAPg4eRNGvXTn7+KYhN149aI9apEPf31SFWxPcohciZKLXrkvEt+CzIJop2Ag=="/>
+			<pubDate>Sat, 05 Dec 2020 18:33:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.58/win-x64-setup.rar" sparkle:version="1.9.58.34590" sparkle:shortVersionString="1.9.58" length="54477367" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="s1HqIyS0f4UmsoXaC0mcZmEmz50ayiBLkDIFMABEC8P6rI/IhlIB6ciagSUUC7HtTM/TSGlR7F8RTzP3+aU8Aw=="/>
 		</item>
 		<item>
-			<title>1.9.55</title>
+			<title>1.9.58</title>
 			<description>RELEASE INFO:
-* Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
-* Thread compress merge (limit to 4 threads max)
-* Fix some minor mod merge progress calculation bugs
-* Descriptor refresh now retains mod descriptor lock state
+* Fix compress merge mod order being messed up since 1.9.55
+* Fix being unable to write to descriptors introduced with mandatory locking of descriptors
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -51,16 +45,14 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sat, 05 Dec 2020 03:58:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/win-x64.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="65202852" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="2miuhx+TAhPxEz33DCv4VFsVGIxukFsElJ4iBVqdqadyvoM/W5JcWzK5BA+jrWtpO9NJApfdIY+TMDqriNVDAQ=="/>
+			<pubDate>Sat, 05 Dec 2020 18:33:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.58/win-x64.rar" sparkle:version="1.9.58.34590" sparkle:shortVersionString="1.9.58" length="65202973" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="i+bH6fhob43vWHtC1sUFH4Tp0nK4y3qlwq88VZcfyjZ/XEZy0EYvrSYPW5Y5KxRVEwjTqAt4yU9tTrORhgjtCA=="/>
 		</item>
 		<item>
-			<title>1.9.55</title>
+			<title>1.9.58</title>
 			<description>RELEASE INFO:
-* Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
-* Thread compress merge (limit to 4 threads max)
-* Fix some minor mod merge progress calculation bugs
-* Descriptor refresh now retains mod descriptor lock state
+* Fix compress merge mod order being messed up since 1.9.55
+* Fix being unable to write to descriptors introduced with mandatory locking of descriptors
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -68,8 +60,8 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Sat, 05 Dec 2020 03:58:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/linux-x64.zip" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="78013631" sparkle:os="linux" type="application/zip" sparkle:signature="5GC5Bx06/zlT1K42a+AkIH5cSF5lQ9+RO4tfkRDEYBFfx1AVqLckHxr3aeM3ooBfNVzfgZGiTA6Vkf+wqNfCDA=="/>
+			<pubDate>Sat, 05 Dec 2020 18:32:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.58/linux-x64.zip" sparkle:version="1.9.58.34590" sparkle:shortVersionString="1.9.58" length="78013884" sparkle:os="linux" type="application/zip" sparkle:signature="jVKo00iQDuYFbirTPkQQ9t8Ez9mZSIEyim7fln/TB0om8HMnzbYLyy54t3naYFtvf6ILWHg16XiSkh0+5Es1Dg=="/>
 		</item>
 	</channel>
 </rss>
