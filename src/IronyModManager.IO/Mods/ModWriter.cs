@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -240,8 +240,21 @@ namespace IronyModManager.IO.Mods
             }
             async Task<bool> writeDescriptor(string fullPath)
             {
+                bool? state = null;
+                if (File.Exists(fullPath))
+                {
+                    var fileInfo = new System.IO.FileInfo(fullPath);
+                    state = fileInfo.IsReadOnly;
+                    fileInfo.IsReadOnly = false;
+                }
                 using var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.Read);
-                return await WriteDescriptorToStreamAsync(parameters, fs);
+                var result = await WriteDescriptorToStreamAsync(parameters, fs);
+                if (state.HasValue)
+                {
+                    var fileInfo = new System.IO.FileInfo(fullPath);
+                    fileInfo.IsReadOnly = state.GetValueOrDefault();
+                }
+                return result;
             }
 
             var retry = new RetryStrategy();
