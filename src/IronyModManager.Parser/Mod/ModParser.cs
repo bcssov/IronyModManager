@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2020
+// Last Modified On : 12-05-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -133,7 +133,7 @@ namespace IronyModManager.Parser.Mod
             foreach (var key in keys)
             {
                 var values = elements.Where(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
-                if (values?.Count() > 0)
+                if (values.Count() > 0)
                 {
                     foreach (var value in values)
                     {

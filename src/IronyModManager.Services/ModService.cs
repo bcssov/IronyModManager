@@ -378,7 +378,7 @@ namespace IronyModManager.Services
             if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
             {
                 var mod = mods.Where(p => p.FullPath.Contains(fullPath));
-                if (mod != null)
+                if (mod.Any())
                 {
                     await DeleteDescriptorsInternalAsync(mod);
                 }
