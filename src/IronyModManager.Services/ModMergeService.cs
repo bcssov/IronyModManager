@@ -570,7 +570,7 @@ namespace IronyModManager.Services
                 return null;
             }
 
-            IMod cloneMod(IMod mod, string fileName)
+            IMod cloneMod(IMod mod, string fileName, int order)
             {
                 var newMod = DIResolver.Get<IMod>();
                 newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
@@ -584,6 +584,7 @@ namespace IronyModManager.Services
                 newMod.ReplacePath = mod.ReplacePath;
                 newMod.Tags = mod.Tags;
                 newMod.UserDir = mod.UserDir;
+                newMod.Order = order;
                 var dependencies = mod.Dependencies;
                 if (dependencies != null && dependencies.Any())
                 {
@@ -681,7 +682,11 @@ namespace IronyModManager.Services
                         innerProgressLock.Dispose();
                     }
 
-                    var newMod = cloneMod(collectionMod, Path.Combine(mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
+                    var newMod = cloneMod(collectionMod,
+                        Path.Combine(mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ?
+                        $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() :
+                        $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()),
+                        collectionMods.IndexOf(collectionMod));
                     var ms = new MemoryStream();
                     await ModWriter.WriteDescriptorToStreamAsync(new ModWriterParameters()
                     {
@@ -738,7 +743,8 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 100));
 
             Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
-            return exportedMods;
+            var ordered = exportedMods.OrderBy(p => p.Order).ToList();
+            return ordered;
         }
 
         /// <summary>
