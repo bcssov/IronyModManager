@@ -4,10 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.9.52</title>
+			<title>1.9.55</title>
 			<description>RELEASE INFO:
 * Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
 * Thread compress merge (limit to 4 threads max)
+* Fix some minor mod merge progress calculation bugs
+* Descriptor refresh now retains mod descriptor lock state
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -15,14 +17,16 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 04 Dec 2020 22:27:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.52/osx-x64.rar" sparkle:version="1.9.52.53606" sparkle:shortVersionString="1.9.52" length="62888900" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="+dtIdXr4algg2BgGrxYF3tFHM548kCFSIz1IGa34H8eYHu4sxVKrqA/TqSR+m/wNNPIO7qX7BnsyBaNUZIM1Dw=="/>
+			<pubDate>Sat, 05 Dec 2020 03:58:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/osx-x64.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="62893199" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="rBlGa9tZneg9cykk8mA1ViJ6cE+0GnN/PZtV/yZ4Uauodv8WNL5YUQaYSBW3Qjpu2akpHUdGgGBGw7e6o55KBQ=="/>
 		</item>
 		<item>
-			<title>1.9.52</title>
+			<title>1.9.55</title>
 			<description>RELEASE INFO:
 * Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
 * Thread compress merge (limit to 4 threads max)
+* Fix some minor mod merge progress calculation bugs
+* Descriptor refresh now retains mod descriptor lock state
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -30,14 +34,16 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 04 Dec 2020 22:27:12 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.52/win-x64-setup.rar" sparkle:version="1.9.52.53606" sparkle:shortVersionString="1.9.52" length="54483001" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="MJXI6sBzHnYVpgf0jCd+8B9W5UFXESyW90oK71nmJXKMEThIsqPRkiQrFyV1bVyhunYtXlArBp6fVpmsw5JdCQ=="/>
+			<pubDate>Sat, 05 Dec 2020 03:58:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/win-x64-setup.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="54465103" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="VFfH1J89nNmlrMAAd8ahF0LXzMAPg4eRNGvXTn7+KYhN149aI9apEPf31SFWxPcohciZKLXrkvEt+CzIJop2Ag=="/>
 		</item>
 		<item>
-			<title>1.9.52</title>
+			<title>1.9.55</title>
 			<description>RELEASE INFO:
 * Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
 * Thread compress merge (limit to 4 threads max)
+* Fix some minor mod merge progress calculation bugs
+* Descriptor refresh now retains mod descriptor lock state
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -45,14 +51,16 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 04 Dec 2020 22:27:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.52/win-x64.rar" sparkle:version="1.9.52.53606" sparkle:shortVersionString="1.9.52" length="65198551" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="DTV0Y9b2Tqn/Bpm7sgfbKD9FPZscVLgXUfOvSckViyIgzTQwSsoBfNEmnr5/2+AqbKW1bXjQuMBNWq65mTPKCw=="/>
+			<pubDate>Sat, 05 Dec 2020 03:58:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/win-x64.rar" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="65202852" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="2miuhx+TAhPxEz33DCv4VFsVGIxukFsElJ4iBVqdqadyvoM/W5JcWzK5BA+jrWtpO9NJApfdIY+TMDqriNVDAQ=="/>
 		</item>
 		<item>
-			<title>1.9.52</title>
+			<title>1.9.55</title>
 			<description>RELEASE INFO:
 * Attempt to fix the fact that the game will sometimes delete local zipped mod descriptors by locking said descriptors using readonly flag
 * Thread compress merge (limit to 4 threads max)
+* Fix some minor mod merge progress calculation bugs
+* Descriptor refresh now retains mod descriptor lock state
 
 CHANGES FROM v1.8:
 * Upgrade to net5
@@ -60,8 +68,8 @@ CHANGES FROM v1.8:
 * Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
 * Add new merge type called compress which zips all mod files into local mod directory
 * Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Fri, 04 Dec 2020 22:27:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.52/linux-x64.zip" sparkle:version="1.9.52.53606" sparkle:shortVersionString="1.9.52" length="78013519" sparkle:os="linux" type="application/zip" sparkle:signature="885VV58TQVDnPt01k7mm31JJA1Y9Dsaz3tzfe9oERo4BA6l0NT3cwERuRC+bSxRDNMQkNH2UWLaBrAWK4L9MCw=="/>
+			<pubDate>Sat, 05 Dec 2020 03:58:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.55/linux-x64.zip" sparkle:version="1.9.55.61467" sparkle:shortVersionString="1.9.55" length="78013631" sparkle:os="linux" type="application/zip" sparkle:signature="5GC5Bx06/zlT1K42a+AkIH5cSF5lQ9+RO4tfkRDEYBFfx1AVqLckHxr3aeM3ooBfNVzfgZGiTA6Vkf+wqNfCDA=="/>
 		</item>
 	</channel>
 </rss>
