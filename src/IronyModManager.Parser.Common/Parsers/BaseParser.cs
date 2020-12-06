@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-06-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -555,6 +555,10 @@ namespace IronyModManager.Parser.Common.Parsers
         {
             try
             {
+                if (!simpleChecks)
+                {
+                    simpleChecks = ShouldSwitchToBasicChecking(args.Lines);
+                }
                 return codeParser.ParseScript(args.Lines, args.File, simpleChecks);
             }
             catch (Exception ex)
