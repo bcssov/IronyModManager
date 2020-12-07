@@ -108,7 +108,10 @@ namespace IronyModManager.IO.TempFile
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                if (logger != null)
+                {
+                    logger.Error(ex);
+                }
             }
             return false;
         }
