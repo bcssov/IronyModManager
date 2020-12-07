@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -51,6 +51,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IUpdateSettings, UpdateSettings>();
             container.RegisterModel<IModHashFileReport, ModHashFileReport>();
             container.RegisterModel<IModHashReport, ModHashReport>();
+            container.RegisterModel<IExternalEditor, ExternalEditor>();
         }
 
         #endregion Methods
