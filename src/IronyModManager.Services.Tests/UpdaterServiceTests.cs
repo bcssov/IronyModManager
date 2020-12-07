@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="UpdaterServiceTests.cs" company="Mario">
 //     Mario
@@ -41,7 +41,7 @@ namespace IronyModManager.Services.Tests
         /// Setups the mocks.
         /// </summary>
         /// <param name="preferencesService">The preferences service.</param>
-        private void SetupMocks(Mock<IPreferencesService> preferencesService)
+        private static void SetupMocks(Mock<IPreferencesService> preferencesService)
         {
             DISetup.SetupContainer();
             CurrentLocale.SetCurrent("en");

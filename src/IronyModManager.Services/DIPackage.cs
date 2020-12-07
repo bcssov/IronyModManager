@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
@@ -49,6 +49,7 @@ namespace IronyModManager.Services
             container.Register<IModMergeService, ModMergeService>();
             container.Register<IUpdaterService, UpdaterService>();
             container.RemoveMixedLifetimeWarning<IUpdaterService>();
+            container.Register<IExternalEditorService, ExternalEditorService>();
         }
 
         #endregion Methods
