@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IFileReader.cs" company="Mario">
 //     Mario
@@ -25,11 +25,25 @@ namespace IronyModManager.IO.Common.Readers
         #region Methods
 
         /// <summary>
+        /// Determines whether this instance [can list files] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can list files] the specified path; otherwise, <c>false</c>.</returns>
+        bool CanListFiles(string path);
+
+        /// <summary>
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         bool CanRead(string path);
+
+        /// <summary>
+        /// Determines whether this instance [can read stream] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can read stream] the specified path; otherwise, <c>false</c>.</returns>
+        bool CanReadStream(string path);
 
         /// <summary>
         /// Gets the files.

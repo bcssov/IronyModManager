@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -56,6 +56,16 @@ namespace IronyModManager.IO.Readers
         #region Methods
 
         /// <summary>
+        /// Determines whether this instance [can list files] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can list files] the specified path; otherwise, <c>false</c>.</returns>
+        public bool CanListFiles(string path)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -63,6 +73,16 @@ namespace IronyModManager.IO.Readers
         public virtual bool CanRead(string path)
         {
             return File.Exists(path) && (path.EndsWith(Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || path.EndsWith(Constants.BinExtension, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can read stream] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can read stream] the specified path; otherwise, <c>false</c>.</returns>
+        public bool CanReadStream(string path)
+        {
+            return true;
         }
 
         /// <summary>

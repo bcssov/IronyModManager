@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -109,7 +109,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public virtual IEnumerable<string> GetFiles(string path)
         {
-            var reader = readers.FirstOrDefault(p => p.CanRead(path));
+            var reader = readers.FirstOrDefault(p => p.CanRead(path) && p.CanListFiles(path));
             if (reader != null)
             {
                 return reader.GetFiles(path);
@@ -277,7 +277,7 @@ namespace IronyModManager.IO.Readers
         /// <returns>(System.IO.Stream, bool).</returns>
         private (Stream, bool) GetStreamInternal(string rootPath, string file)
         {
-            var reader = readers.FirstOrDefault(r => r.CanRead(rootPath));
+            var reader = readers.FirstOrDefault(r => r.CanRead(rootPath) && r.CanReadStream(rootPath));
             if (reader != null)
             {
                 return reader.GetStream(rootPath, file);

@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -32,6 +32,16 @@ namespace IronyModManager.IO
         #region Methods
 
         /// <summary>
+        /// Determines whether this instance [can list files] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can list files] the specified path; otherwise, <c>false</c>.</returns>
+        public bool CanListFiles(string path)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Determines whether this instance can read the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -39,6 +49,16 @@ namespace IronyModManager.IO
         public virtual bool CanRead(string path)
         {
             return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can read stream] the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns><c>true</c> if this instance [can read stream] the specified path; otherwise, <c>false</c>.</returns>
+        public bool CanReadStream(string path)
+        {
+            return true;
         }
 
         /// <summary>
