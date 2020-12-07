@@ -165,6 +165,21 @@ namespace IronyModManager.Parser.Tests
             parser.CanParse(args).Should().BeTrue();            
         }
 
+        /// <summary>
+        /// Defines the test method CanParse_start_screen_messages_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_start_screen_messages_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "common\\start_screen_messages\\t.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
+        }
+
 
         /// <summary>
         /// Defines the test method CanParse_should_be_false.
