@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -32,6 +32,37 @@ namespace IronyModManager.Implementation
     public static class MessageBoxes
     {
         #region Methods
+
+        /// <summary>
+        /// Gets the confirm cancel window.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="header">The header.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="icon">The icon.</param>
+        /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
+        public static MsgBox.BaseWindows.IMsBoxWindow<MsgBox.Enums.ButtonResult> GetConfirmCancelWindow(string title, string header, string message, MsgBox.Enums.Icon icon)
+        {
+            var parameters = new MessageBoxStandardParams()
+            {
+                CanResize = false,
+                ShowInCenter = true,
+                ContentTitle = title,
+                ContentHeader = header,
+                ContentMessage = message,
+                Icon = icon,
+                ButtonDefinitions = MsgBox.Enums.ButtonEnum.OkCancel,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            var font = ResolveFont();
+
+            var window = new Controls.Themes.StandardMessageBox(parameters.Style);
+            parameters.Window = window;
+            window.Icon = StaticResources.GetAppIcon();
+            window.FontFamily = font.GetFontFamily();
+            window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
+            return new StandardMessageBox(window);
+        }
 
         /// <summary>
         /// Gets the fatal error window.

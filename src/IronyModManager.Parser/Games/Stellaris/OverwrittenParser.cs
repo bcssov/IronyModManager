@@ -4,7 +4,7 @@
 // Created          : 05-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="OverwrittenParser.cs" company="Mario">
 //     Mario
@@ -15,10 +15,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -108,9 +109,9 @@ namespace IronyModManager.Parser.Games.Stellaris
             {
                 foreach (var item in results)
                 {
-                    if (item.ValueType == Common.ValueType.Object)
+                    if (item.ValueType == ValueType.Object)
                     {
-                        item.ValueType = Common.ValueType.OverwrittenObject;
+                        item.ValueType = ValueType.OverwrittenObject;
                     }
                 }
             }

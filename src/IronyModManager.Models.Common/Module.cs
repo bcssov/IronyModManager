@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-29-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Module.cs" company="Mario">
 //     Mario
@@ -32,7 +32,7 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The dependencies.</value>
         public IEnumerable<string> Dependencies => new List<string>() { typeof(Shared.Module).Name,
-            typeof(Localization.Module).Name, typeof(Parser.Common.Module).Name };
+            typeof(Localization.Module).Name };
 
         /// <summary>
         /// Gets the name.

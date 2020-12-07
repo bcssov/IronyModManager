@@ -18,10 +18,10 @@ using FluentAssertions;
 using IronyModManager.Converters;
 using IronyModManager.Localization;
 using IronyModManager.Models;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Tests.Common;
+using IronyModManager.Shared.Models;
 using Moq;
 using Xunit;
 

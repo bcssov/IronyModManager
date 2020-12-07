@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
 {

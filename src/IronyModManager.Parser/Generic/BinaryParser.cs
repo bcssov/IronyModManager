@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-29-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="BinaryParser.cs" company="Mario">
 //     Mario
@@ -16,9 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -91,7 +92,7 @@ namespace IronyModManager.Parser.Generic
             {
                 def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             }
-            def.ValueType = Common.ValueType.Binary;
+            def.ValueType = ValueType.Binary;
             def.Tags.Add(def.Id);
             return new List<IDefinition> { def };
         }

@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common.Mod
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IModObject.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser.Common.Mod
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Interface IModObject

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -25,7 +26,9 @@ using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 
@@ -47,19 +50,34 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppAction appAction;
 
         /// <summary>
+        /// The external editor service
+        /// </summary>
+        private readonly IExternalEditorService externalEditorService;
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
+
+        /// <summary>
         /// The redo stack
         /// </summary>
         private readonly Stack<string> redoStack = new Stack<string>();
 
         /// <summary>
-        /// The syncing selection
-        /// </summary>
-        private bool syncingSelection = false;
-
-        /// <summary>
         /// The undo stack
         /// </summary>
         private readonly Stack<string> undoStack = new Stack<string>();
+
+        /// <summary>
+        /// The syncing selection
+        /// </summary>
+        private bool syncingSelection = false;
 
         #endregion Fields
 
@@ -69,9 +87,16 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
         /// <param name="appAction">The application action.</param>
-        public MergeViewerControlViewModel(IAppAction appAction)
+        /// <param name="externalEditorService">The external editor service.</param>
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
+        public MergeViewerControlViewModel(IAppAction appAction, IExternalEditorService externalEditorService,
+            INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.appAction = appAction;
+            this.externalEditorService = externalEditorService;
+            this.notificationAction = notificationAction;
+            this.localizationManager = localizationManager;
         }
 
         #endregion Constructors
@@ -222,6 +247,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if [editing yaml]; otherwise, <c>false</c>.</value>
         public virtual bool EditingYaml { get; set; }
+
+        /// <summary>
+        /// Gets or sets the editor.
+        /// </summary>
+        /// <value>The editor.</value>
+        [StaticLocalization(LocalizationResources.Conflict_Solver.ContextMenu.Editor)]
+        public virtual string Editor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [editor available].
+        /// </summary>
+        /// <value><c>true</c> if [editor available]; otherwise, <c>false</c>.</value>
+        public virtual bool EditorAvailable { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor command.
+        /// </summary>
+        /// <value>The editor command.</value>
+        public virtual ReactiveCommand<bool, Unit> EditorCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the editor copy.
@@ -449,6 +493,19 @@ namespace IronyModManager.ViewModels.Controls
             EditingLeft = false;
             EditingRight = false;
             EditingText = false;
+        }
+
+        /// <summary>
+        /// Initializes the parameters.
+        /// </summary>
+        public virtual void InitParameters()
+        {
+            EditorAvailable = false;
+            var editor = externalEditorService.Get();
+            if (!string.IsNullOrWhiteSpace(editor.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(editor.ExternalEditorParameters) && File.Exists(editor.ExternalEditorLocation))
+            {
+                EditorAvailable = true;
+            }
         }
 
         /// <summary>
@@ -1121,6 +1178,36 @@ namespace IronyModManager.ViewModels.Controls
                     SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
                 }
                 OnStackChanged();
+            }).DisposeWith(disposables);
+
+            EditorCommand = ReactiveCommand.CreateFromTask(async (bool leftSide) =>
+            {
+                var opts = externalEditorService.Get();
+                if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
+                {
+                    var files = externalEditorService.GetFiles();
+                    files.LeftDiff.Text = LeftSide;
+                    files.RightDiff.Text = RightSide;
+                    var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
+                    if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
+                        var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
+                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, false))
+                        {
+                            if (leftSide)
+                            {
+                                SetText(files.LeftDiff.Text, RightSide);
+                            }
+                            else
+                            {
+                                SetText(LeftSide, files.RightDiff.Text);                                
+                            }
+                        }
+                    }
+                    files.LeftDiff.Dispose();
+                    files.RightDiff.Dispose();
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

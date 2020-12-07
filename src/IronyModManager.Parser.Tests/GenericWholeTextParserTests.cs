@@ -20,6 +20,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -144,7 +145,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -155,7 +156,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb.ToString().Trim());
                         result[i].Id.Should().Be("alerts.txt");
-                        result[i].ValueType.Should().Be(Common.ValueType.WholeTextFile);
+                        result[i].ValueType.Should().Be(ValueType.WholeTextFile);
                         break;
 
                     default:

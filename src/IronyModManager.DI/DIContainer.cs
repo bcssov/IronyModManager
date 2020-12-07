@@ -4,15 +4,16 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-24-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DIContainer.cs" company="IronyModManager.DI">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using SimpleInjector;
 
 namespace IronyModManager.DI
@@ -36,16 +37,39 @@ namespace IronyModManager.DI
         /// <value>The name of the plugin path and.</value>
         internal static string PluginPathAndName { get; private set; }
 
+        /// <summary>
+        /// Gets the suppression type queues.
+        /// </summary>
+        /// <value>The suppression type queues.</value>
+        private static List<WarningSuppressionTypeQueue> SuppressionTypeQueue { get; } = new List<WarningSuppressionTypeQueue>();
+
         #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// Verifies this instance.
+        /// Finishes this instance.
         /// </summary>
-        public static void Verify()
+        /// <param name="skipVerify">if set to <c>true</c> [skip verify].</param>
+        public static void Finish(bool skipVerify = false)
         {
-            Container.Verify();
+            if (SuppressionTypeQueue.Any())
+            {
+                foreach (var item in SuppressionTypeQueue)
+                {
+                    var registration = Container.GetRegistration(item.Type, false).Registration;
+                    if (registration != null)
+                    {
+                        registration.SuppressDiagnosticWarning(item.DiagnosticType, item.Reason);
+                    }
+                }
+            }
+#if DEBUG
+            if (!skipVerify)
+            {
+                Container.Verify();
+            }
+#endif
         }
 
         /// <summary>
@@ -58,6 +82,57 @@ namespace IronyModManager.DI
             PluginPathAndName = opts.PluginPathAndName;
         }
 
+        /// <summary>
+        /// Queues the type of the suppression.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="diagnosticType">Type of the diagnostic.</param>
+        /// <param name="reason">The reason.</param>
+        internal static void QueueSuppressionType(Type type, SimpleInjector.Diagnostics.DiagnosticType diagnosticType, string reason)
+        {
+            if (!SuppressionTypeQueue.Any(t => t.Type.Equals(type) && !(t.DiagnosticType == diagnosticType)))
+            {
+                SuppressionTypeQueue.Add(new WarningSuppressionTypeQueue()
+                {
+                    DiagnosticType = diagnosticType,
+                    Reason = reason,
+                    Type = type
+                });
+            }
+        }
+
         #endregion Methods
+
+        #region Classes
+
+        /// <summary>
+        /// Class WarningSuppressionTypeQueue.
+        /// </summary>
+        private class WarningSuppressionTypeQueue
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the type of the diagnostic.
+            /// </summary>
+            /// <value>The type of the diagnostic.</value>
+            public SimpleInjector.Diagnostics.DiagnosticType DiagnosticType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reason.
+            /// </summary>
+            /// <value>The reason.</value>
+            public string Reason { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type.
+            /// </summary>
+            /// <value>The type.</value>
+            public Type Type { get; set; }
+
+            #endregion Properties
+        }
+
+        #endregion Classes
     }
 }

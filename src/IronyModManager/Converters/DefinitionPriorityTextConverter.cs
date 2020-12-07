@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityTextConverter.cs" company="Mario">
 //     Mario
@@ -18,9 +18,9 @@ using Avalonia.Data.Converters;
 using IronyModManager.DI;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Converters
 {

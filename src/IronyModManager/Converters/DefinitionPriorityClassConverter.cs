@@ -4,7 +4,7 @@
 // Created          : 04-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DefinitionPriorityClassConverter.cs" company="Mario">
 //     Mario
@@ -17,8 +17,8 @@ using System.Globalization;
 using System.Linq;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Converters
 {

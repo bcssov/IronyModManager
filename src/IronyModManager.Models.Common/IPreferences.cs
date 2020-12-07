@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -37,6 +37,18 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external editor location.
+        /// </summary>
+        /// <value>The external editor location.</value>
+        string ExternalEditorLocation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the external editor parameters.
+        /// </summary>
+        /// <value>The external editor parameters.</value>
+        string ExternalEditorParameters { get; set; }
 
         /// <summary>
         /// Gets or sets the game.

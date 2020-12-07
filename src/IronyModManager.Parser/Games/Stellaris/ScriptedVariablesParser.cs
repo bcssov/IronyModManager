@@ -4,7 +4,7 @@
 // Created          : 06-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ScriptedVariablesParser.cs" company="Mario">
 //     Mario
@@ -14,9 +14,10 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -80,9 +81,9 @@ namespace IronyModManager.Parser.Games.Stellaris
             var results = ParseRoot(args);
             foreach (var item in results)
             {
-                if (item.ValueType == Common.ValueType.Variable)
+                if (item.ValueType == ValueType.Variable)
                 {
-                    item.ValueType = Common.ValueType.SpecialVariable;
+                    item.ValueType = ValueType.SpecialVariable;
                 }
             }
             return results;

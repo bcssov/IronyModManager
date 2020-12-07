@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -17,8 +17,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using IronyModManager.IO.Common.Mods;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
@@ -99,9 +100,9 @@ namespace IronyModManager.IO.Mods.InfoProviders
             }
 
             EnsureValidType(definition);
-            var fileName = definition.ValueType == Parser.Common.ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
+            var fileName = definition.ValueType == ValueType.WholeTextFile ? Path.GetFileName(definition.File) : $"{definition.Id}{Path.GetExtension(definition.File)}";
             string proposedFileName = string.Empty;
-            if (definition.ValueType == Parser.Common.ValueType.WholeTextFile)
+            if (definition.ValueType == ValueType.WholeTextFile)
             {
                 return definition.File;
             }
@@ -220,7 +221,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         /// <exception cref="ArgumentException">Invalid type.</exception>
         protected virtual void EnsureValidType(IDefinition definition)
         {
-            if (definition.ValueType == Parser.Common.ValueType.Variable || definition.ValueType == Parser.Common.ValueType.Namespace)
+            if (definition.ValueType == ValueType.Variable || definition.ValueType == ValueType.Namespace)
             {
                 throw new ArgumentException("Invalid type.");
             }

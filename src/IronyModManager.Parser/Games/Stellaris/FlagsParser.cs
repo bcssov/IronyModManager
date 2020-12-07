@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="FlagsParser.cs" company="Mario">
 //     Mario
@@ -16,9 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Games.Stellaris
 {
@@ -79,8 +80,8 @@ namespace IronyModManager.Parser.Games.Stellaris
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public override IEnumerable<IDefinition> Parse(ParserArgs args)
         {
-            var valType = !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? Common.ValueType.Binary : Common.ValueType.WholeTextFile;
-            if (valType == Common.ValueType.WholeTextFile)
+            var valType = !Constants.TextExtensions.Any(s => args.File.EndsWith(s, StringComparison.OrdinalIgnoreCase)) ? ValueType.Binary : ValueType.WholeTextFile;
+            if (valType == ValueType.WholeTextFile)
             {
                 var errors = EvalForErrorsOnly(args);
                 if (errors != null)
@@ -100,7 +101,7 @@ namespace IronyModManager.Parser.Games.Stellaris
                 def.Id = Path.GetFileName(args.File).ToLowerInvariant();
             }
             def.ValueType = valType;
-            if (valType == Common.ValueType.WholeTextFile)
+            if (valType == ValueType.WholeTextFile)
             {
                 // Get tags only
                 var definitions = ParseRoot(args);
@@ -120,7 +121,7 @@ namespace IronyModManager.Parser.Games.Stellaris
             {
                 def.Tags.Add(def.Id);
             }
-            MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: def.ValueType == Common.ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType));
+            MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: def.ValueType == ValueType.Binary ? Common.Constants.BinaryType : Common.Constants.TxtType));
             return new List<IDefinition> { def };
         }
 

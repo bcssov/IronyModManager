@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -18,10 +18,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -132,7 +133,7 @@ namespace IronyModManager.Parser.Generic
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
                             def.Id = GetKey(cleaned, Common.Constants.Localization.YmlSeparator.ToString());
                             prevId = def.Id;
-                            def.ValueType = Common.ValueType.SpecialVariable;
+                            def.ValueType = ValueType.SpecialVariable;
                             def.Tags.Add(def.Id.ToLowerInvariant());
                             result.Add(def);
                         }

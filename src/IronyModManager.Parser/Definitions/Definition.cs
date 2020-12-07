@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -16,18 +16,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using Newtonsoft.Json;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class Definition.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
+    /// <seealso cref="IronyModManager.Shared.Models.IDefinition" />
     public class Definition : IDefinition
     {
         #region Fields
@@ -238,7 +239,7 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (ValueType == Common.ValueType.Binary)
+                if (ValueType == ValueType.Binary)
                 {
                     return ContentSHA;
                 }
@@ -308,6 +309,12 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The error message.</value>
         public string ErrorMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        public bool ExistsInLastFile { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the file.
@@ -563,7 +570,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
-        public Common.ValueType ValueType { get; set; }
+        public ValueType ValueType { get; set; }
 
         /// <summary>
         /// Gets or sets the variables.
@@ -571,11 +578,6 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The variables.</value>
         [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether [exists in last file].
-        /// </summary>
-        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
-        public bool ExistsInLastFile { get; set; } = true;
 
         #endregion Properties
 

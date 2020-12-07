@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,10 +17,12 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -29,8 +31,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
-using Avalonia;
-using IronyModManager.Implementation.Overlay;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -45,6 +45,11 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The external editor service
+        /// </summary>
+        private readonly IExternalEditorService externalEditorService;
+
+        /// <summary>
         /// The file dialog action
         /// </summary>
         private readonly IFileDialogAction fileDialogAction;
@@ -53,6 +58,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
 
         /// <summary>
         /// The localization manager
@@ -85,11 +95,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IUpdaterService updaterService;
 
         /// <summary>
-        /// The arguments changed
-        /// </summary>
-        private IDisposable argsChanged;
-
-        /// <summary>
         /// The automatic update changed
         /// </summary>
         private IDisposable autoUpdateChanged;
@@ -103,6 +108,21 @@ namespace IronyModManager.ViewModels.Controls
         /// The close game changed
         /// </summary>
         private IDisposable closeGameChanged;
+
+        /// <summary>
+        /// The editor arguments changed
+        /// </summary>
+        private IDisposable editorArgsChanged;
+
+        /// <summary>
+        /// The arguments changed
+        /// </summary>
+        private IDisposable gameArgsChanged;
+
+        /// <summary>
+        /// The is editor reloading
+        /// </summary>
+        private bool isEditorReloading = false;
 
         /// <summary>
         /// The is game reloading
@@ -119,11 +139,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
 
-        /// <summary>
-        /// The identifier generator
-        /// </summary>
-        private readonly IIDGenerator idGenerator;
-
         #endregion Fields
 
         #region Constructors
@@ -131,6 +146,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
@@ -140,7 +156,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger, 
+        public OptionsControlViewModel(IExternalEditorService externalEditorService, IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
@@ -153,7 +169,8 @@ namespace IronyModManager.ViewModels.Controls
             this.logger = logger;
             this.messageBus = messageBus;
             this.idGenerator = idGenerator;
-            UpdaterMargin = new Thickness(0, 20, 0, 0);
+            this.externalEditorService = externalEditorService;
+            LeftMargin = new Thickness(20, 0, 0, 0);
         }
 
         #endregion Constructors
@@ -233,6 +250,40 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the editor.
+        /// </summary>
+        /// <value>The editor.</value>
+        public virtual IExternalEditor Editor { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor arguments.
+        /// </summary>
+        /// <value>The editor arguments.</value>
+        [StaticLocalization(LocalizationResources.Options.Editor.EditorArgs)]
+        public virtual string EditorArgs { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor arguments placeholder.
+        /// </summary>
+        /// <value>The editor arguments placeholder.</value>
+        [StaticLocalization(LocalizationResources.Options.Editor.EditorArgsPlaceholder)]
+        public virtual string EditorArgsPlaceholder { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor executable.
+        /// </summary>
+        /// <value>The editor executable.</value>
+        [StaticLocalization(LocalizationResources.Options.Editor.EditorExecutable)]
+        public virtual string EditorExecutable { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the editor title.
+        /// </summary>
+        /// <value>The editor title.</value>
+        [StaticLocalization(LocalizationResources.Options.Editor.Title)]
+        public virtual string EditorTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the game.
         /// </summary>
         /// <value>The game.</value>
@@ -279,10 +330,16 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool IsOpen { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the left margin.
+        /// </summary>
+        /// <value>The left margin.</value>
+        public virtual Thickness LeftMargin { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the navigate.
         /// </summary>
         /// <value>The navigate.</value>
-        [StaticLocalization(LocalizationResources.Options.Game.NavigateTo)]
+        [StaticLocalization(LocalizationResources.Options.NavigateTo)]
         public virtual string Navigate { get; protected set; }
 
         /// <summary>
@@ -290,6 +347,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The navigate directory command.</value>
         public virtual ReactiveCommand<Unit, Unit> NavigateDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate editor command.
+        /// </summary>
+        /// <value>The navigate editor command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateEditorCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate editor title.
+        /// </summary>
+        /// <value>The navigate editor title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.EditorTitle)]
+        public virtual string NavigateEditorTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the navigate executable command.
@@ -342,7 +412,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
-        [StaticLocalization(LocalizationResources.Options.Game.Reset)]
+        [StaticLocalization(LocalizationResources.Options.Reset)]
         public virtual string Reset { get; protected set; }
 
         /// <summary>
@@ -356,6 +426,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The reset directory command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset editor arguments command.
+        /// </summary>
+        /// <value>The reset editor arguments command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetEditorArgsCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset editor executable command.
+        /// </summary>
+        /// <value>The reset editor executable command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetEditorExeCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset command.
@@ -408,12 +490,6 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Options.Updates.Version)]
         public virtual string VersionTitle { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets the updater margin.
-        /// </summary>
-        /// <value>The updater margin.</value>
-        public virtual Thickness UpdaterMargin { get; protected set; }
-
         #endregion Properties
 
         #region Methods
@@ -430,6 +506,7 @@ namespace IronyModManager.ViewModels.Controls
         /// check for updates as an asynchronous operation.
         /// </summary>
         /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task CheckForUpdatesAsync(bool autoUpdateCheck = false)
         {
             CheckingForUpdates = true;
@@ -469,6 +546,7 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             SetGame(gameService.GetSelected());
+            SetEditor(externalEditorService.Get());
             var updateSettings = updaterService.Get();
             if (updateSettings.AutoUpdates == null)
             {
@@ -532,6 +610,18 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            NavigateEditorCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenDialogAsync(NavigateEditorTitle);
+                IsOpen = true;
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    Editor.ExternalEditorLocation = result;
+                    SaveEditor();
+                }
+            }).DisposeWith(disposables);
+
             NavigateDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 IsOpen = false;
@@ -559,6 +649,12 @@ namespace IronyModManager.ViewModels.Controls
                 SaveGame();
             }).DisposeWith(disposables);
 
+            ResetEditorExeCommand = ReactiveCommand.Create(() =>
+            {
+                Editor.ExternalEditorLocation = string.Empty;
+                SaveEditor();
+            }).DisposeWith(disposables);
+
             ResetDirectoryCommand = ReactiveCommand.Create(() =>
             {
                 var defaultSettings = gameService.GetDefaultGameSettings(Game);
@@ -569,6 +665,11 @@ namespace IronyModManager.ViewModels.Controls
             ResetArgsCommand = ReactiveCommand.Create(() =>
             {
                 Game.LaunchArguments = gameService.GetDefaultGameSettings(Game).LaunchArguments;
+            }).DisposeWith(disposables);
+
+            ResetEditorArgsCommand = ReactiveCommand.Create(() =>
+            {
+                Editor.ExternalEditorParameters = string.Empty;
             }).DisposeWith(disposables);
 
             AutoConfigureCommand = ReactiveCommand.CreateFromTask(async () =>
@@ -658,6 +759,18 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Saves the editor.
+        /// </summary>
+        protected virtual void SaveEditor()
+        {
+            var settings = externalEditorService.Get();
+            settings.ExternalEditorLocation = Editor.ExternalEditorLocation;
+            settings.ExternalEditorParameters = Editor.ExternalEditorParameters;
+            externalEditorService.Save(settings);
+            SetEditor(settings);
+        }
+
+        /// <summary>
         /// Saves this instance.
         /// </summary>
         protected virtual void SaveGame()
@@ -689,17 +802,33 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets the editor.
+        /// </summary>
+        /// <param name="externalEditor">The external editor.</param>
+        protected virtual void SetEditor(IExternalEditor externalEditor)
+        {
+            isEditorReloading = true;
+            Editor = externalEditor;
+            editorArgsChanged?.Dispose();
+            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(p => !isEditorReloading).Subscribe(s =>
+            {
+                SaveEditor();
+            }).DisposeWith(Disposables);
+            isEditorReloading = false;
+        }
+
+        /// <summary>
         /// Sets the game.
         /// </summary>
         /// <param name="game">The game.</param>
         protected virtual void SetGame(IGame game)
         {
             isGameReloading = true;
-            argsChanged?.Dispose();
+            gameArgsChanged?.Dispose();
             refreshDescriptorsChanged?.Dispose();
             closeGameChanged?.Dispose();
             Game = game;
-            argsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
+            gameArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isGameReloading).Subscribe(s =>
             {
                 SaveGame();
             }).DisposeWith(Disposables);
@@ -712,7 +841,7 @@ namespace IronyModManager.ViewModels.Controls
                 SaveGame();
             }).DisposeWith(Disposables);
             ShowGameOptions = game != null;
-            UpdaterMargin = new Thickness(0, ShowGameOptions ? 20 : 0, 0, 0);
+            LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
             isGameReloading = false;
         }
 

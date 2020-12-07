@@ -4,7 +4,7 @@
 // Created          : 02-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DefinesParser.cs" company="Mario">
 //     Mario
@@ -16,10 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -98,13 +99,13 @@ namespace IronyModManager.Parser.Generic
                             string id = EvalDefinitionId(item.Values, item.Key);
                             MapDefinitionFromArgs(ConstructArgs(args, definition, typeOverride: $"{dataItem.Key}-{Common.Constants.TxtType}"));
                             definition.Id = TrimId(id);
-                            definition.ValueType = Common.ValueType.SpecialVariable;
+                            definition.ValueType = ValueType.SpecialVariable;
                             definition.Code = FormatCode(item, dataItem.Key);
                             definition.OriginalCode = FormatCode(item, skipVariables: true);
                             definition.CodeSeparator = Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                             definition.CodeTag = dataItem.Key;
                             var tags = ParseScriptTags(item.Values, item.Key);
-                            if (tags.Count() > 0)
+                            if (tags.Any())
                             {
                                 foreach (var tag in tags)
                                 {

@@ -22,6 +22,7 @@ using IronyModManager.Parser.Games.Stellaris;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -122,7 +123,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new ScriptedVariablesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(4);
+            result.Count.Should().Be(4);
             for (int i = 0; i < 4; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -133,23 +134,23 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
 
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
 
                     case 2:
                         result[i].Id.Should().Be("asl_mode_options_3");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
 
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
 
                     default:

@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -22,9 +22,9 @@ using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -251,7 +251,7 @@ namespace IronyModManager.ViewModels.Controls
             if (hierarchicalDefinitions != null)
             {
                 HierarchicalDefinitions = hierarchicalDefinitions.ToObservableCollection();
-                if (HierarchicalDefinitions.Count() > 0 && SelectedHierarchicalDefinition == null)
+                if (HierarchicalDefinitions.Any() && SelectedHierarchicalDefinition == null)
                 {
                     SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault();
                 }

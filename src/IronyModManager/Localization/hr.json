@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Da",
-        "No": "Ne"
+        "No": "Ne",
+        "Confirm": "Potvrdi",
+        "Cancel": "Otkaži"
     },
     "FileDialog": {
         "FileName": "Naziv datoteke",
@@ -247,7 +249,8 @@
             "CopyText": "Kopiraj Tekst",
             "Delete": "Obriši",
             "Undo": "Poništi",
-            "Redo": "Ponovi"
+            "Redo": "Ponovi",
+            "Editor": "Vanjsko spajanje"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -288,6 +291,10 @@
             "Path": "Direktorij",
             "Save": "Snimi",
             "Close": "Zatvori"
+        },
+        "Editor": {
+            "Title": "Vanjsko spajanje",
+            "Message": "Pritisnite potvrdi nakon što ste zadovoljni vanjskim spajanjem."
         }
     },
     "ConflictIgnore": {
@@ -298,12 +305,18 @@
     "Options": {
         "Name": "Opcije",
         "Close": "Zatvori",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "Opcije vanjskog uređivača",
+            "EditorExecutable": "Izvršna datoteka",
+            "EditorArgs": "Argumenti",
+            "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
-            "Title": "Title",
-            "NavigateTo": "...",
-            "Reset": "X",
+            "Title": "Mogućnosti igre",
             "GameExecutable": "Izvršna datoteka",
-            "UserDirectory": "Data Directory",
+            "UserDirectory": "Katalog podataka",
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
@@ -337,7 +350,8 @@
         "Dialog": {
             "ExeTitle": "Nađi izvršnu datoteku igre",
             "GameRootTitle": "Pronađite osnovni direktorij igre",
-            "UserDirTitle": "Pronađite direktorij podataka o igri"
+            "UserDirTitle": "Pronađite direktorij podataka o igri",
+            "EditorTitle": "Nađi izvršnu dateoteku editora"
         }
     },
     "Notifications": {

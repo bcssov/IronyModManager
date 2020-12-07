@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Views.Controls
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MergeViewerControlView"/> class.
+        /// Initializes a new instance of the <see cref="MergeViewerControlView" /> class.
         /// </summary>
         public MergeViewerControlView()
         {
@@ -510,7 +510,22 @@ namespace IronyModManager.Views.Controls
         /// <returns>List&lt;MenuItem&gt;.</returns>
         private List<MenuItem> GetEditableMenuItems(bool leftSide)
         {
-            var menuItems = new List<MenuItem>()
+            var menuItems = new List<MenuItem>();
+            if (ViewModel.EditorAvailable)
+            {
+                menuItems.Add(new MenuItem()
+                {
+                    Header = ViewModel.Editor,
+                    Command = ViewModel.EditorCommand,
+                    CommandParameter = leftSide
+                });
+                menuItems.Add(new MenuItem()
+                {
+                    Header = "-"
+                });
+            }
+
+            var mainEditingItems = new List<MenuItem>()
             {
                 new MenuItem()
                 {
@@ -563,6 +578,8 @@ namespace IronyModManager.Views.Controls
                     CommandParameter = leftSide
                 },
             };
+            menuItems.AddRange(mainEditingItems);
+
             var redoAvailable = ViewModel.IsRedoAvailable();
             var undoAvailable = ViewModel.IsUndoAvailable();
             if (redoAvailable || undoAvailable)

@@ -38,7 +38,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="storageProvider">The storage provider.</param>
-        private void SetupMockCase(Mock<IPreferencesService> preferencesService, Mock<IStorageProvider> storageProvider)
+        private static void SetupMockCase(Mock<IPreferencesService> preferencesService, Mock<IStorageProvider> storageProvider)
         {
             DISetup.SetupContainer();
             preferencesService.Setup(p => p.Get()).Returns(() =>

@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Yes",
-        "No": "No"
+        "No": "No",
+        "Confirm": "Confirm",
+        "Cancel": "Cancel"
     },
     "FileDialog": {
         "FileName": "File name",
@@ -247,7 +249,8 @@
             "CopyText": "Copy Text",
             "Delete": "Delete",
             "Undo": "Undo",
-            "Redo": "Redo"
+            "Redo": "Redo",
+            "Editor": "External Merge"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -288,6 +291,10 @@
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"
+        },
+        "Editor": {
+            "Title": "External Merge",
+            "Message": "Press confirm once you are satisfied with external merge."
         }
     },
     "ConflictIgnore": {
@@ -298,10 +305,16 @@
     "Options": {
         "Name": "Options",
         "Close": "Close",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "External Editor Options",
+            "EditorExecutable": "Editor Executable",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "Game Options",
-            "NavigateTo": "...",
-            "Reset": "X",
             "GameExecutable": "Game Executable",
             "UserDirectory": "Data Directory",
             "GameArgs": "Game Args",
@@ -337,7 +350,8 @@
         "Dialog": {
             "ExeTitle": "Find game executable",
             "GameRootTitle": "Find game root directory",
-            "UserDirTitle": "Find game data directory"
+            "UserDirTitle": "Find game data directory",
+            "EditorTitle": "Find editor executable"
         }
     },
     "Notifications": {

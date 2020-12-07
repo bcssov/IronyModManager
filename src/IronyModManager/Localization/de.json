@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Ja",
-        "No": "Nein"
+        "No": "Nein",
+        "Confirm": "Bestätigen",
+        "Cancel": "Stornieren"
     },
     "FileDialog": {
         "FileName": "Dateiname",
@@ -247,7 +249,8 @@
             "CopyText": "Text kopieren",
             "Delete": "Löschen",
             "Undo": "Rückgängig machen",
-            "Redo": "Wiederholen"
+            "Redo": "Wiederholen",
+            "Editor": "Externe Zusammenführung"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",
@@ -288,6 +291,10 @@
             "Path": "Verzeichnis",
             "Save": "Sparen",
             "Close": "Schließen"
+        },
+        "Editor": {
+            "Title": "Externe Zusammenführung",
+            "Message": "Drücken Sie auf Bestätigen, sobald Sie mit der externen Zusammenführung zufrieden sind."
         }
     },
     "ConflictIgnore": {
@@ -298,12 +305,18 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "Externe Editoroptionen",
+            "EditorExecutable": "Editor ausführbar",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "Spieleinstellungen",
-            "NavigateTo": "...",
-            "Reset": "X",
             "GameExecutable": "Spiel ausführbar",
-            "UserDirectory": "Data Directory",
+            "UserDirectory": "Datenverzeichnis",
             "GameArgs": "Spiel Args",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
@@ -337,7 +350,8 @@
         "Dialog": {
             "ExeTitle": "Finde eine ausführbare Spieldatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
-            "UserDirTitle": "Spieldatenverzeichnis suchen"
+            "UserDirTitle": "Spieldatenverzeichnis suchen",
+            "EditorTitle": "Suchen Sie die ausführbare Editor-Datei"
         }
     },
     "Notifications": {
