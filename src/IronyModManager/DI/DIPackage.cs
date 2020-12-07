@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-22-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -39,7 +39,7 @@ namespace IronyModManager.DI
         /// <param name="container">The container the set of services is registered into.</param>
         public void RegisterServices(Container container)
         {
-            var resolver = new SimpleInjectorDependencyResolver(container);
+            var resolver = new SimpleInjectorDependencyResolver(container, new SimpleInjectorInitializer());
             resolver.InitializeSplat();
             resolver.InitializeReactiveUI();
 
