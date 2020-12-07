@@ -41,7 +41,7 @@ namespace IronyModManager.DI
         /// Gets the suppression type queues.
         /// </summary>
         /// <value>The suppression type queues.</value>
-        private static List<WarningSuppressionTypeQueue> SuppressionTypeQueues { get; } = new List<WarningSuppressionTypeQueue>();
+        private static List<WarningSuppressionTypeQueue> SuppressionTypeQueue { get; } = new List<WarningSuppressionTypeQueue>();
 
         #endregion Properties
 
@@ -53,9 +53,9 @@ namespace IronyModManager.DI
         /// <param name="skipVerify">if set to <c>true</c> [skip verify].</param>
         public static void Finish(bool skipVerify = false)
         {
-            if (SuppressionTypeQueues.Any())
+            if (SuppressionTypeQueue.Any())
             {
-                foreach (var item in SuppressionTypeQueues)
+                foreach (var item in SuppressionTypeQueue)
                 {
                     var registration = Container.GetRegistration(item.Type, false).Registration;
                     if (registration != null)
@@ -90,9 +90,9 @@ namespace IronyModManager.DI
         /// <param name="reason">The reason.</param>
         internal static void QueueSuppressionType(Type type, SimpleInjector.Diagnostics.DiagnosticType diagnosticType, string reason)
         {
-            if (!SuppressionTypeQueues.Any(t => t.Type.Equals(type) && !(t.DiagnosticType == diagnosticType)))
+            if (!SuppressionTypeQueue.Any(t => t.Type.Equals(type) && !(t.DiagnosticType == diagnosticType)))
             {
-                SuppressionTypeQueues.Add(new WarningSuppressionTypeQueue()
+                SuppressionTypeQueue.Add(new WarningSuppressionTypeQueue()
                 {
                     DiagnosticType = diagnosticType,
                     Reason = reason,
