@@ -127,11 +127,26 @@ namespace IronyModManager.Parser.Generic
                         {
                             var def = GetDefinitionInstance();
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
-                            def.Code = $"{selectedLanguage}:{Environment.NewLine} {cleaned}";
-                            def.OriginalCode = cleaned;
+                            string code = cleaned;
+                            var index = cleaned.IndexOf(Common.Constants.Localization.YmlSeparator.ToString());
+                            if (index > 0)
+                            {
+                                var firstSegment = code.Substring(0, index + 1);
+                                var secondSegment = code.Substring(index + 1);
+                                if (!string.IsNullOrWhiteSpace(secondSegment))
+                                {
+                                    secondSegment = secondSegment.Substring(secondSegment.IndexOf("\""));
+                                }
+                                if (!string.IsNullOrWhiteSpace(firstSegment) && !string.IsNullOrWhiteSpace(secondSegment))
+                                {
+                                    code = $"{firstSegment}1000 {secondSegment}";
+                                }
+                            }
+                            def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
+                            def.OriginalCode = code;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
                             def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            def.Id = GetKey(cleaned, Common.Constants.Localization.YmlSeparator.ToString());
+                            def.Id = GetKey(code, Common.Constants.Localization.YmlSeparator.ToString());
                             prevId = def.Id;
                             def.ValueType = ValueType.SpecialVariable;
                             def.Tags.Add(def.Id.ToLowerInvariant());

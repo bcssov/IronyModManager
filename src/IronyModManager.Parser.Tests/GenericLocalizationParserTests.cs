@@ -63,15 +63,15 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"l_english:");
-            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:0 ""Brave New World""");                        
+            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");                        
 
             var sb3 = new StringBuilder();
             sb3.AppendLine(@"l_english:");            
-            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:0 ""Colonize a planet""");            
+            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");            
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"l_english:");            
-            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:0 ""Digging Deep""");
+            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:1000 ""Digging Deep""");
 
             var args = new ParserArgs()
             {
@@ -131,15 +131,15 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"l_english:");
-            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:0 ""Brave New World""");
+            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");
 
             var sb3 = new StringBuilder();
             sb3.AppendLine(@"l_english:");
-            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:0 ""Colonize a planet""");
+            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"l_english:");
-            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:0 ""Digging Deep""");
+            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:1000 ""Digging Deep""");
 
             var args = new ParserArgs()
             {
