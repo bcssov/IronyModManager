@@ -375,7 +375,7 @@ namespace IronyModManager.Views.Controls
                 // It's a hack I know see: https://github.com/AvaloniaUI/AvaloniaEdit/issues/99.
                 // I'd need to go into the code to fix it and it ain't worth it. There doesn't seem to be any feedback on this issue as well.
                 var lines = editor.Text.SplitOnNewLine(false).ToList();
-                if (lines.Count() > 3)
+                if (lines.Count > 3)
                 {
                     if (manualAppend)
                     {
@@ -385,7 +385,7 @@ namespace IronyModManager.Views.Controls
                     var carretOffset = editor.CaretOffset;
                     for (int i = 1; i <= 3; i++)
                     {
-                        var last = lines[lines.Count() - i];
+                        var last = lines[^i];
                         if (!string.IsNullOrWhiteSpace(last))
                         {
                             manualAppend = true;

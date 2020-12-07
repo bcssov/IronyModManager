@@ -11,8 +11,9 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
 using IronyModManager.Localization;
 using IronyModManager.Shared.Models;
 
@@ -88,6 +89,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The source.</value>
         ModSource Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version data.
+        /// </summary>
+        /// <value>The version data.</value>
+        Version VersionData { get; }
 
         #endregion Properties
     }

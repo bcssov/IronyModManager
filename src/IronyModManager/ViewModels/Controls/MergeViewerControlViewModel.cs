@@ -659,7 +659,7 @@ namespace IronyModManager.ViewModels.Controls
                         initial = null;
                         appliedOffset = 0;
                         var groupCopy = grouped.Skip(item.Item4 + 1).TakeWhile(p => p.Item3 <= 1);
-                        if (groupCopy.Count() > 0)
+                        if (groupCopy.Any())
                         {
                             if (groupCopy.Last() != initial)
                             {
@@ -789,7 +789,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             var selected = leftSide ? LeftSideSelected : RightSideSelected;
             var source = leftSide ? LeftDiff : RightDiff;
-            if (selected != null && source != null && (selected.Count > 0 && selected.Count() < source.Count()))
+            if (selected != null && source != null && selected.Count > 0 && selected.Count < source.Count)
             {
                 foreach (var item in selected)
                 {
@@ -814,7 +814,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void FindConflict(bool leftSide, bool moveDown)
         {
             var selectedItems = leftSide ? LeftSideSelected : RightSideSelected;
-            if (selectedItems?.Count() > 0)
+            if (selectedItems?.Count > 0)
             {
                 var source = leftSide ? LeftDiff : RightDiff;
                 var idx = source.IndexOf(selectedItems.FirstOrDefault());
@@ -1201,7 +1201,7 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             else
                             {
-                                SetText(LeftSide, files.RightDiff.Text);                                
+                                SetText(LeftSide, files.RightDiff.Text);
                             }
                         }
                     }

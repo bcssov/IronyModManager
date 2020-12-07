@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2020
+// Last Modified On : 12-03-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -781,10 +781,12 @@ namespace IronyModManager.ViewModels.Controls
             switch (ModNameSortOrder.SortOrder)
             {
                 case SortOrder.Asc:
+                    SelectedMod = null;
                     SetSelectedMods(SelectedMods.OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 
                 case SortOrder.Desc:
+                    SelectedMod = null;
                     SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 

@@ -350,7 +350,7 @@ namespace IronyModManager.Services
             mod.FileName = GetModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
-            mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.Tags = new List<string>() { "Fixes" };
             return mod;
         }

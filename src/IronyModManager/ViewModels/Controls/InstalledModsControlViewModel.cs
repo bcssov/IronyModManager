@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -404,6 +404,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool RefreshingMods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the selected mod.
+        /// </summary>
+        /// <value>The selected mod.</value>
+        public virtual IMod SelectedMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
@@ -540,7 +546,7 @@ namespace IronyModManager.ViewModels.Controls
                     break;
 
                 case ModVersionKey:
-                    SortFunction(x => x.Version, sortModel.Key);
+                    SortFunction(x => x.VersionData, sortModel.Key);
                     break;
 
                 default:
@@ -976,6 +982,7 @@ namespace IronyModManager.ViewModels.Controls
                             FilteredMods = FilteredMods.OrderBy(sortProp).ToObservableCollection();
                             AllMods = AllMods.OrderBy(sortProp).ToHashSet();
                         }
+                        SelectedMod = null;
                         break;
 
                     case Implementation.SortOrder.Desc:
@@ -989,6 +996,7 @@ namespace IronyModManager.ViewModels.Controls
                             FilteredMods = FilteredMods.OrderByDescending(sortProp).ToObservableCollection();
                             AllMods = AllMods.OrderByDescending(sortProp).ToHashSet();
                         }
+                        SelectedMod = null;
                         break;
 
                     default:

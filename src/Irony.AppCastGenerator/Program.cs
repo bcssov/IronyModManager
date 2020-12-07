@@ -4,7 +4,7 @@
 // Created          : 09-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="NetSparkle">
 //     NetSparkle
@@ -107,11 +107,15 @@ namespace Irony.AppCastGenerator
                 var didSucceed = _signatureManager.Generate(opts.ForceRegeneration);
                 if (didSucceed)
                 {
+#pragma warning disable CA2241 // Provide correct arguments to formatting methods
                     Console.WriteLine("Keys successfully generated", Color.Green);
+#pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 }
                 else
                 {
+#pragma warning disable CA2241 // Provide correct arguments to formatting methods
                     Console.WriteLine("Keys failed to generate", Color.Red);
+#pragma warning restore CA2241 // Provide correct arguments to formatting methods
                 }
                 return;
             }
@@ -165,7 +169,7 @@ namespace Irony.AppCastGenerator
 
             Console.WriteLine("");
             Console.WriteLine($"Searching: {opts.SourceBinaryDirectory}", Color.Blue);
-            Console.WriteLine($"Found {binaries.Count()} {opts.Extension} files(s)", Color.Blue);
+            Console.WriteLine($"Found {binaries.Count} {opts.Extension} files(s)", Color.Blue);
             Console.WriteLine("");
 
             try

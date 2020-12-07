@@ -217,7 +217,7 @@ namespace IronyModManager.Services
                 mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
                 mod.Name = collectionName;
                 mod.Source = ModSource.Local;
-                mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+                mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
                 await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                 {
                     Mod = mod,
@@ -508,7 +508,7 @@ namespace IronyModManager.Services
             mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
             mod.Name = collectionName;
             mod.Source = ModSource.Local;
-            mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.FullPath = GetModDirectory(game, mergeCollectionPath);
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
