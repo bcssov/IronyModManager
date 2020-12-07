@@ -42,7 +42,7 @@
                  SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
+              <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
                 <Grid.ContextMenu>
                   <ContextMenu>
                   </ContextMenu>
@@ -72,7 +72,7 @@
                  SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <Grid ColumnDefinitions="2*,8*" MinHeight="20" Background="Transparent">
+              <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
                 <Grid.ContextMenu>
                   <ContextMenu>
                   </ContextMenu>
