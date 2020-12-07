@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-11-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -313,6 +313,11 @@ namespace IronyModManager.Parser.Common
             /// The scripted variables
             /// </summary>
             public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
+
+            /// <summary>
+            /// The start screen messages
+            /// </summary>
+            public static readonly string StartScreenMessages = MergePath(CommonPath, "start_screen_messages");
 
             /// <summary>
             /// The solar system initializers
