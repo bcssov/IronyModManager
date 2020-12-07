@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,10 +17,12 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -29,8 +31,6 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
 using SmartFormat;
-using Avalonia;
-using IronyModManager.Implementation.Overlay;
 
 namespace IronyModManager.ViewModels.Controls
 {
@@ -53,6 +53,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
 
         /// <summary>
         /// The localization manager
@@ -119,11 +124,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
 
-        /// <summary>
-        /// The identifier generator
-        /// </summary>
-        private readonly IIDGenerator idGenerator;
-
         #endregion Fields
 
         #region Constructors
@@ -140,7 +140,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger, 
+        public OptionsControlViewModel(IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
@@ -153,7 +153,7 @@ namespace IronyModManager.ViewModels.Controls
             this.logger = logger;
             this.messageBus = messageBus;
             this.idGenerator = idGenerator;
-            UpdaterMargin = new Thickness(0, 20, 0, 0);
+            UpdaterMargin = new Thickness(20, 0, 0, 0);
         }
 
         #endregion Constructors
@@ -383,6 +383,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string UpdateOptions { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the updater margin.
+        /// </summary>
+        /// <value>The updater margin.</value>
+        public virtual Thickness UpdaterMargin { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the update settings.
         /// </summary>
         /// <value>The update settings.</value>
@@ -408,12 +414,6 @@ namespace IronyModManager.ViewModels.Controls
         [StaticLocalization(LocalizationResources.Options.Updates.Version)]
         public virtual string VersionTitle { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets the updater margin.
-        /// </summary>
-        /// <value>The updater margin.</value>
-        public virtual Thickness UpdaterMargin { get; protected set; }
-
         #endregion Properties
 
         #region Methods
@@ -430,6 +430,7 @@ namespace IronyModManager.ViewModels.Controls
         /// check for updates as an asynchronous operation.
         /// </summary>
         /// <param name="autoUpdateCheck">if set to <c>true</c> [automatic update check].</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task CheckForUpdatesAsync(bool autoUpdateCheck = false)
         {
             CheckingForUpdates = true;
@@ -712,7 +713,7 @@ namespace IronyModManager.ViewModels.Controls
                 SaveGame();
             }).DisposeWith(Disposables);
             ShowGameOptions = game != null;
-            UpdaterMargin = new Thickness(0, ShowGameOptions ? 20 : 0, 0, 0);
+            UpdaterMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
             isGameReloading = false;
         }
 

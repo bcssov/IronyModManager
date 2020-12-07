@@ -298,6 +298,14 @@
     "Options": {
         "Name": "Options",
         "Close": "Close",
+        "Editor": {
+            "Title": "External Editor Options",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "EditorExecutable": "Editor Executable",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "Game Options",
             "NavigateTo": "...",

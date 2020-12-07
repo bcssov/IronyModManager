@@ -298,6 +298,14 @@
     "Options": {
         "Name": "选项",
         "Close": "关闭",
+        "Editor": {
+            "Title": "外部编辑器选项",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "EditorExecutable": "编辑器可执行",
+            "EditorArgs": "编辑Args",
+            "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "游戏选项",
             "NavigateTo": "...",

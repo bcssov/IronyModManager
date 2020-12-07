@@ -395,6 +395,16 @@ namespace IronyModManager.Shared
             public const string Prefix = "Options.";
             public const string Name = Prefix + "Name";
             public const string Close = Prefix + "Close";
+            public static class Editor
+            {
+                public const string Prefix = "Options.Editor.";
+                public const string Title = Prefix + "Title";
+                public const string NavigateTo = Prefix + "NavigateTo";
+                public const string Reset = Prefix + "Reset";
+                public const string EditorExecutable = Prefix + "EditorExecutable";
+                public const string EditorArgs = Prefix + "EditorArgs";
+                public const string EditorArgsPlaceholder = Prefix + "EditorArgsPlaceholder";
+            }
             public static class Game
             {
                 public const string Prefix = "Options.Game.";

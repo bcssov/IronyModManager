@@ -298,12 +298,20 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
+        "Editor": {
+            "Title": "Externe Editoroptionen",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "EditorExecutable": "Editor ausführbar",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "Spieleinstellungen",
             "NavigateTo": "...",
             "Reset": "X",
             "GameExecutable": "Spiel ausführbar",
-            "UserDirectory": "Data Directory",
+            "UserDirectory": "Datenverzeichnis",
             "GameArgs": "Spiel Args",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",

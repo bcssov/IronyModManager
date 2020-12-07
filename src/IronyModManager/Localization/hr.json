@@ -298,12 +298,20 @@
     "Options": {
         "Name": "Opcije",
         "Close": "Zatvori",
+        "Editor": {
+            "Title": "Opcije vanjskog uređivača",
+            "NavigateTo": "...",
+            "Reset": "X",
+            "EditorExecutable": "Izvršna datoteka",
+            "EditorArgs": "Argumenti",
+            "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
-            "Title": "Title",
+            "Title": "Mogućnosti igre",
             "NavigateTo": "...",
             "Reset": "X",
             "GameExecutable": "Izvršna datoteka",
-            "UserDirectory": "Data Directory",
+            "UserDirectory": "Katalog podataka",
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
