@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-09-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -231,6 +231,16 @@ namespace IronyModManager.IO.Tests
         private class Reader1 : IFileReader
         {
             /// <summary>
+            /// Determines whether this instance [can list files] the specified path.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns><c>true</c> if this instance [can list files] the specified path; otherwise, <c>false</c>.</returns>
+            public bool CanListFiles(string path)
+            {
+                return true;
+            }
+
+            /// <summary>
             /// Determines whether this instance can read the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
@@ -238,6 +248,16 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake1");
+            }
+
+            /// <summary>
+            /// Determines whether this instance [can read stream] the specified path.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns><c>true</c> if this instance [can read stream] the specified path; otherwise, <c>false</c>.</returns>
+            public bool CanReadStream(string path)
+            {
+                return true;
             }
 
             /// <summary>
@@ -289,6 +309,16 @@ namespace IronyModManager.IO.Tests
         private class Reader2 : IFileReader
         {
             /// <summary>
+            /// Determines whether this instance [can list files] the specified path.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns><c>true</c> if this instance [can list files] the specified path; otherwise, <c>false</c>.</returns>
+            public bool CanListFiles(string path)
+            {
+                return true;
+            }
+
+            /// <summary>
             /// Determines whether this instance can read the specified path.
             /// </summary>
             /// <param name="path">The path.</param>
@@ -296,6 +326,16 @@ namespace IronyModManager.IO.Tests
             public bool CanRead(string path)
             {
                 return path.Equals("fake2");
+            }
+
+            /// <summary>
+            /// Determines whether this instance [can read stream] the specified path.
+            /// </summary>
+            /// <param name="path">The path.</param>
+            /// <returns><c>true</c> if this instance [can read stream] the specified path; otherwise, <c>false</c>.</returns>
+            public bool CanReadStream(string path)
+            {
+                return true;
             }
 
             /// <summary>
