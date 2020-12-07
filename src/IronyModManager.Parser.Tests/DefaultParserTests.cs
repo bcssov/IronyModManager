@@ -20,6 +20,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Default;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
@@ -114,20 +115,20 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 2:
                         result[i].Id.Should().Be("asl_mode_options_3");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -232,20 +233,20 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("asl_mode_options_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 2:
                         result[i].Id.Should().Be("asl_mode_options_3");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 3:
                         result[i].Id.Should().Be("asl_mode_options_5");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
                         break;
                     default:

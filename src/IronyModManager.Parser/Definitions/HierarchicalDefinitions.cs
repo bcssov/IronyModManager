@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -13,14 +13,16 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class HierarchicalDefinitions.
     /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IHierarchicalDefinitions" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IHierarchicalDefinitions" />
     /// <seealso cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
     public class HierarchicalDefinitions : IHierarchicalDefinitions
     {

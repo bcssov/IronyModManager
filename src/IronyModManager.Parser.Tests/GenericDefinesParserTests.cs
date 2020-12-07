@@ -19,6 +19,7 @@ using FluentAssertions;
 using IronyModManager.Parser.Common.Args;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
@@ -68,7 +69,7 @@ namespace IronyModManager.Parser.Tests
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NCamera = {");
             sb2.AppendLine(@"    FOV = 35");
-            sb2.Append(@"}");
+            sb2.Append('}');
 
             var sb3 = new System.Text.StringBuilder();
             sb3.AppendLine(@"NCamera = {");
@@ -77,12 +78,12 @@ namespace IronyModManager.Parser.Tests
             sb3.AppendLine(@"        -0.6");
             sb3.AppendLine(@"        0.3");
             sb3.AppendLine(@"    }");
-            sb3.Append(@"}");            
+            sb3.Append('}');            
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics = {");
             sb4.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
-            sb4.Append(@"}");
+            sb4.Append('}');
 
 
             var args = new ParserArgs()
@@ -96,7 +97,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count.Should().Be(3);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -107,19 +108,19 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("FOV");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NCamera-txt");
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NCamera-txt");
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
                         break;
                     default:
@@ -177,7 +178,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"		""policies""");
             sb2.AppendLine(@"		""F10""");
             sb2.AppendLine(@"	}");
-            sb2.Append(@"}");
+            sb2.Append('}');
 
             var args = new ParserArgs()
             {
@@ -190,7 +191,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -200,7 +201,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Code.Should().Be(sb2.ToString().ReplaceTabs());
                         result[i].Type.Should().Be("common\\defines\\NInterface-txt");
                         break;
@@ -257,7 +258,7 @@ namespace IronyModManager.Parser.Tests
             sb2.AppendLine(@"		""policies""");
             sb2.AppendLine(@"		""F10""");
             sb2.AppendLine(@"	}");
-            sb2.Append(@"}");
+            sb2.Append('}');
 
             var args = new ParserArgs()
             {
@@ -270,7 +271,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -280,7 +281,7 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("TOPBAR_BUTTONS_SHORTCUTS");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Code.Should().Be(sb2.ToString().ReplaceTabs());
                         result[i].Type.Should().Be("common\\defines\\NInterface-txt");
                         break;
@@ -307,7 +308,7 @@ namespace IronyModManager.Parser.Tests
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NGraphics = {");
             sb2.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
-            sb2.Append(@"}");
+            sb2.Append('}');
 
 
             var args = new ParserArgs()
@@ -321,7 +322,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -332,7 +333,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("CAMERA_DISTANCE_TO_ZOOM");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGraphics-txt");
                         break;
                     default:
@@ -373,7 +374,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new Generic.DefinesParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count.Should().Be(3);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -383,19 +384,19 @@ namespace IronyModManager.Parser.Tests
                 {
                     case 0:
                         result[i].Id.Should().Be("ARMY_MILITARY_POWER_EXPONENT");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NArmy-txt");
                         result[i].Code.Should().Be("NArmy = {\r\n    ARMY_MILITARY_POWER_EXPONENT = 0.5\r\n}");
                         break;
                     case 1:
                         result[i].Id.Should().Be("ASCENSION_PERKS_SLOTS");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
                         result[i].Code.Should().Be("NGameplay = {\r\n    ASCENSION_PERKS_SLOTS = 12\r\n}");
                         break;
                     case 2:
                         result[i].Id.Should().Be("JUMP_DRIVE_COOLDOWN");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         result[i].Type.Should().Be("common\\defines\\NGameplay-txt");
                         result[i].Code.Should().Be("NGameplay = {\r\n    JUMP_DRIVE_COOLDOWN = 0\r\n}");
                         break;

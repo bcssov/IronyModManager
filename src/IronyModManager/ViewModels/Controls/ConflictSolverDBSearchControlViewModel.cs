@@ -4,7 +4,7 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverDBSearchControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,8 +21,8 @@ using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls

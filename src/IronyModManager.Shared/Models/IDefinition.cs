@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common.Definitions
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using CodexMicroORM.Core.Collections;
 using Newtonsoft.Json;
 
-namespace IronyModManager.Parser.Common.Definitions
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Interface IDefinition

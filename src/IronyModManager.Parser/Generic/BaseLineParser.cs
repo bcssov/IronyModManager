@@ -4,7 +4,7 @@
 // Created          : 08-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-31-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="BaseLineParser.cs" company="Mario">
 //     Mario
@@ -91,7 +91,7 @@ namespace IronyModManager.Parser.Generic
                 if (prev == 0 || !char.IsWhiteSpace(cleaned[prev - 1]))
                 {
                     var parsed = cleaned.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
+                    if (parsed.Length > 0)
                     {
                         if (parsed.First().StartsWith("\""))
                         {
@@ -121,9 +121,9 @@ namespace IronyModManager.Parser.Generic
                 var prev = cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase);
                 if (prev == 0 || char.IsWhiteSpace(cleaned[prev - 1]) || cleaned[prev - 1] == Common.Constants.Scripts.OpenObject || cleaned[prev - 1] == Common.Constants.Scripts.CloseObject)
                 {
-                    var part = cleaned.Substring(cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase));
+                    var part = cleaned[cleaned.IndexOf(key, StringComparison.OrdinalIgnoreCase)..];
                     var parsed = part.Split(key, StringSplitOptions.RemoveEmptyEntries);
-                    if (parsed.Count() > 0)
+                    if (parsed.Length > 0)
                     {
                         if (parsed.First().StartsWith("\""))
                         {

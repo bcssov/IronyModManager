@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -15,7 +15,6 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Parser.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
@@ -26,6 +25,7 @@ using IronyModManager.Parser.Generic;
 using IronyModManager.Parser.Mod;
 using IronyModManager.Parser.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using SimpleInjector;
 using SimpleInjector.Packaging;
 

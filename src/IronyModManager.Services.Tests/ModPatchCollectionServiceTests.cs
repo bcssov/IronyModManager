@@ -29,7 +29,6 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
@@ -37,11 +36,13 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 using FileInfo = IronyModManager.IO.FileInfo;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services.Tests
 {
@@ -278,7 +279,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -287,7 +288,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -328,7 +329,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -337,7 +338,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -346,7 +347,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "c",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -387,7 +388,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -396,7 +397,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -437,7 +438,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -446,7 +447,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -455,7 +456,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1", "test2" }
                 }
             };
@@ -496,7 +497,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -505,7 +506,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -514,7 +515,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1" }
                 }
             };
@@ -555,7 +556,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -564,7 +565,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -573,7 +574,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test2" }
                 }
             };
@@ -615,7 +616,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -624,7 +625,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -633,7 +634,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1", "test2" }
                 },
                 new Definition()
@@ -643,7 +644,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test4",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -684,7 +685,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a1",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -693,7 +694,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a2",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Variable
+                    ValueType = ValueType.Variable
                 },
                 new Definition()
                 {
@@ -702,7 +703,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a1",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -711,7 +712,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a2",
                     Type= "events",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Variable
+                    ValueType = ValueType.Variable
                 },
             };
             var indexed = new IndexedDefinitions();
@@ -751,7 +752,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -760,7 +761,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -846,7 +847,7 @@ namespace IronyModManager.Services.Tests
                 OrphanConflicts = indexed,
                 ResolvedConflicts = indexed
             };
-            var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -918,7 +919,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -927,7 +928,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();
@@ -1207,7 +1208,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1216,7 +1217,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
@@ -1295,7 +1296,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1304,7 +1305,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var definitions2 = new List<IDefinition>()
@@ -1316,7 +1317,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1325,7 +1326,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
@@ -1543,7 +1544,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed,
                 IgnoredConflicts = indexed
             };
-            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -1601,7 +1602,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1610,7 +1611,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();
@@ -2707,7 +2708,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed,
                 CustomConflicts = indexed,
             };
-            var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -2779,7 +2780,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -2788,7 +2789,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();

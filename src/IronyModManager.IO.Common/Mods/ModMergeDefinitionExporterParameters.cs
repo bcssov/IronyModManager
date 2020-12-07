@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-04-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModMergeDefinitionExporterParameters.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Mods
 {

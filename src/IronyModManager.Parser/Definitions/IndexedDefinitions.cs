@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -17,16 +17,17 @@ using System.Collections.Generic;
 using System.Linq;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class IndexedDefinitions.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IIndexedDefinitions" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
+    /// <seealso cref="IronyModManager.Shared.Models.IIndexedDefinitions" />
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
@@ -272,7 +273,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByValueType(Common.ValueType type)
+        public IEnumerable<IDefinition> GetByValueType(ValueType type)
         {
             return definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type);
         }

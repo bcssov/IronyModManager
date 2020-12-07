@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-04-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -27,14 +27,15 @@ using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
@@ -293,8 +294,8 @@ namespace IronyModManager.Services
             var fileConflictCache = new Dictionary<string, bool>();
             var fileKeys = indexedDefinitions.GetAllFileKeys();
             var typeAndIdKeys = indexedDefinitions.GetAllTypeAndIdKeys();
-            var overwritten = indexedDefinitions.GetByValueType(Parser.Common.ValueType.OverwrittenObject);
-            var empty = indexedDefinitions.GetByValueType(Parser.Common.ValueType.EmptyFile);
+            var overwritten = indexedDefinitions.GetByValueType(ValueType.OverwrittenObject);
+            var empty = indexedDefinitions.GetByValueType(ValueType.EmptyFile);
 
             double total = fileKeys.Count() + typeAndIdKeys.Count() + overwritten.Count() + empty.Count();
             double processed = 0;
@@ -308,7 +309,7 @@ namespace IronyModManager.Services
                 var emptyConflicts = indexedDefinitions.GetByFile(item.File);
                 if (emptyConflicts.Any())
                 {
-                    foreach (var emptyConflict in emptyConflicts.Where(p => p.ValueType != Parser.Common.ValueType.Invalid && !p.ModName.Equals(item.ModName)))
+                    foreach (var emptyConflict in emptyConflicts.Where(p => p.ValueType != ValueType.Invalid && !p.ModName.Equals(item.ModName)))
                     {
                         var copy = indexedDefinitions.GetByTypeAndId(emptyConflict.TypeAndId).FirstOrDefault(p => p.ModName.Equals(item.ModName));
                         if (copy == null)
@@ -1238,7 +1239,7 @@ namespace IronyModManager.Services
                 }
                 else if (allConflicts.Count() == 1)
                 {
-                    if (allConflicts.FirstOrDefault().ValueType == Parser.Common.ValueType.Binary)
+                    if (allConflicts.FirstOrDefault().ValueType == ValueType.Binary)
                     {
                         fileConflictCache.TryAdd(def.FileCI, false);
                     }
@@ -1576,10 +1577,10 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if [is valid definition type] [the specified definition]; otherwise, <c>false</c>.</returns>
         protected virtual bool IsValidDefinitionType(IDefinition definition)
         {
-            return definition != null && definition.ValueType != Parser.Common.ValueType.Variable &&
-                definition.ValueType != Parser.Common.ValueType.Namespace &&
-                definition.ValueType != Parser.Common.ValueType.Invalid &&
-                definition.ValueType != Parser.Common.ValueType.EmptyFile;
+            return definition != null && definition.ValueType != ValueType.Variable &&
+                definition.ValueType != ValueType.Namespace &&
+                definition.ValueType != ValueType.Invalid &&
+                definition.ValueType != ValueType.EmptyFile;
         }
 
         /// <summary>
@@ -1668,7 +1669,7 @@ namespace IronyModManager.Services
                     foreach (var definition in otherDefinitions)
                     {
                         var originalCode = definition.OriginalCode.ReplaceTabs().ReplaceNewLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                        var namespaces = variableDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                        var namespaces = variableDefinitions.Where(p => p.ValueType == ValueType.Namespace);
                         var variables = variableDefinitions.Where(p => originalCode.Contains(p.Id));
                         var allVars = namespaces.Concat(variables);
                         if (allVars.Any())
@@ -1851,7 +1852,7 @@ namespace IronyModManager.Services
                                     Path = item.DiskFile
                                 });
                             }
-                            if (item.ValueType == Parser.Common.ValueType.OverwrittenObject)
+                            if (item.ValueType == ValueType.OverwrittenObject)
                             {
                                 if (collectionMods == null)
                                 {

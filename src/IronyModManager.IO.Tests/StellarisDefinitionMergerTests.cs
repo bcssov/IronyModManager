@@ -17,9 +17,10 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using IronyModManager.IO.Mods.InfoProviders;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 using IronyModManager.Parser.Definitions;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Tests
 {
@@ -58,7 +59,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetEncoding(new Definition()
             {
                 File = "localisation\\test.yml",
-                ValueType = Parser.Common.ValueType.SpecialVariable
+                ValueType = ValueType.SpecialVariable
             });
             result.GetPreamble().Length.Should().Be(3);
         }
@@ -73,7 +74,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetEncoding(new Definition()
             {
                 File = "common\\name_lists\\test.txt",
-                ValueType = Parser.Common.ValueType.SpecialVariable
+                ValueType = ValueType.SpecialVariable
             });
             result.GetPreamble().Length.Should().Be(3);
         }
@@ -88,7 +89,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetEncoding(new Definition()
             {
                 File = "events\\test.txt",
-                ValueType = Parser.Common.ValueType.Object
+                ValueType = ValueType.Object
             });
             result.GetPreamble().Length.Should().Be(0);
         }
@@ -106,7 +107,7 @@ namespace IronyModManager.IO.Tests
                 var result = service.GetFileName(new Definition()
                 {
                     File = "events\\test.txt",
-                    ValueType = Parser.Common.ValueType.Namespace
+                    ValueType = ValueType.Namespace
                 });
             }
             catch (Exception e)
@@ -121,7 +122,7 @@ namespace IronyModManager.IO.Tests
                 var result = service.GetFileName(new Definition()
                 {
                     File = "events\\test.txt",
-                    ValueType = Parser.Common.ValueType.Variable
+                    ValueType = ValueType.Variable
                 });
             }
             catch (Exception e)
@@ -141,7 +142,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "events\\test.txt",
-                ValueType = Parser.Common.ValueType.Object,
+                ValueType = ValueType.Object,
                 Id = "t"
             });
             result.Should().Be("events\\!!!_t.txt");
@@ -157,7 +158,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "common\\agendas\\test.txt",
-                ValueType = Parser.Common.ValueType.Object,
+                ValueType = ValueType.Object,
                 Id = "t"
             });
             result.Should().Be("common\\agendas\\zzz_t.txt");
@@ -173,7 +174,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "localisation\\test.yml",
-                ValueType = Parser.Common.ValueType.SpecialVariable,
+                ValueType = ValueType.SpecialVariable,
                 Id = "t"
             });
             result.Should().Be("localisation\\replace\\zzz_t.yml");
@@ -189,7 +190,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "localisation\\replace\\test.yml",
-                ValueType = Parser.Common.ValueType.SpecialVariable,
+                ValueType = ValueType.SpecialVariable,
                 Id = "t"
             });
             result.Should().Be("localisation\\replace\\zzz_t.yml");
@@ -206,7 +207,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "common\\ship_behaviors\\!!!_a.txt",
-                ValueType = Parser.Common.ValueType.SpecialVariable,
+                ValueType = ValueType.SpecialVariable,
                 Id = "t"
             });
             result.Should().Be("common\\ship_behaviors\\!!!!_t.txt");
@@ -219,7 +220,7 @@ namespace IronyModManager.IO.Tests
             var result = service.GetFileName(new Definition()
             {
                 File = "common\\anomalies\\zzz_z.txt",
-                ValueType = Parser.Common.ValueType.SpecialVariable,
+                ValueType = ValueType.SpecialVariable,
                 Id = "t"
             });
             result.Should().Be("common\\anomalies\\zzzz_t.txt");
@@ -229,7 +230,7 @@ namespace IronyModManager.IO.Tests
         /// Gets the service.
         /// </summary>
         /// <returns>StellarisDefinitionInfoProvider.</returns>
-        private StellarisDefinitionInfoProvider GetService()
+        private static StellarisDefinitionInfoProvider GetService()
         {
             return new StellarisDefinitionInfoProvider();
         }

@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using CodexMicroORM.Core.Collections;
 
-namespace IronyModManager.Parser.Common.Definitions
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Interface IHierarchicalDefinitions

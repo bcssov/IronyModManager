@@ -20,6 +20,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 using Xunit;
 
 namespace IronyModManager.Parser.Tests
@@ -91,7 +92,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(2);
+            result.Count.Should().Be(2);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -102,12 +103,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
                         result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -148,7 +149,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -160,7 +161,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -198,7 +199,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -210,7 +211,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -266,7 +267,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(2);
+            result.Count.Should().Be(2);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -277,12 +278,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("test");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("test2");
                         result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
@@ -361,7 +362,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(2);
+            result.Count.Should().Be(2);
             for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -373,12 +374,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("GFX_text_military_size_2");
                         result[i].Code.Should().Be(sb3.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -422,7 +423,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -434,7 +435,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("GFX_text_military_size_1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -494,7 +495,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(2);
+            result.Count.Should().Be(2);
             for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -506,12 +507,12 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 1:
                         result[i].Id.Should().Be("l_polish-l_russian-large_title_font");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -550,7 +551,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(4);
+            result.Count.Should().Be(4);
             for (int i = 0; i < 2; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -562,21 +563,21 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("@test1");
                         result[i].CodeTag.Should().BeNullOrWhiteSpace();
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("@test2");
                         result[i].CodeTag.Should().Be("spriteTypes");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 2:
                         result[i].Id.Should().Be("@test3");
                         result[i].CodeTag.Should().Be("spriteTypes");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 3:
                         result[i].Id.Should().Be("GFX_dmm_mod_1");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -618,7 +619,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new GraphicsParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(4);
+            result.Count.Should().Be(4);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -629,21 +630,21 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Id.Should().Be("@sort_button_height");
                         result[i].CodeTag.Should().BeNullOrWhiteSpace();
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("@entry_info_height");
                         result[i].CodeTag.Should().Be("guiTypes");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;                    
                     case 2:
                         result[i].Id.Should().Be("alliance_button_window");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     case 3:
                         result[i].Id.Should().Be("@why_am_i_here");
                         result[i].CodeTag.Should().Be("guiTypes");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     default:
                         break;

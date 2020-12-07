@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IParserManager.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Common
 {

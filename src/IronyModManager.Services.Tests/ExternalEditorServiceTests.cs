@@ -39,6 +39,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_return_external_editor()
         {
+            DISetup.SetupContainer();
             var pref = new Preferences()
             {
                 ExternalEditorLocation = "test",
@@ -50,9 +51,17 @@ namespace IronyModManager.Services.Tests
                 return pref;
             });
             var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(s => s.Map<IExternalEditor>(It.IsAny<IPreferences>())).Returns((IPreferences o) =>
+            {
+                return new ExternalEditor()
+                {
+                    ExternalEditorLocation = o.ExternalEditorLocation,
+                    ExternalEditorParameters = o.ExternalEditorParameters
+                };
+            });
 
-
-            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.Get();
             result.Should().NotBeNull();
             result.ExternalEditorParameters.Should().Be(pref.ExternalEditorParameters);
@@ -74,8 +83,17 @@ namespace IronyModManager.Services.Tests
                 return true;
             });
             var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(s => s.Map(It.IsAny<IExternalEditor>(), It.IsAny<IPreferences>())).Returns((IExternalEditor o, IPreferences p) =>
+            {
+                return new Preferences()
+                {
+                    ExternalEditorLocation = o.ExternalEditorLocation,
+                    ExternalEditorParameters = o.ExternalEditorParameters
+                };
+            });
 
-            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             service.Save(new ExternalEditor() { ExternalEditorLocation = "test" }).Should().BeTrue();
             saved.ExternalEditorLocation.Should().Be("test");
         }
@@ -86,6 +104,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_return_launch_args()
         {
+            DISetup.SetupContainer();
             var pref = new Preferences()
             {
                 ExternalEditorLocation = "test",
@@ -97,9 +116,17 @@ namespace IronyModManager.Services.Tests
                 return pref;
             });
             var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(s => s.Map<IExternalEditor>(It.IsAny<IPreferences>())).Returns((IPreferences o) =>
+            {
+                return new ExternalEditor()
+                {
+                    ExternalEditorLocation = o.ExternalEditorLocation,
+                    ExternalEditorParameters = o.ExternalEditorParameters
+                };
+            });
 
-
-            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetLaunchArguments("test1", "test2");
             result.Should().Be("test test1 test2");
         }
@@ -110,6 +137,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public void Should_not_return_launch_args()
         {
+            DISetup.SetupContainer();
             var pref = new Preferences()
             {
                 ExternalEditorLocation = "test",
@@ -120,9 +148,17 @@ namespace IronyModManager.Services.Tests
                 return pref;
             });
             var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(s => s.Map<IExternalEditor>(It.IsAny<IPreferences>())).Returns((IPreferences o) =>
+            {
+                return new ExternalEditor()
+                {
+                    ExternalEditorLocation = o.ExternalEditorLocation,
+                    ExternalEditorParameters = o.ExternalEditorParameters
+                };
+            });
 
-
-            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, new Mock<IMapper>().Object);
+            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetLaunchArguments("test1", "test2");
             result.Should().BeNullOrWhiteSpace();
         }

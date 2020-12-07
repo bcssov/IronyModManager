@@ -4,7 +4,7 @@
 // Created          : 04-27-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-27-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IPriorityDefinitionResult.cs" company="Mario">
 //     Mario
@@ -13,7 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {

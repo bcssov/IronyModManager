@@ -15,8 +15,8 @@
 using System.Collections.Generic;
 using System;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models
 {
