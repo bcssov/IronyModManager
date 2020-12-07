@@ -52,6 +52,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IModHashFileReport, ModHashFileReport>();
             container.RegisterModel<IModHashReport, ModHashReport>();
             container.RegisterModel<IExternalEditor, ExternalEditor>();
+            container.RegisterModel<IExternalEditorFiles, ExternalEditorFiles>();
         }
 
         #endregion Methods

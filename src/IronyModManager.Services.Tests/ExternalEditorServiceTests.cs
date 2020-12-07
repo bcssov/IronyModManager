@@ -18,9 +18,11 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
@@ -132,6 +134,26 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_files.
+        /// </summary>
+        [Fact]
+        public void Should_return_files()
+        {
+            DISetup.SetupContainer();
+            DISetup.Container.Register<ITempFile, DummyTempFile>();
+            DISetup.Container.RemoveTransientWarning<ITempFile>();
+            DI.DIContainer.Finish(true);
+            var preferencesService = new Mock<IPreferencesService>();
+            var storageProvider = new Mock<IStorageProvider>();
+            var mapper = new Mock<IMapper>();
+
+            var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
+            var result = service.GetFiles();
+            result.LeftDiff.File.Should().Be("test");
+            result.RightDiff.File.Should().Be("test");
+        }
+
+        /// <summary>
         /// Defines the test method Should_not_return_launch_args.
         /// </summary>
         [Fact]
@@ -161,6 +183,46 @@ namespace IronyModManager.Services.Tests
             var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetLaunchArguments("test1", "test2");
             result.Should().BeNullOrWhiteSpace();
+        }
+
+        /// <summary>
+        /// Class DummyTempFile.
+        /// Implements the <see cref="IronyModManager.Shared.ITempFile" />
+        /// </summary>
+        /// <seealso cref="IronyModManager.Shared.ITempFile" />
+        public class DummyTempFile : ITempFile
+        {
+            /// <summary>
+            /// Gets the file.
+            /// </summary>
+            /// <value>The file.</value>
+            public string File => "test";
+
+            /// <summary>
+            /// Creates the specified path.
+            /// </summary>
+            /// <returns>System.String.</returns>
+            public string Create()
+            {
+                return File;
+            }
+
+            /// <summary>
+            /// Deletes this instance.
+            /// </summary>
+            /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+            public bool Delete()
+            {
+                return true;
+            }
+
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
+            public void Dispose()
+            {
+                GC.SuppressFinalize(this);
+            }
         }
     }
 }

@@ -15,8 +15,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using AutoMapper;
+using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using SmartFormat;
 
@@ -66,6 +68,20 @@ namespace IronyModManager.Services
         {
             var preferences = PreferencesService.Get();
             return Mapper.Map<IExternalEditor>(preferences);
+        }
+
+        /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <returns>IExternalEditorFiles.</returns>
+        public IExternalEditorFiles GetFiles()
+        {
+            var model = GetModelInstance<IExternalEditorFiles>();
+            model.LeftDiff = DIResolver.Get<ITempFile>();
+            model.LeftDiff.Create();
+            model.RightDiff = DIResolver.Get<ITempFile>();
+            model.RightDiff.Create();
+            return model;
         }
 
         /// <summary>

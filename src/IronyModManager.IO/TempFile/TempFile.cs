@@ -88,7 +88,10 @@ namespace IronyModManager.IO.TempFile
         /// <returns>System.String.</returns>
         public string Create()
         {
-            path = Path.GetTempFileName();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = Path.GetTempFileName();
+            }
             return path;
         }
 
@@ -123,6 +126,7 @@ namespace IronyModManager.IO.TempFile
         {
             if (!disposed)
             {
+                GC.SuppressFinalize(this);
                 Delete();
                 disposed = true;
             }

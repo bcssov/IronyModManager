@@ -34,6 +34,12 @@ namespace IronyModManager.Services.Common
         IExternalEditor Get();
 
         /// <summary>
+        /// Gets the files.
+        /// </summary>
+        /// <returns>IExternalEditorFiles.</returns>
+        IExternalEditorFiles GetFiles();
+
+        /// <summary>
         /// Gets the launch arguments.
         /// </summary>
         /// <param name="leftLocation">The left location.</param>

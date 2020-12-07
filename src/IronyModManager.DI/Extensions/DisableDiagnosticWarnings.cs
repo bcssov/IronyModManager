@@ -4,7 +4,7 @@
 // Created          : 09-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-18-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="DisableDiagnosticWarnings.cs" company="Mario">
 //     Mario
@@ -22,17 +22,19 @@ namespace IronyModManager.DI.Extensions
     /// </summary>
     public static class DisableDiagnosticWarnings
     {
-        #region Methods
-
         /// <summary>
         /// Removes the mixed lifetime warning.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container">The container.</param>
+#pragma warning disable IDE0060 // Remove unused parameter
+
+        #region Methods
+
         public static void RemoveMixedLifetimeWarning<T>(this Container container) where T : class
+#pragma warning restore IDE0060 // Remove unused parameter
         {
-            var registration = container.GetRegistration(typeof(T)).Registration;
-            registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.LifestyleMismatch, "Sometimes lifetimes can be mixed.");
+            DIContainer.QueueSuppressionType(typeof(T), SimpleInjector.Diagnostics.DiagnosticType.LifestyleMismatch, "Sometimes lifetimes can be mixed.");
         }
 
         /// <summary>
@@ -40,10 +42,12 @@ namespace IronyModManager.DI.Extensions
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container">The container.</param>
+#pragma warning disable IDE0060 // Remove unused parameter
+
         public static void RemoveTransientWarning<T>(this Container container) where T : class
+#pragma warning restore IDE0060 // Remove unused parameter
         {
-            var registration = container.GetRegistration(typeof(T)).Registration;
-            registration.SuppressDiagnosticWarning(SimpleInjector.Diagnostics.DiagnosticType.DisposableTransientComponent, "Transient disposable is okay at times.");
+            DIContainer.QueueSuppressionType(typeof(T), SimpleInjector.Diagnostics.DiagnosticType.DisposableTransientComponent, "Transient disposable is okay at times.");
         }
 
         #endregion Methods

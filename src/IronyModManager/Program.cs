@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -48,15 +48,17 @@ namespace IronyModManager
                 .UseIronyAssetLoader()
                 .UseManagedDialogs().AfterSetup((s) =>
                 {
-# if DEBUG
                     if (!Design.IsDesignMode)
                     {
                         StaticResources.IsVerifyingContainer = true;
-                        DIContainer.Verify();
+                        DIContainer.Finish();
                         StaticResources.IsVerifyingContainer = false;
                     }
-#endif
-                }); // You gotta be kidding me?!? Avalonia has a logging reference to Serilog which cannot be removed?!?
+                    else
+                    {
+                        DIContainer.Finish(true);
+                    }
+                });
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
