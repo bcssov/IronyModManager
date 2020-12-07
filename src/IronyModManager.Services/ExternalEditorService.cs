@@ -79,7 +79,7 @@ namespace IronyModManager.Services
             var opts = Get();
             if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters))
             {
-                var launchArgs = Smart.Format($"{opts.ExternalEditorLocation} {opts.ExternalEditorParameters}", new { Left = leftLocation, Right = rightLocation });
+                var launchArgs = Smart.Format($"{opts.ExternalEditorLocation} {opts.ExternalEditorParameters}", new { Left = $"\"{leftLocation}\"", Right = $"\"{rightLocation}\"" });
                 return launchArgs;
             }
             return string.Empty;

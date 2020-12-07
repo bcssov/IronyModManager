@@ -128,7 +128,7 @@ namespace IronyModManager.Services.Tests
 
             var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetLaunchArguments("test1", "test2");
-            result.Should().Be("test test1 test2");
+            result.Should().Be("test \"test1\" \"test2\"");
         }
 
         /// <summary>
