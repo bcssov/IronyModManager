@@ -395,12 +395,12 @@ namespace IronyModManager.Shared
             public const string Prefix = "Options.";
             public const string Name = Prefix + "Name";
             public const string Close = Prefix + "Close";
+            public const string NavigateTo = Prefix + "NavigateTo";
+            public const string Reset = Prefix + "Reset";
             public static class Editor
             {
                 public const string Prefix = "Options.Editor.";
                 public const string Title = Prefix + "Title";
-                public const string NavigateTo = Prefix + "NavigateTo";
-                public const string Reset = Prefix + "Reset";
                 public const string EditorExecutable = Prefix + "EditorExecutable";
                 public const string EditorArgs = Prefix + "EditorArgs";
                 public const string EditorArgsPlaceholder = Prefix + "EditorArgsPlaceholder";
@@ -409,8 +409,6 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Options.Game.";
                 public const string Title = Prefix + "Title";
-                public const string NavigateTo = Prefix + "NavigateTo";
-                public const string Reset = Prefix + "Reset";
                 public const string GameExecutable = Prefix + "GameExecutable";
                 public const string UserDirectory = Prefix + "UserDirectory";
                 public const string GameArgs = Prefix + "GameArgs";
@@ -459,6 +457,7 @@ namespace IronyModManager.Shared
                 public const string ExeTitle = Prefix + "ExeTitle";
                 public const string GameRootTitle = Prefix + "GameRootTitle";
                 public const string UserDirTitle = Prefix + "UserDirTitle";
+                public const string EditorTitle = Prefix + "EditorTitle";
             }
         }
         public static class Notifications

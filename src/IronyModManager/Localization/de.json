@@ -298,18 +298,16 @@
     "Options": {
         "Name": "Optionen",
         "Close": "Schließen",
+        "NavigateTo": "...",
+        "Reset": "X",
         "Editor": {
             "Title": "Externe Editoroptionen",
-            "NavigateTo": "...",
-            "Reset": "X",
             "EditorExecutable": "Editor ausführbar",
             "EditorArgs": "Editor Args",
             "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
         },
         "Game": {
             "Title": "Spieleinstellungen",
-            "NavigateTo": "...",
-            "Reset": "X",
             "GameExecutable": "Spiel ausführbar",
             "UserDirectory": "Datenverzeichnis",
             "GameArgs": "Spiel Args",
@@ -345,7 +343,8 @@
         "Dialog": {
             "ExeTitle": "Finde eine ausführbare Spieldatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
-            "UserDirTitle": "Spieldatenverzeichnis suchen"
+            "UserDirTitle": "Spieldatenverzeichnis suchen",
+            "EditorTitle": "Suchen Sie die ausführbare Editor-Datei"
         }
     },
     "Notifications": {
