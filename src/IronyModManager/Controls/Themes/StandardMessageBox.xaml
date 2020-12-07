@@ -77,7 +77,7 @@
                 HorizontalAlignment="Right">
       <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
       <Button Content="Ok" Tag="Colored" Command="{Binding ButtonClick}"
-              CommandParameter="Ok" IsVisible="{Binding IsOkShowed}" />
+              CommandParameter="Ok" IsVisible="{Binding IsOkShowed}" x:Name="ok" />
       <Button Content="Yes" Command="{Binding ButtonClick}" CommandParameter="Yes"
               IsVisible="{Binding IsYesShowed}" x:Name="yes" />
       <Button Content="No" Command="{Binding ButtonClick}" CommandParameter="No"
@@ -85,7 +85,7 @@
       <Button Content="Abort" Command="{Binding ButtonClick}" CommandParameter="Abort"
               IsVisible="{Binding IsAbortShowed}" />
       <Button Content="Cancel" Command="{Binding ButtonClick}" CommandParameter="Cancel"
-              IsVisible="{Binding IsCancelShowed}" />
+              IsVisible="{Binding IsCancelShowed}" x:Name="cancel"/>
     </StackPanel>
   </Grid>
 </Window>

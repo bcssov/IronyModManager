@@ -32,6 +32,12 @@ namespace IronyModManager.Shared
         /// <value>The file.</value>
         string File { get; }
 
+        /// <summary>
+        /// Gets the text.
+        /// </summary>
+        /// <value>The text.</value>
+        string Text { get; set; }
+
         #endregion Properties
 
         #region Methods

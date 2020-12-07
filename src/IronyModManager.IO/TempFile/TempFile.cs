@@ -78,6 +78,29 @@ namespace IronyModManager.IO.TempFile
         /// <value>The file.</value>
         public string File => path;
 
+        /// <summary>
+        /// Gets the text.
+        /// </summary>
+        /// <value>The text.</value>
+        public string Text
+        {
+            get
+            {
+                if (System.IO.File.Exists(File))
+                {
+                    return System.IO.File.ReadAllText(File);
+                }
+                return string.Empty;
+            }
+            set
+            {
+                if (System.IO.File.Exists(File))
+                {
+                    System.IO.File.AppendAllText(File, value ?? string.Empty);
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods

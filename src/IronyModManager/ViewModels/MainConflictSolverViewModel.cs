@@ -646,6 +646,7 @@ namespace IronyModManager.ViewModels
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
                 DatabaseSearch.SetParameters(s);
                 CustomConflicts.SetParameters(s, SelectedModCollection.Name);
+                MergeViewer.InitParameters();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>

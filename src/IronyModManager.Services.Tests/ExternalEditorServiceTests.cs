@@ -130,7 +130,7 @@ namespace IronyModManager.Services.Tests
 
             var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
             var result = service.GetLaunchArguments("test1", "test2");
-            result.Should().Be("test \"test1\" \"test2\"");
+            result.Should().Be("\"test1\" \"test2\"");
         }
 
         /// <summary>
@@ -197,6 +197,12 @@ namespace IronyModManager.Services.Tests
             /// </summary>
             /// <value>The file.</value>
             public string File => "test";
+
+            /// <summary>
+            /// Gets the text.
+            /// </summary>
+            /// <value>The text.</value>
+            public string Text { get; set; }
 
             /// <summary>
             /// Creates the specified path.

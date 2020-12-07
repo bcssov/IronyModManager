@@ -808,8 +808,9 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual void SetEditor(IExternalEditor externalEditor)
         {
             isEditorReloading = true;
+            Editor = externalEditor;
             editorArgsChanged?.Dispose();
-            editorArgsChanged = this.WhenAnyValue(p => p.Game.LaunchArguments).Where(p => !isEditorReloading).Subscribe(s =>
+            editorArgsChanged = this.WhenAnyValue(p => p.Editor.ExternalEditorParameters).Where(p => !isEditorReloading).Subscribe(s =>
             {
                 SaveEditor();
             }).DisposeWith(Disposables);

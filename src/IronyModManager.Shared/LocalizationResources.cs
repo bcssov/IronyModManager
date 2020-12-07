@@ -43,6 +43,8 @@ namespace IronyModManager.Shared
             public const string Prefix = "Prompt.";
             public const string Yes = Prefix + "Yes";
             public const string No = Prefix + "No";
+            public const string Confirm = Prefix + "Confirm";
+            public const string Cancel = Prefix + "Cancel";
         }
         public static class FileDialog
         {
@@ -329,6 +331,7 @@ namespace IronyModManager.Shared
                 public const string Delete = Prefix + "Delete";
                 public const string Undo = Prefix + "Undo";
                 public const string Redo = Prefix + "Redo";
+                public const string Editor = Prefix + "Editor";
             }
             public static class EditorContextMenu
             {
@@ -381,6 +384,12 @@ namespace IronyModManager.Shared
                 public const string Path = Prefix + "Path";
                 public const string Save = Prefix + "Save";
                 public const string Close = Prefix + "Close";
+            }
+            public static class Editor
+            {
+                public const string Prefix = "Conflict_Solver.Editor.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
             }
         }
         public static class ConflictIgnore

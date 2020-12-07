@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Yes",
-        "No": "No"
+        "No": "No",
+        "Confirm": "Confirm",
+        "Cancel": "Cancel"
     },
     "FileDialog": {
         "FileName": "File name",
@@ -247,7 +249,8 @@
             "CopyText": "Copy Text",
             "Delete": "Delete",
             "Undo": "Undo",
-            "Redo": "Redo"
+            "Redo": "Redo",
+            "Editor": "External Merge"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -288,6 +291,10 @@
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"
+        },
+        "Editor": {
+            "Title": "External Merge",
+            "Message": "Press confirm once you are satisfied with external merge."
         }
     },
     "ConflictIgnore": {

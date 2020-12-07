@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Da",
-        "No": "Ne"
+        "No": "Ne",
+        "Confirm": "Potvrdi",
+        "Cancel": "Otkaži"
     },
     "FileDialog": {
         "FileName": "Naziv datoteke",
@@ -247,7 +249,8 @@
             "CopyText": "Kopiraj Tekst",
             "Delete": "Obriši",
             "Undo": "Poništi",
-            "Redo": "Ponovi"
+            "Redo": "Ponovi",
+            "Editor": "Vanjsko spajanje"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -288,6 +291,10 @@
             "Path": "Direktorij",
             "Save": "Snimi",
             "Close": "Zatvori"
+        },
+        "Editor": {
+            "Title": "Vanjsko spajanje",
+            "Message": "Pritisnite potvrdi nakon što ste zadovoljni vanjskim spajanjem."
         }
     },
     "ConflictIgnore": {

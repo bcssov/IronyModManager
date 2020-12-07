@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "是",
-        "No": "否"
+        "No": "否",
+        "Confirm": "确认",
+        "Cancel": "取消"
     },
     "FileDialog": {
         "FileName": "文件名",
@@ -247,7 +249,8 @@
             "CopyText": "复制文本",
             "Delete": "删除",
             "Undo": "撤销",
-            "Redo": "重做"
+            "Redo": "重做",
+            "Editor": "外部合并"
         },
         "EditorContextMenu": {
             "Copy": "复制",
@@ -288,6 +291,10 @@
             "Path": "路径",
             "Save": "保存",
             "Close": "关闭"
+        },
+        "Editor": {
+            "Title": "外部合并",
+            "Message": "对外部合并感到满意后，请按确认。"
         }
     },
     "ConflictIgnore": {

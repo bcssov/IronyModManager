@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Ja",
-        "No": "Nein"
+        "No": "Nein",
+        "Confirm": "Bestätigen",
+        "Cancel": "Stornieren"
     },
     "FileDialog": {
         "FileName": "Dateiname",
@@ -247,7 +249,8 @@
             "CopyText": "Text kopieren",
             "Delete": "Löschen",
             "Undo": "Rückgängig machen",
-            "Redo": "Wiederholen"
+            "Redo": "Wiederholen",
+            "Editor": "Externe Zusammenführung"
         },
         "EditorContextMenu": {
             "Copy": "Kopieren",
@@ -288,6 +291,10 @@
             "Path": "Verzeichnis",
             "Save": "Sparen",
             "Close": "Schließen"
+        },
+        "Editor": {
+            "Title": "Externe Zusammenführung",
+            "Message": "Drücken Sie auf Bestätigen, sobald Sie mit der externen Zusammenführung zufrieden sind."
         }
     },
     "ConflictIgnore": {
