@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1341,7 +1341,7 @@ namespace IronyModManager.Services
                         {
                             name = $"{name}{Path.DirectorySeparatorChar}";
                         }
-                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileName))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileName)));
+                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileName, p.VirtualFileName))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileName, p.VirtualFileName)));
                         foreach (var item in invalid)
                         {
                             if (!alreadyIgnored.Contains(item.Key))
@@ -1371,19 +1371,29 @@ namespace IronyModManager.Services
         /// Evals the wildcard.
         /// </summary>
         /// <param name="pattern">The pattern.</param>
-        /// <param name="content">The content.</param>
+        /// <param name="values">The content.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual bool EvalWildcard(string pattern, string content)
+        protected virtual bool EvalWildcard(string pattern, params string[] values)
         {
-            if (pattern.Contains("*") || pattern.Contains("?"))
+            foreach (var item in values)
             {
-                var regex = $"^{Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".")}$";
-                return Regex.IsMatch(content, regex, RegexOptions.IgnoreCase);
+                if (pattern.Contains("*") || pattern.Contains("?"))
+                {
+                    var regex = $"^{Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".")}$";
+                    if (Regex.IsMatch(item, regex, RegexOptions.IgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (item.StartsWith(pattern, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
             }
-            else
-            {
-                return content.StartsWith(pattern, StringComparison.OrdinalIgnoreCase);
-            }
+            return false;
         }
 
         /// <summary>

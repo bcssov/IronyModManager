@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -61,6 +61,12 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The name.</value>
         string Name { get; set; }
+
+        /// <summary>
+        /// Gets the name of the virtual file.
+        /// </summary>
+        /// <value>The name of the virtual file.</value>
+        string VirtualFileName { get; }
 
         #endregion Properties
     }

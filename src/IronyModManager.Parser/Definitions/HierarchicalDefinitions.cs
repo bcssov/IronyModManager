@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Definitions
@@ -63,6 +64,22 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets the name of the virtual file.
+        /// </summary>
+        /// <value>The name of the virtual file.</value>
+        public string VirtualFileName
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(Name))
+                {
+                    return Path.Combine(Path.GetDirectoryName(FileName), Name);
+                }
+                return string.Empty;
+            }
+        }
 
         #endregion Properties
 
