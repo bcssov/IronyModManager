@@ -540,7 +540,7 @@ namespace IronyModManager.Services
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 PatchName = patchName
             });
-            if (state != null && state.CustomConflicts.Count() > 0)
+            if (state != null && state.CustomConflicts.Any())
             {
                 prunedDefinitions = new List<IDefinition>();
                 var customIndexed = DIResolver.Get<IIndexedDefinitions>();
@@ -551,7 +551,7 @@ namespace IronyModManager.Services
                     if (item.ValueType == ValueType.Invalid)
                     {
                         var fileCodes = customIndexed.GetByFile(item.File);
-                        if (fileCodes.Count() > 0)
+                        if (fileCodes.Any())
                         {
                             var fileDefs = new List<IDefinition>();
                             foreach (var fileCode in fileCodes)

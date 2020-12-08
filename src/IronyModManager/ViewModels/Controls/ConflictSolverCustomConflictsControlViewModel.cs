@@ -297,7 +297,7 @@ namespace IronyModManager.ViewModels.Controls
             var path = Path ?? string.Empty;
             var extension = System.IO.Path.GetExtension(path.StandardizeDirectorySeparator());
             AllowSave = !string.IsNullOrWhiteSpace(code) && !string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(extension);
-            AllowLoad = ConflictResult.CustomConflicts.GetByFile(path.StandardizeDirectorySeparator()).Count() > 0;
+            AllowLoad = ConflictResult.CustomConflicts.GetByFile(path.StandardizeDirectorySeparator()).Any();
             EditingYaml = path.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -359,13 +359,13 @@ namespace IronyModManager.ViewModels.Controls
             SaveCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var definition = InitDefinition();
-                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Count() > 0)
+                if (ConflictResult.CustomConflicts.GetByFile(Path.StandardizeDirectorySeparator()).Any())
                 {
                     await modPatchCollectionService.ResetCustomConflictAsync(ConflictResult, definition.TypeAndId, CollectionName);
                 }
                 if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
-                    if (!promptShown && ConflictResult.AllConflicts.GetByFile(definition.FileCI).Count() > 0)
+                    if (!promptShown && ConflictResult.AllConflicts.GetByFile(definition.FileCI).Any())
                     {
                         promptShown = true;
                         var title = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Title);

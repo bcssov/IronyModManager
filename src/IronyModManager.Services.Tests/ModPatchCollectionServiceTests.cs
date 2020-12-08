@@ -64,7 +64,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <returns>ModService.</returns>
-        private ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
+        private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
         {
@@ -80,7 +80,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="reader">The reader.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="modParser">The mod parser.</param>
-        private void SetupMockCase(Mock<IReader> reader, Mock<IParserManager> parserManager, Mock<IModParser> modParser)
+        private static void SetupMockCase(Mock<IReader> reader, Mock<IParserManager> parserManager, Mock<IModParser> modParser)
         {
             var fileInfos = new List<IFileInfo>()
             {
@@ -902,7 +902,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.Definitions.Any())
                 {
                     return true;
                 }
@@ -1585,7 +1585,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.Definitions.Any())
                 {
                     return true;
                 }
@@ -2461,8 +2461,8 @@ namespace IronyModManager.Services.Tests
                 IgnoredPaths = "modName:a" + Environment.NewLine + "modName:b"
             });
             result.Count.Should().Be(2);
-            result.First().Should().Be("a");
-            result.Last().Should().Be("b");
+            result[0].Should().Be("a");
+            result[result.Count - 1].Should().Be("b");
         }
 
         /// <summary>
@@ -2763,7 +2763,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.CustomConflicts.Count() > 0)
+                if (p.CustomConflicts.Any())
                 {
                     return true;
                 }

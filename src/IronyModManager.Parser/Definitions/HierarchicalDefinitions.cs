@@ -33,7 +33,7 @@ namespace IronyModManager.Parser.Definitions
         /// <summary>
         /// The file names
         /// </summary>
-        private List<string> fileNames = new List<string>();
+        private readonly List<string> fileNames = new List<string>();
 
         #endregion Fields
 

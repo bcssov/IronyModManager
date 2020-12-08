@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -145,7 +145,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The map
                 /// </summary>
-                public static Dictionary<string, string> Map = new Dictionary<string, string>() { { CurlyBracket, "}" } };
+                public static readonly Dictionary<string, string> Map = new Dictionary<string, string>() { { CurlyBracket, "}" } };
 
                 #endregion Fields
             }
@@ -165,7 +165,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The map
                 /// </summary>
-                public static string[] Map = new string[] { ColonSign };
+                public static readonly string[] Map = new string[] { ColonSign };
 
                 #endregion Fields
             }
@@ -181,14 +181,14 @@ namespace IronyModManager.Shared
             #region Fields
 
             /// <summary>
+            /// The launcher settings file name
+            /// </summary>
+            public static readonly string LauncherSettingsFileName = "launcher-settings.json";
+
+            /// <summary>
             /// The log location
             /// </summary>
             public static readonly string LogLocation = "logs" + Path.DirectorySeparatorChar + "error.log";
-
-            /// <summary>
-            /// The launcher settings file name
-            /// </summary>
-            public static string LauncherSettingsFileName = "launcher-settings.json";
 
             #endregion Fields
 
@@ -230,12 +230,12 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The launcher settings file name
                 /// </summary>
-                public static string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+                public static readonly string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
 
                 /// <summary>
                 /// The launcher settings prefix
                 /// </summary>
-                public static string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
+                public static readonly string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
                 #endregion Fields
             }
@@ -348,12 +348,12 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The launcher settings file name
                 /// </summary>
-                public static string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
+                public static readonly string LauncherSettingsFileName = "launcher" + Path.DirectorySeparatorChar + "launcher-settings.json";
 
                 /// <summary>
                 /// The launcher settings prefix
                 /// </summary>
-                public static string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
+                public static readonly string LauncherSettingsPrefix = ".." + Path.DirectorySeparatorChar;
 
                 #endregion Fields
             }
