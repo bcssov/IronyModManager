@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -123,6 +123,11 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         private string typeAndId = string.Empty;
 
+        /// <summary>
+        /// The virtual path
+        /// </summary>
+        private string virtualPath = string.Empty;
+
         #endregion Fields
 
         #region Properties
@@ -232,6 +237,13 @@ namespace IronyModManager.Parser.Definitions
         public string ContentSHA { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom priority order.
+        /// </summary>
+        /// <value>The custom priority order.</value>
+        [JsonIgnore]
+        public int CustomPriorityOrder { get; set; }
+
+        /// <summary>
         /// Gets the definition sha.
         /// </summary>
         /// <value>The definition sha.</value>
@@ -332,6 +344,8 @@ namespace IronyModManager.Parser.Definitions
                 var val = value ?? string.Empty;
                 file = val;
                 FileCI = val.ToLowerInvariant();
+                parentDirectory = string.Empty;
+                parentDirectoryCI = string.Empty;
                 if (generatedFileNames.Contains(old))
                 {
                     generatedFileNames.Remove(old);
@@ -579,6 +593,46 @@ namespace IronyModManager.Parser.Definitions
         [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
 
+        /// <summary>
+        /// Gets the virtual localization path ci.
+        /// </summary>
+        /// <value>The virtual localization path ci.</value>
+        [JsonIgnore]
+        public string VirtualParentDirectory { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the virtual parent directory ci.
+        /// </summary>
+        /// <value>The virtual parent directory ci.</value>
+        [JsonIgnore]
+        public string VirtualParentDirectoryCI { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the virtual localization path.
+        /// </summary>
+        /// <value>The virtual localization path.</value>
+        [JsonIgnore]
+        public string VirtualPath
+        {
+            get
+            {
+                return virtualPath;
+            }
+            set
+            {
+                virtualPath = value ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(virtualPath))
+                {
+                    VirtualParentDirectory = Path.GetDirectoryName(virtualPath);
+                    VirtualParentDirectoryCI = VirtualParentDirectory.ToLowerInvariant();
+                }
+                else
+                {
+                    VirtualParentDirectory = VirtualParentDirectoryCI = string.Empty;
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -623,6 +677,10 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Variables) => Variables,
                 nameof(DiskFileCI) => DiskFileCI,
                 nameof(OriginalFileName) => OriginalFileName,
+                nameof(VirtualPath) => VirtualPath,
+                nameof(VirtualParentDirectory) => VirtualParentDirectory,
+                nameof(VirtualParentDirectoryCI) => VirtualParentDirectoryCI,
+                nameof(CustomPriorityOrder) => CustomPriorityOrder,
                 _ => Id
             };
         }

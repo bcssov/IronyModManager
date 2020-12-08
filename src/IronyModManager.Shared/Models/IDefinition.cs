@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -58,6 +58,13 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The content sha.</value>
         string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom priority order.
+        /// </summary>
+        /// <value>The custom priority order.</value>
+        [JsonIgnore]
+        int CustomPriorityOrder { get; set; }
 
         /// <summary>
         /// Gets the definition sha.
@@ -226,6 +233,27 @@ namespace IronyModManager.Shared.Models
         /// <value>The variables.</value>
         [JsonIgnore]
         IEnumerable<IDefinition> Variables { get; set; }
+
+        /// <summary>
+        /// Gets the virtual localization directory ci.
+        /// </summary>
+        /// <value>The virtual localization directory ci.</value>
+        [JsonIgnore]
+        string VirtualParentDirectory { get; }
+
+        /// <summary>
+        /// Gets the virtual parent directory ci.
+        /// </summary>
+        /// <value>The virtual parent directory ci.</value>
+        [JsonIgnore]
+        string VirtualParentDirectoryCI { get; }
+
+        /// <summary>
+        /// Gets or sets the virtual localization directory.
+        /// </summary>
+        /// <value>The virtual localization directory.</value>
+        [JsonIgnore]
+        string VirtualPath { get; set; }
 
         #endregion Properties
     }

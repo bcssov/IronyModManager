@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -52,6 +52,11 @@ namespace IronyModManager.ViewModels
         /// The invalid key
         /// </summary>
         private const string InvalidKey = "invalid";
+
+        /// <summary>
+        /// The localization directory
+        /// </summary>
+        private static readonly string LocalizationDirectory = $"{Shared.Constants.LocalizationDirectory}{Path.DirectorySeparatorChar}";
 
         /// <summary>
         /// The application action
@@ -501,9 +506,9 @@ namespace IronyModManager.ViewModels
                 foreach (var topLevelResolvedConflicts in resolved)
                 {
                     IEnumerable<IHierarchicalDefinitions> topLevelConflicts;
-                    if (topLevelResolvedConflicts.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                    if (topLevelResolvedConflicts.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
                     {
-                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
+                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
                     }
                     else
                     {

@@ -4,7 +4,7 @@
 // Created          : 04-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-17-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionMergerTests.cs" company="Mario">
 //     Mario
@@ -196,6 +196,22 @@ namespace IronyModManager.IO.Tests
             result.Should().Be("localisation\\replace\\zzz_t.yml");
         }
 
+        /// <summary>
+        /// Defines the test method GetFilename_localization_synced_should_not_append_replace_path.
+        /// </summary>
+        [Fact]
+        public void GetFilename_localization_synced_should_not_append_replace_path()
+        {
+            var service = GetService();
+            var result = service.GetFileName(new Definition()
+            {
+                File = "localisation_synced\\test.yml",
+                ValueType = ValueType.SpecialVariable,
+                Id = "t"
+            });
+            result.Should().Be("localisation_synced\\zzz_t.yml");
+        }
+
 
         /// <summary>
         /// Defines the test method GetFilename_FIOS_Prefixed_should_append_additional_prefixes.
@@ -213,6 +229,9 @@ namespace IronyModManager.IO.Tests
             result.Should().Be("common\\ship_behaviors\\!!!!_t.txt");
         }
 
+        /// <summary>
+        /// Defines the test method GetFilename_LIOS_Prefixed_should_append_additional_prefixes.
+        /// </summary>
         [Fact]
         public void GetFilename_LIOS_Prefixed_should_append_additional_prefixes()
         {
