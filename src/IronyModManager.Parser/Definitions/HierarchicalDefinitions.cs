@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Definitions
@@ -27,6 +28,15 @@ namespace IronyModManager.Parser.Definitions
     /// <seealso cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
     public class HierarchicalDefinitions : IHierarchicalDefinitions
     {
+        #region Fields
+
+        /// <summary>
+        /// The file names
+        /// </summary>
+        private List<string> fileNames = new List<string>();
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -45,7 +55,17 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
+        public IList<string> FileNames
+        {
+            get
+            {
+                if (fileNames.Count > 0 && !fileNames.Contains(Path.Combine(Path.GetDirectoryName(fileNames.FirstOrDefault()), Name)))
+                {
+                    fileNames.Add(Path.Combine(Path.GetDirectoryName(fileNames.FirstOrDefault()), Name));
+                }
+                return fileNames;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the key.
@@ -65,22 +85,6 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The name.</value>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets the name of the virtual file.
-        /// </summary>
-        /// <value>The name of the virtual file.</value>
-        public string VirtualFileName
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(FileName) && !string.IsNullOrWhiteSpace(Name))
-                {
-                    return Path.Combine(Path.GetDirectoryName(FileName), Name);
-                }
-                return string.Empty;
-            }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -99,7 +103,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Children) => Children,
                 nameof(AdditionalData) => AdditionalData,
                 nameof(Mods) => Mods,
-                nameof(FileName) => FileName,
+                nameof(FileNames) => FileNames,
                 _ => Name,
             };
         }

@@ -429,11 +429,18 @@ namespace IronyModManager.Parser.Definitions
                 child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
-                child.FileName = definition.FileCI;
+                child.FileNames.Add(definition.FileCI);
                 children.Add(child);
                 if (shouldAdd)
                 {
                     mainHierarchalDefinitions.Add(hierarchicalDefinition);
+                }
+            }
+            else
+            {
+                if (!child.FileNames.Contains(definition.FileCI))
+                {
+                    child.FileNames.Add(definition.FileCI);
                 }
             }
             if (child.Mods == null)

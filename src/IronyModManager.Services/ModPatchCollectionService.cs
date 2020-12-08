@@ -1341,7 +1341,7 @@ namespace IronyModManager.Services
                         {
                             name = $"{name}{Path.DirectorySeparatorChar}";
                         }
-                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileName, p.VirtualFileName))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileName, p.VirtualFileName)));
+                        var invalid = topConflict.Children.Where(p => ignoreRules.Any(r => EvalWildcard(r, p.FileNames.ToArray()))).Where(p => !includeRules.Any(r => EvalWildcard(r, p.FileNames.ToArray())));
                         foreach (var item in invalid)
                         {
                             if (!alreadyIgnored.Contains(item.Key))

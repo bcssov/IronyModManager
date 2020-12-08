@@ -39,10 +39,10 @@ namespace IronyModManager.Shared.Models
         ICollection<IHierarchicalDefinitions> Children { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the file.
+        /// Gets or sets the file names.
         /// </summary>
-        /// <value>The name of the file.</value>
-        string FileName { get; set; }
+        /// <value>The file names.</value>
+        IList<string> FileNames { get; }
 
         /// <summary>
         /// Gets or sets the key.
@@ -61,12 +61,6 @@ namespace IronyModManager.Shared.Models
         /// </summary>
         /// <value>The name.</value>
         string Name { get; set; }
-
-        /// <summary>
-        /// Gets the name of the virtual file.
-        /// </summary>
-        /// <value>The name of the virtual file.</value>
-        string VirtualFileName { get; }
 
         #endregion Properties
     }
