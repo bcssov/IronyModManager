@@ -4,6 +4,66 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.10.35-alpha</title>
+			<description>CHANGES FROM v1.9:
+* Upgrade dependencies
+* Tweak basic conflict solver merge view
+* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
+* Improve version sort
+* Clear selection upon mod sort
+* Fix mod compare sort scroll
+* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
+* Allow ignore use to ignore partial definition name matches
+* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
+			<pubDate>Tue, 08 Dec 2020 07:29:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.35-alpha/osx-x64.rar" sparkle:version="1.10.35.21975" sparkle:shortVersionString="1.10.35" length="62896405" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="3o22DH/wKuIf6OIupslBnYb0Tt9SK5BZTyrex2XnOfU5BCVlEpsAHhB/v1FMgWEbxwtrMZ2SHSGHa0afDeYPDA=="/>
+		</item>
+		<item>
+			<title>1.10.35-alpha</title>
+			<description>CHANGES FROM v1.9:
+* Upgrade dependencies
+* Tweak basic conflict solver merge view
+* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
+* Improve version sort
+* Clear selection upon mod sort
+* Fix mod compare sort scroll
+* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
+* Allow ignore use to ignore partial definition name matches
+* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
+			<pubDate>Tue, 08 Dec 2020 07:29:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.35-alpha/win-x64-setup.rar" sparkle:version="1.10.35.21975" sparkle:shortVersionString="1.10.35" length="54489930" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="ZkgHDPi6FyC5pUEMq5dRMDDfiY2ld3FGVlR96H74jupyh8VyTd/UzQiLllpWkTDEG5ZKdkjNd2E5JCv/0JicBA=="/>
+		</item>
+		<item>
+			<title>1.10.35-alpha</title>
+			<description>CHANGES FROM v1.9:
+* Upgrade dependencies
+* Tweak basic conflict solver merge view
+* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
+* Improve version sort
+* Clear selection upon mod sort
+* Fix mod compare sort scroll
+* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
+* Allow ignore use to ignore partial definition name matches
+* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
+			<pubDate>Tue, 08 Dec 2020 07:29:12 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.35-alpha/win-x64.rar" sparkle:version="1.10.35.21975" sparkle:shortVersionString="1.10.35" length="65206374" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="2i7Ta0RD/yFhCQvfbPWSakOn/fLqev+abz7QloZgetC/nDmPEUhUCpxpn+6fK1V5d/gUF+sqOVeH3z9UaljgDg=="/>
+		</item>
+		<item>
+			<title>1.10.35-alpha</title>
+			<description>CHANGES FROM v1.9:
+* Upgrade dependencies
+* Tweak basic conflict solver merge view
+* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
+* Improve version sort
+* Clear selection upon mod sort
+* Fix mod compare sort scroll
+* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
+* Allow ignore use to ignore partial definition name matches
+* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
+			<pubDate>Tue, 08 Dec 2020 07:29:06 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.35-alpha/linux-x64.zip" sparkle:version="1.10.35.21975" sparkle:shortVersionString="1.10.35" length="78031956" sparkle:os="linux" type="application/zip" sparkle:signature="vD7OpLRjfO1mwjKzUflqK8ChiCE1M625LErXCGmg4fWa2WOWnnNu6bk9LB3DUO4IaED33nHAPNE/KfG5Mej3Dw=="/>
+		</item>
+		<item>
 			<title>1.9.63</title>
 			<description>RELEASE INFO:
 * Fix Irony not respecting switch back to simple parser (due to a code comment)
