@@ -38,7 +38,7 @@
           </StackPanel>
           <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="{Binding LeftMargin}">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-              <TextBlock Text="{Binding NavigateEditorTitle}" FontSize="14"></TextBlock>
+              <TextBlock Text="{Binding EditorTitle}" FontSize="14"></TextBlock>
             </Border>
             <Grid ColumnDefinitions="3*,3*,1*,1*" RowDefinitions="1*,1*">
               <TextBlock Text="{Binding EditorExecutable}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
