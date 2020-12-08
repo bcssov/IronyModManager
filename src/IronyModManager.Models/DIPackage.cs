@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Collections.Generic;
 using System;
+using IronyModManager.DI.Extensions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -53,6 +54,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IModHashReport, ModHashReport>();
             container.RegisterModel<IExternalEditor, ExternalEditor>();
             container.RegisterModel<IExternalEditorFiles, ExternalEditorFiles>();
+            container.RemoveTransientWarning<IExternalEditorFiles>();
         }
 
         #endregion Methods

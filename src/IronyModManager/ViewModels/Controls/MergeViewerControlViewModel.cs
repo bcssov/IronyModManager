@@ -1209,8 +1209,7 @@ namespace IronyModManager.ViewModels.Controls
                             }
                         }
                     }
-                    files.LeftDiff.Dispose();
-                    files.RightDiff.Dispose();
+                    files?.Dispose();
                 }
             }).DisposeWith(disposables);
 

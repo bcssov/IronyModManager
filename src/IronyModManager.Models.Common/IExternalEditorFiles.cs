@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IExternalEditorFiles.cs" company="Mario">
 //     Mario
@@ -21,9 +21,11 @@ namespace IronyModManager.Models.Common
     /// <summary>
     /// Interface IExternalEditorFiles
     /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
+    /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IExternalEditorFiles : IModel
+    /// <seealso cref="System.IDisposable" />
+    public interface IExternalEditorFiles : IModel, IDisposable
     {
         #region Properties
 

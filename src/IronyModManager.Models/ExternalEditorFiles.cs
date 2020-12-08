@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="ExternalEditorFiles.cs" company="Mario">
 //     Mario
@@ -28,6 +28,15 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.Common.IExternalEditorFiles" />
     public class ExternalEditorFiles : BaseModel, IExternalEditorFiles
     {
+        #region Fields
+
+        /// <summary>
+        /// The disposed
+        /// </summary>
+        private bool disposed = false;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -43,5 +52,22 @@ namespace IronyModManager.Models
         public ITempFile RightDiff { get; set; }
 
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                disposed = true;
+                LeftDiff?.Dispose();
+                RightDiff?.Dispose();
+            }
+        }
+
+        #endregion Methods
     }
 }
