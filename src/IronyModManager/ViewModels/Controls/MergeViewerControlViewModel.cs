@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -1197,11 +1197,15 @@ namespace IronyModManager.ViewModels.Controls
                         {
                             if (leftSide)
                             {
-                                SetText(files.LeftDiff.Text, RightSide);
+                                var text = files.LeftDiff.Text ?? string.Empty;
+                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                SetText(merged, RightSide);
                             }
                             else
                             {
-                                SetText(LeftSide, files.RightDiff.Text);
+                                var text = files.RightDiff.Text ?? string.Empty;
+                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                                SetText(LeftSide, merged);
                             }
                         }
                     }

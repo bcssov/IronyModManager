@@ -193,10 +193,6 @@ namespace IronyModManager.Parser.Generic
         protected virtual string GetFolderNameFromLanguageId(string id)
         {
             var folder = Common.Constants.Localization.LocaleFolders.FirstOrDefault(p => id.Equals($"l_{p}", StringComparison.OrdinalIgnoreCase));
-            if (folder == "default")
-            {
-                return string.Empty;
-            }
             return folder;
         }
 
