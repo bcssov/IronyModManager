@@ -140,6 +140,13 @@ namespace IronyModManager.Shared.Models
         string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is custom patch.
+        /// </summary>
+        /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
+        [JsonIgnore]
+        bool IsCustomPatch { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>

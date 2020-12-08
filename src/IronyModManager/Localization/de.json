@@ -162,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
                 "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
+                "Overlay_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
                 "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
             },
             "Basic": {
@@ -185,6 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "Spiel startet",
@@ -430,6 +432,10 @@
         "ReportValid": {
             "Title": "Datei-Hash-Übereinstimmung",
             "Message": "Alle Datei-Hashes scheinen übereinzustimmen."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Konfliktlöser aktualisieren",
+            "Message": "Conflict Solver muss aktualisiert werden, um neue benutzerdefinierte Patches zu berücksichtigen. Bitte führen Sie den Konfliktlöser erneut aus."
         }
     },
     "Mod_App_Actions": {

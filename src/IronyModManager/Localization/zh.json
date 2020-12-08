@@ -162,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "正在加载Mod数据...",
                 "Overlay_Analyzing_Definitions": "正在分析Mod数据...",
+                "Overlay_Replacing_Definitions": "替换定义时请稍候...",
                 "Overlay_Merging_Collection": "正在合并整合包..."
             },
             "Basic": {
@@ -185,6 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "正在加载Mod数据...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析Mod冲突...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "替换定义时请稍候...",
         "Overlay_Conflict_Solver_Progress": "进度 {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "启动游戏",
@@ -430,6 +432,10 @@
         "ReportValid": {
             "Title": "文件哈希匹配",
             "Message": "所有文件散列似乎都匹配."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "冲突解决刷新",
+            "Message": "需要刷新冲突解决程序，以考虑添加的新自定义补丁程序。请重新运行冲突解决程序。"
         }
     },
     "Mod_App_Actions": {

@@ -289,7 +289,7 @@ namespace IronyModManager.Services
                             isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
                             foreach (var item in validDefinitions)
                             {
-                                var hasOverrides = validDefinitions.Any(p => p.Dependencies != null && p.Dependencies.Any(p => p.Equals(item.ModName)));
+                                var hasOverrides = validDefinitions.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(item.ModName)));
                                 if (hasOverrides)
                                 {
                                     overrideSkipped = true;
@@ -331,8 +331,16 @@ namespace IronyModManager.Services
                                 // Has same filenames?
                                 if (uniqueDefinitions.GroupBy(p => p.FileNameCI).Count() == 1)
                                 {
-                                    result.Definition = uniqueDefinitions.Last().Definition;
-                                    result.PriorityType = DefinitionPriorityType.ModOrder;
+                                    if (uniqueDefinitions.Any(p => p.Definition.IsCustomPatch))
+                                    {
+                                        result.Definition = uniqueDefinitions.FirstOrDefault(p => p.Definition.IsCustomPatch).Definition;
+                                        result.PriorityType = DefinitionPriorityType.ModOrder;
+                                    }
+                                    else
+                                    {
+                                        result.Definition = uniqueDefinitions.Last().Definition;
+                                        result.PriorityType = DefinitionPriorityType.ModOrder;
+                                    }
                                 }
                                 else
                                 {
