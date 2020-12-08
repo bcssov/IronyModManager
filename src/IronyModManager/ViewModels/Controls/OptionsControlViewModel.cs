@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -171,11 +171,18 @@ namespace IronyModManager.ViewModels.Controls
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
             LeftMargin = new Thickness(20, 0, 0, 0);
+            LeftChildMargin = new Thickness(20, 10, 0, 0);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the left child margin.
+        /// </summary>
+        /// <value>The left child margin.</value>
+        public virtual Thickness LeftChildMargin { get; protected set; }
 
         /// <summary>
         /// Gets or sets the automatic configure.
@@ -463,6 +470,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The update options.</value>
         [StaticLocalization(LocalizationResources.Options.Updates.Title)]
         public virtual string UpdateOptions { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the update release information.
+        /// </summary>
+        /// <value>The update release information.</value>
+        [StaticLocalization(LocalizationResources.Options.Updates.UpdateInfoTitle)]
+        public virtual string UpdateReleaseInfo { get; protected set; }
 
         /// <summary>
         /// Gets or sets the update settings.
@@ -842,6 +856,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(Disposables);
             ShowGameOptions = game != null;
             LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
+            LeftChildMargin = new Thickness(ShowGameOptions ? 20 : 0, 10, 0, 0);
             isGameReloading = false;
         }
 

@@ -326,6 +326,7 @@
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
+            "UpdateInfoTitle": "Versionsinformationen aktualisieren",
             "AutoUpdates": "Beim Start nach Updates suchen",
             "CheckPrerelease": "Update auf Vorabversionen",
             "CheckForUpdates": "Auf Updates prüfen",

@@ -431,6 +431,7 @@ namespace IronyModManager.Shared
             {
                 public const string Prefix = "Options.Updates.";
                 public const string Title = Prefix + "Title";
+                public const string UpdateInfoTitle = Prefix + "UpdateInfoTitle";
                 public const string AutoUpdates = Prefix + "AutoUpdates";
                 public const string CheckPrerelease = Prefix + "CheckPrerelease";
                 public const string CheckForUpdates = Prefix + "CheckForUpdates";

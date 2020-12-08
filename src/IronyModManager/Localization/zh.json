@@ -326,6 +326,7 @@
         },
         "Updates": {
             "Title": "更新选项",
+            "UpdateInfoTitle": "更新发行信息",
             "AutoUpdates": "启动时检查更新",
             "CheckPrerelease": "更新到预览版",
             "CheckForUpdates": "检查更新",
