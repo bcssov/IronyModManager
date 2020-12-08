@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -117,6 +117,37 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Formats the name of the type.
+        /// </summary>
+        /// <param name="instance">The instance.</param>
+        /// <returns>System.String.</returns>
+        private static string FormatTypeName(object instance)
+        {
+            Type type;
+            if (instance is IProxyTargetAccessor proxy)
+            {
+                type = proxy.DynProxyGetTarget().GetType();
+            }
+            else
+            {
+                type = instance.GetType();
+            }
+            if (typeof(IPropertyChangedModel).IsAssignableFrom(type))
+            {
+                var name = type.FullName;
+                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                return string.Join(Store.Constants.Dot, names);
+            }
+            else if (typeof(IEnumerable<IPropertyChangedModel>).IsAssignableFrom(type))
+            {
+                var name = type.GetGenericArguments().SingleOrDefault().FullName;
+                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
+                return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
+            }
+            return type.FullName;
+        }
+
+        /// <summary>
         /// Initializes the path.
         /// </summary>
         /// <param name="useProperSeparator">if set to <c>true</c> [use proper separator].</param>
@@ -153,37 +184,6 @@ namespace IronyModManager.Storage
             }
 
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
-        }
-
-        /// <summary>
-        /// Formats the name of the type.
-        /// </summary>
-        /// <param name="instance">The instance.</param>
-        /// <returns>System.String.</returns>
-        private string FormatTypeName(object instance)
-        {
-            Type type;
-            if (instance is IProxyTargetAccessor proxy)
-            {
-                type = proxy.DynProxyGetTarget().GetType();
-            }
-            else
-            {
-                type = instance.GetType();
-            }
-            if (typeof(IPropertyChangedModel).IsAssignableFrom(type))
-            {
-                var name = type.FullName;
-                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
-                return string.Join(Store.Constants.Dot, names);
-            }
-            else if (typeof(IEnumerable<IPropertyChangedModel>).IsAssignableFrom(type))
-            {
-                var name = type.GetGenericArguments().SingleOrDefault().FullName;
-                var names = name.Split(Store.Constants.Dot, StringSplitOptions.RemoveEmptyEntries);
-                return $"{nameof(IEnumerable)}{Store.Constants.EnumerableOpenTag}{string.Join(Store.Constants.Dot, names)}{Store.Constants.EnumerableCloseTag}";
-            }
-            return type.FullName;
         }
 
         /// <summary>

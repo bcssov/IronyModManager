@@ -223,7 +223,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.InitMap(defs);
             var results = service.GetByParentDirectory("events");
-            results.Count().Should().Be(defs.Count());
+            results.Count().Should().Be(defs.Count);
         }
 
         /// <summary>
@@ -314,7 +314,7 @@ namespace IronyModManager.Parser.Tests
             service.InitMap(defs, true);
             var results = service.GetHierarchicalDefinitions();
             results.Count().Should().Be(1);
-            results.First().Children.Count().Should().Be(10);
+            results.First().Children.Count.Should().Be(10);
         }
 
         /// <summary>

@@ -111,7 +111,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("loc\\l_english-yml");
+                result[i].Type.Should().Be("loc\\english\\l_english-yml");
             }
         }
 
@@ -179,7 +179,7 @@ namespace IronyModManager.Parser.Tests
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("loc\\l_english-yml");
+                result[i].Type.Should().Be("loc\\english\\l_english-yml");
             }
         }
     }

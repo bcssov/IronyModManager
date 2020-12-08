@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -129,19 +129,36 @@ namespace IronyModManager.Parser.Generic
                             MapDefinitionFromArgs(ConstructArgs(args, def, typeOverride: $"{selectedLanguage}-{Common.Constants.YmlType}"));
                             string code = cleaned;
                             var index = cleaned.IndexOf(Common.Constants.Localization.YmlSeparator.ToString());
+                            int order = 0;
                             if (index > 0)
                             {
                                 var firstSegment = code.Substring(0, index + 1);
-                                var secondSegment = code.Substring(index + 1);
+                                var secondSegment = code[(index + 1)..];
                                 if (!string.IsNullOrWhiteSpace(secondSegment))
                                 {
-                                    secondSegment = secondSegment.Substring(secondSegment.IndexOf("\""));
+                                    var orderSegment = secondSegment.Substring(0, secondSegment.IndexOf("\"")).Trim();
+                                    if (int.TryParse(orderSegment, out var parsed))
+                                    {
+                                        order = parsed;
+                                    }
+                                    secondSegment = secondSegment[secondSegment.IndexOf("\"")..];
                                 }
                                 if (!string.IsNullOrWhiteSpace(firstSegment) && !string.IsNullOrWhiteSpace(secondSegment))
                                 {
                                     code = $"{firstSegment}1000 {secondSegment}";
                                 }
                             }
+                            var langFolder = GetFolderNameFromLanguageId(selectedLanguage);
+                            if (!string.IsNullOrWhiteSpace(langFolder))
+                            {
+                                def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], langFolder, Path.GetFileName(args.File));
+                            }
+                            else
+                            {
+                                def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], Path.GetFileName(args.File));
+                            }
+                            def.Type = FormatType(def.VirtualPath, $"{selectedLanguage}-{Common.Constants.YmlType}");
+                            def.CustomPriorityOrder = order;
                             def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
                             def.OriginalCode = code;
                             def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
@@ -166,6 +183,21 @@ namespace IronyModManager.Parser.Generic
                 return new List<IDefinition>() { TranslateScriptError(error, args, $"{selectedLanguage}-{Common.Constants.YmlType}") };
             }
             return result;
+        }
+
+        /// <summary>
+        /// Gets the folder name from language identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetFolderNameFromLanguageId(string id)
+        {
+            var folder = Common.Constants.Localization.LocaleFolders.FirstOrDefault(p => id.Equals($"l_{p}", StringComparison.OrdinalIgnoreCase));
+            if (folder == "default")
+            {
+                return string.Empty;
+            }
+            return folder;
         }
 
         /// <summary>
