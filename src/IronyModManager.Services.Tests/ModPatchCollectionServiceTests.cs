@@ -125,7 +125,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_return_any_mod_objects_when_no_game_or_mods.
         /// </summary>
         [Fact]
-        public void Should_not_return_any_mod_objects_when_no_game_or_mods()
+        public async Task Should_not_return_any_mod_objects_when_no_game_or_mods()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -137,13 +137,13 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(null, new List<IMod>());
+            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty);
             result.Should().BeNull();
 
-            result = service.GetModObjects(new Game(), new List<IMod>());
+            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty);
             result.Should().BeNull();
-
-            result = service.GetModObjects(new Game(), null);
+            
+            result = await service.GetModObjectsAsync(new Game(), null, string.Empty);
             result.Should().BeNull();
         }
 
@@ -151,7 +151,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_fully_qualified_path.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_fully_qualified_path()
+        public async Task Should_return_mod_objects_when_using_fully_qualified_path()
         {
             DISetup.SetupContainer();
 
@@ -167,14 +167,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game(), new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() {  UserDirectory = "c:\\fake"}, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Assembly.GetExecutingAssembly().Location,
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -185,7 +185,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_user_directory.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_user_directory()
+        public async Task Should_return_mod_objects_when_using_user_directory()
         {
             DISetup.SetupContainer();
 
@@ -201,14 +201,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -219,7 +219,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_workshop_directory.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_workshop_directory()
+        public async Task Should_return_mod_objects_when_using_workshop_directory()
         {
             DISetup.SetupContainer();
 
@@ -235,14 +235,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -2763,7 +2763,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.CustomConflicts.Count() > 0)
                 {
                     return true;
                 }
@@ -3314,7 +3314,7 @@ namespace IronyModManager.Services.Tests
 #else
         [Fact(Skip = "This is for functional testing only")]
 #endif
-        public void Stellaris_Performance_profiling()
+        public async Task Stellaris_Performance_profiling()
         {
             DISetup.SetupContainer();
 
@@ -3322,7 +3322,7 @@ namespace IronyModManager.Services.Tests
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = DISetup.Container.GetInstance<IModService>().GetInstalledMods(game);
-            var defs = DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjects(game, mods);
+            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty);
         }
     }
 }

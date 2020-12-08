@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,6 +20,8 @@ using System.Reactive.Linq;
 using AvaloniaEdit.Document;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Actions;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -40,9 +42,24 @@ namespace IronyModManager.ViewModels.Controls
         #region Fields
 
         /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The notification action
+        /// </summary>
+        private readonly INotificationAction notificationAction;
+
+        /// <summary>
+        /// The prompt shown
+        /// </summary>
+        private bool promptShown = false;
 
         #endregion Fields
 
@@ -51,10 +68,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ConflictSolverCustomConflictsControlViewModel" /> class.
         /// </summary>
+        /// <param name="notificationAction">The notification action.</param>
+        /// <param name="localizationManager">The localization manager.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ConflictSolverCustomConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService)
+        public ConflictSolverCustomConflictsControlViewModel(INotificationAction notificationAction,
+            ILocalizationManager localizationManager, IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
+            this.localizationManager = localizationManager;
+            this.notificationAction = notificationAction;
         }
 
         #endregion Constructors
@@ -263,6 +285,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             ConflictResult = conflictResult;
             CollectionName = collectionName;
+            promptShown = false;
         }
 
         /// <summary>
@@ -342,6 +365,13 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 if (await modPatchCollectionService.AddCustomModPatchAsync(ConflictResult, definition, CollectionName))
                 {
+                    if (!promptShown && ConflictResult.AllConflicts.GetByFile(definition.FileCI).Count() > 0)
+                    {
+                        promptShown = true;
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Title);
+                        var message = localizationManager.GetResource(LocalizationResources.Notifications.CustomPatchRerunConflictSolver.Message);
+                        notificationAction.ShowNotification(title, message, NotificationType.Warning, 10);
+                    }
                     Saved = true;
                     Saved = false;
                     Path = string.Empty;

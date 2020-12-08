@@ -162,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
                 "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
+                "Overlay_Replacing_Definitions": "Please wait while replacing definitions...",
                 "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
             },
             "Basic": {
@@ -185,6 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "Launch Game",
@@ -430,6 +432,10 @@
         "ReportValid": {
             "Title": "File Hash Match",
             "Message": "All file hashes seem to match."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Conflict Solver Refresh",
+            "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
         }
     },
     "Mod_App_Actions": {

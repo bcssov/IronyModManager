@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -76,6 +76,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
 
         /// <summary>
+        /// The mod definition invalid replace handler
+        /// </summary>
+        private readonly ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler;
+
+        /// <summary>
         /// The mod definition load handler
         /// </summary>
         private readonly ModDefinitionLoadHandler modDefinitionLoadHandler;
@@ -140,6 +145,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable modCompressProgressHandler = null;
 
+        /// <summary>
+        /// The mod invalid replace handler
+        /// </summary>
+        private IDisposable modInvalidReplaceHandler = null;
+
         #endregion Fields
 
         #region Constructors
@@ -147,6 +157,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModifyCollectionControlViewModel" /> class.
         /// </summary>
+        /// <param name="modDefinitionInvalidReplaceHandler">The mod definition invalid replace handler.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modCompressMergeProgressHandler">The mod compress merge progress handler.</param>
@@ -161,7 +172,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
-        public ModifyCollectionControlViewModel(IModService modService, IIDGenerator idGenerator, ModCompressMergeProgressHandler modCompressMergeProgressHandler,
+        public ModifyCollectionControlViewModel(ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler, IModService modService, IIDGenerator idGenerator, ModCompressMergeProgressHandler modCompressMergeProgressHandler,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionMergeProgressHandler modDefinitionMergeProgressHandler,
             ModFileMergeProgressHandler modFileMergeProgressHandler, IShutDownState shutDownState, IGameService gameService, IModMergeService modMergeService,
             IModCollectionService modCollectionService, IModPatchCollectionService modPatchCollectionService,
@@ -181,6 +192,7 @@ namespace IronyModManager.ViewModels.Controls
             this.idGenerator = idGenerator;
             this.modCompressMergeProgressHandler = modCompressMergeProgressHandler;
             this.modService = modService;
+            this.modDefinitionInvalidReplaceHandler = modDefinitionInvalidReplaceHandler;
         }
 
         #endregion Constructors
@@ -508,15 +520,15 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         PercentDone = 0.ToLocalizedPercentage(),
                         Count = 1,
-                        TotalCount = 3
+                        TotalCount = 4
                     });
                     var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Loading_Definitions);
                     await TriggerOverlayAsync(id, true, message, overlayProgress);
 
                     modPatchCollectionService.ResetPatchStateCache();
-                    var definitions = await Task.Run(() =>
+                    var definitions = await Task.Run(async () =>
                     {
-                        return modPatchCollectionService.GetModObjects(gameService.GetSelected(), SelectedMods);
+                        return await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), SelectedMods, copy.Name).ConfigureAwait(false);
                     }).ConfigureAwait(false);
 
                     var conflicts = await Task.Run(() =>
@@ -692,6 +704,7 @@ namespace IronyModManager.ViewModels.Controls
             definitionMergeProgressHandler?.Dispose();
             fileMergeProgressHandler?.Dispose();
             modCompressProgressHandler?.Dispose();
+            modInvalidReplaceHandler?.Dispose();
 
             if (mergeType == MergeType.Advanced)
             {
@@ -702,7 +715,18 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         PercentDone = s.Percentage.ToLocalizedPercentage(),
                         Count = 1,
-                        TotalCount = 3
+                        TotalCount = 4
+                    });
+                    TriggerOverlay(id, true, message, overlayProgress);
+                }).DisposeWith(disposables);
+                modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Message.Subscribe(s =>
+                {
+                    var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Advanced.Overlay_Replacing_Definitions);
+                    var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
+                    {
+                        PercentDone = s.Percentage.ToLocalizedPercentage(),
+                        Count = 2,
+                        TotalCount = 4
                     });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
@@ -712,8 +736,8 @@ namespace IronyModManager.ViewModels.Controls
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = s.Percentage.ToLocalizedPercentage(),
-                        Count = 2,
-                        TotalCount = 3
+                        Count = 3,
+                        TotalCount = 4
                     });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);
@@ -723,8 +747,8 @@ namespace IronyModManager.ViewModels.Controls
                     var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.MergeCollection.Overlay_Progress), new
                     {
                         PercentDone = s.Percentage.ToLocalizedPercentage(),
-                        Count = 3,
-                        TotalCount = 3
+                        Count = 4,
+                        TotalCount = 4
                     });
                     TriggerOverlay(id, true, message, overlayProgress);
                 }).DisposeWith(disposables);

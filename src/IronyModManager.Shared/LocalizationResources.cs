@@ -217,6 +217,7 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.Advanced.";
                     public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
                     public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
+                    public const string Overlay_Replacing_Definitions = Prefix + "Overlay_Replacing_Definitions";
                     public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
                 }
                 public static class Basic
@@ -248,6 +249,7 @@ namespace IronyModManager.Shared
             public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
             public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
             public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
+            public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
             public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
             public static class LaunchGame
             {
@@ -583,6 +585,12 @@ namespace IronyModManager.Shared
             public static class ReportValid
             {
                 public const string Prefix = "Notifications.ReportValid.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CustomPatchRerunConflictSolver
+            {
+                public const string Prefix = "Notifications.CustomPatchRerunConflictSolver.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

@@ -415,6 +415,12 @@ namespace IronyModManager.Parser.Definitions
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is custom patch.
+        /// </summary>
+        /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
+        public bool IsCustomPatch { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the mod.
         /// </summary>
         /// <value>The name of the mod.</value>
@@ -681,6 +687,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(VirtualParentDirectory) => VirtualParentDirectory,
                 nameof(VirtualParentDirectoryCI) => VirtualParentDirectoryCI,
                 nameof(CustomPriorityOrder) => CustomPriorityOrder,
+                nameof(IsCustomPatch) => IsCustomPatch,
                 _ => Id
             };
         }
