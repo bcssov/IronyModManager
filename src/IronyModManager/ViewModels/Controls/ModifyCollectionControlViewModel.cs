@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 12-09-2020
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -492,7 +492,7 @@ namespace IronyModManager.ViewModels.Controls
 
             MergeAdvancedCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (ActiveCollection != null)
+                if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
                     var copy = await GetMergedCollectionAsync();
 
@@ -570,7 +570,7 @@ namespace IronyModManager.ViewModels.Controls
 
             MergeBasicCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (ActiveCollection != null)
+                if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
                     var copy = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
@@ -623,7 +623,7 @@ namespace IronyModManager.ViewModels.Controls
 
             MergeCompressCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (ActiveCollection != null)
+                if (ActiveCollection != null && ActiveCollection.Mods?.Count() > 0)
                 {
                     var copy = await GetMergedCollectionAsync();
                     var id = idGenerator.GetNextId();
