@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-03-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -845,7 +845,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             skipModCollectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
-            SaveState();
+            SaveState(true);
             if (Mods != null)
             {
                 foreach (var item in Mods)
@@ -1184,7 +1184,17 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
                     }
-                    SaveState();
+                    var modCount = SelectedModCollection?.Mods.Count();
+                    var selectedModsCount = SelectedMods?.Count;
+                    // Save only if the collection is fully loaded
+                    if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
+                    {
+                        if (string.IsNullOrWhiteSpace(s))
+                        {
+                            SelectedMod = null;
+                        }
+                        SaveState();
+                    }
                 }).DisposeWith(disposables);
 
                 Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
@@ -1571,11 +1581,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves the state.
         /// </summary>
-        protected virtual void SaveState()
+        /// <param name="useOldModSelection">if set to <c>true</c> [use old mod selection].</param>
+        protected virtual void SaveState(bool useOldModSelection = false)
         {
             var state = appStateService.Get();
-            state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
-            state.CollectionModsSearchTerm = SearchMods.Text;
+            state.CollectionModsSelectedMod = !useOldModSelection ? SelectedMod?.DescriptorFile : state.CollectionModsSelectedMod;
+            state.CollectionModsSearchTerm = !useOldModSelection ? SearchMods.Text : state.CollectionModsSearchTerm;
             state.CollectionModsSortColumn = ModNameKey;
             state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
             appStateService.Save(state);
