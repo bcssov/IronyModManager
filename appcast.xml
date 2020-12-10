@@ -4,11 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.38-alpha</title>
+			<title>1.10.45-rc</title>
 			<description>RELEASE INFO
-* Fix options editor executable options caption
-* Tweak localization grouping
-* Cleanup text received from external editor
+* Widen new update info area
+* Fix CTD when attempting to perform a merge on an empty collection
+* Fix collection mods area forgetting entered text in search box
+* Fix Irony forgetting ignored localization conflicts
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -20,15 +21,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Tue, 08 Dec 2020 19:16:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.38-alpha/osx-x64.rar" sparkle:version="1.10.38.30952" sparkle:shortVersionString="1.10.38" length="62898757" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Hw9+rc8yNNMXOjVQnBTSammHcTiPtiOUP//TUFUMQD628XI+4GsUS+RILOEmir5Q4x8GPy5EqgwMiUtF0p8ADQ=="/>
+			<pubDate>Thu, 10 Dec 2020 18:50:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/osx-x64.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="62917158" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Im+ngViy/auv+dWTD5a8XrnUO3Z2jPQ3toLyCDkPBRpF3xQ5MWpwqJo/DI7epZJkFjpbu85FOQieFKn7KbLkAw=="/>
 		</item>
 		<item>
-			<title>1.10.38-alpha</title>
+			<title>1.10.45-rc</title>
 			<description>RELEASE INFO
-* Fix options editor executable options caption
-* Tweak localization grouping
-* Cleanup text received from external editor
+* Widen new update info area
+* Fix CTD when attempting to perform a merge on an empty collection
+* Fix collection mods area forgetting entered text in search box
+* Fix Irony forgetting ignored localization conflicts
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -40,15 +42,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Tue, 08 Dec 2020 19:17:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.38-alpha/win-x64-setup.rar" sparkle:version="1.10.38.30952" sparkle:shortVersionString="1.10.38" length="54491765" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="K7rIiy1oXNpQN33qcYf1tonGfq5drnGiXI5+Ty7Wc5+q3cO2VJjRK1xbPXw9tRrdK2s/anmZV6qW2OmRlANdBg=="/>
+			<pubDate>Thu, 10 Dec 2020 18:51:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/win-x64-setup.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="54508245" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="O+nf1tYolSnJGw3tBOsS4vXF7xi1wgDpbG1meXtdrq+YirRuVPBZ3x0PKNf0kSkHURPMZxh9a/saALdv7xfLAQ=="/>
 		</item>
 		<item>
-			<title>1.10.38-alpha</title>
+			<title>1.10.45-rc</title>
 			<description>RELEASE INFO
-* Fix options editor executable options caption
-* Tweak localization grouping
-* Cleanup text received from external editor
+* Widen new update info area
+* Fix CTD when attempting to perform a merge on an empty collection
+* Fix collection mods area forgetting entered text in search box
+* Fix Irony forgetting ignored localization conflicts
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -60,15 +63,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Tue, 08 Dec 2020 19:16:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.38-alpha/win-x64.rar" sparkle:version="1.10.38.30952" sparkle:shortVersionString="1.10.38" length="65208786" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="Lghd6u79jbofpQGSjO+ufsjLeLgaqt59HJp67ZhBgKwUIzew9lPm4Lhvs7C5SXZhjFII2cvGfQR5Ma3in4KtDg=="/>
+			<pubDate>Thu, 10 Dec 2020 18:51:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/win-x64.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="65240127" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="QdPkgc6EJW6MLIx6qLluaPT5DhXd4Se/OvT/M1W0DgaSCYTTloTyg6ys7Hf9W8WgWJvQWhr78t/4Zt3bL8DFDw=="/>
 		</item>
 		<item>
-			<title>1.10.38-alpha</title>
+			<title>1.10.45-rc</title>
 			<description>RELEASE INFO
-* Fix options editor executable options caption
-* Tweak localization grouping
-* Cleanup text received from external editor
+* Widen new update info area
+* Fix CTD when attempting to perform a merge on an empty collection
+* Fix collection mods area forgetting entered text in search box
+* Fix Irony forgetting ignored localization conflicts
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -80,8 +84,8 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Tue, 08 Dec 2020 19:16:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.38-alpha/linux-x64.zip" sparkle:version="1.10.38.30952" sparkle:shortVersionString="1.10.38" length="78032208" sparkle:os="linux" type="application/zip" sparkle:signature="CofdAR8CCKQ9JFvxLQ9R+SuTFIobR8kc02VctCp5Y4e9yZJwqmrLWg7XDdwrWzb3M6FnCVmj9BeIzXqJ8wlZCQ=="/>
+			<pubDate>Thu, 10 Dec 2020 18:50:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/linux-x64.zip" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="78435673" sparkle:os="linux" type="application/zip" sparkle:signature="GURcfZSgrn53IivhWXR8auc+gd0OrKXXutyK3VUGvBPspX+WNjgnjtFxVfJ4haRoVchVNviBtDmNGjDDF1ZWBw=="/>
 		</item>
 		<item>
 			<title>1.9.63</title>
