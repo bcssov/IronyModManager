@@ -166,6 +166,11 @@ namespace IronyModManager.ViewModels.Controls
         private bool skipModCollectionSave = false;
 
         /// <summary>
+        /// The skip mod selection save
+        /// </summary>
+        private bool skipModSelectionSave = false;
+
+        /// <summary>
         /// The skip reorder
         /// </summary>
         private bool skipReorder = false;
@@ -844,6 +849,7 @@ namespace IronyModManager.ViewModels.Controls
                 restoreCollectionSelection = string.Empty;
             }
             skipModCollectionSave = true;
+            skipModSelectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
             SaveState(true);
             if (Mods != null)
@@ -870,10 +876,11 @@ namespace IronyModManager.ViewModels.Controls
             SetSelectedMods(selectedMods);
             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
             var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            InitSortersAndFilters(state, false);
             ApplySort();
             SaveSelectedCollection();
             skipModCollectionSave = false;
+            skipModSelectionSave = false;
         }
 
         /// <summary>
@@ -960,8 +967,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes the sorters and filters.
         /// </summary>
         /// <param name="state">The state.</param>
-        protected virtual void InitSortersAndFilters(IAppState state)
+        /// <param name="setFlag">if set to <c>true</c> [set flag].</param>
+        protected virtual void InitSortersAndFilters(IAppState state, bool setFlag = true)
         {
+            if (setFlag)
+            {
+                skipModSelectionSave = true;
+            }
             CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
             SearchMods.WatermarkText = SearchModsWatermark;
             SearchMods.Text = state?.CollectionModsSearchTerm;
@@ -971,6 +983,10 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod));
             }
             RecognizeSortOrder(SelectedModCollection);
+            if (setFlag)
+            {
+                skipModSelectionSave = false;
+            }
         }
 
         /// <summary>
@@ -1000,10 +1016,12 @@ namespace IronyModManager.ViewModels.Controls
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
+            skipModSelectionSave = true;
             var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            InitSortersAndFilters(state, false);
             LoadModCollections(false);
             ApplySort();
+            skipModSelectionSave = false;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
@@ -1180,6 +1198,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
                 {
+                    skipModSelectionSave = true;
                     if (!string.IsNullOrWhiteSpace(s) && SelectedMods != null)
                     {
                         SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
@@ -1195,6 +1214,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         SaveState();
                     }
+                    skipModSelectionSave = false;
                 }).DisposeWith(disposables);
 
                 Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
@@ -1203,6 +1223,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         return;
                     }
+                    skipModSelectionSave = true;
                     var index = -1;
                     if (SelectedMod != null)
                     {
@@ -1228,6 +1249,7 @@ namespace IronyModManager.ViewModels.Controls
                             SelectedMod = mod;
                         }
                     }
+                    skipModSelectionSave = false;
                     SaveState();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
@@ -1334,6 +1356,7 @@ namespace IronyModManager.ViewModels.Controls
                         var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
                         if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
                         {
+                            skipModSelectionSave = true;
                             skipModCollectionSave = true;
                             var mods = new List<IMod>();
                             foreach (var item in Mods)
@@ -1347,10 +1370,11 @@ namespace IronyModManager.ViewModels.Controls
                             SetSelectedMods(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
                             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                             var state = appStateService.Get();
-                            InitSortersAndFilters(state);
+                            InitSortersAndFilters(state, false);
                             SaveSelectedCollection();
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
+                            skipModSelectionSave = false;
                         }
                     }
                 }
@@ -1411,6 +1435,17 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.SelectedMod).Where(p => !skipModSelectionSave).Subscribe(s =>
+            {
+                var modCount = SelectedModCollection?.Mods.Count();
+                var selectedModsCount = SelectedMods?.Count;
+                // Save only if the collection is fully loaded
+                if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
+                {
+                    SaveState();
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1432,6 +1467,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (SelectedMods != null && mods.Length > 0)
             {
+                skipModSelectionSave = true;
                 foreach (var mod in mods)
                 {
                     var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
@@ -1454,6 +1490,7 @@ namespace IronyModManager.ViewModels.Controls
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
                 ModReordered?.Invoke(mods.Last());
+                skipModSelectionSave = false;
             }
         }
 
