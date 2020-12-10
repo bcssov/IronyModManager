@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -240,7 +240,6 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the custom priority order.
         /// </summary>
         /// <value>The custom priority order.</value>
-        [JsonIgnore]
         public int CustomPriorityOrder { get; set; }
 
         /// <summary>
@@ -617,7 +616,6 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the virtual localization path.
         /// </summary>
         /// <value>The virtual localization path.</value>
-        [JsonIgnore]
         public string VirtualPath
         {
             get

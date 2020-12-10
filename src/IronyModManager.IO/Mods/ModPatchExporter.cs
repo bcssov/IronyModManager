@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -490,6 +490,9 @@ namespace IronyModManager.IO.Mods
             newInstance.DiskFile = original.DiskFile;
             newInstance.Variables = original.Variables;
             newInstance.ExistsInLastFile = original.ExistsInLastFile;
+            newInstance.VirtualPath = original.VirtualPath;
+            newInstance.CustomPriorityOrder = original.CustomPriorityOrder;
+            newInstance.IsCustomPatch = original.IsCustomPatch;
             return newInstance;
         }
 

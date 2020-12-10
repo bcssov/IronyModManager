@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -63,7 +63,6 @@ namespace IronyModManager.Shared.Models
         /// Gets or sets the custom priority order.
         /// </summary>
         /// <value>The custom priority order.</value>
-        [JsonIgnore]
         int CustomPriorityOrder { get; set; }
 
         /// <summary>
@@ -143,7 +142,6 @@ namespace IronyModManager.Shared.Models
         /// Gets or sets a value indicating whether this instance is custom patch.
         /// </summary>
         /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
-        [JsonIgnore]
         bool IsCustomPatch { get; set; }
 
         /// <summary>
@@ -259,7 +257,6 @@ namespace IronyModManager.Shared.Models
         /// Gets or sets the virtual localization directory.
         /// </summary>
         /// <value>The virtual localization directory.</value>
-        [JsonIgnore]
         string VirtualPath { get; set; }
 
         #endregion Properties

@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -191,6 +191,9 @@ namespace IronyModManager.Services
             newDefinition.DiskFile = definition.DiskFile;
             newDefinition.Variables = definition.Variables;
             newDefinition.ExistsInLastFile = definition.ExistsInLastFile;
+            newDefinition.VirtualPath = definition.VirtualPath;
+            newDefinition.CustomPriorityOrder = definition.CustomPriorityOrder;
+            newDefinition.IsCustomPatch = definition.IsCustomPatch;
             return newDefinition;
         }
 
