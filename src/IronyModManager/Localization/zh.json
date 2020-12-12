@@ -353,7 +353,7 @@
         "Dialog": {
             "ExeTitle": "选择游戏可执行文件",
             "GameRootTitle": "选择游戏根目录",
-            "UserDirTitle": "选择游戏数据目录"
+            "UserDirTitle": "选择游戏数据目录",
             "EditorTitle": "查找编辑器可执行文件"
         }
     },
