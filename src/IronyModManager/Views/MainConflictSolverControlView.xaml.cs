@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-12-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -118,6 +118,11 @@ namespace IronyModManager.Views
             IEnumerable lastDataSource = null;
             conflictList.PointerMoved += (sender, args) =>
             {
+                var allItems = conflictList.GetLogicalChildren().Cast<ListBoxItem>().Select(p => p.GetLogicalChildren().OfType<Grid>().FirstOrDefault());
+                if (allItems.Any(p => p.ContextMenu != null && p.ContextMenu.IsOpen))
+                {
+                    return;
+                }
                 var hoveredItem = conflictList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                 if (hoveredItem != null)
                 {

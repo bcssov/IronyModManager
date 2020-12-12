@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-12-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -78,6 +78,11 @@ namespace IronyModManager.Views.Controls
             IEnumerable lastDataSource = null;
             listBox.PointerMoved += (sender, args) =>
             {
+                var allItems = listBox.GetLogicalChildren().Cast<ListBoxItem>().Select(p => p.GetLogicalChildren().OfType<Grid>().FirstOrDefault());
+                if (allItems.Any(p => p.ContextMenu != null && p.ContextMenu.IsOpen))
+                {
+                    return;
+                }
                 var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                 if (hoveredItem != null)
                 {
