@@ -4,12 +4,10 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.45-rc</title>
+			<title>1.10.50</title>
 			<description>RELEASE INFO
-* Widen new update info area
-* Fix CTD when attempting to perform a merge on an empty collection
-* Fix collection mods area forgetting entered text in search box
-* Fix Irony forgetting ignored localization conflicts
+* Fix being unable to use deselect all mods when filter is active in the installed mods area
+* Updated Chinese translation (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -21,16 +19,14 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 10 Dec 2020 18:50:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/osx-x64.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="62917158" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Im+ngViy/auv+dWTD5a8XrnUO3Z2jPQ3toLyCDkPBRpF3xQ5MWpwqJo/DI7epZJkFjpbu85FOQieFKn7KbLkAw=="/>
+			<pubDate>Sat, 12 Dec 2020 17:36:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.50/osx-x64.rar" sparkle:version="1.10.50.38652" sparkle:shortVersionString="1.10.50" length="62910722" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="R5wHY3EC4/M7rcjqiWxGWC/mtYbWFXl0gH+17LrZ2QuL7qLrJz4IESSUb5XNeWvH8PEjUHadFAxw6o4NqL1AAg=="/>
 		</item>
 		<item>
-			<title>1.10.45-rc</title>
+			<title>1.10.50</title>
 			<description>RELEASE INFO
-* Widen new update info area
-* Fix CTD when attempting to perform a merge on an empty collection
-* Fix collection mods area forgetting entered text in search box
-* Fix Irony forgetting ignored localization conflicts
+* Fix being unable to use deselect all mods when filter is active in the installed mods area
+* Updated Chinese translation (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -42,16 +38,14 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 10 Dec 2020 18:51:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/win-x64-setup.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="54508245" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="O+nf1tYolSnJGw3tBOsS4vXF7xi1wgDpbG1meXtdrq+YirRuVPBZ3x0PKNf0kSkHURPMZxh9a/saALdv7xfLAQ=="/>
+			<pubDate>Sat, 12 Dec 2020 17:37:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.50/win-x64-setup.rar" sparkle:version="1.10.50.38652" sparkle:shortVersionString="1.10.50" length="54509636" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="MMLLF8f9ywFNBvGGM7V13fuNIXr2DuLOFh6gfxS6c0ip1wZWik5D0K4G2qh35jY5aJdjJ5pbkZmc87Oikv3dCQ=="/>
 		</item>
 		<item>
-			<title>1.10.45-rc</title>
+			<title>1.10.50</title>
 			<description>RELEASE INFO
-* Widen new update info area
-* Fix CTD when attempting to perform a merge on an empty collection
-* Fix collection mods area forgetting entered text in search box
-* Fix Irony forgetting ignored localization conflicts
+* Fix being unable to use deselect all mods when filter is active in the installed mods area
+* Updated Chinese translation (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -63,16 +57,14 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 10 Dec 2020 18:51:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/win-x64.rar" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="65240127" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="QdPkgc6EJW6MLIx6qLluaPT5DhXd4Se/OvT/M1W0DgaSCYTTloTyg6ys7Hf9W8WgWJvQWhr78t/4Zt3bL8DFDw=="/>
+			<pubDate>Sat, 12 Dec 2020 17:36:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.50/win-x64.rar" sparkle:version="1.10.50.38652" sparkle:shortVersionString="1.10.50" length="65233457" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="G5XgijlxIASoS9j1HyXx0Rq+qQ1IORdf34fX0uugC5/zFg5aaKhHFS8xhrJ/5OYeWVWVoFVYkf7elNe9CR7lCA=="/>
 		</item>
 		<item>
-			<title>1.10.45-rc</title>
+			<title>1.10.50</title>
 			<description>RELEASE INFO
-* Widen new update info area
-* Fix CTD when attempting to perform a merge on an empty collection
-* Fix collection mods area forgetting entered text in search box
-* Fix Irony forgetting ignored localization conflicts
+* Fix being unable to use deselect all mods when filter is active in the installed mods area
+* Updated Chinese translation (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -84,72 +76,8 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 10 Dec 2020 18:50:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.45-rc/linux-x64.zip" sparkle:version="1.10.45.26066" sparkle:shortVersionString="1.10.45" length="78435673" sparkle:os="linux" type="application/zip" sparkle:signature="GURcfZSgrn53IivhWXR8auc+gd0OrKXXutyK3VUGvBPspX+WNjgnjtFxVfJ4haRoVchVNviBtDmNGjDDF1ZWBw=="/>
-		</item>
-		<item>
-			<title>1.9.63</title>
-			<description>RELEASE INFO:
-* Fix Irony not respecting switch back to simple parser (due to a code comment)
-* Ensure that proper IO readers are selected
-* Start screen messages are treated as file conflicts now
-
-CHANGES FROM v1.8:
-* Upgrade to net5
-* Upgrade dependencies
-* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
-* Add new merge type called compress which zips all mod files into local mod directory
-* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Mon, 07 Dec 2020 03:14:14 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.63/osx-x64.rar" sparkle:version="1.9.63.59676" sparkle:shortVersionString="1.9.63" length="62893847" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="Es4L/vEjmWCU5qda4NiM/T5ifSJpiiH+poiUJyvCesfIq+AkydEyju7YOdiDsonasxB36Dv3EH/YDK5AxoG2DA=="/>
-		</item>
-		<item>
-			<title>1.9.63</title>
-			<description>RELEASE INFO:
-* Fix Irony not respecting switch back to simple parser (due to a code comment)
-* Ensure that proper IO readers are selected
-* Start screen messages are treated as file conflicts now
-
-CHANGES FROM v1.8:
-* Upgrade to net5
-* Upgrade dependencies
-* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
-* Add new merge type called compress which zips all mod files into local mod directory
-* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Mon, 07 Dec 2020 03:14:22 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.63/win-x64-setup.rar" sparkle:version="1.9.63.59676" sparkle:shortVersionString="1.9.63" length="54477499" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="EHiCBf0wplDL+8H2Ny3lcz3cT2msbmUOHk8iccdhnHgCxJ9EtS9wmdbvZtVYAstY/5nncS+XW+D2TklcLmETDw=="/>
-		</item>
-		<item>
-			<title>1.9.63</title>
-			<description>RELEASE INFO:
-* Fix Irony not respecting switch back to simple parser (due to a code comment)
-* Ensure that proper IO readers are selected
-* Start screen messages are treated as file conflicts now
-
-CHANGES FROM v1.8:
-* Upgrade to net5
-* Upgrade dependencies
-* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
-* Add new merge type called compress which zips all mod files into local mod directory
-* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Mon, 07 Dec 2020 03:14:18 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.63/win-x64.rar" sparkle:version="1.9.63.59676" sparkle:shortVersionString="1.9.63" length="65203469" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="kEJJ4VzK0txEMe25G1zspMEUV/7QIX3v8VWEuQNI23OSYJoLAbipjuRkHrVvv6qME6yLjFCl8D3SMDlXoJohBA=="/>
-		</item>
-		<item>
-			<title>1.9.63</title>
-			<description>RELEASE INFO:
-* Fix Irony not respecting switch back to simple parser (due to a code comment)
-* Ensure that proper IO readers are selected
-* Start screen messages are treated as file conflicts now
-
-CHANGES FROM v1.8:
-* Upgrade to net5
-* Upgrade dependencies
-* Fix conflict solver UI issue with conflict solver dropdown menu opening on the wrong screen (more like Avalonia hack fix)
-* Add new merge type called compress which zips all mod files into local mod directory
-* Add option to remove merged mods (for all types unless these mods folders have been renamed)</description>
-			<pubDate>Mon, 07 Dec 2020 03:14:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.9.63/linux-x64.zip" sparkle:version="1.9.63.59676" sparkle:shortVersionString="1.9.63" length="78014191" sparkle:os="linux" type="application/zip" sparkle:signature="nL5NO7/AfVMSz9Lb8ZersQoOoX8STk/hrD3Yy3F3WNbF6P/MCClw5C7GLeiS/H69w/K72Gzi5tTCRBRyBqkPAA=="/>
+			<pubDate>Sat, 12 Dec 2020 17:36:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.50/linux-x64.zip" sparkle:version="1.10.50.38652" sparkle:shortVersionString="1.10.50" length="78438221" sparkle:os="linux" type="application/zip" sparkle:signature="lJfNYVeOnATdlrvQCeza28AqXUdCWtY9WbCWzXqmKyy26jDc5aOBKA6FEhrD4JJz5WzlAQJLYlmPvh9lntgjDg=="/>
 		</item>
 	</channel>
 </rss>
