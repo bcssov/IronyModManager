@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModPatchExporterParameters.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Common.Mods
 {

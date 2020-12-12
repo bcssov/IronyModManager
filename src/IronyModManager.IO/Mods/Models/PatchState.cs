@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-27-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -15,8 +15,8 @@ using System;
 using System.Collections.Generic;
 using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods.Models;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Mods.Models
 {

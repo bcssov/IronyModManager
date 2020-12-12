@@ -20,6 +20,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 
 namespace IronyModManager.Parser.Tests
@@ -62,15 +63,15 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"l_english:");
-            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:0 ""Brave New World""");                        
+            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");                        
 
             var sb3 = new StringBuilder();
             sb3.AppendLine(@"l_english:");            
-            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:0 ""Colonize a planet""");            
+            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");            
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"l_english:");            
-            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:0 ""Digging Deep""");
+            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:1000 ""Digging Deep""");
 
             var args = new ParserArgs()
             {
@@ -83,7 +84,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new LocalizationParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count.Should().Be(3);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -94,23 +95,23 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_NAME");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_DESC");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");                        
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     default:
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("loc\\l_english-yml");
+                result[i].Type.Should().Be("loc\\english\\l_english-yml");
             }
         }
 
@@ -130,15 +131,15 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"l_english:");
-            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:0 ""Brave New World""");
+            sb2.AppendLine(@" NEW_ACHIEVEMENT_2_0_NAME:1000 ""Brave New World""");
 
             var sb3 = new StringBuilder();
             sb3.AppendLine(@"l_english:");
-            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:0 ""Colonize a planet""");
+            sb3.AppendLine(@" NEW_ACHIEVEMENT_2_0_DESC:1000 ""Colonize a planet""");
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"l_english:");
-            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:0 ""Digging Deep""");
+            sb4.AppendLine(@" NEW_ACHIEVEMENT_2_1_NAME:1000 ""Digging Deep""");
 
             var args = new ParserArgs()
             {
@@ -151,7 +152,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new LocalizationParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count.Should().Be(3);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -162,23 +163,23 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_NAME");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     case 1:
                         result[i].Code.Trim().Should().Be(sb3.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_0_DESC");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     case 2:
                         result[i].Code.Trim().Should().Be(sb4.ToString().Trim());
                         result[i].Id.Should().Be("NEW_ACHIEVEMENT_2_1_NAME");
-                        result[i].ValueType.Should().Be(Common.ValueType.SpecialVariable);
+                        result[i].ValueType.Should().Be(ValueType.SpecialVariable);
                         break;
                     default:
                         break;
                 }
                 result[i].ModName.Should().Be("fake");
-                result[i].Type.Should().Be("loc\\l_english-yml");
+                result[i].Type.Should().Be("loc\\english\\l_english-yml");
             }
         }
     }

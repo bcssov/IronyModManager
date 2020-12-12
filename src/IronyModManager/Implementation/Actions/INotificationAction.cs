@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="INotificationAction.cs" company="Mario">
 //     Mario
@@ -41,8 +41,9 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <param name="notificationType">Type of the notification.</param>
+        /// <param name="yesNoPrompt">if set to <c>true</c> [yes no prompt].</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ShowPromptAsync(string title, string header, string message, NotificationType notificationType);
+        Task<bool> ShowPromptAsync(string title, string header, string message, NotificationType notificationType, bool yesNoPrompt = true);
 
         #endregion Methods
     }

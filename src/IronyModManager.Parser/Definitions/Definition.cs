@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="Definition.cs" company="Mario">
 //     Mario
@@ -16,18 +16,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using Newtonsoft.Json;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class Definition.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IDefinition" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IDefinition" />
+    /// <seealso cref="IronyModManager.Shared.Models.IDefinition" />
     public class Definition : IDefinition
     {
         #region Fields
@@ -121,6 +122,11 @@ namespace IronyModManager.Parser.Definitions
         /// The type and identifier
         /// </summary>
         private string typeAndId = string.Empty;
+
+        /// <summary>
+        /// The virtual path
+        /// </summary>
+        private string virtualPath = string.Empty;
 
         #endregion Fields
 
@@ -231,6 +237,12 @@ namespace IronyModManager.Parser.Definitions
         public string ContentSHA { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom priority order.
+        /// </summary>
+        /// <value>The custom priority order.</value>
+        public int CustomPriorityOrder { get; set; }
+
+        /// <summary>
         /// Gets the definition sha.
         /// </summary>
         /// <value>The definition sha.</value>
@@ -238,7 +250,7 @@ namespace IronyModManager.Parser.Definitions
         {
             get
             {
-                if (ValueType == Common.ValueType.Binary)
+                if (ValueType == ValueType.Binary)
                 {
                     return ContentSHA;
                 }
@@ -310,6 +322,12 @@ namespace IronyModManager.Parser.Definitions
         public string ErrorMessage { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [exists in last file].
+        /// </summary>
+        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
+        public bool ExistsInLastFile { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the file.
         /// </summary>
         /// <value>The file.</value>
@@ -325,6 +343,8 @@ namespace IronyModManager.Parser.Definitions
                 var val = value ?? string.Empty;
                 file = val;
                 FileCI = val.ToLowerInvariant();
+                parentDirectory = string.Empty;
+                parentDirectoryCI = string.Empty;
                 if (generatedFileNames.Contains(old))
                 {
                     generatedFileNames.Remove(old);
@@ -392,6 +412,12 @@ namespace IronyModManager.Parser.Definitions
                 id = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is custom patch.
+        /// </summary>
+        /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
+        public bool IsCustomPatch { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -563,7 +589,7 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the type of the value.
         /// </summary>
         /// <value>The type of the value.</value>
-        public Common.ValueType ValueType { get; set; }
+        public ValueType ValueType { get; set; }
 
         /// <summary>
         /// Gets or sets the variables.
@@ -571,11 +597,45 @@ namespace IronyModManager.Parser.Definitions
         /// <value>The variables.</value>
         [JsonIgnore]
         public IEnumerable<IDefinition> Variables { get; set; }
+
         /// <summary>
-        /// Gets or sets a value indicating whether [exists in last file].
+        /// Gets the virtual localization path ci.
         /// </summary>
-        /// <value><c>true</c> if [exists in last file]; otherwise, <c>false</c>.</value>
-        public bool ExistsInLastFile { get; set; } = true;
+        /// <value>The virtual localization path ci.</value>
+        [JsonIgnore]
+        public string VirtualParentDirectory { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the virtual parent directory ci.
+        /// </summary>
+        /// <value>The virtual parent directory ci.</value>
+        [JsonIgnore]
+        public string VirtualParentDirectoryCI { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the virtual localization path.
+        /// </summary>
+        /// <value>The virtual localization path.</value>
+        public string VirtualPath
+        {
+            get
+            {
+                return virtualPath;
+            }
+            set
+            {
+                virtualPath = value ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(virtualPath))
+                {
+                    VirtualParentDirectory = Path.GetDirectoryName(virtualPath);
+                    VirtualParentDirectoryCI = VirtualParentDirectory.ToLowerInvariant();
+                }
+                else
+                {
+                    VirtualParentDirectory = VirtualParentDirectoryCI = string.Empty;
+                }
+            }
+        }
 
         #endregion Properties
 
@@ -621,6 +681,11 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Variables) => Variables,
                 nameof(DiskFileCI) => DiskFileCI,
                 nameof(OriginalFileName) => OriginalFileName,
+                nameof(VirtualPath) => VirtualPath,
+                nameof(VirtualParentDirectory) => VirtualParentDirectory,
+                nameof(VirtualParentDirectoryCI) => VirtualParentDirectoryCI,
+                nameof(CustomPriorityOrder) => CustomPriorityOrder,
+                nameof(IsCustomPatch) => IsCustomPatch,
                 _ => Id
             };
         }

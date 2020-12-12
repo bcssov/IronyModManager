@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -28,12 +28,13 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
 using SmartFormat;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.ViewModels
 {
@@ -51,6 +52,11 @@ namespace IronyModManager.ViewModels
         /// The invalid key
         /// </summary>
         private const string InvalidKey = "invalid";
+
+        /// <summary>
+        /// The localization directory
+        /// </summary>
+        private static readonly string LocalizationDirectory = $"{Shared.Constants.LocalizationDirectory}{Path.DirectorySeparatorChar}";
 
         /// <summary>
         /// The application action
@@ -500,9 +506,9 @@ namespace IronyModManager.ViewModels
                 foreach (var topLevelResolvedConflicts in resolved)
                 {
                     IEnumerable<IHierarchicalDefinitions> topLevelConflicts;
-                    if (topLevelResolvedConflicts.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
+                    if (topLevelResolvedConflicts.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase))
                     {
-                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(Shared.Constants.LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
+                        topLevelConflicts = conflicts.Where(p => p.Name.StartsWith(LocalizationDirectory, StringComparison.OrdinalIgnoreCase));
                     }
                     else
                     {
@@ -524,7 +530,7 @@ namespace IronyModManager.ViewModels
                     }
                     conflicts.RemoveAll(p => p.Children == null || p.Children.Count == 0);
                 }
-                var invalid = conflictResult.AllConflicts.GetByValueType(Parser.Common.ValueType.Invalid);
+                var invalid = conflictResult.AllConflicts.GetByValueType(ValueType.Invalid);
                 if (invalid?.Count() > 0)
                 {
                     var invalidDef = DIResolver.Get<IHierarchicalDefinitions>();
@@ -645,6 +651,7 @@ namespace IronyModManager.ViewModels
                 ResetConflicts.SetParameters(s, SelectedModCollection.Name);
                 DatabaseSearch.SetParameters(s);
                 CustomConflicts.SetParameters(s, SelectedModCollection.Name);
+                MergeViewer.InitParameters();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.SelectedParentConflict).Subscribe(s =>
@@ -661,7 +668,7 @@ namespace IronyModManager.ViewModels
                     var conflicts = Conflicts.Conflicts.GetByTypeAndId(s.Key).ToObservableCollection();
                     ModCompareSelector.SelectedModsOrder = SelectedModsOrder;
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
-                    ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == Parser.Common.ValueType.Binary;
+                    ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
                     MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
                     MergeViewer.SetText(string.Empty, string.Empty, true);

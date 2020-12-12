@@ -4,7 +4,7 @@
 // Created          : 02-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="ParserManager.cs" company="Mario">
 //     Mario
@@ -19,8 +19,9 @@ using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser
 {
@@ -99,7 +100,7 @@ namespace IronyModManager.Parser
             }
             // Check if empty text file
             if (Shared.Constants.TextExtensions.Any(p => args.File.EndsWith(p, StringComparison.OrdinalIgnoreCase)) &&
-                (args.Lines == null || args.Lines.Count() == 0 || args.Lines.Count(p => isValidLine(p)) == 0))
+                (args.Lines == null || !args.Lines.Any() || !args.Lines.Any(p => isValidLine(p))))
             {
                 var definition = DIResolver.Get<IDefinition>();
                 definition.OriginalCode = definition.Code = "# This mod contains empty code. Possibly to overwrite other mods.";
@@ -113,7 +114,7 @@ namespace IronyModManager.Parser
                 definition.OriginalModName = args.ModName;
                 definition.OriginalFileName = args.File;
                 definition.UsedParser = string.Empty;
-                definition.ValueType = Common.ValueType.EmptyFile;
+                definition.ValueType = ValueType.EmptyFile;
                 return new List<IDefinition>() { definition };
             }
             return InvokeParsers(args);
@@ -133,6 +134,43 @@ namespace IronyModManager.Parser
                 type = Constants.TxtType;
             }
             return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{type}";
+        }
+
+        /// <summary>
+        /// Sets the parser.
+        /// </summary>
+        /// <param name="definitions">The definitions.</param>
+        /// <param name="parserName">Name of the parser.</param>
+        private static void SetAdditionalData(IEnumerable<IDefinition> definitions, string parserName)
+        {
+            if (definitions?.Count() > 0)
+            {
+                int order = 0;
+                foreach (var item in definitions)
+                {
+                    if (item.ValueType != ValueType.Variable && item.ValueType != ValueType.Namespace)
+                    {
+                        order++;
+                        item.Order = order;
+                    }
+                    item.UsedParser = parserName;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validates the parser names.
+        /// </summary>
+        /// <param name="parsers">The parsers.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
+        private static void ValidateParserNames(IEnumerable<IDefaultParser> parsers)
+        {
+            var invalid = parsers.GroupBy(p => p.ParserName).Where(s => s.Count() > 1);
+            if (invalid.Any())
+            {
+                var message = string.Join(',', invalid.SelectMany(s => s).Select(s => s.ParserName));
+                throw new ArgumentOutOfRangeException($"Duplicate parsers detected: {message}");
+            }
         }
 
         /// <summary>
@@ -205,17 +243,17 @@ namespace IronyModManager.Parser
             if (preferredParserNames?.Count() > 0)
             {
                 var gameParser = gameParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
-                if (gameParsers.Count() > 0)
+                if (gameParsers.Any())
                 {
                     preferredParser = gameParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
                 var genericParser = genericParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
-                if (preferredParser == null && genericParser.Count() > 0)
+                if (preferredParser == null && genericParser.Any())
                 {
                     preferredParser = genericParsers.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
                 var defaultParser = defaultParsers.Where(p => preferredParserNames.Any(s => s.Equals(p.ParserName)));
-                if (preferredParser == null && defaultParsers.Count() > 0)
+                if (preferredParser == null && defaultParsers.Any())
                 {
                     preferredParser = defaultParser.FirstOrDefault(p => p.CanParse(canParseArgs));
                 }
@@ -252,43 +290,6 @@ namespace IronyModManager.Parser
                 }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Sets the parser.
-        /// </summary>
-        /// <param name="definitions">The definitions.</param>
-        /// <param name="parserName">Name of the parser.</param>
-        private void SetAdditionalData(IEnumerable<IDefinition> definitions, string parserName)
-        {
-            if (definitions?.Count() > 0)
-            {
-                int order = 0;
-                foreach (var item in definitions)
-                {
-                    if (item.ValueType != Common.ValueType.Variable && item.ValueType != Common.ValueType.Namespace)
-                    {
-                        order++;
-                        item.Order = order;
-                    }
-                    item.UsedParser = parserName;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Validates the parser names.
-        /// </summary>
-        /// <param name="parsers">The parsers.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Duplicate parsers detected: {message}</exception>
-        private void ValidateParserNames(IEnumerable<IDefaultParser> parsers)
-        {
-            var invalid = parsers.GroupBy(p => p.ParserName).Where(s => s.Count() > 1);
-            if (invalid.Count() > 0)
-            {
-                var message = string.Join(',', invalid.SelectMany(s => s).Select(s => s.ParserName));
-                throw new ArgumentOutOfRangeException($"Duplicate parsers detected: {message}");
-            }
         }
 
         #endregion Methods

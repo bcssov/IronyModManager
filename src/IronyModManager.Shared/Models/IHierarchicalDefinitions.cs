@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IHierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using CodexMicroORM.Core.Collections;
 
-namespace IronyModManager.Parser.Common.Definitions
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Interface IHierarchicalDefinitions
@@ -39,10 +39,10 @@ namespace IronyModManager.Parser.Common.Definitions
         ICollection<IHierarchicalDefinitions> Children { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the file.
+        /// Gets or sets the file names.
         /// </summary>
-        /// <value>The name of the file.</value>
-        string FileName { get; set; }
+        /// <value>The file names.</value>
+        IList<string> FileNames { get; }
 
         /// <summary>
         /// Gets or sets the key.

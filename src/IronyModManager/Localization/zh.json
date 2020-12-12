@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "是",
-        "No": "否"
+        "No": "否",
+        "Confirm": "确认",
+        "Cancel": "取消"
     },
     "FileDialog": {
         "FileName": "文件名",
@@ -160,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "正在加载模组数据……",
                 "Overlay_Analyzing_Definitions": "正在分析模组数据……",
+                "Overlay_Replacing_Definitions": "替换定义时请稍候...",
                 "Overlay_Merging_Collection": "正在合并合集……"
             },
             "Basic": {
@@ -183,6 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "替换定义时请稍候...",
         "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "启动游戏",
@@ -247,7 +251,8 @@
             "CopyText": "复制全部文本",
             "Delete": "删除",
             "Undo": "撤销",
-            "Redo": "重做"
+            "Redo": "重做",
+            "Editor": "外部合并"
         },
         "EditorContextMenu": {
             "Copy": "复制",
@@ -288,6 +293,10 @@
             "Path": "路径",
             "Save": "保存",
             "Close": "关闭"
+        },
+        "Editor": {
+            "Title": "外部合并",
+            "Message": "对外部合并感到满意后，请按确认。"
         }
     },
     "ConflictIgnore": {
@@ -298,10 +307,16 @@
     "Options": {
         "Name": "选项",
         "Close": "关闭",
+        "NavigateTo": "…",
+        "Reset": "×",
+        "Editor": {
+            "Title": "外部编辑器选项",
+            "EditorExecutable": "编辑器可执行",
+            "EditorArgs": "编辑Args",
+            "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "游戏选项",
-            "NavigateTo": "…",
-            "Reset": "×",
             "GameExecutable": "游戏可执行文件",
             "UserDirectory": "游戏数据目录",
             "GameArgs": "游戏启动参数",
@@ -311,6 +326,7 @@
         },
         "Updates": {
             "Title": "更新选项",
+            "UpdateInfoTitle": "更新发行信息",
             "AutoUpdates": "启动时检查更新",
             "CheckPrerelease": "检查预发布版更新",
             "CheckForUpdates": "检查更新",
@@ -338,6 +354,7 @@
             "ExeTitle": "选择游戏可执行文件",
             "GameRootTitle": "选择游戏根目录",
             "UserDirTitle": "选择游戏数据目录"
+            "EditorTitle": "查找编辑器可执行文件"
         }
     },
     "Notifications": {
@@ -416,6 +433,10 @@
         "ReportValid": {
             "Title": "文件指纹匹配",
             "Message": "所有文件指纹似乎均匹配。"
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "冲突解决刷新",
+            "Message": "需要刷新冲突解决程序，以考虑添加的新自定义补丁程序。请重新运行冲突解决程序。"
         }
     },
     "Mod_App_Actions": {

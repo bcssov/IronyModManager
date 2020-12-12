@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-12-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="StandardMessageBox.xaml.cs" company="Mario">
 //     Mario
@@ -71,9 +71,13 @@ namespace IronyModManager.Controls.Themes
         {
             var yes = this.FindControl<Button>("yes");
             var no = this.FindControl<Button>("no");
+            var ok = this.FindControl<Button>("ok");
+            var cancel = this.FindControl<Button>("cancel");
             var locManager = DIResolver.Get<ILocalizationManager>();
             yes.Content = locManager.GetResource(LocalizationResources.Prompt.Yes);
             no.Content = locManager.GetResource(LocalizationResources.Prompt.No);
+            ok.Content = locManager.GetResource(LocalizationResources.Prompt.Confirm);
+            cancel.Content = locManager.GetResource(LocalizationResources.Prompt.Cancel);
         }
 
         /// <summary>

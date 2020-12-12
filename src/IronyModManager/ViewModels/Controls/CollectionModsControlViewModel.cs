@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-29-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -164,6 +164,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The skip mod collection save
         /// </summary>
         private bool skipModCollectionSave = false;
+
+        /// <summary>
+        /// The skip mod selection save
+        /// </summary>
+        private bool skipModSelectionSave = false;
 
         /// <summary>
         /// The skip reorder
@@ -781,10 +786,12 @@ namespace IronyModManager.ViewModels.Controls
             switch (ModNameSortOrder.SortOrder)
             {
                 case SortOrder.Asc:
+                    SelectedMod = null;
                     SetSelectedMods(SelectedMods.OrderBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 
                 case SortOrder.Desc:
+                    SelectedMod = null;
                     SetSelectedMods(SelectedMods.OrderByDescending(x => x.Name, StringComparer.OrdinalIgnoreCase).ToObservableCollection());
                     break;
 
@@ -842,8 +849,9 @@ namespace IronyModManager.ViewModels.Controls
                 restoreCollectionSelection = string.Empty;
             }
             skipModCollectionSave = true;
+            skipModSelectionSave = true;
             ExportCollection.CollectionName = SelectedModCollection?.Name;
-            SaveState();
+            SaveState(true);
             if (Mods != null)
             {
                 foreach (var item in Mods)
@@ -868,10 +876,11 @@ namespace IronyModManager.ViewModels.Controls
             SetSelectedMods(selectedMods);
             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
             var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            InitSortersAndFilters(state, false);
             ApplySort();
             SaveSelectedCollection();
             skipModCollectionSave = false;
+            skipModSelectionSave = false;
         }
 
         /// <summary>
@@ -958,8 +967,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes the sorters and filters.
         /// </summary>
         /// <param name="state">The state.</param>
-        protected virtual void InitSortersAndFilters(IAppState state)
+        /// <param name="setFlag">if set to <c>true</c> [set flag].</param>
+        protected virtual void InitSortersAndFilters(IAppState state, bool setFlag = true)
         {
+            if (setFlag)
+            {
+                skipModSelectionSave = true;
+            }
             CollectionJumpOnPositionChange = state.CollectionJumpOnPositionChange;
             SearchMods.WatermarkText = SearchModsWatermark;
             SearchMods.Text = state?.CollectionModsSearchTerm;
@@ -969,6 +983,10 @@ namespace IronyModManager.ViewModels.Controls
                 SelectedMod = SelectedMods.FirstOrDefault(p => p.DescriptorFile.Equals(state.CollectionModsSelectedMod));
             }
             RecognizeSortOrder(SelectedModCollection);
+            if (setFlag)
+            {
+                skipModSelectionSave = false;
+            }
         }
 
         /// <summary>
@@ -998,10 +1016,12 @@ namespace IronyModManager.ViewModels.Controls
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
+            skipModSelectionSave = true;
             var state = appStateService.Get();
-            InitSortersAndFilters(state);
+            InitSortersAndFilters(state, false);
             LoadModCollections(false);
             ApplySort();
+            skipModSelectionSave = false;
 
             var allowModSelectionEnabled = this.WhenAnyValue(v => v.AllowModSelection);
 
@@ -1178,11 +1198,23 @@ namespace IronyModManager.ViewModels.Controls
             {
                 this.WhenAnyValue(s => s.SearchMods.Text).Subscribe(s =>
                 {
+                    skipModSelectionSave = true;
                     if (!string.IsNullOrWhiteSpace(s) && SelectedMods != null)
                     {
                         SelectedMod = SelectedMods.FirstOrDefault(p => p.Name.Contains(s, StringComparison.InvariantCultureIgnoreCase) || (p.RemoteId.HasValue && p.RemoteId.GetValueOrDefault().ToString().Contains(s)));
                     }
-                    SaveState();
+                    var modCount = SelectedModCollection?.Mods.Count();
+                    var selectedModsCount = SelectedMods?.Count;
+                    // Save only if the collection is fully loaded
+                    if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
+                    {
+                        if (string.IsNullOrWhiteSpace(s))
+                        {
+                            SelectedMod = null;
+                        }
+                        SaveState();
+                    }
+                    skipModSelectionSave = false;
                 }).DisposeWith(disposables);
 
                 Observable.Merge(SearchMods.DownArrowCommand, SearchMods.UpArrowCommand).Subscribe(s =>
@@ -1191,6 +1223,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         return;
                     }
+                    skipModSelectionSave = true;
                     var index = -1;
                     if (SelectedMod != null)
                     {
@@ -1216,6 +1249,7 @@ namespace IronyModManager.ViewModels.Controls
                             SelectedMod = mod;
                         }
                     }
+                    skipModSelectionSave = false;
                     SaveState();
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
@@ -1322,6 +1356,7 @@ namespace IronyModManager.ViewModels.Controls
                         var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
                         if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
                         {
+                            skipModSelectionSave = true;
                             skipModCollectionSave = true;
                             var mods = new List<IMod>();
                             foreach (var item in Mods)
@@ -1335,10 +1370,11 @@ namespace IronyModManager.ViewModels.Controls
                             SetSelectedMods(mods.OrderBy(p => modNames.IndexOf(p.Name)).ToObservableCollection());
                             AllModsEnabled = SelectedMods?.Count > 0 && SelectedMods.All(p => p.IsSelected);
                             var state = appStateService.Get();
-                            InitSortersAndFilters(state);
+                            InitSortersAndFilters(state, false);
                             SaveSelectedCollection();
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
+                            skipModSelectionSave = false;
                         }
                     }
                 }
@@ -1399,6 +1435,17 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            this.WhenAnyValue(p => p.SelectedMod).Where(p => !skipModSelectionSave).Subscribe(s =>
+            {
+                var modCount = SelectedModCollection?.Mods.Count();
+                var selectedModsCount = SelectedMods?.Count;
+                // Save only if the collection is fully loaded
+                if (modCount.GetValueOrDefault() == selectedModsCount.GetValueOrDefault())
+                {
+                    SaveState();
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1420,6 +1467,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             if (SelectedMods != null && mods.Length > 0)
             {
+                skipModSelectionSave = true;
                 foreach (var mod in mods)
                 {
                     var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
@@ -1442,6 +1490,7 @@ namespace IronyModManager.ViewModels.Controls
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
                 ModReordered?.Invoke(mods.Last());
+                skipModSelectionSave = false;
             }
         }
 
@@ -1569,11 +1618,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Saves the state.
         /// </summary>
-        protected virtual void SaveState()
+        /// <param name="useOldModSelection">if set to <c>true</c> [use old mod selection].</param>
+        protected virtual void SaveState(bool useOldModSelection = false)
         {
             var state = appStateService.Get();
-            state.CollectionModsSelectedMod = SelectedMod?.DescriptorFile;
-            state.CollectionModsSearchTerm = SearchMods.Text;
+            state.CollectionModsSelectedMod = !useOldModSelection ? SelectedMod?.DescriptorFile : state.CollectionModsSelectedMod;
+            state.CollectionModsSearchTerm = !useOldModSelection ? SearchMods.Text : state.CollectionModsSearchTerm;
             state.CollectionModsSortColumn = ModNameKey;
             state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
             appStateService.Save(state);

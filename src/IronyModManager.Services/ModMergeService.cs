@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -24,15 +24,16 @@ using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Services.Common;
 using IronyModManager.Services.Common.MessageBus;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
 using Nito.AsyncEx;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services
 {
@@ -147,12 +148,12 @@ namespace IronyModManager.Services
             }
             void parseNameSpaces(List<IDefinition> exportDefinitions, IDefinition def)
             {
-                var namespaces = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
+                var namespaces = def.Variables?.Where(p => p.ValueType == ValueType.Namespace);
                 if (namespaces?.Count() > 0)
                 {
                     foreach (var name in namespaces)
                     {
-                        if (!exportDefinitions.Any(p => p.ValueType == Parser.Common.ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
+                        if (!exportDefinitions.Any(p => p.ValueType == ValueType.Namespace && cleanString(p.Code).Equals(cleanString(name.Code))))
                         {
                             var copy = CopyDefinition(name);
                             copy.CodeTag = def.CodeTag;
@@ -164,7 +165,7 @@ namespace IronyModManager.Services
             }
             void parseVariables(List<IDefinition> exportDefinitions, IDefinition def)
             {
-                var variables = def.Variables?.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
+                var variables = def.Variables?.Where(p => p.ValueType == ValueType.Variable);
                 if (variables?.Count() > 0)
                 {
                     foreach (var variable in variables)
@@ -188,7 +189,7 @@ namespace IronyModManager.Services
             {
                 return null;
             }
-            var total = conflictResult.AllConflicts.GetAll().Count(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+            var total = conflictResult.AllConflicts.GetAll().Count(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
             if (conflictResult.AllConflicts.GetAll().Any())
             {
                 var allMods = GetInstalledModsInternal(game, false).ToList();
@@ -216,7 +217,7 @@ namespace IronyModManager.Services
                 mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
                 mod.Name = collectionName;
                 mod.Source = ModSource.Local;
-                mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+                mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
                 await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                 {
                     Mod = mod,
@@ -285,11 +286,11 @@ namespace IronyModManager.Services
                 foreach (var file in conflictResult.AllConflicts.GetAllFileKeys().OrderBy(p => p))
                 {
                     counter++;
-                    var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != Parser.Common.ValueType.EmptyFile);
+                    var definitions = conflictResult.AllConflicts.GetByFile(file).Where(p => p.ValueType != ValueType.EmptyFile);
                     if (definitions.Any())
                     {
                         var exportDefinitions = new List<IDefinition>();
-                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault() != null && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Namespace && p.FirstOrDefault().ValueType != Parser.Common.ValueType.Variable))
+                        foreach (var definitionGroup in definitions.GroupBy(p => p.TypeAndId).Where(p => p.FirstOrDefault() != null && p.FirstOrDefault().ValueType != ValueType.Namespace && p.FirstOrDefault().ValueType != ValueType.Variable))
                         {
                             // Orphans are placed under resolved items during analysis so no need to check them
                             var resolved = conflictResult.ResolvedConflicts.GetByTypeAndId(definitionGroup.FirstOrDefault().TypeAndId);
@@ -305,7 +306,7 @@ namespace IronyModManager.Services
                                         if (!dumpedIds.Contains(item.TypeAndId))
                                         {
                                             var copy = CopyDefinition(item);
-                                            if (copy.ValueType != Parser.Common.ValueType.Binary)
+                                            if (copy.ValueType != ValueType.Binary)
                                             {
                                                 copy.Code = conflictHistoryIndex.GetByTypeAndId(item.TypeAndId).FirstOrDefault().Code;
                                                 var parsed = parserManager.Parse(new Parser.Common.Args.ParserManagerArgs()
@@ -317,10 +318,10 @@ namespace IronyModManager.Services
                                                     ModDependencies = copy.Dependencies,
                                                     ModName = copy.ModName
                                                 });
-                                                var others = parsed.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                                                var others = parsed.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
                                                 foreach (var other in others)
                                                 {
-                                                    var variables = parsed.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace);
+                                                    var variables = parsed.Where(p => p.ValueType == ValueType.Variable || p.ValueType == ValueType.Namespace);
                                                     other.Variables = variables;
                                                     parseNameSpaces(exportDefinitions, other);
                                                     parseVariables(exportDefinitions, other);
@@ -393,7 +394,7 @@ namespace IronyModManager.Services
                         }
 
                         // Prevent exporting only namespaces or variables?
-                        if (exportDefinitions.All(p => p.ValueType == Parser.Common.ValueType.Namespace || p.ValueType == Parser.Common.ValueType.Variable))
+                        if (exportDefinitions.All(p => p.ValueType == ValueType.Namespace || p.ValueType == ValueType.Variable))
                         {
                             exportDefinitions.Clear();
                         }
@@ -436,8 +437,8 @@ namespace IronyModManager.Services
                                     }
                                 }
                             }
-                            var variables = exportDefinitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable || p.ValueType == Parser.Common.ValueType.Namespace).OrderBy(p => p.Id);
-                            var other = exportDefinitions.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace).OrderBy(p => p.Order);
+                            var variables = exportDefinitions.Where(p => p.ValueType == ValueType.Variable || p.ValueType == ValueType.Namespace).OrderBy(p => p.Id);
+                            var other = exportDefinitions.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace).OrderBy(p => p.Order);
                             var merged = MergeDefinitions(variables.Concat(other));
                             // Preserve proper file casing
                             var conflicts = conflictResult.AllConflicts.GetByFile(file);
@@ -507,7 +508,7 @@ namespace IronyModManager.Services
             mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
             mod.Name = collectionName;
             mod.Source = ModSource.Local;
-            mod.Version = allMods.OrderByDescending(p => p.Version).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.Version).FirstOrDefault().Version : string.Empty;
+            mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.FullPath = GetModDirectory(game, mergeCollectionPath);
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
@@ -844,9 +845,9 @@ namespace IronyModManager.Services
 
             var sb = new StringBuilder();
             var copy = CopyDefinition(definitions.FirstOrDefault());
-            if (copy.ValueType == Parser.Common.ValueType.Namespace || copy.ValueType == Parser.Common.ValueType.Variable)
+            if (copy.ValueType == ValueType.Namespace || copy.ValueType == ValueType.Variable)
             {
-                copy.ValueType = Parser.Common.ValueType.Object;
+                copy.ValueType = ValueType.Object;
             }
             var groups = definitions.GroupBy(p => p.CodeTag, StringComparer.OrdinalIgnoreCase);
             foreach (var group in groups.OrderBy(p => p.FirstOrDefault().CodeTag, StringComparer.OrdinalIgnoreCase))
@@ -854,17 +855,17 @@ namespace IronyModManager.Services
                 bool hasCodeTag = !string.IsNullOrWhiteSpace(group.FirstOrDefault().CodeTag);
                 if (!hasCodeTag)
                 {
-                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = group.Where(p => p.ValueType == Parser.Common.ValueType.Variable);
-                    var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                    var namespaces = group.Where(p => p.ValueType == ValueType.Namespace);
+                    var variables = group.Where(p => p.ValueType == ValueType.Variable);
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
                     var code = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode)).Concat(other.Select(p => p.OriginalCode));
                     appendLine(sb, code);
                 }
                 else
                 {
-                    var namespaces = group.Where(p => p.ValueType == Parser.Common.ValueType.Namespace);
-                    var variables = definitions.Where(p => p.ValueType == Parser.Common.ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
-                    var other = group.Where(p => p.ValueType != Parser.Common.ValueType.Variable && p.ValueType != Parser.Common.ValueType.Namespace);
+                    var namespaces = group.Where(p => p.ValueType == ValueType.Namespace);
+                    var variables = definitions.Where(p => p.ValueType == ValueType.Variable && !string.IsNullOrWhiteSpace(p.CodeTag));
+                    var other = group.Where(p => p.ValueType != ValueType.Variable && p.ValueType != ValueType.Namespace);
                     var vars = namespaces.Select(p => p.OriginalCode).Concat(variables.Select(p => p.OriginalCode));
                     var code = other.Select(p => p.OriginalCode);
                     mergeCode(sb, group.FirstOrDefault().CodeTag, group.FirstOrDefault().CodeSeparator, vars, code);

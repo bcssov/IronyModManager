@@ -46,7 +46,7 @@
             <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
-        <ListBox Items="{Binding FilteredMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
+        <ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid Background="Transparent">

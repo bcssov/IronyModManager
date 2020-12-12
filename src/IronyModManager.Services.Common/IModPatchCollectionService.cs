@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
 {
@@ -100,12 +100,13 @@ namespace IronyModManager.Services.Common
         IReadOnlyList<string> GetIgnoredMods(IConflictResult conflictResult);
 
         /// <summary>
-        /// Gets the mod objects.
+        /// Gets the mod objects asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <param name="mods">The mods.</param>
-        /// <returns>IIndexedDefinitions.</returns>
-        IIndexedDefinitions GetModObjects(IGame game, IEnumerable<IMod> mods);
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IIndexedDefinitions&gt;.</returns>
+        Task<IIndexedDefinitions> GetModObjectsAsync(IGame game, IEnumerable<IMod> mods, string collectionName);
 
         /// <summary>
         /// Gets the patch state mode asynchronous.

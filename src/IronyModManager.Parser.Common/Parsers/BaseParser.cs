@@ -4,7 +4,7 @@
 // Created          : 02-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-06-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="BaseParser.cs" company="Mario">
 //     Mario
@@ -18,9 +18,10 @@ using System.Linq;
 using System.Text;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers.Models;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Common.Parsers
 {
@@ -90,6 +91,15 @@ namespace IronyModManager.Parser.Common.Parsers
         /// <param name="args">The arguments.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
         public abstract IEnumerable<IDefinition> Parse(ParserArgs args);
+
+        /// <summary>
+        /// Gets the definition instance.
+        /// </summary>
+        /// <returns>IDefinition.</returns>
+        protected static IDefinition GetDefinitionInstance()
+        {
+            return DIResolver.Get<IDefinition>();
+        }
 
         /// <summary>
         /// Constructs the arguments.
@@ -227,7 +237,7 @@ namespace IronyModManager.Parser.Common.Parsers
                 {
                     performVariableCheck(sb, item);
                 }
-                sb.Append("}");
+                sb.Append('}');
                 return sb.ToString();
             }
         }
@@ -247,15 +257,6 @@ namespace IronyModManager.Parser.Common.Parsers
                 type = Constants.TxtType;
             }
             return $"{formatted.ToLowerInvariant()}{Path.DirectorySeparatorChar}{(string.IsNullOrWhiteSpace(typeOverride) ? type : typeOverride)}";
-        }
-
-        /// <summary>
-        /// Gets the definition instance.
-        /// </summary>
-        /// <returns>IDefinition.</returns>
-        protected IDefinition GetDefinitionInstance()
-        {
-            return DIResolver.Get<IDefinition>();
         }
 
         /// <summary>
@@ -318,7 +319,7 @@ namespace IronyModManager.Parser.Common.Parsers
                         definition.CodeSeparator = Shared.Constants.CodeSeparators.ClosingSeparators.CurlyBracket;
                     }
                     var tags = ParseScriptTags(item.Values, item.Key);
-                    if (tags.Count() > 0)
+                    if (tags.Any())
                     {
                         foreach (var tag in tags)
                         {
@@ -486,12 +487,12 @@ namespace IronyModManager.Parser.Common.Parsers
                     if (item.Values?.Count() > 0)
                     {
                         var variables = ParseSimpleTypes(item.Values, args, parent, typeOverride, isFirstLevel);
-                        if (variables.Count() > 0)
+                        if (variables.Any())
                         {
                             result.AddRange(variables);
                         }
                         variables = ParseTypesForVariables(item.Values, args, parent, typeOverride, isFirstLevel);
-                        if (variables.Count() > 0)
+                        if (variables.Any())
                         {
                             result.AddRange(variables);
                         }

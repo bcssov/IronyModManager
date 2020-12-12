@@ -4,7 +4,7 @@
 // Created          : 03-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="HierarchicalDefinitions.cs" company="Mario">
 //     Mario
@@ -13,17 +13,30 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Parser.Common.Definitions;
+using System.IO;
+using System.Linq;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class HierarchicalDefinitions.
     /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IHierarchicalDefinitions" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IHierarchicalDefinitions" />
     /// <seealso cref="IronyModManager.Parser.Common.Definitions.IHierarchicalDefinitions" />
     public class HierarchicalDefinitions : IHierarchicalDefinitions
     {
+        #region Fields
+
+        /// <summary>
+        /// The file names
+        /// </summary>
+        private readonly List<string> fileNames = new List<string>();
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -42,7 +55,17 @@ namespace IronyModManager.Parser.Definitions
         /// Gets or sets the name of the file.
         /// </summary>
         /// <value>The name of the file.</value>
-        public string FileName { get; set; }
+        public IList<string> FileNames
+        {
+            get
+            {
+                if (fileNames.Count > 0 && !fileNames.Contains(Path.Combine(Path.GetDirectoryName(fileNames.FirstOrDefault()), Name)))
+                {
+                    fileNames.Add(Path.Combine(Path.GetDirectoryName(fileNames.FirstOrDefault()), Name));
+                }
+                return fileNames;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the key.
@@ -80,7 +103,7 @@ namespace IronyModManager.Parser.Definitions
                 nameof(Children) => Children,
                 nameof(AdditionalData) => AdditionalData,
                 nameof(Mods) => Mods,
-                nameof(FileName) => FileName,
+                nameof(FileNames) => FileNames,
                 _ => Name,
             };
         }

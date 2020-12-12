@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-16-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,9 +20,9 @@ using Avalonia.Media.Imaging;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 using SmartFormat;
 

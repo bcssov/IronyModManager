@@ -20,6 +20,7 @@ using IronyModManager.Parser.Common.Args;
 using IronyModManager.Parser.Generic;
 using IronyModManager.Tests.Common;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -74,7 +75,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().BeNullOrEmpty();
                         result[i].Id.Should().Be("test");
-                        result[i].ValueType.Should().Be(Common.ValueType.Binary);
+                        result[i].ValueType.Should().Be(ValueType.Binary);
                         break;
 
                     default:

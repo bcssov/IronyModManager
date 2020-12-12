@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common.Definitions
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-24-2020
+// Last Modified On : 12-10-2020
 // ***********************************************************************
 // <copyright file="IDefinition.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using CodexMicroORM.Core.Collections;
 using Newtonsoft.Json;
 
-namespace IronyModManager.Parser.Common.Definitions
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Interface IDefinition
@@ -58,6 +58,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The content sha.</value>
         string ContentSHA { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom priority order.
+        /// </summary>
+        /// <value>The custom priority order.</value>
+        int CustomPriorityOrder { get; set; }
 
         /// <summary>
         /// Gets the definition sha.
@@ -131,6 +137,12 @@ namespace IronyModManager.Parser.Common.Definitions
         /// </summary>
         /// <value>The identifier.</value>
         string Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is custom patch.
+        /// </summary>
+        /// <value><c>true</c> if this instance is custom patch; otherwise, <c>false</c>.</value>
+        bool IsCustomPatch { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -226,6 +238,26 @@ namespace IronyModManager.Parser.Common.Definitions
         /// <value>The variables.</value>
         [JsonIgnore]
         IEnumerable<IDefinition> Variables { get; set; }
+
+        /// <summary>
+        /// Gets the virtual localization directory ci.
+        /// </summary>
+        /// <value>The virtual localization directory ci.</value>
+        [JsonIgnore]
+        string VirtualParentDirectory { get; }
+
+        /// <summary>
+        /// Gets the virtual parent directory ci.
+        /// </summary>
+        /// <value>The virtual parent directory ci.</value>
+        [JsonIgnore]
+        string VirtualParentDirectoryCI { get; }
+
+        /// <summary>
+        /// Gets or sets the virtual localization directory.
+        /// </summary>
+        /// <value>The virtual localization directory.</value>
+        string VirtualPath { get; set; }
 
         #endregion Properties
     }

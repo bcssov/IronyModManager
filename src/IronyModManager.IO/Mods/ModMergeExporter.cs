@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -18,8 +18,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.IO.Mods
 {
@@ -84,9 +85,9 @@ namespace IronyModManager.IO.Mods
             var results = new List<bool>();
             if (parameters.Definitions?.Count() > 0)
             {
-                results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == Parser.Common.ValueType.Binary),
+                results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == ValueType.Binary),
                     parameters.ExportPath));
-                results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != Parser.Common.ValueType.Binary),
+                results.Add(await WriteTextContentAsync(parameters.Definitions.Where(p => p.ValueType != ValueType.Binary),
                     parameters.ExportPath, parameters.Game));
             }
             return results.All(p => p);

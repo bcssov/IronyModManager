@@ -16,10 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Tests.Common;
+using IronyModManager.Shared.Models;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -189,12 +190,12 @@ namespace IronyModManager.Parser.Tests
                     Id = i.ToString(),
                     ModName = i.ToString(),
                     Type = i.ToString(),
-                    ValueType = Common.ValueType.Object
+                    ValueType = ValueType.Object
                 });
             }
             var service = new IndexedDefinitions();
             service.InitMap(defs);
-            var results = service.GetByValueType(Common.ValueType.Object);
+            var results = service.GetByValueType(ValueType.Object);
             results.Count().Should().Be(10);
         }
 
@@ -222,7 +223,7 @@ namespace IronyModManager.Parser.Tests
             var service = new IndexedDefinitions();
             service.InitMap(defs);
             var results = service.GetByParentDirectory("events");
-            results.Count().Should().Be(defs.Count());
+            results.Count().Should().Be(defs.Count);
         }
 
         /// <summary>
@@ -313,7 +314,7 @@ namespace IronyModManager.Parser.Tests
             service.InitMap(defs, true);
             var results = service.GetHierarchicalDefinitions();
             results.Count().Should().Be(1);
-            results.First().Children.Count().Should().Be(10);
+            results.First().Children.Count.Should().Be(10);
         }
 
         /// <summary>

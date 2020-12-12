@@ -21,6 +21,7 @@ using IronyModManager.Parser.Generic;
 using IronyModManager.Shared;
 using IronyModManager.Tests.Common;
 using Xunit;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 
 namespace IronyModManager.Parser.Tests
@@ -136,7 +137,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new KeyParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(3);
+            result.Count.Should().Be(3);
             for (int i = 0; i < 3; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -147,16 +148,16 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be("@test = 1");
                         result[i].Id.Should().Be("@test");
-                        result[i].ValueType.Should().Be(Common.ValueType.Variable);
+                        result[i].ValueType.Should().Be(ValueType.Variable);
                         break;
                     case 1:
                         result[i].Id.Should().Be("fake-namespace");
-                        result[i].ValueType.Should().Be(Common.ValueType.Namespace);
+                        result[i].ValueType.Should().Be(ValueType.Namespace);
                         break;
                     case 2:
                         result[i].Id.Should().Be("dmm_mod.1");
                         result[i].Code.Should().Be(sb2.ToString().Trim().ReplaceTabs());
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -195,7 +196,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new KeyParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -206,7 +207,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("ai_01_blue_sponsored_colonizer_entity");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -248,7 +249,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new KeyParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -259,7 +260,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("create_envoys");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;
@@ -302,7 +303,7 @@ namespace IronyModManager.Parser.Tests
             var parser = new KeyParser(new CodeParser(new Logger()), null);
             var result = parser.Parse(args).ToList();
             result.Should().NotBeNullOrEmpty();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             for (int i = 0; i < 1; i++)
             {
                 result[i].ContentSHA.Should().Be("sha");
@@ -313,7 +314,7 @@ namespace IronyModManager.Parser.Tests
                     case 0:
                         result[i].Code.Trim().Should().Be(sb2.ToString().Trim());
                         result[i].Id.Should().Be("create_envoys");
-                        result[i].ValueType.Should().Be(Common.ValueType.Object);
+                        result[i].ValueType.Should().Be(ValueType.Object);
                         break;
                     default:
                         break;

@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="IndexedDefinitions.cs" company="Mario">
 //     Mario
@@ -17,16 +17,17 @@ using System.Collections.Generic;
 using System.Linq;
 using CodexMicroORM.Core.Collections;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared.Models;
 using IronyModManager.Shared.Trie;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Definitions
 {
     /// <summary>
     /// Class IndexedDefinitions.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IIndexedDefinitions" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Parser.Common.Definitions.IIndexedDefinitions" />
+    /// <seealso cref="IronyModManager.Shared.Models.IIndexedDefinitions" />
     public class IndexedDefinitions : IIndexedDefinitions
     {
         #region Fields
@@ -142,6 +143,7 @@ namespace IronyModManager.Parser.Definitions
             {
                 return;
             }
+            GC.SuppressFinalize(this);
             disposed = true;
             definitions.Clear();
             definitions = null;
@@ -272,7 +274,7 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>IEnumerable&lt;IDefinition&gt;.</returns>
-        public IEnumerable<IDefinition> GetByValueType(Common.ValueType type)
+        public IEnumerable<IDefinition> GetByValueType(ValueType type)
         {
             return definitions.GetAllByNameNoLock(nameof(IDefinition.ValueType), type);
         }
@@ -329,7 +331,7 @@ namespace IronyModManager.Parser.Definitions
         public void Remove(IDefinition definition)
         {
             definitions.Remove(definition);
-            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectoryCI);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), ResolveHierarchalParentDirectory(definition));
             if (hierarchicalDefinition != null)
             {
                 if (childHierarchicalDefinitions.TryGetValue(hierarchicalDefinition.Name, out var children))
@@ -339,7 +341,7 @@ namespace IronyModManager.Parser.Definitions
                     {
                         children.Remove(child);
                     }
-                    if (children.Select(p => p).Count() == 0)
+                    if (!children.Select(p => p).Any())
                     {
                         childHierarchicalDefinitions.TryRemove(hierarchicalDefinition.Name, out _);
                         mainHierarchalDefinitions.Remove(hierarchicalDefinition);
@@ -367,9 +369,36 @@ namespace IronyModManager.Parser.Definitions
         /// </summary>
         /// <param name="keys">The keys.</param>
         /// <returns>System.String.</returns>
-        private string ConstructKey(params string[] keys)
+        private static string ConstructKey(params string[] keys)
         {
             return string.Join("-", keys);
+        }
+
+        /// <summary>
+        /// Maps the keys.
+        /// </summary>
+        /// <param name="map">The map.</param>
+        /// <param name="key">The key.</param>
+        private static void MapKeys(HashSet<string> map, string key)
+        {
+            if (!map.Contains(key))
+            {
+                map.Add(key);
+            }
+        }
+
+        /// <summary>
+        /// Resolves the hierarchal parent directory.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <returns>System.String.</returns>
+        private static string ResolveHierarchalParentDirectory(IDefinition definition)
+        {
+            if (string.IsNullOrWhiteSpace(definition.VirtualParentDirectoryCI))
+            {
+                return definition.ParentDirectoryCI;
+            }
+            return definition.VirtualParentDirectoryCI;
         }
 
         /// <summary>
@@ -379,12 +408,13 @@ namespace IronyModManager.Parser.Definitions
         private void MapHierarchicalDefinition(IDefinition definition)
         {
             bool shouldAdd = false;
-            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), definition.ParentDirectoryCI);
+            var parentDirectoryCI = ResolveHierarchalParentDirectory(definition);
+            var hierarchicalDefinition = mainHierarchalDefinitions.GetFirstByNameNoLock(nameof(IHierarchicalDefinitions.Name), parentDirectoryCI);
             if (hierarchicalDefinition == null)
             {
                 hierarchicalDefinition = DIResolver.Get<IHierarchicalDefinitions>();
-                hierarchicalDefinition.Name = definition.ParentDirectoryCI;
-                childHierarchicalDefinitions.TryAdd(definition.ParentDirectoryCI, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
+                hierarchicalDefinition.Name = parentDirectoryCI;
+                childHierarchicalDefinitions.TryAdd(parentDirectoryCI, new ConcurrentIndexedList<IHierarchicalDefinitions>(nameof(IHierarchicalDefinitions.Name)));
                 shouldAdd = true;
             }
             bool exists = false;
@@ -399,11 +429,18 @@ namespace IronyModManager.Parser.Definitions
                 child = DIResolver.Get<IHierarchicalDefinitions>();
                 child.Name = definition.Id;
                 child.Key = definition.TypeAndId;
-                child.FileName = definition.FileCI;
+                child.FileNames.Add(definition.FileCI);
                 children.Add(child);
                 if (shouldAdd)
                 {
                     mainHierarchalDefinitions.Add(hierarchicalDefinition);
+                }
+            }
+            else
+            {
+                if (!child.FileNames.Contains(definition.FileCI))
+                {
+                    child.FileNames.Add(definition.FileCI);
                 }
             }
             if (child.Mods == null)
@@ -421,19 +458,6 @@ namespace IronyModManager.Parser.Definitions
             if (!hierarchicalDefinition.Mods.Contains(definition.ModName))
             {
                 hierarchicalDefinition.Mods.Add(definition.ModName);
-            }
-        }
-
-        /// <summary>
-        /// Maps the keys.
-        /// </summary>
-        /// <param name="map">The map.</param>
-        /// <param name="key">The key.</param>
-        private void MapKeys(HashSet<string> map, string key)
-        {
-            if (!map.Contains(key))
-            {
-                map.Add(key);
             }
         }
 

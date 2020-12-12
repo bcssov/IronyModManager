@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-06-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -21,8 +21,8 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using IronyModManager.ViewModels.Controls;
 
 namespace IronyModManager.Views.Controls

@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -25,9 +25,9 @@ using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls

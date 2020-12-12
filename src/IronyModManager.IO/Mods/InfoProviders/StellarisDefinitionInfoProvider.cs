@@ -4,7 +4,7 @@
 // Created          : 04-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-13-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="StellarisDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -13,8 +13,10 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using IronyModManager.Parser.Common.Definitions;
+using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.IO.Mods.InfoProviders
 {
@@ -26,6 +28,11 @@ namespace IronyModManager.IO.Mods.InfoProviders
     public class StellarisDefinitionInfoProvider : BaseDefinitionInfoProvider
     {
         #region Fields
+
+        /// <summary>
+        /// The localization synced
+        /// </summary>
+        private const string LocalizationSynced = "localisation_synced";
 
         /// <summary>
         /// The name lists
@@ -71,6 +78,22 @@ namespace IronyModManager.IO.Mods.InfoProviders
                 return new UTF8Encoding(true);
             }
             return base.GetEncoding(definition);
+        }
+
+        /// <summary>
+        /// Generates the name of the localization file.
+        /// </summary>
+        /// <param name="definition">The definition.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>System.String.</returns>
+        protected override string GenerateLocalizationFileName(IDefinition definition, string fileName)
+        {
+            if (definition.File.StartsWith(LocalizationSynced))
+            {
+                var proposedFileName = Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
+                return EnsureRuleEnforced(definition, proposedFileName, false);
+            }
+            return base.GenerateLocalizationFileName(definition, fileName);
         }
 
         #endregion Methods

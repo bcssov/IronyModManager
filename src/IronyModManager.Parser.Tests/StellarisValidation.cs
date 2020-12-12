@@ -20,12 +20,13 @@ using System.Text.RegularExpressions;
 using IronyModManager.DI;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using IronyModManager.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Tests
 {
@@ -66,9 +67,9 @@ namespace IronyModManager.Parser.Tests
         /// Defines the test method Detect.
         /// </summary>
         /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
-        /// <exception cref="ArgumentException">Fatal error. Check parsers.</exception>
 
 #if !FUNCTIONAL_TEST
+
 
         [Fact(Skip = "Test is for detection of parser issues.", Timeout = 300000)]
 #else
@@ -200,10 +201,10 @@ namespace IronyModManager.Parser.Tests
             foreach (var item in typesKeys)
             {
                 var all = indexed.GetByType(item);
-                var types = all.Where(p => p.ValueType != Common.ValueType.Invalid).ToHashSet();
-                if (all.Any(p => p.ValueType == Common.ValueType.Invalid))
+                var types = all.Where(p => p.ValueType != ValueType.Invalid).ToHashSet();
+                if (all.Any(p => p.ValueType == ValueType.Invalid))
                 {
-                    foreach (var def in all.Where(p => p.ValueType == Common.ValueType.Invalid))
+                    foreach (var def in all.Where(p => p.ValueType == ValueType.Invalid))
                     {
                         if (!invalid.Contains(def.File))
                         {
@@ -280,9 +281,9 @@ namespace IronyModManager.Parser.Tests
                 {
                     undefined.Add(item);
                 }
-                if (grouped.Count(s => s.Key == Common.ValueType.Object) > 0)
+                if (grouped.Count(s => s.Key == ValueType.Object) > 0)
                 {
-                    var objTypes = grouped.Where(s => s.Key == Common.ValueType.Object).SelectMany(p => p);
+                    var objTypes = grouped.Where(s => s.Key == ValueType.Object).SelectMany(p => p);
                     var idGroup = objTypes.GroupBy(s => s.Id);
                     if (idGroup.Count() != objTypes.Count())
                     {

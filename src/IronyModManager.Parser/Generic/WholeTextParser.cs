@@ -4,7 +4,7 @@
 // Created          : 03-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-03-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="WholeTextParser.cs" company="Mario">
 //     Mario
@@ -16,9 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Parser.Generic
 {
@@ -139,7 +140,7 @@ namespace IronyModManager.Parser.Generic
                     }
                 }
             }
-            def.ValueType = Common.ValueType.WholeTextFile;
+            def.ValueType = ValueType.WholeTextFile;
             return new List<IDefinition> { def };
         }
 

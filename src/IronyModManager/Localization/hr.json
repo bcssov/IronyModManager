@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Da",
-        "No": "Ne"
+        "No": "Ne",
+        "Confirm": "Potvrdi",
+        "Cancel": "Otkaži"
     },
     "FileDialog": {
         "FileName": "Naziv datoteke",
@@ -160,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
                 "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
+                "Overlay_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
                 "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
             },
             "Basic": {
@@ -181,6 +184,7 @@
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
         "Conflict": "Rješavanje sukoba",
         "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
         "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
@@ -247,7 +251,8 @@
             "CopyText": "Kopiraj Tekst",
             "Delete": "Obriši",
             "Undo": "Poništi",
-            "Redo": "Ponovi"
+            "Redo": "Ponovi",
+            "Editor": "Vanjsko spajanje"
         },
         "EditorContextMenu": {
             "Copy": "Kopiraj",
@@ -288,6 +293,10 @@
             "Path": "Direktorij",
             "Save": "Snimi",
             "Close": "Zatvori"
+        },
+        "Editor": {
+            "Title": "Vanjsko spajanje",
+            "Message": "Pritisnite potvrdi nakon što ste zadovoljni vanjskim spajanjem."
         }
     },
     "ConflictIgnore": {
@@ -298,12 +307,18 @@
     "Options": {
         "Name": "Opcije",
         "Close": "Zatvori",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "Opcije vanjskog uređivača",
+            "EditorExecutable": "Izvršna datoteka",
+            "EditorArgs": "Argumenti",
+            "EditorArgsPlaceholder": "Primjer: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
-            "Title": "Title",
-            "NavigateTo": "...",
-            "Reset": "X",
+            "Title": "Mogućnosti igre",
             "GameExecutable": "Izvršna datoteka",
-            "UserDirectory": "Data Directory",
+            "UserDirectory": "Katalog podataka",
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
@@ -311,6 +326,7 @@
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",
+            "UpdateInfoTitle": "Informacije o novoj verziji",
             "AutoUpdates": "Provjeri ima li ažuriranja pri pokretanju",
             "CheckPrerelease": "Uključi alpha\\beta\\rc azužiranja",
             "CheckForUpdates": "Provjeri ima li ažuriranja",
@@ -337,7 +353,8 @@
         "Dialog": {
             "ExeTitle": "Nađi izvršnu datoteku igre",
             "GameRootTitle": "Pronađite osnovni direktorij igre",
-            "UserDirTitle": "Pronađite direktorij podataka o igri"
+            "UserDirTitle": "Pronađite direktorij podataka o igri",
+            "EditorTitle": "Nađi izvršnu dateoteku editora"
         }
     },
     "Notifications": {
@@ -416,6 +433,10 @@
         "ReportValid": {
             "Title": "Hashevi dateoteka se podudaraju",
             "Message": "Svi hashevi se podudaraju."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Osvježi rješenje za rješavanje sukoba",
+            "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene zakrpe. Ponovite postupak rješavanja sukoba."
         }
     },
     "Mod_App_Actions": {

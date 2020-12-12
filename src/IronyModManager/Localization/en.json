@@ -23,7 +23,9 @@
     },
     "Prompt": {
         "Yes": "Yes",
-        "No": "No"
+        "No": "No",
+        "Confirm": "Confirm",
+        "Cancel": "Cancel"
     },
     "FileDialog": {
         "FileName": "File name",
@@ -160,6 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
                 "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
+                "Overlay_Replacing_Definitions": "Please wait while replacing definitions...",
                 "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
             },
             "Basic": {
@@ -183,6 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
         "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "Launch Game",
@@ -247,7 +251,8 @@
             "CopyText": "Copy Text",
             "Delete": "Delete",
             "Undo": "Undo",
-            "Redo": "Redo"
+            "Redo": "Redo",
+            "Editor": "External Merge"
         },
         "EditorContextMenu": {
             "Copy": "Copy",
@@ -288,6 +293,10 @@
             "Path": "Path",
             "Save": "Save",
             "Close": "Close"
+        },
+        "Editor": {
+            "Title": "External Merge",
+            "Message": "Press confirm once you are satisfied with external merge."
         }
     },
     "ConflictIgnore": {
@@ -298,10 +307,16 @@
     "Options": {
         "Name": "Options",
         "Close": "Close",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "External Editor Options",
+            "EditorExecutable": "Editor Executable",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Example: leftFile:{Left} rightFile:{Right}"
+        },
         "Game": {
             "Title": "Game Options",
-            "NavigateTo": "...",
-            "Reset": "X",
             "GameExecutable": "Game Executable",
             "UserDirectory": "Data Directory",
             "GameArgs": "Game Args",
@@ -311,6 +326,7 @@
         },
         "Updates": {
             "Title": "Update Options",
+            "UpdateInfoTitle": "Update Release Information",
             "AutoUpdates": "Check For Updates at Startup",
             "CheckPrerelease": "Update To Prerelease Versions",
             "CheckForUpdates": "Check For Updates",
@@ -337,7 +353,8 @@
         "Dialog": {
             "ExeTitle": "Find game executable",
             "GameRootTitle": "Find game root directory",
-            "UserDirTitle": "Find game data directory"
+            "UserDirTitle": "Find game data directory",
+            "EditorTitle": "Find editor executable"
         }
     },
     "Notifications": {
@@ -416,6 +433,10 @@
         "ReportValid": {
             "Title": "File Hash Match",
             "Message": "All file hashes seem to match."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Conflict Solver Refresh",
+            "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
         }
     },
     "Mod_App_Actions": {

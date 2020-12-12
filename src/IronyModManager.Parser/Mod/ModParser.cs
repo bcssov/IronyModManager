@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ModParser.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using IronyModManager.DI;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Parser.Common.Parsers.Models;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Mod
 {
@@ -85,6 +86,19 @@ namespace IronyModManager.Parser.Mod
         }
 
         /// <summary>
+        /// Converts the specified value.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>T.</returns>
+        private static T Convert<T>(string value)
+        {
+            value = value.Replace("\"", string.Empty);
+            var converter = GetConverter<T>();
+            return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
+        }
+
+        /// <summary>
         /// Gets the converter.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -105,26 +119,13 @@ namespace IronyModManager.Parser.Mod
         }
 
         /// <summary>
-        /// Converts the specified value.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns>T.</returns>
-        private T Convert<T>(string value)
-        {
-            value = value.Replace("\"", string.Empty);
-            var converter = GetConverter<T>();
-            return converter.IsValid(value) ? (T)converter.ConvertFromString(value) : default;
-        }
-
-        /// <summary>
         /// Gets the keyed values.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="elements">The elements.</param>
         /// <param name="keys">The keys.</param>
         /// <returns>IEnumerable&lt;T&gt;.</returns>
-        private IEnumerable<T> GetKeyedValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
+        private static IEnumerable<T> GetKeyedValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
         {
             // One thing consistent about Paradox is that they're inconsistent
             var type = typeof(List<>).MakeGenericType(typeof(T));
@@ -133,7 +134,7 @@ namespace IronyModManager.Parser.Mod
             foreach (var key in keys)
             {
                 var values = elements.Where(p => p.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
-                if (values.Count() > 0)
+                if (values.Any())
                 {
                     foreach (var value in values)
                     {
@@ -163,7 +164,7 @@ namespace IronyModManager.Parser.Mod
         /// <param name="elements">The elements.</param>
         /// <param name="keys">The keys.</param>
         /// <returns>System.String.</returns>
-        private T GetValue<T>(IEnumerable<IScriptElement> elements, params string[] keys)
+        private static T GetValue<T>(IEnumerable<IScriptElement> elements, params string[] keys)
         {
             foreach (var key in keys)
             {
@@ -183,7 +184,7 @@ namespace IronyModManager.Parser.Mod
         /// <param name="elements">The elements.</param>
         /// <param name="keys">The keys.</param>
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
-        private IEnumerable<T> GetValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
+        private static IEnumerable<T> GetValues<T>(IEnumerable<IScriptElement> elements, params string[] keys)
         {
             var type = typeof(List<>).MakeGenericType(typeof(T));
             var result = (IList)Activator.CreateInstance(type);

@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-21-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -111,12 +111,12 @@ namespace IronyModManager.Services
         /// <param name="themes">The themes.</param>
         /// <param name="selectedTheme">The selected theme.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">themes or selectedTheme.</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<ITheme> themes, ITheme selectedTheme)
         {
-            if (themes == null || themes.Count() == 0 || selectedTheme == null)
+            if (themes == null || !themes.Any() || selectedTheme == null)
             {
-                throw new ArgumentNullException("themes or selectedTheme.");
+                throw new ArgumentNullException($"{nameof(themes)} or {nameof(selectedTheme)}");
             }
             var currentlySelected = GetSelected();
             if (currentlySelected.Type == selectedTheme.Type)
@@ -143,7 +143,7 @@ namespace IronyModManager.Services
         /// <param name="themeTypes">The theme types.</param>
         protected virtual void EnsureThemeIsSelected(IEnumerable<ITheme> themes, IEnumerable<IThemeType> themeTypes)
         {
-            if (themes.Count() > 0 && !themes.Any(p => p.IsSelected))
+            if (themes.Any() && !themes.Any(p => p.IsSelected))
             {
                 themes.FirstOrDefault(p => p.Type == themeTypes.FirstOrDefault(s => s.IsDefault).Name).IsSelected = true;
             }

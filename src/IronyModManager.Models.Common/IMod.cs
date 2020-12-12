@@ -4,27 +4,28 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IMod.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
 using IronyModManager.Localization;
-using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Models.Common
 {
     /// <summary>
     /// Interface IMod
-    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.IModObject" />
+    /// Implements the <see cref="IronyModManager.Shared.Models.IModObject" />
     /// Implements the <see cref="IronyModManager.Localization.ILocalizableModel" />
     /// </summary>
+    /// <seealso cref="IronyModManager.Shared.Models.IModObject" />
     /// <seealso cref="IronyModManager.Localization.ILocalizableModel" />
-    /// <seealso cref="IronyModManager.Parser.Common.Mod.IModObject" />
     public interface IMod : IModObject, ILocalizableModel
     {
         #region Properties
@@ -88,6 +89,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The source.</value>
         ModSource Source { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version data.
+        /// </summary>
+        /// <value>The version data.</value>
+        Version VersionData { get; }
 
         #endregion Properties
     }

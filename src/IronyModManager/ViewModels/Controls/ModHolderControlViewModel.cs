@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-08-2020
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -99,6 +99,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler;
 
         /// <summary>
+        /// The mod definition invalid replace handler
+        /// </summary>
+        private readonly ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler;
+
+        /// <summary>
         /// The mod definition load handler
         /// </summary>
         private readonly ModDefinitionLoadHandler modDefinitionLoadHandler;
@@ -143,6 +148,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable definitionSyncHandler = null;
 
+        /// <summary>
+        /// The mod invalid replace handler
+        /// </summary>
+        private IDisposable modInvalidReplaceHandler = null;
+
         #endregion Fields
 
         #region Constructors
@@ -150,6 +160,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="modDefinitionInvalidReplaceHandler">The mod definition invalid replace handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="shutDownState">State of the shut down.</param>
         /// <param name="modService">The mod service.</param>
@@ -165,13 +176,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(IIDGenerator idGenerator, IShutDownState shutDownState,
+        public ModHolderControlViewModel(ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler, IIDGenerator idGenerator, IShutDownState shutDownState,
             IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
             GameUserDirectoryChangedHandler gameDirectoryChangedHandler, ILogger logger)
         {
+            this.modDefinitionInvalidReplaceHandler = modDefinitionInvalidReplaceHandler;
             this.idGenerator = idGenerator;
             this.shutDownState = shutDownState;
             this.modService = modService;
@@ -373,16 +385,16 @@ namespace IronyModManager.ViewModels.Controls
             {
                 PercentDone = 0.ToLocalizedPercentage(),
                 Count = 1,
-                TotalCount = 3
+                TotalCount = 4
             });
             var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(id, true, message, overlayProgress);
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
 
-            var definitions = await Task.Run(() =>
+            var definitions = await Task.Run(async () =>
             {
-                return modPatchCollectionService.GetModObjects(gameService.GetSelected(), CollectionMods.SelectedMods);
+                return await modPatchCollectionService.GetModObjectsAsync(gameService.GetSelected(), CollectionMods.SelectedMods, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
             }).ConfigureAwait(false);
             var conflicts = await Task.Run(() =>
             {
@@ -755,7 +767,20 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 1,
-                    TotalCount = 3
+                    TotalCount = 4
+                });
+                TriggerOverlay(id, true, message, overlayProgress);
+            }).DisposeWith(disposables);
+
+            modInvalidReplaceHandler?.Dispose();
+            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Message.Subscribe(s =>
+            {
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Replacing_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                {
+                    PercentDone = s.Percentage.ToLocalizedPercentage(),
+                    Count = 2,
+                    TotalCount = 4
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
@@ -767,8 +792,8 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 2,
-                    TotalCount = 3
+                    Count = 3,
+                    TotalCount = 4
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);
@@ -780,8 +805,8 @@ namespace IronyModManager.ViewModels.Controls
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
-                    Count = 3,
-                    TotalCount = 3
+                    Count = 4,
+                    TotalCount = 4
                 });
                 TriggerOverlay(id, true, message, overlayProgress);
             }).DisposeWith(disposables);

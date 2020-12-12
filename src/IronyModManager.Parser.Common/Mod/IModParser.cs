@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-25-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="IModParser.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Parser.Common.Mod
 {

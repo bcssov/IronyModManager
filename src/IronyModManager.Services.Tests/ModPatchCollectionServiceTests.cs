@@ -29,7 +29,6 @@ using IronyModManager.Models.Common;
 using IronyModManager.Parser;
 using IronyModManager.Parser.Common;
 using IronyModManager.Parser.Common.Args;
-using IronyModManager.Parser.Common.Definitions;
 using IronyModManager.Parser.Common.Mod;
 using IronyModManager.Parser.Definitions;
 using IronyModManager.Parser.Mod;
@@ -37,11 +36,13 @@ using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Cache;
 using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.Models;
 using IronyModManager.Storage.Common;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
 using FileInfo = IronyModManager.IO.FileInfo;
+using ValueType = IronyModManager.Shared.Models.ValueType;
 
 namespace IronyModManager.Services.Tests
 {
@@ -63,7 +64,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="modPatchExporter">The mod patch exporter.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <returns>ModService.</returns>
-        private ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
+        private static ModPatchCollectionService GetService(Mock<IStorageProvider> storageProvider, Mock<IModParser> modParser,
             Mock<IParserManager> parserManager, Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService, Mock<IModPatchExporter> modPatchExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders = null)
         {
@@ -79,7 +80,7 @@ namespace IronyModManager.Services.Tests
         /// <param name="reader">The reader.</param>
         /// <param name="parserManager">The parser manager.</param>
         /// <param name="modParser">The mod parser.</param>
-        private void SetupMockCase(Mock<IReader> reader, Mock<IParserManager> parserManager, Mock<IModParser> modParser)
+        private static void SetupMockCase(Mock<IReader> reader, Mock<IParserManager> parserManager, Mock<IModParser> modParser)
         {
             var fileInfos = new List<IFileInfo>()
             {
@@ -124,7 +125,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_not_return_any_mod_objects_when_no_game_or_mods.
         /// </summary>
         [Fact]
-        public void Should_not_return_any_mod_objects_when_no_game_or_mods()
+        public async Task Should_not_return_any_mod_objects_when_no_game_or_mods()
         {
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
@@ -136,13 +137,13 @@ namespace IronyModManager.Services.Tests
             var modPatchExporter = new Mock<IModPatchExporter>();
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(null, new List<IMod>());
+            var result = await service.GetModObjectsAsync(null, new List<IMod>(), string.Empty);
             result.Should().BeNull();
 
-            result = service.GetModObjects(new Game(), new List<IMod>());
+            result = await service.GetModObjectsAsync(new Game(), new List<IMod>(), string.Empty);
             result.Should().BeNull();
-
-            result = service.GetModObjects(new Game(), null);
+            
+            result = await service.GetModObjectsAsync(new Game(), null, string.Empty);
             result.Should().BeNull();
         }
 
@@ -150,7 +151,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_fully_qualified_path.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_fully_qualified_path()
+        public async Task Should_return_mod_objects_when_using_fully_qualified_path()
         {
             DISetup.SetupContainer();
 
@@ -166,14 +167,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game(), new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() {  UserDirectory = "c:\\fake"}, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Assembly.GetExecutingAssembly().Location,
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -184,7 +185,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_user_directory.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_user_directory()
+        public async Task Should_return_mod_objects_when_using_user_directory()
         {
             DISetup.SetupContainer();
 
@@ -200,14 +201,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { UserDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), WorkshopDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -218,7 +219,7 @@ namespace IronyModManager.Services.Tests
         /// Defines the test method Should_return_mod_objects_when_using_workshop_directory.
         /// </summary>
         [Fact]
-        public void Should_return_mod_objects_when_using_workshop_directory()
+        public async Task Should_return_mod_objects_when_using_workshop_directory()
         {
             DISetup.SetupContainer();
 
@@ -234,14 +235,14 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = service.GetModObjects(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
+            var result = await service.GetModObjectsAsync(new Game() { WorkshopDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), UserDirectory = "fake1" }, new List<IMod>()
             {
                 new Mod()
                 {
                     FileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location),
                     Name = "fake"
                 }
-            });
+            }, string.Empty);
             result.GetAll().Count().Should().Be(2);
             var ordered = result.GetAll().OrderBy(p => p.Id);
             ordered.First().Id.Should().Be("fake1.txt");
@@ -278,7 +279,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -287,7 +288,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -328,7 +329,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -337,7 +338,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -346,7 +347,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "c",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -387,7 +388,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -396,7 +397,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -437,7 +438,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -446,7 +447,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -455,7 +456,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1", "test2" }
                 }
             };
@@ -496,7 +497,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -505,7 +506,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -514,7 +515,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1" }
                 }
             };
@@ -555,7 +556,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -564,7 +565,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -573,7 +574,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test2" }
                 }
             };
@@ -615,7 +616,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -624,7 +625,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -633,7 +634,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test3",
-                    ValueType = Parser.Common.ValueType.Object,
+                    ValueType = ValueType.Object,
                     Dependencies = new List<string>() { "test1", "test2" }
                 },
                 new Definition()
@@ -643,7 +644,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test4",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -684,7 +685,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a1",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -693,7 +694,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a2",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Variable
+                    ValueType = ValueType.Variable
                 },
                 new Definition()
                 {
@@ -702,7 +703,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a1",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -711,7 +712,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a2",
                     Type= "events",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Variable
+                    ValueType = ValueType.Variable
                 },
             };
             var indexed = new IndexedDefinitions();
@@ -751,7 +752,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -760,7 +761,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             var indexed = new IndexedDefinitions();
@@ -846,7 +847,7 @@ namespace IronyModManager.Services.Tests
                 OrphanConflicts = indexed,
                 ResolvedConflicts = indexed
             };
-            var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.ApplyModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -901,7 +902,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.Definitions.Any())
                 {
                     return true;
                 }
@@ -918,7 +919,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -927,7 +928,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();
@@ -1207,7 +1208,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1216,7 +1217,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
@@ -1295,7 +1296,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1304,7 +1305,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var definitions2 = new List<IDefinition>()
@@ -1316,7 +1317,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1325,7 +1326,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 }
             };
             modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
@@ -1543,7 +1544,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed,
                 IgnoredConflicts = indexed
             };
-            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.IgnoreModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -1584,7 +1585,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.Definitions.Any())
                 {
                     return true;
                 }
@@ -1601,7 +1602,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -1610,7 +1611,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();
@@ -2460,8 +2461,8 @@ namespace IronyModManager.Services.Tests
                 IgnoredPaths = "modName:a" + Environment.NewLine + "modName:b"
             });
             result.Count.Should().Be(2);
-            result.First().Should().Be("a");
-            result.Last().Should().Be("b");
+            result[0].Should().Be("a");
+            result[result.Count - 1].Should().Be("b");
         }
 
         /// <summary>
@@ -2707,7 +2708,7 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed,
                 CustomConflicts = indexed,
             };
-            var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "test", ValueType = Parser.Common.ValueType.Object }, "colname");
+            var result = await service.AddCustomModPatchAsync(c, new Definition() { ModName = "test", ValueType = ValueType.Object }, "colname");
             result.Should().BeFalse();
         }
 
@@ -2762,7 +2763,7 @@ namespace IronyModManager.Services.Tests
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             modPatchExporter.Setup(p => p.ExportDefinitionAsync(It.IsAny<ModPatchExporterParameters>())).ReturnsAsync((ModPatchExporterParameters p) =>
             {
-                if (p.Definitions.Count() > 0)
+                if (p.CustomConflicts.Any())
                 {
                     return true;
                 }
@@ -2779,7 +2780,7 @@ namespace IronyModManager.Services.Tests
                     Id = "a",
                     Type= "events",
                     ModName = "test1",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
                 new Definition()
                 {
@@ -2788,7 +2789,7 @@ namespace IronyModManager.Services.Tests
                     Type = "events",
                     Id = "a",
                     ModName = "test2",
-                    ValueType = Parser.Common.ValueType.Object
+                    ValueType = ValueType.Object
                 },
             };
             var all = new IndexedDefinitions();
@@ -3313,7 +3314,7 @@ namespace IronyModManager.Services.Tests
 #else
         [Fact(Skip = "This is for functional testing only")]
 #endif
-        public void Stellaris_Performance_profiling()
+        public async Task Stellaris_Performance_profiling()
         {
             DISetup.SetupContainer();
 
@@ -3321,7 +3322,7 @@ namespace IronyModManager.Services.Tests
             registration.OnPostStartup();
             var game = DISetup.Container.GetInstance<IGameService>().Get().First(s => s.Type == "Stellaris");
             var mods = DISetup.Container.GetInstance<IModService>().GetInstalledMods(game);
-            var defs = DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjects(game, mods);
+            var defs = await DISetup.Container.GetInstance<IModPatchCollectionService>().GetModObjectsAsync(game, mods, string.Empty);
         }
     }
 }

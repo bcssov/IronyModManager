@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Mod.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Text;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -27,6 +28,20 @@ namespace IronyModManager.Models
     /// <seealso cref="IronyModManager.Models.Common.IMod" />
     public class Mod : BaseModel, IMod
     {
+        #region Fields
+
+        /// <summary>
+        /// The version
+        /// </summary>
+        private string version;
+
+        /// <summary>
+        /// The version data
+        /// </summary>
+        private Version versionData;
+
+        #endregion Fields
+
         #region Properties
 
         /// <summary>
@@ -150,7 +165,64 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The version.</value>
         [DescriptorProperty("supported_version")]
-        public virtual string Version { get; set; }
+        public virtual string Version
+        {
+            get
+            {
+                return version;
+            }
+            set
+            {
+                versionData = null;
+                version = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the version data.
+        /// </summary>
+        /// <value>The version data.</value>
+        public virtual Version VersionData
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(Version))
+                {
+                    var sb = new StringBuilder();
+                    var count = 0;
+                    foreach (var item in Version.Split("."))
+                    {
+                        var parsed = item.Replace("*", string.Empty);
+                        if (string.IsNullOrWhiteSpace(parsed))
+                        {
+                            parsed = "*";
+                        }
+                        if (int.TryParse(parsed, out var part))
+                        {
+                            sb.Append($"{part}.");
+                        }
+                        else if (parsed.Equals("*"))
+                        {
+                            sb.Append($"{(count > 1 ? int.MaxValue : 0)}.");
+                        }
+                        count++;
+                    }
+                    if (System.Version.TryParse(sb.ToString().Trim().Trim('.'), out var parsedVersion))
+                    {
+                        versionData = parsedVersion;
+                    }
+                    else
+                    {
+                        versionData = new Version();
+                    }
+                }
+                else
+                {
+                    versionData = new Version();
+                }
+                return versionData;
+            }
+        }
 
         #endregion Properties
     }

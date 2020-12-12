@@ -56,7 +56,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IronyModManager.Localization\IronyModManager.Localization.csproj" />
-    <ProjectReference Include="..\IronyModManager.Parser.Common\IronyModManager.Parser.Common.csproj" />
     <ProjectReference Include="..\IronyModManager.Shared\IronyModManager.Shared.csproj" />
   </ItemGroup>
 

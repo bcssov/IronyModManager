@@ -1,10 +1,10 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Parser.Common
+// Assembly         : IronyModManager.Shared
 // Author           : Mario
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-02-2020
+// Last Modified On : 12-07-2020
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -14,7 +14,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace IronyModManager.Parser.Common
+namespace IronyModManager.Shared.Models
 {
     /// <summary>
     /// Enum ValueType
