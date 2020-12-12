@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-15-2020
+// Last Modified On : 12-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -69,6 +69,11 @@ namespace IronyModManager.Views.Controls
             {
                 modList.PointerMoved += (sender, args) =>
                 {
+                    var allItems = modList.GetLogicalChildren().Cast<ListBoxItem>().Select(p => p.GetLogicalChildren().OfType<Grid>().FirstOrDefault());
+                    if (allItems.Any(p => p.ContextMenu != null && p.ContextMenu.IsOpen))
+                    {
+                        return;
+                    }
                     var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                     if (hoveredItem != null)
                     {
