@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-12-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -764,38 +764,38 @@ namespace IronyModManager.ViewModels.Controls
                  }).DisposeWith(disposables);
              }).DisposeWith(disposables);
 
-            OpenUrlCommand = ReactiveCommand.Create(() =>
+            OpenUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.OpenAsync(url).ConfigureAwait(true);
+                    await appAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            CopyUrlCommand = ReactiveCommand.Create(() =>
+            CopyUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var url = GetHoveredModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.CopyAsync(url).ConfigureAwait(true);
+                    await appAction.CopyAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            OpenInSteamCommand = ReactiveCommand.Create(() =>
+            OpenInSteamCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var url = GetHoveredModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
-                    appAction.OpenAsync(url).ConfigureAwait(true);
+                    await appAction.OpenAsync(url).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            OpenInAssociatedAppCommand = ReactiveCommand.Create(() =>
+            OpenInAssociatedAppCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
                 {
-                    appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
+                    await appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -814,7 +814,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (FilteredMods?.Count() > 0)
                 {
                     PerformingEnableAll = true;
-                    bool enabled = Mods.Where(p => p.IsValid).All(p => p.IsSelected);
+                    bool enabled = FilteredMods.Where(p => p.IsValid).All(p => p.IsSelected);
                     foreach (var item in FilteredMods)
                     {
                         item.IsSelected = !enabled;
@@ -824,57 +824,57 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            DeleteDescriptorCommand = ReactiveCommand.Create(() =>
+            DeleteDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (HoveredMod != null)
                 {
-                    DeleteDescriptorAsync(new List<IMod>() { HoveredMod }).ConfigureAwait(true);
+                    await DeleteDescriptorAsync(new List<IMod>() { HoveredMod }).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            DeleteAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            DeleteAllDescriptorsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (FilteredMods != null)
                 {
-                    DeleteDescriptorAsync(FilteredMods).ConfigureAwait(true);
+                    await DeleteDescriptorAsync(FilteredMods).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            LockDescriptorCommand = ReactiveCommand.Create(() =>
+            LockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (HoveredMod != null)
                 {
-                    LockDescriptorAsync(new List<IMod>() { HoveredMod }, true).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, true).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            LockAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            LockAllDescriptorsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (FilteredMods != null)
                 {
-                    LockDescriptorAsync(FilteredMods, true).ConfigureAwait(true);
+                    await LockDescriptorAsync(FilteredMods, true).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            UnlockDescriptorCommand = ReactiveCommand.Create(() =>
+            UnlockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (HoveredMod != null)
                 {
-                    LockDescriptorAsync(new List<IMod>() { HoveredMod }, false).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, false).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            UnlockAllDescriptorsCommand = ReactiveCommand.Create(() =>
+            UnlockAllDescriptorsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 if (FilteredMods != null)
                 {
-                    LockDescriptorAsync(FilteredMods, false).ConfigureAwait(true);
+                    await LockDescriptorAsync(FilteredMods, false).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
-            CheckNewModsCommand = ReactiveCommand.Create(() =>
+            CheckNewModsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                CheckNewModsAsync().ConfigureAwait(true);
+                await CheckNewModsAsync().ConfigureAwait(true);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
