@@ -4,10 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.51</title>
+			<title>1.10.52</title>
 			<description>RELEASE INFO
 * Fix being unable to use deselect all mods when filter is active in the installed mods area
 * Updated Chinese translation (thanks to Sciencmine)
+* Prevent hovered item from changing when context menu is opened
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -19,14 +20,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Sat, 12 Dec 2020 18:09:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.51/osx-x64.rar" sparkle:version="1.10.51.37701" sparkle:shortVersionString="1.10.51" length="62910275" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="2bCyp8GKSh1IFnSKevBSrwQByBo0TRT6jS0gRfZmTO3Gxp5+HIpEO8pFByAI7BYFsgKnizqA6RhxkYb+nHhbBg=="/>
+			<pubDate>Sun, 13 Dec 2020 01:19:38 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.52/osx-x64.rar" sparkle:version="1.10.52.12841" sparkle:shortVersionString="1.10.52" length="62911459" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="em13aEEzMuNtn834IJZi+gJyB0uuQ/yQCaqfNByZECICHZBbyJ48QyQwNWUY0fjc7/vwKx7M4R+5akAi9yhwAw=="/>
 		</item>
 		<item>
-			<title>1.10.51</title>
+			<title>1.10.52</title>
 			<description>RELEASE INFO
 * Fix being unable to use deselect all mods when filter is active in the installed mods area
 * Updated Chinese translation (thanks to Sciencmine)
+* Prevent hovered item from changing when context menu is opened
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -38,14 +40,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Sat, 12 Dec 2020 18:09:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.51/win-x64-setup.rar" sparkle:version="1.10.51.37701" sparkle:shortVersionString="1.10.51" length="54500912" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="ALdkicNqS9HVKVObpGiqgdM/SCLPJJevFNFhdgDswULMxTDTjz2BsdMCihYuPUPJr1W5V24cAN+ESxDW5CCsCg=="/>
+			<pubDate>Sun, 13 Dec 2020 01:19:44 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.52/win-x64-setup.rar" sparkle:version="1.10.52.12841" sparkle:shortVersionString="1.10.52" length="54516142" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="XCi7tL9JdLkgsye2iJT11WQKn9TVIamMksBSn/+KfZc/o/hZ/8dWp2ZfsExcLV5UavM8fJXnXUMW7856GITdAA=="/>
 		</item>
 		<item>
-			<title>1.10.51</title>
+			<title>1.10.52</title>
 			<description>RELEASE INFO
 * Fix being unable to use deselect all mods when filter is active in the installed mods area
 * Updated Chinese translation (thanks to Sciencmine)
+* Prevent hovered item from changing when context menu is opened
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -57,14 +60,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Sat, 12 Dec 2020 18:09:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.51/win-x64.rar" sparkle:version="1.10.51.37701" sparkle:shortVersionString="1.10.51" length="65233223" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="EsXqxvvPXLdXA61IcVzKlaRxTiSY9/MzfZUfOSvPgWC03Z87TstUkT13cAhsOpPzma8p7sJy6WponSW9bxTQDw=="/>
+			<pubDate>Sun, 13 Dec 2020 01:19:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.52/win-x64.rar" sparkle:version="1.10.52.12841" sparkle:shortVersionString="1.10.52" length="65233706" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="rKJpm+2PONWdmW0Z1efZ/zmPEOs7dyRED51sBY2pi6APv6Xhsk5g5b5SURPcbW3Pa5nXEPtZmXtp/HLLJvbLAA=="/>
 		</item>
 		<item>
-			<title>1.10.51</title>
+			<title>1.10.52</title>
 			<description>RELEASE INFO
 * Fix being unable to use deselect all mods when filter is active in the installed mods area
 * Updated Chinese translation (thanks to Sciencmine)
+* Prevent hovered item from changing when context menu is opened
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -76,8 +80,8 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Sat, 12 Dec 2020 18:09:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.51/linux-x64.zip" sparkle:version="1.10.51.37701" sparkle:shortVersionString="1.10.51" length="78438211" sparkle:os="linux" type="application/zip" sparkle:signature="C6m7q2ymOtaYMjfDxkp0kHyW0nK6cSOMkYaxnMggRBdqjCQoTO94bUAOMU6gSTTQtvz2ggFEbfsOzSttqm14AA=="/>
+			<pubDate>Sun, 13 Dec 2020 01:19:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.52/linux-x64.zip" sparkle:version="1.10.52.12841" sparkle:shortVersionString="1.10.52" length="78438795" sparkle:os="linux" type="application/zip" sparkle:signature="Um+UeYXqDeSTFKG4nZjr5u/dhLL0yN8YShRfcKNzZc9FcJ3hJoWM2NOOJFHLwRcyY1onBiukryqnQ21pW0JmAQ=="/>
 		</item>
 	</channel>
 </rss>
