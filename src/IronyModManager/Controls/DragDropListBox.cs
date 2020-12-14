@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 12-14-2020
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -28,10 +28,10 @@ namespace IronyModManager.Controls
 {
     /// <summary>
     /// Class DragDropListBox.
-    /// Implements the <see cref="Avalonia.Controls.ListBox" />
+    /// Implements the <see cref="IronyModManager.Controls.ListBox" />
     /// Implements the <see cref="Avalonia.Styling.IStyleable" />
     /// </summary>
-    /// <seealso cref="Avalonia.Controls.ListBox" />
+    /// <seealso cref="IronyModManager.Controls.ListBox" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
     [ExcludeFromCoverage("Should be tested in functional testing.")]
     public class DragDropListBox : ListBox, IStyleable
@@ -108,7 +108,7 @@ namespace IronyModManager.Controls
         /// Gets the style key.
         /// </summary>
         /// <value>The style key.</value>
-        Type IStyleable.StyleKey => typeof(ListBox);
+        Type IStyleable.StyleKey => typeof(Avalonia.Controls.ListBox);
 
         #endregion Properties
 

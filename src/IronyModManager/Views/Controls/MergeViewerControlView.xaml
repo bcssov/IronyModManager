@@ -37,16 +37,12 @@
     </Panel>
     <Panel IsVisible="{Binding !EditingText}">
       <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0" IsSharedSizeScope="True">
-        <ListBox Grid.Column="0" Items="{Binding LeftDiff}"
+        <controls:ListBox Grid.Column="0" Items="{Binding LeftDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="leftSide"
                  SelectedItems="{Binding LeftSideSelected}" SelectionMode="Multiple">
-          <ListBox.ItemTemplate>
+          <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
-                <Grid.ContextMenu>
-                  <ContextMenu>
-                  </ContextMenu>
-                </Grid.ContextMenu>
                 <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
                 <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
                                                 Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
@@ -65,18 +61,14 @@
                 </controls:BoundClassTextBlock>
               </Grid>
             </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-        <ListBox Grid.Column="1" Items="{Binding RightDiff}"
+          </controls:ListBox.ItemTemplate>
+        </controls:ListBox>
+        <controls:ListBox Grid.Column="1" Items="{Binding RightDiff}"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto" x:Name="rightSide"
                  SelectedItems="{Binding RightSideSelected}" SelectionMode="Multiple">
-          <ListBox.ItemTemplate>
+          <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid ColumnDefinitions="30,8*" MinHeight="20" Background="Transparent">
-                <Grid.ContextMenu>
-                  <ContextMenu>
-                  </ContextMenu>
-                </Grid.ContextMenu>
                 <TextBlock Text="{Binding Position}" Grid.Column="0" Width="30" HorizontalAlignment="Left"></TextBlock>
                 <controls:HorizontalItemsRepeater Grid.Column="1" Items="{Binding SubPieces}" IsVisible="{Binding SubPieces, 
                                                 Converter={StaticResource CollectionNullOrEmptyConverter} ConverterParameter=true}"
@@ -95,8 +87,8 @@
                 </controls:BoundClassTextBlock>
               </Grid>
             </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
+          </controls:ListBox.ItemTemplate>
+        </controls:ListBox>
       </Grid>
     </Panel>
   </Panel>

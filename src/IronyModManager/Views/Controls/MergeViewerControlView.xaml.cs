@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-14-2020
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -60,26 +59,6 @@ namespace IronyModManager.Views.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
-
-        /// <summary>
-        /// The last left data source
-        /// </summary>
-        private IEnumerable lastLeftDataSource = null;
-
-        /// <summary>
-        /// The last right data source
-        /// </summary>
-        private IEnumerable lastRightDataSource = null;
-
-        /// <summary>
-        /// The left side cached menu items
-        /// </summary>
-        private Dictionary<object, List<MenuItem>> leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-
-        /// <summary>
-        /// The right side cached menu items
-        /// </summary>
-        private Dictionary<object, List<MenuItem>> rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
 
         /// <summary>
         /// The syncing scroll
@@ -134,64 +113,29 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         /// <param name="listBox">The list box.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void HandleContextMenu(ListBox listBox, bool leftSide)
+        protected virtual void HandleContextMenu(IronyModManager.Controls.ListBox listBox, bool leftSide)
         {
-            var lastDataSource = leftSide ? lastLeftDataSource : lastRightDataSource;
+            List<MenuItem> menuItems = null;
             var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
             if (hoveredItem != null)
             {
-                var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                if (grid != null)
+                if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
                 {
-                    var processedItems = leftSide ? leftSideCachedMenuItems : rightSideCachedMenuItems;
-                    bool retrieved = processedItems.TryGetValue(hoveredItem.Content, out var cached);
-                    if (listBox.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
+                    menuItems = GetNonEditableMenuItems(leftSide);
+                }
+                else
+                {
+                    if (leftSide)
                     {
-                        if (leftSide)
-                        {
-                            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-                            lastLeftDataSource = listBox.Items;
-                        }
-                        else
-                        {
-                            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-                            lastRightDataSource = listBox.Items;
-                        }
+                        menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
                     }
-                    if (!processedItems.ContainsKey(hoveredItem.Content))
+                    else
                     {
-                        List<MenuItem> menuItems = null;
-                        if (ViewModel.RightSidePatchMod && ViewModel.LeftSidePatchMod)
-                        {
-                            grid.ContextMenu = null;
-                        }
-                        else if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
-                        {
-                            menuItems = GetNonEditableMenuItems(leftSide);
-                        }
-                        else
-                        {
-                            if (leftSide)
-                            {
-                                menuItems = ViewModel.RightSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
-                            else
-                            {
-                                menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
-                            }
-                        }
-                        if (menuItems != null)
-                        {
-                            if (grid.ContextMenu == null)
-                            {
-                                grid.ContextMenu = new ContextMenu();
-                            }
-                            grid.ContextMenu.Items = menuItems;
-                        }
-                        processedItems.Add(hoveredItem.Content, menuItems);
+                        menuItems = ViewModel.LeftSidePatchMod ? GetActionsMenuItems(leftSide) : GetEditableMenuItems(leftSide);
                     }
                 }
             }
+            listBox.SetContextMenu(menuItems);
         }
 
         /// <summary>
@@ -238,8 +182,8 @@ namespace IronyModManager.Views.Controls
             SetEditorOptions(editorLeft, true);
             SetEditorOptions(editorRight, false);
 
-            var leftSide = this.FindControl<ListBox>("leftSide");
-            var rightSide = this.FindControl<ListBox>("rightSide");
+            var leftSide = this.FindControl<IronyModManager.Controls.ListBox>("leftSide");
+            var rightSide = this.FindControl<IronyModManager.Controls.ListBox>("rightSide");
 
             leftSide.PropertyChanged += (sender, args) =>
             {
@@ -249,11 +193,11 @@ namespace IronyModManager.Views.Controls
             {
                 HandleListBoxPropertyChanged(args, rightSide, leftSide);
             };
-            leftSide.PointerMoved += (sender, args) =>
+            leftSide.ContextMenuOpening += (sender, args) =>
             {
                 HandleContextMenu(leftSide, true);
             };
-            rightSide.PointerMoved += (sender, args) =>
+            rightSide.ContextMenuOpening += (sender, args) =>
             {
                 HandleContextMenu(rightSide, false);
             };
@@ -261,25 +205,8 @@ namespace IronyModManager.Views.Controls
             {
                 FocusConflict(line, leftSide, rightSide);
             };
-            ViewModel.StackChanged += (sender, args) =>
-            {
-                leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-                rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-            };
 
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        protected override void OnLocaleChanged(string newLocale, string oldLocale)
-        {
-            leftSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-            rightSideCachedMenuItems = new Dictionary<object, List<MenuItem>>();
-            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>

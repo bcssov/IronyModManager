@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2020
+// Last Modified On : 12-14-2020
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -34,15 +33,6 @@ namespace IronyModManager.Views.Controls
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class InstalledModsControlView : BaseControl<InstalledModsControlViewModel>
     {
-        #region Fields
-
-        /// <summary>
-        /// The cached menu items
-        /// </summary>
-        private Dictionary<object, List<MenuItem>> cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-
-        #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -63,63 +53,26 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            IEnumerable lastDataSource = null;
-            var modList = this.FindControl<ListBox>("modList");
+            var modList = this.FindControl<IronyModManager.Controls.ListBox>("modList");
             if (modList != null)
             {
-                modList.PointerMoved += (sender, args) =>
+                modList.ContextMenuOpening += (sender, args) =>
                 {
-                    var allItems = modList.GetLogicalChildren().Cast<ListBoxItem>().Select(p => p.GetLogicalChildren().OfType<Grid>().FirstOrDefault());
-                    if (allItems.Any(p => p.ContextMenu != null && p.ContextMenu.IsOpen))
-                    {
-                        return;
-                    }
+                    List<MenuItem> menuItems = null;
                     var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                     if (hoveredItem != null)
                     {
-                        var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                        if (grid != null)
-                        {
-                            ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                            bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
-                            if (modList.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
-                            {
-                                cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-                                lastDataSource = modList.Items;
-                            }
-                            if (!cachedMenuItems.ContainsKey(hoveredItem.Content))
-                            {
-                                var menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
-                                if (grid.ContextMenu == null)
-                                {
-                                    grid.ContextMenu = new ContextMenu();
-                                }
-                                if (menuItems.Count == 0)
-                                {
-                                    grid.ContextMenu = null;
-                                }
-                                else
-                                {
-                                    grid.ContextMenu.Items = menuItems;
-                                }
-                                cachedMenuItems.Add(hoveredItem.Content, menuItems);
-                            }
-                        }
+                        ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                        menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
+                    if (modList.ItemCount == 0)
+                    {
+                        menuItems = GetStaticMenuItems();
+                    }
+                    modList.SetContextMenu(menuItems);
                 };
             }
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        protected override void OnLocaleChanged(string newLocale, string oldLocale)
-        {
-            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>
@@ -285,6 +238,28 @@ namespace IronyModManager.Views.Controls
                     Command = ViewModel.UnlockAllDescriptorsCommand
                 }
             });
+            return menuItems;
+        }
+
+        /// <summary>
+        /// Gets the static menu items.
+        /// </summary>
+        /// <returns>System.Collections.Generic.List&lt;Avalonia.Controls.MenuItem&gt;.</returns>
+        private List<MenuItem> GetStaticMenuItems()
+        {
+            var menuItems = new List<MenuItem>()
+            {
+                new MenuItem()
+                {
+                    Header = ViewModel.CheckNewMods,
+                    Command = ViewModel.CheckNewModsCommand
+                },
+                new MenuItem()
+                {
+                    Header = ViewModel.DeleteAllDescriptors,
+                    Command = ViewModel.DeleteAllDescriptorsCommand
+                }
+            };
             return menuItems;
         }
 
