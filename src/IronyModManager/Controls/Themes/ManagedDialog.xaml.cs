@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 12-16-2020
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -51,7 +51,7 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// The files view
         /// </summary>
-        private readonly ListBox filesView;
+        private readonly Avalonia.Controls.ListBox filesView;
 
         /// <summary>
         /// The filter
@@ -75,7 +75,7 @@ namespace IronyModManager.Controls.Themes
             AvaloniaXamlLoader.Load(this);
             AddHandler(PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
             quickLinksRoot = this.FindControl<Control>("QuickLinks");
-            filesView = this.FindControl<ListBox>("Files");
+            filesView = this.FindControl<Avalonia.Controls.ListBox>("Files");
             var locManager = DIResolver.Get<ILocalizationManager>();
             fileName = this.FindControl<TextBox>("fileName");
             fileName.Watermark = locManager.GetResource(LocalizationResources.FileDialog.FileName);
