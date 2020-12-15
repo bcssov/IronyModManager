@@ -235,11 +235,8 @@ namespace IronyModManager.IO.Readers
                     }
                     catch
                     {
-                        if (ms != null)
-                        {
-                            ms.Close();
-                            await ms.DisposeAsync();
-                        }
+                        ms.Close();
+                        await ms.DisposeAsync();
                         ms = null;
                         throw;
                     }
