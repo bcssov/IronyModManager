@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 12-16-2020
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -71,7 +71,7 @@ namespace IronyModManager.Views.Controls
                 });
             }).DisposeWith(disposables);
 
-            var conflictList = this.FindControl<ListBox>("conflictList");
+            var conflictList = this.FindControl<Avalonia.Controls.ListBox>("conflictList");
             conflictList.SelectionChanged += (sender, args) =>
             {
                 if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentHierarchicalDefinition != null)
