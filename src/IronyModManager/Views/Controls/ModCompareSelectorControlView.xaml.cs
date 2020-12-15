@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2020
+// Last Modified On : 12-14-2020
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -12,7 +12,6 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -47,11 +46,6 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         private readonly ILogger logger;
 
-        /// <summary>
-        /// The cached menu items
-        /// </summary>
-        private Dictionary<object, List<MenuItem>> cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-
         #endregion Fields
 
         #region Constructors
@@ -73,65 +67,37 @@ namespace IronyModManager.Views.Controls
         /// Binds the ListBox pointer.
         /// </summary>
         /// <param name="listBox">The list box.</param>
-        protected virtual void BindListBoxPointer(ListBox listBox)
+        protected virtual void BindListBoxPointer(IronyModManager.Controls.ListBox listBox)
         {
-            IEnumerable lastDataSource = null;
-            listBox.PointerMoved += (sender, args) =>
+            listBox.ContextMenuOpening += (sender, args) =>
             {
-                var allItems = listBox.GetLogicalChildren().Cast<ListBoxItem>().Select(p => p.GetLogicalChildren().OfType<Grid>().FirstOrDefault());
-                if (allItems.Any(p => p.ContextMenu != null && p.ContextMenu.IsOpen))
-                {
-                    return;
-                }
+                List<MenuItem> menuItems = null;
                 var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                 if (hoveredItem != null)
                 {
-                    var grid = hoveredItem.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                    if (grid != null)
+                    ViewModel.SetParameters(hoveredItem.Content as IDefinition);
+                    if (!string.IsNullOrWhiteSpace(ViewModel.ConflictPath))
                     {
-                        ViewModel.SetParameters(hoveredItem.Content as IDefinition);
-                        bool retrieved = cachedMenuItems.TryGetValue(hoveredItem.Content, out var cached);
-                        if (listBox.Items != lastDataSource || (retrieved && cached != grid.ContextMenu?.Items))
+                        menuItems = new List<MenuItem>()
                         {
-                            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-                            lastDataSource = listBox.Items;
-                        }
-                        if (!cachedMenuItems.ContainsKey(hoveredItem.Content))
+                            new MenuItem()
+                            {
+                                Header = ViewModel.OpenFile,
+                                Command = ViewModel.OpenFileCommand
+                            }
+                        };
+                        if (!ViewModel.ConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) &&
+                            !ViewModel.ConflictPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
                         {
-                            if (!string.IsNullOrWhiteSpace(ViewModel.ConflictPath))
+                            menuItems.Add(new MenuItem()
                             {
-                                var menuItems = new List<MenuItem>()
-                                {
-                                    new MenuItem()
-                                    {
-                                        Header = ViewModel.OpenFile,
-                                        Command = ViewModel.OpenFileCommand
-                                    }
-                                };
-                                if (!ViewModel.ConflictPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) &&
-                                    !ViewModel.ConflictPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    menuItems.Add(new MenuItem()
-                                    {
-                                        Header = ViewModel.OpenDirectory,
-                                        Command = ViewModel.OpenDirectoryCommand
-                                    });
-                                }
-                                if (grid.ContextMenu == null)
-                                {
-                                    grid.ContextMenu = new ContextMenu();
-                                }
-                                grid.ContextMenu.Items = menuItems;
-                                cachedMenuItems.Add(hoveredItem.Content, menuItems);
-                            }
-                            else
-                            {
-                                grid.ContextMenu = null;
-                                cachedMenuItems.Add(hoveredItem.Content, null);
-                            }
+                                Header = ViewModel.OpenDirectory,
+                                Command = ViewModel.OpenDirectoryCommand
+                            });
                         }
                     }
                 }
+                listBox.SetContextMenu(menuItems);
             };
         }
 
@@ -152,8 +118,8 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             }
-            var left = this.FindControl<ListBox>("leftSide");
-            var right = this.FindControl<ListBox>("rightSide");
+            var left = this.FindControl<IronyModManager.Controls.ListBox>("leftSide");
+            var right = this.FindControl<IronyModManager.Controls.ListBox>("rightSide");
             LayoutUpdated += (sender, args) =>
             {
                 try
@@ -163,7 +129,7 @@ namespace IronyModManager.Views.Controls
                     appendClass(left);
                     appendClass(right);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     logger.Error(ex);
                 }
@@ -171,17 +137,6 @@ namespace IronyModManager.Views.Controls
             BindListBoxPointer(left);
             BindListBoxPointer(right);
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Called when [locale changed].
-        /// </summary>
-        /// <param name="newLocale">The new locale.</param>
-        /// <param name="oldLocale">The old locale.</param>
-        protected override void OnLocaleChanged(string newLocale, string oldLocale)
-        {
-            cachedMenuItems = new Dictionary<object, List<MenuItem>>();
-            base.OnLocaleChanged(newLocale, oldLocale);
         }
 
         /// <summary>

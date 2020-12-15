@@ -5,6 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              MinWidth="800" MinHeight="450"
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.MainConflictSolverControlView">
   <UserControl.Resources>
     <converter:MathConverter x:Key="MathConverter" />
@@ -31,23 +32,19 @@
               </DataTemplate>
             </ComboBox.ItemTemplate>
           </ComboBox>
-          <ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
+          <controls:ListBox Items="{Binding SelectedParentConflict.Children}" SelectedItem="SelectedConflict"
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" x:Name="conflictList"
                    Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
                      ConverterParameter=x-160}">
-            <ListBox.ItemTemplate>
+            <controls:ListBox.ItemTemplate>
               <DataTemplate>
                 <Grid ColumnDefinitions="*" Background="Transparent">
-                  <Grid.ContextMenu>
-                    <ContextMenu>
-                    </ContextMenu>
-                  </Grid.ContextMenu>
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
                 </Grid>
               </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
+            </controls:ListBox.ItemTemplate>
+          </controls:ListBox>
           <TextBlock Text="{Binding NumberOfConflictsCaption}" HorizontalAlignment="Center" Margin="0,10,0,0"></TextBlock>
         </StackPanel>
       </Panel>

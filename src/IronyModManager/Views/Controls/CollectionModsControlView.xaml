@@ -110,10 +110,6 @@
                       <ColumnDefinition Width="2*" />
                       <ColumnDefinition Width="5*" />
                     </Grid.ColumnDefinitions>
-                    <Grid.ContextMenu>
-                      <ContextMenu>
-                      </ContextMenu>
-                    </Grid.ContextMenu>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
                     <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" AllowSpin="False" MinMaxAllowSpin="False"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,4,0"></controls:MinMaxNumericUpDown>

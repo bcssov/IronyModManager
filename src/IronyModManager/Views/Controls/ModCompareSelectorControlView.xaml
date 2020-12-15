@@ -13,16 +13,12 @@
   </UserControl.Resources>
   <Panel>
     <Grid ColumnDefinitions="5*,5*" Margin="0,0,10,0">
-      <ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
+      <controls:ListBox Grid.Column="0" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                SelectedItem="{Binding LeftSelectedDefinition}" x:Name="leftSide">
-        <ListBox.ItemTemplate>
+        <controls:ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*" Background="Transparent">
-              <Grid.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-              </Grid.ContextMenu>
               <controls:BoundClassBorder>
                 <controls:BoundClassBorder.BoundClasses>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
@@ -43,18 +39,14 @@
               </controls:BoundClassBorder>
             </Grid>
           </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-      <ListBox Grid.Column="1" Items="{Binding VirtualDefinitions}"
+        </controls:ListBox.ItemTemplate>
+      </controls:ListBox>
+      <controls:ListBox Grid.Column="1" Items="{Binding VirtualDefinitions}"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                SelectedItem="{Binding RightSelectedDefinition}" x:Name="rightSide">
-        <ListBox.ItemTemplate>
+        <controls:ListBox.ItemTemplate>
           <DataTemplate>
             <Grid ColumnDefinitions="*" Background="Transparent">
-              <Grid.ContextMenu>
-                <ContextMenu>
-                </ContextMenu>
-              </Grid.ContextMenu>
               <controls:BoundClassBorder>
                 <controls:BoundClassBorder.BoundClasses>
                   <MultiBinding Converter="{StaticResource DefinitionPriorityClassConverter}" Mode="OneWay">
@@ -75,8 +67,8 @@
               </controls:BoundClassBorder>
             </Grid>
           </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
+        </controls:ListBox.ItemTemplate>
+      </controls:ListBox>
     </Grid>
   </Panel>
 </UserControl>

@@ -46,8 +46,8 @@
             <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
-        <ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
-          <ListBox.ItemTemplate>
+        <controls:ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
+          <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
@@ -57,10 +57,6 @@
                   <ColumnDefinition Width="5*" />
                   <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <Grid.ContextMenu>
-                  <ContextMenu>
-                  </ContextMenu>
-                </Grid.ContextMenu>
                 <CheckBox IsChecked="{Binding IsSelected}"
                           Grid.Column="0" Grid.ColumnSpan="2">
                   <CheckBox.IsEnabled>
@@ -89,8 +85,8 @@
                 <TextBlock Text="{Binding Version}" Grid.Column="4" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
+          </controls:ListBox.ItemTemplate>
+        </controls:ListBox>
       </DockPanel>
     </Grid>
   </Panel>

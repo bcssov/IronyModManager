@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-15-2020
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -53,21 +53,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private readonly IModService modService;
 
-        /// <summary>
-        /// The loading images
-        /// </summary>
-        private bool loadingImages = false;
-
-        /// <summary>
-        /// The previous left definition
-        /// </summary>
-        private IDefinition prevLeftDefinition = null;
-
-        /// <summary>
-        /// The previous right definition
-        /// </summary>
-        private IDefinition prevRightDefinition = null;
-
         #endregion Fields
 
         #region Constructors
@@ -101,12 +86,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool EnableSelection { get; set; }
 
         /// <summary>
-        /// Gets or sets the left definition.
-        /// </summary>
-        /// <value>The left definition.</value>
-        public virtual IDefinition LeftDefinition { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the left image.
         /// </summary>
         /// <value>The left image.</value>
@@ -117,12 +96,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The left image information.</value>
         public virtual string LeftImageInfo { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the right definition.
-        /// </summary>
-        /// <value>The right definition.</value>
-        public virtual IDefinition RightDefinition { get; protected set; }
 
         /// <summary>
         /// Gets or sets the right image.
@@ -191,13 +164,9 @@ namespace IronyModManager.ViewModels.Controls
                 var left = LeftImage;
                 LeftImage = null;
                 left?.Dispose();
-                prevLeftDefinition = null;
-                LeftDefinition = null;
                 var right = RightImage;
                 RightImage = null;
                 right?.Dispose();
-                prevRightDefinition = null;
-                RightDefinition = null;
                 LeftImageInfo = string.Empty;
                 RightImageInfo = string.Empty;
             }
@@ -209,9 +178,39 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetLeft(IDefinition definition)
         {
-            prevLeftDefinition = LeftDefinition;
-            LeftDefinition = definition;
-            LoadImagesAsync().ConfigureAwait(false);
+            var loadingImage = false;
+            async Task loadImage()
+            {
+                while (loadingImage)
+                {
+                    await Task.Delay(25);
+                }
+                loadingImage = true;
+                LeftImageInfo = string.Empty;
+                var left = LeftImage;
+                LeftImage = null;
+                left?.Dispose();
+                using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                if (ms != null)
+                {
+                    LeftImage = new Bitmap(ms);
+                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                    LeftImageInfo = Smart.Format(info, new { LeftImage.PixelSize.Width, LeftImage.PixelSize.Height });
+                }
+                loadingImage = false;
+            }
+
+            if (definition != null)
+            {
+                Task.Run(() => loadImage().ConfigureAwait(false)).ConfigureAwait(false);
+            }
+            else
+            {
+                LeftImageInfo = string.Empty;
+                var left = LeftImage;
+                LeftImage = null;
+                left?.Dispose();
+            }
         }
 
         /// <summary>
@@ -220,50 +219,39 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetRight(IDefinition definition)
         {
-            prevRightDefinition = RightDefinition;
-            RightDefinition = definition;
-            LoadImagesAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// load images as an asynchronous operation.
-        /// </summary>
-        protected virtual async Task LoadImagesAsync()
-        {
-            while (loadingImages)
+            var loadingImage = false;
+            async Task loadImage()
             {
-                await Task.Delay(25);
-            }
-            loadingImages = true;
-            if (prevLeftDefinition != LeftDefinition)
-            {
-                LeftImageInfo = string.Empty;
-                var left = LeftImage;
-                LeftImage = null;
-                left?.Dispose();
-                using var ms = await modService.GetImageStreamAsync(LeftDefinition?.ModName, LeftDefinition?.File);
-                if (ms != null)
+                while (loadingImage)
                 {
-                    LeftImage = new Bitmap(ms);
-                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                    LeftImageInfo = Smart.Format(info, new { LeftImage.PixelSize.Width, LeftImage.PixelSize.Height });
+                    await Task.Delay(25);
                 }
-            }
-            if (prevRightDefinition != RightDefinition)
-            {
+                loadingImage = true;
                 RightImageInfo = string.Empty;
                 var right = RightImage;
                 RightImage = null;
                 right?.Dispose();
-                using var ms = await modService.GetImageStreamAsync(RightDefinition?.ModName, RightDefinition?.File);
+                using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
                 if (ms != null)
                 {
                     RightImage = new Bitmap(ms);
                     var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
                     RightImageInfo = Smart.Format(info, new { RightImage.PixelSize.Width, RightImage.PixelSize.Height });
                 }
+                loadingImage = false;
             }
-            loadingImages = false;
+
+            if (definition != null)
+            {
+                Task.Run(() => loadImage().ConfigureAwait(false)).ConfigureAwait(false);
+            }
+            else
+            {
+                RightImageInfo = string.Empty;
+                var right = RightImage;
+                RightImage = null;
+                right?.Dispose();
+            }
         }
 
         /// <summary>
