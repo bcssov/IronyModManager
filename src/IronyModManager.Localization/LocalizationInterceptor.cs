@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-06-2020
+// Last Modified On : 12-15-2020
 // ***********************************************************************
 // <copyright file="LocalizationInterceptor.cs" company="Mario">
 //     Mario
@@ -137,7 +137,7 @@ namespace IronyModManager.Localization
         private void ProcessLocaleChanged(IInvocation invocation)
         {
             var localizationProperties = invocation.TargetType.GetProperties().Where(p => Attribute.IsDefined(p, typeof(LocalizationAttributeBase)));
-            if (localizationProperties.Count() > 0)
+            if (localizationProperties.Any())
             {
                 foreach (var prop in localizationProperties)
                 {

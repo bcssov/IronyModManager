@@ -73,7 +73,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Irony.AppCastGenerator", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Updater", "src\IronyModManager.Updater\IronyModManager.Updater.csproj", "{F8C4879F-DCA8-466E-AE6A-047B5DF33EF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronyModManager.Platform", "src\IronyModManager.Platform\IronyModManager.Platform.csproj", "{2A528AAE-CD48-41BA-8839-52162A9659F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IronyModManager.Platform", "src\IronyModManager.Platform\IronyModManager.Platform.csproj", "{2A528AAE-CD48-41BA-8839-52162A9659F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
