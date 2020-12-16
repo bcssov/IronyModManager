@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 12-16-2020
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -243,7 +243,8 @@ namespace IronyModManager.ViewModels.Controls
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
-        public delegate void ModReorderedDelegate(IMod mod);
+        /// <param name="instant">if set to <c>true</c> [instant].</param>
+        public delegate void ModReorderedDelegate(IMod mod, bool instant);
 
         #endregion Delegates
 
@@ -736,7 +737,7 @@ namespace IronyModManager.ViewModels.Controls
                     await Task.Delay(50);
                 }
                 mod.Order = newOrder;
-                PerformModReorder(mod);
+                PerformModReorder(true, mod);
             }
             waitForQueue().ConfigureAwait(false);
         }
@@ -1462,8 +1463,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Performs the mod reorder.
         /// </summary>
+        /// <param name="instant">if set to <c>true</c> [instant].</param>
         /// <param name="mods">The mods.</param>
-        protected virtual void PerformModReorder(params IMod[] mods)
+        protected virtual void PerformModReorder(bool instant, params IMod[] mods)
         {
             if (SelectedMods != null && mods.Length > 0)
             {
@@ -1489,7 +1491,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
-                ModReordered?.Invoke(mods.Last());
+                ModReordered?.Invoke(mods.Last(), instant);
                 skipModSelectionSave = false;
             }
         }
@@ -1583,7 +1585,7 @@ namespace IronyModManager.ViewModels.Controls
             await Task.Delay(300);
             if (reorderCounter == queueNumber)
             {
-                PerformModReorder(reorderQueue.ToArray());
+                PerformModReorder(false, reorderQueue.ToArray());
                 reorderCounter = 0;
                 reorderQueue.Clear();
             }
