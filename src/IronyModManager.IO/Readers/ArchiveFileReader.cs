@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 12-16-2020
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -121,12 +121,12 @@ namespace IronyModManager.IO.Readers
             }
             try
             {
-                return getUsingReaderFactory();
+                return getUsingArchiveFactory();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                return getUsingArchiveFactory();
+                return getUsingReaderFactory();            
             }
         }
 
@@ -203,13 +203,12 @@ namespace IronyModManager.IO.Readers
 
             try
             {
-                return (getUsingReaderFactory(), false);
+                return (getUsingArchiveFactory(), false);                
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
-                // Falling back to archive factory
-                return (getUsingArchiveFactory(), false);
+                return (getUsingReaderFactory(), false);
             }
         }
 
@@ -302,13 +301,13 @@ namespace IronyModManager.IO.Readers
             }
             try
             {
-                parseUsingReaderFactory();
+                parseUsingArchiveFactory();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 result = new List<IFileInfo>();
-                parseUsingArchiveFactory();
+                parseUsingReaderFactory();                
             }
 
             return result.Count != 0 ? result : null;

@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 12-16-2020
 // ***********************************************************************
 // <copyright file="ModCollectionExporter.cs" company="Mario">
 //     Mario
@@ -230,13 +230,13 @@ namespace IronyModManager.IO.Mods
             }
             try
             {
-                parseUsingReaderFactory();
+                parseUsingArchiveFactory();
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 result = false;
-                parseUsingArchiveFactory();
+                parseUsingReaderFactory();
             }
             return !importInstance || result;
         }
