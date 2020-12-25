@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2020
+// Last Modified On : 12-25-2020
 // ***********************************************************************
 // <copyright file="StandardMessageBox.cs" company="Mario">
 //     Mario
@@ -75,6 +75,8 @@ namespace IronyModManager.Implementation
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.Closed += delegate { tcs.TrySetResult(window.ButtonResult); };
             window.ShowDialog(ownerWindow);
+            window.BringIntoView();
+            window.Focus();
             return tcs.Task;
         }
 
