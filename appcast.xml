@@ -4,13 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.58</title>
-			<description>This is an urgent hotfix as the most recent update inadvertently broke file dialogs.
-
-RELEASE INFO
-* Ensure the certain mod area context menu actions are always visible
-* Optimize context menus
-* Add support for more DDS preview types
+			<title>1.10.64</title>
+			<description>RELEASE INFO
+* Use archive factory as default when working with archives
+* Fix collection mods textbox incorrect position when dragging and dropping off screen
+* Ensure that prompts are brought into focus (if they already aren't)
+* Chinese localization update (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -22,17 +21,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Wed, 16 Dec 2020 00:46:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.58/osx-x64.rar" sparkle:version="1.10.58.37253" sparkle:shortVersionString="1.10.58" length="62969409" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="+yeENmqomhfHY4vw32XTpnpM8B1AuTNBGXU7ZgXjfEFM1e27lyJJ5ueqMtVqUf8pdjSwz+N6HuhUwp1uNmEvBQ=="/>
+			<pubDate>Sat, 26 Dec 2020 17:46:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.64/osx-x64.rar" sparkle:version="1.10.64.23113" sparkle:shortVersionString="1.10.64" length="62968108" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="dPxRV3Re7beadO7O0W8VYqWueOcA0dqM/+pyuwkC/6u6fFhoLFwJBYzGF+SupbOjtjyGGOiGF13FkM9sfFyaBw=="/>
 		</item>
 		<item>
-			<title>1.10.58</title>
-			<description>This is an urgent hotfix as the most recent update inadvertently broke file dialogs.
-
-RELEASE INFO
-* Ensure the certain mod area context menu actions are always visible
-* Optimize context menus
-* Add support for more DDS preview types
+			<title>1.10.64</title>
+			<description>RELEASE INFO
+* Use archive factory as default when working with archives
+* Fix collection mods textbox incorrect position when dragging and dropping off screen
+* Ensure that prompts are brought into focus (if they already aren't)
+* Chinese localization update (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -44,17 +42,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Wed, 16 Dec 2020 00:46:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.58/win-x64-setup.rar" sparkle:version="1.10.58.37253" sparkle:shortVersionString="1.10.58" length="54564356" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="e+tiYT0zlqjbeCyOH25WoLpXcfLh6WBGnfnb16I2DPSeSJz2BjktI8f1dNWroAnAAmIKf4kLiGYDqOQ6NgaRBQ=="/>
+			<pubDate>Sat, 26 Dec 2020 17:46:18 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.64/win-x64-setup.rar" sparkle:version="1.10.64.23113" sparkle:shortVersionString="1.10.64" length="54560613" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="4iEeAvQgKsjQ81V+AmDTboEiw61f+Bg8QiueBZpfjXGD7KpFPd9NsFQcJu7xcLfw6hWbi96qF/7TfwxC6c54Cg=="/>
 		</item>
 		<item>
-			<title>1.10.58</title>
-			<description>This is an urgent hotfix as the most recent update inadvertently broke file dialogs.
-
-RELEASE INFO
-* Ensure the certain mod area context menu actions are always visible
-* Optimize context menus
-* Add support for more DDS preview types
+			<title>1.10.64</title>
+			<description>RELEASE INFO
+* Use archive factory as default when working with archives
+* Fix collection mods textbox incorrect position when dragging and dropping off screen
+* Ensure that prompts are brought into focus (if they already aren't)
+* Chinese localization update (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -66,17 +63,16 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Wed, 16 Dec 2020 00:46:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.58/win-x64.rar" sparkle:version="1.10.58.37253" sparkle:shortVersionString="1.10.58" length="65291953" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="KVGsG6s0G6vYaFV2mlovlzFN/NMBBccqbcxu7OChiHuVMliF1Uyt32SVz7qAxRkFJo1auwLX0M2y2KWJwcKZCA=="/>
+			<pubDate>Sat, 26 Dec 2020 17:46:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.64/win-x64.rar" sparkle:version="1.10.64.23113" sparkle:shortVersionString="1.10.64" length="65291102" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="iJxnnDp+xQ8/GQ9HQF5XLBbombtIFsu3K1oWA8duV8BxTOfnIx9q0sjfMTMslIFUi5kAiOYhEgHSNZ2z7AigDw=="/>
 		</item>
 		<item>
-			<title>1.10.58</title>
-			<description>This is an urgent hotfix as the most recent update inadvertently broke file dialogs.
-
-RELEASE INFO
-* Ensure the certain mod area context menu actions are always visible
-* Optimize context menus
-* Add support for more DDS preview types
+			<title>1.10.64</title>
+			<description>RELEASE INFO
+* Use archive factory as default when working with archives
+* Fix collection mods textbox incorrect position when dragging and dropping off screen
+* Ensure that prompts are brought into focus (if they already aren't)
+* Chinese localization update (thanks to Sciencmine)
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -88,8 +84,8 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Wed, 16 Dec 2020 00:46:20 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.58/linux-x64.zip" sparkle:version="1.10.58.37253" sparkle:shortVersionString="1.10.58" length="78501956" sparkle:os="linux" type="application/zip" sparkle:signature="EddvqY4x+EbXOoOoFmTNTvR/xXRFFa6spuofLp1y0k+NLJZAyZ+Pu3hkJeOLCXQ0z2ienVc4iBgdAXAOpHBtCw=="/>
+			<pubDate>Sat, 26 Dec 2020 17:46:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.64/linux-x64.zip" sparkle:version="1.10.64.23113" sparkle:shortVersionString="1.10.64" length="78501976" sparkle:os="linux" type="application/zip" sparkle:signature="UlsKZvBeSD26uIg4HZR24F+73OQh7gNvN7kMzwfDcyiPoe63Vo927SA/cWn9ejQTpPm6BBmuEC3xje05n2tNBA=="/>
 		</item>
 	</channel>
 </rss>
