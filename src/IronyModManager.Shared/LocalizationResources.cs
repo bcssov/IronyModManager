@@ -224,7 +224,7 @@ namespace IronyModManager.Shared
                 {
                     public const string Prefix = "Collection_Mods.MergeCollection.Basic.";
                     public const string Overlay_Gathering_Mod_Info = Prefix + "Overlay_Gathering_Mod_Info";
-                    public const string Overlay_Writting_Files = Prefix + "Overlay_Writting_Files";
+                    public const string Overlay_Writing_Files = Prefix + "Overlay_Writing_Files";
                 }
                 public static class Compress
                 {
