@@ -167,7 +167,7 @@
             },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
-                "Overlay_Writting_Files": "正在合并合集……"
+                "Overlay_Writing_Files": "正在合并合集……"
             },
             "Compress": {
                 "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
