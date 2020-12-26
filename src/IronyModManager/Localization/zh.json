@@ -78,7 +78,7 @@
         "RefreshingModList": "正在刷新模组列表……",
         "InvalidMods": {
             "Title": "检测到无效模组",
-            "Message": "下列模组丢失：{NewLine}{Mods}.{NewLine}{NewLine}是否删除对应的描述文件？"
+            "Message": "下列模组丢失：{NewLine}{Mods}。{NewLine}{NewLine}是否删除对应的描述文件？"
         }
     },
     "Collection_Mods": {
@@ -162,7 +162,7 @@
             "Advanced": {
                 "Overlay_Loading_Definitions": "正在加载模组数据……",
                 "Overlay_Analyzing_Definitions": "正在分析模组数据……",
-                "Overlay_Replacing_Definitions": "替换定义时请稍候...",
+                "Overlay_Replacing_Definitions": "正在应用模组补丁……",
                 "Overlay_Merging_Collection": "正在合并合集……"
             },
             "Basic": {
@@ -186,7 +186,7 @@
         "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
         "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "替换定义时请稍候...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
         "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
             "Launch": "启动游戏",
@@ -296,7 +296,7 @@
         },
         "Editor": {
             "Title": "外部合并",
-            "Message": "对外部合并感到满意后，请按确认。"
+            "Message": "外部合并完成后，请点击确认。"
         }
     },
     "ConflictIgnore": {
@@ -311,22 +311,22 @@
         "Reset": "×",
         "Editor": {
             "Title": "外部编辑器选项",
-            "EditorExecutable": "编辑器可执行",
-            "EditorArgs": "编辑Args",
+            "EditorExecutable": "可执行文件",
+            "EditorArgs": "启动参数",
             "EditorArgsPlaceholder": "示例：leftFile:{Left} rightFile:{Right}"
         },
         "Game": {
             "Title": "游戏选项",
-            "GameExecutable": "游戏可执行文件",
-            "UserDirectory": "游戏数据目录",
-            "GameArgs": "游戏启动参数",
+            "GameExecutable": "可执行文件",
+            "UserDirectory": "数据目录",
+            "GameArgs": "启动参数",
             "RefreshMods": "启动前刷新模组描述文件",
             "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置全部……"
         },
         "Updates": {
             "Title": "更新选项",
-            "UpdateInfoTitle": "更新发行信息",
+            "UpdateInfoTitle": "更新发布信息",
             "AutoUpdates": "启动时检查更新",
             "CheckPrerelease": "检查预发布版更新",
             "CheckForUpdates": "检查更新",
@@ -419,8 +419,8 @@
             "Message": "合集已合并。"
         },
         "ConflictSolverUpdate": {
-            "Title": "冲突处理器更新",
-            "Message": "一个或多个模组已更新，冲突处理器需要刷新数据。"
+            "Title": "冲突处理器刷新",
+            "Message": "模组或自定义补丁已更新，冲突处理器需要重新运行以刷新数据。"
         },
         "NoUpdatesAvailable": {
             "Title": "没有更新",
