@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 12-31-2020
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -136,12 +136,20 @@ namespace IronyModManager.Parser.Generic
                                 var secondSegment = code[(index + 1)..];
                                 if (!string.IsNullOrWhiteSpace(secondSegment))
                                 {
-                                    var orderSegment = secondSegment.Substring(0, secondSegment.IndexOf("\"")).Trim();
-                                    if (int.TryParse(orderSegment, out var parsed))
+                                    var quoteIndex = secondSegment.IndexOf("\"");
+                                    if (quoteIndex != -1)
                                     {
-                                        order = parsed;
+                                        var orderSegment = secondSegment.Substring(0, secondSegment.IndexOf("\"")).Trim();
+                                        if (int.TryParse(orderSegment, out var parsed))
+                                        {
+                                            order = parsed;
+                                        }
+                                        secondSegment = secondSegment[secondSegment.IndexOf("\"")..];
                                     }
-                                    secondSegment = secondSegment[secondSegment.IndexOf("\"")..];
+                                    else
+                                    {
+                                        errors.Add($"Invalid quotes detected near line: {line}");
+                                    }
                                 }
                                 if (!string.IsNullOrWhiteSpace(firstSegment) && !string.IsNullOrWhiteSpace(secondSegment))
                                 {
