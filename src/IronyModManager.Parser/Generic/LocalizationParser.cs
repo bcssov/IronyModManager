@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-31-2020
+// Last Modified On : 01-01-2021
 // ***********************************************************************
 // <copyright file="LocalizationParser.cs" company="Mario">
 //     Mario
@@ -130,6 +130,7 @@ namespace IronyModManager.Parser.Generic
                             string code = cleaned;
                             var index = cleaned.IndexOf(Common.Constants.Localization.YmlSeparator.ToString());
                             int order = 0;
+                            var hasError = false;
                             if (index > 0)
                             {
                                 var firstSegment = code.Substring(0, index + 1);
@@ -139,16 +140,17 @@ namespace IronyModManager.Parser.Generic
                                     var quoteIndex = secondSegment.IndexOf("\"");
                                     if (quoteIndex != -1)
                                     {
-                                        var orderSegment = secondSegment.Substring(0, secondSegment.IndexOf("\"")).Trim();
+                                        var orderSegment = secondSegment.Substring(0, quoteIndex).Trim();
                                         if (int.TryParse(orderSegment, out var parsed))
                                         {
                                             order = parsed;
                                         }
-                                        secondSegment = secondSegment[secondSegment.IndexOf("\"")..];
+                                        secondSegment = secondSegment[quoteIndex..];
                                     }
                                     else
                                     {
-                                        errors.Add($"Invalid quotes detected near line: {line}");
+                                        errors.Add($"Invalid quotes detected near line: {line}.");
+                                        hasError = true;
                                     }
                                 }
                                 if (!string.IsNullOrWhiteSpace(firstSegment) && !string.IsNullOrWhiteSpace(secondSegment))
@@ -156,26 +158,29 @@ namespace IronyModManager.Parser.Generic
                                     code = $"{firstSegment}1000 {secondSegment}";
                                 }
                             }
-                            var langFolder = GetFolderNameFromLanguageId(selectedLanguage);
-                            if (!string.IsNullOrWhiteSpace(langFolder))
+                            if (!hasError)
                             {
-                                def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], langFolder, Path.GetFileName(args.File));
+                                var langFolder = GetFolderNameFromLanguageId(selectedLanguage);
+                                if (!string.IsNullOrWhiteSpace(langFolder))
+                                {
+                                    def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], langFolder, Path.GetFileName(args.File));
+                                }
+                                else
+                                {
+                                    def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], Path.GetFileName(args.File));
+                                }
+                                def.Type = FormatType(def.VirtualPath, $"{selectedLanguage}-{Common.Constants.YmlType}");
+                                def.CustomPriorityOrder = order;
+                                def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
+                                def.OriginalCode = code;
+                                def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
+                                def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
+                                def.Id = GetKey(code, Common.Constants.Localization.YmlSeparator.ToString());
+                                prevId = def.Id;
+                                def.ValueType = ValueType.SpecialVariable;
+                                def.Tags.Add(def.Id.ToLowerInvariant());
+                                result.Add(def);
                             }
-                            else
-                            {
-                                def.VirtualPath = Path.Combine(args.File.Split(Path.DirectorySeparatorChar)[0], Path.GetFileName(args.File));
-                            }
-                            def.Type = FormatType(def.VirtualPath, $"{selectedLanguage}-{Common.Constants.YmlType}");
-                            def.CustomPriorityOrder = order;
-                            def.Code = $"{selectedLanguage}:{Environment.NewLine} {code}";
-                            def.OriginalCode = code;
-                            def.CodeSeparator = Constants.CodeSeparators.NonClosingSeparators.ColonSign;
-                            def.CodeTag = selectedLanguage.Split("=:{".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)[0];
-                            def.Id = GetKey(code, Common.Constants.Localization.YmlSeparator.ToString());
-                            prevId = def.Id;
-                            def.ValueType = ValueType.SpecialVariable;
-                            def.Tags.Add(def.Id.ToLowerInvariant());
-                            result.Add(def);
                         }
                         else
                         {
