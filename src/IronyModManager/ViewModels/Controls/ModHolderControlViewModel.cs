@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 01-03-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -505,7 +505,7 @@ namespace IronyModManager.ViewModels.Controls
         protected virtual async Task EvalResumeAvailabilityLoopAsync()
         {
             EvalResumeAvailability();
-            await Task.Delay(30000);
+            await Task.Delay(15000);
             await EvalResumeAvailabilityLoopAsync();
         }
 

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 01-03-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -284,7 +284,7 @@ namespace IronyModManager.Services
                             }
                         }
                     }
-                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Contains(path, StringComparison.OrdinalIgnoreCase));
+                    return files.Any(p => Path.GetFileNameWithoutExtension(p).Equals(path, StringComparison.OrdinalIgnoreCase));
                 }
                 catch
                 {
