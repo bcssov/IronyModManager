@@ -4,9 +4,11 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.65</title>
+			<title>1.10.70</title>
 			<description>RELEASE INFO
-* Irony will no longer crash upon encountering invalid localization items with wrong quote types being used but will flag these as invalid
+* Improve resume game detection availability
+* Fix cross thread access CTD
+* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -18,13 +20,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 31 Dec 2020 19:20:45 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.65/osx-x64.rar" sparkle:version="1.10.65.19248" sparkle:shortVersionString="1.10.65" length="62967947" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="bhh4EFTuKwXmjt3QcE/nygSi8kUSwH50+02KAuVpaqpaNWs+JIsu1HwRy7ehBUo/YaPHaneELagTCz73cOo8DQ=="/>
+			<pubDate>Fri, 22 Jan 2021 04:28:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/osx-x64.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="62973367" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="gUDDPV97SskxON6pyIxVEa957obHp4HGXvYmpAdLBdulbcioUQXdtCqndPlaKw5PhHT3WrZx4dgzrMcfcFxXDQ=="/>
 		</item>
 		<item>
-			<title>1.10.65</title>
+			<title>1.10.70</title>
 			<description>RELEASE INFO
-* Irony will no longer crash upon encountering invalid localization items with wrong quote types being used but will flag these as invalid
+* Improve resume game detection availability
+* Fix cross thread access CTD
+* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -36,13 +40,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 31 Dec 2020 19:20:51 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.65/win-x64-setup.rar" sparkle:version="1.10.65.19248" sparkle:shortVersionString="1.10.65" length="54554744" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="p00TBiI25o6Tc54Tc+a6DXB1f1l7m2tqR5TIvkVeiWjykG4MIibhEVASEZn6PDTMb+JgusMifrtjfbX5IsP+Bg=="/>
+			<pubDate>Fri, 22 Jan 2021 04:29:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/win-x64-setup.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="54555440" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="YrsO81df4ljZxQ1sPTj8T70iXoCA/tqOuKVhjUD5gz4TnRX0QzoTDC68uB1rRGPqOGdiByc9aQi77G3dm9y0CQ=="/>
 		</item>
 		<item>
-			<title>1.10.65</title>
+			<title>1.10.70</title>
 			<description>RELEASE INFO
-* Irony will no longer crash upon encountering invalid localization items with wrong quote types being used but will flag these as invalid
+* Improve resume game detection availability
+* Fix cross thread access CTD
+* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -54,13 +60,15 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 31 Dec 2020 19:20:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.65/win-x64.rar" sparkle:version="1.10.65.19248" sparkle:shortVersionString="1.10.65" length="65290492" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="EuTbItCA/kBIoGwRcwE/rws2o5NvgnTP8oH17W2Wwl3cPAp+VzrSdGSttZEu5ZRlIIBy5o4qg3eSNEXpJbjtAg=="/>
+			<pubDate>Fri, 22 Jan 2021 04:29:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/win-x64.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="65297816" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="4JqNjJllMibOa3dlosH/zIitYESVrs/mfMSemtKWATo8M6n8lSA/jw3a6PAU7DNK+X2GAaRpxAaD2l0W86YkBQ=="/>
 		</item>
 		<item>
-			<title>1.10.65</title>
+			<title>1.10.70</title>
 			<description>RELEASE INFO
-* Irony will no longer crash upon encountering invalid localization items with wrong quote types being used but will flag these as invalid
+* Improve resume game detection availability
+* Fix cross thread access CTD
+* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
 
 CHANGES FROM v1.9:
 * Upgrade dependencies
@@ -72,8 +80,8 @@ CHANGES FROM v1.9:
 * Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
 * Allow ignore use to ignore partial definition name matches
 * Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Thu, 31 Dec 2020 19:20:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.65/linux-x64.zip" sparkle:version="1.10.65.19248" sparkle:shortVersionString="1.10.65" length="78502014" sparkle:os="linux" type="application/zip" sparkle:signature="90MO5lm2jyvjoXABIwIA0C5J+pC2I44YmKQLpnXsA+X0y2e0bF5Hix7uvu90UJTk46jEAr0Jyb2PeSht2uUtDQ=="/>
+			<pubDate>Fri, 22 Jan 2021 04:28:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/linux-x64.zip" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="78505190" sparkle:os="linux" type="application/zip" sparkle:signature="91ST34oRMcBm66XtlNq8X7VknT3q+tFQErGwRyJmy5l+ku6sw18tQMSO4etnlcXePSbbPaFqE0JBB3Po/AynDA=="/>
 		</item>
 	</channel>
 </rss>
