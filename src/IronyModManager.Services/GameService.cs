@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-03-2021
+// Last Modified On : 01-22-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -342,12 +342,12 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">games or selectedGame.</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
-            if (games == null || games.Count() == 0 || selectedGame == null)
+            if (games == null || !games.Any() || selectedGame == null)
             {
-                throw new ArgumentNullException("games or selectedGame.");
+                throw new ArgumentNullException($"{nameof(games)} or {nameof(selectedGame)}.");
             }
 
             var currentSelection = GetSelected();
