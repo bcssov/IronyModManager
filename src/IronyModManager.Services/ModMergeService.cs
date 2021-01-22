@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-22-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -661,16 +662,38 @@ namespace IronyModManager.Services
                     var streams = new List<Stream>();
                     foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
                     {
+                        // OSX seems to have a very low ulimit (according to #183) -- so don't punish other OS users by placing stuff in memory
                         var stream = Reader.GetStream(collectionMod.FullPath, file);
                         if (stream != null)
                         {
-                            modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                             {
-                                FileName = file,
-                                QueueId = queueId,
-                                Stream = stream
-                            });
-                            streams.Add(stream);
+                                var streamCopy = new MemoryStream();
+                                if (stream.CanSeek)
+                                {
+                                    stream.Seek(0, SeekOrigin.Begin);
+                                }
+                                await stream.CopyToAsync(streamCopy);
+                                stream.Close();
+                                await stream.DisposeAsync();
+                                modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                                {
+                                    FileName = file,
+                                    QueueId = queueId,
+                                    Stream = streamCopy
+                                });
+                                streams.Add(streamCopy);
+                            }
+                            else
+                            {
+                                modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
+                                {
+                                    FileName = file,
+                                    QueueId = queueId,
+                                    Stream = stream
+                                });
+                                streams.Add(stream);
+                            }
                         }
                         using var innerProgressLock = await zipLock.LockAsync();
                         processed++;
