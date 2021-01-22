@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 01-22-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using IronyModManager.Common.Views;
 using IronyModManager.Controls;
 using IronyModManager.Models.Common;
@@ -187,7 +188,14 @@ namespace IronyModManager.Views.Controls
 
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
             {
-                setNumericProperties();
+                if (Dispatcher.UIThread.CheckAccess())
+                {
+                    setNumericProperties();
+                }
+                else
+                {
+                    Dispatcher.UIThread.InvokeAsync(() => setNumericProperties());
+                }
             }).DisposeWith(Disposables);
 
             modList.LayoutUpdated += (sender, args) =>
