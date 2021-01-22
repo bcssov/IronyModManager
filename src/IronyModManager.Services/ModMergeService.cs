@@ -662,7 +662,7 @@ namespace IronyModManager.Services
                     var streams = new List<Stream>();
                     foreach (var file in collectionMod.Files.Where(p => game.GameFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase))))
                     {
-                        // OSX seems to have a very low ulimit (acording to #183) -- so don't punish other OS users by placing stuff in memory
+                        // OSX seems to have a very low ulimit (according to #183) -- so don't punish other OS users by placing stuff in memory
                         var stream = Reader.GetStream(collectionMod.FullPath, file);
                         if (stream != null)
                         {
@@ -674,6 +674,8 @@ namespace IronyModManager.Services
                                     stream.Seek(0, SeekOrigin.Begin);
                                 }
                                 await stream.CopyToAsync(streamCopy);
+                                stream.Close();
+                                await stream.DisposeAsync();
                                 modMergeCompressExporter.AddFile(new ModMergeCompressExporterParameters()
                                 {
                                     FileName = file,
