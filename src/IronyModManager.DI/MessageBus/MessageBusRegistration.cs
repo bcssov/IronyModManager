@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="MessageBusRegistration.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using IronyModManager.Shared.MessageBus;
+using Microsoft.Extensions.Logging.Abstractions;
 using SlimMessageBus.Host.Config;
 using SlimMessageBus.Host.Memory;
 
@@ -37,6 +38,7 @@ namespace IronyModManager.DI.MessageBus
         {
             var registeredTypes = new HashSet<Type>();
             var builder = MessageBusBuilder.Create()
+                .WithLoggerFacory(NullLoggerFactory.Instance) // Breaking change for some reason
                 .WithDependencyResolver(new MessageBusDependencyResolver())
                 .WithProviderMemory(new MemoryMessageBusSettings()
                 {
