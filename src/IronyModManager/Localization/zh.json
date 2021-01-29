@@ -21,7 +21,12 @@
         "Title": "保存失败",
         "Message": "Irony 无法写入模组文件，请将这个错误发送至 GitHub Issue 并附上错误日志"
     },
+    "InvalidModsDetected": {
+        "Title": "检测到无效的Mod",
+        "Message": "由于无效的存档或锁定的文件，无法解析以下mod位置：{NewLine}{Mods}"
+    },
     "Prompt": {
+        "OK": "好",
         "Yes": "是",
         "No": "否",
         "Confirm": "确认",

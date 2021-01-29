@@ -4,7 +4,7 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using IronyModManager.Shared;
+using MessageBox.Avalonia.Enums;
 
 namespace IronyModManager.Implementation.Actions
 {
@@ -91,23 +92,23 @@ namespace IronyModManager.Implementation.Actions
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <param name="notificationType">Type of the notification.</param>
-        /// <param name="yesNoPrompt">if set to <c>true</c> [yes no prompt].</param>
+        /// <param name="promptType">Type of the prompt.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public async Task<bool> ShowPromptAsync(string title, string header, string message, NotificationType notificationType, bool yesNoPrompt = true)
+        public async Task<bool> ShowPromptAsync(string title, string header, string message, NotificationType notificationType, PromptType promptType = PromptType.YesNo)
         {
             var icon = notificationType switch
             {
-                NotificationType.Info => MessageBox.Avalonia.Enums.Icon.Info,
+                NotificationType.Info => Icon.Info,
                 // Perhaps I should just fork this project over...
-                NotificationType.Success => MessageBox.Avalonia.Enums.Icon.Plus,
-                NotificationType.Warning => MessageBox.Avalonia.Enums.Icon.Warning,
-                NotificationType.Error => MessageBox.Avalonia.Enums.Icon.Error,
-                _ => MessageBox.Avalonia.Enums.Icon.None,
+                NotificationType.Success => Icon.Plus,
+                NotificationType.Warning => Icon.Warning,
+                NotificationType.Error => Icon.Error,
+                _ => Icon.None,
             };
             var mainWindow = Helpers.GetMainWindow();
-            var prompt = yesNoPrompt ? MessageBoxes.GetYesNoWindow(title, header, message, icon) : MessageBoxes.GetConfirmCancelWindow(title, header, message, icon);
+            var prompt = MessageBoxes.GetPromptWindow(title, header, message, icon, promptType);
             var result = await prompt.ShowDialog(mainWindow);
-            return result == MessageBox.Avalonia.Enums.ButtonResult.Yes || result == MessageBox.Avalonia.Enums.ButtonResult.Ok;
+            return result == ButtonResult.Yes || result == ButtonResult.Ok;
         }
 
         #endregion Methods

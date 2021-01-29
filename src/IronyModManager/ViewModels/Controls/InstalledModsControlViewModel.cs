@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-12-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -103,6 +103,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod order changed
         /// </summary>
         private IDisposable modChanged;
+
+        /// <summary>
+        /// The showing invalid notification
+        /// </summary>
+        private bool showingInvalidNotification = false;
 
         /// <summary>
         /// The showing prompt
@@ -644,7 +649,11 @@ namespace IronyModManager.ViewModels.Controls
         {
             var id = idGenerator.GetNextId();
             await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
-            await modService.InstallModsAsync(Mods);
+            var result = await modService.InstallModsAsync(Mods);
+            if (result != null && result.Any(p => p.Invalid))
+            {
+                await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
+            }
             RefreshMods();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
             var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
@@ -663,7 +672,11 @@ namespace IronyModManager.ViewModels.Controls
                 var id = idGenerator.GetNextId();
                 await TriggerOverlayAsync(id, true, message: localizationManager.GetResource(LocalizationResources.Installed_Mods.RefreshingModList));
                 await modService.DeleteDescriptorsAsync(mods);
-                await modService.InstallModsAsync(Mods);
+                var result = await modService.InstallModsAsync(Mods);
+                if (result != null && result.Any(p => p.Invalid))
+                {
+                    await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
+                }
                 RefreshMods();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
@@ -955,6 +968,24 @@ namespace IronyModManager.ViewModels.Controls
             state.InstalledModsSortColumn = sortModel.Key;
             state.InstalledModsSortMode = (int)sortModel.Value.SortOrder;
             appStateService.Save(state);
+        }
+
+        /// <summary>
+        /// Shows the invalid mods notification asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task.</returns>
+        protected virtual async Task ShowInvalidModsNotificationAsync(IReadOnlyCollection<IModInstallationResult> mods)
+        {
+            var title = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Title);
+            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatSmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
+
+            if (!showingInvalidNotification)
+            {
+                showingInvalidNotification = true;
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
+                showingInvalidNotification = false;
+            }
         }
 
         /// <summary>

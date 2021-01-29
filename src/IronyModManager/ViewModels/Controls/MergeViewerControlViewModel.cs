@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -1193,7 +1193,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
                         var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
-                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, false))
+                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
                         {
                             if (leftSide)
                             {

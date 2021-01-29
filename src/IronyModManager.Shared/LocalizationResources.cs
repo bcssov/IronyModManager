@@ -38,9 +38,16 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string Message = Prefix + "Message";
         }
+        public static class InvalidModsDetected
+        {
+            public const string Prefix = "InvalidModsDetected.";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
         public static class Prompt
         {
             public const string Prefix = "Prompt.";
+            public const string OK = Prefix + "OK";
             public const string Yes = Prefix + "Yes";
             public const string No = Prefix + "No";
             public const string Confirm = Prefix + "Confirm";

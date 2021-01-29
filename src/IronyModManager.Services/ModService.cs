@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -38,11 +38,21 @@ namespace IronyModManager.Services
     /// <seealso cref="IronyModManager.Services.Common.IModService" />
     public class ModService : ModBaseService, IModService
     {
+        #region Fields
+
+        /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModService" /> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="definitionInfoProviders">The definition information providers.</param>
         /// <param name="reader">The reader.</param>
@@ -51,11 +61,12 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModService(ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
+        public ModService(ILogger logger, ICache cache, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModParser modParser,
             IModWriter modWriter, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -229,15 +240,15 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="statusToRetain">The status to retain.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> InstallModsAsync(IEnumerable<IMod> statusToRetain)
+        public virtual async Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain)
         {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return false;
+                return null;
             }
             var mods = GetInstalledModsInternal(game, false);
-            var descriptors = new List<IMod>();
+            var descriptors = new List<IModInstallationResult>();
             var userDirectoryMods = GetAllModDescriptors(Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory), ModSource.Local);
             if (userDirectoryMods?.Count() > 0)
             {
@@ -248,18 +259,20 @@ namespace IronyModManager.Services
             {
                 descriptors.AddRange(workshopDirectoryMods);
             }
-            var diffs = descriptors.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
+            var diffs = descriptors.Where(p => p.Mod != null && !mods.Any(m => m.DescriptorFile.Equals(p.Mod.DescriptorFile, StringComparison.OrdinalIgnoreCase))).ToList();
             if (diffs.Count > 0)
             {
+                var result = new List<IModInstallationResult>();
                 await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
                 {
                     RootDirectory = game.UserDirectory,
                     Path = Shared.Constants.ModDirectory
                 });
                 var tasks = new List<Task>();
-                foreach (var diff in diffs.GroupBy(p => p.DescriptorFile))
+                foreach (var diff in diffs.GroupBy(p => p.Mod.DescriptorFile))
                 {
-                    var localDiff = diff.FirstOrDefault();
+                    var installResult = diff.FirstOrDefault();
+                    var localDiff = diff.FirstOrDefault().Mod;
                     if (IsPatchModInternal(localDiff))
                     {
                         continue;
@@ -283,16 +296,25 @@ namespace IronyModManager.Services
                             LockDescriptor = shouldLock
                         }, IsPatchModInternal(localDiff)); ;
                     }));
+                    installResult.Installed = true;
+                    result.Add(installResult);
                 }
                 if (tasks.Count > 0)
                 {
                     await Task.WhenAll(tasks);
                     Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
                 }
-                return true;
+                if (descriptors.Any(p => p.Invalid))
+                {
+                    result.AddRange(descriptors.Where(p => p.Invalid));
+                }
+                return result;
             }
-
-            return false;
+            if (descriptors.Any(p => p.Invalid))
+            {
+                return descriptors.Where(p => p.Invalid).ToList();
+            }
+            return null;
         }
 
         /// <summary>
@@ -392,11 +414,11 @@ namespace IronyModManager.Services
         /// <param name="path">The path.</param>
         /// <param name="modSource">The mod source.</param>
         /// <returns>IEnumerable&lt;IMod&gt;.</returns>
-        protected virtual IEnumerable<IMod> GetAllModDescriptors(string path, ModSource modSource)
+        protected virtual IEnumerable<IModInstallationResult> GetAllModDescriptors(string path, ModSource modSource)
         {
             var files = Directory.Exists(path) ? Directory.EnumerateFiles(path, $"*{Shared.Constants.ZipExtension}").Union(Directory.EnumerateFiles(path, $"*{Shared.Constants.BinExtension}")) : Array.Empty<string>();
             var directories = Directory.Exists(path) ? Directory.EnumerateDirectories(path) : Array.Empty<string>();
-            var mods = new List<IMod>();
+            var mods = new List<IModInstallationResult>();
 
             static void setDescriptorPath(IMod mod, string desiredPath, string localPath)
             {
@@ -420,66 +442,77 @@ namespace IronyModManager.Services
 
             void parseModFiles(string path, ModSource source, bool isDirectory)
             {
-                var fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
-                if (fileInfo == null)
+                var result = GetModelInstance<IModInstallationResult>();
+                try
                 {
-                    fileInfo = Reader.GetFileInfo(path, $"*{Shared.Constants.ModExtension}");
+                    var fileInfo = Reader.GetFileInfo(path, Shared.Constants.DescriptorFile);
                     if (fileInfo == null)
                     {
-                        return;
-                    }
-                }
-                var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
-                mod.FileName = path.Replace("\\", "/");
-                mod.FullPath = path.StandardizeDirectorySeparator();
-                mod.IsLocked = fileInfo.IsReadOnly;
-                mod.Source = source;
-                var cleanedPath = path;
-                if (!isDirectory)
-                {
-                    cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
-                }
-
-                var localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
-                switch (mod.Source)
-                {
-                    case ModSource.Local:
-                        setDescriptorPath(mod, localPath, localPath);
-                        break;
-
-                    case ModSource.Steam:
-                        if (mod.RemoteId.GetValueOrDefault() == 0)
+                        fileInfo = Reader.GetFileInfo(path, $"*{Shared.Constants.ModExtension}");
+                        if (fileInfo == null)
                         {
+                            return;
+                        }
+                    }
+                    var mod = Mapper.Map<IMod>(ModParser.Parse(fileInfo.Content));
+                    mod.FileName = path.Replace("\\", "/");
+                    mod.FullPath = path.StandardizeDirectorySeparator();
+                    mod.IsLocked = fileInfo.IsReadOnly;
+                    mod.Source = source;
+                    var cleanedPath = path;
+                    if (!isDirectory)
+                    {
+                        cleanedPath = Path.Combine(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(path));
+                    }
+
+                    var localPath = $"{Shared.Constants.ModDirectory}/{cleanedPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).LastOrDefault()}{Shared.Constants.ModExtension}";
+                    switch (mod.Source)
+                    {
+                        case ModSource.Local:
+                            setDescriptorPath(mod, localPath, localPath);
+                            break;
+
+                        case ModSource.Steam:
+                            if (mod.RemoteId.GetValueOrDefault() == 0)
+                            {
+                                if (!isDirectory)
+                                {
+                                    var modParentDirectory = Path.GetDirectoryName(path);
+                                    mod.RemoteId = GetSteamModId(modParentDirectory, isDirectory);
+                                }
+                                else
+                                {
+                                    mod.RemoteId = GetSteamModId(path, isDirectory);
+                                }
+                            }
+                            setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
+                            break;
+
+                        case ModSource.Paradox:
                             if (!isDirectory)
                             {
                                 var modParentDirectory = Path.GetDirectoryName(path);
-                                mod.RemoteId = GetSteamModId(modParentDirectory, isDirectory);
+                                mod.RemoteId = GetPdxModId(modParentDirectory, isDirectory);
                             }
                             else
                             {
-                                mod.RemoteId = GetSteamModId(path, isDirectory);
+                                mod.RemoteId = GetPdxModId(path, isDirectory);
                             }
-                        }
-                        setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Steam_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
-                        break;
+                            setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
+                            break;
 
-                    case ModSource.Paradox:
-                        if (!isDirectory)
-                        {
-                            var modParentDirectory = Path.GetDirectoryName(path);
-                            mod.RemoteId = GetPdxModId(modParentDirectory, isDirectory);
-                        }
-                        else
-                        {
-                            mod.RemoteId = GetPdxModId(path, isDirectory);
-                        }
-                        setDescriptorPath(mod, $"{Shared.Constants.ModDirectory}/{Constants.Paradox_mod_id}{mod.RemoteId}{Shared.Constants.ModExtension}", localPath);
-                        break;
-
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
+                    result.Mod = mod;
                 }
-                mods.Add(mod);
+                catch (Exception ex)
+                {
+                    logger.Error(ex);
+                    result.Invalid = true;
+                }
+                result.Path = path;
+                mods.Add(result);
             }
             if (files.Any())
             {

@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="StandardMessageBox.xaml.cs" company="Mario">
 //     Mario
@@ -36,11 +36,12 @@ namespace IronyModManager.Controls.Themes
         /// Initializes a new instance of the <see cref="StandardMessageBox" /> class.
         /// </summary>
         /// <param name="style">The style.</param>
-        public StandardMessageBox(Style style)
+        /// <param name="buttonEnum">The button enum.</param>
+        public StandardMessageBox(Style style, ButtonEnum buttonEnum)
         {
             SetStyle(style);
             InitializeComponent();
-            SetCaptions();
+            SetCaptions(buttonEnum);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace IronyModManager.Controls.Themes
         public StandardMessageBox()
         {
             InitializeComponent();
-            SetCaptions();
+            SetCaptions(ButtonEnum.YesNo);
         }
 
         #endregion Constructors
@@ -67,7 +68,8 @@ namespace IronyModManager.Controls.Themes
         /// <summary>
         /// Sets the captions.
         /// </summary>
-        private void SetCaptions()
+        /// <param name="buttonEnum">The button enum.</param>
+        private void SetCaptions(ButtonEnum buttonEnum)
         {
             var yes = this.FindControl<Button>("yes");
             var no = this.FindControl<Button>("no");
@@ -76,7 +78,14 @@ namespace IronyModManager.Controls.Themes
             var locManager = DIResolver.Get<ILocalizationManager>();
             yes.Content = locManager.GetResource(LocalizationResources.Prompt.Yes);
             no.Content = locManager.GetResource(LocalizationResources.Prompt.No);
-            ok.Content = locManager.GetResource(LocalizationResources.Prompt.Confirm);
+            if (buttonEnum == ButtonEnum.Ok)
+            {
+                ok.Content = locManager.GetResource(LocalizationResources.Prompt.OK);
+            }
+            else
+            {
+                ok.Content = locManager.GetResource(LocalizationResources.Prompt.Confirm);
+            }
             cancel.Content = locManager.GetResource(LocalizationResources.Prompt.Cancel);
         }
 
