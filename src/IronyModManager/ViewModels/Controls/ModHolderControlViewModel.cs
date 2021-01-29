@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-03-2021
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,8 +13,8 @@
 // ***********************************************************************
 
 using System;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -152,6 +152,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod invalid replace handler
         /// </summary>
         private IDisposable modInvalidReplaceHandler = null;
+
+        /// <summary>
+        /// The showing invalid notification
+        /// </summary>
+        private bool showingInvalidNotification = false;
 
         #endregion Fields
 
@@ -504,9 +509,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual async Task EvalResumeAvailabilityLoopAsync()
         {
-            EvalResumeAvailability();
-            await Task.Delay(15000);
-            await EvalResumeAvailabilityLoopAsync();
+            while (true)
+            {
+                EvalResumeAvailability();
+                await Task.Delay(15000);
+            }
         }
 
         /// <summary>
@@ -514,11 +521,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         protected virtual async Task InstallModsAsync()
         {
-            if (await modService.InstallModsAsync(InstalledMods.Mods))
+            var result = await modService.InstallModsAsync(InstalledMods.Mods);
+            if (result != null)
             {
-                if (InstalledMods.IsActivated)
+                if (result.Any(p => p.Installed == true))
                 {
-                    InstalledMods.RefreshMods();
+                    if (InstalledMods.IsActivated)
+                    {
+                        InstalledMods.RefreshMods();
+                    }
+                }
+                if (result.Any(p => p.Invalid))
+                {
+                    await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
                 }
             }
         }
@@ -750,6 +765,24 @@ namespace IronyModManager.ViewModels.Controls
             EvalResumeAvailability(game);
             ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
             base.OnSelectedGameChanged(game);
+        }
+
+        /// <summary>
+        /// Shows the invalid mods notification asynchronous.
+        /// </summary>
+        /// <param name="mods">The mods.</param>
+        /// <returns>Task.</returns>
+        protected virtual async Task ShowInvalidModsNotificationAsync(IReadOnlyCollection<IModInstallationResult> mods)
+        {
+            var title = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Title);
+            var message = localizationManager.GetResource(LocalizationResources.InvalidModsDetected.Message).FormatSmart(new { Environment.NewLine, Mods = string.Join(Environment.NewLine, mods.Select(p => p.Path)) });
+
+            if (!showingInvalidNotification)
+            {
+                showingInvalidNotification = true;
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
+                showingInvalidNotification = false;
+            }
         }
 
         /// <summary>
