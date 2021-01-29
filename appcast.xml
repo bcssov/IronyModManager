@@ -4,84 +4,36 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.10.70</title>
-			<description>RELEASE INFO
-* Improve resume game detection availability
-* Fix cross thread access CTD
-* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
-
-CHANGES FROM v1.9:
-* Upgrade dependencies
-* Tweak basic conflict solver merge view
-* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
-* Improve version sort
-* Clear selection upon mod sort
-* Fix mod compare sort scroll
-* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
-* Allow ignore use to ignore partial definition name matches
-* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Fri, 22 Jan 2021 04:28:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/osx-x64.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="62973367" sparkle:os="osx" type="application/x-rar-compressed" sparkle:signature="gUDDPV97SskxON6pyIxVEa957obHp4HGXvYmpAdLBdulbcioUQXdtCqndPlaKw5PhHT3WrZx4dgzrMcfcFxXDQ=="/>
+			<title>1.11.27</title>
+			<description>CHANGES FROM v1.10:
+* Update dependencies
+* Add error message for mod zips which cannot be parsed</description>
+			<pubDate>Fri, 29 Jan 2021 21:05:18 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/osx-x64.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="63007699" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="vTcoQj2zxhH168L1mbJC+vV64m2EZQrlH9kc58nawcsGsAD2zFEyBS3Gga4J4BoCCKkYAi84Mwd10oil1psoDw=="/>
 		</item>
 		<item>
-			<title>1.10.70</title>
-			<description>RELEASE INFO
-* Improve resume game detection availability
-* Fix cross thread access CTD
-* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
-
-CHANGES FROM v1.9:
-* Upgrade dependencies
-* Tweak basic conflict solver merge view
-* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
-* Improve version sort
-* Clear selection upon mod sort
-* Fix mod compare sort scroll
-* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
-* Allow ignore use to ignore partial definition name matches
-* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Fri, 22 Jan 2021 04:29:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/win-x64-setup.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="54555440" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="YrsO81df4ljZxQ1sPTj8T70iXoCA/tqOuKVhjUD5gz4TnRX0QzoTDC68uB1rRGPqOGdiByc9aQi77G3dm9y0CQ=="/>
+			<title>1.11.27</title>
+			<description>CHANGES FROM v1.10:
+* Update dependencies
+* Add error message for mod zips which cannot be parsed</description>
+			<pubDate>Fri, 29 Jan 2021 21:05:25 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/win-x64-setup.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="54655962" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7Ei7E3QXUtvm3B994sVh/zEh87sm7icOkcDXxqRz99QR7BDLnk9bCTfiMZDWlj0igWJbVfWRfVO0h9fmTyFxDw=="/>
 		</item>
 		<item>
-			<title>1.10.70</title>
-			<description>RELEASE INFO
-* Improve resume game detection availability
-* Fix cross thread access CTD
-* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
-
-CHANGES FROM v1.9:
-* Upgrade dependencies
-* Tweak basic conflict solver merge view
-* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
-* Improve version sort
-* Clear selection upon mod sort
-* Fix mod compare sort scroll
-* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
-* Allow ignore use to ignore partial definition name matches
-* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Fri, 22 Jan 2021 04:29:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/win-x64.rar" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="65297816" sparkle:os="windows" type="application/x-rar-compressed" sparkle:signature="4JqNjJllMibOa3dlosH/zIitYESVrs/mfMSemtKWATo8M6n8lSA/jw3a6PAU7DNK+X2GAaRpxAaD2l0W86YkBQ=="/>
+			<title>1.11.27</title>
+			<description>CHANGES FROM v1.10:
+* Update dependencies
+* Add error message for mod zips which cannot be parsed</description>
+			<pubDate>Fri, 29 Jan 2021 21:05:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/win-x64.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="65421935" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kehAs+yELgawaCt4FHsByvQIX85T+ItRWuQFQMRuAbMfc0D3DSVNDkuXgr/Fq/pHQC6kJCi4kLocPMEv8xW4Ag=="/>
 		</item>
 		<item>
-			<title>1.10.70</title>
-			<description>RELEASE INFO
-* Improve resume game detection availability
-* Fix cross thread access CTD
-* Bypass very low ulimit on OSX by placing files in memory when using merge compress option
-
-CHANGES FROM v1.9:
-* Upgrade dependencies
-* Tweak basic conflict solver merge view
-* Add advanced merge "view" by allowing you to open diffs in external editor of your choice
-* Improve version sort
-* Clear selection upon mod sort
-* Fix mod compare sort scroll
-* Improved localization conflict detection and export (warning this is not backwards compatible and could reset a lot of resolved conflicts)
-* Allow ignore use to ignore partial definition name matches
-* Custom patches overriding existing mod files will be acknowledged by Irony and replaced during replacement phase and used instead of the source mod file</description>
-			<pubDate>Fri, 22 Jan 2021 04:28:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.10.70/linux-x64.zip" sparkle:version="1.10.70.63254" sparkle:shortVersionString="1.10.70" length="78505190" sparkle:os="linux" type="application/zip" sparkle:signature="91ST34oRMcBm66XtlNq8X7VknT3q+tFQErGwRyJmy5l+ku6sw18tQMSO4etnlcXePSbbPaFqE0JBB3Po/AynDA=="/>
+			<title>1.11.27</title>
+			<description>CHANGES FROM v1.10:
+* Update dependencies
+* Add error message for mod zips which cannot be parsed</description>
+			<pubDate>Fri, 29 Jan 2021 21:05:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/linux-x64.zip" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="78536404" sparkle:os="linux" type="application/zip" sparkle:signature="SlX/IdRluBKoLJ2g/Ij5e1b8K9LXCDRkQ8zt52kZphn/iK+MLVACnQ58dVYeNIjwNPh0kv9yaDXI+ajAOYo7BQ=="/>
 		</item>
 	</channel>
 </rss>
