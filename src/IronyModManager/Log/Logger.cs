@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-11-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="Logger.cs" company="Mario">
 //     Mario
@@ -26,12 +26,13 @@ namespace IronyModManager.Log
     [ExcludeFromCoverage("Exclude logger.")]
     public class Logger : Shared.ILogger
     {
-        #region Fields
-
         /// <summary>
         /// The log
         /// </summary>
-        protected static NLog.Logger log = LogManager.GetCurrentClassLogger();
+
+        #region Fields
+
+        protected static readonly NLog.Logger log = LogManager.GetCurrentClassLogger();
 
         #endregion Fields
 
@@ -79,6 +80,60 @@ namespace IronyModManager.Log
             {
                 log.Trace(message);
             }
+        }
+
+        /// <summary>
+        /// Determines whether [is debug enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is debug enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsDebugEnabled()
+        {
+            return log.IsDebugEnabled;
+        }
+
+        /// <summary>
+        /// Determines whether [is error enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is error enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsErrorEnabled()
+        {
+            return log.IsErrorEnabled;
+        }
+
+        /// <summary>
+        /// Determines whether [is fatal enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is fatal enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsFatalEnabled()
+        {
+            return log.IsFatalEnabled;
+        }
+
+        /// <summary>
+        /// Determines whether [is information enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is information enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsInfoEnabled()
+        {
+            return log.IsInfoEnabled;
+        }
+
+        /// <summary>
+        /// Determines whether [is trace enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is trace enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsTraceEnabled()
+        {
+            return log.IsTraceEnabled;
+        }
+
+        /// <summary>
+        /// Determines whether [is warn enabled].
+        /// </summary>
+        /// <returns><c>true</c> if [is warn enabled]; otherwise, <c>false</c>.</returns>
+        protected static bool IsWarnEnabled()
+        {
+            return log.IsWarnEnabled;
         }
 
         #endregion Methods
