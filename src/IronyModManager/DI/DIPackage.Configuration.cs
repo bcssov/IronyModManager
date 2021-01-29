@@ -4,7 +4,7 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Configuration.cs" company="Mario">
 //     Mario
@@ -28,13 +28,16 @@ namespace IronyModManager.DI
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
-        #region Methods
-
         /// <summary>
         /// Registers the configurations.
         /// </summary>
         /// <param name="container">The container.</param>
+#pragma warning disable CA1822 // Mark members as static
+
+        #region Methods
+
         private void RegisterConfigurations(Container container)
+#pragma warning restore CA1822 // Mark members as static
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

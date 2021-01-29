@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -92,8 +92,8 @@ namespace IronyModManager.Services.Common
         /// Installs the mods asynchronous.
         /// </summary>
         /// <param name="statusToRetain">The status to retain.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> InstallModsAsync(IEnumerable<IMod> statusToRetain);
+        /// <returns>Task&lt;IReadOnlyCollection&lt;IModInstallationResult&gt;&gt;.</returns>
+        Task<IReadOnlyCollection<IModInstallationResult>> InstallModsAsync(IEnumerable<IMod> statusToRetain);
 
         /// <summary>
         /// Locks the descriptors asynchronous.

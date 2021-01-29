@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -18,9 +18,11 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using IronyModManager.DI;
 using IronyModManager.Fonts;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using MsgBox = MessageBox.Avalonia;
 
 namespace IronyModManager.Implementation
@@ -32,37 +34,6 @@ namespace IronyModManager.Implementation
     public static class MessageBoxes
     {
         #region Methods
-
-        /// <summary>
-        /// Gets the confirm cancel window.
-        /// </summary>
-        /// <param name="title">The title.</param>
-        /// <param name="header">The header.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="icon">The icon.</param>
-        /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
-        public static MsgBox.BaseWindows.IMsBoxWindow<MsgBox.Enums.ButtonResult> GetConfirmCancelWindow(string title, string header, string message, MsgBox.Enums.Icon icon)
-        {
-            var parameters = new MessageBoxStandardParams()
-            {
-                CanResize = false,
-                ShowInCenter = true,
-                ContentTitle = title,
-                ContentHeader = header,
-                ContentMessage = message,
-                Icon = icon,
-                ButtonDefinitions = MsgBox.Enums.ButtonEnum.OkCancel,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-            var font = ResolveFont();
-
-            var window = new Controls.Themes.StandardMessageBox(parameters.Style);
-            parameters.Window = window;
-            window.Icon = StaticResources.GetAppIcon();
-            window.FontFamily = font.GetFontFamily();
-            window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
-            return new StandardMessageBox(window);
-        }
 
         /// <summary>
         /// Gets the fatal error window.
@@ -114,15 +85,22 @@ namespace IronyModManager.Implementation
         }
 
         /// <summary>
-        /// Gets the yes no window.
+        /// Gets the confirm cancel window.
         /// </summary>
         /// <param name="title">The title.</param>
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <param name="icon">The icon.</param>
-        /// <returns>MessageBox.Avalonia.BaseWindows.MsBoxStandardWindow.</returns>
-        public static MsgBox.BaseWindows.IMsBoxWindow<MsgBox.Enums.ButtonResult> GetYesNoWindow(string title, string header, string message, MsgBox.Enums.Icon icon)
+        /// <param name="promptyType">Type of the prompty.</param>
+        /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
+        public static MsgBox.BaseWindows.IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
         {
+            var buttonEnum = promptyType switch
+            {
+                PromptType.ConfirmCancel => ButtonEnum.OkCancel,
+                PromptType.OK => ButtonEnum.Ok,
+                _ => ButtonEnum.YesNo,
+            };
             var parameters = new MessageBoxStandardParams()
             {
                 CanResize = false,
@@ -131,12 +109,12 @@ namespace IronyModManager.Implementation
                 ContentHeader = header,
                 ContentMessage = message,
                 Icon = icon,
-                ButtonDefinitions = MsgBox.Enums.ButtonEnum.YesNo,
+                ButtonDefinitions = buttonEnum,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             var font = ResolveFont();
 
-            var window = new Controls.Themes.StandardMessageBox(parameters.Style);
+            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum);
             parameters.Window = window;
             window.Icon = StaticResources.GetAppIcon();
             window.FontFamily = font.GetFontFamily();

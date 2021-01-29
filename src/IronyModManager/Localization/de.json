@@ -21,7 +21,12 @@
         "Title": "Fehler speichern",
         "Message": "Etwas scheint Ironys Fähigkeit zu blockieren, in Mod-Dateien zu schreiben. Bitte melden Sie dies im GitHub Issue Tracker und veröffentlichen Sie das Fehlerprotokoll."
     },
+    "InvalidModsDetected": {
+        "Title": "Ungültige Mods erkannt",
+        "Message": "Die folgenden Mod-Speicherorte konnten aufgrund ungültiger Archive oder gesperrter Dateien nicht analysiert werden:{NewLine}{Mods}"
+    },
     "Prompt": {
+        "OK": "OK",
         "Yes": "Ja",
         "No": "Nein",
         "Confirm": "Bestätigen",

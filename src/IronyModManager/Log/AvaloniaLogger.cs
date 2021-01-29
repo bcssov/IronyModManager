@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-20-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -37,11 +37,16 @@ namespace IronyModManager.Log
         /// <returns><c>true</c> if the specified level is enabled; otherwise, <c>false</c>.</returns>
         public bool IsEnabled(LogEventLevel level)
         {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
+            return level switch
+            {
+                LogEventLevel.Verbose => IsTraceEnabled(),
+                LogEventLevel.Debug => IsDebugEnabled(),
+                LogEventLevel.Information => IsInfoEnabled(),
+                LogEventLevel.Warning => IsWarnEnabled(),
+                LogEventLevel.Error => IsErrorEnabled(),
+                LogEventLevel.Fatal => IsFatalEnabled(),
+                _ => false,
+            };
         }
 
         /// <summary>
@@ -127,7 +132,7 @@ namespace IronyModManager.Log
         /// </summary>
         /// <param name="level">The level.</param>
         /// <returns>NLog.LogLevel.</returns>
-        private NLog.LogLevel MapLogLevel(LogEventLevel level)
+        private static NLog.LogLevel MapLogLevel(LogEventLevel level)
         {
             var mappedLevel = NLog.LogLevel.Debug;
             switch (level)

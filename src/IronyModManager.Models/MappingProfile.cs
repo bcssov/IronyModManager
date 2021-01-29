@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -52,6 +52,7 @@ namespace IronyModManager.Models
             CreateMap<IModHashFileReport, ModHashFileReport>().ReverseMap();
             CreateMap<IModHashReport, ModHashReport>().ReverseMap();
             CreateMap<IExternalEditor, ExternalEditor>().ReverseMap();
+            CreateMap<IModInstallationResult, ModInstallationResult>().ReverseMap();
         }
 
         #endregion Constructors

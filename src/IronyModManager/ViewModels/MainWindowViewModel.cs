@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -276,64 +276,66 @@ namespace IronyModManager.ViewModels
                     HasProgress = !string.IsNullOrWhiteSpace(e.MessageProgress);
                 }
             }
-            await Task.Delay(2);
-            lock (queueLock)
+            while (true)
             {
-                var now = DateTime.Now;
-                if (overlayStack.Any(p => now >= p.DateAdded) && currentMessageId.HasValue)
+                await Task.Delay(2);
+                lock (queueLock)
                 {
-                    var overlays = overlayStack.Where(p => now >= p.DateAdded && p.Event.Id == currentMessageId.GetValueOrDefault()).OrderBy(p => p.DateAdded).ToList();
-                    if (overlays.Count() > 0)
+                    var now = DateTime.Now;
+                    if (overlayStack.Any(p => now >= p.DateAdded) && currentMessageId.HasValue)
                     {
-                        OverlayQueue overlay = null;
-                        if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
+                        var overlays = overlayStack.Where(p => now >= p.DateAdded && p.Event.Id == currentMessageId.GetValueOrDefault()).OrderBy(p => p.DateAdded).ToList();
+                        if (overlays.Count > 0)
                         {
-                            if (overlays.Any(p => p.Event.IsVisible == false))
+                            OverlayQueue overlay = null;
+                            if (overlays.Any(p => p.Event.IsVisible != OverlayVisible))
                             {
-                                overlayStack.RemoveAll(p => p.Event.Id <= currentMessageId.GetValueOrDefault());
-                                if (overlayStack.Count > 0)
+                                if (overlays.Any(p => p.Event.IsVisible == false))
                                 {
-                                    currentMessageId = overlayStack.OrderByDescending(p => p.Event.Id).FirstOrDefault().Event.Id;
+                                    overlayStack.RemoveAll(p => p.Event.Id <= currentMessageId.GetValueOrDefault());
+                                    if (overlayStack.Count > 0)
+                                    {
+                                        currentMessageId = overlayStack.OrderByDescending(p => p.Event.Id).FirstOrDefault().Event.Id;
+                                    }
+                                    else
+                                    {
+                                        currentMessageId = null;
+                                    }
+                                    if (currentMessageId.HasValue)
+                                    {
+                                        lastMessageId = currentMessageId.GetValueOrDefault();
+                                    }
+                                    else
+                                    {
+                                        lastMessageId++;
+                                    }
+                                    overlay = overlays.FirstOrDefault(p => p.Event.IsVisible == false);
                                 }
                                 else
                                 {
-                                    currentMessageId = null;
+                                    overlay = overlays.FirstOrDefault(p => p.Event.IsVisible != OverlayVisible);
+                                    if (overlay != null)
+                                    {
+                                        overlayStack.Remove(overlay);
+                                    }
                                 }
-                                if (currentMessageId.HasValue)
-                                {
-                                    lastMessageId = currentMessageId.GetValueOrDefault();
-                                }
-                                else
-                                {
-                                    lastMessageId++;
-                                }
-                                overlay = overlays.FirstOrDefault(p => p.Event.IsVisible == false);
                             }
                             else
                             {
-                                overlay = overlays.FirstOrDefault(p => p.Event.IsVisible != OverlayVisible);
-                                if (overlay != null)
+                                foreach (var item in overlays)
                                 {
-                                    overlayStack.Remove(overlay);
+                                    overlayStack.Remove(item);
                                 }
+                                overlay = overlays.LastOrDefault();
                             }
-                        }
-                        else
-                        {
-                            foreach (var item in overlays)
+                            if (overlay != null)
                             {
-                                overlayStack.Remove(item);
+                                setOverlayProperties(overlay.Event);
                             }
-                            overlay = overlays.LastOrDefault();
-                        }
-                        if (overlay != null)
-                        {
-                            setOverlayProperties(overlay.Event);
                         }
                     }
                 }
             }
-            await OverlayLoopAsync();
         }
 
         /// <summary>

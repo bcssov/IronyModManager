@@ -62,7 +62,7 @@ namespace IronyModManager.Services.Tests
              Mock<IReader> reader, Mock<IMapper> mapper, Mock<IModWriter> modWriter,
             Mock<IGameService> gameService)
         {
-            return new ModService(new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
+            return new ModService(null, new Cache(), null, reader.Object, modParser.Object, modWriter.Object, gameService.Object, storageProvider.Object, mapper.Object);
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace IronyModManager.Services.Tests
             gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
 
             var result = await service.InstallModsAsync(null);
-            result.Should().BeFalse();
+            result.Should().BeNull();
         }
 
         /// <summary>
@@ -458,7 +458,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var result = await service.InstallModsAsync(null);
-            result.Should().BeFalse();
+            result.Should().BeNull();
         }
 
         /// <summary>
@@ -516,7 +516,7 @@ namespace IronyModManager.Services.Tests
              });
 
             var result = await service.InstallModsAsync(null);
-            result.Should().BeTrue();
+            result.Count.Should().BeGreaterThan(0);
         }
 
         [Fact]
@@ -583,7 +583,7 @@ namespace IronyModManager.Services.Tests
                 DescriptorFile = "mod/fake.mod",
                 IsLocked = true
             }}); ;
-            result.Should().BeTrue();
+            result.Count.Should().BeGreaterThan(0);
             lockSet.Should().BeTrue();
         }
 

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-02-2020
+// Last Modified On : 01-29-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Avalonia.cs" company="Mario">
 //     Mario
@@ -29,13 +29,16 @@ namespace IronyModManager.DI
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
-        #region Methods
-
         /// <summary>
         /// Registers the avalonia services.
         /// </summary>
         /// <param name="container">The container.</param>
+#pragma warning disable CA1822 // Mark members as static
+
+        #region Methods
+
         private void RegisterAvaloniaServices(Container container)
+#pragma warning restore CA1822 // Mark members as static
         {
             var viewFetcher = new AvaloniaActivationForViewFetcher();
             var dataTemplate = new AutoDataTemplateBindingHook();
