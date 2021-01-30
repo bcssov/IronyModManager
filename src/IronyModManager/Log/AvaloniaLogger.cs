@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 01-30-2021
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -14,7 +14,9 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Logging;
+using IronyModManager.DI;
 using IronyModManager.Shared;
+using Microsoft.Extensions.Configuration;
 
 namespace IronyModManager.Log
 {
@@ -28,6 +30,15 @@ namespace IronyModManager.Log
     [ExcludeFromCoverage("Exclude logger.")]
     public class AvaloniaLogger : Logger, ILogSink
     {
+        #region Fields
+
+        /// <summary>
+        /// The logging allowed
+        /// </summary>
+        private bool? loggingAllowed;
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -37,16 +48,25 @@ namespace IronyModManager.Log
         /// <returns><c>true</c> if the specified level is enabled; otherwise, <c>false</c>.</returns>
         public bool IsEnabled(LogEventLevel level)
         {
-            return level switch
+            if (!loggingAllowed.HasValue)
             {
-                LogEventLevel.Verbose => IsTraceEnabled(),
-                LogEventLevel.Debug => IsDebugEnabled(),
-                LogEventLevel.Information => IsInfoEnabled(),
-                LogEventLevel.Warning => IsWarnEnabled(),
-                LogEventLevel.Error => IsErrorEnabled(),
-                LogEventLevel.Fatal => IsFatalEnabled(),
-                _ => false,
-            };
+                var configuration = DIResolver.Get<IConfigurationRoot>();
+                loggingAllowed = configuration.GetSection("Logging").GetSection("EnableAvaloniaLogger").Get<bool?>().GetValueOrDefault();
+            }
+            if (loggingAllowed.GetValueOrDefault())
+            {
+                return level switch
+                {
+                    LogEventLevel.Verbose => IsTraceEnabled(),
+                    LogEventLevel.Debug => IsDebugEnabled(),
+                    LogEventLevel.Information => IsInfoEnabled(),
+                    LogEventLevel.Warning => IsWarnEnabled(),
+                    LogEventLevel.Error => IsErrorEnabled(),
+                    LogEventLevel.Fatal => IsFatalEnabled(),
+                    _ => false,
+                };
+            }
+            return false;
         }
 
         /// <summary>
