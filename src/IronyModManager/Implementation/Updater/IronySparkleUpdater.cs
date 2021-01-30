@@ -4,7 +4,7 @@
 // Created          : 09-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 01-30-2021
 // ***********************************************************************
 // <copyright file="IronySparkleUpdater.cs" company="Mario">
 //     Mario
@@ -57,6 +57,7 @@ namespace IronyModManager.Implementation.Updater
         public IronySparkleUpdater(bool isInstallerVersion, IUpdaterService updaterService, IAppAction appAction) :
             base(Constants.AppCastAddress, new Ed25519Checker(NetSparkleUpdater.Enums.SecurityMode.OnlyVerifySoftwareDownloads, Constants.PublicUpdateKey))
         {
+            CheckServerFileName = false; // Any more breaking changes?
             IsInstallerVersion = isInstallerVersion;
             this.updaterService = updaterService;
             this.appAction = appAction;
