@@ -4,36 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.11.27</title>
-			<description>CHANGES FROM v1.10:
+			<title>1.11.30</title>
+			<description>NOTE:
+Auto update was broken by an external component breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO:
+* Fix broken auto update due to breaking change in external component
+* Disable too verbose avalonia logger (still can be turned on via appSettings)
+
+CHANGES FROM v1.10:
 * Update dependencies
-* Add error message for mod zips which cannot be parsed</description>
-			<pubDate>Fri, 29 Jan 2021 21:05:18 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/osx-x64.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="63007699" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="vTcoQj2zxhH168L1mbJC+vV64m2EZQrlH9kc58nawcsGsAD2zFEyBS3Gga4J4BoCCKkYAi84Mwd10oil1psoDw=="/>
+* Add error message for mod zips which cannot be parsed
+</description>
+			<pubDate>Sat, 30 Jan 2021 04:35:26 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/osx-x64.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="63018764" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="aRlVOfywOkAGZaTj5xSnL56ggl07uI/9+FIqMAHkd6gg8YHtUeu+9PgKKGfsS1RXtVmhtZa6PWUCjvyya2SRCA=="/>
 		</item>
 		<item>
-			<title>1.11.27</title>
-			<description>CHANGES FROM v1.10:
+			<title>1.11.30</title>
+			<description>NOTE:
+Auto update was broken by an external component breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO:
+* Fix broken auto update due to breaking change in external component
+* Disable too verbose avalonia logger (still can be turned on via appSettings)
+
+CHANGES FROM v1.10:
 * Update dependencies
-* Add error message for mod zips which cannot be parsed</description>
-			<pubDate>Fri, 29 Jan 2021 21:05:25 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/win-x64-setup.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="54655962" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7Ei7E3QXUtvm3B994sVh/zEh87sm7icOkcDXxqRz99QR7BDLnk9bCTfiMZDWlj0igWJbVfWRfVO0h9fmTyFxDw=="/>
+* Add error message for mod zips which cannot be parsed
+</description>
+			<pubDate>Sat, 30 Jan 2021 04:35:32 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/win-x64-setup.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="54678223" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="tXJHcnZpUMi1BF3oz5NKzm99OESkgOiq8TYxrEJ/uGQxGA4VgvdMmcyZ+CX+BMnuh1pe/SJyArIQl9Tz4yHKDQ=="/>
 		</item>
 		<item>
-			<title>1.11.27</title>
-			<description>CHANGES FROM v1.10:
+			<title>1.11.30</title>
+			<description>NOTE:
+Auto update was broken by an external component breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO:
+* Fix broken auto update due to breaking change in external component
+* Disable too verbose avalonia logger (still can be turned on via appSettings)
+
+CHANGES FROM v1.10:
 * Update dependencies
-* Add error message for mod zips which cannot be parsed</description>
-			<pubDate>Fri, 29 Jan 2021 21:05:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/win-x64.rar" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="65421935" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kehAs+yELgawaCt4FHsByvQIX85T+ItRWuQFQMRuAbMfc0D3DSVNDkuXgr/Fq/pHQC6kJCi4kLocPMEv8xW4Ag=="/>
+* Add error message for mod zips which cannot be parsed
+</description>
+			<pubDate>Sat, 30 Jan 2021 04:35:29 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/win-x64.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="65433044" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="wRFSXNH0br90klCxS+0/gyI9I+eqn7F2jbliChyI4vudx2ivuz80V3NjQSGoDmlyV1k7AOTosmpJYpQ4WlbbAg=="/>
 		</item>
 		<item>
-			<title>1.11.27</title>
-			<description>CHANGES FROM v1.10:
+			<title>1.11.30</title>
+			<description>NOTE:
+Auto update was broken by an external component breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO:
+* Fix broken auto update due to breaking change in external component
+* Disable too verbose avalonia logger (still can be turned on via appSettings)
+
+CHANGES FROM v1.10:
 * Update dependencies
-* Add error message for mod zips which cannot be parsed</description>
-			<pubDate>Fri, 29 Jan 2021 21:05:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.27/linux-x64.zip" sparkle:version="1.11.27.45976" sparkle:shortVersionString="1.11.27" length="78536404" sparkle:os="linux" type="application/zip" sparkle:signature="SlX/IdRluBKoLJ2g/Ij5e1b8K9LXCDRkQ8zt52kZphn/iK+MLVACnQ58dVYeNIjwNPh0kv9yaDXI+ajAOYo7BQ=="/>
+* Add error message for mod zips which cannot be parsed
+</description>
+			<pubDate>Sat, 30 Jan 2021 04:35:24 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/linux-x64.zip" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="78543451" sparkle:os="linux" type="application/zip" sparkle:signature="Wk+EBcFdECCql1TtTBNUN3jiZ22dUY5SzHCEJYiF4PkwE+eIxuqq0QYzqUY8W677mcEk2q8fZhXcSsJ7+ZvXCg=="/>
 		</item>
 	</channel>
 </rss>
