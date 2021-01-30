@@ -9,11 +9,11 @@ Irony Mod Manager is a new advanced mod manager for Paradox Games, it started ou
 
 Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyModManager/wiki).
 
-### Important Notice about Paradox Launcher 2020.10
-Download Irony >= v1.4 if you're using Paradox Launcher >= 2020.10.
+### Autoupdate notice
+Auto update was broken by an external component breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 ### Download
-* Latest stable version: [v1.11.27](https://github.com/bcssov/IronyModManager/releases/tag/v1.11.27)
+* Latest stable version: [v1.11.30](https://github.com/bcssov/IronyModManager/releases/tag/v1.11.30)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
