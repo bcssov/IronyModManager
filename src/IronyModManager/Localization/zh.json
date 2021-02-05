@@ -1,4 +1,4 @@
-﻿{
+{
     "App": {
         "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
         "Title": "Irony 模组管理器：v{AppVersion}",
@@ -19,11 +19,11 @@
     },
     "SavingError": {
         "Title": "保存失败",
-        "Message": "Irony 无法写入模组文件，请将这个错误发送至 GitHub Issue 并附上错误日志"
+        "Message": "Irony 无法写入模组文件，请将该错误发送至 GitHub Issue 并附上错误日志。"
     },
     "InvalidModsDetected": {
-        "Title": "检测到无效的Mod",
-        "Message": "由于无效的存档或锁定的文件，无法解析以下mod位置：{NewLine}{Mods}"
+        "Title": "检测到无效模组",
+        "Message": "由于无效的存档或锁定的文件，无法解析以下模组位置：{NewLine}{Mods}"
     },
     "Prompt": {
         "OK": "好",
@@ -58,12 +58,12 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
-        "MaterialDark": "Material 暗色",
-        "MaterialLightGreen": "Material 亮绿",
-        "MaterialDeepPurple": "Material 深紫",
+        "MaterialDark": "暗色质感",
+        "MaterialLightGreen": "亮绿质感",
+        "MaterialDeepPurple": "深紫质感",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
-        "Restart_Message": "应用程序需要重启来应用新的主题。是否现在重启？"
+        "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"
     },
     "Games": {
         "Name": "游戏",
@@ -203,13 +203,13 @@
             },
             "NotSet": {
                 "Title": "找不到游戏",
-                "Message": "游戏自动检测失败，请在“选项”窗口中手动设置游戏可执行文件的路径"
+                "Message": "游戏自动检测失败，请在“选项”窗口中手动设置游戏可执行文件路径。"
             }
         }
     },
     "Conflict_Solver": {
         "Back": "返回",
-        "ConflictedObjects": "冲突的对象",
+        "ConflictedObjects": "冲突对象",
         "LeftSide": "左侧",
         "RightSide": "右侧",
         "BinaryFile": "二进制文件",
@@ -352,7 +352,7 @@
             },
             "UpdateNotification": {
                 "Title": "检测到更新",
-                "Message": "在“选项”窗口查看更新详情，或点击此消息"
+                "Message": "在“选项”窗口查看更新详情，或点击此消息。"
             }
         },
         "Dialog": {
@@ -384,15 +384,15 @@
             "Message": "{CollectionName} 已导出。"
         },
         "CollectionImported": {
-            "Title": "已导入合集",
+            "Title": "合集已导入",
             "Message": "{CollectionName} 已导入。"
         },
         "CollectionApplied": {
-            "Title": "合集已加载",
+            "Title": "合集已应用",
             "Message": "{CollectionName} 已加载。"
         },
         "CollectionNotApplied": {
-            "Title": "没有加载",
+            "Title": "合集未应用",
             "Message": "{CollectionName} 未加载。"
         },
         "DescriptorsRefreshed": {
@@ -400,16 +400,16 @@
             "Message": "描述文件已刷新。"
         },
         "DescriptorsLocked": {
-            "Title": "描述文件已被锁定",
-            "Message": "描述文件已被锁定。"
+            "Title": "描述文件已锁定",
+            "Message": "描述文件已锁定。"
         },
         "DescriptorsUnlocked": {
-            "Title": "描述文件已被解锁",
-            "Message": "描述文件已被解锁。"
+            "Title": "描述文件已解锁",
+            "Message": "描述文件已解锁。"
         },
         "NewDescriptorsChecked": {
-            "Title": "检查新模组完成",
-            "Message": "检查新模组完成。"
+            "Title": "新模组检查完成",
+            "Message": "新模组检查完成。"
         },
         "CollectionRenamed": {
             "Title": "已重命名合集",
@@ -424,24 +424,24 @@
             "Message": "合集已合并。"
         },
         "ConflictSolverUpdate": {
-            "Title": "冲突处理器刷新",
-            "Message": "模组或自定义补丁已更新，冲突处理器需要重新运行以刷新数据。"
+            "Title": "刷新冲突处理器",
+            "Message": "一个或多个模组已更新。需刷新冲突处理器。"
         },
         "NoUpdatesAvailable": {
-            "Title": "没有更新",
-            "Message": "没有可用更新。"
+            "Title": "无更新",
+            "Message": "无可用更新。"
         },
         "ReportExported": {
             "Title": "报告已导出",
             "Message": "报告已导出。"
         },
         "ReportValid": {
-            "Title": "文件指纹匹配",
-            "Message": "所有文件指纹似乎均匹配。"
+            "Title": "文件哈希值匹配",
+            "Message": "所有文件哈希值均匹配。"
         },
         "CustomPatchRerunConflictSolver": {
-            "Title": "冲突解决刷新",
-            "Message": "需要刷新冲突解决程序，以考虑添加的新自定义补丁程序。请重新运行冲突解决程序。"
+            "Title": "刷新冲突处理器",
+            "Message": "因添加新自定义补丁，需要刷新冲突处理器。请重新运行冲突处理器。"
         }
     },
     "Mod_App_Actions": {
@@ -453,11 +453,11 @@
     "Descriptor_Actions": {
         "CheckNew": "检查新模组",
         "Delete": "删除并重载",
-        "Delete_All": "删除并重载所有",
+        "Delete_All": "全部删除并重载",
         "Lock": "锁定",
-        "Lock_All": "锁定所有",
+        "Lock_All": "全部锁定",
         "Unlock": "解锁",
-        "Unlock_All": "解锁所有"
+        "Unlock_All": "全部解锁"
     },
     "Achievements": {
         "AchievementCompatible": "模组兼容成就",
