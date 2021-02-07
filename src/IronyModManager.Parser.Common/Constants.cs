@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-07-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -280,6 +280,11 @@ namespace IronyModManager.Parser.Common
             public static readonly string MapGalaxy = MergePath("map", "galaxy");
 
             /// <summary>
+            /// The map setup scenarios
+            /// </summary>
+            public static readonly string MapSetupScenarios = MergePath("map", "setup_scenarios");
+
+            /// <summary>
             /// The name lists
             /// </summary>
             public static readonly string NameLists = MergePath(CommonPath, "name_lists");
@@ -315,11 +320,6 @@ namespace IronyModManager.Parser.Common
             public static readonly string ScriptedVariables = MergePath(CommonPath, "scripted_variables");
 
             /// <summary>
-            /// The start screen messages
-            /// </summary>
-            public static readonly string StartScreenMessages = MergePath(CommonPath, "start_screen_messages");
-
-            /// <summary>
             /// The solar system initializers
             /// </summary>
             public static readonly string SolarSystemInitializers = MergePath(CommonPath, "solar_system_initializers");
@@ -328,6 +328,11 @@ namespace IronyModManager.Parser.Common
             /// The species names
             /// </summary>
             public static readonly string SpeciesNames = MergePath(CommonPath, "species_names");
+
+            /// <summary>
+            /// The start screen messages
+            /// </summary>
+            public static readonly string StartScreenMessages = MergePath(CommonPath, "start_screen_messages");
 
             /// <summary>
             /// The terraform

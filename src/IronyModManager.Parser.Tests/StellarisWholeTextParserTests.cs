@@ -4,7 +4,7 @@
 // Created          : 02-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-11-2020
+// Last Modified On : 02-07-2021
 // ***********************************************************************
 // <copyright file="StellarisWholeTextParserTests.cs" company="Mario">
 //     Mario
@@ -195,6 +195,21 @@ namespace IronyModManager.Parser.Tests
             };
             var parser = new WholeTextParser(new CodeParser(new Logger()), null);
             parser.CanParse(args).Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method CanParse_map_setup_scenarios_should_be_true.
+        /// </summary>
+        [Fact]
+        public void CanParse_map_setup_scenarios_should_be_true()
+        {
+            var args = new CanParseArgs()
+            {
+                File = "map\\setup_scenarios\\test.txt",
+                GameType = "Stellaris"
+            };
+            var parser = new WholeTextParser(new CodeParser(new Logger()), null);
+            parser.CanParse(args).Should().BeTrue();
         }
 
         /// <summary>
