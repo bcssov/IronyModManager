@@ -4,68 +4,68 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.11.30</title>
+			<title>1.11.33</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix broken auto update due to breaking change in external component
-* Disable too verbose avalonia logger (still can be turned on via appSettings)
+* Updates chinese translation (by LunarTraveller)
+* Treat setup_scenarios as whole file conflicts
 
 CHANGES FROM v1.10:
 * Update dependencies
 * Add error message for mod zips which cannot be parsed
 </description>
-			<pubDate>Sat, 30 Jan 2021 04:35:26 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/osx-x64.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="63018764" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="aRlVOfywOkAGZaTj5xSnL56ggl07uI/9+FIqMAHkd6gg8YHtUeu+9PgKKGfsS1RXtVmhtZa6PWUCjvyya2SRCA=="/>
+			<pubDate>Tue, 09 Feb 2021 19:48:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/osx-x64.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="63018647" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="MdGL/F7sUW5q+0A2O69SUWvwlqM0djIyNQ0yDmbxNk1sdEhSrGOic4bwQ8InxleXOkWKB/rGATPUfNzDlSC/Ag=="/>
 		</item>
 		<item>
-			<title>1.11.30</title>
+			<title>1.11.33</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix broken auto update due to breaking change in external component
-* Disable too verbose avalonia logger (still can be turned on via appSettings)
+* Updates chinese translation (by LunarTraveller)
+* Treat setup_scenarios as whole file conflicts
 
 CHANGES FROM v1.10:
 * Update dependencies
 * Add error message for mod zips which cannot be parsed
 </description>
-			<pubDate>Sat, 30 Jan 2021 04:35:32 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/win-x64-setup.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="54678223" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="tXJHcnZpUMi1BF3oz5NKzm99OESkgOiq8TYxrEJ/uGQxGA4VgvdMmcyZ+CX+BMnuh1pe/SJyArIQl9Tz4yHKDQ=="/>
+			<pubDate>Tue, 09 Feb 2021 19:48:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/win-x64-setup.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="54673649" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="wXEyWVdbFeo8wV7rcp1cYv/i5OZ4s0VsFu447N4pVvX/aw9hPspznv/SKmmV4T1NZLxoyIvYRROW+KSPYhQaAg=="/>
 		</item>
 		<item>
-			<title>1.11.30</title>
+			<title>1.11.33</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix broken auto update due to breaking change in external component
-* Disable too verbose avalonia logger (still can be turned on via appSettings)
+* Updates chinese translation (by LunarTraveller)
+* Treat setup_scenarios as whole file conflicts
 
 CHANGES FROM v1.10:
 * Update dependencies
 * Add error message for mod zips which cannot be parsed
 </description>
-			<pubDate>Sat, 30 Jan 2021 04:35:29 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/win-x64.rar" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="65433044" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="wRFSXNH0br90klCxS+0/gyI9I+eqn7F2jbliChyI4vudx2ivuz80V3NjQSGoDmlyV1k7AOTosmpJYpQ4WlbbAg=="/>
+			<pubDate>Tue, 09 Feb 2021 19:48:17 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/win-x64.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="65432427" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vgjz3ewS+bvmepXZx0t0G6L1Pu4MRhfzUwq9HFhBQpBILxOysMj0E/kpfn17w4KNCDkZpO84YuIpYevn/BQmCg=="/>
 		</item>
 		<item>
-			<title>1.11.30</title>
+			<title>1.11.33</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix broken auto update due to breaking change in external component
-* Disable too verbose avalonia logger (still can be turned on via appSettings)
+* Updates chinese translation (by LunarTraveller)
+* Treat setup_scenarios as whole file conflicts
 
 CHANGES FROM v1.10:
 * Update dependencies
 * Add error message for mod zips which cannot be parsed
 </description>
-			<pubDate>Sat, 30 Jan 2021 04:35:24 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.30/linux-x64.zip" sparkle:version="1.11.30.20568" sparkle:shortVersionString="1.11.30" length="78543451" sparkle:os="linux" type="application/zip" sparkle:signature="Wk+EBcFdECCql1TtTBNUN3jiZ22dUY5SzHCEJYiF4PkwE+eIxuqq0QYzqUY8W677mcEk2q8fZhXcSsJ7+ZvXCg=="/>
+			<pubDate>Tue, 09 Feb 2021 19:48:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/linux-x64.zip" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="78543490" sparkle:os="linux" type="application/zip" sparkle:signature="ISHAD0pMsYlW+uVckPeDakInJ5EWc3PVKjpLkAdjNBkHObm1hWxKyHNNiAqhiS7pGlPWCF57cNyw9V0mjeNDBg=="/>
 		</item>
 	</channel>
 </rss>
