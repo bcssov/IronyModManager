@@ -1,0 +1,475 @@
+﻿{
+    "App": {
+        "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
+        "Title": "Irony Mod Manager: v{AppVersion}",
+        "BackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano. La aplicación se cerrará una vez que se complete ...",
+        "WaitBackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano.",
+        "Shortcuts": {
+            "Name": "Atajos",
+            "Wiki": "Wiki",
+            "Logs": "Logs",
+            "ErrorLog": "Error.log",
+            "Close": "Cerrar"
+        }
+    },
+    "FatalError": {
+        "Message": "Ocurrió un error no manejado. La aplicación se cerrará automáticamente.",
+        "Title": "Error",
+        "Header": "Error Fatal"
+    },
+    "SavingError": {
+        "Title": "Guardar Error",
+        "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
+    },
+    "InvalidModsDetected": {
+        "Title": "Mods no válidos detectados",
+        "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados: {NewLine} {Mods}"
+    },
+    "Prompt": {
+        "OK": "OK",
+        "Yes": "Si",
+        "No": "No",
+        "Confirm": "Confirmar",
+        "Cancel": "Cancelar"
+    },
+    "FileDialog": {
+        "FileName": "Nombre del Archovo",
+        "ShowHiddenFiles": "Mostrar Archivos Ocultos",
+        "Volume": "{Tamaño} Tamaño",
+        "OK": "OK",
+        "Cancel": "Cancelar",
+        "Name": "Nombre",
+        "DateModified": "Fecha Modificada",
+        "Type": "Tipo",
+        "Size": "Tamaño",
+        "Folders": {
+            "Downloads": "Descargas",
+            "Desktop": "Escritorio",
+            "Documents": "Documentos",
+            "Music": "Música",
+            "Videos": "Videos",
+            "Pictures": "Imagenes"
+        }
+    },
+    "Languages": {
+        "Name": "Idioma"
+    },
+    "Themes": {
+        "Name": "Tema",
+        "Light": "Claro",
+        "Dark": "Oscuro",
+        "MaterialDark": "Material Oscuro",
+        "MaterialLightGreen": "Material Verde Claro",
+        "MaterialDeepPurple": "Material Morado Oscuro",
+        "Restart_Title": "Necesita Reinicio",
+        "Restart_Header": "Aplicación Necesita Reinicio",
+        "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
+    },
+    "Games": {
+        "Name": "Juego",
+        "Stellaris": "Stellaris",
+        "EuropaUniversalisIV": "Europa Universalis IV",
+        "HeartsofIronIV": "Hearts of Iron IV",
+        "ImperatorRome": "Imperator Rome",
+        "CrusaderKings3": "Crusader Kings III"
+    },
+    "Installed_Mods": {
+        "Name": "Mods Instalados",
+        "Filter": "Filtro de Mods",
+        "Selected": "Seleccionado",
+        "Mod_Name": "Nombre Mod",
+        "Supported_Version": "Versión Soportada",
+        "LoadingMods": "Espere mientras carga los datos del mod...",
+        "RefreshingModList": "Espere mientras se actualiza la lista de mods...",
+        "InvalidMods": {
+            "Title": "Mods no válidos detectados",
+            "Message": "Faltan las siguientes modificaciones: {NewLine} {Mods}. {NewLine} {NewLine} ¿Desea eliminar los descriptores?"
+        }
+    },
+    "Collection_Mods": {
+        "Name": "Colección de Mods",
+        "Remove": "-",
+        "Create": "+",
+        "OK": "OK",
+        "Cancel": "Cancelar",
+        "Watermark": "Ingresa Nombre de la nueva Colección",
+        "Delete_Title": "Eliminar Colección?",
+        "Delete_Header": "Confirmar Eliminación Colección",
+        "Delete_Message": "¿Está seguro de que desea eliminar la colección {CollectionName}?",
+        "Export": "Exportar",
+        "Import": "Importar",
+        "Export_Dialog_Title": "Exportar Colección",
+        "Import_Dialog_Title": "Importar Colección",
+        "Overlay_Exporting_Message": "Por favor espere mientras se exporta una colección de mods...",
+        "Overlay_Importing_Message": "Por favor espere mientras se importa una colección de mods...",
+        "Filter": "Buscar Mods",
+        "Selected": "Seleccionados",
+        "Mod_Name": "Nombre Mod",
+        "Order": "Orden",
+        "Rename": "Renombrar",
+        "Duplicate": "Duplicar",
+        "Overlay_Rename_Message": "Por favor espere mientras se renombra...",
+        "Overlay_Duplicate_Message": "Por favor espere mientras se duplica...",
+        "ExportToClipboard": "Copiar colección al portapapeles",
+        "DeleteMerge": {
+            "DeleteTitle": "Eliminar mod combinado?",
+            "DeleteHeader": "Confirmar Eliminación de mod combinado",
+            "DeleteMessage": "Se ha detectado la existencia de un mod combinado, ¿quieres eliminarlo también?"
+        },
+        "ImportFromClipboard": {
+            "Title": "Importar Orden del Mod desde portapapeles",
+            "PromptTitle": "¿Sobrescribir orden del mod?",
+            "PromptMessage": "Esto sobrescribirá tu colección de mods orden de mods y la selección de mod. ¿Continuar?"
+        },
+        "FileHash": {
+            "Export": "Exportar Colección de Hashes",
+            "Import": "Verificar Colección de Hashes",
+            "DialogTitleExport": "Seleccione dónde exportar el informe",
+            "DialogTitleImport": "Seleccione el informe json para importar",
+            "ExportOverlay": "Espere mientras exporta...",
+            "ImportOverlay": "Espere mientras verifica...",
+            "Progress": "{Progreso}",
+            "Close": "Cerrar"
+        },
+        "JumpOnDragAndDrop": {
+            "Title": "Auto Focus: {State}",
+            "On": "On",
+            "Off": "Off"
+        },
+        "ImportPrompt": {
+            "Title": "Colección existente",
+            "Message": "La colección ya existe y se sobrescribirá, ¿desea continuar?"
+        },
+        "ImportOther": {
+            "Title": "...",
+            "Paradoxos": "Importar desde Paradoxos",
+            "Paradox": "Importar desde Juego",
+            "ParadoxLauncher": "Importar desde Paradox Launcher",
+            "Close": "Cerrar"
+        },
+        "ExportOther": {
+            "Title": "...",
+            "OrderOnly": "Exportar Orden Solamente",
+            "Close": "Cerrar"
+        },
+        "MergeCollection": {
+            "Name": "Unir",
+            "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
+            "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
+            "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "Options": {
+                "Title": "Seleccionar Modo",
+                "Basic": "Basico",
+                "Advanced": "Avanzado",
+                "Compress": "Comprimido",
+                "Close": "Cerrar"
+            },
+            "Advanced": {
+                "Overlay_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
+                "Overlay_Analyzing_Definitions": "Espere mientras se analiza las definiciones...",
+                "Overlay_Replacing_Definitions": "Espere mientras se reemplaza las definiciones...",
+                "Overlay_Merging_Collection": "Espere mientras se fusiona la colección de mods..."
+            },
+            "Basic": {
+                "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
+                "Overlay_Writing_Files": "Espere mientras se fusiona la colección de mods..."
+            },
+            "Compress": {
+                "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
+                "Overlay_Compressing_Files": "Espere mientras se fusiona la colección de mods..."
+            },
+            "OverwritePrompt": {
+                "Title": "¿Sobrescribir la colección existente?",
+                "Message": "Ya existe una colección combinada con el nombre especificado. ¿Le gustaría sobrescribirlo?"
+            }
+        }
+    },
+    "Mod_Actions": {
+        "Apply": "Aplicar",
+        "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
+        "Conflict": "Solucionador de conflictos",
+        "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
+        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
+        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
+        "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
+        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+        "LaunchGame": {
+            "Launch": "Inciar Juego",
+            "Resume": "Reanudar Juego",
+            "Overlay": "Inciando Juego, espere...",
+            "LaunchError": {
+                "Title": "No se pudo iniciar el juego.",
+                "Message": "No se pudo iniciar el juego."
+            },
+            "NotSet": {
+                "Title": "Juego no configurado",
+                "Message": "El juego no se detectó automáticamente, utilice la ventana de opciones para configurar manualmente la ruta del ejecutable."
+            }
+        }
+    },
+    "Conflict_Solver": {
+        "Back": "Atrás",
+        "ConflictedObjects": "Objetos en Conflicto",
+        "LeftSide": "Lado Izquierdo",
+        "RightSide": "Lado Derecho",
+        "BinaryFile": "Contenido Binario",
+        "ImageInfo": "Anchura: {Width} Altura: {Height}",
+        "TakeLeft": "Gire a la Izquierda",
+        "TakeRight": "Gire a la Derecha",
+        "OK": "OK",
+        "Cancel": "Cancelar",
+        "Resolve": "Resolver",
+        "Ignore": "Ignorar",
+        "IgnoreRules": "Ignorar Reglas",
+        "OverlayResolve": "Espere mientras se resuelve el conflicto...",
+        "NextConflict": "Conflicto Siguiente ",
+        "PrevConflict": "Conflicto Previo",
+        "ConflictCount": "Conteo de Conflictos: {Conteo}",
+        "PriorityReason": {
+            "FIOS": "(FIOS)",
+            "LIOS": "(LIOS)",
+            "Order": "(Orden de Carga)",
+            "Override": "(Anular)"
+        },
+        "InvalidConflicts": {
+            "Name": "Invalido",
+            "Error": "Error en la línea: {Line} Columna: {Column} Archivo: {File}. {NewLine} Informe este error al autor del mod: {ModName}. {NewLine} {NewLine} El mensaje de error dice: {NewLine} { NewLine} {Message} ",
+            "ErrorNoLine": "Error en el archivo: {Archivo}. {NewLine} Informe este error al autor del mod: {ModName}. {NewLine} {NewLine} El mensaje de error dice: {NewLine} {NewLine} {Message}",
+            "ContextMenu": {
+                "OpenFile": "Abrir Archivo",
+                "OpenDirectory": "Abrir Directorio",
+                "CustomPatch": "Copiar a Parche Personalizado"
+            }
+        },
+        "CompareSelectorContextMenu": {
+            "OpenFile": "Abrir Archivo",
+            "OpenDirectory": "Abrir Directorio"
+        },
+        "ContextMenu": {
+            "CopyAll": "Copiar Todo",
+            "CopyThis": "Copia este",
+            "CopyThisAfterLine": "Copiar esto después de la línea",
+            "CopyThisBeforeLine": "Copia esto antes de la línea",
+            "MoveUp": "Mover Arriba",
+            "MoveDown": "Mover Abajo",
+            "Edit": "Editar",
+            "CopyText": "Copiar Texto",
+            "Delete": "Eliminar",
+            "Undo": "Deshacer",
+            "Redo": "Rehacer",
+            "Editor": "Fusión Externa"
+        },
+        "EditorContextMenu": {
+            "Copy": "Copiar",
+            "Cut": "Cortar",
+            "Delete": "Eliminar",
+            "Paste": "Pegar",
+            "Undo": "Deshacer",
+            "Redo": "Rehacer",
+            "SelectAll": "Seleccionar Todo"
+        },
+        "Modes": {
+            "Title": "Seleccionar Modo",
+            "Default": "Defecto",
+            "Advanced": "Avanzado",
+            "Close": "Cerrar"
+        },
+        "ModFilter": {
+            "Title": "Filtro de Mods",
+            "Close": "Cerrar"
+        },
+        "ResetConflicts": {
+            "Title": "Reiniciar Conflictos",
+            "Resolved": "Resuelto",
+            "Ignored": "Ignorado",
+            "Custom": "Personalizado",
+            "Close": "Cerrar",
+            "Reset": "Reiniciar"
+        },
+        "DBSearch": {
+            "Title": "Búsqueda en Base de Datos",
+            "Watermark": "Introduce Término de Búsqueda",
+            "Close": "Cerrar",
+            "Clear": "X"
+        },
+        "CustomPatch": {
+            "Title": "Parche personalizado",
+            "Load": "Cargar",
+            "Path": "Ruta",
+            "Save": "Guardar",
+            "Close": "Cerrar"
+        },
+        "Editor": {
+            "Title": "Fusión Externa",
+            "Message": "Presione confirmar una vez que esté satisfecho con la Fusión Externa."
+        }
+    },
+    "ConflictIgnore": {
+        "Save": "Guardar",
+        "Cancel": "Cancelar",
+        "Watermark": "Usa # para comentarios. La nueva línea es una nueva regla."
+    },
+    "Options": {
+        "Name": "Opciones",
+        "Close": "Cerrar",
+        "NavigateTo": "...",
+        "Reset": "X",
+        "Editor": {
+            "Title": "Opciones del Editor externo",
+            "EditorExecutable": "Editor Ejecutable",
+            "EditorArgs": "Editor Args",
+            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Derecha} rightFile:{Izquierda}"
+        },
+        "Game": {
+            "Title": "Opciones de Juego",
+            "GameExecutable": "Ejecutable del Juego",
+            "UserDirectory": "Directorio de Datos",
+            "GameArgs": "Game Args",
+            "RefreshMods": "Refrescar Descriptors antes de jugar",
+            "CloseAfterLaunch": "Cerrar después de iniciar el juego",
+            "AutoConfigure": "Configurar todo..."
+        },
+        "Updates": {
+            "Title": "Opciones de Actualización",
+            "UpdateInfoTitle": "Actualizar Información de la versión",
+            "AutoUpdates": "Buscar Actualizaciones al iniciar",
+            "CheckPrerelease": "Actualizar a versiones preliminares",
+            "CheckForUpdates": "Buscar Actualizaciones",
+            "Install": "Instalar Actualizaciones",
+            "Version": "Version",
+            "Overlay": {
+                "UpdateDownloading": "Descargando Actualizaciones...",
+                "UpdateDownloadProgress": "{Progreso}",
+                "UpdateInstalling": "Desempaqueta actualizaciones y preparando para ejecutar el instalador..."
+            },
+            "Errors": {
+                "DownloadErrorTitle": "Error de Actualizacion",
+                "DownloadErrorMessage": "Se produjo un error al descargar las actualizaciones; consulte el registro de errores para obtener más detalles."
+            },
+            "AutoUpdatePrompts": {
+                "Title": "Buscar Actualizaciones Automáticamente",
+                "Message": "Irony quiere su permiso para buscar actualizaciones al inicio. ¿Le gustaría que Irony le notificara las actualizaciones automáticamente?"
+            },
+            "UpdateNotification": {
+                "Title": "Actualización Detectada",
+                "Message": "Consulte la pantalla de opciones para ver los detalles de la actualización o haga clic en este mensaje."
+            }
+        },
+        "Dialog": {
+            "ExeTitle": "Encuentra el ejecutable del juego",
+            "GameRootTitle": "Encuentra el directorio raíz del juego",
+            "UserDirTitle": "Encuentra el directorio de datos del juego",
+            "EditorTitle": "Buscar editor ejecutable"
+        }
+    },
+    "Notifications": {
+        "CollectionCreated": {
+            "Title": "Colección Creada",
+            "Message": "{CollectionName} ha sido creada."
+        },
+        "CollectionDeleted": {
+            "Title": "Colección Eliminada",
+            "Message": "{CollectionName} ha sido eliminada."
+        },
+        "CollectionAndModDeleted": {
+            "Title": "Colecciónes y mods fusionados eliminados",
+            "Message": "{CollectionName} y las modificaciones fusionadas se han eliminado."
+        },
+        "CollectionExists": {
+            "Title": "Colección Existente",
+            "Message": "{CollectionName} ya existe."
+        },
+        "CollectionExported": {
+            "Title": "Colección Exportada",
+            "Message": "{CollectionName} ha sido exportada."
+        },
+        "CollectionImported": {
+            "Title": "Colección Importada",
+            "Message": "{CollectionName} ha sido importada."
+        },
+        "CollectionApplied": {
+            "Title": "Colección Aplicada",
+            "Message": "{CollectionName} ha sido aplicada."
+        },
+        "CollectionNotApplied": {
+            "Title": "Colección no aplicada",
+            "Message": "{CollectionName} no se ha aplicado."
+        },
+        "DescriptorsRefreshed": {
+            "Title": "Descriptors Refrescados",
+            "Message": "Descriptors han sido refrescados."
+        },
+        "DescriptorsLocked": {
+            "Title": "Descriptors Bloqueados",
+            "Message": "Descriptors han sido bloqueados."
+        },
+        "DescriptorsUnlocked": {
+            "Title": "Descriptors Desbloqueados",
+            "Message": "Descriptors han sido desbloqueados."
+        },
+        "NewDescriptorsChecked": {
+            "Title": "Nuevos Mods comprobados",
+            "Message": "Verificación de nuevos mods completa."
+        },
+        "CollectionRenamed": {
+            "Title": "Colección Renombrada",
+            "Message": "La Colección ha sido renombrada."
+        },
+        "CollectionDuplicated": {
+            "Title": "Colección Duplicada",
+            "Message": "La Colección ha sido duplicada."
+        },
+        "CollectionMerged": {
+            "Title": "Colección Unida",
+            "Message": "La Colección ha sido fusionada."
+        },
+        "ConflictSolverUpdate": {
+            "Title": "Actualizaciones del Solucionador de conflictos",
+            "Message": "Se han actualizado uno o varios mods. Es posible que sea necesario actualizar el solucionador de conflictos."
+        },
+        "NoUpdatesAvailable": {
+            "Title": "Sin Actualizaciones",
+            "Message": "Parece que no hay actualizaciones disponibles."
+        },
+        "ReportExported": {
+            "Title": "Informe Exportado",
+            "Message": "El Informe ha sido Exportado"
+        },
+        "ReportValid": {
+            "Title": "Coincidencia Archivo Hash",
+            "Message": "Todos los archivo hash parecen coincidir."
+        },
+        "CustomPatchRerunConflictSolver": {
+            "Title": "Actualización del Solucionador de conflictos",
+            "Message": "El Solucionador de conflictos debe actualizarse para tener en cuenta los nuevos parches personalizados añadidos. Vuelva a ejecutar el solucionador de conflictos."
+        }
+    },
+    "Mod_App_Actions": {
+        "OpenInSteam": "Abrir en Steam",
+        "Open": "Abrir Mod Url",
+        "Copy": "Copiar Mod Url",
+        "OpenInAssociatedApp": "Abrir Mod Folder/Archivo"
+    },
+    "Descriptor_Actions": {
+        "CheckNew": "Ver nuevas modificaciones",
+        "Delete": "Eliminar y Recargar",
+        "Delete_All": "Eliminar Todo y volver a cargar",
+        "Lock": "Bloqueado",
+        "Lock_All": "Bloquear Todo",
+        "Unlock": "Desbloquear",
+        "Unlock_All": "Desbloquear Todo"
+    },
+    "Achievements": {
+        "AchievementCompatible": "Mod es compatible con logros.",
+        "NotAchievementCompatible": "Mod NO es compatible con logros."
+    },
+    "Sorting": {
+        "Sort_A_Z": "↑",
+        "Sort_Z_A": "↓"
+    },
+    "Filter": {
+        "Clear": "X",
+        "UpArrow": "▲",
+        "DownArrow": "▼"
+    }
+}
