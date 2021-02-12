@@ -30,7 +30,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210114001" />
+    <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210131001" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.9" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
