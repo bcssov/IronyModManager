@@ -75,7 +75,7 @@
     },
     "Installed_Mods": {
         "Name": "Installierte Mods",
-        "Filter": "Filter Mods",
+        "Filter": "Mods filtern",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Supported_Version": "Unterstützte Version",
@@ -87,22 +87,22 @@
         }
     },
     "Collection_Mods": {
-        "Name": "Sammlung Mods",
+        "Name": "Kollektion Mods",
         "Remove": "-",
         "Create": "+",
         "OK": "In Ordnung",
         "Cancel": "Stornieren",
-        "Watermark": "Geben Sie den neuen Sammlungsnamen ein",
-        "Delete_Title": "Sammlung löschen?",
-        "Delete_Header": "Bestätigen Sie das Löschen der Sammlung",
-        "Delete_Message": "Möchten Sie die {CollectionName}-Sammlung wirklich löschen?",
+        "Watermark": "Geben Sie den neuen kollektion ein",
+        "Delete_Title": "Kollektion löschen?",
+        "Delete_Header": "Bestätigen Sie das Löschen der kollektion",
+        "Delete_Message": "Möchten Sie die {CollectionName}-Kollektion wirklich löschen?",
         "Export": "Export",
         "Import": "Importieren",
-        "Export_Dialog_Title": "Sammlung exportieren",
-        "Import_Dialog_Title": "Sammlung importieren",
-        "Overlay_Exporting_Message": "Bitte warten Sie beim Exportieren einer Mod-Sammlung...",
-        "Overlay_Importing_Message": "Bitte warten Sie beim Importieren einer Mod-Sammlung...",
-        "Filter": "Suchmods",
+        "Export_Dialog_Title": "Kollektion exportieren",
+        "Import_Dialog_Title": "Kollektion importieren",
+        "Overlay_Exporting_Message": "Bitte warten Sie beim Exportieren einer Mod-Kollektion...",
+        "Overlay_Importing_Message": "Bitte warten Sie beim Importieren einer Mod-Kollektion...",
+        "Filter": "Mods durchsuchen",
         "Selected": "Ausgewählt",
         "Mod_Name": "Mod Name",
         "Order": "Reihenfolge",
@@ -110,7 +110,7 @@
         "Duplicate": "Duplizieren",
         "Overlay_Rename_Message": "Bitte warten Sie, während Sie den Umbenennungsvorgang ausführen...",
         "Overlay_Duplicate_Message": "Bitte warten Sie, während Sie einen doppelten Vorgang ausführen...",
-        "ExportToClipboard": "Sammlung in Zwischenablage kopieren",
+        "ExportToClipboard": "Kollektion in Zwischenablage kopieren",
         "DeleteMerge": {
             "DeleteTitle": "Zusammengeführten Mod löschen?",
             "DeleteHeader": "Bestätigen Sie das Löschen des Merge-Mods",
@@ -119,11 +119,11 @@
         "ImportFromClipboard": {
             "Title": "Mod-Reihenfolge aus der Zwischenablage importieren",
             "PromptTitle": "Mod-Reihenfolge überschreiben?",
-            "PromptMessage": "Dies überschreibt deine Mod-Sammlungs-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
+            "PromptMessage": "Dies überschreibt deine Mod-Kollektions-Mod-Reihenfolge und Mod-Auswahl. Vorgehen?"
         },
         "FileHash": {
-            "Export": "Sammlungshashes exportieren",
-            "Import": "Überprüfen Sie die Sammlungshashes",
+            "Export": "Kollektion hashes exportieren",
+            "Import": "Überprüfen Sie die kollektion hashes",
             "DialogTitleExport": "Wählen Sie aus, wohin der Bericht exportiert werden soll",
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
@@ -137,8 +137,8 @@
             "Off": "Aus"
         },
         "ImportPrompt": {
-            "Title": "Sammlung existiert",
-            "Message": "Die Sammlung ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
+            "Title": "Kollektion existiert",
+            "Message": "Die kollektion ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
         },
         "ImportOther": {
             "Title": "...",
@@ -165,21 +165,21 @@
             },            
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
-                "Overlay_Writing_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+                "Overlay_Writing_Files": "Bitte warten Sie, während Sie die Mod-Kollektion zusammenführen..."
             },
             "Compress": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
-                "Overlay_Compressing_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
+                "Overlay_Compressing_Files": "Bitte warten Sie, während Sie die Mod-Kollektion zusammenführen..."
             },
             "OverwritePrompt": {
-                "Title": "Bestehende Sammlung überschreiben?",
-                "Message": "Eine zusammengeführte Sammlung mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
+                "Title": "Bestehende Kollektion überschreiben?",
+                "Message": "Eine zusammengeführte Kollektion mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
             }
         }
     },
     "Mod_Actions": {
         "Apply": "Anwenden",
-        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Sammlung anwenden...",
+        "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Kollektion anwenden...",
         "Conflict": "Konfliktlöser",
         "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
         "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
@@ -187,7 +187,7 @@
         "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
         "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
         "LaunchGame": {
-            "Launch": "Spiel startet",
+            "Launch": "Spiel starten",
             "Resume": "Setzen Sie Gameg fort",
             "Overlay": "Spiel starten, bitte warten...",
             "LaunchError": {
@@ -196,7 +196,7 @@
             },
             "NotSet": {
                 "Title": "Spiel nicht eingestellt",
-                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den ausführbaren Pfad manuell festzulegen."
+                "Message": "Das Spiel wurde nicht automatisch erkannt. Verwenden Sie das Optionsfenster, um den Programdatei Pfad manuell festzulegen."
             }
         }
     },
@@ -309,15 +309,15 @@
         "Reset": "X",
         "Editor": {
             "Title": "Externe Editoroptionen",
-            "EditorExecutable": "Editor ausführbar",
+            "EditorExecutable": "Editor Programdatei",
             "EditorArgs": "Editor Args",
             "EditorArgsPlaceholder": "Beispiel: leftFile:{Left} rightFile:{Right}"
         },
         "Game": {
             "Title": "Spieleinstellungen",
-            "GameExecutable": "Spiel ausführbar",
+            "GameExecutable": "Spiel Programdatei",
             "UserDirectory": "Datenverzeichnis",
-            "GameArgs": "Spiel Args",
+            "GameArgs": "Spiel Startoptionen",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
             "AutoConfigure": "Alle konfigurieren..."
@@ -329,7 +329,7 @@
             "CheckPrerelease": "Update auf Vorabversionen",
             "CheckForUpdates": "Auf Updates prüfen",
             "Install": "Installiere Updates",
-            "Version": "Ausführung",
+            "Version": "Version",
             "Overlay": {
                 "UpdateDownloading": "Updates herunterladen...",
                 "UpdateDownloadProgress": "{Progress}",
@@ -349,43 +349,43 @@
             }
         },
         "Dialog": {
-            "ExeTitle": "Finde eine ausführbare Spieldatei",
+            "ExeTitle": "Finde eine Programdatei Spieldatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
             "UserDirTitle": "Spieldatenverzeichnis suchen",
-            "EditorTitle": "Suchen Sie die ausführbare Editor-Datei"
+            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei"
         }
     },
     "Notifications": {
         "CollectionCreated": {
-            "Title": "Sammlung erstellt",
+            "Title": "Kollektion erstellt",
             "Message": "{CollectionName} wurde erstellt."
         },
         "CollectionDeleted": {
-            "Title": "Sammlung gelöscht",
+            "Title": "Kollektion gelöscht",
             "Message": "{CollectionName} wurde gelöscht."
         },
         "CollectionAndModDeleted": {
-            "Title": "Sammlung und zusammengeführte Mods gelöscht",
+            "Title": "Kollektion und zusammengeführte Mods gelöscht",
             "Message": "{CollectionName} und zusammengeführte Mods wurden gelöscht."
         },
         "CollectionExists": {
-            "Title": "Sammlung existiert",
+            "Title": "Kollektion existiert",
             "Message": "{CollectionName} existiert bereits."
         },
         "CollectionExported": {
-            "Title": "Sammlung exportiert",
+            "Title": "Kollektion exportiert",
             "Message": "{CollectionName} wurde exportiert."
         },
         "CollectionImported": {
-            "Title": "Sammlung importiert",
+            "Title": "Kollektion importiert",
             "Message": "{CollectionName} wurde importiert."
         },
         "CollectionApplied": {
-            "Title": "Sammlung angewendet",
+            "Title": "Kollektion angewendet",
             "Message": "{CollectionName} wurde angewendet."
         },
         "CollectionNotApplied": {
-            "Title": "Sammlung nicht angewendet",
+            "Title": "Kollektion nicht angewendet",
             "Message": "{CollectionName} wurde nicht angewendet."
         },
         "DescriptorsRefreshed": {
@@ -405,16 +405,16 @@
             "Message": "Die Überprüfung auf neue Mods ist abgeschlossen."
         },
         "CollectionRenamed": {
-            "Title": "Sammlung umbenannt",
-            "Message": "Sammlung wurde umbenannt."
+            "Title": "Kollektion umbenannt",
+            "Message": "Kollektion wurde umbenannt."
         },
         "CollectionDuplicated": {
-            "Title": "Sammlung dupliziert",
-            "Message": "Sammlung wurde dupliziert."
+            "Title": "Kollektion dupliziert",
+            "Message": "Kollektion wurde dupliziert."
         },
         "CollectionMerged": {
-            "Title": "Sammlung zusammengeführt",
-            "Message": "Sammlung wurde zusammengeführt."
+            "Title": "Kollektion zusammengeführt",
+            "Message": "Kollektion wurde zusammengeführt."
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",

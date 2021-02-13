@@ -317,7 +317,7 @@
             "Title": "Game Options",
             "GameExecutable": "Game Executable",
             "UserDirectory": "Data Directory",
-            "GameArgs": "Game Args",
+            "GameArgs": "Game Launch Options",
             "RefreshMods": "Refresh Descriptors Before Playing",
             "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All..."
