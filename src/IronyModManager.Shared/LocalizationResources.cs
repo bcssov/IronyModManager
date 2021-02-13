@@ -215,17 +215,8 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.Options.";
                     public const string Title = Prefix + "Title";
                     public const string Basic = Prefix + "Basic";
-                    public const string Advanced = Prefix + "Advanced";
                     public const string Compress = Prefix + "Compress";
                     public const string Close = Prefix + "Close";
-                }
-                public static class Advanced
-                {
-                    public const string Prefix = "Collection_Mods.MergeCollection.Advanced.";
-                    public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
-                    public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
-                    public const string Overlay_Replacing_Definitions = Prefix + "Overlay_Replacing_Definitions";
-                    public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
                 }
                 public static class Basic
                 {

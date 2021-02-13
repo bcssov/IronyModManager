@@ -159,17 +159,10 @@
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Select mode",
-                "Basic": "Basic",
-                "Advanced": "Advanced",
+                "Basic": "Basic",                
                 "Compress": "Compress",
                 "Close": "Close"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
-                "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
-                "Overlay_Replacing_Definitions": "Please wait while replacing definitions...",
-                "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
-            },
+            },            
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
                 "Overlay_Writing_Files": "Please wait while merging the mod collection..."

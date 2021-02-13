@@ -159,17 +159,10 @@
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Odaberi način",
-                "Basic": "Osnovno",
-                "Advanced": "Napredno",
+                "Basic": "Osnovno",                
                 "Compress": "Kompresiraj",
                 "Close": "Zatvori"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-                "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
-                "Overlay_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
-                "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
-            },
+            },            
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
                 "Overlay_Writing_Files": "Pričekaj dok se spaja kolekcija..."

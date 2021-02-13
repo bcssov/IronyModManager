@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1144,7 +1144,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeAdvancedCommand, ModifyCollection.MergeBasicCommand, ModifyCollection.MergeCompressCommand).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeBasicCommand, ModifyCollection.MergeCompressCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
