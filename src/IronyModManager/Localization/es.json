@@ -21,6 +21,10 @@
         "Title": "Guardar Error",
         "Message": "Algo parece estar bloqueando la capacidad de Irony para escribir en archivos mod. Reporta esto en el rastreador de problemas de GitHub y publique el registro de errores."
     },
+    "UnableToWriteError": {
+        "Title": "Aplicación bloqueada",
+        "Message": "La aplicación parece estar bloqueada por AntiVirus o permisos y no puede escribir en el directorio de documentos del usuario."
+    },
     "InvalidModsDetected": {
         "Title": "Mods no válidos detectados",
         "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados: {NewLine} {Mods}"

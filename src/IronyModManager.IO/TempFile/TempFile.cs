@@ -148,13 +148,15 @@ namespace IronyModManager.IO.TempFile
                     else
                     {
                         path = Path.Combine(tempDirectory, Path.GetRandomFileName());
-                        System.IO.File.Create(path);
+                        var fs = System.IO.File.Create(path);
+                        fs.Dispose();
                     }
                 }
                 else
                 {
                     path = Path.Combine(tempDirectory, fileName);
-                    System.IO.File.Create(path);
+                    var fs = System.IO.File.Create(path);
+                    fs.Dispose();
                 }
             }
             return path;

@@ -21,6 +21,10 @@
         "Title": "Greška prilikom snimanja",
         "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
     },
+    "UnableToWriteError": {
+        "Title": "Aplikacija blokirana",
+        "Message": "Čini se da je aplikacija blokirana Anti-Virusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata. "
+    },
     "InvalidModsDetected": {
         "Title": "Otkriveni su nevaljani modovi",
         "Message": "Sljedeće lokacije modova nisu mogle biti raščlanjene zbog nevaljanih arhiva ili zaključanih datoteka:{NewLine}{Mods}"

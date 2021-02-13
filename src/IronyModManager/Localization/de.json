@@ -21,6 +21,10 @@
         "Title": "Fehler speichern",
         "Message": "Etwas scheint Ironys Fähigkeit zu blockieren, in Mod-Dateien zu schreiben. Bitte melden Sie dies im GitHub Issue Tracker und veröffentlichen Sie das Fehlerprotokoll."
     },
+    "UnableToWriteError": {
+        "Title": "Anwendung blockiert",
+        "Message": "Die Anwendung scheint durch AntiVirus oder Berechtigungen blockiert zu sein und kann nicht in das Benutzerdokumentenverzeichnis schreiben."
+    },
     "InvalidModsDetected": {
         "Title": "Ungültige Mods erkannt",
         "Message": "Die folgenden Mod-Speicherorte konnten aufgrund ungültiger Archive oder gesperrter Dateien nicht analysiert werden:{NewLine}{Mods}"
