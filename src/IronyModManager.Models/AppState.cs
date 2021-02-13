@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-18-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="AppState.cs" company="Mario">
 //     Mario
@@ -69,6 +69,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The installed mods sort mode.</value>
         public virtual int InstalledModsSortMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last writable check.
+        /// </summary>
+        /// <value>The last writable check.</value>
+        public virtual DateTime? LastWritableCheck { get; set; }
 
         #endregion Properties
     }

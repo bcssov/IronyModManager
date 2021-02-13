@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="ITempFile.cs" company="Mario">
 //     Mario
@@ -33,6 +33,12 @@ namespace IronyModManager.Shared
         string File { get; }
 
         /// <summary>
+        /// Gets or sets the temporary directory.
+        /// </summary>
+        /// <value>The temporary directory.</value>
+        string TempDirectory { get; set; }
+
+        /// <summary>
         /// Gets the text.
         /// </summary>
         /// <value>The text.</value>
@@ -45,8 +51,9 @@ namespace IronyModManager.Shared
         /// <summary>
         /// Creates the specified path.
         /// </summary>
+        /// <param name="fileName">Name of the file.</param>
         /// <returns>System.String.</returns>
-        string Create();
+        string Create(string fileName = Constants.EmptyParam);
 
         /// <summary>
         /// Deletes this instance.
