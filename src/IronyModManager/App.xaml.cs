@@ -116,7 +116,7 @@ namespace IronyModManager
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
-                var message = Smart.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).ToList()) });
+                var message = Smart.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
                 await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
             }
         }
