@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -56,6 +56,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IExternalEditorFiles, ExternalEditorFiles>();
             container.RemoveTransientWarning<IExternalEditorFiles>();
             container.RegisterModel<IModInstallationResult, ModInstallationResult>();
+            container.RegisterModel<IPermissionCheckResult, PermissionCheckResult>();
         }
 
         #endregion Methods

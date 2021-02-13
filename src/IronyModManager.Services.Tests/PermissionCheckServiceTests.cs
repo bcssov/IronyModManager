@@ -46,10 +46,6 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
-            {
-                UserDirectory = "test"
-            });
             gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
                 new Game()
@@ -65,38 +61,9 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeTrue();
+            service.VerifyPermissions().Count.Should().Be(0);
         }
 
-        /// <summary>
-        /// Defines the test method Should_validate_due_to_non_existing_directory_and_selected_game_being_null.
-        /// </summary>
-        [Fact]
-        public void Should_validate_due_to_non_existing_directory_and_selected_game_being_null()
-        {
-            DISetup.SetupContainer();
-            DISetup.Container.Register<ITempFile, DummyTempFile>();
-            DISetup.Container.RemoveTransientWarning<ITempFile>();
-            DI.DIContainer.Finish(true);
-            var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
-            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
-            {
-                new Game()
-                {
-                    UserDirectory = "test"
-                }
-            });
-            var appStateService = new Mock<IAppStateService>();
-            appStateService.Setup(p => p.Get()).Returns(new AppState()
-            {
-                LastWritableCheck = null
-            });
-            appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
-
-            var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeTrue();
-        }
 
         /// <summary>
         /// Defines the test method Should_validate_due_to_last_check_being_valid.
@@ -109,9 +76,12 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
-                UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                new Game()
+                {
+                    UserDirectory = "test"
+                }
             });
             var appStateService = new Mock<IAppStateService>();
             appStateService.Setup(p => p.Get()).Returns(new AppState()
@@ -121,23 +91,26 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeTrue();
+            service.VerifyPermissions().Count.Should().Be(0);
         }
 
         /// <summary>
-        /// Defines the test method Should_validate_due_to_last_successfull_file_creation.
+        /// Defines the test method Should_validate_due_to_last_successful_file_creation.
         /// </summary>
         [Fact]
-        public void Should_validate_due_to_last_successfull_file_creation()
+        public void Should_validate_due_to_last_successful_file_creation()
         {
             DISetup.SetupContainer();
             DISetup.Container.Register<ITempFile, DummyTempFile>();
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
-                UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                new Game()
+                {
+                    UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                }
             });
             var appStateService = new Mock<IAppStateService>();
             appStateService.Setup(p => p.Get()).Returns(new AppState()
@@ -147,7 +120,12 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeTrue();
+            var result = service.VerifyPermissions();
+            result.Count.Should().Be(1);
+            foreach (var item in result)
+            {
+                item.Valid.Should().BeTrue();
+            }
         }
 
         /// <summary>
@@ -161,9 +139,12 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
-                UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                new Game()
+                {
+                    UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                }
             });
             var appStateService = new Mock<IAppStateService>();
             appStateService.Setup(p => p.Get()).Returns(new AppState()
@@ -173,7 +154,12 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeFalse();
+            var result = service.VerifyPermissions();
+            result.Count.Should().Be(1);
+            foreach (var item in result)
+            {
+                item.Valid.Should().BeFalse();
+            }
         }
 
         /// <summary>
@@ -187,9 +173,12 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
-                UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                new Game()
+                {
+                    UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                }
             });
             var appStateService = new Mock<IAppStateService>();
             appStateService.Setup(p => p.Get()).Returns(new AppState()
@@ -199,7 +188,12 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeFalse();
+            var result = service.VerifyPermissions();
+            result.Count.Should().Be(1);
+            foreach (var item in result)
+            {
+                item.Valid.Should().BeFalse();
+            }
         }
 
         /// <summary>
@@ -213,9 +207,12 @@ namespace IronyModManager.Services.Tests
             DISetup.Container.RemoveTransientWarning<ITempFile>();
             DI.DIContainer.Finish(true);
             var gameService = new Mock<IGameService>();
-            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
             {
-                UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                new Game()
+                {
+                   UserDirectory = AppDomain.CurrentDomain.BaseDirectory
+                }
             });
             var appStateService = new Mock<IAppStateService>();
             appStateService.Setup(p => p.Get()).Returns(new AppState()
@@ -225,7 +222,12 @@ namespace IronyModManager.Services.Tests
             appStateService.Setup(p => p.Save(It.IsAny<IAppState>())).Returns(true);
 
             var service = new PermissionCheckService(gameService.Object, appStateService.Object, null, null);
-            service.VerifyPermission().Should().BeFalse();
+            var result = service.VerifyPermissions();
+            result.Count.Should().Be(1);
+            foreach (var item in result)
+            {
+                item.Valid.Should().BeFalse();
+            }
         }
 
         /// <summary>

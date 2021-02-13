@@ -1,4 +1,5 @@
 {
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
         "Title": "Irony 模组管理器：v{AppVersion}",
@@ -23,7 +24,7 @@
     },
     "UnableToWriteError": {
         "Title": "应用程序被阻止",
-        "Message": "该应用程序似乎已被防病毒或权限阻止，无法写入用户文档目录。"
+        "Message": "该应用程序似乎已被防病毒或权限阻止，无法写入用户文档目录：{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "检测到无效模组",
@@ -163,10 +164,10 @@
             "Overlay_Progress": "步骤 {Count}/{TotalCount}：{PercentDone}",
             "Options": {
                 "Title": "选择模式",
-                "Basic": "基础",                
+                "Basic": "基础",
                 "Compress": "压缩",
                 "Close": "关闭"
-            },            
+            },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
                 "Overlay_Writing_Files": "正在合并合集……"

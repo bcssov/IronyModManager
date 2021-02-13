@@ -11,9 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
 using System.Linq;
+using System;
 using System.Collections.Generic;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Services.Common
 {
@@ -27,10 +28,10 @@ namespace IronyModManager.Services.Common
         #region Methods
 
         /// <summary>
-        /// Verifies the permission.
+        /// Verifies the permissions.
         /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool VerifyPermission();
+        /// <returns>IReadOnlyCollection&lt;IPermissionCheckResult&gt;.</returns>
+        IReadOnlyCollection<IPermissionCheckResult> VerifyPermissions();
 
         #endregion Methods
     }

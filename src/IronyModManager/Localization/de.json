@@ -1,4 +1,5 @@
 ﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
@@ -23,7 +24,7 @@
     },
     "UnableToWriteError": {
         "Title": "Anwendung blockiert",
-        "Message": "Die Anwendung scheint durch Antivirus oder Berechtigungen blockiert zu sein und kann nicht in das Benutzerdokumentenverzeichnis schreiben."
+        "Message": "Die Anwendung scheint durch Antivirus oder Berechtigungen blockiert zu sein und kann nicht in das Benutzerdokumentenverzeichnis schreiben:{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "Ungültige Mods erkannt",
@@ -163,10 +164,10 @@
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Auswahlmodus",
-                "Basic": "Basic",                
+                "Basic": "Basic",
                 "Compress": "Komprimieren",
                 "Close": "Schließen"
-            },            
+            },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writing_Files": "Bitte warten Sie, während Sie die Mod-Kollektion zusammenführen..."

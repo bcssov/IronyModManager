@@ -110,12 +110,13 @@ namespace IronyModManager
         protected virtual async Task VerifyWritePermissionsAsync()
         {
             var permissionService = DIResolver.Get<IPermissionCheckService>();
-            if (!permissionService.VerifyPermission())
+            var permissions = permissionService.VerifyPermissions();
+            if (permissions.Count > 0 && permissions.Any(p => !p.Valid))
             {
                 var notificationAction = DIResolver.Get<INotificationAction>();
                 var locManager = DIResolver.Get<ILocalizationManager>();
                 var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
-                var message = locManager.GetResource(LocalizationResources.UnableToWriteError.Message);
+                var message = Smart.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).ToList()) });
                 await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
             }
         }
@@ -192,7 +193,9 @@ namespace IronyModManager
         /// </summary>
         /// <param name="mainWindow">The main window.</param>
         /// <param name="locale">The locale.</param>
+#pragma warning disable CA1822 // Mark members as static
         private void SetFontFamily(Window mainWindow, string locale = Shared.Constants.EmptyParam)
+#pragma warning restore CA1822 // Mark members as static
         {
             var langService = DIResolver.Get<ILanguagesService>();
             ILanguage language;
@@ -238,7 +241,9 @@ namespace IronyModManager
         /// Called when [theme changed].
         /// </summary>
         /// <returns>Task.</returns>
+#pragma warning disable CA1822 // Mark members as static
         private async Task OnThemeChanged()
+#pragma warning restore CA1822 // Mark members as static
         {
             var notificationAction = DIResolver.Get<INotificationAction>();
             var locManager = DIResolver.Get<ILocalizationManager>();

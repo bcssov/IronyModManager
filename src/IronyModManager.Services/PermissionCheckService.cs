@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
@@ -72,49 +73,53 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
-        /// Verifies the permission.
+        /// Verifies the permissions.
         /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public bool VerifyPermission()
+        /// <returns>IReadOnlyCollection&lt;IPermissionCheckResult&gt;.</returns>
+        public virtual IReadOnlyCollection<IPermissionCheckResult> VerifyPermissions()
         {
-            var game = gameService.GetSelected();
-            if (game == null || !Directory.Exists(game.UserDirectory))
+            var games = gameService.Get().Where(p => Directory.Exists(p.UserDirectory));
+            if (games == null || !games.Any())
             {
-                game = gameService.Get().FirstOrDefault(p => Directory.Exists(p.UserDirectory));
+                return new List<IPermissionCheckResult>();
             }
-            if (game == null)
-            {
-                return true;
-            }
-            var result = true;
+            var result = new List<IPermissionCheckResult>();
             var state = appStateService.Get();
             if (!state.LastWritableCheck.HasValue || state.LastWritableCheck.GetValueOrDefault().AddDays(DaysCheckValid) < DateTime.Now)
             {
-                var tempFile = DIResolver.Get<ITempFile>();
-                tempFile.TempDirectory = game.UserDirectory;
-                try
+                foreach (var game in games)
                 {
-                    tempFile.Create(nameof(IronyModManager) + ".txt");
-                    tempFile.Text = nameof(IronyModManager);
-                    tempFile.Text = nameof(IronyModManager) + " Edited";
-                    tempFile.Delete();
-                }
-                catch
-                {
-                    result = false;
-                }
-                finally
-                {
+                    var tempFile = DIResolver.Get<ITempFile>();
+                    tempFile.TempDirectory = game.UserDirectory;
+                    var model = GetModelInstance<IPermissionCheckResult>();
+                    model.Path = game.UserDirectory;
+                    model.Valid = true;
                     try
                     {
-                        tempFile.Dispose();
+                        tempFile.Create(nameof(IronyModManager) + ".txt");
+                        tempFile.Text = nameof(IronyModManager);
+                        tempFile.Text = nameof(IronyModManager) + " Edited";
+                        tempFile.Delete();
                     }
                     catch
                     {
+                        model.Valid = false;
+                        break;
                     }
+                    finally
+                    {
+                        result.Add(model);
+                        try
+                        {
+                            tempFile.Dispose();
+                        }
+                        catch
+                        {
+                        }
+                    }                    
                 }
             }
-            if (result)
+            if (result.All(p => p.Valid))
             {
                 state.LastWritableCheck = DateTime.Now;
                 appStateService.Save(state);

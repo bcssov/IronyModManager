@@ -1,4 +1,5 @@
 ﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
@@ -23,7 +24,7 @@
     },
     "UnableToWriteError": {
         "Title": "Aplikacija blokirana",
-        "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata."
+        "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata:{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "Otkriveni su nevaljani modovi",
@@ -163,10 +164,10 @@
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Odaberi način",
-                "Basic": "Osnovno",                
+                "Basic": "Osnovno",
                 "Compress": "Kompresiraj",
                 "Close": "Zatvori"
-            },            
+            },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
                 "Overlay_Writing_Files": "Pričekaj dok se spaja kolekcija..."

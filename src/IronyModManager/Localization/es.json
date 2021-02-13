@@ -1,4 +1,5 @@
 ﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
@@ -23,11 +24,11 @@
     },
     "UnableToWriteError": {
         "Title": "Aplicación bloqueada",
-        "Message": "La aplicación parece estar bloqueada por Antivirus o permisos y no puede escribir en el directorio de documentos del usuario."
+        "Message": "La aplicación parece estar bloqueada por Antivirus o permisos y no puede escribir en el directorio de documentos del usuario:{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "Mods no válidos detectados",
-        "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados: {NewLine} {Mods}"
+        "Message": "No se pudieron analizar las siguientes ubicaciones del mod debido a archivos no válidos o archivos bloqueados:{NewLine}{Mods}"
     },
     "Prompt": {
         "OK": "OK",
@@ -39,7 +40,7 @@
     "FileDialog": {
         "FileName": "Nombre del Archovo",
         "ShowHiddenFiles": "Mostrar Archivos Ocultos",
-        "Volume": "{Tamaño} Tamaño",
+        "Volume": "{Size} Tamaño",
         "OK": "OK",
         "Cancel": "Cancelar",
         "Name": "Nombre",
@@ -87,7 +88,7 @@
         "RefreshingModList": "Espere mientras se actualiza la lista de mods...",
         "InvalidMods": {
             "Title": "Mods no válidos detectados",
-            "Message": "Faltan las siguientes modificaciones: {NewLine} {Mods}. {NewLine} {NewLine} ¿Desea eliminar los descriptores?"
+            "Message": "Faltan las siguientes modificaciones:{NewLine}{Mods}.{NewLine}{NewLine}¿Desea eliminar los descriptores?"
         }
     },
     "Collection_Mods": {
@@ -132,7 +133,7 @@
             "DialogTitleImport": "Seleccione el informe json para importar",
             "ExportOverlay": "Espere mientras exporta...",
             "ImportOverlay": "Espere mientras verifica...",
-            "Progress": "{Progreso}",
+            "Progress": "{Progress}",
             "Close": "Cerrar"
         },
         "JumpOnDragAndDrop": {
@@ -163,10 +164,10 @@
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Seleccionar Modo",
-                "Basic": "Basico",                
+                "Basic": "Basico",
                 "Compress": "Comprimido",
                 "Close": "Cerrar"
-            },            
+            },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Espere mientras se recopila la información del mod...",
                 "Overlay_Writing_Files": "Espere mientras se fusiona la colección de mods..."
@@ -221,7 +222,7 @@
         "OverlayResolve": "Espere mientras se resuelve el conflicto...",
         "NextConflict": "Conflicto Siguiente ",
         "PrevConflict": "Conflicto Previo",
-        "ConflictCount": "Conteo de Conflictos: {Conteo}",
+        "ConflictCount": "Conteo de Conflictos: {Count}",
         "PriorityReason": {
             "FIOS": "(FIOS)",
             "LIOS": "(LIOS)",
@@ -230,8 +231,8 @@
         },
         "InvalidConflicts": {
             "Name": "Invalido",
-            "Error": "Error en la línea: {Line} Columna: {Column} Archivo: {File}. {NewLine} Informe este error al autor del mod: {ModName}. {NewLine} {NewLine} El mensaje de error dice: {NewLine} { NewLine} {Message} ",
-            "ErrorNoLine": "Error en el archivo: {Archivo}. {NewLine} Informe este error al autor del mod: {ModName}. {NewLine} {NewLine} El mensaje de error dice: {NewLine} {NewLine} {Message}",
+            "Error": "Error en la línea: {Line} Columna: {Column} Archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message} ",
+            "ErrorNoLine": "Error en el archivo: {File}.{NewLine}Informe este error al autor del mod: {ModName}.{NewLine}{NewLine} El mensaje de error dice:{NewLine}{NewLine}{Message}",
             "ContextMenu": {
                 "OpenFile": "Abrir Archivo",
                 "OpenDirectory": "Abrir Directorio",
@@ -315,7 +316,7 @@
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",
             "EditorArgs": "Editor Args",
-            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Derecha} rightFile:{Izquierda}"
+            "EditorArgsPlaceholder": "Ejemplo: leftFile:{Left} rightFile:{Right}"
         },
         "Game": {
             "Title": "Opciones de Juego",
@@ -336,7 +337,7 @@
             "Version": "Version",
             "Overlay": {
                 "UpdateDownloading": "Descargando Actualizaciones...",
-                "UpdateDownloadProgress": "{Progreso}",
+                "UpdateDownloadProgress": "{Progress}",
                 "UpdateInstalling": "Desempaqueta actualizaciones y preparando para ejecutar el instalador..."
             },
             "Errors": {
