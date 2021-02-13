@@ -154,7 +154,7 @@ namespace IronyModManager.IO.TempFile
                 }
                 else
                 {
-                    path = Path.Combine(tempDirectory, fileName);
+                    path = Path.Combine(TempDirectory, fileName);
                     var fs = System.IO.File.Create(path);
                     fs.Dispose();
                 }
