@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Parser
 // Author           : Mario
-// Created          : 02-22-2020
+// Created          : 02-13-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 02-13-2021
 // ***********************************************************************
-// <copyright file="ModParser.cs" company="Mario">
+// <copyright file="DLCParser.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -15,28 +15,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IronyModManager.DI;
-using IronyModManager.Parser.Common.Mod;
+using IronyModManager.Parser.Common.DLC;
 using IronyModManager.Parser.Common.Parsers;
 using IronyModManager.Shared.Models;
 
-namespace IronyModManager.Parser.Mod
+namespace IronyModManager.Parser.DLC
 {
     /// <summary>
-    /// Class ModParser.
-    /// Implements the <see cref="IronyModManager.Parser.Common.Mod.IModParser" />
+    /// Class DLCParser.
+    /// Implements the <see cref="IronyModManager.Parser.Common.DLC.IDLCParser" />
     /// Implements the <see cref="IronyModManager.Parser.BaseGenericObjectParser" />
     /// </summary>
     /// <seealso cref="IronyModManager.Parser.BaseGenericObjectParser" />
-    /// <seealso cref="IronyModManager.Parser.Common.Mod.IModParser" />
-    public class ModParser : BaseGenericObjectParser, IModParser
+    /// <seealso cref="IronyModManager.Parser.Common.DLC.IDLCParser" />
+    public class DLCParser : BaseGenericObjectParser, IDLCParser
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModParser" /> class.
+        /// Initializes a new instance of the <see cref="DLCParser" /> class.
         /// </summary>
         /// <param name="codeParser">The code parser.</param>
-        public ModParser(ICodeParser codeParser) : base(codeParser)
+        public DLCParser(ICodeParser codeParser) : base(codeParser)
         {
         }
 
@@ -47,23 +47,17 @@ namespace IronyModManager.Parser.Mod
         /// <summary>
         /// Parses the specified lines.
         /// </summary>
+        /// <param name="path">The path.</param>
         /// <param name="lines">The lines.</param>
-        /// <returns>IModObject.</returns>
-        public IModObject Parse(IEnumerable<string> lines)
+        /// <returns>IDLCObject.</returns>
+        public IDLCObject Parse(string path, IEnumerable<string> lines)
         {
             var data = ParseCode(lines);
-            var obj = DIResolver.Get<IModObject>();
+            var obj = DIResolver.Get<IDLCObject>();
             if (data != null)
             {
-                obj.ReplacePath = GetKeyedValues<string>(data.Values, "replace_path");
-                obj.UserDir = GetKeyedValues<string>(data.Values, "user_dir");
-                obj.FileName = GetValue<string>(data.Values, "path", "archive") ?? string.Empty;
-                obj.Picture = GetValue<string>(data.Values, "picture") ?? string.Empty;
                 obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
-                obj.Version = GetValue<string>(data.Values, "supported_version", "version") ?? string.Empty;
-                obj.Tags = GetValues<string>(data.Values, "tags");
-                obj.RemoteId = GetValue<long?>(data.Values, "remote_file_id");
-                obj.Dependencies = GetValues<string>(data.Values, "dependencies");
+                obj.Path = path.Replace("\\", "/") ?? string.Empty;
             }
             return obj;
         }
