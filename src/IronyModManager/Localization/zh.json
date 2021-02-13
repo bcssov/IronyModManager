@@ -159,17 +159,10 @@
             "Overlay_Progress": "步骤 {Count}/{TotalCount}：{PercentDone}",
             "Options": {
                 "Title": "选择模式",
-                "Basic": "基础",
-                "Advanced": "高级",
+                "Basic": "基础",                
                 "Compress": "压缩",
                 "Close": "关闭"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "正在加载模组数据……",
-                "Overlay_Analyzing_Definitions": "正在分析模组数据……",
-                "Overlay_Replacing_Definitions": "正在应用模组补丁……",
-                "Overlay_Merging_Collection": "正在合并合集……"
-            },
+            },            
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "正在收集模组信息……",
                 "Overlay_Writing_Files": "正在合并合集……"

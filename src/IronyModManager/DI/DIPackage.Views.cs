@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -27,13 +27,16 @@ namespace IronyModManager.DI
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
-        #region Methods
-
         /// <summary>
         /// Registers the views.
         /// </summary>
         /// <param name="container">The container.</param>
+#pragma warning disable CA1822 // Mark members as static
+
+        #region Methods
+
         private void RegisterViews(Container container)
+#pragma warning restore CA1822 // Mark members as static
         {
             container.Register<MainWindow>();
             container.Register<ThemeControlView>();

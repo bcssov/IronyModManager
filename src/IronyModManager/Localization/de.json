@@ -159,17 +159,10 @@
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
             "Options": {
                 "Title": "Auswahlmodus",
-                "Basic": "Basic",
-                "Advanced": "Fortgeschrittene",
+                "Basic": "Basic",                
                 "Compress": "Komprimieren",
                 "Close": "Schließen"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
-                "Overlay_Analyzing_Definitions": "Bitte warten Sie, während Sie die Definitionen analysieren...",
-                "Overlay_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
-                "Overlay_Merging_Collection": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
-            },
+            },            
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Bitte warten Sie, während Sie Mod-Informationen sammeln...",
                 "Overlay_Writing_Files": "Bitte warten Sie, während Sie die Mod-Sammlung zusammenführen..."
