@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -780,7 +780,7 @@ namespace IronyModManager.ViewModels.Controls
             if (!showingInvalidNotification)
             {
                 showingInvalidNotification = true;
-                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
                 showingInvalidNotification = false;
             }
         }
