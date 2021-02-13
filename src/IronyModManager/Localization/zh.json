@@ -5,8 +5,8 @@
         "Title": "Irony 模组管理器：v{AppVersion}",
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭……",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",
-        "Shortcuts": {
-            "Name": "快捷菜单",
+        "Actions": {
+            "Name": "动作",
             "Wiki": "Wiki",
             "Logs": "日志",
             "ErrorLog": "错误日志",

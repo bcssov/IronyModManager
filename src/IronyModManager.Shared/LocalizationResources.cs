@@ -15,9 +15,9 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
             public const string WaitBackgroundOperationMessage = Prefix + "WaitBackgroundOperationMessage";
-            public static class Shortcuts
+            public static class Actions
             {
-                public const string Prefix = "App.Shortcuts.";
+                public const string Prefix = "App.Actions.";
                 public const string Name = Prefix + "Name";
                 public const string Wiki = Prefix + "Wiki";
                 public const string Logs = Prefix + "Logs";

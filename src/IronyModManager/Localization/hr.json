@@ -5,8 +5,8 @@
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
         "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
-        "Shortcuts": {
-            "Name": "Prečaci",
+        "Actions": {
+            "Name": "Akcije",
             "Wiki": "Wiki",
             "Logs": "Logovi",
             "ErrorLog": "Error.log",

@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="ShortcutsControlViewModel.cs" company="Mario">
 //     Mario
@@ -68,7 +68,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the close.
         /// </summary>
         /// <value>The close.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Close)]
+        [StaticLocalization(LocalizationResources.App.Actions.Close)]
         public virtual string Close { get; protected set; }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the error log.
         /// </summary>
         /// <value>The error log.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.ErrorLog)]
+        [StaticLocalization(LocalizationResources.App.Actions.ErrorLog)]
         public virtual string ErrorLog { get; protected set; }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the logs.
         /// </summary>
         /// <value>The logs.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Logs)]
+        [StaticLocalization(LocalizationResources.App.Actions.Logs)]
         public virtual string Logs { get; protected set; }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the shortcuts.
         /// </summary>
         /// <value>The shortcuts.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Name)]
+        [StaticLocalization(LocalizationResources.App.Actions.Name)]
         public virtual string Shortcuts { get; protected set; }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the wiki.
         /// </summary>
         /// <value>The wiki.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Wiki)]
+        [StaticLocalization(LocalizationResources.App.Actions.Wiki)]
         public virtual string Wiki { get; protected set; }
 
         /// <summary>
