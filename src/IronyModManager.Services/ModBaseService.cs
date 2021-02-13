@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -632,6 +632,7 @@ namespace IronyModManager.Services
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         protected virtual async Task<bool> PopulateModFilesInternalAsync(IEnumerable<IMod> mods)
         {
+            var logger = DIResolver.Get<ILogger>();
             if (mods?.Count() > 0)
             {
                 var tasks = new List<Task>();
@@ -642,8 +643,16 @@ namespace IronyModManager.Services
                         var task = Task.Run(() =>
                         {
                             var localMod = mod;
-                            var files = Reader.GetFiles(mod.FullPath);
-                            localMod.Files = files ?? new List<string>();
+                            try
+                            {
+                                var files = Reader.GetFiles(mod.FullPath);
+                                localMod.Files = files ?? new List<string>();
+                            }
+                            catch (Exception ex)
+                            {
+                                mod.Files = new List<string>();
+                                logger.Error(ex);
+                            }
                         });
                         tasks.Add(task);
                     }

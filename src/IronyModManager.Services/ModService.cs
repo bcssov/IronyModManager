@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -130,8 +130,15 @@ namespace IronyModManager.Services
             {
                 foreach (var item in mods.Where(p => p.IsValid))
                 {
-                    var isAchievementCompatible = !item.Files.Any(p => game.ChecksumFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)));
-                    item.AchievementStatus = isAchievementCompatible ? AchievementStatus.Compatible : AchievementStatus.NotCompatible;
+                    if (item.Files.Any())
+                    {
+                        var isAchievementCompatible = !item.Files.Any(p => game.ChecksumFolders.Any(s => p.StartsWith(s, StringComparison.OrdinalIgnoreCase)));
+                        item.AchievementStatus = isAchievementCompatible ? AchievementStatus.Compatible : AchievementStatus.NotCompatible;
+                    }
+                    else
+                    {
+                        item.AchievementStatus = AchievementStatus.NotEvaluated;
+                    }
                 }
                 return true;
             }
