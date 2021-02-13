@@ -23,7 +23,7 @@
     },
     "UnableToWriteError": {
         "Title": "Aplikacija blokirana",
-        "Message": "Čini se da je aplikacija blokirana Anti-Virusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata. "
+        "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata."
     },
     "InvalidModsDetected": {
         "Title": "Otkriveni su nevaljani modovi",

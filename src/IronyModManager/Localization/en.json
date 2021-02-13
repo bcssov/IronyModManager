@@ -23,7 +23,7 @@
     },
     "UnableToWriteError": {
         "Title": "Application Blocked",
-        "Message": "The application appears to be blocked by AntiVirus or permissions and is unable to write to the user documents directory."
+        "Message": "The application appears to be blocked by Antivirus or permissions and is unable to write to the user documents directory."
     },
     "InvalidModsDetected": {
         "Title": "Invalid Mods Detected",

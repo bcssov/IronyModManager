@@ -23,7 +23,7 @@
     },
     "UnableToWriteError": {
         "Title": "应用程序被阻止",
-        "Message": "该应用程序似乎已被AntiVirus或权限阻止，无法写入用户文档目录。"
+        "Message": "该应用程序似乎已被防病毒或权限阻止，无法写入用户文档目录。"
     },
     "InvalidModsDetected": {
         "Title": "检测到无效模组",

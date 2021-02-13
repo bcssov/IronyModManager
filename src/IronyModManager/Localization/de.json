@@ -23,7 +23,7 @@
     },
     "UnableToWriteError": {
         "Title": "Anwendung blockiert",
-        "Message": "Die Anwendung scheint durch AntiVirus oder Berechtigungen blockiert zu sein und kann nicht in das Benutzerdokumentenverzeichnis schreiben."
+        "Message": "Die Anwendung scheint durch Antivirus oder Berechtigungen blockiert zu sein und kann nicht in das Benutzerdokumentenverzeichnis schreiben."
     },
     "InvalidModsDetected": {
         "Title": "Ungültige Mods erkannt",
