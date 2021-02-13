@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -30,6 +30,11 @@ namespace IronyModManager.IO.Common
         /// The exported mod content identifier
         /// </summary>
         public const string ExportedModContentId = "exported.json";
+
+        /// <summary>
+        /// The DLC directory
+        /// </summary>
+        public static readonly string DLCDirectory = Path.DirectorySeparatorChar + "dlc";
 
         /// <summary>
         /// The mod directory
