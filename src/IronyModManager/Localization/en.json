@@ -21,6 +21,10 @@
         "Title": "Save Error",
         "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
     },
+    "UnableToWriteError": {
+        "Title": "Application Blocked",
+        "Message": "The application appears to be blocked by Antivirus or permissions and is unable to write to the user documents directory."
+    },
     "InvalidModsDetected": {
         "Title": "Invalid Mods Detected",
         "Message": "The following mod locations could not be parsed due to either invalid archives or locked files:{NewLine}{Mods}"

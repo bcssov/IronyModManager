@@ -38,6 +38,12 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string Message = Prefix + "Message";
         }
+        public static class UnableToWriteError
+        {
+            public const string Prefix = "UnableToWriteError.";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
         public static class InvalidModsDetected
         {
             public const string Prefix = "InvalidModsDetected.";

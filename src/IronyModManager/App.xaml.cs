@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -98,9 +98,26 @@ namespace IronyModManager
                 InitApp(desktop);
                 InitAppTitle(desktop);
                 InitAppSizeDefaults(desktop);
+                VerifyWritePermissionsAsync().ConfigureAwait(false);
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        /// <summary>
+        /// verify write permissions as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task VerifyWritePermissionsAsync()
+        {
+            var permissionService = DIResolver.Get<IPermissionCheckService>();
+            if (!permissionService.VerifyPermission())
+            {
+                var notificationAction = DIResolver.Get<INotificationAction>();
+                var locManager = DIResolver.Get<ILocalizationManager>();
+                var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
+                var message = locManager.GetResource(LocalizationResources.UnableToWriteError.Message);
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
+            }
         }
 
         /// <summary>

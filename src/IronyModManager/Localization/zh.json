@@ -21,6 +21,10 @@
         "Title": "保存失败",
         "Message": "Irony 无法写入模组文件，请将该错误发送至 GitHub Issue 并附上错误日志。"
     },
+    "UnableToWriteError": {
+        "Title": "应用程序被阻止",
+        "Message": "该应用程序似乎已被防病毒或权限阻止，无法写入用户文档目录。"
+    },
     "InvalidModsDetected": {
         "Title": "检测到无效模组",
         "Message": "由于无效的存档或锁定的文件，无法解析以下模组位置：{NewLine}{Mods}"
