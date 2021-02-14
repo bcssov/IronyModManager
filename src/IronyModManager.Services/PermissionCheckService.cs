@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="PermissionCheckService.cs" company="Mario">
 //     Mario
@@ -79,7 +79,7 @@ namespace IronyModManager.Services
         public virtual IReadOnlyCollection<IPermissionCheckResult> VerifyPermissions()
         {
             var games = gameService.Get().Where(p => Directory.Exists(p.UserDirectory));
-            if (games == null || !games.Any())
+            if (!games.Any())
             {
                 return new List<IPermissionCheckResult>();
             }
@@ -116,7 +116,7 @@ namespace IronyModManager.Services
                         catch
                         {
                         }
-                    }                    
+                    }
                 }
             }
             if (result.All(p => p.Valid))

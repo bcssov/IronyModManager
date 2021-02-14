@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="DLCParser.cs" company="Mario">
 //     Mario
@@ -54,10 +54,14 @@ namespace IronyModManager.Parser.DLC
         {
             var data = ParseCode(lines);
             var obj = DIResolver.Get<IDLCObject>();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = string.Empty;
+            }
             if (data != null)
             {
                 obj.Name = GetValue<string>(data.Values, "name") ?? string.Empty;
-                obj.Path = path.Replace("\\", "/") ?? string.Empty;
+                obj.Path = path.Replace("\\", "/");
             }
             return obj;
         }
