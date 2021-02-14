@@ -208,7 +208,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
-            SetDLCAsync(game).ConfigureAwait(false);
+            Task.Run(async () => await SetDLCAsync(game)).ConfigureAwait(false);
             base.OnSelectedGameChanged(game);
         }
 
