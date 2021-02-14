@@ -162,7 +162,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            SetDLCAsync(gameService.GetSelected()).ConfigureAwait(false);
+            Task.Run(async () => await SetDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
 
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -208,7 +208,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
-            Task.Run(async () => await SetDLCAsync(game)).ConfigureAwait(false);
+            Task.Run(async () => await SetDLCAsync(game).ConfigureAwait(false)).ConfigureAwait(false);
             base.OnSelectedGameChanged(game);
         }
 
