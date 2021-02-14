@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -54,6 +54,9 @@ namespace IronyModManager.Models
             CreateMap<IExternalEditor, ExternalEditor>().ReverseMap();
             CreateMap<IModInstallationResult, ModInstallationResult>().ReverseMap();
             CreateMap<IPermissionCheckResult, PermissionCheckResult>().ReverseMap();
+            CreateMap<IDLC, DLC>().ReverseMap();
+            CreateMap<IDLCObject, IDLC>().ReverseMap();
+            CreateMap<IDLCObject, DLC>().ReverseMap();
         }
 
         #endregion Constructors
