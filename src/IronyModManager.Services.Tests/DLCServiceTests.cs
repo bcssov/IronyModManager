@@ -159,7 +159,7 @@ namespace IronyModManager.Services.Tests
             var service = new DLCService(new Cache(), null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
-                BaseGameDirectory = string.Empty,
+                ExecutableLocation = string.Empty,
                 Type = "Should_not_return_dlc_objects_when_game_path_not_set"
             });
             result.Count.Should().Be(0);

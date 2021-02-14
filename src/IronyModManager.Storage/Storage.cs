@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -167,7 +167,7 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <param name="gameType">Type of the game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public virtual bool RegisterGame(IGameType gameType)
         {
             lock (dbLock)
@@ -184,7 +184,7 @@ namespace IronyModManager.Storage
                 game.LogLocation = gameType.LogLocation;
                 game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
                 game.GameFolders = gameType.GameFolders ?? new List<string>();
-                game.BaseGameDirectory = gameType.BaseGameDirectory ?? string.Empty;
+                game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory ?? string.Empty;
                 game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
@@ -203,8 +203,8 @@ namespace IronyModManager.Storage
         /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="System.InvalidOperationException">There is already a default theme registered.</exception>
+        /// <exception cref="System.InvalidOperationException"></exception>
         public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
         {
             lock (dbLock)
