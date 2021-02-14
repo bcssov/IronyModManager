@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-30-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="MainControlViewModel.cs" company="Mario">
 //     Mario
@@ -37,24 +37,30 @@ namespace IronyModManager.ViewModels
         /// <param name="gameControl">The game control.</param>
         /// <param name="modControl">The mod control.</param>
         /// <param name="options">The options.</param>
-        /// <param name="shortcuts">The shortcuts.</param>
+        /// <param name="actions">The actions.</param>
         public MainControlViewModel(ThemeControlViewModel themeControl,
             LanguageControlViewModel languageControl,
             GameControlViewModel gameControl,
             ModHolderControlViewModel modControl,
-            OptionsControlViewModel options, ShortcutsControlViewModel shortcuts)
+            OptionsControlViewModel options, ActionsControlViewModel actions)
         {
             ThemeSelector = themeControl;
             LanguageSelector = languageControl;
             GameSelector = gameControl;
             ModHolder = modControl;
             Options = options;
-            Shortcuts = shortcuts;
+            Actions = actions;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the actions.
+        /// </summary>
+        /// <value>The actions.</value>
+        public virtual ActionsControlViewModel Actions { get; protected set; }
 
         /// <summary>
         /// Gets or sets the game selector.
@@ -79,12 +85,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The options.</value>
         public virtual OptionsControlViewModel Options { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the shortcuts.
-        /// </summary>
-        /// <value>The shortcuts.</value>
-        public virtual ShortcutsControlViewModel Shortcuts { get; protected set; }
 
         /// <summary>
         /// Gets the theme selector.

@@ -99,9 +99,19 @@ namespace IronyModManager.Services
                     return Task.FromResult((IReadOnlyCollection<IDLC>)cached);
                 }
                 var result = new List<IDLC>();
-                if (!string.IsNullOrWhiteSpace(game.BaseGameDirectory))
+                if (!string.IsNullOrWhiteSpace(game.ExecutableLocation))
                 {
-                    var directory = System.IO.Path.Combine(game.BaseGameDirectory, DLCFolder);
+                    string directory = string.Empty;
+                    var cleanedExePath = System.IO.Path.GetDirectoryName(game.ExecutableLocation);
+                    while (!string.IsNullOrWhiteSpace(cleanedExePath))
+                    {
+                        directory = System.IO.Path.Combine(cleanedExePath, DLCFolder);
+                        if (System.IO.Directory.Exists(directory))
+                        {
+                            break;
+                        }
+                        cleanedExePath = System.IO.Path.GetDirectoryName(cleanedExePath);
+                    }
                     if (System.IO.Directory.Exists(directory))
                     {
                         var infos = reader.Read(directory);
@@ -109,7 +119,7 @@ namespace IronyModManager.Services
                         {
                             foreach (var item in infos)
                             {
-                                var dlcObject = dlcParser.Parse(item.FileName, item.Content);
+                                var dlcObject = dlcParser.Parse(System.IO.Path.Combine(DLCFolder, item.FileName), item.Content);
                                 result.Add(Mapper.Map<IDLC>(dlcObject));
                             }
                         }

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -28,13 +28,16 @@ namespace IronyModManager.DI
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
-        #region Methods
-
         /// <summary>
         /// Registers the view models.
         /// </summary>
         /// <param name="container">The container.</param>
+#pragma warning disable CA1822 // Mark members as static
+
+        #region Methods
+
         private void RegisterViewModels(Container container)
+#pragma warning restore CA1822 // Mark members as static
         {
             container.RegisterLocalization<MainWindowViewModel>();
             container.RegisterLocalization<ThemeControlViewModel>();
@@ -59,7 +62,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ConflictSolverResetConflictsControlViewModel>();
             container.RegisterLocalization<ConflictSolverDBSearchControlViewModel>();
             container.RegisterLocalization<ConflictSolverCustomConflictsControlViewModel>();
-            container.RegisterLocalization<ShortcutsControlViewModel>();
+            container.RegisterLocalization<ActionsControlViewModel>();
             container.RegisterLocalization<ModHashReportControlViewModel>();
         }
 

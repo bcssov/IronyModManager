@@ -85,7 +85,7 @@ namespace IronyModManager.Services.Tests
             var service = new DLCService(new Cache(), reader.Object, parser.Object, null, mapper.Object);
             var result = await service.GetAsync(new Game()
             {
-                BaseGameDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
                 Type = "Should_parse_dlc_object"
             });
             result.Count.Should().Be(2);
@@ -97,7 +97,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_return_dlc_object_from_cache()
         {
-            var dlcs = new List<IDLC>() { new DLC() 
+            var dlcs = new List<IDLC>() { new DLC()
             {
                 Name = "test",
                 Path = "test"
@@ -108,7 +108,31 @@ namespace IronyModManager.Services.Tests
             var service = new DLCService(cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
-                BaseGameDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
+                Type = "Should_return_dlc_object_from_cache"
+            });
+            result.Count.Should().Be(1);
+            result.Should().BeEquivalentTo(dlcs);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_dlc_object_from_cache_when_exe_path_in_subfolder.
+        /// </summary>
+        [Fact]
+        public async Task Should_return_dlc_object_from_cache_when_exe_path_in_subfolder()
+        {
+            var dlcs = new List<IDLC>() { new DLC()
+            {
+                Name = "test",
+                Path = "test"
+            } };
+            var cache = new Cache();
+            cache.Set("DLC", "Should_return_dlc_object_from_cache", dlcs);
+
+            var service = new DLCService(cache, null, null, null, null);
+            var result = await service.GetAsync(new Game()
+            {
+                ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe",
                 Type = "Should_return_dlc_object_from_cache"
             });
             result.Count.Should().Be(1);
@@ -120,7 +144,7 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_null()
-        {            
+        {
             var service = new DLCService(null, null, null, null, null);
             var result = await service.GetAsync(null);
             result.Count.Should().Be(0);
@@ -131,14 +155,14 @@ namespace IronyModManager.Services.Tests
         /// </summary>
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_path_not_set()
-        {            
+        {
             var service = new DLCService(new Cache(), null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 BaseGameDirectory = string.Empty,
                 Type = "Should_not_return_dlc_objects_when_game_path_not_set"
             });
-            result.Count.Should().Be(0);         
+            result.Count.Should().Be(0);
         }
     }
 }

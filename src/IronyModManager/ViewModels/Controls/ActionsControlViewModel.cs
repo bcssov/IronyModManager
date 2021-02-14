@@ -4,9 +4,9 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-14-2021
 // ***********************************************************************
-// <copyright file="ShortcutsControlViewModel.cs" company="Mario">
+// <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -16,9 +16,11 @@ using System;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -26,12 +28,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ShortcutsControlViewModel.
+    /// Class ActionsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ShortcutsControlViewModel : BaseViewModel
+    public class ActionsControlViewModel : BaseViewModel
     {
         #region Fields
 
@@ -39,6 +41,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The URL action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The DLC service
+        /// </summary>
+        private readonly IDLCService dlcService;
 
         /// <summary>
         /// The game service
@@ -52,10 +59,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortcutsControlViewModel" /> class.
         /// </summary>
+        /// <param name="dlcService">The DLC service.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="gameService">The game service.</param>
-        public ShortcutsControlViewModel(IAppAction appAction, IGameService gameService)
+        public ActionsControlViewModel(IDLCService dlcService, IAppAction appAction, IGameService gameService)
         {
+            this.dlcService = dlcService;
             this.appAction = appAction;
             this.gameService = gameService;
         }
@@ -153,6 +162,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            SetDLCAsync(gameService.GetSelected()).ConfigureAwait(false);
+
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 await appAction.OpenAsync(Constants.WikiUrl);
@@ -189,6 +200,25 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            SetDLCAsync(game).ConfigureAwait(false);
+            base.OnSelectedGameChanged(game);
+        }
+
+        /// <summary>
+        /// set DLC as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected virtual async Task SetDLCAsync(IGame game)
+        {
+            var dlc = await dlcService.GetAsync(game);
         }
 
         #endregion Methods
