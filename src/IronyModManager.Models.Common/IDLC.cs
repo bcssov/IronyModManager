@@ -4,16 +4,16 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="IDLC.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using IronyModManager.Localization;
 using IronyModManager.Shared.Models;
 
@@ -28,5 +28,14 @@ namespace IronyModManager.Models.Common
     /// <seealso cref="IronyModManager.Shared.Models.IDLCObject" />
     public interface IDLC : ILocalizableModel, IDLCObject
     {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is enabled.
+        /// </summary>
+        /// <value><c>true</c> if this instance is enabled; otherwise, <c>false</c>.</value>
+        bool IsEnabled { get; set; }
+
+        #endregion Properties
     }
 }

@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
 using IronyModManager.Parser.Common.DLC;
@@ -52,6 +53,11 @@ namespace IronyModManager.Services
         private readonly ICache cache;
 
         /// <summary>
+        /// The DLC exporter
+        /// </summary>
+        private readonly IDLCExporter dlcExporter;
+
+        /// <summary>
         /// The DLC parser
         /// </summary>
         private readonly IDLCParser dlcParser;
@@ -68,13 +74,15 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="DLCService" /> class.
         /// </summary>
+        /// <param name="dlcExporter">The DLC exporter.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="dlcParser">The DLC parser.</param>
         /// <param name="storage">The storage.</param>
         /// <param name="mapper">The mapper.</param>
-        public DLCService(ICache cache, IReader reader, IDLCParser dlcParser, IStorageProvider storage, IMapper mapper) : base(storage, mapper)
+        public DLCService(IDLCExporter dlcExporter, ICache cache, IReader reader, IDLCParser dlcParser, IStorageProvider storage, IMapper mapper) : base(storage, mapper)
         {
+            this.dlcExporter = dlcExporter;
             this.reader = reader;
             this.dlcParser = dlcParser;
             this.cache = cache;
@@ -85,11 +93,34 @@ namespace IronyModManager.Services
         #region Methods
 
         /// <summary>
+        /// Exports the asynchronous.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="dlc">The DLC.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> ExportAsync(IGame game, IReadOnlyCollection<IDLC> dlc)
+        {
+            if (game != null && (dlc?.Any()).GetValueOrDefault())
+            {
+                var disabledDLC = dlc.Where(p => !p.IsEnabled).ToList();
+                if (disabledDLC.Any())
+                {
+                    return dlcExporter.ExportDLCAsync(new DLCParameters()
+                    {
+                        RootPath = game.UserDirectory,
+                        DLC = disabledDLC
+                    });
+                }
+            }
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
         /// Gets the asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns>Task&lt;IDLC&gt;.</returns>
-        public Task<IReadOnlyCollection<IDLC>> GetAsync(IGame game)
+        public virtual Task<IReadOnlyCollection<IDLC>> GetAsync(IGame game)
         {
             if (game != null)
             {
@@ -129,6 +160,40 @@ namespace IronyModManager.Services
                 return Task.FromResult((IReadOnlyCollection<IDLC>)result);
             }
             return Task.FromResult((IReadOnlyCollection<IDLC>)new List<IDLC>());
+        }
+
+        /// <summary>
+        /// synchronize state as an asynchronous operation.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="dlc">The DLC.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> SyncStateAsync(IGame game, IReadOnlyCollection<IDLC> dlc)
+        {
+            if (game != null && (dlc?.Any()).GetValueOrDefault())
+            {
+                foreach (var item in dlc)
+                {
+                    item.IsEnabled = true;
+                }
+                var disabledDLC = await dlcExporter.GetDisabledDLCAsync(new DLCParameters()
+                {
+                    RootPath = game.UserDirectory
+                });
+                if ((disabledDLC?.Any()).GetValueOrDefault())
+                {
+                    foreach (var item in disabledDLC)
+                    {
+                        var matchedDLC = dlc.FirstOrDefault(p => p.Path.Equals(item.Path, StringComparison.OrdinalIgnoreCase));
+                        if (matchedDLC != null)
+                        {
+                            matchedDLC.IsEnabled = false;
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
         }
 
         #endregion Methods

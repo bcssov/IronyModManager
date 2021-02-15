@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="DLCServiceTests.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using AutoMapper;
 using FluentAssertions;
 using IronyModManager.DI.Extensions;
 using IronyModManager.IO;
+using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
@@ -82,7 +83,7 @@ namespace IronyModManager.Services.Tests
                     Name = values.First()
                 };
             });
-            var service = new DLCService(new Cache(), reader.Object, parser.Object, null, mapper.Object);
+            var service = new DLCService(null, new Cache(), reader.Object, parser.Object, null, mapper.Object);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
@@ -105,7 +106,7 @@ namespace IronyModManager.Services.Tests
             var cache = new Cache();
             cache.Set("DLC", "Should_return_dlc_object_from_cache", dlcs);
 
-            var service = new DLCService(cache, null, null, null, null);
+            var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\test.exe",
@@ -129,7 +130,7 @@ namespace IronyModManager.Services.Tests
             var cache = new Cache();
             cache.Set("DLC", "Should_return_dlc_object_from_cache", dlcs);
 
-            var service = new DLCService(cache, null, null, null, null);
+            var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe",
@@ -145,7 +146,7 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_null()
         {
-            var service = new DLCService(null, null, null, null, null);
+            var service = new DLCService(null, null, null, null, null, null);
             var result = await service.GetAsync(null);
             result.Count.Should().Be(0);
         }
@@ -156,13 +157,138 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_return_dlc_objects_when_game_path_not_set()
         {
-            var service = new DLCService(new Cache(), null, null, null, null);
+            var service = new DLCService(null, new Cache(), null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
                 Type = "Should_not_return_dlc_objects_when_game_path_not_set"
             });
             result.Count.Should().Be(0);
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_export_dlc_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_export_dlc_when_no_game()
+        {
+            var service = new DLCService(null, null, null, null, null, null);
+            var result = await service.ExportAsync(null, new List<IDLC>()
+            {
+                new DLC()
+                {
+                    Name = "test",
+                    Path = "dlc/dlc01.dlc"
+                }
+            });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_export_dlc_when_no_dlc.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_export_dlc_when_no_dlc()
+        {
+            var service = new DLCService(null, null, null, null, null, null);
+            var result = await service.ExportAsync(new Game()
+            {
+                ExecutableLocation = string.Empty,
+                Type = "Should_not_return_dlc_objects_when_game_path_not_set"
+            }, new List<IDLC>());
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_dlc.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_dlc()
+        {
+            var dlcExport = new Mock<IDLCExporter>();
+            dlcExport.Setup(p => p.ExportDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync((DLCParameters p) => { return p.DLC.Any(); });
+            var service = new DLCService(dlcExport.Object, null, null, null, null, null);
+            var result = await service.ExportAsync(new Game()
+            {
+                ExecutableLocation = string.Empty,
+                Type = "Should_export_dlc"
+            }, new List<IDLC>()
+            {
+                new DLC()
+                {
+                    Name = "test",
+                    Path = "dlc/dlc01.dlc",
+                    IsEnabled = false
+                }
+            });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_sync_dlc_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_sync_dlc_when_no_game()
+        {
+            var service = new DLCService(null, null, null, null, null, null);
+            var result = await service.SyncStateAsync(null, new List<IDLC>()
+            {
+                new DLC()
+                {
+                    Name = "test",
+                    Path = "dlc/dlc01.dlc"
+                }
+            });
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_not_sync_dlc_when_no_dlc.
+        /// </summary>
+        [Fact]
+        public async Task Should_not_sync_dlc_when_no_dlc()
+        {
+            var service = new DLCService(null, null, null, null, null, null);
+            var result = await service.ExportAsync(new Game()
+            {
+                ExecutableLocation = string.Empty,
+                Type = "Should_not_sync_dlc_when_no_dlc"
+            }, new List<IDLC>());
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_sync_dlc.
+        /// </summary>
+        [Fact]
+        public async Task Should_sync_dlc()
+        {
+            var dlc = new DLC()
+            {
+                Name = "test",
+                Path = "dlc/dlc01.dlc",
+                IsEnabled = true
+            };
+            var dlc2 = new DLC()
+            {
+                Name = "test",
+                Path = "dlc/dlc02.dlc",
+                IsEnabled = true
+            };
+            var dlcExport = new Mock<IDLCExporter>();
+            dlcExport.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync(() => new List<IDLCObject>() { new DLCObject() {  Path = "dlc/dlc01.dlc"} });
+            var service = new DLCService(dlcExport.Object, null, null, null, null, null);
+            var result = await service.SyncStateAsync(new Game()
+            {
+                ExecutableLocation = string.Empty,
+                Type = "Should_sync_dlc"
+            }, new List<IDLC>()
+            {
+                dlc, dlc2
+            });
+            result.Should().BeTrue();
+            dlc.IsEnabled.Should().BeFalse();
+            dlc2.IsEnabled.Should().BeTrue();
         }
     }
 }
