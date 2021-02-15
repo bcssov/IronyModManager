@@ -10,7 +10,8 @@
             "Wiki": "Wiki",
             "Logs": "Logs",
             "ErrorLog": "Error.log",
-            "Close": "Cerrar"
+            "Close": "Cerrar",
+            "DLC": "DLC"
         }
     },
     "FatalError": {

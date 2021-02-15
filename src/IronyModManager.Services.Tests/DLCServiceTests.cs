@@ -249,7 +249,7 @@ namespace IronyModManager.Services.Tests
         public async Task Should_not_sync_dlc_when_no_dlc()
         {
             var service = new DLCService(null, null, null, null, null, null);
-            var result = await service.ExportAsync(new Game()
+            var result = await service.SyncStateAsync(new Game()
             {
                 ExecutableLocation = string.Empty,
                 Type = "Should_not_sync_dlc_when_no_dlc"

@@ -10,7 +10,8 @@
             "Wiki": "Wiki",
             "Logs": "日志",
             "ErrorLog": "错误日志",
-            "Close": "关闭"
+            "Close": "关闭",
+            "DLC": "可下载的内容"
         }
     },
     "FatalError": {

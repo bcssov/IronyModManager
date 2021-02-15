@@ -4,15 +4,15 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -43,11 +43,6 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppAction appAction;
 
         /// <summary>
-        /// The DLC service
-        /// </summary>
-        private readonly IDLCService dlcService;
-
-        /// <summary>
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
@@ -59,14 +54,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortcutsControlViewModel" /> class.
         /// </summary>
-        /// <param name="dlcService">The DLC service.</param>
+        /// <param name="dlcManager">The DLC manager.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="gameService">The game service.</param>
-        public ActionsControlViewModel(IDLCService dlcService, IAppAction appAction, IGameService gameService)
+        public ActionsControlViewModel(DLCManagerControlViewModel dlcManager, IAppAction appAction, IGameService gameService)
         {
-            this.dlcService = dlcService;
             this.appAction = appAction;
             this.gameService = gameService;
+            DLCManager = dlcManager;
         }
 
         #endregion Constructors
@@ -85,6 +80,25 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The close command.</value>
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the DLC.
+        /// </summary>
+        /// <value>The DLC.</value>
+        [StaticLocalization(LocalizationResources.App.Actions.DLC)]
+        public virtual string DLC { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the DLC command.
+        /// </summary>
+        /// <value>The DLC command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DLCCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the DLC manager.
+        /// </summary>
+        /// <value>The DLC manager.</value>
+        public virtual DLCManagerControlViewModel DLCManager { get; protected set; }
 
         /// <summary>
         /// Gets or sets the error log.
@@ -162,7 +176,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            Task.Run(async () => await SetDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
+            Task.Run(async () => await DLCManager.RefreshDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
 
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -199,6 +213,12 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = false;
             }).DisposeWith(disposables);
 
+            DLCCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = false;
+                DLCManager.Open();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -208,17 +228,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
-            Task.Run(async () => await SetDLCAsync(game).ConfigureAwait(false)).ConfigureAwait(false);
+            Task.Run(async () => await DLCManager.RefreshDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
             base.OnSelectedGameChanged(game);
-        }
-
-        /// <summary>
-        /// set DLC as an asynchronous operation.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        protected virtual async Task SetDLCAsync(IGame game)
-        {
-            var dlc = await dlcService.GetAsync(game);
         }
 
         #endregion Methods

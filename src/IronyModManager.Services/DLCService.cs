@@ -103,14 +103,11 @@ namespace IronyModManager.Services
             if (game != null && (dlc?.Any()).GetValueOrDefault())
             {
                 var disabledDLC = dlc.Where(p => !p.IsEnabled).ToList();
-                if (disabledDLC.Any())
+                return dlcExporter.ExportDLCAsync(new DLCParameters()
                 {
-                    return dlcExporter.ExportDLCAsync(new DLCParameters()
-                    {
-                        RootPath = game.UserDirectory,
-                        DLC = disabledDLC
-                    });
-                }
+                    RootPath = game.UserDirectory,
+                    DLC = disabledDLC
+                });
             }
             return Task.FromResult(false);
         }

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Localization;
 using IronyModManager.ViewModels;
 using IronyModManager.ViewModels.Controls;
@@ -64,6 +64,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ConflictSolverCustomConflictsControlViewModel>();
             container.RegisterLocalization<ActionsControlViewModel>();
             container.RegisterLocalization<ModHashReportControlViewModel>();
+            container.RegisterLocalization<DLCManagerControlViewModel>();
         }
 
         #endregion Methods

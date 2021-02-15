@@ -23,6 +23,7 @@ namespace IronyModManager.Shared
                 public const string Logs = Prefix + "Logs";
                 public const string ErrorLog = Prefix + "ErrorLog";
                 public const string Close = Prefix + "Close";
+                public const string DLC = Prefix + "DLC";
             }
         }
         public static class FatalError
