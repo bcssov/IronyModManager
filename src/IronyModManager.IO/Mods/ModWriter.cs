@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-05-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.IO.Mods
                 tasks = new Task<bool>[]
                 {
                     Task.Run(async() => await sqliteExporter.ExportAsync(parameters)),
-                    Task.Run(async() => await jsonExporter.ExportAsync(parameters))
+                    Task.Run(async() => await jsonExporter.ExportModsAsync(parameters))
                 };
                 await Task.WhenAll(tasks);
             }

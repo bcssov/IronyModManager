@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -16,12 +16,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using IronyModManager.DI;
+using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Mods.Models.Paradox.Common;
 using IronyModManager.IO.Mods.Models.Paradox.v1;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using Newtonsoft.Json;
+using Nito.AsyncEx;
 
 namespace IronyModManager.IO.Mods.Exporter
 {
@@ -33,15 +37,45 @@ namespace IronyModManager.IO.Mods.Exporter
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     internal class JsonExporter : BaseExporter
     {
+        #region Fields
+
+        /// <summary>
+        /// The write lock
+        /// </summary>
+        private static readonly AsyncLock writeLock = new AsyncLock();
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
-        /// export as an asynchronous operation.
+        /// export DLC as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public async Task<bool> ExportAsync(ModWriterParameters parameters)
+        public async Task<bool> ExportDLCAsync(DLCParameters parameters)
         {
+            using var mutex = await writeLock.LockAsync();
+
+            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+            dLCLoad.DisabledDlcs = parameters.DLC.Select(p => p.Path).ToList();
+            var result = await WritePdxModelAsync(dLCLoad, dlcPath);
+
+            mutex.Dispose();
+
+            return result;
+        }
+
+        /// <summary>
+        /// export mods as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public async Task<bool> ExportModsAsync(ModWriterParameters parameters)
+        {
+            using var mutex = await writeLock.LockAsync();
+
             var dlcPath = Path.Combine(parameters.RootDirectory, Constants.DLC_load_path);
             var gameDataPath = Path.Combine(parameters.RootDirectory, Constants.Game_data_path);
             var modRegistryPath = Path.Combine(parameters.RootDirectory, Constants.Mod_registry_path);
@@ -111,7 +145,31 @@ namespace IronyModManager.IO.Mods.Exporter
             };
             await Task.WhenAll(tasks);
 
+            mutex.Dispose();
+
             return tasks.All(p => p.Result);
+        }
+
+        /// <summary>
+        /// get disabled DLC as an asynchronous operation.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns>IReadOnlyCollection&lt;IDLCObject&gt;.</returns>
+        public async Task<IReadOnlyCollection<IDLCObject>> GetDisabledDLCAsync(DLCParameters parameters)
+        {
+            var dlcPath = Path.Combine(parameters.RootPath, Constants.DLC_load_path);
+            var dLCLoad = await LoadPdxModelAsync<DLCLoad>(dlcPath) ?? new DLCLoad();
+            if ((dLCLoad.DisabledDlcs?.Any()).GetValueOrDefault())
+            {
+                var result = dLCLoad.DisabledDlcs.Select(p =>
+                {
+                    var model = DIResolver.Get<IDLCObject>();
+                    model.Path = p;
+                    return model;
+                }).ToList();
+                return result;
+            }
+            return null;
         }
 
         /// <summary>
@@ -120,7 +178,7 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;T&gt;.</returns>
-        private async Task<T> LoadPdxModelAsync<T>(string path) where T : IPdxFormat
+        private static async Task<T> LoadPdxModelAsync<T>(string path) where T : IPdxFormat
         {
             if (File.Exists(path))
             {

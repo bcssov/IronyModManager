@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
@@ -33,10 +33,10 @@ namespace IronyModManager.Storage
         public virtual bool AdvancedFeaturesSupported { get; set; }
 
         /// <summary>
-        /// Gets or sets the base game directory.
+        /// Gets or sets the base steam game directory.
         /// </summary>
-        /// <value>The base game directory.</value>
-        public virtual string BaseGameDirectory { get; set; }
+        /// <value>The base steam game directory.</value>
+        public virtual string BaseSteamGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.

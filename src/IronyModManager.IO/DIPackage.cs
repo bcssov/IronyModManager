@@ -4,20 +4,23 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-14-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+
+using System;
 using System.Collections.Generic;
 using IronyModManager.DI.Extensions;
-using System;
+using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.IO.Common.Updater;
+using IronyModManager.IO.DLC;
 using IronyModManager.IO.Mods;
 using IronyModManager.IO.Mods.Models;
 using IronyModManager.IO.Readers;
@@ -58,6 +61,7 @@ namespace IronyModManager.IO
             container.Register<IModMergeCompressExporter, ModMergeCompressExporter>();
             container.Register<ITempFile, TempFile.TempFile>();
             container.RemoveTransientWarning<ITempFile>();
+            container.Register<IDLCExporter, DLCExporter>();
         }
 
         #endregion Methods

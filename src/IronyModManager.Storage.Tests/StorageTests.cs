@@ -248,7 +248,7 @@ namespace IronyModManager.Storage.Tests
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
                 WorkshopDirectory = "workshop1",
-                BaseGameDirectory = "base",
+                BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
@@ -265,7 +265,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
-            dbMock.Games.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).BaseSteamGameDirectory.Should().Be("base");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
@@ -449,7 +449,7 @@ namespace IronyModManager.Storage.Tests
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
                 WorkshopDirectory = "workshop1",
-                BaseGameDirectory = "base",
+                BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
@@ -467,7 +467,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
-            result.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            result.FirstOrDefault(p => p.Name == key).BaseSteamGameDirectory.Should().Be("base");
             result.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             result.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");

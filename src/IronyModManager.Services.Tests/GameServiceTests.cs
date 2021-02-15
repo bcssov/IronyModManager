@@ -69,7 +69,7 @@ namespace IronyModManager.Services.Tests
                     WorkshopDirectory = "workshop2",
                     ExecutableArgs = "args",
                     ExecutablePath = "exePath.exe",
-                    BaseGameDirectory = "exePath"
+                    BaseSteamGameDirectory = "exePath"
                 },
                 new GameType()
                 {

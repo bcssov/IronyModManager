@@ -5,12 +5,13 @@
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
         "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
-        "Shortcuts": {
-            "Name": "Shortcuts",
+        "Actions": {
+            "Name": "Actions",
             "Wiki": "Wiki",
             "Logs": "Logs",
             "ErrorLog": "Error.log",
-            "Close": "Close"
+            "Close": "Close",
+            "DLC": "DLC"
         }
     },
     "FatalError": {

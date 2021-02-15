@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Views;
 using IronyModManager.Views.Controls;
 using Container = SimpleInjector.Container;
@@ -61,8 +61,9 @@ namespace IronyModManager.DI
             container.Register<ConflictSolverResetConflictsControlView>();
             container.Register<ConflictSolverDBSearchControlView>();
             container.Register<ConflictSolverCustomConflictsControlView>();
-            container.Register<ShortcutsControlView>();
+            container.Register<ActionsControlView>();
             container.Register<ModHashReportControlView>();
+            container.Register<DLCManagerControlView>();
         }
 
         #endregion Methods

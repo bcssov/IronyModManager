@@ -5,12 +5,13 @@
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano. La aplicación se cerrará una vez que se complete ...",
         "WaitBackgroundOperationMessage": "Por favor espere, se está realizando una operación en segundo plano.",
-        "Shortcuts": {
-            "Name": "Atajos",
+        "Actions": {
+            "Name": "Comportamiento",
             "Wiki": "Wiki",
             "Logs": "Logs",
             "ErrorLog": "Error.log",
-            "Close": "Cerrar"
+            "Close": "Cerrar",
+            "DLC": "DLC"
         }
     },
     "FatalError": {

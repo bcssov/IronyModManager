@@ -15,7 +15,7 @@
         <ContentControl Content="{Binding GameSelector}" HorizontalAlignment="Center" VerticalAlignment="Top"></ContentControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
           <ContentControl Content="{Binding LanguageSelector}"></ContentControl>
-          <ContentControl Margin="20,0" Content="{Binding Shortcuts}"></ContentControl>          
+          <ContentControl Margin="20,0" Content="{Binding Actions}"></ContentControl>          
         </StackPanel>
       </Panel>
       <Panel>

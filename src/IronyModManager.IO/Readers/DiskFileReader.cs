@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -29,6 +29,15 @@ namespace IronyModManager.IO
     [ExcludeFromCoverage("Skipping testing IO logic.")]
     public class DiskFileReader : IFileReader
     {
+        #region Fields
+
+        /// <summary>
+        /// The disallowed paths
+        /// </summary>
+        private static readonly string[] disallowedPaths = new string[] { Common.Constants.ModDirectory, Common.Constants.DLCDirectory };
+
+        #endregion Fields
+
         #region Methods
 
         /// <summary>
@@ -48,7 +57,7 @@ namespace IronyModManager.IO
         /// <returns><c>true</c> if this instance can read the specified path; otherwise, <c>false</c>.</returns>
         public virtual bool CanRead(string path)
         {
-            return Directory.Exists(path) && !path.EndsWith(Common.Constants.ModDirectory, StringComparison.OrdinalIgnoreCase);
+            return Directory.Exists(path) && !disallowedPaths.Any(p => !path.EndsWith(p, StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
