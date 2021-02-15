@@ -4,15 +4,15 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-15-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.DI;
@@ -21,8 +21,6 @@ using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
-
-using System.Linq;
 
 namespace IronyModManager.Services.Registrations
 {
