@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModCollection.cs" company="Mario">
 //     Mario
@@ -76,6 +76,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [patch mode enabled].
+        /// </summary>
+        /// <value><c>true</c> if [patch mode enabled]; otherwise, <c>false</c>.</value>
+        public bool PatchModeEnabled { get; set; } = true;
 
         #endregion Properties
     }
