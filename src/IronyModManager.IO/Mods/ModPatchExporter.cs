@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -162,7 +162,8 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> CopyPatchModAsync(ModPatchExporterParameters parameters)
         {
-            return CopyPathModInternalAsync(parameters);
+            var retry = new RetryStrategy();
+            return retry.RetryActionAsync(() => CopyPatchModInternalAsync(parameters));
         }
 
         /// <summary>
@@ -174,55 +175,60 @@ namespace IronyModManager.IO.Mods
         /// <exception cref="ArgumentNullException">parameters - Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
-            if (string.IsNullOrWhiteSpace(parameters.Game))
+            async Task<bool> export()
             {
-                throw new ArgumentNullException(nameof(parameters), "Game.");
+                if (string.IsNullOrWhiteSpace(parameters.Game))
+                {
+                    throw new ArgumentNullException(nameof(parameters), "Game.");
+                }
+                var definitionsInvalid = (parameters.Definitions == null || !parameters.Definitions.Any()) &&
+                    (parameters.OrphanConflicts == null || !parameters.OrphanConflicts.Any()) &&
+                    (parameters.OverwrittenConflicts == null || !parameters.OverwrittenConflicts.Any()) &&
+                    (parameters.CustomConflicts == null || !parameters.CustomConflicts.Any());
+                if (definitionsInvalid)
+                {
+                    throw new ArgumentNullException(nameof(parameters), "Definitions.");
+                }
+                var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
+                if (definitionInfoProvider != null)
+                {
+                    var results = new List<bool>();
+
+                    if (parameters.Definitions?.Count() > 0)
+                    {
+                        results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                        results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
+                    }
+
+                    if (parameters.OrphanConflicts?.Count() > 0)
+                    {
+                        results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                        results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
+                    }
+
+                    if (parameters.OverwrittenConflicts?.Count() > 0)
+                    {
+                        results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                        results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
+                    }
+
+                    if (parameters.CustomConflicts?.Count() > 0)
+                    {
+                        results.Add(await WriteMergedContentAsync(parameters.CustomConflicts.Where(p => p.ValueType != ValueType.Binary),
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, FileNameGeneration.UseExistingFileName));
+                    }
+                    return results.All(p => p);
+                }
+                return false;
             }
-            var definitionsInvalid = (parameters.Definitions == null || !parameters.Definitions.Any()) &&
-                (parameters.OrphanConflicts == null || !parameters.OrphanConflicts.Any()) &&
-                (parameters.OverwrittenConflicts == null || !parameters.OverwrittenConflicts.Any()) &&
-                (parameters.CustomConflicts == null || !parameters.CustomConflicts.Any());
-            if (definitionsInvalid)
-            {
-                throw new ArgumentNullException(nameof(parameters), "Definitions.");
-            }
-            var definitionInfoProvider = definitionInfoProviders.FirstOrDefault(p => p.CanProcess(parameters.Game));
-            if (definitionInfoProvider != null)
-            {
-                var results = new List<bool>();
-
-                if (parameters.Definitions?.Count() > 0)
-                {
-                    results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
-                    results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
-                }
-
-                if (parameters.OrphanConflicts?.Count() > 0)
-                {
-                    results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
-                    results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
-                }
-
-                if (parameters.OverwrittenConflicts?.Count() > 0)
-                {
-                    results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
-                    results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
-                }
-
-                if (parameters.CustomConflicts?.Count() > 0)
-                {
-                    results.Add(await WriteMergedContentAsync(parameters.CustomConflicts.Where(p => p.ValueType != ValueType.Binary),
-                        GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, FileNameGeneration.UseExistingFileName));
-                }
-                return results.All(p => p);
-            }
-            return false;
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(() => export());
         }
 
         /// <summary>
@@ -282,16 +288,21 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public async Task<bool> RenamePatchModAsync(ModPatchExporterParameters parameters)
         {
-            var result = await CopyPathModInternalAsync(parameters);
-            if (result)
+            async Task<bool> rename()
             {
-                var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
-                if (Directory.Exists(oldPath))
+                var result = await CopyPatchModInternalAsync(parameters);
+                if (result)
                 {
-                    Directory.Delete(oldPath, true);
+                    var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
+                    if (Directory.Exists(oldPath))
+                    {
+                        Directory.Delete(oldPath, true);
+                    }
                 }
-            }
-            return result;
+                return result;
+            };
+            var retry = new RetryStrategy();
+            return await retry.RetryActionAsync(() => rename());
         }
 
         /// <summary>
@@ -402,11 +413,11 @@ namespace IronyModManager.IO.Mods
         }
 
         /// <summary>
-        /// copy path mod internal as an asynchronous operation.
+        /// copy patch mod internal as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static async Task<bool> CopyPathModInternalAsync(ModPatchExporterParameters parameters)
+        private static async Task<bool> CopyPatchModInternalAsync(ModPatchExporterParameters parameters)
         {
             var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
             var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);

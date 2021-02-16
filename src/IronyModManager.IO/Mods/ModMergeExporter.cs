@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModMergeExporter.cs" company="Mario">
 //     Mario
@@ -76,7 +76,8 @@ namespace IronyModManager.IO.Mods
             {
                 throw new ArgumentNullException(nameof(parameters), "RootModPath");
             }
-            return CopyStreamAsync(parameters.RootModPath, parameters.ExportFile, parameters.ExportPath);
+            var retry = new RetryStrategy();
+            return retry.RetryActionAsync(() => CopyStreamAsync(parameters.RootModPath, parameters.ExportFile, parameters.ExportPath));
         }
 
         /// <summary>

@@ -111,17 +111,22 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> DeleteDescriptorAsync(ModWriterParameters parameters)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
-            if (File.Exists(fullPath))
+            Task<bool> delete()
             {
-                _ = new System.IO.FileInfo(fullPath)
+                var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+                if (File.Exists(fullPath))
                 {
-                    IsReadOnly = false
-                };
-                File.Delete(fullPath);
-                return Task.FromResult(true);
+                    _ = new System.IO.FileInfo(fullPath)
+                    {
+                        IsReadOnly = false
+                    };
+                    File.Delete(fullPath);
+                    return Task.FromResult(true);
+                }
+                return Task.FromResult(false);
             }
-            return Task.FromResult(false);
+            var retry = new RetryStrategy();
+            return retry.RetryActionAsync(() => delete());
         }
 
         /// <summary>
@@ -162,29 +167,34 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> PurgeModDirectoryAsync(ModWriterParameters parameters, bool deleteAll = false)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
-            if (Directory.Exists(fullPath))
+            Task<bool> purge()
             {
-                if (!deleteAll)
+                var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+                if (Directory.Exists(fullPath))
                 {
-                    var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
-                    foreach (var item in files)
+                    if (!deleteAll)
                     {
-                        File.Delete(item);
+                        var files = Directory.EnumerateFiles(fullPath, "*", SearchOption.TopDirectoryOnly);
+                        foreach (var item in files)
+                        {
+                            File.Delete(item);
+                        }
                     }
+                    else
+                    {
+                        Directory.Delete(fullPath, true);
+                    }
+                    return Task.FromResult(true);
                 }
-                else
+                else if (File.Exists(fullPath))
                 {
-                    Directory.Delete(fullPath, true);
+                    File.Delete(fullPath);
+                    return Task.FromResult(true);
                 }
-                return Task.FromResult(true);
+                return Task.FromResult(false);
             }
-            else if (File.Exists(fullPath))
-            {
-                File.Delete(fullPath);
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
+            var retry = new RetryStrategy();
+            return retry.RetryActionAsync(() => purge());
         }
 
         /// <summary>
