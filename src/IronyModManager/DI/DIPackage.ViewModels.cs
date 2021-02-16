@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.ViewModels.cs" company="Mario">
 //     Mario
@@ -32,12 +32,10 @@ namespace IronyModManager.DI
         /// Registers the view models.
         /// </summary>
         /// <param name="container">The container.</param>
-#pragma warning disable CA1822 // Mark members as static
 
         #region Methods
 
         private void RegisterViewModels(Container container)
-#pragma warning restore CA1822 // Mark members as static
         {
             container.RegisterLocalization<MainWindowViewModel>();
             container.RegisterLocalization<ThemeControlViewModel>();

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -193,9 +193,7 @@ namespace IronyModManager
         /// </summary>
         /// <param name="mainWindow">The main window.</param>
         /// <param name="locale">The locale.</param>
-#pragma warning disable CA1822 // Mark members as static
         private void SetFontFamily(Window mainWindow, string locale = Shared.Constants.EmptyParam)
-#pragma warning restore CA1822 // Mark members as static
         {
             var langService = DIResolver.Get<ILanguagesService>();
             ILanguage language;
@@ -241,9 +239,7 @@ namespace IronyModManager
         /// Called when [theme changed].
         /// </summary>
         /// <returns>Task.</returns>
-#pragma warning disable CA1822 // Mark members as static
         private async Task OnThemeChanged()
-#pragma warning restore CA1822 // Mark members as static
         {
             var notificationAction = DIResolver.Get<INotificationAction>();
             var locManager = DIResolver.Get<ILocalizationManager>();

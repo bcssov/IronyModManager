@@ -32,6 +32,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Castle.Core" Version="4.4.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="$(MicrosoftDotNetPlatformAbstractionsVersion)" allowedVersions="$(MicrosoftDotNetPlatformAbstractionsVersion)" />

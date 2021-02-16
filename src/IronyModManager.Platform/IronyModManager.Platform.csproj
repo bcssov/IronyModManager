@@ -35,6 +35,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

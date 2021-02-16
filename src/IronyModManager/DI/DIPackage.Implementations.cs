@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -40,12 +40,10 @@ namespace IronyModManager.DI
         /// Registers the implementations.
         /// </summary>
         /// <param name="container">The container.</param>
-#pragma warning disable CA1822 // Mark members as static
 
         #region Methods
 
         private void RegisterImplementations(Container container)
-#pragma warning restore CA1822 // Mark members as static
         {
             container.Register<IViewResolver, ViewResolver>();
             container.Register<ILogger, Logger>();
