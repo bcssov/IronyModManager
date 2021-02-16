@@ -181,6 +181,22 @@
                 "Title": "Bestehende Kollektion überschreiben?",
                 "Message": "Eine zusammengeführte Kollektion mit dem angegebenen Namen ist bereits vorhanden. Möchten Sie es überschreiben?"
             }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Aktiviert",
+            "Disabled": "Behindert",
+            "NotAvailable": "Nicht verfügbar",
+            "DeletePrompt": {
+                "Title": "Löschen bestätigen",
+                "Message": "Bist du sicher, dass du den Patch Mod löschen willst?"
+            },
+            "Actions": {
+                "Enable": "Aktivieren",
+                "Disable": "Deaktivieren",
+                "Delete": "Löschen",
+                "Close": "Schließen"
+            }
         }
     },
     "Mod_Actions": {

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Avalonia.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Avalonia.ReactiveUI;
 using IronyModManager.Log;
 using ReactiveUI;
@@ -33,12 +33,10 @@ namespace IronyModManager.DI
         /// Registers the avalonia services.
         /// </summary>
         /// <param name="container">The container.</param>
-#pragma warning disable CA1822 // Mark members as static
 
         #region Methods
 
         private void RegisterAvaloniaServices(Container container)
-#pragma warning restore CA1822 // Mark members as static
         {
             var viewFetcher = new AvaloniaActivationForViewFetcher();
             var dataTemplate = new AutoDataTemplateBindingHook();

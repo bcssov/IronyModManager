@@ -181,6 +181,22 @@
                 "Title": "¿Sobrescribir la colección existente?",
                 "Message": "Ya existe una colección combinada con el nombre especificado. ¿Le gustaría sobrescribirlo?"
             }
+        },
+        "PatchMod": {
+            "Title": "Modificación de parche: {Status}",
+            "Enabled": "Activado",
+            "Disabled": "Discapacitado",
+            "NotAvailable": "No disponible",
+            "DeletePrompt": {
+                "Title": "Confirmar eliminación",
+                "Message": "¿Estás seguro de que quieres eliminar el mod de parche?"
+            },
+            "Actions": {
+                "Enable": "Habilitar",
+                "Disable": "Desactivar",
+                "Delete": "Borrar",
+                "Close": "Cerrar"
+            }
         }
     },
     "Mod_Actions": {

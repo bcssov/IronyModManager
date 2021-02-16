@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -337,6 +337,7 @@ namespace IronyModManager.ViewModels.Controls
             copied.IsSelected = true;
             copied.Mods = ActiveCollection.Mods;
             copied.Name = name;
+            copied.PatchModEnabled = true;
             return copied;
         }
 

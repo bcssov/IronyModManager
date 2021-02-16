@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -182,6 +182,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modReportView">The mod report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
@@ -200,12 +201,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(PatchModControlViewModel patchMod, IIDGenerator idGenerator, ModHashReportControlViewModel modReportView,
+            ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
         {
+            this.PatchMod = patchMod;
             this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -576,6 +579,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the patch mod.
+        /// </summary>
+        /// <value>The patch mod.</value>
+        public virtual PatchModControlViewModel PatchMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the remove.
         /// </summary>
         /// <value>The remove.</value>
@@ -760,7 +769,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void Reset()
         {
-            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            PatchMod.SetParameters(SelectedModCollection);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -830,6 +840,28 @@ namespace IronyModManager.ViewModels.Controls
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
             await TriggerOverlayAsync(id, false);
+        }
+
+        /// <summary>
+        /// handle collection patch as an asynchronous operation.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        protected virtual async Task HandleCollectionPatchStateAsync(string collection)
+        {
+            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
+            if (activeGame != null && SelectedMods?.Count > 0)
+            {
+                ConflictSolverStateChanged?.Invoke(collection, true);
+                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
+                {
+                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
+                    ConflictSolverStateChanged?.Invoke(collection, !result);
+                }
+            }
+            else
+            {
+                ConflictSolverStateChanged?.Invoke(collection, true);
+            }
         }
 
         /// <summary>
@@ -1047,6 +1079,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
                 ModifyCollection.ActiveCollection = o;
+                PatchMod.SetParameters(o);
                 HandleModCollectionChange();
             }).DisposeWith(disposables);
 
@@ -1610,6 +1643,7 @@ namespace IronyModManager.ViewModels.Controls
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
                 collection.MergedFolderName = SelectedModCollection.MergedFolderName;
+                collection.PatchModEnabled = SelectedModCollection.PatchModEnabled;
                 if (modCollectionService.Save(collection))
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();
@@ -1678,7 +1712,7 @@ namespace IronyModManager.ViewModels.Controls
                 previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (k, v) => oldMods);
             }
             ModifyCollection.SelectedMods = selectedMods;
-            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             var order = 1;
             if (SelectedMods?.Count > 0)
             {
@@ -1759,28 +1793,6 @@ namespace IronyModManager.ViewModels.Controls
                         ReorderQueuedItemsAsync(queue).ConfigureAwait(false);
                     }
                 }).DisposeWith(Disposables);
-            }
-        }
-
-        /// <summary>
-        /// validate collection patch state as an asynchronous operation.
-        /// </summary>
-        /// <param name="collection">The collection.</param>
-        protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
-        {
-            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
-            if (activeGame != null && SelectedMods?.Count > 0)
-            {
-                ConflictSolverStateChanged?.Invoke(collection, true);
-                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
-                {
-                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
-                    ConflictSolverStateChanged?.Invoke(collection, !result);
-                }
-            }
-            else
-            {
-                ConflictSolverStateChanged?.Invoke(collection, true);
             }
         }
 

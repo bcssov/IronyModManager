@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -150,17 +150,17 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="enabledMods">The mods.</param>
         /// <param name="regularMods">The regular mods.</param>
-        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, string collectionName)
+        public virtual async Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection)
         {
             var game = GameService.GetSelected();
-            if (game == null || enabledMods == null || regularMods == null)
+            if (game == null || enabledMods == null || regularMods == null || modCollection == null)
             {
                 return false;
             }
             var allMods = GetInstalledModsInternal(game, false);
-            var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(collectionName));
+            var mod = GeneratePatchModDescriptor(allMods, game, GenerateCollectionPatchName(modCollection.Name));
             var applyModParams = new ModWriterParameters()
             {
                 OtherMods = regularMods.Where(p => !enabledMods.Any(m => m.DescriptorFile.Equals(p.DescriptorFile))).ToList(),
@@ -173,16 +173,19 @@ namespace IronyModManager.Services
                 Path = mod.FileName
             }))
             {
-                if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                if (modCollection.PatchModEnabled)
                 {
-                    Mod = mod,
-                    RootDirectory = game.UserDirectory,
-                    Path = mod.DescriptorFile,
-                    LockDescriptor = CheckIfModShouldBeLocked(game, mod)
-                }, IsPatchModInternal(mod)))
-                {
-                    applyModParams.TopPriorityMods = new List<IMod>() { mod };
-                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                    if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
+                    {
+                        Mod = mod,
+                        RootDirectory = game.UserDirectory,
+                        Path = mod.DescriptorFile,
+                        LockDescriptor = CheckIfModShouldBeLocked(game, mod)
+                    }, IsPatchModInternal(mod)))
+                    {
+                        applyModParams.TopPriorityMods = new List<IMod>() { mod };
+                        Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                    }
                 }
             }
             else
@@ -376,6 +379,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Patches the mod exists asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> PatchModExistsAsync(string collectionName)
+        {
+            return ModDirectoryExistsAsync(GenerateCollectionPatchName(collectionName));
+        }
+
+        /// <summary>
         /// populate mod files as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -413,6 +426,16 @@ namespace IronyModManager.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Purges the mod patch asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> PurgeModPatchAsync(string collectionName)
+        {
+            return PurgeModDirectoryAsync(GenerateCollectionPatchName(collectionName));
         }
 
         /// <summary>

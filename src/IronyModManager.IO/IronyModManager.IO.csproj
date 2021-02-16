@@ -32,6 +32,10 @@
     <NoWarn>1701;1702;NU1603</NoWarn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Include="..\..\LICENSE">

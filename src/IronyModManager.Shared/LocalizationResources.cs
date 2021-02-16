@@ -244,6 +244,28 @@ namespace IronyModManager.Shared
                     public const string Message = Prefix + "Message";
                 }
             }
+            public static class PatchMod
+            {
+                public const string Prefix = "Collection_Mods.PatchMod.";
+                public const string Title = Prefix + "Title";
+                public const string Enabled = Prefix + "Enabled";
+                public const string Disabled = Prefix + "Disabled";
+                public const string NotAvailable = Prefix + "NotAvailable";
+                public static class DeletePrompt
+                {
+                    public const string Prefix = "Collection_Mods.PatchMod.DeletePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class Actions
+                {
+                    public const string Prefix = "Collection_Mods.PatchMod.Actions.";
+                    public const string Enable = Prefix + "Enable";
+                    public const string Disable = Prefix + "Disable";
+                    public const string Delete = Prefix + "Delete";
+                    public const string Close = Prefix + "Close";
+                }
+            }
         }
         public static class Mod_Actions
         {

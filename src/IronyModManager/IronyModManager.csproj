@@ -171,6 +171,7 @@
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Remove="Views\MainConflictSolverControlView.xaml" />
     <None Remove="Views\MainControlView.xaml" />
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

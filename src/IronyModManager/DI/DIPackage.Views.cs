@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -31,12 +31,10 @@ namespace IronyModManager.DI
         /// Registers the views.
         /// </summary>
         /// <param name="container">The container.</param>
-#pragma warning disable CA1822 // Mark members as static
 
         #region Methods
 
         private void RegisterViews(Container container)
-#pragma warning restore CA1822 // Mark members as static
         {
             container.Register<MainWindow>();
             container.Register<ThemeControlView>();
@@ -64,6 +62,7 @@ namespace IronyModManager.DI
             container.Register<ActionsControlView>();
             container.Register<ModHashReportControlView>();
             container.Register<DLCManagerControlView>();
+            container.Register<PatchModControlView>();
         }
 
         #endregion Methods

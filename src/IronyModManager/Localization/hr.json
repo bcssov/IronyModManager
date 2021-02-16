@@ -181,6 +181,22 @@
                 "Title": "Prebriši postojeću kolekciju?",
                 "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
             }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Omogućeno",
+            "Disabled": "Onemogućeno",
+            "NotAvailable": "Nije dostupno",
+            "DeletePrompt": {
+                "Title": "Potvrdi brisanje",
+                "Message": "Jeste li sigurni da želite izbrisati mod zakrpe?"
+            },
+            "Actions": {
+                "Enable": "Omogući",
+                "Disable": "Onemogući",
+                "Delete": "Obriši",
+                "Close": "Zatvori"
+            }
         }
     },
     "Mod_Actions": {

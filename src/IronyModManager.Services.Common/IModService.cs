@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -61,9 +61,9 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <param name="enabledMods">The enabled mods.</param>
         /// <param name="regularMods">The regular mods.</param>
-        /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="modCollection">The mod collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, string collectionName);
+        Task<bool> ExportModsAsync(IReadOnlyCollection<IMod> enabledMods, IReadOnlyCollection<IMod> regularMods, IModCollection modCollection);
 
         /// <summary>
         /// Gets the image stream asynchronous.
@@ -111,6 +111,13 @@ namespace IronyModManager.Services.Common
         Task<bool> ModDirectoryExistsAsync(string folder);
 
         /// <summary>
+        /// Patches the mod exists asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PatchModExistsAsync(string collectionName);
+
+        /// <summary>
         /// Populates the mod files asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -123,6 +130,13 @@ namespace IronyModManager.Services.Common
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> PurgeModDirectoryAsync(string folder);
+
+        /// <summary>
+        /// Purges the mod patch asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PurgeModPatchAsync(string collectionName);
 
         #endregion Methods
     }
