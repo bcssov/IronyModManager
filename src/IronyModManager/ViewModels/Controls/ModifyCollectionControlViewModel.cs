@@ -337,7 +337,7 @@ namespace IronyModManager.ViewModels.Controls
             copied.IsSelected = true;
             copied.Mods = ActiveCollection.Mods;
             copied.Name = name;
-            copied.PatchModeEnabled = true;
+            copied.PatchModEnabled = true;
             return copied;
         }
 

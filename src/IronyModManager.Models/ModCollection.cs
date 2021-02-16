@@ -78,10 +78,10 @@ namespace IronyModManager.Models
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [patch mode enabled].
+        /// Gets or sets a value indicating whether [patch mod enabled].
         /// </summary>
-        /// <value><c>true</c> if [patch mode enabled]; otherwise, <c>false</c>.</value>
-        public bool PatchModeEnabled { get; set; } = true;
+        /// <value><c>true</c> if [patch mod enabled]; otherwise, <c>false</c>.</value>
+        public bool PatchModEnabled { get; set; } = true;
 
         #endregion Properties
     }

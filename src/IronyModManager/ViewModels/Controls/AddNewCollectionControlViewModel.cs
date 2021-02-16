@@ -144,7 +144,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (RenamingCollection != null)
                     {
                         collection.Mods = RenamingCollection.Mods;
-                        collection.PatchModeEnabled = RenamingCollection.PatchModeEnabled;
+                        collection.PatchModEnabled = RenamingCollection.PatchModEnabled;
                         modCollectionService.Delete(RenamingCollection.Name);
                         modPatchCollectionService.InvalidatePatchModState(RenamingCollection.Name);
                     }

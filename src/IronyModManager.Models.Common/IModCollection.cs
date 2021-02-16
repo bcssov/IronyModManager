@@ -61,10 +61,10 @@ namespace IronyModManager.Models.Common
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [patch mode enabled].
+        /// Gets or sets a value indicating whether [patch mod enabled].
         /// </summary>
-        /// <value><c>true</c> if [patch mode enabled]; otherwise, <c>false</c>.</value>
-        bool PatchModeEnabled { get; set; }
+        /// <value><c>true</c> if [patch mod enabled]; otherwise, <c>false</c>.</value>
+        bool PatchModEnabled { get; set; }
 
         #endregion Properties
     }

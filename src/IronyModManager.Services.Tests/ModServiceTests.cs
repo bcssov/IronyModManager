@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModServiceTests.cs" company="Mario">
 //     Mario
@@ -269,6 +269,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_export_mods()
         {
+            DISetup.SetupContainer();
+
             var storageProvider = new Mock<IStorageProvider>();
             var modParser = new Mock<IModParser>();
             var reader = new Mock<IReader>();
@@ -305,8 +307,59 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, "fake");
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new ModCollection() { Name = "fake" });
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_export_mods_without_patch_mod.
+        /// </summary>
+        [Fact]
+        public async Task Should_export_mods_without_patch_mod()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            bool noPatchModExported = false;
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName
+                };
+            });
+            gameService.Setup(s => s.GetSelected()).Returns(new Game()
+            {
+                Type = "test",
+                UserDirectory = "C:\\users\\fake"
+            });
+            modWriter.Setup(p => p.DescriptorExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.WriteDescriptorAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns((ModWriterParameters p, bool isPath) =>
+            {
+                return Task.FromResult(true);
+            });
+            modWriter.Setup(p => p.ApplyModsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                noPatchModExported = p.TopPriorityMods == null || p.TopPriorityMods.Count == 0;
+                return Task.FromResult(true);
+            });
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new List<IMod> { new Mod() { DescriptorFile = "mod/fake.mod" } }, new ModCollection() { PatchModEnabled = false, Name = "fake" });
+            result.Should().BeTrue();
+            noPatchModExported.Should().BeTrue();
         }
 
         /// <summary>
@@ -350,7 +403,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, new List<IMod> { new Mod() }, "fake");
+            var result = await service.ExportModsAsync(new List<IMod> { new Mod() }, new List<IMod> { new Mod() }, new ModCollection() { Name = "fake" });
             result.Should().BeFalse();
         }
 
@@ -395,7 +448,7 @@ namespace IronyModManager.Services.Tests
             });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = await service.ExportModsAsync(null, null, "fake");
+            var result = await service.ExportModsAsync(null, null, new ModCollection() { Name = "fake" });
             result.Should().BeFalse();
         }
 
@@ -519,6 +572,9 @@ namespace IronyModManager.Services.Tests
             result.Count.Should().BeGreaterThan(0);
         }
 
+        /// <summary>
+        /// Defines the test method Should_install_lockable_mods.
+        /// </summary>
         [Fact]
         public async Task Should_install_lockable_mods()
         {

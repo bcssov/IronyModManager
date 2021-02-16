@@ -1632,7 +1632,7 @@ namespace IronyModManager.ViewModels.Controls
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
                 collection.MergedFolderName = SelectedModCollection.MergedFolderName;
-                collection.PatchModeEnabled = SelectedModCollection.PatchModeEnabled;
+                collection.PatchModEnabled = SelectedModCollection.PatchModEnabled;
                 if (modCollectionService.Save(collection))
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();
