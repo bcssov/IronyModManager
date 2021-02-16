@@ -6,12 +6,12 @@
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭……",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",
         "Actions": {
-            "Name": "动作",
+            "Name": "操作",
             "Wiki": "Wiki",
             "Logs": "日志",
             "ErrorLog": "错误日志",
             "Close": "关闭",
-            "DLC": "可下载的内容"
+            "DLC": "DLC"
         }
     },
     "FatalError": {
@@ -25,7 +25,7 @@
     },
     "UnableToWriteError": {
         "Title": "应用程序被阻止",
-        "Message": "该应用程序似乎已被防病毒或权限阻止，无法写入用户文档目录：{NewLine}{Paths}"
+        "Message": "该应用程序似乎已被杀毒软件阻止或无相关权限，无法写入用户文档目录：{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "检测到无效模组",
@@ -64,9 +64,9 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
-        "MaterialDark": "暗色质感",
-        "MaterialLightGreen": "亮绿质感",
-        "MaterialDeepPurple": "深紫质感",
+        "MaterialDark": "Material 暗色",
+        "MaterialLightGreen": "Material 亮绿",
+        "MaterialDeepPurple": "Material 深紫",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
         "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"
@@ -74,10 +74,10 @@
     "Games": {
         "Name": "游戏",
         "Stellaris": "群星",
-        "EuropaUniversalisIV": "欧陆风云 IV",
-        "HeartsofIronIV": "钢铁雄心 IV",
+        "EuropaUniversalisIV": "欧陆风云 Ⅳ",
+        "HeartsofIronIV": "钢铁雄心 Ⅳ",
         "ImperatorRome": "帝皇：罗马",
-        "CrusaderKings3": "王国风云 III"
+        "CrusaderKings3": "十字军之王 Ⅲ"
     },
     "Installed_Mods": {
         "Name": "已安装模组",
