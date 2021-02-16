@@ -253,6 +253,7 @@ namespace IronyModManager.ViewModels.Controls
                     {
                         await modService.PurgeModPatchAsync(modCollection.Name);
                         IsOpenVisible = false;
+                        SetOpenCaption();
                     }
                     ForceClose();
                 }
