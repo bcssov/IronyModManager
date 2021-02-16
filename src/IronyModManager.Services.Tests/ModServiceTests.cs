@@ -1055,6 +1055,57 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Patch_Mod_directory_should_not_exist_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Patch_Mod_directory_should_not_exist_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.PatchModExistsAsync("test");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Patch_Mod_directory_should_exist.
+        /// </summary>
+        [Fact]
+        public async Task Patch_Mod_directory_should_exist()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Patch_Mod_directory_should_exist",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var result = await service.PatchModExistsAsync("test");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
         /// Defines the test method Mod_directory_should_not_purge_when_no_game.
         /// </summary>
         [Fact]
@@ -1102,6 +1153,57 @@ namespace IronyModManager.Services.Tests
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
             var result = await service.PurgeModDirectoryAsync("test");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Patch_mod_directory_should_not_purge_when_no_game.
+        /// </summary>
+        [Fact]
+        public async Task Patch_mod_directory_should_not_purge_when_no_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            gameService.Setup(p => p.GetSelected()).Returns((IGame)null);
+
+            var result = await service.PurgeModPatchAsync("test");
+            result.Should().BeFalse();
+        }
+
+        /// <summary>
+        /// Defines the test method Patch_mod_directory_should_purge.
+        /// </summary>
+        [Fact]
+        public async Task Patch_mod_directory_should_purge()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Patch_mod_directory_should_purge",
+                UserDirectory = "C:\\Users\\Fake",
+                WorkshopDirectory = "C:\\workshop"
+            });
+            modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            var result = await service.PurgeModPatchAsync("test");
             result.Should().BeTrue();
         }
     }

@@ -63,6 +63,7 @@ namespace IronyModManager.DI
             container.RegisterLocalization<ActionsControlViewModel>();
             container.RegisterLocalization<ModHashReportControlViewModel>();
             container.RegisterLocalization<DLCManagerControlViewModel>();
+            container.RegisterLocalization<PatchModControlViewModel>();
         }
 
         #endregion Methods

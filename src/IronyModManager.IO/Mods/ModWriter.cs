@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -251,8 +251,10 @@ namespace IronyModManager.IO.Mods
                 var result = await WriteDescriptorToStreamAsync(parameters, fs);
                 if (state.HasValue)
                 {
-                    var fileInfo = new System.IO.FileInfo(fullPath);
-                    fileInfo.IsReadOnly = state.GetValueOrDefault();
+                    var fileInfo = new System.IO.FileInfo(fullPath)
+                    {
+                        IsReadOnly = state.GetValueOrDefault()
+                    };
                 }
                 return result;
             }

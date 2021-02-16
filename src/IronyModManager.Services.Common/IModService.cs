@@ -111,6 +111,13 @@ namespace IronyModManager.Services.Common
         Task<bool> ModDirectoryExistsAsync(string folder);
 
         /// <summary>
+        /// Patches the mod exists asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PatchModExistsAsync(string collectionName);
+
+        /// <summary>
         /// Populates the mod files asynchronous.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -123,6 +130,13 @@ namespace IronyModManager.Services.Common
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> PurgeModDirectoryAsync(string folder);
+
+        /// <summary>
+        /// Purges the mod patch asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> PurgeModPatchAsync(string collectionName);
 
         #endregion Methods
     }

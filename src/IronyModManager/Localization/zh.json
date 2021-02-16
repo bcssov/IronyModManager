@@ -181,6 +181,22 @@
                 "Title": "覆盖现有合集？",
                 "Message": "同名的合并模组已存在，是否覆盖？"
             }
+        },
+        "PatchMod": {
+            "Title": "补丁程序：{Status}",
+            "Enabled": "已启用",
+            "Disabled": "残障人士",
+            "NotAvailable": "无法使用",
+            "DeletePrompt": {
+                "Title": "确认删除",
+                "Message": "您确定要删除补丁程序吗？"
+            },
+            "Actions": {
+                "Enable": "使能够",
+                "Disable": "禁用",
+                "Delete": "删除",
+                "Close": "关闭"
+            }
         }
     },
     "Mod_Actions": {

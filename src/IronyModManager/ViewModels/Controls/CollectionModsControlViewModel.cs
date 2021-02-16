@@ -182,6 +182,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modReportView">The mod report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
@@ -200,12 +201,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(PatchModControlViewModel patchMod, IIDGenerator idGenerator, ModHashReportControlViewModel modReportView,
+            ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
             INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
         {
+            this.PatchMod = patchMod;
             this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -576,6 +579,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the patch mod.
+        /// </summary>
+        /// <value>The patch mod.</value>
+        public virtual PatchModControlViewModel PatchMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the remove.
         /// </summary>
         /// <value>The remove.</value>
@@ -760,7 +769,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void Reset()
         {
-            HandleCollectionPatchAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            PatchMod.SetParameters(SelectedModCollection);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -836,7 +846,7 @@ namespace IronyModManager.ViewModels.Controls
         /// handle collection patch as an asynchronous operation.
         /// </summary>
         /// <param name="collection">The collection.</param>
-        protected virtual async Task HandleCollectionPatchAsync(string collection)
+        protected virtual async Task HandleCollectionPatchStateAsync(string collection)
         {
             var currentCollection = SelectedModCollection?.Name ?? string.Empty;
             if (activeGame != null && SelectedMods?.Count > 0)
@@ -1069,6 +1079,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
                 ModifyCollection.ActiveCollection = o;
+                PatchMod.SetParameters(o);
                 HandleModCollectionChange();
             }).DisposeWith(disposables);
 
@@ -1701,7 +1712,7 @@ namespace IronyModManager.ViewModels.Controls
                 previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (k, v) => oldMods);
             }
             ModifyCollection.SelectedMods = selectedMods;
-            HandleCollectionPatchAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             var order = 1;
             if (SelectedMods?.Count > 0)
             {

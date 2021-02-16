@@ -62,6 +62,7 @@ namespace IronyModManager.DI
             container.Register<ActionsControlView>();
             container.Register<ModHashReportControlView>();
             container.Register<DLCManagerControlView>();
+            container.Register<PatchModControlView>();
         }
 
         #endregion Methods

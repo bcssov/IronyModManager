@@ -181,6 +181,22 @@
                 "Title": "Overwrite existing collection?",
                 "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
             }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Enabled",
+            "Disabled": "Disabled",
+            "NotAvailable": "Not Available",
+            "DeletePrompt": {
+                "Title": "Confirm Delete",
+                "Message": "Are you sure you want to delete the patch mod?"
+            },
+            "Actions": {
+                "Enable": "Enable",
+                "Disable": "Disable",
+                "Delete": "Delete",
+                "Close": "Close"
+            }
         }
     },
     "Mod_Actions": {

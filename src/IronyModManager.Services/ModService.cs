@@ -379,6 +379,16 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Patches the mod exists asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> PatchModExistsAsync(string collectionName)
+        {
+            return ModDirectoryExistsAsync(GenerateCollectionPatchName(collectionName));
+        }
+
+        /// <summary>
         /// populate mod files as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -416,6 +426,16 @@ namespace IronyModManager.Services
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Purges the mod patch asynchronous.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual Task<bool> PurgeModPatchAsync(string collectionName)
+        {
+            return PurgeModDirectoryAsync(GenerateCollectionPatchName(collectionName));
         }
 
         /// <summary>
