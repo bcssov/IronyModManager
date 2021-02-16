@@ -126,6 +126,9 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;System.IO.MemoryStream&gt;.</returns>
+        /// <exception cref="List<Exception>"></exception>
+        /// <exception cref="List<Exception>"></exception>
 
         public async Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
@@ -163,8 +166,8 @@ namespace IronyModManager.IO.Readers
                     {
                         ms = new MemoryStream();
                         var file = DdsFile.Load(stream);
-                        var decoder = new BcDecoder();                        
-                        var image = await decoder.Decode2DAsync(file);                        
+                        var decoder = new BcDecoder();
+                        var image = await decoder.Decode2DAsync(file);
                         var pngImage = ColorMemoryToImage(image);
                         await pngImage.SaveAsPngAsync(ms);
                     }
