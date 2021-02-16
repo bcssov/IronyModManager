@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -18,9 +18,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using BCnEncoder.Decoder;
 using BCnEncoder.Shared;
+using BCnEncoder.Shared.ImageFiles;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Shared;
+using Microsoft.Toolkit.HighPerformance.Memory;
 using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -124,7 +126,7 @@ namespace IronyModManager.IO.Readers
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
-        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+
         public async Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
@@ -161,9 +163,10 @@ namespace IronyModManager.IO.Readers
                     {
                         ms = new MemoryStream();
                         var file = DdsFile.Load(stream);
-                        var decoder = new BcDecoder();
-                        var image = decoder.Decode(file);
-                        await image.SaveAsPngAsync(ms);
+                        var decoder = new BcDecoder();                        
+                        var image = await decoder.Decode2DAsync(file);                        
+                        var pngImage = ColorMemoryToImage(image);
+                        await pngImage.SaveAsPngAsync(ms);
                     }
                     catch (Exception ex)
                     {
@@ -357,6 +360,26 @@ namespace IronyModManager.IO.Readers
                 return reader.Read(path, allowedPaths);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Colors the memory to image.
+        /// </summary>
+        /// <param name="colors">The colors.</param>
+        /// <returns>Image&lt;Rgba32&gt;.</returns>
+        private static Image<Rgba32> ColorMemoryToImage(Memory2D<ColorRgba32> colors)
+        {
+            // Taken from project due to a breaking change: https://github.com/Nominom/BCnEncoder.NET/blob/master/BCnEncoder.NET.ImageSharp/BCnDecoderExtensions.cs
+            var output = new Image<Rgba32>(colors.Width, colors.Height);
+            output.TryGetSinglePixelSpan(out var pixels);
+            colors.Span.TryGetSpan(out var decodedPixels);
+
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                var c = decodedPixels[i];
+                pixels[i] = new Rgba32(c.r, c.g, c.b, c.a);
+            }
+            return output;
         }
 
         /// <summary>

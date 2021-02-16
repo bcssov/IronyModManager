@@ -16,7 +16,7 @@
             </StackPanel>
             <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
               <Image Source="{Binding LeftImage}" MaxWidth="{Binding LeftImage.Width}"
-                     MaxHeight="{Binding LeftImage.Height}"></Image>
+                     MaxHeight="{Binding LeftImage.Height}" Stretch="None"></Image>
             </Panel>
             <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
                     IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
@@ -32,7 +32,7 @@
             </StackPanel>
             <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
               <Image Source="{Binding RightImage}" MaxWidth="{Binding RightImage.Width}" 
-                     MaxHeight="{Binding RightImage.Height}"></Image>
+                     MaxHeight="{Binding RightImage.Height}" Stretch="None"></Image>
             </Panel>
             <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
                     IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
