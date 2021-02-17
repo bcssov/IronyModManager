@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-17-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -16,16 +16,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BCnEncoder.Decoder;
-using BCnEncoder.Shared;
-using BCnEncoder.Shared.ImageFiles;
 using IronyModManager.DI;
 using IronyModManager.IO.Common.Readers;
+using IronyModManager.IO.Images;
 using IronyModManager.Shared;
-using Microsoft.Toolkit.HighPerformance.Memory;
-using Pfim;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace IronyModManager.IO.Readers
 {
@@ -39,14 +33,9 @@ namespace IronyModManager.IO.Readers
         #region Fields
 
         /// <summary>
-        /// The DDS extension
-        /// </summary>
-        private const string DDSExtension = ".dds";
-
-        /// <summary>
         /// The logger
         /// </summary>
-        private readonly ILogger logger;
+        private readonly ImageReader imageReader;
 
         /// <summary>
         /// The readers
@@ -65,7 +54,7 @@ namespace IronyModManager.IO.Readers
         public Reader(IEnumerable<IFileReader> readers, ILogger logger)
         {
             this.readers = readers;
-            this.logger = logger;
+            imageReader = new ImageReader(logger);
         }
 
         #endregion Constructors
@@ -122,218 +111,18 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
-        /// get image stream as an asynchronous operation.
+        /// Gets the image stream asynchronous.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
-        /// <returns>System.Threading.Tasks.Task&lt;System.IO.MemoryStream&gt;.</returns>
-        /// <exception cref="List<Exception>"></exception>
-        /// <exception cref="List<Exception>"></exception>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
 
-        public async Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
+        public Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
-                var attemptedAsDds = false;
-                var attemptedAsPng = false;
-
-                static byte[] tightData(Dds image)
-                {
-                    // Code from this PR (MIT licensed): https://github.com/hguy/dds-reader/pull/1/commits/ba751f0af4fc1c725842dc86d12ecf69f0c70108
-                    var tightStride = image.Width * image.BitsPerPixel / 8;
-                    if (image.Stride == tightStride)
-                    {
-                        return image.Data;
-                    }
-
-                    byte[] newData = new byte[image.Height * tightStride];
-                    for (int i = 0; i < image.Height; i++)
-                    {
-                        Buffer.BlockCopy(image.Data, i * image.Stride, newData, i * tightStride, tightStride);
-                    }
-
-                    return newData;
-                }
-                static async Task<MemoryStream> getDDS(Stream stream)
-                {
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-                    var exceptions = new List<Exception>();
-                    MemoryStream ms = null;
-                    try
-                    {
-                        ms = new MemoryStream();
-                        var file = DdsFile.Load(stream);
-                        var decoder = new BcDecoder();
-                        var image = await decoder.Decode2DAsync(file);
-                        var pngImage = ColorMemoryToImage(image);
-                        await pngImage.SaveAsPngAsync(ms);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ms != null)
-                        {
-                            ms.Close();
-                            await ms.DisposeAsync();
-                        }
-                        ms = null;
-                        exceptions.Add(ex);
-                    }
-                    // fallback
-                    if (ms == null)
-                    {
-                        if (stream.CanSeek)
-                        {
-                            stream.Seek(0, SeekOrigin.Begin);
-                        }
-                        try
-                        {
-                            using var pfimImage = Dds.Create(stream, new PfimConfig());
-                            if (pfimImage.Compressed)
-                            {
-                                pfimImage.Decompress();
-                            }
-                            if (pfimImage.Format == ImageFormat.Rgba32)
-                            {
-                                ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgra32>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                                await image.SaveAsPngAsync(ms);
-                            }
-                            else if (pfimImage.Format == ImageFormat.Rgb24)
-                            {
-                                ms = new MemoryStream();
-                                using var image = Image.LoadPixelData<Bgr24>(tightData(pfimImage), pfimImage.Width, pfimImage.Height);
-                                await image.SaveAsPngAsync(ms);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (ms != null)
-                            {
-                                ms.Close();
-                                await ms.DisposeAsync();
-                            }
-                            ms = null;
-                            exceptions.Add(ex);
-                        }
-                    }
-                    // Fallback can result in memory stream being empty so throw aggregate exception only if both attempts failed
-                    if (ms == null && exceptions.Count == 2)
-                    {
-                        throw new AggregateException(exceptions);
-                    }
-                    return ms;
-                }
-                static async Task<MemoryStream> getOther(Stream stream)
-                {
-                    if (stream.CanSeek)
-                    {
-                        stream.Seek(0, SeekOrigin.Begin);
-                    }
-                    var ms = new MemoryStream();
-                    try
-                    {
-                        using var image = await Image.LoadAsync(stream);
-                        await image.SaveAsPngAsync(ms);
-                        return ms;
-                    }
-                    catch
-                    {
-                        ms.Close();
-                        await ms.DisposeAsync();
-                        ms = null;
-                        throw;
-                    }
-                }
-                async Task<MemoryStream> parseDds(Stream stream)
-                {
-                    MemoryStream ms = null;
-                    try
-                    {
-                        attemptedAsDds = true;
-                        ms = await getDDS(stream);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex);
-                        if (ms != null)
-                        {
-                            ms.Close();
-                            await ms.DisposeAsync();
-                        }
-                        ms = null;
-                    }
-                    return ms;
-                }
-                async Task<MemoryStream> parseOther(Stream stream)
-                {
-                    MemoryStream ms = null;
-                    try
-                    {
-                        attemptedAsPng = true;
-                        ms = await getOther(stream);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex);
-                        if (ms != null)
-                        {
-                            ms.Close();
-                            await ms.DisposeAsync();
-                        }
-                        ms = null;
-                    }
-                    return ms;
-                }
-
                 var stream = GetStream(rootPath, file);
-                if (stream != null)
-                {
-                    MemoryStream ms = null;
-                    try
-                    {
-                        if (file.EndsWith(DDSExtension, StringComparison.OrdinalIgnoreCase))
-                        {
-                            ms = await parseDds(stream);
-                        }
-                        else
-                        {
-                            ms = await parseOther(stream);
-                        }
-                        if (ms == null)
-                        {
-                            if (!attemptedAsDds)
-                            {
-                                ms = await parseDds(stream);
-                            }
-                            else if (!attemptedAsPng)
-                            {
-                                ms = await parseOther(stream);
-                            }
-                        }
-                        if (ms != null && ms.CanSeek)
-                        {
-                            ms.Seek(0, SeekOrigin.Begin);
-                        }
-                        return ms;
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex);
-                        if (ms != null)
-                        {
-                            ms.Close();
-                            await ms.DisposeAsync();
-                        }
-                    }
-                    finally
-                    {
-                        stream.Close();
-                        await stream.DisposeAsync();
-                    }
-                }
+                return imageReader.Parse(stream, file);
             }
             return null;
         }
@@ -363,26 +152,6 @@ namespace IronyModManager.IO.Readers
                 return reader.Read(path, allowedPaths);
             }
             return null;
-        }
-
-        /// <summary>
-        /// Colors the memory to image.
-        /// </summary>
-        /// <param name="colors">The colors.</param>
-        /// <returns>Image&lt;Rgba32&gt;.</returns>
-        private static Image<Rgba32> ColorMemoryToImage(Memory2D<ColorRgba32> colors)
-        {
-            // Taken from project due to a breaking change: https://github.com/Nominom/BCnEncoder.NET/blob/master/BCnEncoder.NET.ImageSharp/BCnDecoderExtensions.cs
-            var output = new Image<Rgba32>(colors.Width, colors.Height);
-            output.TryGetSinglePixelSpan(out var pixels);
-            colors.Span.TryGetSpan(out var decodedPixels);
-
-            for (var i = 0; i < pixels.Length; i++)
-            {
-                var c = decodedPixels[i];
-                pixels[i] = new Rgba32(c.r, c.g, c.b, c.a);
-            }
-            return output;
         }
 
         /// <summary>

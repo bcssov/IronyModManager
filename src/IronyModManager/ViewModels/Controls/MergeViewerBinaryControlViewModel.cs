@@ -4,15 +4,15 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-15-2020
+// Last Modified On : 02-17-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -86,6 +86,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual bool EnableSelection { get; set; }
 
         /// <summary>
+        /// Gets or sets the height of the left.
+        /// </summary>
+        /// <value>The height of the left.</value>
+        public virtual double LeftHeight { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the left image.
         /// </summary>
         /// <value>The left image.</value>
@@ -98,6 +104,18 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string LeftImageInfo { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the width of the left.
+        /// </summary>
+        /// <value>The width of the left.</value>
+        public virtual double LeftWidth { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the height of the right.
+        /// </summary>
+        /// <value>The height of the right.</value>
+        public virtual double RightHeight { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the right image.
         /// </summary>
         /// <value>The right image.</value>
@@ -108,6 +126,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The right image information.</value>
         public virtual string RightImageInfo { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the width of the right.
+        /// </summary>
+        /// <value>The width of the right.</value>
+        public virtual double RightWidth { get; protected set; }
 
         /// <summary>
         /// Gets or sets the take left.
@@ -169,6 +193,7 @@ namespace IronyModManager.ViewModels.Controls
                 right?.Dispose();
                 LeftImageInfo = string.Empty;
                 RightImageInfo = string.Empty;
+                LeftHeight = LeftWidth = RightHeight = RightWidth = 0;
             }
         }
 
@@ -190,12 +215,15 @@ namespace IronyModManager.ViewModels.Controls
                 var left = LeftImage;
                 LeftImage = null;
                 left?.Dispose();
+                LeftHeight = LeftWidth = 0;
                 using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
                 if (ms != null)
                 {
                     LeftImage = new Bitmap(ms);
                     var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
                     LeftImageInfo = Smart.Format(info, new { LeftImage.PixelSize.Width, LeftImage.PixelSize.Height });
+                    LeftHeight = LeftImage.PixelSize.Height;
+                    LeftWidth = LeftImage.PixelSize.Width;
                 }
                 loadingImage = false;
             }
@@ -210,6 +238,7 @@ namespace IronyModManager.ViewModels.Controls
                 var left = LeftImage;
                 LeftImage = null;
                 left?.Dispose();
+                LeftHeight = LeftWidth = 0;
             }
         }
 
@@ -231,12 +260,15 @@ namespace IronyModManager.ViewModels.Controls
                 var right = RightImage;
                 RightImage = null;
                 right?.Dispose();
+                RightHeight = RightWidth = 0;
                 using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
                 if (ms != null)
                 {
                     RightImage = new Bitmap(ms);
                     var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
                     RightImageInfo = Smart.Format(info, new { RightImage.PixelSize.Width, RightImage.PixelSize.Height });
+                    RightHeight = RightImage.PixelSize.Height;
+                    RightWidth = RightImage.PixelSize.Width;
                 }
                 loadingImage = false;
             }
@@ -251,6 +283,7 @@ namespace IronyModManager.ViewModels.Controls
                 var right = RightImage;
                 RightImage = null;
                 right?.Dispose();
+                RightHeight = RightWidth = 0;
             }
         }
 
