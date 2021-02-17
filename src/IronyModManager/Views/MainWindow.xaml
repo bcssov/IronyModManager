@@ -16,6 +16,10 @@
   <Design.DataContext>
     <vm:MainWindowViewModel />
   </Design.DataContext>
+  <Window.KeyBindings>
+    <KeyBinding Gesture="CTRL+Up" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+Up"></KeyBinding>
+    <KeyBinding Gesture="CTRL+Down" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+Down"></KeyBinding>
+  </Window.KeyBindings>
 
   <Panel>
     <Grid>
