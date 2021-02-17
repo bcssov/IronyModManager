@@ -16,11 +16,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BCnEncoder.Decoder;
-using BCnEncoder.Shared;
 using BCnEncoder.Shared.ImageFiles;
 using IronyModManager.Shared;
-using Microsoft.Toolkit.HighPerformance.Memory;
 using Pfim;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -40,6 +37,11 @@ namespace IronyModManager.IO.Images
         private const string DDSExtension = ".dds";
 
         /// <summary>
+        /// The DDS decoder
+        /// </summary>
+        private readonly DDSDecoder ddsDecoder;
+
+        /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger logger;
@@ -55,6 +57,7 @@ namespace IronyModManager.IO.Images
         public ImageReader(ILogger logger)
         {
             this.logger = logger;
+            ddsDecoder = new DDSDecoder();
         }
 
         #endregion Constructors
@@ -122,26 +125,6 @@ namespace IronyModManager.IO.Images
         }
 
         /// <summary>
-        /// BCNs the encoder to image.
-        /// </summary>
-        /// <param name="colors">The colors.</param>
-        /// <returns>Image&lt;Rgba32&gt;.</returns>
-        private Image<Rgba32> ColorMemoryToImage(Memory2D<ColorRgba32> colors)
-        {
-            // Taken from project due to a breaking change: https://github.com/Nominom/BCnEncoder.NET/blob/master/BCnEncoder.NET.ImageSharp/BCnDecoderExtensions.cs
-            var output = new Image<Rgba32>(colors.Width, colors.Height);
-            output.TryGetSinglePixelSpan(out var pixels);
-            colors.Span.TryGetSpan(out var decodedPixels);
-
-            for (var i = 0; i < pixels.Length; i++)
-            {
-                var c = decodedPixels[i];
-                pixels[i] = new Rgba32(c.r, c.g, c.b, c.a);
-            }
-            return output;
-        }
-
-        /// <summary>
         /// Gets the DDS.
         /// </summary>
         /// <param name="stream">The stream.</param>
@@ -157,12 +140,13 @@ namespace IronyModManager.IO.Images
             MemoryStream ms = null;
             try
             {
-                ms = new MemoryStream();
                 var file = DdsFile.Load(stream);
-                var decoder = new BcDecoder();
-                var bcnImage = await decoder.Decode2DAsync(file);
-                var image = ColorMemoryToImage(bcnImage);
-                await image.SaveAsPngAsync(ms);
+                var image = await ddsDecoder.DecodeToImageAsync(file);
+                if (image != null)
+                {
+                    ms = new MemoryStream();
+                    await image.SaveAsPngAsync(ms);
+                }
             }
             catch (Exception ex)
             {
@@ -191,13 +175,13 @@ namespace IronyModManager.IO.Images
                     if (pfimImage.Format == ImageFormat.Rgba32)
                     {
                         ms = new MemoryStream();
-                        using var image = Image.LoadPixelData<Bgra32>(TightPfimData(pfimImage), pfimImage.Width, pfimImage.Height);
+                        using var image = Image.LoadPixelData<Bgra32>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
                         await image.SaveAsPngAsync(ms);
                     }
                     else if (pfimImage.Format == ImageFormat.Rgb24)
                     {
                         ms = new MemoryStream();
-                        using var image = Image.LoadPixelData<Bgr24>(TightPfimData(pfimImage), pfimImage.Width, pfimImage.Height);
+                        using var image = Image.LoadPixelData<Bgr24>(ddsDecoder.TightData(pfimImage), pfimImage.Width, pfimImage.Height);
                         await image.SaveAsPngAsync(ms);
                     }
                 }
@@ -294,29 +278,6 @@ namespace IronyModManager.IO.Images
                 ms = null;
             }
             return ms;
-        }
-
-        /// <summary>
-        /// Tights the pfim data.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <returns>System.Byte[].</returns>
-        private byte[] TightPfimData(Dds image)
-        {
-            // Code from this PR (MIT licensed): https://github.com/hguy/dds-reader/pull/1/commits/ba751f0af4fc1c725842dc86d12ecf69f0c70108
-            var tightStride = image.Width * image.BitsPerPixel / 8;
-            if (image.Stride == tightStride)
-            {
-                return image.Data;
-            }
-
-            byte[] newData = new byte[image.Height * tightStride];
-            for (int i = 0; i < image.Height; i++)
-            {
-                Buffer.BlockCopy(image.Data, i * image.Stride, newData, i * tightStride, tightStride);
-            }
-
-            return newData;
         }
 
         #endregion Methods
