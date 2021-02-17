@@ -15,8 +15,8 @@
               <TextBlock Text="{Binding LeftImageInfo}" HorizontalAlignment="Center" VerticalAlignment="Bottom"></TextBlock>
             </StackPanel>
             <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-              <Image Source="{Binding LeftImage}" MaxWidth="{Binding LeftImage.Width}"
-                     MaxHeight="{Binding LeftImage.Height}" Stretch="None"></Image>
+              <Image Source="{Binding LeftImage}" MaxWidth="{Binding LeftWidth}"
+                     MaxHeight="{Binding LeftHeight}"></Image>
             </Panel>
             <Button Content="{Binding TakeLeft}" Command="{Binding TakeLeftCommand}"
                     IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
@@ -31,8 +31,8 @@
               <TextBlock Text="{Binding RightImageInfo}" HorizontalAlignment="Center"></TextBlock>
             </StackPanel>
             <Panel Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-              <Image Source="{Binding RightImage}" MaxWidth="{Binding RightImage.Width}" 
-                     MaxHeight="{Binding RightImage.Height}" Stretch="None"></Image>
+              <Image Source="{Binding RightImage}" MaxWidth="{Binding RightWidth}"
+                     MaxHeight="{Binding RightHeight}"></Image>
             </Panel>
             <Button Content="{Binding TakeRight}" Command="{Binding TakeRightCommand}"
                     IsEnabled="{Binding EnableSelection}" Grid.Column="0" Grid.Row="2" MaxHeight="30"></Button>
