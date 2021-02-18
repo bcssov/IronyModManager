@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1478,6 +1478,16 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     SaveState();
                 }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
+            {
+                this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(state =>
+                {
+                    modPatchCollectionService.InvalidatePatchModState(PatchMod.CollectionName);
+                    modPatchCollectionService.ResetPatchStateCache();
+                    HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

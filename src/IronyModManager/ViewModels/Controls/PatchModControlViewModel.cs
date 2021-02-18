@@ -4,7 +4,7 @@
 // Created          : 02-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="PatchModControlViewModel.cs" company="Mario">
 //     Mario
@@ -111,6 +111,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the name of the collection.
+        /// </summary>
+        /// <value>The name of the collection.</value>
+        public virtual string CollectionName { get; set; }
+
+        /// <summary>
         /// Gets or sets the delete.
         /// </summary>
         /// <value>The delete.</value>
@@ -185,6 +191,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The open command.</value>
         public virtual ReactiveCommand<Unit, Unit> OpenCommand { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [patch deleted].
+        /// </summary>
+        /// <value><c>true</c> if [patch deleted]; otherwise, <c>false</c>.</value>
+        public virtual bool PatchDeleted { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -254,8 +266,10 @@ namespace IronyModManager.ViewModels.Controls
                         await modService.PurgeModPatchAsync(modCollection.Name);
                         IsOpenVisible = false;
                         SetOpenCaption();
+                        PatchDeleted = true;
                     }
                     ForceClose();
+                    PatchDeleted = false;
                 }
             }
 
@@ -294,6 +308,7 @@ namespace IronyModManager.ViewModels.Controls
         protected async Task SetCollectionDataAsync(IModCollection modCollection)
         {
             this.modCollection = modCollection;
+            CollectionName = modCollection.Name;
             IsOpenVisible = await modService.PatchModExistsAsync(modCollection.Name);
             IsPatchModEnabled = modCollection.PatchModEnabled;
             OpenClass = IsPatchModEnabled ? ActiveClass : InactiveClass;
