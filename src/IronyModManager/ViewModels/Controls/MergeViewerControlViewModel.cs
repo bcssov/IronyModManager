@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -139,6 +139,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The cancel command.</value>
         public virtual ReactiveCommand<Unit, Unit> CancelCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can perform hot key actions.
+        /// </summary>
+        /// <value><c>true</c> if this instance can perform hot key actions; otherwise, <c>false</c>.</value>
+        public virtual bool CanPerformHotKeyActions { get; set; }
 
         /// <summary>
         /// Gets or sets the copy all.

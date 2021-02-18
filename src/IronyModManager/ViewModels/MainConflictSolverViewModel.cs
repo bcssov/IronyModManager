@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -469,6 +469,7 @@ namespace IronyModManager.ViewModels
         {
             IsBinaryViewerVisible = IsBinaryConflict && IsConflictSolverAvailable;
             IsMergeViewerVisible = !IsBinaryConflict && IsConflictSolverAvailable;
+            MergeViewer.CanPerformHotKeyActions = IsMergeViewerVisible;
         }
 
         /// <summary>

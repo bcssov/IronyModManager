@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -27,11 +27,14 @@ using Avalonia.Threading;
 using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
+using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels.Controls;
 using ReactiveUI;
+using static IronyModManager.ViewModels.Controls.MergeViewerControlViewModel;
 
 namespace IronyModManager.Views.Controls
 {
@@ -56,6 +59,11 @@ namespace IronyModManager.Views.Controls
         private static IHighlightingDefinition yamlHighlightingDefinition;
 
         /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
+
+        /// <summary>
         /// The logger
         /// </summary>
         private readonly ILogger logger;
@@ -75,7 +83,8 @@ namespace IronyModManager.Views.Controls
         public MergeViewerControlView()
         {
             logger = DIResolver.Get<ILogger>();
-            this.InitializeComponent();
+            hotkeyPressedHandler = DIResolver.Get<ConflictSolverViewHotkeyPressedHandler>();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -205,6 +214,89 @@ namespace IronyModManager.Views.Controls
             {
                 FocusConflict(line, leftSide, rightSide);
             };
+
+            hotkeyPressedHandler.Message.Subscribe(hotkey =>
+            {
+                DiffPieceWithIndex findItem(bool searchUp)
+                {
+                    var visibleItems = leftSide.ItemContainerGenerator.Containers.ToList();
+                    if (visibleItems.Any())
+                    {
+                        var items = leftSide.Items as IEnumerable<DiffPieceWithIndex>;
+                        if (items != null)
+                        {
+                            var itemsList = items.ToList();
+                            if (searchUp)
+                            {
+                                var visibleItem = visibleItems.FirstOrDefault().Item as DiffPieceWithIndex;
+                                if (visibleItem != null)
+                                {
+                                    var index = itemsList.IndexOf(visibleItem) - 2;
+                                    if (index < 0)
+                                    {
+                                        index = 0;
+                                    }
+                                    return itemsList[index];
+                                }
+                            }
+                            else
+                            {
+                                var visibleItem = visibleItems.LastOrDefault().Item as DiffPieceWithIndex;
+                                if (visibleItem != null)
+                                {
+                                    var index = itemsList.IndexOf(visibleItem) + 2;
+                                    if (index > leftSide.ItemCount - 1)
+                                    {
+                                        index = leftSide.ItemCount - 1;
+                                    }
+                                    return itemsList[index];
+                                }
+                            }
+                        }
+                    }
+                    return null;
+                }
+                void evalKey()
+                {
+                    // Yeah, it sucks that we can't access a property from a different thread
+                    if (ViewModel.CanPerformHotKeyActions)
+                    {
+                        DiffPiece item = null;
+                        switch (hotkey.Hotkey)
+                        {
+                            case Enums.HotKeys.Ctrl_Up:
+                                break;
+
+                            case Enums.HotKeys.Ctrl_Down:
+                                break;
+
+                            case Enums.HotKeys.Ctrl_Shift_Up:
+                                item = findItem(true);
+                                break;
+
+                            case Enums.HotKeys.Ctrl_Shift_Down:
+                                item = findItem(false);
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (item != null)
+                        {
+                            leftSide.ScrollIntoView(item);
+                        }
+                    }
+                }
+
+                if (Dispatcher.UIThread.CheckAccess())
+                {
+                    evalKey();
+                }
+                else
+                {
+                    Dispatcher.UIThread.InvokeAsync(() => evalKey());
+                }
+            }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
         }
