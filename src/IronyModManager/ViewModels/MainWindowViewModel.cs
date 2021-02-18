@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -239,12 +239,14 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var state = NavigationState.Main;
             BindOverlay();
 
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>
                 {
                     ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
+                    state = s.State;
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:
@@ -269,7 +271,7 @@ namespace IronyModManager.ViewModels
 
             RegisterHotkeyCommand = ReactiveCommand.Create((string key) =>
             {
-                hotkeyManager.HotKeyPressedAsync(key).ConfigureAwait(false);
+                hotkeyManager.HotKeyPressedAsync(state, key).ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

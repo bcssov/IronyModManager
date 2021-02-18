@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         :
+// Assembly         : IronyModManager
 // Author           : Mario
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
-// <copyright file="HotkeyPressedEvent.cs" company="Mario">
+// <copyright file="BaseHotkeyPressedEvent.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -23,15 +23,15 @@ namespace IronyModManager.Implementation.Hotkey
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
-    public class HotkeyPressedEvent : IMessageBusEvent
+    public abstract class BaseHotkeyPressedEvent : IMessageBusEvent
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HotkeyPressedEvent" /> class.
+        /// Initializes a new instance of the <see cref="BaseHotkeyPressedEvent" /> class.
         /// </summary>
         /// <param name="hotKey">The hot key.</param>
-        public HotkeyPressedEvent(Enums.HotKeys hotKey)
+        public BaseHotkeyPressedEvent(Enums.HotKeys hotKey)
         {
             Hotkey = hotKey;
         }
