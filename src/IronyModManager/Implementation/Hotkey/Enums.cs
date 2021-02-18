@@ -20,7 +20,7 @@ namespace IronyModManager.Implementation.Hotkey
     /// <summary>
     /// Class Enums.
     /// </summary>
-    public class Enums
+    public static class Enums
     {
         #region Enums
 

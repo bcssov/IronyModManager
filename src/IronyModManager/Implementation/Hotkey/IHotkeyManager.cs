@@ -27,6 +27,12 @@ namespace IronyModManager.Implementation.Hotkey
         #region Methods
 
         /// <summary>
+        /// Gets the keys.
+        /// </summary>
+        /// <returns>IReadOnlyCollection&lt;System.String&gt;.</returns>
+        IReadOnlyCollection<string> GetKeys();
+
+        /// <summary>
         /// Hots the key pressed asynchronous.
         /// </summary>
         /// <param name="navigationState">State of the navigation.</param>

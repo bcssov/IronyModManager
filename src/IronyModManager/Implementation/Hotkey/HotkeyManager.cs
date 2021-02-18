@@ -63,6 +63,15 @@ namespace IronyModManager.Implementation.Hotkey
         #region Methods
 
         /// <summary>
+        /// Gets the keys.
+        /// </summary>
+        /// <returns>IReadOnlyCollection&lt;System.String&gt;.</returns>
+        public IReadOnlyCollection<string> GetKeys()
+        {
+            return map.Select(p => p.Key).ToList();
+        }
+
+        /// <summary>
         /// Hots the key pressed asynchronous.
         /// </summary>
         /// <param name="navigationState">State of the navigation.</param>
@@ -101,39 +110,5 @@ namespace IronyModManager.Implementation.Hotkey
         }
 
         #endregion Methods
-
-        #region Classes
-
-        /// <summary>
-        /// Class Constants.
-        /// </summary>
-        private class Constants
-        {
-            #region Fields
-
-            /// <summary>
-            /// The control down
-            /// </summary>
-            public const string CTRL_Down = "CTRL+Down";
-
-            /// <summary>
-            /// The control shift down
-            /// </summary>
-            public const string CTRL_SHIFT_Down = "CTRL+SHIFT+Down";
-
-            /// <summary>
-            /// The control shift up
-            /// </summary>
-            public const string CTRL_SHIFT_Up = "CTRL+SHIFT+Up";
-
-            /// <summary>
-            /// The control up
-            /// </summary>
-            public const string CTRL_Up = "CTRL+Up";
-
-            #endregion Fields
-        }
-
-        #endregion Classes
     }
 }
