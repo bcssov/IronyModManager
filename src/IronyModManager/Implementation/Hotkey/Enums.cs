@@ -52,7 +52,17 @@ namespace IronyModManager.Implementation.Hotkey
             /// <summary>
             /// The control shift down
             /// </summary>
-            Ctrl_Shift_Down
+            Ctrl_Shift_Down,
+
+            /// <summary>
+            /// The shift up
+            /// </summary>
+            Shift_Up,
+
+            /// <summary>
+            /// The shift down
+            /// </summary>
+            Shift_Down
         }
 
         #endregion Enums

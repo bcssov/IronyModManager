@@ -44,6 +44,16 @@ namespace IronyModManager.Implementation.Hotkey
         /// </summary>
         public const string CTRL_Up = "CTRL+Up";
 
+        /// <summary>
+        /// The shift down
+        /// </summary>
+        public const string SHIFT_Down = "SHIFT+Down";
+
+        /// <summary>
+        /// The shift up
+        /// </summary>
+        public const string SHIFT_Up = "SHIFT+Up";
+
         #endregion Fields
     }
 }

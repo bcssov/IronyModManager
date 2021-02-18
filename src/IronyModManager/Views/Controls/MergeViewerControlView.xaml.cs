@@ -259,17 +259,11 @@ namespace IronyModManager.Views.Controls
                 void evalKey()
                 {
                     // Yeah, it sucks that we can't access a property from a different thread
-                    if (ViewModel.CanPerformHotKeyActions)
+                    if (ViewModel.CanPerformHotKeyActions && !ViewModel.EditingText) // Cannot perform if in text edit mode also
                     {
                         DiffPiece item = null;
                         switch (hotkey.Hotkey)
                         {
-                            case Enums.HotKeys.Ctrl_Up:
-                                break;
-
-                            case Enums.HotKeys.Ctrl_Down:
-                                break;
-
                             case Enums.HotKeys.Ctrl_Shift_Up:
                                 item = findItem(true);
                                 break;

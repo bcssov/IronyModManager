@@ -20,12 +20,14 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
@@ -53,6 +55,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The external editor service
         /// </summary>
         private readonly IExternalEditorService externalEditorService;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The localization manager
@@ -86,17 +93,20 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(IAppAction appAction, IExternalEditorService externalEditorService,
+        public MergeViewerControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+            IAppAction appAction, IExternalEditorService externalEditorService,
             INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.appAction = appAction;
             this.externalEditorService = externalEditorService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
         }
 
         #endregion Constructors
@@ -1216,6 +1226,41 @@ namespace IronyModManager.ViewModels.Controls
                         }
                     }
                     files?.Dispose();
+                }
+            }).DisposeWith(disposables);
+
+            hotkeyPressedHandler.Message.Subscribe(m =>
+            {
+                void performAction()
+                {
+                    if (LeftSideSelected.Count == 0)
+                    {
+                        LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                    }
+                    switch (m.Hotkey)
+                    {
+                        case Enums.HotKeys.Ctrl_Up:
+                            FindConflict(true, false);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Down:
+                            FindConflict(true, true);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                if (CanPerformHotKeyActions && !EditingText)
+                {
+                    if (Dispatcher.UIThread.CheckAccess())
+                    {
+                        performAction();
+                    }
+                    else
+                    {
+                        Dispatcher.UIThread.InvokeAsync(() => performAction());
+                    }
                 }
             }).DisposeWith(disposables);
 
