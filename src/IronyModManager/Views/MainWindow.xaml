@@ -19,6 +19,8 @@
   <Window.KeyBindings>
     <KeyBinding Gesture="CTRL+Up" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+Up"></KeyBinding>
     <KeyBinding Gesture="CTRL+Down" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+Down"></KeyBinding>
+    <KeyBinding Gesture="CTRL+SHIFT+Up" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+SHIFT+Up"></KeyBinding>
+    <KeyBinding Gesture="CTRL+SHIFT+Down" Command="{Binding RegisterHotkeyCommand}" CommandParameter="CTRL+SHIFT+Down"></KeyBinding>
   </Window.KeyBindings>
 
   <Panel>

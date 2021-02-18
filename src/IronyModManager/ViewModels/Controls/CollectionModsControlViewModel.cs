@@ -21,12 +21,14 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
@@ -74,6 +76,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The game service
         /// </summary>
         private readonly IGameService gameService;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly MainViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The identifier generator
@@ -182,6 +189,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modReportView">The mod report view.</param>
@@ -201,8 +209,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(PatchModControlViewModel patchMod, IIDGenerator idGenerator, ModHashReportControlViewModel modReportView,
-            ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
+            IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler,
+            IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
@@ -226,6 +235,7 @@ namespace IronyModManager.ViewModels.Controls
             this.messageBus = messageBus;
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
             ModReportView = modReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
@@ -1480,7 +1490,48 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
+            hotkeyPressedHandler.Message.Subscribe(hotkey =>
+            {
+                if (SelectedMod != null)
+                {
+                    var order = SelectedMod.Order;
+                    switch (hotkey.Hotkey)
+                    {
+                        case Enums.HotKeys.Ctrl_Up:
+                            order--;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Down:
+                            order++;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_Up:
+                            order = 1;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_Down:
+                            order = MaxOrder;
+                            break;
+
+                        default:
+                            break;
+                    }
+                    if (!(order < 1 || order > MaxOrder))
+                    {
+                        // Check access because it's probably coming from a background thread
+                        if (Dispatcher.UIThread.CheckAccess())
+                        {
+                            SelectedMod.Order = order;
+                        }
+                        else
+                        {
+                            Dispatcher.UIThread.InvokeAsync(() => SelectedMod.Order = order);
+                        }
+                    }
+                }
+            }).DisposeWith(disposables);
+			
+			this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
             {
                 this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(state =>
                 {

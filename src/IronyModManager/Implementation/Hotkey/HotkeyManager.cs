@@ -35,7 +35,9 @@ namespace IronyModManager.Implementation.Hotkey
         private static readonly Dictionary<string, Enums.HotKeys> map = new Dictionary<string, Enums.HotKeys>()
         {
             { Constants.CTRL_Down, Enums.HotKeys.Ctrl_Down },
-            { Constants.CTRL_Up, Enums.HotKeys.Ctrl_Up }
+            { Constants.CTRL_Up, Enums.HotKeys.Ctrl_Up },
+            { Constants.CTRL_SHIFT_Up, Enums.HotKeys.Ctrl_Shift_Up },
+            { Constants.CTRL_SHIFT_Down, Enums.HotKeys.Ctrl_Shift_Down }
         };
 
         /// <summary>
@@ -113,6 +115,16 @@ namespace IronyModManager.Implementation.Hotkey
             /// The control down
             /// </summary>
             public const string CTRL_Down = "CTRL+Down";
+
+            /// <summary>
+            /// The control shift down
+            /// </summary>
+            public const string CTRL_SHIFT_Down = "CTRL+SHIFT+Down";
+
+            /// <summary>
+            /// The control shift up
+            /// </summary>
+            public const string CTRL_SHIFT_Up = "CTRL+SHIFT+Up";
 
             /// <summary>
             /// The control up
