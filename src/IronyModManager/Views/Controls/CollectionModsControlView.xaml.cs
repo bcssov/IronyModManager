@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Controls;
 using IronyModManager.Models.Common;
@@ -181,14 +182,7 @@ namespace IronyModManager.Views.Controls
 
             void setNumericPropertiesSafe(bool setMargin = false)
             {
-                if (Dispatcher.UIThread.CheckAccess())
-                {
-                    setNumericProperties(setMargin);
-                }
-                else
-                {
-                    Dispatcher.UIThread.InvokeAsync(() => setNumericProperties(setMargin));
-                }
+                Dispatcher.UIThread.SafeInvoke(() => setNumericProperties(setMargin));
             }
 
             ViewModel.ModReordered += (mod, instant) =>

@@ -4,7 +4,7 @@
 // Created          : 01-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-21-2020
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -16,7 +16,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Shared;
 
@@ -29,6 +31,60 @@ namespace IronyModManager.Common
     public static class Extensions
     {
         #region Methods
+
+        /// <summary>
+        /// Safes the invoke.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="action">The action.</param>
+        public static void SafeInvoke(this Dispatcher dispatcher, Action action)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                action();
+            }
+            else
+            {
+                dispatcher.InvokeAsync(() => action());
+            }
+        }
+
+        /// <summary>
+        /// Safes the invoke asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>Task&lt;T&gt;.</returns>
+        public static Task<T> SafeInvokeAsync<T>(this Dispatcher dispatcher, Func<Task<T>> action)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                return action();
+            }
+            else
+            {
+                return dispatcher.InvokeAsync(() => action());
+            }
+        }
+
+        /// <summary>
+        /// Safes the invoke asynchronous.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>Task.</returns>
+        public static async Task SafeInvokeAsync(this Dispatcher dispatcher, Action action)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                action();
+            }
+            else
+            {
+                await dispatcher.InvokeAsync(() => action());
+            }
+        }
 
         /// <summary>
         /// Subscribes the observable.

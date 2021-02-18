@@ -25,6 +25,7 @@ using AvaloniaEdit.Document;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
+using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Hotkey;
@@ -1253,14 +1254,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 if (CanPerformHotKeyActions && !EditingText)
                 {
-                    if (Dispatcher.UIThread.CheckAccess())
-                    {
-                        performAction();
-                    }
-                    else
-                    {
-                        Dispatcher.UIThread.InvokeAsync(() => performAction());
-                    }
+                    Dispatcher.UIThread.SafeInvoke(performAction);
                 }
             }).DisposeWith(disposables);
 
@@ -1306,15 +1300,21 @@ namespace IronyModManager.ViewModels.Controls
             var syncDiff = !leftSide ? LeftDiff : RightDiff;
             var sourceCol = leftSide ? LeftSideSelected : RightSideSelected;
             var syncCol = !leftSide ? LeftSideSelected : RightSideSelected;
+            bool clearCol = true;
             if (sourceCol?.Count > 0)
             {
-                syncCol.Clear();
-                foreach (var item in sourceCol)
+                var filtered = sourceCol.Where(p => p != null); // Must be an underlying bug?
+                if (filtered.Any())
                 {
-                    syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    clearCol = false;
+                    syncCol.Clear();
+                    foreach (var item in filtered)
+                    {
+                        syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    }
                 }
             }
-            else
+            if (clearCol)
             {
                 syncCol.Clear();
             }

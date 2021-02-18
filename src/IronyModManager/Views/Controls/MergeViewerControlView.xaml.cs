@@ -28,6 +28,7 @@ using AvaloniaEdit;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
 using DiffPlex.DiffBuilder.Model;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Hotkey;
@@ -282,14 +283,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
 
-                if (Dispatcher.UIThread.CheckAccess())
-                {
-                    evalKey();
-                }
-                else
-                {
-                    Dispatcher.UIThread.InvokeAsync(() => evalKey());
-                }
+                Dispatcher.UIThread.SafeInvoke(evalKey);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

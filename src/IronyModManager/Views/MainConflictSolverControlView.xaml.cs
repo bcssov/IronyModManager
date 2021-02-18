@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -44,7 +45,7 @@ namespace IronyModManager.Views
         /// </summary>
         public MainConflictSolverControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -75,7 +76,7 @@ namespace IronyModManager.Views
                 {
                     if (s?.Children.Count > 0)
                     {
-                        Dispatcher.UIThread.InvokeAsync(() =>
+                        Dispatcher.UIThread.SafeInvoke(() =>
                         {
                             if (ViewModel.PreviousConflictIndex.HasValue)
                             {
@@ -99,6 +100,20 @@ namespace IronyModManager.Views
                                 {
                                     conflictList.SelectedIndex = -1;
                                 }
+                            }
+                        });
+                    }
+                }).DisposeWith(disposables);
+
+                this.WhenAnyValue(v => v.ViewModel.SelectedConflictOverride).Subscribe(s =>
+                {
+                    if (s.HasValue)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() =>
+                        {
+                            if (conflictList.ItemCount > 0)
+                            {
+                                conflictList.SelectedIndex = s.GetValueOrDefault();
                             }
                         });
                     }

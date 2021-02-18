@@ -10,7 +10,7 @@
 //     Mario
 // </copyright>
 // <summary></summary>
-// ***********************************************************************
+// ************************************************************************
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -1519,19 +1519,12 @@ namespace IronyModManager.ViewModels.Controls
                     if (!(order < 1 || order > MaxOrder))
                     {
                         // Check access because it's probably coming from a background thread
-                        if (Dispatcher.UIThread.CheckAccess())
-                        {
-                            SelectedMod.Order = order;
-                        }
-                        else
-                        {
-                            Dispatcher.UIThread.InvokeAsync(() => SelectedMod.Order = order);
-                        }
+                        Dispatcher.UIThread.SafeInvoke(() => SelectedMod.Order = order);
                     }
                 }
             }).DisposeWith(disposables);
-			
-			this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
+
+            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
             {
                 this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(state =>
                 {

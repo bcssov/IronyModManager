@@ -19,11 +19,13 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -62,6 +64,11 @@ namespace IronyModManager.ViewModels
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The identifier generator
@@ -105,6 +112,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -119,7 +127,8 @@ namespace IronyModManager.ViewModels
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public MainConflictSolverControlViewModel(IIDGenerator idGenerator, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
+        public MainConflictSolverControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler, IIDGenerator idGenerator,
+            IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
@@ -132,6 +141,7 @@ namespace IronyModManager.ViewModels
             this.logger = logger;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -404,6 +414,12 @@ namespace IronyModManager.ViewModels
         public virtual IHierarchicalDefinitions SelectedConflict { get; set; }
 
         /// <summary>
+        /// Gets or sets the selected conflict override.
+        /// </summary>
+        /// <value>The selected conflict override.</value>
+        public virtual int? SelectedConflictOverride { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mod collection.
         /// </summary>
         /// <value>The selected mod collection.</value>
@@ -661,8 +677,15 @@ namespace IronyModManager.ViewModels
                 EvalViewerVisibility();
             }).DisposeWith(disposables);
 
+            var switchingConflict = false;
             this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
             {
+                async Task resetFlag()
+                {
+                    await Task.Delay(200);
+                    switchingConflict = false;
+                }
+                switchingConflict = true;
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
@@ -688,6 +711,7 @@ namespace IronyModManager.ViewModels
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
+                resetFlag().ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ModCompareSelector.IsActivated).Where(p => p).Subscribe(s =>
@@ -841,6 +865,69 @@ namespace IronyModManager.ViewModels
             this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
             {
                 ResetConflicts.Refresh();
+            }).DisposeWith(disposables);
+
+            hotkeyPressedHandler.Message.Subscribe(m =>
+            {
+                async Task performAction()
+                {
+                    while (switchingConflict)
+                    {
+                        await Task.Delay(25);
+                    }
+                    if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
+                    {
+                        int? newSelectedConflict = null;
+                        var col = SelectedParentConflict?.Children.ToList();
+                        switch (m.Hotkey)
+                        {
+                            case Enums.HotKeys.Shift_Up:
+                                if (SelectedConflict == null)
+                                {
+                                    newSelectedConflict = col.Count - 1;
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedConflict);
+                                    index--;
+                                    if (index < 0)
+                                    {
+                                        index = 0;
+                                    }
+                                    newSelectedConflict = index;
+                                }
+                                break;
+
+                            case Enums.HotKeys.Shift_Down:
+                                if (SelectedConflict == null)
+                                {
+                                    newSelectedConflict = 0;
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedConflict);
+                                    index++;
+                                    if (index > col.Count - 1)
+                                    {
+                                        index = col.Count - 1;
+                                    }
+                                    newSelectedConflict = index;
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (newSelectedConflict != null)
+                        {
+                            await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                            {
+                                SelectedConflictOverride = newSelectedConflict;
+                            });
+                        }
+                    }
+                }
+                performAction().ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
