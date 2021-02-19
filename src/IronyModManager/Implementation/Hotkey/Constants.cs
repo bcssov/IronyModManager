@@ -160,9 +160,19 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_SHIFT_P = "CTRL+SHIFT+P";
 
         /// <summary>
+        /// The control shift t
+        /// </summary>
+        public const string CTRL_SHIFT_T = "CTRL+SHIFT+T";
+
+        /// <summary>
         /// The control shift up
         /// </summary>
         public const string CTRL_SHIFT_Up = "CTRL+SHIFT+Up";
+
+        /// <summary>
+        /// The control t
+        /// </summary>
+        public const string CTRL_T = "CTRL+T";
 
         /// <summary>
         /// The control up

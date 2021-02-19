@@ -187,7 +187,17 @@ namespace IronyModManager.Implementation.Hotkey
             /// <summary>
             /// The control e
             /// </summary>
-            Ctrl_E
+            Ctrl_E,
+
+            /// <summary>
+            /// The control t
+            /// </summary>
+            Ctrl_T,
+
+            /// <summary>
+            /// The control shift t
+            /// </summary>
+            Ctrl_Shift_T
         }
 
         #endregion Enums

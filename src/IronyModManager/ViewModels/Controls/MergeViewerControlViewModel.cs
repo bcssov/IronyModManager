@@ -1243,6 +1243,14 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             break;
 
+                        case Enums.HotKeys.Ctrl_Shift_T:
+                            CopyTextAsync(false).ConfigureAwait(true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_T:
+                            CopyTextAsync(true).ConfigureAwait(true);
+                            break;
+
                         default:
                             break;
                     }
