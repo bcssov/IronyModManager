@@ -61,7 +61,10 @@ namespace IronyModManager.Implementation.Hotkey
             { Constants.CTRL_0, Enums.HotKeys.Ctrl_0 },
             { Constants.CTRL_SHIFT_0, Enums.HotKeys.Ctrl_Shift_0 },
             { Constants.CTRL_SHIFT_N, Enums.HotKeys.Ctrl_Shift_N },
-            { Constants.CTRL_SHIFT_P, Enums.HotKeys.Ctrl_Shift_P }
+            { Constants.CTRL_SHIFT_P, Enums.HotKeys.Ctrl_Shift_P },
+            { Constants.CTRL_E, Enums.HotKeys.Ctrl_E },
+            { Constants.CTRL_I, Enums.HotKeys.Ctrl_I },
+            { Constants.CTRL_R, Enums.HotKeys.Ctrl_R }
         };
 
         /// <summary>

@@ -80,6 +80,21 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_Down = "CTRL+Down";
 
         /// <summary>
+        /// The control e
+        /// </summary>
+        public const string CTRL_E = "CTRL+E";
+
+        /// <summary>
+        /// The control i
+        /// </summary>
+        public const string CTRL_I = "CTRL+I";
+
+        /// <summary>
+        /// The control r
+        /// </summary>
+        public const string CTRL_R = "CTRL+R";
+
+        /// <summary>
         /// The control shift 0
         /// </summary>
         public const string CTRL_SHIFT_0 = "CTRL+SHIFT+D0";

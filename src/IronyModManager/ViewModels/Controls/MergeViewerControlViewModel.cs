@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -1124,19 +1124,7 @@ namespace IronyModManager.ViewModels.Controls
 
             EditThisCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                EditingLeft = leftSide;
-                EditingRight = !leftSide;
-                EditingText = true;
-                if (leftSide)
-                {
-                    CurrentEditText = LeftSide;
-                }
-                else
-                {
-                    CurrentEditText = RightSide;
-                }
-                LeftDocument = new TextDocument(LeftSide);
-                RightDocument = new TextDocument(RightSide);
+                SetEditThis(leftSide);
             }).DisposeWith(disposables);
 
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
@@ -1248,6 +1236,13 @@ namespace IronyModManager.ViewModels.Controls
                             FindConflict(true, true);
                             break;
 
+                        case Enums.HotKeys.Ctrl_E:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                SetEditThis(LeftSidePatchMod);
+                            }
+                            break;
+
                         default:
                             break;
                     }
@@ -1287,6 +1282,27 @@ namespace IronyModManager.ViewModels.Controls
                 orderedSelected.Add(idx, item);
             }
             return orderedSelected.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        /// <summary>
+        /// Sets the edit this.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void SetEditThis(bool leftSide)
+        {
+            EditingLeft = leftSide;
+            EditingRight = !leftSide;
+            EditingText = true;
+            if (leftSide)
+            {
+                CurrentEditText = LeftSide;
+            }
+            else
+            {
+                CurrentEditText = RightSide;
+            }
+            LeftDocument = new TextDocument(LeftSide);
+            RightDocument = new TextDocument(RightSide);
         }
 
         /// <summary>

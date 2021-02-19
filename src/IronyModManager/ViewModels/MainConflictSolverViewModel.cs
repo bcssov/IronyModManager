@@ -989,6 +989,20 @@ namespace IronyModManager.ViewModels
                 {
                     performModSelectionAction().ConfigureAwait(false);
                 }
+                else if (m.Hotkey == Enums.HotKeys.Ctrl_R)
+                {
+                    if (ResolveEnabled && !ResolvingConflict)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                    }
+                }
+                else if (m.Hotkey == Enums.HotKeys.Ctrl_I)
+                {
+                    if (IgnoreEnabled && !ResolvingConflict)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(false).ConfigureAwait(true));
+                    }
+                }
                 else
                 {
                     performModParentSelectionAction().ConfigureAwait(false);
