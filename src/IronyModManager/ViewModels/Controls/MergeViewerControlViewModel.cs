@@ -1252,44 +1252,35 @@ namespace IronyModManager.ViewModels.Controls
                             break;
 
                         case Enums.HotKeys.Ctrl_C:
-                            if (RightSidePatchMod)
+                            if (LeftSidePatchMod)
+                            {
+                                Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            else if (RightSidePatchMod)
                             {
                                 Copy(LeftSideSelected, LeftDiff, RightDiff, true);
                             }
                             break;
 
-                        case Enums.HotKeys.Ctrl_Shift_C:
+                        case Enums.HotKeys.Ctrl_V:
                             if (LeftSidePatchMod)
                             {
-                                Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                                CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
                             }
-                            break;
-
-                        case Enums.HotKeys.Ctrl_V:
-                            if (RightSidePatchMod)
+                            else if (RightSidePatchMod)
                             {
                                 CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
                             }
                             break;
 
-                        case Enums.HotKeys.Ctrl_Shift_V:
-                            if (LeftSidePatchMod)
-                            {
-                                CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
-                            }
-                            break;
-
                         case Enums.HotKeys.Ctrl_B:
-                            if (RightSidePatchMod)
-                            {
-                                CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
-                            }
-                            break;
-
-                        case Enums.HotKeys.Ctrl_Shift_B:
                             if (LeftSidePatchMod)
                             {
                                 CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                            }
+                            else if (RightSidePatchMod)
+                            {
+                                CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
                             }
                             break;
 

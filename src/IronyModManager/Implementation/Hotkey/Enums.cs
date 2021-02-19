@@ -205,29 +205,14 @@ namespace IronyModManager.Implementation.Hotkey
             Ctrl_C,
 
             /// <summary>
-            /// The control shift c
-            /// </summary>
-            Ctrl_Shift_C,
-
-            /// <summary>
             /// The control v
             /// </summary>
             Ctrl_V,
 
             /// <summary>
-            /// The control shift v
-            /// </summary>
-            Ctrl_Shift_V,
-
-            /// <summary>
             /// The control b
             /// </summary>
-            Ctrl_B,
-
-            /// <summary>
-            /// The control shift b
-            /// </summary>
-            Ctrl_Shift_B,
+            Ctrl_B
         }
 
         #endregion Enums
