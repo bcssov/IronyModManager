@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="HotkeyManager.cs" company="Mario">
 //     Mario
@@ -39,7 +39,27 @@ namespace IronyModManager.Implementation.Hotkey
             { Constants.CTRL_SHIFT_Up, Enums.HotKeys.Ctrl_Shift_Up },
             { Constants.CTRL_SHIFT_Down, Enums.HotKeys.Ctrl_Shift_Down },
             { Constants.SHIFT_Down, Enums.HotKeys.Shift_Down},
-            { Constants.SHIFT_Up, Enums.HotKeys.Shift_Up }
+            { Constants.SHIFT_Up, Enums.HotKeys.Shift_Up },
+            { Constants.CTRL_1, Enums.HotKeys.Ctrl_1 },
+            { Constants.CTRL_SHIFT_1, Enums.HotKeys.Ctrl_Shift_1 },
+            { Constants.CTRL_2, Enums.HotKeys.Ctrl_2 },
+            { Constants.CTRL_SHIFT_2, Enums.HotKeys.Ctrl_Shift_2 },
+            { Constants.CTRL_3, Enums.HotKeys.Ctrl_3 },
+            { Constants.CTRL_SHIFT_3, Enums.HotKeys.Ctrl_Shift_3 },
+            { Constants.CTRL_4, Enums.HotKeys.Ctrl_4 },
+            { Constants.CTRL_SHIFT_4, Enums.HotKeys.Ctrl_Shift_4 },
+            { Constants.CTRL_5, Enums.HotKeys.Ctrl_5 },
+            { Constants.CTRL_SHIFT_5, Enums.HotKeys.Ctrl_Shift_5 },
+            { Constants.CTRL_6, Enums.HotKeys.Ctrl_6 },
+            { Constants.CTRL_SHIFT_6, Enums.HotKeys.Ctrl_Shift_6 },
+            { Constants.CTRL_7, Enums.HotKeys.Ctrl_7 },
+            { Constants.CTRL_SHIFT_7, Enums.HotKeys.Ctrl_Shift_7 },
+            { Constants.CTRL_8, Enums.HotKeys.Ctrl_8 },
+            { Constants.CTRL_SHIFT_8, Enums.HotKeys.Ctrl_Shift_8 },
+            { Constants.CTRL_9, Enums.HotKeys.Ctrl_9 },
+            { Constants.CTRL_SHIFT_9, Enums.HotKeys.Ctrl_Shift_9 },
+            { Constants.CTRL_0, Enums.HotKeys.Ctrl_0 },
+            { Constants.CTRL_SHIFT_0, Enums.HotKeys.Ctrl_Shift_0 }
         };
 
         /// <summary>

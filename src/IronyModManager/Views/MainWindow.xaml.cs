@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -125,7 +125,7 @@ namespace IronyModManager.Views
             foreach (var item in manager.GetKeys())
             {
                 var vm = ViewModel;
-                this.KeyBindings.Add(new KeyBinding()
+                KeyBindings.Add(new KeyBinding()
                 {
                     Command = vm.RegisterHotkeyCommand,
                     CommandParameter = item,

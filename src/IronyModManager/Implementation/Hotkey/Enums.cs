@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -45,24 +45,124 @@ namespace IronyModManager.Implementation.Hotkey
             Ctrl_Down,
 
             /// <summary>
-            /// The control shift up
+            /// The control Shift up
             /// </summary>
             Ctrl_Shift_Up,
 
             /// <summary>
-            /// The control shift down
+            /// The control Shift down
             /// </summary>
             Ctrl_Shift_Down,
 
             /// <summary>
-            /// The shift up
+            /// The Shift up
             /// </summary>
             Shift_Up,
 
             /// <summary>
-            /// The shift down
+            /// The Shift down
             /// </summary>
-            Shift_Down
+            Shift_Down,
+
+            /// <summary>
+            /// The control 1
+            /// </summary>
+            Ctrl_1,
+
+            /// <summary>
+            /// The control Shift 1
+            /// </summary>
+            Ctrl_Shift_1,
+
+            /// <summary>
+            /// The control 2
+            /// </summary>
+            Ctrl_2,
+
+            /// <summary>
+            /// The control Shift 2
+            /// </summary>
+            Ctrl_Shift_2,
+
+            /// <summary>
+            /// The control 3
+            /// </summary>
+            Ctrl_3,
+
+            /// <summary>
+            /// The control Shift 3
+            /// </summary>
+            Ctrl_Shift_3,
+
+            /// <summary>
+            /// The control 4
+            /// </summary>
+            Ctrl_4,
+
+            /// <summary>
+            /// The control Shift 4
+            /// </summary>
+            Ctrl_Shift_4,
+
+            /// <summary>
+            /// The control 5
+            /// </summary>
+            Ctrl_5,
+
+            /// <summary>
+            /// The control Shift 5
+            /// </summary>
+            Ctrl_Shift_5,
+
+            /// <summary>
+            /// The control 6
+            /// </summary>
+            Ctrl_6,
+
+            /// <summary>
+            /// The control Shift 6
+            /// </summary>
+            Ctrl_Shift_6,
+
+            /// <summary>
+            /// The control 7
+            /// </summary>
+            Ctrl_7,
+
+            /// <summary>
+            /// The control Shift 7
+            /// </summary>
+            Ctrl_Shift_7,
+
+            /// <summary>
+            /// The control 8
+            /// </summary>
+            Ctrl_8,
+
+            /// <summary>
+            /// The control Shift 8
+            /// </summary>
+            Ctrl_Shift_8,
+
+            /// <summary>
+            /// The control 9
+            /// </summary>
+            Ctrl_9,
+
+            /// <summary>
+            /// The control Shift 9
+            /// </summary>
+            Ctrl_Shift_9,
+
+            /// <summary>
+            /// The control 0
+            /// </summary>
+            Ctrl_0,
+
+            /// <summary>
+            /// The control Shift 0
+            /// </summary>
+            Ctrl_Shift_0
         }
 
         #endregion Enums
