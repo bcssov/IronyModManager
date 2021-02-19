@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Controls;
 using IronyModManager.Models.Common;
@@ -179,28 +180,26 @@ namespace IronyModManager.Views.Controls
                 }
             }
 
+            void setNumericPropertiesSafe(bool setMargin = false)
+            {
+                Dispatcher.UIThread.SafeInvoke(() => setNumericProperties(setMargin));
+            }
+
             ViewModel.ModReordered += (mod, instant) =>
             {
-                setNumericProperties(instant);
+                setNumericPropertiesSafe(instant);
                 modList.Focus();
                 FocusOrderTextBoxAsync(mod).ConfigureAwait(true);
             };
 
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
             {
-                if (Dispatcher.UIThread.CheckAccess())
-                {
-                    setNumericProperties();
-                }
-                else
-                {
-                    Dispatcher.UIThread.InvokeAsync(() => setNumericProperties());
-                }
+                setNumericPropertiesSafe();
             }).DisposeWith(Disposables);
 
             modList.LayoutUpdated += (sender, args) =>
             {
-                setNumericProperties(true);
+                setNumericPropertiesSafe(true);
             };
         }
 

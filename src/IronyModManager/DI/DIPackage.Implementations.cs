@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-18-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using IronyModManager.Fonts;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
@@ -71,6 +72,9 @@ namespace IronyModManager.DI
             container.Register<IIDGenerator, IDGenerator>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModCompressMergeProgressHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModDefinitionInvalidReplaceHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<MainViewHotkeyPressedHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ConflictSolverViewHotkeyPressedHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IHotkeyManager, HotkeyManager>();
         }
 
         #endregion Methods

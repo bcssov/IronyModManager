@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,12 +20,15 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
+using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
@@ -53,6 +56,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The external editor service
         /// </summary>
         private readonly IExternalEditorService externalEditorService;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The localization manager
@@ -86,17 +94,20 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(IAppAction appAction, IExternalEditorService externalEditorService,
+        public MergeViewerControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+            IAppAction appAction, IExternalEditorService externalEditorService,
             INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.appAction = appAction;
             this.externalEditorService = externalEditorService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
         }
 
         #endregion Constructors
@@ -139,6 +150,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The cancel command.</value>
         public virtual ReactiveCommand<Unit, Unit> CancelCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can perform hot key actions.
+        /// </summary>
+        /// <value><c>true</c> if this instance can perform hot key actions; otherwise, <c>false</c>.</value>
+        public virtual bool CanPerformHotKeyActions { get; set; }
 
         /// <summary>
         /// Gets or sets the copy all.
@@ -1107,19 +1124,7 @@ namespace IronyModManager.ViewModels.Controls
 
             EditThisCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                EditingLeft = leftSide;
-                EditingRight = !leftSide;
-                EditingText = true;
-                if (leftSide)
-                {
-                    CurrentEditText = LeftSide;
-                }
-                else
-                {
-                    CurrentEditText = RightSide;
-                }
-                LeftDocument = new TextDocument(LeftSide);
-                RightDocument = new TextDocument(RightSide);
+                SetEditThis(leftSide);
             }).DisposeWith(disposables);
 
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
@@ -1213,6 +1218,91 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            hotkeyPressedHandler.Message.Subscribe(m =>
+            {
+                void performAction()
+                {
+                    if (LeftSideSelected.Count == 0)
+                    {
+                        LeftSideSelected.Add(LeftDiff.FirstOrDefault());
+                    }
+                    switch (m.Hotkey)
+                    {
+                        case Enums.HotKeys.Ctrl_Up:
+                            FindConflict(true, false);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Down:
+                            FindConflict(true, true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_E:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                SetEditThis(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_T:
+                            CopyTextAsync(false).ConfigureAwait(true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_T:
+                            CopyTextAsync(true).ConfigureAwait(true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_C:
+                            if (RightSidePatchMod)
+                            {
+                                Copy(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_C:
+                            if (LeftSidePatchMod)
+                            {
+                                Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_V:
+                            if (RightSidePatchMod)
+                            {
+                                CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_V:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_B:
+                            if (RightSidePatchMod)
+                            {
+                                CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_B:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                if (CanPerformHotKeyActions && !EditingText)
+                {
+                    Dispatcher.UIThread.SafeInvoke(performAction);
+                }
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1245,6 +1335,27 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Sets the edit this.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void SetEditThis(bool leftSide)
+        {
+            EditingLeft = leftSide;
+            EditingRight = !leftSide;
+            EditingText = true;
+            if (leftSide)
+            {
+                CurrentEditText = LeftSide;
+            }
+            else
+            {
+                CurrentEditText = RightSide;
+            }
+            LeftDocument = new TextDocument(LeftSide);
+            RightDocument = new TextDocument(RightSide);
+        }
+
+        /// <summary>
         /// synchronize selections as an asynchronous operation.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
@@ -1255,15 +1366,21 @@ namespace IronyModManager.ViewModels.Controls
             var syncDiff = !leftSide ? LeftDiff : RightDiff;
             var sourceCol = leftSide ? LeftSideSelected : RightSideSelected;
             var syncCol = !leftSide ? LeftSideSelected : RightSideSelected;
+            bool clearCol = true;
             if (sourceCol?.Count > 0)
             {
-                syncCol.Clear();
-                foreach (var item in sourceCol)
+                var filtered = sourceCol.Where(p => p != null); // Must be an underlying bug?
+                if (filtered.Any())
                 {
-                    syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    clearCol = false;
+                    syncCol.Clear();
+                    foreach (var item in filtered)
+                    {
+                        syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    }
                 }
             }
-            else
+            if (clearCol)
             {
                 syncCol.Clear();
             }
