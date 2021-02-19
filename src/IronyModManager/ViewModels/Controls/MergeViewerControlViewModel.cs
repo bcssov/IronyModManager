@@ -1251,6 +1251,48 @@ namespace IronyModManager.ViewModels.Controls
                             CopyTextAsync(true).ConfigureAwait(true);
                             break;
 
+                        case Enums.HotKeys.Ctrl_C:
+                            if (RightSidePatchMod)
+                            {
+                                Copy(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_C:
+                            if (LeftSidePatchMod)
+                            {
+                                Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_V:
+                            if (RightSidePatchMod)
+                            {
+                                CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_V:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_B:
+                            if (RightSidePatchMod)
+                            {
+                                CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_B:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                            }
+                            break;
+
                         default:
                             break;
                     }

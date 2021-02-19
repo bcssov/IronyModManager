@@ -75,6 +75,16 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_9 = "CTRL+D9";
 
         /// <summary>
+        /// The control b
+        /// </summary>
+        public const string CTRL_B = "CTRL+B";
+
+        /// <summary>
+        /// The control c
+        /// </summary>
+        public const string CTRL_C = "CTRL+C";
+
+        /// <summary>
         /// The control down
         /// </summary>
         public const string CTRL_Down = "CTRL+Down";
@@ -145,6 +155,16 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_SHIFT_9 = "CTRL+SHIFT+D9";
 
         /// <summary>
+        /// The control shift b
+        /// </summary>
+        public const string CTRL_SHIFT_B = "CTRL+SHIFT+B";
+
+        /// <summary>
+        /// The control shift c
+        /// </summary>
+        public const string CTRL_SHIFT_C = "CTRL+SHIFT+C";
+
+        /// <summary>
         /// The control shift down
         /// </summary>
         public const string CTRL_SHIFT_Down = "CTRL+SHIFT+Down";
@@ -170,6 +190,11 @@ namespace IronyModManager.Implementation.Hotkey
         public const string CTRL_SHIFT_Up = "CTRL+SHIFT+Up";
 
         /// <summary>
+        /// The control shift v
+        /// </summary>
+        public const string CTRL_SHIFT_V = "CTRL+SHIFT+V";
+
+        /// <summary>
         /// The control t
         /// </summary>
         public const string CTRL_T = "CTRL+T";
@@ -178,6 +203,11 @@ namespace IronyModManager.Implementation.Hotkey
         /// The control up
         /// </summary>
         public const string CTRL_Up = "CTRL+Up";
+
+        /// <summary>
+        /// The control v
+        /// </summary>
+        public const string CTRL_V = "CTRL+V";
 
         /// <summary>
         /// The shift down
