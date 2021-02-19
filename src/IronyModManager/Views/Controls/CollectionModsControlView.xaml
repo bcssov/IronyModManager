@@ -71,8 +71,8 @@
             </Panel>
             <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
               <Grid ColumnDefinitions="1.5*,1*">
-                <ContentControl Content="{Binding SearchMods}" MaxHeight="30" Grid.Column="0"></ContentControl>
-                <ContentControl Content="{Binding PatchMod}" MaxHeight="30" Grid.Column="1"></ContentControl>
+                <ContentControl Content="{Binding SearchMods}" MaxHeight="30" Grid.Column="0" Grid.ColumnSpan="{Binding SearchModsColSpan}"></ContentControl>
+                <ContentControl Content="{Binding PatchMod}" MaxHeight="30" Grid.Column="1" IsVisible="{Binding ShowAdvancedFeatures}"></ContentControl>
               </Grid>
             </Panel>
             <Grid Margin="0,30,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">

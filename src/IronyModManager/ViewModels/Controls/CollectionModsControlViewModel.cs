@@ -4,13 +4,13 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
-// ************************************************************************
+// ***********************************************************************
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -614,6 +614,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual SearchModsControlViewModel SearchMods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the search mods col span.
+        /// </summary>
+        /// <value>The search mods col span.</value>
+        public virtual int SearchModsColSpan { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the search mods watermark.
         /// </summary>
         /// <value>The search mods watermark.</value>
@@ -637,6 +643,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The selected mods.</value>
         public virtual IList<IMod> SelectedMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; protected set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -832,6 +844,16 @@ namespace IronyModManager.ViewModels.Controls
                 collection = SelectedModCollection;
             }
             collection.ModNames = SelectedMods?.Where(p => p.IsSelected).Select(p => p.Name).ToList();
+        }
+
+        /// <summary>
+        /// Evals the advanced features visibility.
+        /// </summary>
+        protected virtual void EvalAdvancedFeaturesVisibility()
+        {
+            var game = gameService.GetSelected();
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
         }
 
         /// <summary>
@@ -1056,6 +1078,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvalAdvancedFeaturesVisibility();
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -1544,6 +1567,7 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnSelectedGameChanged(IGame game)
         {
             base.OnSelectedGameChanged(game);
+            EvalAdvancedFeaturesVisibility();
             LoadModCollections();
         }
 
