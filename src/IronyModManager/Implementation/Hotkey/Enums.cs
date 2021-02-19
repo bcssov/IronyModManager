@@ -162,7 +162,17 @@ namespace IronyModManager.Implementation.Hotkey
             /// <summary>
             /// The control Shift 0
             /// </summary>
-            Ctrl_Shift_0
+            Ctrl_Shift_0,
+
+            /// <summary>
+            /// The control shift p
+            /// </summary>
+            Ctrl_Shift_P,
+
+            /// <summary>
+            /// The control shift n
+            /// </summary>
+            Ctrl_Shift_N,
         }
 
         #endregion Enums

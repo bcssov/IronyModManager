@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-19-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -869,7 +869,7 @@ namespace IronyModManager.ViewModels
 
             hotkeyPressedHandler.Message.Subscribe(m =>
             {
-                async Task performAction()
+                async Task performModSelectionAction()
                 {
                     while (switchingConflict)
                     {
@@ -927,7 +927,72 @@ namespace IronyModManager.ViewModels
                         }
                     }
                 }
-                performAction().ConfigureAwait(false);
+                async Task performModParentSelectionAction()
+                {
+                    while (switchingConflict)
+                    {
+                        await Task.Delay(25);
+                    }
+                    if (!filteringConflicts && (HierarchalConflicts?.Any()).GetValueOrDefault())
+                    {
+                        IHierarchicalDefinitions parent = null;
+                        var col = HierarchalConflicts.ToList();
+                        switch (m.Hotkey)
+                        {
+                            case Enums.HotKeys.Ctrl_Shift_P:
+                                if (SelectedParentConflict == null)
+                                {
+                                    parent = col.LastOrDefault();
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedParentConflict);
+                                    index--;
+                                    if (index < 0)
+                                    {
+                                        index = 0;
+                                    }
+                                    parent = col[index];
+                                }
+                                break;
+
+                            case Enums.HotKeys.Ctrl_Shift_N:
+                                if (SelectedParentConflict == null)
+                                {
+                                    parent = col.FirstOrDefault();
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedParentConflict);
+                                    index++;
+                                    if (index > col.Count - 1)
+                                    {
+                                        index = col.Count - 1;
+                                    }
+                                    parent = col[index];
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (parent != null)
+                        {
+                            await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                            {
+                                SelectedParentConflict = parent;
+                            });
+                        }
+                    }
+                }
+                if (m.Hotkey == Enums.HotKeys.Shift_Down || m.Hotkey == Enums.HotKeys.Shift_Up)
+                {
+                    performModSelectionAction().ConfigureAwait(false);
+                }
+                else
+                {
+                    performModParentSelectionAction().ConfigureAwait(false);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
