@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2021
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -677,15 +677,8 @@ namespace IronyModManager.ViewModels
                 EvalViewerVisibility();
             }).DisposeWith(disposables);
 
-            var switchingConflict = false;
             this.WhenAnyValue(v => v.SelectedConflict).Subscribe(s =>
             {
-                async Task resetFlag()
-                {
-                    await Task.Delay(200);
-                    switchingConflict = false;
-                }
-                switchingConflict = true;
                 if (Conflicts?.Conflicts != null && !string.IsNullOrWhiteSpace(s?.Key) && IsConflictSolverAvailable)
                 {
                     PreviousConflictIndex = SelectedParentConflict.Children.ToList().IndexOf(s);
@@ -711,7 +704,6 @@ namespace IronyModManager.ViewModels
                     PreviousConflictIndex = null;
                     IgnoreEnabled = false;
                 }
-                resetFlag().ConfigureAwait(false);
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ModCompareSelector.IsActivated).Where(p => p).Subscribe(s =>
@@ -871,10 +863,6 @@ namespace IronyModManager.ViewModels
             {
                 async Task performModSelectionAction()
                 {
-                    while (switchingConflict)
-                    {
-                        await Task.Delay(25);
-                    }
                     if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
                     {
                         int? newSelectedConflict = null;
@@ -929,10 +917,6 @@ namespace IronyModManager.ViewModels
                 }
                 async Task performModParentSelectionAction()
                 {
-                    while (switchingConflict)
-                    {
-                        await Task.Delay(25);
-                    }
                     if (!filteringConflicts && (HierarchalConflicts?.Any()).GetValueOrDefault())
                     {
                         IHierarchicalDefinitions parent = null;

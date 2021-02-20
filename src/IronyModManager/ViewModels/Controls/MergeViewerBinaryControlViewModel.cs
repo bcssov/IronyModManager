@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -49,6 +49,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ILocalizationManager localizationManager;
 
         /// <summary>
+        /// The logger
+        /// </summary>
+        private readonly ILogger logger;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModService modService;
@@ -60,12 +65,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerBinaryControlViewModel" /> class.
         /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="modService">The mod service.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerBinaryControlViewModel(IModService modService, ILocalizationManager localizationManager)
+        public MergeViewerBinaryControlViewModel(ILogger logger, IModService modService, ILocalizationManager localizationManager)
         {
             this.modService = modService;
             this.localizationManager = localizationManager;
+            this.logger = logger;
         }
 
         #endregion Constructors
@@ -204,42 +211,54 @@ namespace IronyModManager.ViewModels.Controls
         public void SetLeft(IDefinition definition)
         {
             var loadingImage = false;
-            async Task loadImage()
+            async Task parseImage()
             {
                 while (loadingImage)
                 {
                     await Task.Delay(25);
                 }
                 loadingImage = true;
-                LeftImageInfo = string.Empty;
                 var left = LeftImage;
-                LeftImage = null;
-                left?.Dispose();
-                LeftHeight = LeftWidth = 0;
-                using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
-                if (ms != null)
+                if (definition != null)
                 {
-                    LeftImage = new Bitmap(ms);
-                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                    LeftImageInfo = Smart.Format(info, new { LeftImage.PixelSize.Width, LeftImage.PixelSize.Height });
-                    LeftHeight = LeftImage.PixelSize.Height;
-                    LeftWidth = LeftImage.PixelSize.Width;
+                    LeftImageInfo = string.Empty;
+                    LeftImage = null;
+                    left?.Dispose();
+                    LeftHeight = LeftWidth = 0;
+                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    if (ms != null)
+                    {
+                        try
+                        {
+                            LeftImage = new Bitmap(ms);
+                            var imageHeight = LeftImage.PixelSize.Width;
+                            var imageWidth = LeftImage.PixelSize.Height;
+                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                            LeftImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            LeftHeight = imageHeight;
+                            LeftWidth = imageWidth;
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex);
+                            LeftImageInfo = string.Empty;
+                            LeftImage = null;
+                            left?.Dispose();
+                            LeftHeight = LeftWidth = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    LeftImageInfo = string.Empty;
+                    LeftImage = null;
+                    left?.Dispose();
+                    LeftHeight = LeftWidth = 0;
                 }
                 loadingImage = false;
             }
 
-            if (definition != null)
-            {
-                Task.Run(() => loadImage().ConfigureAwait(false)).ConfigureAwait(false);
-            }
-            else
-            {
-                LeftImageInfo = string.Empty;
-                var left = LeftImage;
-                LeftImage = null;
-                left?.Dispose();
-                LeftHeight = LeftWidth = 0;
-            }
+            Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -249,42 +268,53 @@ namespace IronyModManager.ViewModels.Controls
         public void SetRight(IDefinition definition)
         {
             var loadingImage = false;
-            async Task loadImage()
+            async Task parseImage()
             {
                 while (loadingImage)
                 {
                     await Task.Delay(25);
                 }
                 loadingImage = true;
-                RightImageInfo = string.Empty;
                 var right = RightImage;
-                RightImage = null;
-                right?.Dispose();
-                RightHeight = RightWidth = 0;
-                using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
-                if (ms != null)
+                if (definition != null)
                 {
-                    RightImage = new Bitmap(ms);
-                    var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
-                    RightImageInfo = Smart.Format(info, new { RightImage.PixelSize.Width, RightImage.PixelSize.Height });
-                    RightHeight = RightImage.PixelSize.Height;
-                    RightWidth = RightImage.PixelSize.Width;
+                    RightImageInfo = string.Empty;
+                    RightImage = null;
+                    right?.Dispose();
+                    RightHeight = RightWidth = 0;
+                    using var ms = await modService.GetImageStreamAsync(definition?.ModName, definition?.File);
+                    if (ms != null)
+                    {
+                        try
+                        {
+                            RightImage = new Bitmap(ms);
+                            var imageHeight = RightImage.PixelSize.Width;
+                            var imageWidth = RightImage.PixelSize.Height;
+                            var info = localizationManager.GetResource(LocalizationResources.Conflict_Solver.ImageInfo);
+                            RightImageInfo = Smart.Format(info, new { Width = imageWidth, Height = imageHeight });
+                            RightHeight = imageHeight;
+                            RightWidth = imageWidth;
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.Error(ex);
+                            RightImageInfo = string.Empty;
+                            RightImage = null;
+                            right?.Dispose();
+                            RightHeight = RightWidth = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    RightImageInfo = string.Empty;
+                    RightImage = null;
+                    right?.Dispose();
+                    RightHeight = RightWidth = 0;
                 }
                 loadingImage = false;
             }
-
-            if (definition != null)
-            {
-                Task.Run(() => loadImage().ConfigureAwait(false)).ConfigureAwait(false);
-            }
-            else
-            {
-                RightImageInfo = string.Empty;
-                var right = RightImage;
-                RightImage = null;
-                right?.Dispose();
-                RightHeight = RightWidth = 0;
-            }
+            Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         /// <summary>

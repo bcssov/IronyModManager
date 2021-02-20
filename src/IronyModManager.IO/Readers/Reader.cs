@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -124,7 +124,7 @@ namespace IronyModManager.IO.Readers
                 var stream = GetStream(rootPath, file);
                 return imageReader.Parse(stream, file);
             }
-            return null;
+            return Task.FromResult((MemoryStream)null);
         }
 
         /// <summary>
