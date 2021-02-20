@@ -4,15 +4,15 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared.Models;
@@ -125,6 +125,14 @@ namespace IronyModManager.Services.Common
         Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName);
 
         /// <summary>
+        /// Initializes the patch state asynchronous.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IConflictResult&gt;.</returns>
+        Task<IConflictResult> InitializePatchStateAsync(IConflictResult conflictResult, string collectionName);
+
+        /// <summary>
         /// Invalidates the state of the patch mod.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -215,14 +223,6 @@ namespace IronyModManager.Services.Common
         /// <param name="collectionName">Name of the collection.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> SaveIgnoredPathsAsync(IConflictResult conflictResult, string collectionName);
-
-        /// <summary>
-        /// Synchronizes the patch state asynchronous.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;IConflictResult&gt;.</returns>
-        Task<IConflictResult> SyncPatchStateAsync(IConflictResult conflictResult, string collectionName);
 
         #endregion Methods
     }

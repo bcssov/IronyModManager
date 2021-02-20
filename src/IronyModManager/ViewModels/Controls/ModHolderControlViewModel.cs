@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -411,7 +411,7 @@ namespace IronyModManager.ViewModels.Controls
             }).ConfigureAwait(false);
             var syncedConflicts = await Task.Run(async () =>
             {
-                return await modPatchCollectionService.SyncPatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
+                return await modPatchCollectionService.InitializePatchStateAsync(conflicts, CollectionMods.SelectedModCollection.Name).ConfigureAwait(false);
             }).ConfigureAwait(false);
             if (syncedConflicts != null)
             {
@@ -430,6 +430,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler?.Dispose();
             definitionLoadHandler?.Dispose();
             definitionSyncHandler?.Dispose();
+            // I know, I know... but I wanna force a cleanup
+            GC.Collect();
         }
 
         /// <summary>

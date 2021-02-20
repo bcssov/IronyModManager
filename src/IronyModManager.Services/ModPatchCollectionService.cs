@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-10-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -303,7 +303,6 @@ namespace IronyModManager.Services
             messageBus.Publish(new ModDefinitionAnalyzeEvent(0));
 
             // Create virtual empty objects from an empty file
-            bool searchNeedsRefresh = false;
             foreach (var item in empty)
             {
                 var emptyConflicts = indexedDefinitions.GetByFile(item.File);
@@ -328,7 +327,6 @@ namespace IronyModManager.Services
                             copy.OriginalFileName = item.OriginalFileName;
                             copy.Variables = item.Variables;
                             indexedDefinitions.AddToMap(copy);
-                            searchNeedsRefresh = true;
                         }
                         var fileNames = copy.AdditionalFileNames;
                         foreach (var fileName in item.AdditionalFileNames)
@@ -345,10 +343,6 @@ namespace IronyModManager.Services
                     messageBus.Publish(new ModDefinitionAnalyzeEvent(perc));
                     previousProgress = perc;
                 }
-            }
-            if (searchNeedsRefresh)
-            {
-                indexedDefinitions.InitSearch();
             }
 
             foreach (var item in fileKeys)
@@ -599,11 +593,12 @@ namespace IronyModManager.Services
             {
                 prunedDefinitions = definitions.ToList();
             }
+            definitions.Clear();
+            definitions = null;
 
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(99.9));
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(prunedDefinitions);
-            indexed.InitSearch();
             await messageBus.PublishAsync(new ModDefinitionInvalidReplaceEvent(100));
             return indexed;
         }
@@ -642,6 +637,355 @@ namespace IronyModManager.Services
         public virtual Task<bool> IgnoreModPatchAsync(IConflictResult conflictResult, IDefinition definition, string collectionName)
         {
             return ExportModPatchDefinitionAsync(conflictResult, definition, collectionName, ExportType.Ignored);
+        }
+
+        /// <summary>
+        /// initialize patch state as an asynchronous operation.
+        /// </summary>
+        /// <param name="conflictResult">The conflict result.</param>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;IConflictResult&gt;.</returns>
+        public virtual async Task<IConflictResult> InitializePatchStateAsync(IConflictResult conflictResult, string collectionName)
+        {
+            var game = GameService.GetSelected();
+            double previousProgress = 0;
+            async Task syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
+            {
+                foreach (var file in patchFiles.Distinct())
+                {
+                    var cleaned = false;
+                    if (!conflicts.CustomConflicts.ExistsByFile(file) &&
+                        !conflicts.OrphanConflicts.ExistsByFile(file) &&
+                        !conflicts.OverwrittenConflicts.ExistsByFile(file) &&
+                        !conflicts.ResolvedConflicts.ExistsByFile(file))
+                    {
+                        cleaned = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                        {
+                            RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                            Path = file
+                        });
+                    }
+                    if (!cleaned)
+                    {
+                        var resolved = conflicts.ResolvedConflicts.GetByDiskFile(file);
+                        if (resolved.Any())
+                        {
+                            var overwritten = conflicts.OverwrittenConflicts.GetByTypeAndId(resolved.FirstOrDefault().TypeAndId);
+                            if (overwritten.Any() && overwritten.FirstOrDefault().DiskFileCI != resolved.FirstOrDefault().DiskFileCI)
+                            {
+                                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
+                                {
+                                    RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
+                                    Path = overwritten.FirstOrDefault().DiskFile
+                                });
+                            }
+                        }
+                    }
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, maxProgress);
+                    if (previousProgress != perc)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        previousProgress = perc;
+                    }
+                }
+            }
+            IDefinition partialDefinitionCopy(IDefinition definition)
+            {
+                if (definition.ValueType == ValueType.Invalid)
+                {
+                    // Perform a full copy for invalid items
+                    return CopyDefinition(definition);
+                }
+                var copy = DIResolver.Get<IDefinition>();
+                copy.DiskFile = definition.DiskFile;
+                copy.File = definition.File;
+                copy.Id = definition.Id;
+                copy.ModName = definition.ModName;
+                copy.Tags = definition.Tags;
+                copy.Type = definition.Type;
+                copy.ValueType = definition.ValueType;
+                return copy;
+            }
+            async Task<(IIndexedDefinitions, int)> partialCopyIndexedDefinitions(IIndexedDefinitions indexedDefinitions, int total, int processed, int maxProgress)
+            {
+                var copy = DIResolver.Get<IIndexedDefinitions>();
+                foreach (var item in indexedDefinitions.GetAll())
+                {
+                    copy.AddToMap(partialDefinitionCopy(item));
+                    processed++;
+                    var perc = GetProgressPercentage(total, processed, maxProgress);
+                    if (previousProgress != perc)
+                    {
+                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                        previousProgress = perc;
+                    }
+                }
+                return (copy, total);
+            }
+
+            if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
+            {
+                double perc = 0;
+                var patchName = GenerateCollectionPatchName(collectionName);
+                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(0));
+                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                    PatchName = patchName
+                });
+                var patchFiles = modPatchExporter.GetPatchFiles(new ModPatchExporterParameters()
+                {
+                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                    PatchName = patchName
+                });
+                var total = patchFiles.Count() + conflictResult.AllConflicts.GetAll().Count();
+                if (state != null)
+                {
+                    var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
+                    var ignoredConflicts = new List<IDefinition>();
+                    total += state.Conflicts.Count() + (state.OrphanConflicts.Count() * 2) + (state.OverwrittenConflicts.Count() * 2) + 1;
+                    int processed = 0;
+                    foreach (var item in state.OrphanConflicts.GroupBy(p => p.TypeAndId))
+                    {
+                        var files = ProcessPatchStateFiles(state, item, ref processed);
+                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
+                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
+                        perc = GetProgressPercentage(total, processed);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
+                    }
+                    foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
+                    {
+                        var files = ProcessPatchStateFiles(state, item, ref processed);
+                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
+                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
+                        perc = GetProgressPercentage(total, processed);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
+                    }
+                    foreach (var item in state.OverwrittenConflicts.GroupBy(p => p.TypeAndId))
+                    {
+                        processed += item.Count();
+                        var files = new List<string>();
+                        files.AddRange(item.SelectMany(p => p.OverwrittenFileNames));
+                        files.AddRange(item.Where(p => !string.IsNullOrWhiteSpace(p.DiskFile)).ToList().Select(p => p.DiskFile));
+                        if (state.ResolvedConflicts != null)
+                        {
+                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
+                            if (resolved.Any())
+                            {
+                                var fileNames = resolved.Select(p => p.File).ToList();
+                                fileNames.AddRange(resolved.Where(p => !string.IsNullOrWhiteSpace(p.DiskFile)).ToList().Select(p => p.DiskFile));
+                                files.RemoveAll(p => fileNames.Any(a => a.Equals(p, StringComparison.OrdinalIgnoreCase)));
+                            }
+                        }
+                        var matchedConflicts = conflictResult.OverwrittenConflicts.GetByTypeAndId(item.First().TypeAndId);
+                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
+                        perc = GetProgressPercentage(total, processed);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
+                    }
+
+                    if (conflictResult.OrphanConflicts.GetAll().Any())
+                    {
+                        var orphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods());
+                        foreach (var item in orphanConflicts)
+                        {
+                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            {
+                                Game = game.Type,
+                                OrphanConflicts = new List<IDefinition>() { item },
+                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                                PatchName = patchName
+                            }))
+                            {
+                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
+                                if (!existing.Any())
+                                {
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
+                                }
+                            }
+                            processed++;
+                            perc = GetProgressPercentage(total, processed);
+                            if (previousProgress != perc)
+                            {
+                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                                previousProgress = perc;
+                            }
+                        }
+                    }
+
+                    var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
+                    resolvedIndex.InitMap(resolvedConflicts, true);
+
+                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
+                    {
+                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !resolvedIndex.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
+                        foreach (var item in overwrittenConflicts)
+                        {
+                            await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            {
+                                Game = game.Type,
+                                OverwrittenConflicts = new List<IDefinition>() { item },
+                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                                PatchName = patchName
+                            });
+                        }
+                        processed++;
+                        perc = GetProgressPercentage(total, processed);
+                        if (previousProgress != perc)
+                        {
+                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                            previousProgress = perc;
+                        }
+                    }
+
+                    var conflicts = GetModelInstance<IConflictResult>();
+
+                    var partialCopyResult = await partialCopyIndexedDefinitions(conflictResult.AllConflicts, total, processed, 100);
+                    conflictResult.AllConflicts.Dispose();
+                    conflicts.AllConflicts = partialCopyResult.Item1;
+                    total = partialCopyResult.Item2;
+
+                    var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
+                    conflictsIndex.InitMap(conflictResult.Conflicts.GetAll(), true);
+                    conflicts.Conflicts = conflictsIndex;
+                    var orphanIndex = DIResolver.Get<IIndexedDefinitions>();
+                    orphanIndex.InitMap(conflictResult.OrphanConflicts.GetAll(), false);
+                    conflicts.OrphanConflicts = orphanIndex;
+                    conflicts.ResolvedConflicts = resolvedIndex;
+                    var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
+                    ignoredIndex.InitMap(ignoredConflicts, true);
+                    conflicts.IgnoredConflicts = ignoredIndex;
+                    conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
+                    conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
+                    var customConflicts = DIResolver.Get<IIndexedDefinitions>();
+                    customConflicts.InitMap(state.CustomConflicts, true);
+                    conflicts.CustomConflicts = customConflicts;
+                    conflicts.Mode = conflictResult.Mode;
+                    EvalModIgnoreDefinitions(conflicts);
+                    await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
+
+                    await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+                    {
+                        Mode = MapPatchStateMode(conflicts.Mode),
+                        IgnoreConflictPaths = conflicts.IgnoredPaths,
+                        Conflicts = GetDefinitionOrDefault(conflicts.Conflicts),
+                        OrphanConflicts = GetDefinitionOrDefault(conflicts.OrphanConflicts),
+                        ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
+                        IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
+                        OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
+                        CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
+                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                        PatchName = patchName
+                    });
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
+
+                    // Initialize search here
+                    conflicts.AllConflicts.InitSearch();
+
+                    return conflicts;
+                }
+                else
+                {
+                    var processed = 0;
+                    await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 100);
+
+                    var exportedConflicts = false;
+                    if (conflictResult.OrphanConflicts.GetAll().Any())
+                    {
+                        var orphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods());
+                        foreach (var item in orphanConflicts)
+                        {
+                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            {
+                                Game = game.Type,
+                                OrphanConflicts = new List<IDefinition>() { item },
+                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                                PatchName = patchName
+                            }))
+                            {
+                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
+                                if (!existing.Any())
+                                {
+                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
+                                }
+                                exportedConflicts = true;
+                            }
+                            processed++;
+                            perc = GetProgressPercentage(total, processed);
+                            if (previousProgress != perc)
+                            {
+                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                                previousProgress = perc;
+                            }
+                        }
+                    }
+
+                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
+                    {
+                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
+                        foreach (var item in overwrittenConflicts)
+                        {
+                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
+                            {
+                                Game = game.Type,
+                                OverwrittenConflicts = new List<IDefinition>() { item },
+                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                                PatchName = patchName
+                            }))
+                            {
+                                exportedConflicts = true;
+                            }
+                            processed++;
+                            perc = GetProgressPercentage(total, processed);
+                            if (previousProgress != perc)
+                            {
+                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
+                                previousProgress = perc;
+                            }
+                        }
+                    }
+
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
+                    if (exportedConflicts)
+                    {
+                        await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
+                        {
+                            Mode = MapPatchStateMode(conflictResult.Mode),
+                            IgnoreConflictPaths = conflictResult.IgnoredPaths,
+                            Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
+                            OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
+                            ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
+                            IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
+                            OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
+                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
+                            RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
+                            PatchName = patchName
+                        });
+                    }
+
+                    var partialCopyResult = await partialCopyIndexedDefinitions(conflictResult.AllConflicts, total, processed, 100);
+                    conflictResult.AllConflicts.Dispose();
+                    conflictResult.AllConflicts = partialCopyResult.Item1;
+                    total = partialCopyResult.Item2;
+                    // Initialize search here
+                    conflictResult.AllConflicts.InitSearch();
+
+                    return conflictResult;
+                }
+            };
+            return null;
         }
 
         /// <summary>
@@ -910,304 +1254,6 @@ namespace IronyModManager.Services
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 PatchName = patchName
             });
-        }
-
-        /// <summary>
-        /// synchronize patch state as an asynchronous operation.
-        /// </summary>
-        /// <param name="conflictResult">The conflict result.</param>
-        /// <param name="collectionName">Name of the collection.</param>
-        /// <returns>Task&lt;IConflictResult&gt;.</returns>
-        public virtual async Task<IConflictResult> SyncPatchStateAsync(IConflictResult conflictResult, string collectionName)
-        {
-            var game = GameService.GetSelected();
-            double previousProgress = 0;
-            async Task syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
-            {
-                foreach (var file in patchFiles.Distinct())
-                {
-                    var cleaned = false;
-                    if (!conflicts.CustomConflicts.ExistsByFile(file) &&
-                        !conflicts.OrphanConflicts.ExistsByFile(file) &&
-                        !conflicts.OverwrittenConflicts.ExistsByFile(file) &&
-                        !conflicts.ResolvedConflicts.ExistsByFile(file))
-                    {
-                        cleaned = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
-                        {
-                            RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
-                            Path = file
-                        });
-                    }
-                    if (!cleaned)
-                    {
-                        var resolved = conflicts.ResolvedConflicts.GetByDiskFile(file);
-                        if (resolved.Any())
-                        {
-                            var overwritten = conflicts.OverwrittenConflicts.GetByTypeAndId(resolved.FirstOrDefault().TypeAndId);
-                            if (overwritten.Any() && overwritten.FirstOrDefault().DiskFileCI != resolved.FirstOrDefault().DiskFileCI)
-                            {
-                                await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
-                                {
-                                    RootDirectory = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName),
-                                    Path = overwritten.FirstOrDefault().DiskFile
-                                });
-                            }
-                        }
-                    }
-                    processed++;
-                    var perc = GetProgressPercentage(total, processed, maxProgress);
-                    if (previousProgress != perc)
-                    {
-                        await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                        previousProgress = perc;
-                    }
-                }
-            }
-            if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
-            {
-                double perc = 0;
-                var patchName = GenerateCollectionPatchName(collectionName);
-                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(0));
-                var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
-                {
-                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                    PatchName = patchName
-                });
-                var patchFiles = modPatchExporter.GetPatchFiles(new ModPatchExporterParameters()
-                {
-                    RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                    PatchName = patchName
-                });
-                var total = patchFiles.Count();
-                if (state != null)
-                {
-                    var resolvedConflicts = new List<IDefinition>(state.ResolvedConflicts);
-                    var ignoredConflicts = new List<IDefinition>();
-                    total += state.Conflicts.Count() + (state.OrphanConflicts.Count() * 2) + (state.OverwrittenConflicts.Count() * 2) + 1;
-                    int processed = 0;
-                    foreach (var item in state.OrphanConflicts.GroupBy(p => p.TypeAndId))
-                    {
-                        var files = ProcessPatchStateFiles(state, item, ref processed);
-                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.OrphanConflicts, state, ignoredConflicts, item);
-                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
-                        perc = GetProgressPercentage(total, processed);
-                        if (previousProgress != perc)
-                        {
-                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                            previousProgress = perc;
-                        }
-                    }
-                    foreach (var item in state.Conflicts.GroupBy(p => p.TypeAndId))
-                    {
-                        var files = ProcessPatchStateFiles(state, item, ref processed);
-                        var matchedConflicts = FindPatchStateMatchedConflicts(conflictResult.Conflicts, state, ignoredConflicts, item);
-                        await SyncPatchStateAsync(game.UserDirectory, patchName, resolvedConflicts, item, files, matchedConflicts);
-                        perc = GetProgressPercentage(total, processed);
-                        if (previousProgress != perc)
-                        {
-                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                            previousProgress = perc;
-                        }
-                    }
-                    foreach (var item in state.OverwrittenConflicts.GroupBy(p => p.TypeAndId))
-                    {
-                        processed += item.Count();
-                        var files = new List<string>();
-                        files.AddRange(item.SelectMany(p => p.OverwrittenFileNames));
-                        files.AddRange(item.Where(p => !string.IsNullOrWhiteSpace(p.DiskFile)).ToList().Select(p => p.DiskFile));
-                        if (state.ResolvedConflicts != null)
-                        {
-                            var resolved = state.ResolvedConflicts.Where(p => p.TypeAndId.Equals(item.First().TypeAndId));
-                            if (resolved.Any())
-                            {
-                                var fileNames = resolved.Select(p => p.File).ToList();
-                                fileNames.AddRange(resolved.Where(p => !string.IsNullOrWhiteSpace(p.DiskFile)).ToList().Select(p => p.DiskFile));
-                                files.RemoveAll(p => fileNames.Any(a => a.Equals(p, StringComparison.OrdinalIgnoreCase)));
-                            }
-                        }
-                        var matchedConflicts = conflictResult.OverwrittenConflicts.GetByTypeAndId(item.First().TypeAndId);
-                        await SyncPatchStatesAsync(matchedConflicts, item, patchName, game.UserDirectory, files.ToArray());
-                        perc = GetProgressPercentage(total, processed);
-                        if (previousProgress != perc)
-                        {
-                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                            previousProgress = perc;
-                        }
-                    }
-
-                    if (conflictResult.OrphanConflicts.GetAll().Any())
-                    {
-                        var orphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods());
-                        foreach (var item in orphanConflicts)
-                        {
-                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
-                            {
-                                Game = game.Type,
-                                OrphanConflicts = new List<IDefinition>() { item },
-                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                                PatchName = patchName
-                            }))
-                            {
-                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
-                                if (!existing.Any())
-                                {
-                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
-                                }
-                            }
-                            processed++;
-                            perc = GetProgressPercentage(total, processed);
-                            if (previousProgress != perc)
-                            {
-                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                                previousProgress = perc;
-                            }
-                        }
-                    }
-
-                    var resolvedIndex = DIResolver.Get<IIndexedDefinitions>();
-                    resolvedIndex.InitMap(resolvedConflicts, true);
-
-                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
-                    {
-                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !resolvedIndex.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
-                        foreach (var item in overwrittenConflicts)
-                        {
-                            await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
-                            {
-                                Game = game.Type,
-                                OverwrittenConflicts = new List<IDefinition>() { item },
-                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                                PatchName = patchName
-                            });
-                        }
-                        processed++;
-                        perc = GetProgressPercentage(total, processed);
-                        if (previousProgress != perc)
-                        {
-                            await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                            previousProgress = perc;
-                        }
-                    }
-
-                    var conflicts = GetModelInstance<IConflictResult>();
-                    conflicts.AllConflicts = conflictResult.AllConflicts;
-                    var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
-                    conflictsIndex.InitMap(conflictResult.Conflicts.GetAll(), true);
-                    conflicts.Conflicts = conflictsIndex;
-                    var orphanIndex = DIResolver.Get<IIndexedDefinitions>();
-                    orphanIndex.InitMap(conflictResult.OrphanConflicts.GetAll(), false);
-                    conflicts.OrphanConflicts = orphanIndex;
-                    conflicts.ResolvedConflicts = resolvedIndex;
-                    var ignoredIndex = DIResolver.Get<IIndexedDefinitions>();
-                    ignoredIndex.InitMap(ignoredConflicts, true);
-                    conflicts.IgnoredConflicts = ignoredIndex;
-                    conflicts.IgnoredPaths = state.IgnoreConflictPaths ?? string.Empty;
-                    conflicts.OverwrittenConflicts = conflictResult.OverwrittenConflicts;
-                    var customConflicts = DIResolver.Get<IIndexedDefinitions>();
-                    customConflicts.InitMap(state.CustomConflicts, true);
-                    conflicts.CustomConflicts = customConflicts;
-                    conflicts.Mode = conflictResult.Mode;
-                    EvalModIgnoreDefinitions(conflicts);
-                    await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
-
-                    await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
-                    {
-                        Mode = MapPatchStateMode(conflicts.Mode),
-                        IgnoreConflictPaths = conflicts.IgnoredPaths,
-                        Conflicts = GetDefinitionOrDefault(conflicts.Conflicts),
-                        OrphanConflicts = GetDefinitionOrDefault(conflicts.OrphanConflicts),
-                        ResolvedConflicts = GetDefinitionOrDefault(conflicts.ResolvedConflicts),
-                        IgnoredConflicts = GetDefinitionOrDefault(conflicts.IgnoredConflicts),
-                        OverwrittenConflicts = GetDefinitionOrDefault(conflicts.OverwrittenConflicts),
-                        CustomConflicts = GetDefinitionOrDefault(conflicts.CustomConflicts),
-                        RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                        PatchName = patchName
-                    });
-                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
-
-                    return conflicts;
-                }
-                else
-                {
-                    var processed = 0;
-                    await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 100);
-
-                    var exportedConflicts = false;
-                    if (conflictResult.OrphanConflicts.GetAll().Any())
-                    {
-                        var orphanConflicts = PopulateModPath(conflictResult.OrphanConflicts.GetAll(), GetCollectionMods());
-                        foreach (var item in orphanConflicts)
-                        {
-                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
-                            {
-                                Game = game.Type,
-                                OrphanConflicts = new List<IDefinition>() { item },
-                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                                PatchName = patchName
-                            }))
-                            {
-                                var existing = conflictResult.ResolvedConflicts.GetByTypeAndId(item.TypeAndId);
-                                if (!existing.Any())
-                                {
-                                    conflictResult.ResolvedConflicts.AddToMap(item, true);
-                                }
-                                exportedConflicts = true;
-                            }
-                            processed++;
-                            perc = GetProgressPercentage(total, processed);
-                            if (previousProgress != perc)
-                            {
-                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                                previousProgress = perc;
-                            }
-                        }
-                    }
-
-                    if (conflictResult.OverwrittenConflicts.GetAll().Any())
-                    {
-                        var overwrittenConflicts = PopulateModPath(conflictResult.OverwrittenConflicts.GetAll().Where(p => !conflictResult.ResolvedConflicts.GetByTypeAndId(p.TypeAndId).Any()), GetCollectionMods());
-                        foreach (var item in overwrittenConflicts)
-                        {
-                            if (await modPatchExporter.ExportDefinitionAsync(new ModPatchExporterParameters()
-                            {
-                                Game = game.Type,
-                                OverwrittenConflicts = new List<IDefinition>() { item },
-                                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                                PatchName = patchName
-                            }))
-                            {
-                                exportedConflicts = true;
-                            }
-                            processed++;
-                            perc = GetProgressPercentage(total, processed);
-                            if (previousProgress != perc)
-                            {
-                                await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(perc));
-                                previousProgress = perc;
-                            }
-                        }
-                    }
-
-                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
-                    if (exportedConflicts)
-                    {
-                        await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
-                        {
-                            Mode = MapPatchStateMode(conflictResult.Mode),
-                            IgnoreConflictPaths = conflictResult.IgnoredPaths,
-                            Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
-                            OrphanConflicts = GetDefinitionOrDefault(conflictResult.OrphanConflicts),
-                            ResolvedConflicts = GetDefinitionOrDefault(conflictResult.ResolvedConflicts),
-                            IgnoredConflicts = GetDefinitionOrDefault(conflictResult.IgnoredConflicts),
-                            OverwrittenConflicts = GetDefinitionOrDefault(conflictResult.OverwrittenConflicts),
-                            CustomConflicts = GetDefinitionOrDefault(conflictResult.CustomConflicts),
-                            RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                            PatchName = patchName
-                        });
-                    }
-                }
-            };
-            return null;
         }
 
         /// <summary>
