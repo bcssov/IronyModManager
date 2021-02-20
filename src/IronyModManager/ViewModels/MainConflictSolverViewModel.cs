@@ -1119,6 +1119,8 @@ namespace IronyModManager.ViewModels
                     }
                     if (HierarchalConflicts.Any())
                     {
+                        // Force a refresh of the UI
+                        SelectedParentConflict = null;
                         SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
                     }
                 }
