@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2021
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -955,12 +955,16 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="type">The type.</param>
         protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
+            List<string> modNames = null;
             async Task<IModCollection> importDefault()
             {
                 var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
                 if (collection != null)
                 {
                     collection.IsSelected = true;
+                    modNames = collection.ModNames.ToList();
+                    // Mod names are only used in export\import operations
+                    collection.ModNames = null;
                     if (modCollectionService.Save(collection))
                     {
                         return collection;
@@ -974,6 +978,9 @@ namespace IronyModManager.ViewModels.Controls
                 if (importData != null)
                 {
                     importData.IsSelected = true;
+                    modNames = importData.ModNames.ToList();
+                    // Mod names are only used in export\import operations
+                    importData.ModNames = null;
                     if (modCollectionService.Save(importData))
                     {
                         return Task.FromResult(importData);
@@ -1007,6 +1014,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 proceed = true;
             }
+            var endOverlay = true;
             if (proceed)
             {
                 var result = type switch
@@ -1014,18 +1022,58 @@ namespace IronyModManager.ViewModels.Controls
                     ImportProviderType.Default => await importDefault(),
                     _ => await importInstance(importData),
                 };
+                var modPaths = result.Mods.ToList();
                 if (result != null)
                 {
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await messageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
-                    var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                    var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
-                    notificationAction.ShowNotification(title, message, NotificationType.Success);
+                    var showImportNotification = true;
+                    // Check if any mods do not exist
+                    if ((modNames?.Any()).GetValueOrDefault() && Mods.Any())
+                    {
+                        var mods = Mods;
+                        var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
+                        if (nonExistingModPaths.Any())
+                        {
+                            var nonExistingModNames = new List<string>();
+                            var hasModNames = (modNames?.Any()).GetValueOrDefault() && modPaths.Count == modNames.Count;
+                            foreach (var item in nonExistingModPaths)
+                            {
+                                var index = modPaths.IndexOf(item);
+                                if (hasModNames)
+                                {
+                                    nonExistingModNames.Add($"{modNames[index]} ({item})");
+                                }
+                                else
+                                {
+                                    nonExistingModNames.Add(item);
+                                }
+                            }
+                            var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                            var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
+                            endOverlay = false;
+                            showImportNotification = false;
+                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                            notificationAction.ShowNotification(title, message, NotificationType.Warning);
+                            await TriggerOverlayAsync(id, false);
+                            await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                        }
+                    }
+                    if (showImportNotification)
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                        var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                        notificationAction.ShowNotification(title, message, NotificationType.Success);
+                    }
                 }
             }
-            await TriggerOverlayAsync(id, false);
+            if (endOverlay)
+            {
+                await TriggerOverlayAsync(id, false);
+            }
         }
 
         /// <summary>
@@ -1442,6 +1490,13 @@ namespace IronyModManager.ViewModels.Controls
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
                             skipModSelectionSave = false;
+                            var nonExistingMods = modNames.Where(p => !mods.Any(m => m.Name.Equals(p)));
+                            if (nonExistingMods.Any())
+                            {
+                                var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                                var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
+                                await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                            }
                         }
                     }
                 }

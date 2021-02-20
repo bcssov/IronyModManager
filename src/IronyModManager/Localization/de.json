@@ -146,6 +146,10 @@
             "Title": "Kollektion existiert",
             "Message": "Die kollektion ist bereits vorhanden und wird überschrieben. Möchten Sie fortfahren?"
         },
+        "ImportNonExistingMods": {
+            "Title": "Nicht existierende Mods",
+            "Message": "Die folgenden Mods konnten nicht importiert werden, da sie zu fehlen scheinen:{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Import aus Paradoxos",

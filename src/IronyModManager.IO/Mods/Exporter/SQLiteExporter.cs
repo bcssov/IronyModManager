@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-25-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="SQLiteExporter.cs" company="Mario">
 //     Mario
@@ -158,7 +158,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 {
                     await con.DeleteAsync<Playsets>(p => p.Name == colName, transaction: transaction, trace: trace);
 
-                    if (activeCollections.Count() > 0)
+                    if (activeCollections.Count > 0)
                     {
                         foreach (var item in activeCollections)
                         {
@@ -174,7 +174,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 {
                     ironyCollection = (await con.QueryAsync<Playsets>(p => p.Name == colName, trace: trace)).FirstOrDefault();
 
-                    if (activeCollections.Count() > 0)
+                    if (activeCollections.Count > 0)
                     {
                         foreach (var item in activeCollections)
                         {
@@ -342,7 +342,7 @@ namespace IronyModManager.IO.Mods.Exporter
                 var collectionMods = await con.QueryAsync<PlaysetsMods>(p => p.PlaysetId == collection.Id, trace: trace);
                 // Because it's readable for me in hex
                 int pos = 4096;
-                if (recreateCollection || collectionMods == null || collectionMods.Count() == 0)
+                if (recreateCollection || collectionMods == null || !collectionMods.Any())
                 {
                     if (recreateCollection)
                     {
