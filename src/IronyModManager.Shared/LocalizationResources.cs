@@ -194,6 +194,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class ImportNonExistingMods
+            {
+                public const string Prefix = "Collection_Mods.ImportNonExistingMods.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class ImportOther
             {
                 public const string Prefix = "Collection_Mods.ImportOther.";

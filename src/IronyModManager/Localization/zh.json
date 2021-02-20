@@ -146,6 +146,10 @@
             "Title": "合集已存在",
             "Message": "合集已存在并将被覆盖, 是否继续？"
         },
+        "ImportNonExistingMods": {
+            "Title": "不存在的mod",
+            "Message": "无法导入以下mod，因为它们似乎丢失了：{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "…",
             "Paradoxos": "从 Paradoxos 导入",

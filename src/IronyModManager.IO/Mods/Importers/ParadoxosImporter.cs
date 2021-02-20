@@ -4,7 +4,7 @@
 // Created          : 05-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="ParadoxosImporter.cs" company="Mario">
 //     Mario
@@ -89,6 +89,7 @@ namespace IronyModManager.IO.Mods.Importers
                         }
                         return p.FileName;
                     }).ToList();
+                    parameters.Mod.ModNames = ordered.Select(p => p.ModName).ToList();
                 }
                 bool parseXML(string content)
                 {

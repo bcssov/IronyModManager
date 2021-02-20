@@ -146,6 +146,10 @@
             "Title": "Collection Exists",
             "Message": "Collection already exists and will be overwritten, do you want to proceed?"
         },
+        "ImportNonExistingMods": {
+            "Title": "Non existant mods",
+            "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Import From Paradoxos",

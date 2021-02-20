@@ -146,6 +146,10 @@
             "Title": "Kolekcija postoji",
             "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
         },
+        "ImportNonExistingMods": {
+            "Title": "Nepostojeći modovi",
+            "Message": "Sljedeće modove nije moguće uvesti jer se čini da nedostaju::{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Uvezi iz Paradoxos",
