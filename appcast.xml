@@ -23,7 +23,7 @@ CHANGES FROM v1.11:
 * Image preview fixes and improvements
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
-* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection</description>
 			<pubDate>Sat, 20 Feb 2021 07:09:25 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/osx-x64.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="63108300" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="gmaNgwG/3Ne3IRPfMU3XJZ+Q5DWYddbpILxY0ARFgBP0vlGSnm5kUxPTjhUnu6ef9QWVkniWULYDSHN+0gn5Cg=="/>
@@ -48,7 +48,7 @@ CHANGES FROM v1.11:
 * Image preview fixes and improvements
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
-* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection</description>
 			<pubDate>Sat, 20 Feb 2021 07:09:32 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/win-x64-setup.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="54731264" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="mAxqsAtRzF1ajDSc557k6aKdG2JsLwR4zCAo9WwcsEGOKt2R4VrFGu/guqqB2IzhcoQ8WYvOQjARvDrBnM/mCg=="/>
@@ -73,7 +73,7 @@ CHANGES FROM v1.11:
 * Image preview fixes and improvements
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
-* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection</description>
 			<pubDate>Sat, 20 Feb 2021 07:09:29 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/win-x64.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="65525892" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cDKUFEvsYvw9QaXma3RjWBBI6L1iJvPimhBlH50whSAdMMYrWPISuGNq/QLBOafvp0oZ1MvzJhLbM4p3Q3mLAQ=="/>
@@ -98,7 +98,7 @@ CHANGES FROM v1.11:
 * Image preview fixes and improvements
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
-* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection</description>
 			<pubDate>Sat, 20 Feb 2021 07:09:22 +01:00</pubDate>
 			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/linux-x64.zip" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="78635466" sparkle:os="linux" type="application/zip" sparkle:signature="mqOKL1Exlx1qMm69k6rsOAh8jKKtMUq0Ut3RCMH2b/W/IBpRhASbkvpxJ8ZziLVhfBeUqdDSZ0WfCZO3UB97Cg=="/>
