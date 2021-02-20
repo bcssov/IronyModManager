@@ -1038,10 +1038,18 @@ namespace IronyModManager.ViewModels.Controls
                         if (nonExistingModPaths.Any())
                         {
                             var nonExistingModNames = new List<string>();
+                            var hasModNames = (modNames?.Any()).GetValueOrDefault() && modPaths.Count == modNames.Count;
                             foreach (var item in nonExistingModPaths)
                             {
                                 var index = modPaths.IndexOf(item);
-                                nonExistingModNames.Add($"{modNames[index]} ({item})");
+                                if (hasModNames)
+                                {
+                                    nonExistingModNames.Add($"{modNames[index]} ({item})");
+                                }
+                                else
+                                {
+                                    nonExistingModNames.Add(item);
+                                }
                             }
                             var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
                             var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
@@ -1482,6 +1490,13 @@ namespace IronyModManager.ViewModels.Controls
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
                             skipModSelectionSave = false;
+                            var nonExistingMods = modNames.Where(p => !mods.Any(m => m.Name.Equals(p)));
+                            if (nonExistingMods.Any())
+                            {
+                                var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                                var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
+                                await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                            }
                         }
                     }
                 }
