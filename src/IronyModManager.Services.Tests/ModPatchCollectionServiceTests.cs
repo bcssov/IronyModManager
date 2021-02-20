@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-02-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -1101,10 +1101,10 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
-        /// Defines the test method Should_not_sync_patch_state_when_no_selected_game.
+        /// Defines the test method Should_not_initialize_patch_state_when_no_selected_game.
         /// </summary>
         [Fact]
-        public async Task Should_not_sync_patch_state_when_no_selected_game()
+        public async Task Should_not_initialize_patch_state_when_no_selected_game()
         {
             DISetup.SetupContainer();
 
@@ -1128,15 +1128,15 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.SyncPatchStateAsync(c, "fake");
+            var result = await service.InitializePatchStateAsync(c, "fake");
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Defines the test method Should_not_sync_patch_state.
+        /// Defines the test method Should_not_initialize_patch_state.
         /// </summary>
         [Fact]
-        public async Task Should_not_sync_patch_state()
+        public async Task Should_not_initialize_patch_state()
         {
             DISetup.SetupContainer();
 
@@ -1160,18 +1160,18 @@ namespace IronyModManager.Services.Tests
                 ResolvedConflicts = indexed
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.SyncPatchStateAsync(c, null);
+            var result = await service.InitializePatchStateAsync(c, null);
             result.Should().BeNull();
 
-            result = await service.SyncPatchStateAsync(null, "fake");
+            result = await service.InitializePatchStateAsync(null, "fake");
             result.Should().BeNull();
         }
 
         /// <summary>
-        /// Defines the test method Should_sync_patch_state.
+        /// Defines the test method Should_initialize_patch_state.
         /// </summary>
         [Fact]
-        public async Task Should_sync_patch_state()
+        public async Task Should_initialize_patch_state()
         {
             DISetup.SetupContainer();
 
@@ -1250,16 +1250,16 @@ namespace IronyModManager.Services.Tests
                 OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.SyncPatchStateAsync(c, "fake");
+            var result = await service.InitializePatchStateAsync(c, "fake");
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.ResolvedConflicts.GetAll().Count().Should().Be(2);
         }
 
         /// <summary>
-        /// Defines the test method Should_sync_patch_state_and_remove_different.
+        /// Defines the test method Should_initialize_patch_state_and_remove_different.
         /// </summary>
         [Fact]
-        public async Task Should_sync_patch_state_and_remove_different()
+        public async Task Should_initialize_patch_state_and_remove_different()
         {
             DISetup.SetupContainer();
 
@@ -1359,7 +1359,7 @@ namespace IronyModManager.Services.Tests
                 OverwrittenConflicts = orphan
             };
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.SyncPatchStateAsync(c, "fake");
+            var result = await service.InitializePatchStateAsync(c, "fake");
             result.Conflicts.GetAll().Count().Should().Be(2);
             result.ResolvedConflicts.GetAll().Count().Should().Be(0);
         }

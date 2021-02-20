@@ -4,15 +4,15 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="ConflictResult.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared.Models;
 
@@ -111,6 +111,7 @@ namespace IronyModManager.Models
             {
                 return;
             }
+            GC.SuppressFinalize(this);
             disposed = true;
             AllConflicts?.Dispose();
             Conflicts?.Dispose();
