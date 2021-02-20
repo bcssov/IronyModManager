@@ -4,6 +4,106 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.12.78-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.11:
+* Update dependencies
+* Various minor fixes
+* Add Spanish translation (by Werety)
+* Removed advanced mod merge (use compress instead)
+* German localization changes (by Cranky)
+* Added periodic permission check which verifies whether Irony is blocked by AV
+* Added DLC Manager
+* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
+* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
+* Irony patch mod control added (ability to disable it, ability to delete it)
+* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
+* Image preview fixes and improvements
+* Image preview should now show dds cubemaps properly
+* Add keyboard shortcuts
+* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Show notification if Irony cannot import a certain mod in a collection</description>
+			<pubDate>Sat, 20 Feb 2021 07:09:25 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/osx-x64.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="63108300" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="gmaNgwG/3Ne3IRPfMU3XJZ+Q5DWYddbpILxY0ARFgBP0vlGSnm5kUxPTjhUnu6ef9QWVkniWULYDSHN+0gn5Cg=="/>
+		</item>
+		<item>
+			<title>1.12.78-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.11:
+* Update dependencies
+* Various minor fixes
+* Add Spanish translation (by Werety)
+* Removed advanced mod merge (use compress instead)
+* German localization changes (by Cranky)
+* Added periodic permission check which verifies whether Irony is blocked by AV
+* Added DLC Manager
+* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
+* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
+* Irony patch mod control added (ability to disable it, ability to delete it)
+* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
+* Image preview fixes and improvements
+* Image preview should now show dds cubemaps properly
+* Add keyboard shortcuts
+* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Show notification if Irony cannot import a certain mod in a collection</description>
+			<pubDate>Sat, 20 Feb 2021 07:09:32 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/win-x64-setup.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="54731264" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="mAxqsAtRzF1ajDSc557k6aKdG2JsLwR4zCAo9WwcsEGOKt2R4VrFGu/guqqB2IzhcoQ8WYvOQjARvDrBnM/mCg=="/>
+		</item>
+		<item>
+			<title>1.12.78-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.11:
+* Update dependencies
+* Various minor fixes
+* Add Spanish translation (by Werety)
+* Removed advanced mod merge (use compress instead)
+* German localization changes (by Cranky)
+* Added periodic permission check which verifies whether Irony is blocked by AV
+* Added DLC Manager
+* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
+* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
+* Irony patch mod control added (ability to disable it, ability to delete it)
+* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
+* Image preview fixes and improvements
+* Image preview should now show dds cubemaps properly
+* Add keyboard shortcuts
+* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Show notification if Irony cannot import a certain mod in a collection</description>
+			<pubDate>Sat, 20 Feb 2021 07:09:29 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/win-x64.rar" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="65525892" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="cDKUFEvsYvw9QaXma3RjWBBI6L1iJvPimhBlH50whSAdMMYrWPISuGNq/QLBOafvp0oZ1MvzJhLbM4p3Q3mLAQ=="/>
+		</item>
+		<item>
+			<title>1.12.78-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.11:
+* Update dependencies
+* Various minor fixes
+* Add Spanish translation (by Werety)
+* Removed advanced mod merge (use compress instead)
+* German localization changes (by Cranky)
+* Added periodic permission check which verifies whether Irony is blocked by AV
+* Added DLC Manager
+* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
+* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
+* Irony patch mod control added (ability to disable it, ability to delete it)
+* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
+* Image preview fixes and improvements
+* Image preview should now show dds cubemaps properly
+* Add keyboard shortcuts
+* Reduce conflict solver usage memory (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
+* Show notification if Irony cannot import a certain mod in a collection</description>
+			<pubDate>Sat, 20 Feb 2021 07:09:22 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.78-alpha/linux-x64.zip" sparkle:version="1.12.78.57519" sparkle:shortVersionString="1.12.78" length="78635466" sparkle:os="linux" type="application/zip" sparkle:signature="mqOKL1Exlx1qMm69k6rsOAh8jKKtMUq0Ut3RCMH2b/W/IBpRhASbkvpxJ8ZziLVhfBeUqdDSZ0WfCZO3UB97Cg=="/>
+		</item>
+		<item>
 			<title>1.11.33</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
