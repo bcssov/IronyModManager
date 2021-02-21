@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -173,7 +173,11 @@ namespace IronyModManager.Views.Controls
                                 {
                                     left = 6;
                                 }
-                                orderCtrl.Margin = new Avalonia.Thickness(left, 0, right, 0);
+                                var margin = new Avalonia.Thickness(left, 0, right, 0);
+                                if (orderCtrl.Margin != margin)
+                                {
+                                    orderCtrl.Margin = margin;
+                                }
                             }
                         }
                     }
@@ -185,9 +189,9 @@ namespace IronyModManager.Views.Controls
                 Dispatcher.UIThread.SafeInvoke(() => setNumericProperties(setMargin));
             }
 
-            ViewModel.ModReordered += (mod, instant) =>
+            ViewModel.ModReordered += (mod) =>
             {
-                setNumericPropertiesSafe(instant);
+                setNumericPropertiesSafe(true);
                 modList.Focus();
                 FocusOrderTextBoxAsync(mod).ConfigureAwait(true);
             };

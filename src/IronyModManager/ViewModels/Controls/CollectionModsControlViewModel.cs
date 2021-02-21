@@ -249,8 +249,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
-        /// <param name="instant">if set to <c>true</c> [instant].</param>
-        public delegate void ModReorderedDelegate(IMod mod, bool instant);
+        public delegate void ModReorderedDelegate(IMod mod);
 
         #endregion Delegates
 
@@ -761,7 +760,7 @@ namespace IronyModManager.ViewModels.Controls
                     await Task.Delay(50);
                 }
                 mod.Order = newOrder;
-                PerformModReorder(true, mod);
+                PerformModReorder(mod);
             }
             waitForQueue().ConfigureAwait(false);
         }
@@ -1622,9 +1621,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Performs the mod reorder.
         /// </summary>
-        /// <param name="instant">if set to <c>true</c> [instant].</param>
         /// <param name="mods">The mods.</param>
-        protected virtual void PerformModReorder(bool instant, params IMod[] mods)
+        protected virtual void PerformModReorder(params IMod[] mods)
         {
             if (SelectedMods != null && mods.Length > 0)
             {
@@ -1650,7 +1648,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
                 SaveState();
                 RecognizeSortOrder(SelectedModCollection);
-                ModReordered?.Invoke(mods.Last(), instant);
+                ModReordered?.Invoke(mods.Last());
                 skipModSelectionSave = false;
             }
         }
@@ -1744,7 +1742,7 @@ namespace IronyModManager.ViewModels.Controls
             await Task.Delay(300);
             if (reorderCounter == queueNumber)
             {
-                PerformModReorder(false, reorderQueue.ToArray());
+                PerformModReorder(reorderQueue.ToArray());
                 reorderCounter = 0;
                 reorderQueue.Clear();
             }
