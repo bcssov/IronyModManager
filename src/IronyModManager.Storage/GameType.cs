@@ -4,15 +4,15 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="GameType.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Storage
@@ -25,6 +25,12 @@ namespace IronyModManager.Storage
     public class GameType : IGameType
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the abrv.
+        /// </summary>
+        /// <value>The abrv.</value>
+        public virtual string Abrv { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [advanced features supported].

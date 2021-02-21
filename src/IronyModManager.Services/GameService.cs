@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -322,7 +322,7 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="game">The game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="System.InvalidOperationException">Game not selected</exception>
+        /// <exception cref="InvalidOperationException">Game not selected</exception>
         public virtual bool Save(IGame game)
         {
             if (!game.IsSelected)
@@ -342,7 +342,7 @@ namespace IronyModManager.Services
         /// <param name="games">The games.</param>
         /// <param name="selectedGame">The selected game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<IGame> games, IGame selectedGame)
         {
             if (games == null || !games.Any() || selectedGame == null)
@@ -394,6 +394,7 @@ namespace IronyModManager.Services
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
+            game.Abrv = gameType.Abrv;
             game.CloseAppAfterGameLaunch = true;
             var setExeLocation = true;
             var setUserDirLocation = true;

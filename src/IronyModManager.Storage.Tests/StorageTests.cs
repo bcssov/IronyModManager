@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -254,7 +254,8 @@ namespace IronyModManager.Storage.Tests
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
-                RemoteSteamUserDirectory = new List<string>() { "remotesave" }
+                RemoteSteamUserDirectory = new List<string>() { "remotesave" },
+                Abrv = "abrv"
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -272,6 +273,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             dbMock.Games.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            dbMock.Games.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
         }
 
         /// <summary>
@@ -455,7 +457,8 @@ namespace IronyModManager.Storage.Tests
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
-                RemoteSteamUserDirectory = new List<string>() { "remotesave" }
+                RemoteSteamUserDirectory = new List<string>() { "remotesave" },
+                Abrv = "abrv"
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -474,6 +477,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             result.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             result.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            result.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
         }
 
         /// <summary>

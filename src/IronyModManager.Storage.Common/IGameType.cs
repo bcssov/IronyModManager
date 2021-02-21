@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -22,6 +22,12 @@ namespace IronyModManager.Storage.Common
     public interface IGameType
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the abrv.
+        /// </summary>
+        /// <value>The abrv.</value>
+        string Abrv { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [advanced features supported].
