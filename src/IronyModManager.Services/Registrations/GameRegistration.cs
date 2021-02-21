@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
@@ -70,6 +70,7 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.CrusaderKings3.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.CrusaderKings3.Id;
+            game.Abrv = Shared.Constants.GamesTypes.CrusaderKings3.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
@@ -94,6 +95,7 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.EuropaUniversalis4.Id;
+            game.Abrv = Shared.Constants.GamesTypes.EuropaUniversalis4.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
@@ -152,6 +154,7 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.HeartsOfIron4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.HeartsOfIron4.Id;
+            game.Abrv = Shared.Constants.GamesTypes.HeartsOfIron4.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
@@ -175,6 +178,7 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.ImperatorRome.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.ImperatorRome.Id;
+            game.Abrv = Shared.Constants.GamesTypes.ImperatorRome.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.ImperatorRome.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
@@ -199,6 +203,7 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.Stellaris.Id;
+            game.Abrv = Shared.Constants.GamesTypes.Stellaris.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.Stellaris.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();

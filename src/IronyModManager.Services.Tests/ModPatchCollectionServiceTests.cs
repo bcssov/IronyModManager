@@ -1236,6 +1236,9 @@ namespace IronyModManager.Services.Tests
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
 
+            var conflicts = new IndexedDefinitions();
+            conflicts.InitMap(definitions);
+
             var orphan = new IndexedDefinitions();
             orphan.InitMap(new List<IDefinition>());
 
@@ -1245,7 +1248,7 @@ namespace IronyModManager.Services.Tests
             var c = new ConflictResult()
             {
                 AllConflicts = all,
-                Conflicts = all,
+                Conflicts = conflicts,
                 OrphanConflicts = orphan,
                 OverwrittenConflicts = orphan
             };
@@ -1345,6 +1348,9 @@ namespace IronyModManager.Services.Tests
             var all = new IndexedDefinitions();
             all.InitMap(definitions);
 
+            var conflicts = new IndexedDefinitions();
+            conflicts.InitMap(definitions);
+
             var orphan = new IndexedDefinitions();
             orphan.InitMap(new List<IDefinition>());
 
@@ -1354,7 +1360,7 @@ namespace IronyModManager.Services.Tests
             var c = new ConflictResult()
             {
                 AllConflicts = all,
-                Conflicts = all,
+                Conflicts = conflicts,
                 OrphanConflicts = orphan,
                 OverwrittenConflicts = orphan
             };

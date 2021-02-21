@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -149,6 +149,11 @@ namespace IronyModManager.ViewModels.Controls
         private IDisposable definitionSyncHandler = null;
 
         /// <summary>
+        /// The force enable resume button
+        /// </summary>
+        private bool forceEnableResumeButton = false;
+
+        /// <summary>
         /// The mod invalid replace handler
         /// </summary>
         private IDisposable modInvalidReplaceHandler = null;
@@ -204,6 +209,10 @@ namespace IronyModManager.ViewModels.Controls
             this.gameDirectoryChangedHandler = gameDirectoryChangedHandler;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
+            if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
+            {
+                forceEnableResumeButton = true;
+            }
         }
 
         #endregion Constructors
@@ -498,7 +507,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             if (game != null)
             {
-                ResumeGameVisible = gameService.IsContinueGameAllowed(game);
+                ResumeGameVisible = gameService.IsContinueGameAllowed(game) || forceEnableResumeButton;
             }
             else
             {
@@ -764,8 +773,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="game">The game.</param>
         protected override void OnSelectedGameChanged(IGame game)
         {
+            forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();            
             base.OnSelectedGameChanged(game);
         }
 

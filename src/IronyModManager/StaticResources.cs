@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-23-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the command line options.
+        /// </summary>
+        /// <value>The command line options.</value>
+        public static CommandLineArgs CommandLineOptions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is verifying container.

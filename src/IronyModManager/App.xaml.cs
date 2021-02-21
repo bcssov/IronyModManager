@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -84,6 +84,24 @@ namespace IronyModManager
             if (!Design.IsDesignMode)
             {
                 InitThemes();
+                HandleCommandLine();
+            }
+        }
+
+        /// <summary>
+        /// Handles the command line.
+        /// </summary>
+        protected virtual void HandleCommandLine()
+        {
+            if (StaticResources.CommandLineOptions != null && !string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.GameAbrv))
+            {
+                var gameService = DIResolver.Get<IGameService>();
+                var games = gameService.Get();
+                var game = games.FirstOrDefault(g => g.Abrv.Equals(StaticResources.CommandLineOptions.GameAbrv, StringComparison.OrdinalIgnoreCase));
+                if (game != null)
+                {
+                    gameService.SetSelected(games, game);
+                }
             }
         }
 

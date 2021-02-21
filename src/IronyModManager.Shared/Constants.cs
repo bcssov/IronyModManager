@@ -4,15 +4,15 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace IronyModManager.Shared
@@ -202,6 +202,11 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "CK3";
+
+                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = "Crusader Kings III";
@@ -248,6 +253,11 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "EU4";
+
+                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = "Europa Universalis IV";
@@ -284,6 +294,11 @@ namespace IronyModManager.Shared
                 #region Fields
 
                 /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "HOI4";
+
+                /// <summary>
                 /// The docs path
                 /// </summary>
                 public const string DocsPath = "Hearts of Iron IV";
@@ -318,6 +333,11 @@ namespace IronyModManager.Shared
             public static class ImperatorRome
             {
                 #region Fields
+
+                /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "IR";
 
                 /// <summary>
                 /// The docs path
@@ -364,6 +384,11 @@ namespace IronyModManager.Shared
             public static class Stellaris
             {
                 #region Fields
+
+                /// <summary>
+                /// The abrv
+                /// </summary>
+                public const string Abrv = "Stellaris";
 
                 /// <summary>
                 /// The docs path

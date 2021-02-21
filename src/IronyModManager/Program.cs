@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,12 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using CommandLine;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
 using IronyModManager.Implementation;
@@ -78,6 +79,7 @@ namespace IronyModManager
 
             try
             {
+                ParseArguments(args);
                 var app = BuildAvaloniaApp();
                 InitAvaloniaOptions(app);
                 Bootstrap.PostStartup();
@@ -200,6 +202,18 @@ namespace IronyModManager
                 messageBox.ShowAsync().Wait(TimeSpan.FromSeconds(10));
                 Dispatcher.UIThread.InvokeAsync(() => Environment.Exit(0));
             }
+        }
+
+        /// <summary>
+        /// Parses the arguments.
+        /// </summary>
+        /// <param name="args">The arguments.</param>
+        private static void ParseArguments(string[] args)
+        {
+            CommandLine.Parser.Default.ParseArguments<CommandLineArgs>(args).WithParsed(a =>
+            {
+                StaticResources.CommandLineOptions = a;
+            });
         }
 
         /// <summary>

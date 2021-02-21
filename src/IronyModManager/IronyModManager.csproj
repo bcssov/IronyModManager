@@ -183,6 +183,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEdit)" allowedVersions="$(AvaloniaEdit)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
