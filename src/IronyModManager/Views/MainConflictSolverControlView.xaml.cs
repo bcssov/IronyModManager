@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -17,8 +17,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
@@ -61,33 +59,19 @@ namespace IronyModManager.Views
         protected override void OnActivated(CompositeDisposable disposables)
         {
             var conflictList = this.FindControl<IronyModManager.Controls.ListBox>("conflictList");
-            CancellationTokenSource cancel = null;
             conflictList.SelectionChanged += (sender, args) =>
             {
-                async Task delay(CancellationToken token)
+                Dispatcher.UIThread.SafeInvoke(() =>
                 {
-                    await Task.Delay(150, token);
-                    if (!token.IsCancellationRequested)
+                    if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
                     {
-                        await Dispatcher.UIThread.SafeInvokeAsync(() =>
-                        {
-                            if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
-                            {
-                                ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
-                            }
-                            else
-                            {
-                                ViewModel.SelectedConflict = null;
-                            }
-                        });
+                        ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
                     }
-                }
-                if (cancel != null)
-                {
-                    cancel.Cancel();
-                }
-                cancel = new CancellationTokenSource();
-                delay(cancel.Token).ConfigureAwait(false);
+                    else
+                    {
+                        ViewModel.SelectedConflict = null;
+                    }
+                });
             };
             this.WhenAnyValue(p => p.IsActivated).Where(v => v).Subscribe(s =>
             {

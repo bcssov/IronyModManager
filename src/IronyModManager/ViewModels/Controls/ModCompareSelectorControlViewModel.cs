@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using IronyModManager.Common;
@@ -63,6 +64,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The adding virtual definition
         /// </summary>
         private bool addingVirtualDefinition = false;
+
+        /// <summary>
+        /// The cancel
+        /// </summary>
+        private CancellationTokenSource cancel = null;
 
         /// <summary>
         /// The previous definitions
@@ -200,7 +206,8 @@ namespace IronyModManager.ViewModels.Controls
         /// add virtual definition as an asynchronous operation.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions)
+        /// <param name="token">The token.</param>
+        protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions, CancellationToken token)
         {
             addingVirtualDefinition = true;
             if (previousDefinitions != definitions)
@@ -227,29 +234,43 @@ namespace IronyModManager.ViewModels.Controls
                         col.Add(newDefinition);
                     }
                     VirtualDefinitions = col.ToObservableCollection();
-                    if (VirtualDefinitions.Count() > 0)
+                    var virtualDefinitions = VirtualDefinitions;
+                    if (virtualDefinitions.Count() > 0)
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                        await Task.Delay(100);
-                        LeftSelectedDefinition = null;
-                        RightSelectedDefinition = null;
-                        await Task.Delay(50);
-                        LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
-                        RightSelectedDefinition = newDefinition;
+                        await Task.Delay(100, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
+                        }
+                        await Task.Delay(50, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                            RightSelectedDefinition = newDefinition;
+                        }
                     }
                 }
                 else
                 {
                     VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                    if (VirtualDefinitions.Count() > 0)
+                    var virtualDefinitions = VirtualDefinitions;
+                    if (virtualDefinitions.Count() > 0)
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                        await Task.Delay(100);
-                        LeftSelectedDefinition = null;
-                        RightSelectedDefinition = null;
-                        await Task.Delay(50);
-                        LeftSelectedDefinition = definitions.ElementAt(0);
-                        RightSelectedDefinition = definitions.ElementAt(1);
+                        await Task.Delay(100, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
+                        }
+                        await Task.Delay(50, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = virtualDefinitions.ElementAt(0);
+                            RightSelectedDefinition = virtualDefinitions.ElementAt(1);
+                        }
                     }
                 }
             }
@@ -267,7 +288,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (s != null)
                 {
-                    AddVirtualDefinitionAsync(s).ConfigureAwait(true);
+                    if (cancel != null)
+                    {
+                        cancel.Cancel();
+                    }
+                    cancel = new CancellationTokenSource();
+                    AddVirtualDefinitionAsync(s, cancel.Token).ConfigureAwait(true);
                 }
                 else
                 {
