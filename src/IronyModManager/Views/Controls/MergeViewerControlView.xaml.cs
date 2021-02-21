@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -260,7 +260,7 @@ namespace IronyModManager.Views.Controls
                 void evalKey()
                 {
                     // Yeah, it sucks that we can't access a property from a different thread
-                    if (ViewModel.CanPerformHotKeyActions && !ViewModel.EditingText) // Cannot perform if in text edit mode also
+                    if (ViewModel.CanPerformHotKeyActions)
                     {
                         DiffPiece item = null;
                         switch (hotkey.Hotkey)

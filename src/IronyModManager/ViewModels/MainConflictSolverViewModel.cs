@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -50,7 +50,7 @@ namespace IronyModManager.ViewModels
     {
         #region Fields
 
-        /// <summary>
+        /// <summary>s
         /// The invalid key
         /// </summary>
         private const string InvalidKey = "invalid";
@@ -857,6 +857,16 @@ namespace IronyModManager.ViewModels
             this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
             {
                 ResetConflicts.Refresh();
+            }).DisposeWith(disposables);
+
+            var previousEditTextState = false;
+            this.WhenAnyValue(v => v.EditingIgnoreConflictsRules).Subscribe(s =>
+            {
+                if (s != previousEditTextState)
+                {
+                    previousEditTextState = s;
+                    MessageBus.Publish(new SuspendHotkeysEvent(s));
+                }
             }).DisposeWith(disposables);
 
             hotkeyPressedHandler.Message.Subscribe(m =>

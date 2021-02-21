@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -1218,6 +1218,16 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            var previousEditTextState = false;
+            this.WhenAnyValue(v => v.EditingText).Subscribe(s =>
+            {
+                if (s != previousEditTextState)
+                {
+                    previousEditTextState = s;
+                    MessageBus.Publish(new SuspendHotkeysEvent(s));
+                }
+            }).DisposeWith(disposables);
+
             hotkeyPressedHandler.Message.Subscribe(m =>
             {
                 void performAction()
@@ -1288,7 +1298,7 @@ namespace IronyModManager.ViewModels.Controls
                             break;
                     }
                 }
-                if (CanPerformHotKeyActions && !EditingText)
+                if (CanPerformHotKeyActions)
                 {
                     Dispatcher.UIThread.SafeInvoke(performAction);
                 }

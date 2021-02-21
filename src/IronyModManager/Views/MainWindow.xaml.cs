@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-19-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -22,6 +22,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
@@ -122,6 +123,7 @@ namespace IronyModManager.Views
         protected virtual void InitializeHotkeys()
         {
             var manager = DIResolver.Get<IHotkeyManager>();
+            KillHotkeys();
             foreach (var item in manager.GetKeys())
             {
                 var vm = ViewModel;
@@ -154,6 +156,14 @@ namespace IronyModManager.Views
         }
 
         /// <summary>
+        /// Kills the hotkeys.
+        /// </summary>
+        protected virtual void KillHotkeys()
+        {
+            KeyBindings.Clear();
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -180,6 +190,22 @@ namespace IronyModManager.Views
             this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(s =>
             {
                 InitializeHotkeys();
+            }).DisposeWith(disposables);
+
+            var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
+            hotkeySuspendHandler.Message.Subscribe(s =>
+            {
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    if (s.SuspendHotkeys)
+                    {
+                        KillHotkeys();
+                    }
+                    else
+                    {
+                        InitializeHotkeys();
+                    }
+                });
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

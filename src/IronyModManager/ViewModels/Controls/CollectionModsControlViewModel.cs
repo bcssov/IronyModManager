@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -91,11 +91,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
-
-        /// <summary>
-        /// The message bus
-        /// </summary>
-        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The mod collection service
@@ -208,14 +203,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        /// <param name="messageBus">The message bus.</param>
         public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
             IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
-            INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
+            INotificationAction notificationAction, IAppAction appAction)
         {
             this.PatchMod = patchMod;
             this.idGenerator = idGenerator;
@@ -232,7 +226,6 @@ namespace IronyModManager.ViewModels.Controls
             this.modService = modService;
             this.gameService = gameService;
             this.modPatchCollectionService = modPatchCollectionService;
-            this.messageBus = messageBus;
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
@@ -1026,7 +1019,7 @@ namespace IronyModManager.ViewModels.Controls
                 if (result != null)
                 {
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
-                    await messageBus.PublishAsync(new ActiveGameRequestEvent(game));
+                    await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
