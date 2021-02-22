@@ -1053,13 +1053,16 @@ namespace IronyModManager.Services
         /// patch mod needs update as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="loadOrder">The load order.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName)
+        public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName, IReadOnlyCollection<string> loadOrder)
         {
+            loadOrder = loadOrder ?? new List<string>();
             async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
             {
                 Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
-                var mods = GetCollectionMods(collectionName: collectionName);
+                var allMods = GetInstalledModsInternal(game, false);
+                var mods = allMods.Where(p => loadOrder.Any(x => x.Equals(p.DescriptorFile))).ToList();
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
                 {
                     RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
@@ -1069,6 +1072,12 @@ namespace IronyModManager.Services
                 {
                     Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
                     return false;
+                }
+                // Check load order first
+                if (!state.LoadOrder.SequenceEqual(loadOrder))
+                {
+                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                    return true;
                 }
                 foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
                 {

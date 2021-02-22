@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="IModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -165,8 +165,9 @@ namespace IronyModManager.Services.Common
         /// Patches the mod needs update asynchronous.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
+        /// <param name="loadOrder">The load order.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> PatchModNeedsUpdateAsync(string collectionName);
+        Task<bool> PatchModNeedsUpdateAsync(string collectionName, IReadOnlyCollection<string> loadOrder);
 
         /// <summary>
         /// Renames the patch collection asynchronous.
