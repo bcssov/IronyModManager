@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -878,6 +878,7 @@ namespace IronyModManager.Services
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
+                        LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                         Mode = MapPatchStateMode(conflicts.Mode),
                         IgnoreConflictPaths = conflicts.IgnoredPaths,
                         Conflicts = GetDefinitionOrDefault(conflicts.Conflicts),
@@ -962,6 +963,7 @@ namespace IronyModManager.Services
                     {
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                         {
+                            LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                             Mode = MapPatchStateMode(conflictResult.Mode),
                             IgnoreConflictPaths = conflictResult.IgnoredPaths,
                             Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
@@ -1162,7 +1164,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetCustomConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Custom);
+            return UnResolveConflictAsync(conflictResult, typeAndId, collectionName, ExportType.Custom);
         }
 
         /// <summary>
@@ -1174,7 +1176,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetIgnoredConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Ignored);
+            return UnResolveConflictAsync(conflictResult, typeAndId, collectionName, ExportType.Ignored);
         }
 
         /// <summary>
@@ -1196,7 +1198,7 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ResetResolvedConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName)
         {
-            return UnResolveConflictAsync(conflictResult, typeAndId, GenerateCollectionPatchName(collectionName), ExportType.Resolved);
+            return UnResolveConflictAsync(conflictResult, typeAndId, collectionName, ExportType.Resolved);
         }
 
         /// <summary>
@@ -1243,6 +1245,7 @@ namespace IronyModManager.Services
             var patchName = GenerateCollectionPatchName(collectionName);
             return modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
             {
+                LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                 Mode = MapPatchStateMode(conflictResult.Mode),
                 IgnoreConflictPaths = conflictResult.IgnoredPaths,
                 Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),
@@ -1613,6 +1616,7 @@ namespace IronyModManager.Services
 
                     var stateResult = await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
+                        LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                         Mode = MapPatchStateMode(conflictResult.Mode),
                         IgnoreConflictPaths = conflictResult.IgnoredPaths,
                         Definitions = exportPatches,
@@ -1934,12 +1938,13 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="conflictResult">The conflict result.</param>
         /// <param name="typeAndId">The type and identifier.</param>
-        /// <param name="patchName">Name of the patch.</param>
+        /// <param name="collectionName">Name of the collection.</param>
         /// <param name="exportType">Type of the export.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string patchName, ExportType exportType)
+        protected virtual async Task<bool> UnResolveConflictAsync(IConflictResult conflictResult, string typeAndId, string collectionName, ExportType exportType)
         {
             var game = GameService.GetSelected();
+            var patchName = GenerateCollectionPatchName(collectionName);
             if (conflictResult != null && game != null)
             {
                 bool purgeFiles = true;
@@ -2039,6 +2044,7 @@ namespace IronyModManager.Services
                     });
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
+                        LoadOrder = GetCollectionMods(collectionName: collectionName).Select(p => p.DescriptorFile),
                         Mode = MapPatchStateMode(conflictResult.Mode),
                         IgnoreConflictPaths = conflictResult.IgnoredPaths,
                         Conflicts = GetDefinitionOrDefault(conflictResult.Conflicts),

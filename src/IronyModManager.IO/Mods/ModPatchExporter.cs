@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -171,8 +171,6 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        /// <exception cref="ArgumentNullException">parameters - Game.</exception>
-        /// <exception cref="ArgumentNullException">parameters - Definitions.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             async Task<bool> export()
@@ -335,6 +333,7 @@ namespace IronyModManager.IO.Mods
             state.OverwrittenConflicts = MapDefinitions(parameters.OverwrittenConflicts, false);
             state.CustomConflicts = MapDefinitions(parameters.CustomConflicts, false);
             state.Mode = parameters.Mode;
+            state.LoadOrder = parameters.LoadOrder;
             var history = state.ConflictHistory != null ? state.ConflictHistory.ToList() : new List<IDefinition>();
             var indexed = DIResolver.Get<IIndexedDefinitions>();
             indexed.InitMap(history);
@@ -543,6 +542,7 @@ namespace IronyModManager.IO.Mods
             destination.OverwrittenConflicts = MapDefinitions(source.OverwrittenConflicts, includeCode);
             destination.CustomConflicts = MapDefinitions(source.CustomConflicts, includeCode);
             destination.Mode = source.Mode;
+            destination.LoadOrder = source.LoadOrder;
         }
 
         /// <summary>
@@ -712,6 +712,10 @@ namespace IronyModManager.IO.Mods
                     else
                     {
                         StandardizeDefinitionPaths(cached.CustomConflicts);
+                    }
+                    if (cached.LoadOrder == null)
+                    {
+                        cached.LoadOrder = new List<string>();
                     }
                     // If not allowing full load don't cache anything
                     if (loadExternalCode)
