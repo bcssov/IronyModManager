@@ -4,17 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.86-alpha</title>
+			<title>1.12.93-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Fix bug when sometimes the ignore button would not be re-enabled after ignoring\resolving a conflict
-* Fix CTD when quickly switching the conflict definitions
-* Fix CTD in conflict solver image viewer 
-* Fix editor hotkeys being suspended by Irony's own global hotkeys
-* Fix hotkey reorder mod visual bug related to numeric textbox width
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -32,22 +28,20 @@ CHANGES FROM v1.11:
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection</description>
-			<pubDate>Sun, 21 Feb 2021 05:35:54 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.86-alpha/osx-x64.rar" sparkle:version="1.12.86.47382" sparkle:shortVersionString="1.12.86" length="63122232" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="xGWOw6ef4pkRvhqDMVc+uPxInmPeq6hjmsnzti41Cpeqmf4Ahn7nMc7P6EAZ4pKQ0QkukWS/maDrnI6c7HhSCg=="/>
+* Show notification if Irony cannot import a certain mod in a collection
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
+			<pubDate>Mon, 22 Feb 2021 06:38:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/osx-x64.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="63194054" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="73XDPj0sMNLoZzxfpSklypfjgeUBgKAmTNC+URxUuqZ+fds3Ew1LRzaFspWfqvqk0NHUjQTVhUejSCdjqID5Cw=="/>
 		</item>
 		<item>
-			<title>1.12.86-alpha</title>
+			<title>1.12.93-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Fix bug when sometimes the ignore button would not be re-enabled after ignoring\resolving a conflict
-* Fix CTD when quickly switching the conflict definitions
-* Fix CTD in conflict solver image viewer 
-* Fix editor hotkeys being suspended by Irony's own global hotkeys
-* Fix hotkey reorder mod visual bug related to numeric textbox width
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -65,22 +59,20 @@ CHANGES FROM v1.11:
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection</description>
-			<pubDate>Sun, 21 Feb 2021 05:36:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.86-alpha/win-x64-setup.rar" sparkle:version="1.12.86.47382" sparkle:shortVersionString="1.12.86" length="54739269" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="OlOIZ9XJAlDCsvNr3WOV/8Sb46vM7DqEJev/yVj+UNJErDlDtsHESaoc5CLluRGrmim3A2couqG1BBYfA6N3DA=="/>
+* Show notification if Irony cannot import a certain mod in a collection
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
+			<pubDate>Mon, 22 Feb 2021 06:38:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/win-x64-setup.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="54816494" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="HT2Drsvt87EPWovsmXYFMQ+ft/y82+Jo9y9o6uByG8TLoykOU0wXjAmObU1mNgwjLbIIOGIGF5Qd/cK3r9QdBQ=="/>
 		</item>
 		<item>
-			<title>1.12.86-alpha</title>
+			<title>1.12.93-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Fix bug when sometimes the ignore button would not be re-enabled after ignoring\resolving a conflict
-* Fix CTD when quickly switching the conflict definitions
-* Fix CTD in conflict solver image viewer 
-* Fix editor hotkeys being suspended by Irony's own global hotkeys
-* Fix hotkey reorder mod visual bug related to numeric textbox width
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -98,22 +90,20 @@ CHANGES FROM v1.11:
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection</description>
-			<pubDate>Sun, 21 Feb 2021 05:35:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.86-alpha/win-x64.rar" sparkle:version="1.12.86.47382" sparkle:shortVersionString="1.12.86" length="65539798" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kqVHbNROSzOXzurRtx6SWSXJACm8GV/2JXKs+iRUmtFKMJ4yPCanWdN7avqJ73MbUZ5HAyFMqVxAkm1KSlTYBg=="/>
+* Show notification if Irony cannot import a certain mod in a collection
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
+			<pubDate>Mon, 22 Feb 2021 06:38:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/win-x64.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="65611665" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5Qqjsn+pwceSWTyYmVazNOSTeDjRA150b1aoKL0MTpbSN59ckEY8bVK1BDCY9Mj7k5Fit1Ayb8PrJB+jg0lDCg=="/>
 		</item>
 		<item>
-			<title>1.12.86-alpha</title>
+			<title>1.12.93-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Fix bug when sometimes the ignore button would not be re-enabled after ignoring\resolving a conflict
-* Fix CTD when quickly switching the conflict definitions
-* Fix CTD in conflict solver image viewer 
-* Fix editor hotkeys being suspended by Irony's own global hotkeys
-* Fix hotkey reorder mod visual bug related to numeric textbox width
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -131,9 +121,11 @@ CHANGES FROM v1.11:
 * Image preview should now show dds cubemaps properly
 * Add keyboard shortcuts
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection</description>
-			<pubDate>Sun, 21 Feb 2021 05:35:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.86-alpha/linux-x64.zip" sparkle:version="1.12.86.47382" sparkle:shortVersionString="1.12.86" length="78649950" sparkle:os="linux" type="application/zip" sparkle:signature="1mzSJ/QYbRz7tWXh9qBjX5g/bg++UGFlUiAoqUW/N0wZ+3EbTHSvvGrNleHwkIWI+nIA1crZufjTzluKWq/oAQ=="/>
+* Show notification if Irony cannot import a certain mod in a collection
+* Add command line support (to be utilized by projects like pdx unlimiter)
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
+			<pubDate>Mon, 22 Feb 2021 06:38:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/linux-x64.zip" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="78740901" sparkle:os="linux" type="application/zip" sparkle:signature="3gTBieHS2U+LvQHuoWKLscePL9SjXfgvoKzvcAEfbJFN+9Yv67PM3YrqmWd+AjRHkOpXwHLdOj+de3xPkSXRDg=="/>
 		</item>
 		<item>
 			<title>1.11.33</title>
