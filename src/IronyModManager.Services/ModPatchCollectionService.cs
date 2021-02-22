@@ -649,7 +649,7 @@ namespace IronyModManager.Services
         {
             var game = GameService.GetSelected();
             double previousProgress = 0;
-            async Task syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
+            async Task<int> syncPatchFiles(IConflictResult conflicts, IEnumerable<string> patchFiles, string patchName, int total, int processed, int maxProgress)
             {
                 foreach (var file in patchFiles.Distinct())
                 {
@@ -689,6 +689,7 @@ namespace IronyModManager.Services
                         previousProgress = perc;
                     }
                 }
+                return processed;
             }
             IDefinition partialDefinitionCopy(IDefinition definition)
             {
@@ -721,7 +722,7 @@ namespace IronyModManager.Services
                         previousProgress = perc;
                     }
                 }
-                return (copy, total);
+                return (copy, processed);
             }
 
             if (game != null && conflictResult != null && !string.IsNullOrWhiteSpace(collectionName))
@@ -855,7 +856,7 @@ namespace IronyModManager.Services
                     var partialCopyResult = await partialCopyIndexedDefinitions(conflictResult.AllConflicts, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
                     conflicts.AllConflicts = partialCopyResult.Item1;
-                    total = partialCopyResult.Item2;
+                    processed = partialCopyResult.Item2;
 
                     var conflictsIndex = DIResolver.Get<IIndexedDefinitions>();
                     conflictsIndex.InitMap(conflictResult.Conflicts.GetAll(), true);
@@ -874,7 +875,7 @@ namespace IronyModManager.Services
                     conflicts.CustomConflicts = customConflicts;
                     conflicts.Mode = conflictResult.Mode;
                     EvalModIgnoreDefinitions(conflicts);
-                    await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
+                    processed = await syncPatchFiles(conflicts, patchFiles, patchName, total, processed, 100);
 
                     await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
                     {
@@ -900,7 +901,7 @@ namespace IronyModManager.Services
                 else
                 {
                     var processed = 0;
-                    await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 100);
+                    processed = await syncPatchFiles(conflictResult, patchFiles, patchName, total, processed, 100);
 
                     var exportedConflicts = false;
                     if (conflictResult.OrphanConflicts.GetAll().Any())
@@ -958,7 +959,6 @@ namespace IronyModManager.Services
                         }
                     }
 
-                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
                     if (exportedConflicts)
                     {
                         await modPatchExporter.SaveStateAsync(new ModPatchExporterParameters()
@@ -980,7 +980,10 @@ namespace IronyModManager.Services
                     var partialCopyResult = await partialCopyIndexedDefinitions(conflictResult.AllConflicts, total, processed, 100);
                     conflictResult.AllConflicts.Dispose();
                     conflictResult.AllConflicts = partialCopyResult.Item1;
-                    total = partialCopyResult.Item2;
+                    processed = partialCopyResult.Item2;
+
+                    await messageBus.PublishAsync(new ModDefinitionPatchLoadEvent(100));
+
                     // Initialize search here
                     conflictResult.AllConflicts.InitSearch();
 
@@ -1057,7 +1060,21 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName, IReadOnlyCollection<string> loadOrder)
         {
-            loadOrder = loadOrder ?? new List<string>();
+            loadOrder ??= new List<string>();
+            List<EvalState> mapEvalState(IEnumerable<IDefinition> definitions, bool useOriginalFilename)
+            {
+                var result = new List<EvalState>();
+                if ((definitions?.Any()).GetValueOrDefault())
+                {
+                    result.AddRange(definitions.Select(m => new EvalState()
+                    {
+                        ContentSha = m.ContentSHA,
+                        FileName = useOriginalFilename ? m.OriginalFileName : m.File,
+                        ModName = m.ModName
+                    }));
+                }
+                return result;
+            }
             async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
             {
                 Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
@@ -1079,9 +1096,13 @@ namespace IronyModManager.Services
                     Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
                     return true;
                 }
-                foreach (var groupedMods in state.Conflicts.GroupBy(p => p.ModName))
+                var conflicts = new List<EvalState>();
+                conflicts.AddRange(mapEvalState(state.Conflicts, false));
+                conflicts.AddRange(mapEvalState(state.OrphanConflicts, false));
+                conflicts.AddRange(mapEvalState(state.OverwrittenConflicts, true));
+                foreach (var groupedMods in conflicts.GroupBy(p => p.ModName))
                 {
-                    foreach (var item in groupedMods.GroupBy(p => p.File))
+                    foreach (var item in groupedMods.GroupBy(p => p.FileName))
                     {
                         var definition = item.FirstOrDefault();
                         var mod = mods.FirstOrDefault(p => p.Name.Equals(definition.ModName));
@@ -1093,8 +1114,8 @@ namespace IronyModManager.Services
                         }
                         else
                         {
-                            var info = Reader.GetFileInfo(mod.FullPath, definition.File);
-                            if (info == null || !info.ContentSHA.Equals(definition.ContentSHA))
+                            var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
+                            if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
                             {
                                 // File no longer in collection or content does not match, break further checks
                                 Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
@@ -2074,6 +2095,34 @@ namespace IronyModManager.Services
         #endregion Methods
 
         #region Classes
+
+        /// <summary>
+        /// Class EvalState.
+        /// </summary>
+        private class EvalState
+        {
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the content sha.
+            /// </summary>
+            /// <value>The content sha.</value>
+            public string ContentSha { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the file.
+            /// </summary>
+            /// <value>The name of the file.</value>
+            public string FileName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the mod.
+            /// </summary>
+            /// <value>The name of the mod.</value>
+            public string ModName { get; set; }
+
+            #endregion Properties
+        }
 
         /// <summary>
         /// Class PatchCollectionState.

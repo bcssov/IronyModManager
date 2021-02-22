@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-20-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionServiceTests.cs" company="Mario">
 //     Mario
@@ -3087,12 +3087,14 @@ namespace IronyModManager.Services.Tests
                 var res = new PatchState()
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
-                    LoadOrder = new List<string>()
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", null);
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
         }
 
@@ -3144,12 +3146,14 @@ namespace IronyModManager.Services.Tests
                 var res = new PatchState()
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
-                    LoadOrder = new List<string>()
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", null);
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
         }
 
@@ -3201,7 +3205,9 @@ namespace IronyModManager.Services.Tests
                 var res = new PatchState()
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
-                    LoadOrder = new List<string>()
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
             });
@@ -3210,7 +3216,133 @@ namespace IronyModManager.Services.Tests
                 ContentSHA = "2"
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", null);
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Patches the mod should need update when overwritten sha not same.
+        /// </summary>
+        [Fact]
+        public async Task Patch_mod_should_need_update_when_overwritten_sha_not_same()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Patch_mod_should_need_update_when_overwritten_sha_not_same",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
+                    Name = "test",
+                    Game = "Patch_mod_should_need_update_when_overwritten_sha_not_same"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
+            {
+                var res = new PatchState()
+                {
+                    Conflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", OriginalFileName = "1" } },
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
+                };
+                return res;
+            });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
+            {
+                ContentSHA = "2"
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Patch_mod_should_need_update_when_orphan_sha_not_same.
+        /// </summary>
+        [Fact]
+        public async Task Patch_mod_should_need_update_when_orphan_sha_not_same()
+        {
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var parserManager = new Mock<IParserManager>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+            var modPatchExporter = new Mock<IModPatchExporter>();
+            SetupMockCase(reader, parserManager, modParser);
+            gameService.Setup(p => p.GetSelected()).Returns(new Game()
+            {
+                Type = "Patch_mod_should_need_update_when_overwritten_sha_not_same",
+                UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
+                WorkshopDirectory = "C:\\fake"
+            });
+            mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
+            {
+                return new Mod()
+                {
+                    FileName = o.FileName,
+                    Name = o.Name
+                };
+            });
+            var collections = new List<IModCollection>()
+            {
+                new ModCollection()
+                {
+                    IsSelected = true,
+                    Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
+                    Name = "test",
+                    Game = "Patch_mod_should_need_update_when_overwritten_sha_not_same"
+                }
+            };
+            storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
+            {
+                return collections;
+            });
+            modPatchExporter.Setup(p => p.GetPatchStateAsync(It.IsAny<ModPatchExporterParameters>(), It.IsAny<bool>())).ReturnsAsync((ModPatchExporterParameters p, bool load) =>
+            {
+                var res = new PatchState()
+                {
+                    Conflicts = new List<IDefinition>(),
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
+                };
+                return res;
+            });
+            reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
+            {
+                ContentSHA = "2"
+            });
+            var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
         }
 
@@ -3231,7 +3363,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, parserManager, modParser);
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Patch_mod_should_need_update_when_sha_not_same",
+                Type = "Patch_mod_should_need_update_when_load_order_not_same",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
                 WorkshopDirectory = "C:\\fake"
             });
@@ -3250,7 +3382,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fake1.txt", "mod/fake2.txt"},
                     Name = "test",
-                    Game = "Patch_mod_should_need_update_when_sha_not_same"
+                    Game = "Patch_mod_should_need_update_when_load_order_not_same"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -3262,7 +3394,9 @@ namespace IronyModManager.Services.Tests
                 var res = new PatchState()
                 {
                     Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
-                    LoadOrder = new List<string>() { "1", "2" }
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake1.txt", "mod/fake2.txt" }
                 };
                 return res;
             });
@@ -3271,7 +3405,7 @@ namespace IronyModManager.Services.Tests
                 ContentSHA = "2"
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "2", "1" });
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
         }
 
@@ -3322,8 +3456,10 @@ namespace IronyModManager.Services.Tests
             {
                 var res = new PatchState()
                 {
-                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1" } },
-                    LoadOrder = new List<string>()
+                    Conflicts = new List<IDefinition>() { new Definition() { File = "1", Id = "test", Type = "events", Code = "ab", ModName = "1", ContentSHA = "1" } },
+                    OverwrittenConflicts = new List<IDefinition>(),
+                    OrphanConflicts = new List<IDefinition>(),
+                    LoadOrder = new List<string>() { "mod/fake2.txt", "mod/fake1.txt" }
                 };
                 return res;
             });
@@ -3332,8 +3468,8 @@ namespace IronyModManager.Services.Tests
                 ContentSHA = "1"
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
-            var result = await service.PatchModNeedsUpdateAsync("colname", null);
-            result.Should().BeTrue();
+            var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
+            result.Should().BeFalse();
         }
 
         /// <summary>
