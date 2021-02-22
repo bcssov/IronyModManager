@@ -1,37 +1,39 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Shared
+// Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 06-11-2020
+// Created          : 02-22-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 02-22-2021
 // ***********************************************************************
-// <copyright file="LaunchingGameEvent.cs" company="Mario">
+// <copyright file="ModListInstallRefreshRequestEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using IronyModManager.Shared.MessageBus.Events;
 
-namespace IronyModManager.Shared.MessageBus.Events
+namespace IronyModManager.Implementation.MessageBus.Events
 {
     /// <summary>
-    /// Class LaunchingGameEvent.
+    /// Class ModListInstallRefreshRequestEvent.
     /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
     /// </summary>
     /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
-    public class LaunchingGameEvent : BaseAwaitableEvent
+    public class ModListInstallRefreshRequestEvent : BaseAwaitableEvent
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LaunchingGameEvent" /> class.
+        /// Initializes a new instance of the <see cref="ModListRefreshRequestEvent" /> class.
         /// </summary>
-        /// <param name="gameType">Type of the game.</param>
-        public LaunchingGameEvent(string gameType)
+        /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        public ModListInstallRefreshRequestEvent(bool skipOverlay)
         {
-            GameType = gameType;
+            SkipOverlay = skipOverlay;
         }
 
         #endregion Constructors
@@ -39,10 +41,10 @@ namespace IronyModManager.Shared.MessageBus.Events
         #region Properties
 
         /// <summary>
-        /// Gets or sets the type of the game.
+        /// Gets or sets a value indicating whether [skip overlay].
         /// </summary>
-        /// <value>The type of the game.</value>
-        public string GameType { get; }
+        /// <value><c>true</c> if [skip overlay]; otherwise, <c>false</c>.</value>
+        public bool SkipOverlay { get; set; }
 
         #endregion Properties
     }

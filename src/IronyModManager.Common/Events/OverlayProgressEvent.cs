@@ -4,27 +4,27 @@
 // Created          : 07-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="OverlayProgressEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Shared;
-using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.MessageBus.Events;
 
 namespace IronyModManager.Common.Events
 {
     /// <summary>
     /// Class OverlayProgressEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
     [ExcludeFromCoverage("Excluding external message bus.")]
-    public class OverlayProgressEvent : IMessageBusEvent
+    public class OverlayProgressEvent : BaseNonAwaitableEvent
     {
         #region Properties
 
@@ -33,12 +33,6 @@ namespace IronyModManager.Common.Events
         /// </summary>
         /// <value>The identifier.</value>
         public long Id { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is fire and forget.
-        /// </summary>
-        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => true;
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is visible.

@@ -1,25 +1,28 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Shared
 // Author           : Mario
-// Created          : 06-10-2020
+// Created          : 02-22-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 02-22-2021
 // ***********************************************************************
-// <copyright file="IMessageBusEvent.cs" company="Mario">
+// <copyright file="BaseNonAwaitableEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace IronyModManager.Shared.MessageBus
+namespace IronyModManager.Shared.MessageBus.Events
 {
     /// <summary>
-    /// Interface IMessageBusEvent
+    /// Class BaseNonAwaitableEvent.
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     /// </summary>
-    public interface IMessageBusEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    public abstract class BaseNonAwaitableEvent : IMessageBusEvent
     {
         #region Properties
 
@@ -27,13 +30,13 @@ namespace IronyModManager.Shared.MessageBus
         /// Gets or sets a value indicating whether [end await].
         /// </summary>
         /// <value><c>true</c> if [end await]; otherwise, <c>false</c>.</value>
-        bool EndAwait { get; set; }
+        public bool EndAwait { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is fire and forget.
         /// </summary>
         /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        bool IsAwaitable { get; }
+        public bool IsAwaitable => false;
 
         #endregion Properties
     }

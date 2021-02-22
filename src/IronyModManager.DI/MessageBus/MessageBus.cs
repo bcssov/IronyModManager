@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="MessageBus.cs" company="Mario">
 //     Mario
@@ -88,35 +88,7 @@ namespace IronyModManager.DI.MessageBus
             {
                 return Task.FromResult(false);
             }
-            if (!message.IsFireAndForget)
-            {
-                return PublishAwaitableAsync(message);
-            }
-            return PublishFireAndForgetAsync(message);
-        }
-
-        /// <summary>
-        /// Publishes the awaitable asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="message">The message.</param>
-        /// <returns>Task.</returns>
-        private Task PublishAwaitableAsync<T>(T message) where T : IMessageBusEvent
-        {
             return messageBus.Publish(message);
-        }
-
-        /// <summary>
-        /// publish fire and forget as an asynchronous operation.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="message">The message.</param>
-        private async Task PublishFireAndForgetAsync<T>(T message) where T : IMessageBusEvent
-        {
-            await Task.Factory.StartNew(async () =>
-            {
-                await messageBus.Publish(message);
-            });
         }
 
         #endregion Methods

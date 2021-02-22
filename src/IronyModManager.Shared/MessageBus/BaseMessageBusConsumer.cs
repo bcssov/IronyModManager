@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="BaseMessageBusConsumer.cs" company="Mario">
 //     Mario
@@ -65,10 +65,16 @@ namespace IronyModManager.Shared.MessageBus
         /// <param name="message">The message.</param>
         /// <param name="name">The name.</param>
         /// <returns>Task.</returns>
-        public virtual Task OnHandle(TMessage message, string name)
+        public virtual async Task OnHandle(TMessage message, string name)
         {
             messageSubject.OnNext(message);
-            return Task.FromResult(true);
+            if (message.IsAwaitable && messageSubject.HasObservers)
+            {
+                while (!message.EndAwait)
+                {
+                    await Task.Delay(25);
+                }
+            }
         }
 
         #endregion Methods

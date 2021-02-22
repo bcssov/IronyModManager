@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -76,6 +76,7 @@ namespace IronyModManager.DI
             container.Register<ConflictSolverViewHotkeyPressedHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IHotkeyManager, HotkeyManager>();
             container.Register<SuspendHotkeysHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<ModListInstallRefreshRequestHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

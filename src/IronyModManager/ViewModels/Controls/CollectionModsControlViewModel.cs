@@ -30,6 +30,7 @@ using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -1022,6 +1023,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
+                    await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
                     var showImportNotification = true;
@@ -1466,6 +1468,7 @@ namespace IronyModManager.ViewModels.Controls
                         var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
                         if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
                         {
+                            await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                             skipModSelectionSave = true;
                             skipModCollectionSave = true;
                             var mods = new List<IMod>();

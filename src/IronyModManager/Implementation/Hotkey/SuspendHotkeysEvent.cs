@@ -4,7 +4,7 @@
 // Created          : 02-21-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="SuspendHotkeysEvent.cs" company="Mario">
 //     Mario
@@ -14,16 +14,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Shared.MessageBus;
+using IronyModManager.Shared.MessageBus.Events;
 
 namespace IronyModManager.Implementation.Hotkey
 {
     /// <summary>
     /// Class SuspendHotkeysEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
-    public class SuspendHotkeysEvent : IMessageBusEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    public class SuspendHotkeysEvent : BaseNonAwaitableEvent
     {
         #region Constructors
 
@@ -39,12 +39,6 @@ namespace IronyModManager.Implementation.Hotkey
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is fire and forget.
-        /// </summary>
-        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => true;
 
         /// <summary>
         /// Gets a value indicating whether [suspend hotkeys].
