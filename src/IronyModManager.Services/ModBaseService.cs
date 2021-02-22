@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -141,7 +141,7 @@ namespace IronyModManager.Services
             if (game != null && mod != null)
             {
                 var fullPath = mod.FullPath ?? string.Empty;
-                return IsPatchModInternal(mod.Name) || (mod.Source == ModSource.Local && fullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) && fullPath.StartsWith(game.UserDirectory));
+                return IsPatchModInternal(mod.Name) || (mod.Source == ModSource.Local && (fullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || fullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase)) && fullPath.StartsWith(game.UserDirectory));
             }
             return false;
         }
