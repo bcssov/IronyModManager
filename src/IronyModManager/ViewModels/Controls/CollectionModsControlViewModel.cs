@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -853,6 +853,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="providerType">Type of the provider.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
@@ -870,6 +871,7 @@ namespace IronyModManager.ViewModels.Controls
         /// handle collection patch as an asynchronous operation.
         /// </summary>
         /// <param name="collection">The collection.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task HandleCollectionPatchStateAsync(string collection)
         {
             var currentCollection = SelectedModCollection?.Name ?? string.Empty;
@@ -878,7 +880,7 @@ namespace IronyModManager.ViewModels.Controls
                 ConflictSolverStateChanged?.Invoke(collection, true);
                 if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
                 {
-                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
+                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection, SelectedMods.Select(p => p.DescriptorFile).ToList()));
                     ConflictSolverStateChanged?.Invoke(collection, !result);
                 }
             }
@@ -945,6 +947,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="type">The type.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
             List<string> modNames = null;
@@ -1687,6 +1690,7 @@ namespace IronyModManager.ViewModels.Controls
         /// remove collection as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected async Task RemoveCollectionAsync(string collectionName)
         {
             var noti = new { CollectionName = collectionName };
@@ -1737,6 +1741,7 @@ namespace IronyModManager.ViewModels.Controls
         /// reorder selected items as an asynchronous operation.
         /// </summary>
         /// <param name="queueNumber">The queue number.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ReorderQueuedItemsAsync(int queueNumber)
         {
             await Task.Delay(300);
@@ -1829,7 +1834,9 @@ namespace IronyModManager.ViewModels.Controls
                     oldMods.AddRange(SelectedMods);
                 }
                 previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
-                if (SelectedMods?.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())))
+                if (SelectedMods?.Count > 0 && (prevMods == null ||
+                    !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())
+                    || !prevMods.Select(p => p.DescriptorFile).SequenceEqual(SelectedMods.Select(p => p.DescriptorFile))))
                 {
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }

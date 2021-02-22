@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="PatchState.cs" company="Mario">
 //     Mario
@@ -59,6 +59,12 @@ namespace IronyModManager.IO.Mods.Models
         /// </summary>
         /// <value>The ignored conflicts.</value>
         public IEnumerable<IDefinition> IgnoredConflicts { get; set; }
+
+        /// <summary>
+        /// Gets or sets the load order.
+        /// </summary>
+        /// <value>The load order.</value>
+        public IEnumerable<string> LoadOrder { get; set; }
 
         /// <summary>
         /// Gets or sets the mode.
