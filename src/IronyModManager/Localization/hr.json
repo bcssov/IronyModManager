@@ -444,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",
-            "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
+            "Message": "Redoslijed učitavanja ili neki modovi su ažurirani. U slučaju da nema sukoba, samo se vrati natrag. Primjenjuju se neki automatski popravci."
         },
         "NoUpdatesAvailable": {
             "Title": "Nema ažuriranja",

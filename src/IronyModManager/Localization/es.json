@@ -444,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Actualizaciones del Solucionador de conflictos",
-            "Message": "Se han actualizado uno o varios mods. Es posible que sea necesario actualizar el solucionador de conflictos."
+            "Message": "Se ha actualizado el orden de carga o algunas modificaciones. En caso de que no haya conflictos, simplemente navegue hacia atrás. Se aplican algunas correcciones automáticas."
         },
         "NoUpdatesAvailable": {
             "Title": "Sin Actualizaciones",

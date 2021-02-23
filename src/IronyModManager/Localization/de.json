@@ -444,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver-Updates",
-            "Message": "Ein oder mehrere Mods wurden aktualisiert. Conflict Solver muss möglicherweise aktualisiert werden."
+            "Message": "Ladereihenfolge oder einige Mods wurden aktualisiert. Wenn keine Konflikte vorliegen, navigieren Sie einfach zurück. Einige automatische Korrekturen werden angewendet."
         },
         "NoUpdatesAvailable": {
             "Title": "Keine Aktualisierungen",

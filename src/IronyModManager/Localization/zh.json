@@ -444,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "刷新冲突处理器",
-            "Message": "一个或多个模组已更新。需刷新冲突处理器。"
+            "Message": "加载顺序或某些模组已更新。如果没有冲突，请向后浏览。应用了一些自动修复程序。"
         },
         "NoUpdatesAvailable": {
             "Title": "无更新",
