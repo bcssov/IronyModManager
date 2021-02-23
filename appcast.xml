@@ -4,13 +4,17 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.93-rc</title>
+			<title>1.12.104-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area
+* Update conflict solver refresh message to make it more clear
+* Hotkey mod shorcuts now react to hovered mod instead of selected mod
+* Add more conflict solver shortcuts (undo, redo and launch external editor)
+* Fix handling of zero byte .mod files
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -30,18 +34,24 @@ CHANGES FROM v1.11:
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection
 * Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
-			<pubDate>Mon, 22 Feb 2021 06:38:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/osx-x64.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="63194054" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="73XDPj0sMNLoZzxfpSklypfjgeUBgKAmTNC+URxUuqZ+fds3Ew1LRzaFspWfqvqk0NHUjQTVhUejSCdjqID5Cw=="/>
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area</description>
+			<pubDate>Tue, 23 Feb 2021 21:24:30 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/osx-x64.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="63209627" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="/QTXRze7fsGPlSkXxNvMSFYGArf58XJLNfBQU1f4wrfiG6yW+yJeOoavJHDAPQ/3WwZYSBvG2045R0+zH/DIBA=="/>
 		</item>
 		<item>
-			<title>1.12.93-rc</title>
+			<title>1.12.104-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area
+* Update conflict solver refresh message to make it more clear
+* Hotkey mod shorcuts now react to hovered mod instead of selected mod
+* Add more conflict solver shortcuts (undo, redo and launch external editor)
+* Fix handling of zero byte .mod files
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -61,18 +71,24 @@ CHANGES FROM v1.11:
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection
 * Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
-			<pubDate>Mon, 22 Feb 2021 06:38:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/win-x64-setup.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="54816494" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="HT2Drsvt87EPWovsmXYFMQ+ft/y82+Jo9y9o6uByG8TLoykOU0wXjAmObU1mNgwjLbIIOGIGF5Qd/cK3r9QdBQ=="/>
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area</description>
+			<pubDate>Tue, 23 Feb 2021 21:24:36 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/win-x64-setup.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="54814481" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="KE6rhqgjW5oiCNbGfqhXLWyBeRldGo21TMuP2Kd/SUiiR+RlDm+pYUEYHBVVH9fNhg1nlZMz81QL9HDj3LeQAg=="/>
 		</item>
 		<item>
-			<title>1.12.93-rc</title>
+			<title>1.12.104-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area
+* Update conflict solver refresh message to make it more clear
+* Hotkey mod shorcuts now react to hovered mod instead of selected mod
+* Add more conflict solver shortcuts (undo, redo and launch external editor)
+* Fix handling of zero byte .mod files
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -92,18 +108,24 @@ CHANGES FROM v1.11:
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection
 * Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
-			<pubDate>Mon, 22 Feb 2021 06:38:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/win-x64.rar" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="65611665" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="5Qqjsn+pwceSWTyYmVazNOSTeDjRA150b1aoKL0MTpbSN59ckEY8bVK1BDCY9Mj7k5Fit1Ayb8PrJB+jg0lDCg=="/>
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area</description>
+			<pubDate>Tue, 23 Feb 2021 21:24:33 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/win-x64.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="65627187" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z/Rm9M8mTm1McovuRVWYa3r68DwJEj0fVo/M0XS1uV1cNkweCA1hmlCPtyyCb1H0tfsDATcb3Xl3OvBRKqVKCQ=="/>
 		</item>
 		<item>
-			<title>1.12.93-rc</title>
+			<title>1.12.104-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area
+* Update conflict solver refresh message to make it more clear
+* Hotkey mod shorcuts now react to hovered mod instead of selected mod
+* Add more conflict solver shortcuts (undo, redo and launch external editor)
+* Fix handling of zero byte .mod files
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -123,9 +145,11 @@ CHANGES FROM v1.11:
 * Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
 * Show notification if Irony cannot import a certain mod in a collection
 * Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run</description>
-			<pubDate>Mon, 22 Feb 2021 06:38:36 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.93-rc/linux-x64.zip" sparkle:version="1.12.93.26490" sparkle:shortVersionString="1.12.93" length="78740901" sparkle:os="linux" type="application/zip" sparkle:signature="3gTBieHS2U+LvQHuoWKLscePL9SjXfgvoKzvcAEfbJFN+9Yv67PM3YrqmWd+AjRHkOpXwHLdOj+de3xPkSXRDg=="/>
+* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
+* Refresh mod list before performing a collection import
+* Tweak moving around mods in collection mods area</description>
+			<pubDate>Tue, 23 Feb 2021 21:24:27 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/linux-x64.zip" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="78748882" sparkle:os="linux" type="application/zip" sparkle:signature="qmI5dlMHpH54m4Zsf3IjxG3qWKW3j2/dTZ9Tll58IrK2uougzHb9qLeklrPwnNPD2RaCqNfQPX0heWZio9lqBg=="/>
 		</item>
 		<item>
 			<title>1.11.33</title>
