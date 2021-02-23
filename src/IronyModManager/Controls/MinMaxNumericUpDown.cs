@@ -224,7 +224,7 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if ((whitelistedGestures?.Any(p => p.KeyModifiers == e.KeyModifiers && e.Key == p.Key)).GetValueOrDefault())
+            if (whitelistedGestures != null && whitelistedGestures.Any(p => p.KeyModifiers == e.KeyModifiers && e.Key == p.Key))
             {
                 e.Handled = false;
                 return;

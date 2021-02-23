@@ -1036,9 +1036,9 @@ namespace IronyModManager.ViewModels.Controls
                     ImportProviderType.Default => await importDefault(),
                     _ => await importInstance(importData),
                 };
-                var modPaths = result.Mods.ToList();
                 if (result != null)
                 {
+                    var modPaths = result.Mods.ToList();
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
                     await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
                     await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
@@ -1053,7 +1053,7 @@ namespace IronyModManager.ViewModels.Controls
                         if (nonExistingModPaths.Any())
                         {
                             var nonExistingModNames = new List<string>();
-                            var hasModNames = (modNames?.Any()).GetValueOrDefault() && modPaths.Count == modNames.Count;
+                            var hasModNames = modNames != null && modNames.Any() && modPaths.Count == modNames.Count;
                             foreach (var item in nonExistingModPaths)
                             {
                                 var index = modPaths.IndexOf(item);

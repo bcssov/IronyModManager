@@ -4,7 +4,7 @@
 // Created          : 02-17-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-17-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ImageReader.cs" company="Mario">
 //     Mario
@@ -142,11 +142,8 @@ namespace IronyModManager.IO.Images
             {
                 var file = DdsFile.Load(stream);
                 var image = await ddsDecoder.DecodeToImageAsync(file);
-                if (image != null)
-                {
-                    ms = new MemoryStream();
-                    await image.SaveAsPngAsync(ms);
-                }
+                ms = new MemoryStream();
+                await image.SaveAsPngAsync(ms);
             }
             catch (Exception ex)
             {

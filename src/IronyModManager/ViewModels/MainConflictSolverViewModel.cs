@@ -876,7 +876,7 @@ namespace IronyModManager.ViewModels
                     if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
                     {
                         int? newSelectedConflict = null;
-                        var col = SelectedParentConflict?.Children.ToList();
+                        var col = SelectedParentConflict != null ? SelectedParentConflict.Children.ToList() : new List<IHierarchicalDefinitions>();
                         switch (m.Hotkey)
                         {
                             case Enums.HotKeys.Shift_Up:
