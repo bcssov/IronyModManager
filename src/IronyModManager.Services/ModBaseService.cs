@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -497,6 +497,7 @@ namespace IronyModManager.Services
                         {
                             continue;
                         }
+                        mod.Name = string.IsNullOrWhiteSpace(mod.Name) ? string.Empty : mod.Name;
                         mod.IsLocked = installedMod.IsReadOnly;
                         mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{installedMod.FileName}";
                         mod.Source = GetModSource(installedMod);
