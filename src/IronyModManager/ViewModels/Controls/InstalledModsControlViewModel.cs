@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -204,6 +204,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CheckNewModsCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the context menu mod.
+        /// </summary>
+        /// <value>The context menu mod.</value>
+        public virtual IMod ContextMenuMod { get; set; }
+
+        /// <summary>
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
@@ -266,12 +272,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The filter mods watermark.</value>
         [StaticLocalization(LocalizationResources.Installed_Mods.Filter)]
         public virtual string FilterModsWatermark { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the hovered mod.
-        /// </summary>
-        /// <value>The hovered mod.</value>
-        public virtual IMod HoveredMod { get; set; }
 
         /// <summary>
         /// Gets or sets the lock all descriptors.
@@ -452,28 +452,28 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Gets the hovered mod steam URL.
+        /// Gets the context menu mod mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModSteamUrl()
+        public virtual string GetContextMenuModModSteamUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildSteamUrl(HoveredMod);
+                var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
         }
 
         /// <summary>
-        /// Gets the selected mod URL.
+        /// Gets the context menu mod mod URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModUrl()
+        public virtual string GetContextMenuModModUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildModUrl(HoveredMod);
+                var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
@@ -780,7 +780,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.OpenAsync(url).ConfigureAwait(true);
@@ -789,7 +789,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.CopyAsync(url).ConfigureAwait(true);
@@ -798,7 +798,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInSteamCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModSteamUrl();
+                var url = GetContextMenuModModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.OpenAsync(url).ConfigureAwait(true);
@@ -807,9 +807,9 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInAssociatedAppCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    await appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
+                    await appAction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -840,9 +840,9 @@ namespace IronyModManager.ViewModels.Controls
 
             DeleteDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await DeleteDescriptorAsync(new List<IMod>() { HoveredMod }).ConfigureAwait(true);
+                    await DeleteDescriptorAsync(new List<IMod>() { ContextMenuMod }).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -856,9 +856,9 @@ namespace IronyModManager.ViewModels.Controls
 
             LockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, true).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, true).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -872,9 +872,9 @@ namespace IronyModManager.ViewModels.Controls
 
             UnlockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, false).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, false).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 

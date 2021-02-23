@@ -378,6 +378,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the context menu mod.
+        /// </summary>
+        /// <value>The context menu mod.</value>
+        public virtual IMod ContextMenuMod { get; set; }
+
+        /// <summary>
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
@@ -446,12 +452,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The export report command.</value>
         public virtual ReactiveCommand<Unit, Unit> ExportReportCommand { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the hovered mod.
-        /// </summary>
-        /// <value>The hovered mod.</value>
-        public virtual IMod HoveredMod { get; set; }
 
         /// <summary>
         /// Gets or sets the import collection from clipboard.
@@ -662,28 +662,28 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Gets the hovered mod steam URL.
+        /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModSteamUrl()
+        public virtual string GetContextMenuModSteamUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildSteamUrl(HoveredMod);
+                var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
         }
 
         /// <summary>
-        /// Gets the selected mod URL.
+        /// Gets the context menu mod URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModUrl()
+        public virtual string GetContextMenuModUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildModUrl(HoveredMod);
+                var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
@@ -1405,7 +1405,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.OpenAsync(url).ConfigureAwait(true);
@@ -1414,7 +1414,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyUrlCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.CopyAsync(url).ConfigureAwait(true);
@@ -1423,7 +1423,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInSteamCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModSteamUrl();
+                var url = GetContextMenuModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.OpenAsync(url).ConfigureAwait(true);
@@ -1432,9 +1432,9 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInAssociatedAppCommand = ReactiveCommand.Create(() =>
             {
-                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
+                    appAction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
