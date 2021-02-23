@@ -4,7 +4,7 @@
 // Created          : 07-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="OverlayProgressEvent.cs" company="Mario">
 //     Mario
@@ -14,15 +14,15 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.Shared;
-using IronyModManager.Shared.MessageBus.Events;
+using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.Common.Events
 {
     /// <summary>
     /// Class OverlayProgressEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     [ExcludeFromCoverage("Excluding external message bus.")]
     public class OverlayProgressEvent : BaseNonAwaitableEvent
     {

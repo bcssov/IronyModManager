@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -235,7 +235,7 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     VirtualDefinitions = col.ToObservableCollection();
                     var virtualDefinitions = VirtualDefinitions;
-                    if (virtualDefinitions.Count() > 0)
+                    if (virtualDefinitions.Any())
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
                         await Task.Delay(100, token);
@@ -256,7 +256,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
                     var virtualDefinitions = VirtualDefinitions;
-                    if (virtualDefinitions.Count() > 0)
+                    if (virtualDefinitions.Any())
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
                         await Task.Delay(100, token);
@@ -318,7 +318,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Message.Subscribe(m =>
+            hotkeyPressedHandler.Subscribe(m =>
             {
                 SelectDefinitionByHotkey(m.Hotkey);
             }).DisposeWith(disposables);

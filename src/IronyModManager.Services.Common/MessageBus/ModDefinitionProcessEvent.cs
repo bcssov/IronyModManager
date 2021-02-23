@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModDefinitionProcessEvent.cs" company="Mario">
 //     Mario
@@ -13,15 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Shared.MessageBus.Events;
+using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.Services.Common.MessageBus
 {
     /// <summary>
     /// Class ModDefinitionProcessEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     public abstract class ModDefinitionProcessEvent : BaseNonAwaitableEvent
     {
         #region Constructors

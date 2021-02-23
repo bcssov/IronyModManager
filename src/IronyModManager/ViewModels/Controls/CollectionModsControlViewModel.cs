@@ -1516,7 +1516,7 @@ namespace IronyModManager.ViewModels.Controls
 
             void registerReportHandlers(long id, bool useImportOverlay = false)
             {
-                reportDisposable = modReportExportHandler.Message.Subscribe(s =>
+                reportDisposable = modReportExportHandler.Subscribe(s =>
                 {
                     TriggerOverlay(id, true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
                         Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
@@ -1578,7 +1578,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Message.Subscribe(async hotkey =>
+            hotkeyPressedHandler.Subscribe(async hotkey =>
             {
                 var mod = SelectedMod;
                 if (mod != null)

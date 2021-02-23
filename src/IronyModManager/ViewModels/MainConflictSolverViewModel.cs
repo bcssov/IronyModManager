@@ -869,7 +869,7 @@ namespace IronyModManager.ViewModels
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Message.Subscribe(m =>
+            hotkeyPressedHandler.Subscribe(m =>
             {
                 async Task performModSelectionAction()
                 {

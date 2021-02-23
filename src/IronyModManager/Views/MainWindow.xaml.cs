@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -193,7 +193,7 @@ namespace IronyModManager.Views
             }).DisposeWith(disposables);
 
             var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
-            hotkeySuspendHandler.Message.Subscribe(s =>
+            hotkeySuspendHandler.Subscribe(s =>
             {
                 Dispatcher.UIThread.SafeInvoke(() =>
                 {

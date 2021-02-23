@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-18-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -211,7 +211,7 @@ namespace IronyModManager.ViewModels
         {
             InitOverlayLoop();
             overlayDisposable?.Dispose();
-            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
+            overlayDisposable = overlayProgressHandler.Subscribe(s =>
             {
                 QueueOverlay(s);
             });
@@ -264,7 +264,7 @@ namespace IronyModManager.ViewModels
                     }
                 }).DisposeWith(disposables);
 
-            writingStateOperationHandler.Message.Subscribe(s =>
+            writingStateOperationHandler.Subscribe(s =>
             {
                 TriggerPreventShutdown(!s.CanShutdown);
             }).DisposeWith(disposables);

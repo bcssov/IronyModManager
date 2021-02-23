@@ -1228,7 +1228,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Message.Subscribe(m =>
+            hotkeyPressedHandler.Subscribe(m =>
             {
                 void performAction()
                 {

@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="LaunchingGameEvent.cs" company="Mario">
 //     Mario
@@ -18,9 +18,9 @@ namespace IronyModManager.Shared.MessageBus.Events
 {
     /// <summary>
     /// Class LaunchingGameEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseAwaitableEvent" />
     public class LaunchingGameEvent : BaseAwaitableEvent
     {
         #region Constructors

@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MessageBus.cs" company="Mario">
 //     Mario
@@ -86,7 +86,7 @@ namespace IronyModManager.DI.MessageBus
         {
             if (!registeredTypes.Contains(typeof(TMessage)))
             {
-                return Task.FromResult(false);
+                return Task.CompletedTask;
             }
             return messageBus.Publish(message);
         }

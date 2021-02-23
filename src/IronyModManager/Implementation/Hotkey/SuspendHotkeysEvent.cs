@@ -4,7 +4,7 @@
 // Created          : 02-21-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="SuspendHotkeysEvent.cs" company="Mario">
 //     Mario
@@ -14,15 +14,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Shared.MessageBus.Events;
+using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.Implementation.Hotkey
 {
     /// <summary>
     /// Class SuspendHotkeysEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseNonAwaitableEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     public class SuspendHotkeysEvent : BaseNonAwaitableEvent
     {
         #region Constructors

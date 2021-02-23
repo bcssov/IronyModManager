@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,6 +33,11 @@ namespace IronyModManager.Shared.MessageBus
         /// </summary>
         private readonly Subject<TMessage> messageSubject;
 
+        /// <summary>
+        /// The task cache
+        /// </summary>
+        private readonly ConcurrentDictionary<BaseAwaitableEvent, int> taskCache;
+
         #endregion Fields
 
         #region Constructors
@@ -42,19 +48,10 @@ namespace IronyModManager.Shared.MessageBus
         public BaseMessageBusConsumer()
         {
             messageSubject = new Subject<TMessage>();
+            taskCache = new ConcurrentDictionary<BaseAwaitableEvent, int>();
         }
 
         #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        public virtual IObservable<TMessage> Message => messageSubject;
-
-        #endregion Properties
 
         #region Methods
 
@@ -67,13 +64,80 @@ namespace IronyModManager.Shared.MessageBus
         public virtual async Task OnHandle(TMessage message, string name)
         {
             messageSubject.OnNext(message);
-            if (message.IsAwaitable && messageSubject.HasObservers)
+            if (message is BaseAwaitableEvent awaitableEvent)
             {
-                while (message.TasksCompleted < messageSubject.Subscribers)
+                taskCache.TryGetValue(awaitableEvent, out var tasksCompleted);
+                while (tasksCompleted < messageSubject.Subscribers)
                 {
                     await Task.Delay(25);
+                    taskCache.TryGetValue(awaitableEvent, out tasksCompleted);
                 }
+                taskCache.Remove(awaitableEvent, out tasksCompleted);
             }
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe(Action<TMessage> action)
+        {
+            return messageSubject.Subscribe(s =>
+            {
+                action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe(Func<TMessage, Task> action)
+        {
+            return messageSubject.Subscribe(async s =>
+            {
+                await action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe<T>(Func<TMessage, Task<T>> action)
+        {
+            return messageSubject.Subscribe(async s =>
+            {
+                await action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Increments the task counter.
+        /// </summary>
+        /// <param name="awaitableEvent">The awaitable event.</param>
+        protected virtual void IncrementTaskCounter(BaseAwaitableEvent awaitableEvent)
+        {
+            taskCache.AddOrUpdate(awaitableEvent, 1, (key, oldValue) =>
+            {
+                return oldValue + 1;
+            });
         }
 
         #endregion Methods

@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -216,21 +216,19 @@ namespace IronyModManager.Views.Controls
                 FocusConflict(line, leftSide, rightSide);
             };
 
-            hotkeyPressedHandler.Message.Subscribe(hotkey =>
+            hotkeyPressedHandler.Subscribe(hotkey =>
             {
                 DiffPieceWithIndex findItem(bool searchUp)
                 {
                     var visibleItems = leftSide.ItemContainerGenerator.Containers.ToList();
                     if (visibleItems.Any())
                     {
-                        var items = leftSide.Items as IEnumerable<DiffPieceWithIndex>;
-                        if (items != null)
+                        if (leftSide.Items is IEnumerable<DiffPieceWithIndex> items)
                         {
                             var itemsList = items.ToList();
                             if (searchUp)
                             {
-                                var visibleItem = visibleItems.FirstOrDefault().Item as DiffPieceWithIndex;
-                                if (visibleItem != null)
+                                if (visibleItems.FirstOrDefault().Item is DiffPieceWithIndex visibleItem)
                                 {
                                     var index = itemsList.IndexOf(visibleItem) - 2;
                                     if (index < 0)
@@ -242,8 +240,7 @@ namespace IronyModManager.Views.Controls
                             }
                             else
                             {
-                                var visibleItem = visibleItems.LastOrDefault().Item as DiffPieceWithIndex;
-                                if (visibleItem != null)
+                                if (visibleItems.LastOrDefault().Item is DiffPieceWithIndex visibleItem)
                                 {
                                     var index = itemsList.IndexOf(visibleItem) + 2;
                                     if (index > leftSide.ItemCount - 1)

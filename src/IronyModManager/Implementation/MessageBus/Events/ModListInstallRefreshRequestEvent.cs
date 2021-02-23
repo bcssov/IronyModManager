@@ -4,7 +4,7 @@
 // Created          : 02-22-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModListInstallRefreshRequestEvent.cs" company="Mario">
 //     Mario
@@ -14,15 +14,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IronyModManager.Shared.MessageBus.Events;
+using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.Implementation.MessageBus.Events
 {
     /// <summary>
     /// Class ModListInstallRefreshRequestEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.Events.BaseAwaitableEvent" />
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseAwaitableEvent" />
     public class ModListInstallRefreshRequestEvent : BaseAwaitableEvent
     {
         #region Constructors

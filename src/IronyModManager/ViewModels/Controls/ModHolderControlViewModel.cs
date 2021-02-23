@@ -761,7 +761,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             };
 
-            gameDirectoryChangedHandler.Message.Subscribe(async s =>
+            gameDirectoryChangedHandler.Subscribe(async s =>
             {
                 await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
@@ -772,10 +772,9 @@ namespace IronyModManager.ViewModels.Controls
                 CollectionMods.CanExportModHashReport = s;
             }).DisposeWith(disposables);
 
-            modListInstallRefreshRequestHandler.Message.Subscribe(async m =>
+            modListInstallRefreshRequestHandler.Subscribe(async m =>
             {
                 await InstallModsAsync(m.SkipOverlay);
-                m.FinalizeAwait();
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -819,7 +818,7 @@ namespace IronyModManager.ViewModels.Controls
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables)
         {
             definitionLoadHandler?.Dispose();
-            definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
+            definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -832,7 +831,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             modInvalidReplaceHandler?.Dispose();
-            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Message.Subscribe(s =>
+            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Replacing_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -845,7 +844,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             definitionAnalyzeLoadHandler?.Dispose();
-            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
+            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -858,7 +857,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             definitionSyncHandler?.Dispose();
-            definitionSyncHandler = modDefinitionPatchLoadHandler.Message.Subscribe(s =>
+            definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new

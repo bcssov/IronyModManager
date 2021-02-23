@@ -4,7 +4,7 @@
 // Created          : 05-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModifyCollectionControlViewModel.cs" company="Mario">
 //     Mario
@@ -535,7 +535,7 @@ namespace IronyModManager.ViewModels.Controls
 
             if (mergeType == MergeType.Basic)
             {
-                fileMergeProgressHandler = modFileMergeProgressHandler.Message.Subscribe(s =>
+                fileMergeProgressHandler = modFileMergeProgressHandler.Subscribe(s =>
                 {
                     string message;
                     if (s.Step == 1)
@@ -557,7 +557,7 @@ namespace IronyModManager.ViewModels.Controls
             }
             else
             {
-                modCompressProgressHandler = modCompressMergeProgressHandler.Message.Subscribe(s =>
+                modCompressProgressHandler = modCompressMergeProgressHandler.Subscribe(s =>
                 {
                     string message;
                     if (s.Step == 1)
