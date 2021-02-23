@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="BaseMessageBusConsumer.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.MessageBus
@@ -70,7 +69,7 @@ namespace IronyModManager.Shared.MessageBus
             messageSubject.OnNext(message);
             if (message.IsAwaitable && messageSubject.HasObservers)
             {
-                while (!message.EndAwait)
+                while (message.TasksCompleted < messageSubject.Subscribers)
                 {
                     await Task.Delay(25);
                 }

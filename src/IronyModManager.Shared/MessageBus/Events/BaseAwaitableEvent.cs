@@ -4,7 +4,7 @@
 // Created          : 02-22-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="BaseAwaitableEvent.cs" company="Mario">
 //     Mario
@@ -24,13 +24,21 @@ namespace IronyModManager.Shared.MessageBus.Events
     /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
     public abstract class BaseAwaitableEvent : IMessageBusEvent
     {
-        #region Properties
+        #region Fields
 
         /// <summary>
-        /// Gets or sets a value indicating whether [end await].
+        /// The object lock
         /// </summary>
-        /// <value><c>true</c> if [end await]; otherwise, <c>false</c>.</value>
-        public virtual bool EndAwait { get; set; }
+        private readonly object objectLock = new { };
+
+        /// <summary>
+        /// The tasks completed
+        /// </summary>
+        private int tasksCompleted;
+
+        #endregion Fields
+
+        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether this instance is fire and forget.
@@ -38,6 +46,27 @@ namespace IronyModManager.Shared.MessageBus.Events
         /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
         public bool IsAwaitable => true;
 
+        /// <summary>
+        /// Gets the tasks completed.
+        /// </summary>
+        /// <value>The tasks completed.</value>
+        public int TasksCompleted => tasksCompleted;
+
         #endregion Properties
+
+        #region Methods
+
+        /// <summary>
+        /// Finalizes the await.
+        /// </summary>
+        public void FinalizeAwait()
+        {
+            lock (objectLock)
+            {
+                tasksCompleted++;
+            }
+        }
+
+        #endregion Methods
     }
 }
