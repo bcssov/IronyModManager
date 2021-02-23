@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -80,6 +81,11 @@ namespace IronyModManager.Controls
         /// The text box
         /// </summary>
         private TextBox textBox;
+
+        /// <summary>
+        /// The whitelisted gestures
+        /// </summary>
+        private KeyGesture[] whitelistedGestures;
 
         #endregion Fields
 
@@ -151,6 +157,15 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
+        /// Registers the white listed gestures.
+        /// </summary>
+        /// <param name="keyGestures">The key gestures.</param>
+        public void RegisterWhiteListedGestures(params KeyGesture[] keyGestures)
+        {
+            whitelistedGestures = keyGestures;
+        }
+
+        /// <summary>
         /// Called when [culture information changed].
         /// </summary>
         /// <param name="oldValue">The old value.</param>
@@ -209,6 +224,11 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if ((whitelistedGestures?.Any(p => p.KeyModifiers == e.KeyModifiers && e.Key == p.Key)).GetValueOrDefault())
+            {
+                e.Handled = false;
+                return;
+            }
             switch (e.Key)
             {
                 case Key.Enter:
@@ -371,7 +391,7 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="SpinEventArgs" /> instance containing the event data.</param>
         private void OnMinMaxSpinnerSpin(object sender, SpinEventArgs e)
         {
-            if (!IsReadOnly)
+            if (MinMaxAllowSpin && !IsReadOnly)
             {
                 var spin = !e.UsingMouseWheel;
                 if (spin)

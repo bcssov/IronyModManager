@@ -454,6 +454,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportReportCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the hovered mod.
+        /// </summary>
+        /// <value>The hovered mod.</value>
+        public virtual IMod HoveredMod { get; set; }
+
+        /// <summary>
         /// Gets or sets the import collection from clipboard.
         /// </summary>
         /// <value>The import collection from clipboard.</value>
@@ -1580,7 +1586,7 @@ namespace IronyModManager.ViewModels.Controls
 
             hotkeyPressedHandler.Subscribe(async hotkey =>
             {
-                var mod = SelectedMod;
+                var mod = HoveredMod;
                 if (mod != null)
                 {
                     var order = mod.Order;

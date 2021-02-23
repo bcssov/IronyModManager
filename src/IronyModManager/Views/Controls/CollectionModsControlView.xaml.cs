@@ -18,6 +18,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -40,6 +41,11 @@ namespace IronyModManager.Views.Controls
     public class CollectionModsControlView : BaseControl<CollectionModsControlViewModel>
     {
         #region Fields
+
+        /// <summary>
+        /// The white listed gestures
+        /// </summary>
+        protected static KeyGesture[] whiteListedGestures;
 
         /// <summary>
         /// The order name
@@ -93,6 +99,25 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
+        /// Gets the white listed gestures.
+        /// </summary>
+        /// <returns>KeyGesture[].</returns>
+        protected virtual KeyGesture[] GetWhiteListedGestures()
+        {
+            if (whiteListedGestures == null)
+            {
+                whiteListedGestures = new KeyGesture[]
+                {
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Up),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Down),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Up),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Down)
+                };
+            }
+            return whiteListedGestures;
+        }
+
+        /// <summary>
         /// Handles the item dragged.
         /// </summary>
         protected virtual void HandleItemDragged()
@@ -102,6 +127,21 @@ namespace IronyModManager.Views.Controls
                 var sourceMod = source as IMod;
                 var destinationMod = destination as IMod;
                 ViewModel.InstantReorderSelectedItems(sourceMod, destinationMod.Order);
+            };
+        }
+
+        /// <summary>
+        /// Handles the pointer moved.
+        /// </summary>
+        protected virtual void HandlePointerMoved()
+        {
+            modList.PointerMoved += (sender, args) =>
+            {
+                var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
+                if (hoveredItem != null)
+                {
+                    ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                };
             };
         }
 
@@ -117,6 +157,7 @@ namespace IronyModManager.Views.Controls
                 SetContextMenus();
                 SetOrderParameters();
                 HandleItemDragged();
+                HandlePointerMoved();
             }
             base.OnActivated(disposables);
         }
@@ -161,6 +202,7 @@ namespace IronyModManager.Views.Controls
                         {
                             orderCtrl.Minimum = 1;
                             orderCtrl.Maximum = ViewModel.MaxOrder;
+                            orderCtrl.RegisterWhiteListedGestures(whiteListedGestures);
                             if (setMargin)
                             {
                                 var left = 0;
