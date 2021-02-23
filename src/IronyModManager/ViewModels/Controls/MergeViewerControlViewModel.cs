@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -120,6 +120,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="line">The line.</param>
         public delegate void ConflictFoundDelegate(int line);
 
+        /// <summary>
+        /// Delegate FocusSideDelegate
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        public delegate void FocusSideDelegate(bool leftSide);
+
         #endregion Delegates
 
         #region Events
@@ -130,9 +136,14 @@ namespace IronyModManager.ViewModels.Controls
         public event ConflictFoundDelegate ConflictFound;
 
         /// <summary>
-        /// Occurs when [stack changed].
+        /// Occurs when [focus side].
         /// </summary>
-        public event EventHandler StackChanged;
+        public event FocusSideDelegate PostFocusSide;
+
+        /// <summary>
+        /// Occurs when [pre focus side].
+        /// </summary>
+        public event FocusSideDelegate PreFocusSide;
 
         #endregion Events
 
@@ -583,7 +594,6 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     undoStack.Push(prevText);
                     redoStack.Clear();
-                    OnStackChanged();
                 }
             }
             var prevLeftSide = LeftSide;
@@ -597,7 +607,6 @@ namespace IronyModManager.ViewModels.Controls
             {
                 undoStack.Clear();
                 redoStack.Clear();
-                OnStackChanged();
             }
             else if (!skipStackPush)
             {
@@ -1149,73 +1158,17 @@ namespace IronyModManager.ViewModels.Controls
 
             UndoCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                if (undoStack.Count == 0)
-                {
-                    return;
-                }
-                if (leftSide)
-                {
-                    redoStack.Push(LeftSide);
-                    SetText(undoStack.Pop(), RightSide, skipStackPush: true);
-                }
-                else
-                {
-                    redoStack.Push(RightSide);
-                    SetText(LeftSide, undoStack.Pop(), skipStackPush: true);
-                }
-                OnStackChanged();
+                PerformUndo(leftSide);
             }).DisposeWith(disposables);
 
             RedoCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                if (redoStack.Count == 0)
-                {
-                    return;
-                }
-                if (leftSide)
-                {
-                    undoStack.Push(LeftSide);
-                    SetText(redoStack.Pop(), RightSide, skipStackPush: true);
-                }
-                else
-                {
-                    undoStack.Push(RightSide);
-                    SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
-                }
-                OnStackChanged();
+                PerformRedo(leftSide);
             }).DisposeWith(disposables);
 
-            EditorCommand = ReactiveCommand.CreateFromTask(async (bool leftSide) =>
+            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) =>
             {
-                var opts = externalEditorService.Get();
-                if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
-                {
-                    var files = externalEditorService.GetFiles();
-                    files.LeftDiff.Text = LeftSide;
-                    files.RightDiff.Text = RightSide;
-                    var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
-                    if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
-                    {
-                        var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
-                        var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
-                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
-                        {
-                            if (leftSide)
-                            {
-                                var text = files.LeftDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                                SetText(merged, RightSide);
-                            }
-                            else
-                            {
-                                var text = files.RightDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                                SetText(LeftSide, merged);
-                            }
-                        }
-                    }
-                    files?.Dispose();
-                }
+                return LaunchExternalEditor(leftSide);
             }).DisposeWith(disposables);
 
             var previousEditTextState = false;
@@ -1294,6 +1247,31 @@ namespace IronyModManager.ViewModels.Controls
                             }
                             break;
 
+                        case Enums.HotKeys.Ctrl_Z:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                PreFocusSide?.Invoke(LeftSidePatchMod);
+                                PerformUndo(LeftSidePatchMod);
+                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Y:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                PreFocusSide?.Invoke(LeftSidePatchMod);
+                                PerformRedo(LeftSidePatchMod);
+                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_X:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                LaunchExternalEditor(LeftSidePatchMod).ConfigureAwait(true);
+                            }
+                            break;
+
                         default:
                             break;
                     }
@@ -1305,17 +1283,6 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Called when [stack changed].
-        /// </summary>
-        protected virtual void OnStackChanged()
-        {
-            if (StackChanged != null)
-            {
-                StackChanged.Invoke(this, EventArgs.Empty);
-            }
         }
 
         /// <summary>
@@ -1333,6 +1300,50 @@ namespace IronyModManager.ViewModels.Controls
                 orderedSelected.Add(idx, item);
             }
             return orderedSelected.OrderBy(p => p.Key).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        /// <summary>
+        /// Performs the redo.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void PerformRedo(bool leftSide)
+        {
+            if (redoStack.Count == 0)
+            {
+                return;
+            }
+            if (leftSide)
+            {
+                undoStack.Push(LeftSide);
+                SetText(redoStack.Pop(), RightSide, skipStackPush: true);
+            }
+            else
+            {
+                undoStack.Push(RightSide);
+                SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
+            }
+        }
+
+        /// <summary>
+        /// Performs the undo.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void PerformUndo(bool leftSide)
+        {
+            if (undoStack.Count == 0)
+            {
+                return;
+            }
+            if (leftSide)
+            {
+                redoStack.Push(LeftSide);
+                SetText(undoStack.Pop(), RightSide, skipStackPush: true);
+            }
+            else
+            {
+                redoStack.Push(RightSide);
+                SetText(LeftSide, undoStack.Pop(), skipStackPush: true);
+            }
         }
 
         /// <summary>
@@ -1386,6 +1397,43 @@ namespace IronyModManager.ViewModels.Controls
                 syncCol.Clear();
             }
             syncingSelection = false;
+        }
+
+        /// <summary>
+        /// Launches the external editor.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        private async Task LaunchExternalEditor(bool leftSide)
+        {
+            var opts = externalEditorService.Get();
+            if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
+            {
+                var files = externalEditorService.GetFiles();
+                files.LeftDiff.Text = LeftSide;
+                files.RightDiff.Text = RightSide;
+                var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
+                if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
+                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
+                    {
+                        if (leftSide)
+                        {
+                            var text = files.LeftDiff.Text ?? string.Empty;
+                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                            SetText(merged, RightSide);
+                        }
+                        else
+                        {
+                            var text = files.RightDiff.Text ?? string.Empty;
+                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                            SetText(LeftSide, merged);
+                        }
+                    }
+                }
+                files?.Dispose();
+            }
         }
 
         #endregion Methods

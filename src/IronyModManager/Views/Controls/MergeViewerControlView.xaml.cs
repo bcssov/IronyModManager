@@ -215,6 +215,39 @@ namespace IronyModManager.Views.Controls
             {
                 FocusConflict(line, leftSide, rightSide);
             };
+            int? focusSideScrollItem = null;
+            ViewModel.PreFocusSide += (left) =>
+            {
+                var visibleItems = left ? leftSide.ItemContainerGenerator.Containers.ToList() : rightSide.ItemContainerGenerator.Containers.ToList();
+                if (visibleItems.Any())
+                {
+                    focusSideScrollItem = visibleItems.LastOrDefault().Index;
+                }
+            };
+            ViewModel.PostFocusSide += (left) =>
+            {
+                async Task delay()
+                {
+                    await Task.Delay(1);
+                    var listBox = left ? leftSide : rightSide;
+                    listBox.Focus();
+                    if (focusSideScrollItem.HasValue)
+                    {
+                        if (listBox.Items is IEnumerable<DiffPieceWithIndex> items)
+                        {
+                            var itemsList = items.ToList();
+                            var item = itemsList.FirstOrDefault(p => p.Index == focusSideScrollItem.GetValueOrDefault());
+                            if (item == null)
+                            {
+                                item = itemsList.LastOrDefault();
+                            }
+                            listBox.ScrollIntoView(item);
+                        }
+                    }
+                    focusSideScrollItem = null;
+                }
+                Dispatcher.UIThread.SafeInvoke(() => delay().ConfigureAwait(false));
+            };
 
             hotkeyPressedHandler.Subscribe(hotkey =>
             {
