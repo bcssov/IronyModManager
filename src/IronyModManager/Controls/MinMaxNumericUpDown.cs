@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-14-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -14,12 +14,17 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
+using Avalonia.Threading;
+using Avalonia.Utilities;
+using IronyModManager.Common;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
@@ -52,6 +57,16 @@ namespace IronyModManager.Controls
         public static readonly StyledProperty<bool> MinMaxShowButtonSpinnerProperty = AvaloniaProperty.Register<MinMaxButtonSpinner, bool>(nameof(MinMaxShowButtonSpinner), true);
 
         /// <summary>
+        /// The delay
+        /// </summary>
+        private const int Delay = 50;
+
+        /// <summary>
+        /// The cancellation token source
+        /// </summary>
+        private CancellationTokenSource cancellationTokenSource;
+
+        /// <summary>
         /// The spinner
         /// </summary>
         private Spinner minMaxSpinner;
@@ -75,6 +90,7 @@ namespace IronyModManager.Controls
         /// </summary>
         public MinMaxNumericUpDown() : base()
         {
+            AllowSpin = false;
             Initialized += (sender, e) =>
             {
                 SetValidSpinDirection();
@@ -82,6 +98,15 @@ namespace IronyModManager.Controls
         }
 
         #endregion Constructors
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when [spinned].
+        /// </summary>
+        public new event EventHandler<SpinEventArgs> Spinned;
+
+        #endregion Events
 
         #region Properties
 
@@ -300,6 +325,46 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// do decrement as an asynchronous operation.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task DoDecrementAsync(CancellationToken cancellationToken)
+        {
+            if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Decrease) == ValidSpinDirections.Decrease)
+            {
+                await Task.Delay(Delay, cancellationToken);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    var result = Value - Increment;
+                    await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                    {
+                        Value = MathUtilities.Clamp(result, Minimum, Maximum);
+                    });
+                }
+            }
+        }
+
+        /// <summary>
+        /// do increment as an asynchronous operation.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task DoIncrementAsync(CancellationToken cancellationToken)
+        {
+            if (spinner == null || (spinner.ValidSpinDirection & ValidSpinDirections.Increase) == ValidSpinDirections.Increase)
+            {
+                await Task.Delay(Delay, cancellationToken);
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    var result = Value + Increment;
+                    await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                    {
+                        Value = MathUtilities.Clamp(result, Minimum, Maximum);
+                    });
+                }
+            }
+        }
+
+        /// <summary>
         /// Handles the <see cref="E:MinMaxSpinnerSpin" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -309,11 +374,6 @@ namespace IronyModManager.Controls
             if (!IsReadOnly)
             {
                 var spin = !e.UsingMouseWheel;
-                if (MinMaxAllowSpin)
-                {
-                    spin |= (textBox != null) && textBox.IsFocused;
-                }
-
                 if (spin)
                 {
                     e.Handled = true;
@@ -342,14 +402,29 @@ namespace IronyModManager.Controls
         /// <param name="e">The <see cref="SpinEventArgs" /> instance containing the event data.</param>
         private void OnSpinnerSpin(object sender, SpinEventArgs e)
         {
-            if (!AllowSpin && !IsReadOnly)
+            if (!AllowSpin && MinMaxAllowSpin && !IsReadOnly)
             {
                 var spin = !e.UsingMouseWheel;
 
                 if (spin)
                 {
                     e.Handled = true;
-                    OnSpin(e);
+                    var handler = Spinned;
+                    handler?.Invoke(this, e);
+
+                    if (cancellationTokenSource != null)
+                    {
+                        cancellationTokenSource.Cancel();
+                    }
+                    cancellationTokenSource = new CancellationTokenSource();
+                    if (e.Direction == SpinDirection.Increase)
+                    {
+                        DoIncrementAsync(cancellationTokenSource.Token).ConfigureAwait(true);
+                    }
+                    else
+                    {
+                        DoDecrementAsync(cancellationTokenSource.Token).ConfigureAwait(true);
+                    }
                 }
             }
         }
