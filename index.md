@@ -14,7 +14,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 ### Download
 * Latest stable version: [v1.11.33](https://github.com/bcssov/IronyModManager/releases/tag/v1.11.33)
-* Latest prerelease version: [v1.12.93-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.12.93-rc)
+* Latest prerelease version: [v1.12.104-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.12.104-rc)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
