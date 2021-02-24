@@ -4,17 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.104-rc</title>
+			<title>1.12.110</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Update conflict solver refresh message to make it more clear
-* Hotkey mod shorcuts now react to hovered mod instead of selected mod
-* Add more conflict solver shortcuts (undo, redo and launch external editor)
-* Fix handling of zero byte .mod files
+* Fix false positive when evaluating patch state by attempting to file which may or may no be there
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -37,21 +32,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Tue, 23 Feb 2021 21:24:30 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/osx-x64.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="63209627" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="/QTXRze7fsGPlSkXxNvMSFYGArf58XJLNfBQU1f4wrfiG6yW+yJeOoavJHDAPQ/3WwZYSBvG2045R0+zH/DIBA=="/>
+			<pubDate>Wed, 24 Feb 2021 18:20:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/osx-x64.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="63204139" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="93FoJ+sn3k/yqqK3AH2EkGCaQs0mdO2CmNR7V6HrORjarqdg+ly46WbGreyDCJoYq3g1j8HIKeX+9sbhmdCZDg=="/>
 		</item>
 		<item>
-			<title>1.12.104-rc</title>
+			<title>1.12.110</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Update conflict solver refresh message to make it more clear
-* Hotkey mod shorcuts now react to hovered mod instead of selected mod
-* Add more conflict solver shortcuts (undo, redo and launch external editor)
-* Fix handling of zero byte .mod files
+* Fix false positive when evaluating patch state by attempting to file which may or may no be there
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -74,21 +64,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Tue, 23 Feb 2021 21:24:36 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/win-x64-setup.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="54814481" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="KE6rhqgjW5oiCNbGfqhXLWyBeRldGo21TMuP2Kd/SUiiR+RlDm+pYUEYHBVVH9fNhg1nlZMz81QL9HDj3LeQAg=="/>
+			<pubDate>Wed, 24 Feb 2021 18:21:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/win-x64-setup.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="54821435" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="sWw/Fb5rPt4FEcdgLL//3qnRb6fwsSyUTm9oti36DJox1ihAwNMQL39WJeLBUh7XSKOiHpI4QBM0rmbO9gQHDA=="/>
 		</item>
 		<item>
-			<title>1.12.104-rc</title>
+			<title>1.12.110</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Update conflict solver refresh message to make it more clear
-* Hotkey mod shorcuts now react to hovered mod instead of selected mod
-* Add more conflict solver shortcuts (undo, redo and launch external editor)
-* Fix handling of zero byte .mod files
+* Fix false positive when evaluating patch state by attempting to file which may or may no be there
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -111,21 +96,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Tue, 23 Feb 2021 21:24:33 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/win-x64.rar" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="65627187" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z/Rm9M8mTm1McovuRVWYa3r68DwJEj0fVo/M0XS1uV1cNkweCA1hmlCPtyyCb1H0tfsDATcb3Xl3OvBRKqVKCQ=="/>
+			<pubDate>Wed, 24 Feb 2021 18:20:59 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/win-x64.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="65621581" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="6kWhVCK/Wjtlju3i9918vH2XFa2WUtvXtf7Psfsay8HhPNbMR9cWA/aAOl32ASzxVV0wAVl2owBoR5d1eYvvDA=="/>
 		</item>
 		<item>
-			<title>1.12.104-rc</title>
+			<title>1.12.110</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Update conflict solver refresh message to make it more clear
-* Hotkey mod shorcuts now react to hovered mod instead of selected mod
-* Add more conflict solver shortcuts (undo, redo and launch external editor)
-* Fix handling of zero byte .mod files
+* Fix false positive when evaluating patch state by attempting to file which may or may no be there
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -148,72 +128,8 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Tue, 23 Feb 2021 21:24:27 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.104-rc/linux-x64.zip" sparkle:version="1.12.104.15711" sparkle:shortVersionString="1.12.104" length="78748882" sparkle:os="linux" type="application/zip" sparkle:signature="qmI5dlMHpH54m4Zsf3IjxG3qWKW3j2/dTZ9Tll58IrK2uougzHb9qLeklrPwnNPD2RaCqNfQPX0heWZio9lqBg=="/>
-		</item>
-		<item>
-			<title>1.11.33</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Updates chinese translation (by LunarTraveller)
-* Treat setup_scenarios as whole file conflicts
-
-CHANGES FROM v1.10:
-* Update dependencies
-* Add error message for mod zips which cannot be parsed
-</description>
-			<pubDate>Tue, 09 Feb 2021 19:48:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/osx-x64.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="63018647" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="MdGL/F7sUW5q+0A2O69SUWvwlqM0djIyNQ0yDmbxNk1sdEhSrGOic4bwQ8InxleXOkWKB/rGATPUfNzDlSC/Ag=="/>
-		</item>
-		<item>
-			<title>1.11.33</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Updates chinese translation (by LunarTraveller)
-* Treat setup_scenarios as whole file conflicts
-
-CHANGES FROM v1.10:
-* Update dependencies
-* Add error message for mod zips which cannot be parsed
-</description>
-			<pubDate>Tue, 09 Feb 2021 19:48:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/win-x64-setup.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="54673649" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="wXEyWVdbFeo8wV7rcp1cYv/i5OZ4s0VsFu447N4pVvX/aw9hPspznv/SKmmV4T1NZLxoyIvYRROW+KSPYhQaAg=="/>
-		</item>
-		<item>
-			<title>1.11.33</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Updates chinese translation (by LunarTraveller)
-* Treat setup_scenarios as whole file conflicts
-
-CHANGES FROM v1.10:
-* Update dependencies
-* Add error message for mod zips which cannot be parsed
-</description>
-			<pubDate>Tue, 09 Feb 2021 19:48:17 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/win-x64.rar" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="65432427" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="vgjz3ewS+bvmepXZx0t0G6L1Pu4MRhfzUwq9HFhBQpBILxOysMj0E/kpfn17w4KNCDkZpO84YuIpYevn/BQmCg=="/>
-		</item>
-		<item>
-			<title>1.11.33</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Updates chinese translation (by LunarTraveller)
-* Treat setup_scenarios as whole file conflicts
-
-CHANGES FROM v1.10:
-* Update dependencies
-* Add error message for mod zips which cannot be parsed
-</description>
-			<pubDate>Tue, 09 Feb 2021 19:48:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.11.33/linux-x64.zip" sparkle:version="1.11.33.57545" sparkle:shortVersionString="1.11.33" length="78543490" sparkle:os="linux" type="application/zip" sparkle:signature="ISHAD0pMsYlW+uVckPeDakInJ5EWc3PVKjpLkAdjNBkHObm1hWxKyHNNiAqhiS7pGlPWCF57cNyw9V0mjeNDBg=="/>
+			<pubDate>Wed, 24 Feb 2021 18:20:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/linux-x64.zip" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="78749793" sparkle:os="linux" type="application/zip" sparkle:signature="fP3cS3asnMha59G7DzGR4ecepsA/qXcDhe7cCcEGNAQgF+bkyQp3tRLetE/yvZbCLoKi/xeV4i4ZNnbTsPAPAg=="/>
 		</item>
 	</channel>
 </rss>
