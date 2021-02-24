@@ -12,11 +12,9 @@
         SizeToContent="Manual"
         WindowStartupLocation="Manual"
         ShowInTaskbar="True">
-
   <Design.DataContext>
     <vm:MainWindowViewModel />
   </Design.DataContext>
-
   <Panel>
     <Grid>
       <Grid ZIndex="1000" IsVisible="{Binding OverlayVisible}">

@@ -74,7 +74,7 @@ namespace IronyModManager.Parser.Tests
             var sb3 = new System.Text.StringBuilder();
             sb3.AppendLine(@"NCamera = {");
             sb3.AppendLine(@"    ENTITY_SPRITE_DESIGN_ENTRY_CAM_DIR = {");
-            sb3.AppendLine(@"        -1.0");
+            sb3.AppendLine(@"        -1");
             sb3.AppendLine(@"        -0.6");
             sb3.AppendLine(@"        0.3");
             sb3.AppendLine(@"    }");
@@ -82,7 +82,7 @@ namespace IronyModManager.Parser.Tests
 
             var sb4 = new StringBuilder();
             sb4.AppendLine(@"NGraphics = {");
-            sb4.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
+            sb4.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10");
             sb4.Append('}');
 
 
@@ -307,7 +307,7 @@ namespace IronyModManager.Parser.Tests
 
             var sb2 = new StringBuilder();
             sb2.AppendLine(@"NGraphics = {");
-            sb2.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10.0");
+            sb2.AppendLine(@"    CAMERA_DISTANCE_TO_ZOOM = 10");
             sb2.Append('}');
 
 

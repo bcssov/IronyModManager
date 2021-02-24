@@ -4,7 +4,7 @@
 // Created          : 01-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Views.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Views;
 using IronyModManager.Views.Controls;
 using Container = SimpleInjector.Container;
@@ -27,12 +27,13 @@ namespace IronyModManager.DI
     /// <seealso cref="SimpleInjector.Packaging.IPackage" />
     public partial class DIPackage
     {
-        #region Methods
-
         /// <summary>
         /// Registers the views.
         /// </summary>
         /// <param name="container">The container.</param>
+
+        #region Methods
+
         private void RegisterViews(Container container)
         {
             container.Register<MainWindow>();
@@ -58,8 +59,10 @@ namespace IronyModManager.DI
             container.Register<ConflictSolverResetConflictsControlView>();
             container.Register<ConflictSolverDBSearchControlView>();
             container.Register<ConflictSolverCustomConflictsControlView>();
-            container.Register<ShortcutsControlView>();
+            container.Register<ActionsControlView>();
             container.Register<ModHashReportControlView>();
+            container.Register<DLCManagerControlView>();
+            container.Register<PatchModControlView>();
         }
 
         #endregion Methods

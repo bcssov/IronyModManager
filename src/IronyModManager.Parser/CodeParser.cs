@@ -4,7 +4,7 @@
 // Created          : 02-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-01-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="CodeParser.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using CWTools.CSharp;
@@ -751,6 +752,15 @@ namespace IronyModManager.Parser
         /// </summary>
         protected class ElementValue
         {
+            #region Fields
+
+            /// <summary>
+            /// The value
+            /// </summary>
+            private string value = string.Empty;
+
+            #endregion Fields
+
             #region Properties
 
             /// <summary>
@@ -769,7 +779,24 @@ namespace IronyModManager.Parser
             /// Gets or sets the value.
             /// </summary>
             /// <value>The value.</value>
-            public string Value { get; set; }
+            public string Value
+            {
+                get
+                {
+                    return value;
+                }
+                set
+                {
+                    if (decimal.TryParse(value, NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
+                    {
+                        this.value = result.ToString("G0", CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        this.value = value;
+                    }
+                }
+            }
 
             #endregion Properties
         }

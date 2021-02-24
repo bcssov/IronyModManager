@@ -4,23 +4,23 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="GameRegistration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IronyModManager.DI;
 using IronyModManager.Services.Models;
 using IronyModManager.Services.Resolver;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
 using Newtonsoft.Json;
-using System.Linq;
 
 namespace IronyModManager.Services.Registrations
 {
@@ -70,15 +70,16 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.CrusaderKings3.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.CrusaderKings3.Id;
+            game.Abrv = Shared.Constants.GamesTypes.CrusaderKings3.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.CrusaderKings3.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
-            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.CrusaderKings3.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.CrusaderKings3.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -94,14 +95,15 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.EuropaUniversalis4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.EuropaUniversalis4.Id;
+            game.Abrv = Shared.Constants.GamesTypes.EuropaUniversalis4.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.EuropaUniversalis4.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
-            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.EuropaUniversalis4.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -152,14 +154,15 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.HeartsOfIron4.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.HeartsOfIron4.Id;
+            game.Abrv = Shared.Constants.GamesTypes.HeartsOfIron4.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.HeartsOfIron4.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
-            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.HeartsOfIron4.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -175,15 +178,16 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.ImperatorRome.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.ImperatorRome.Id;
+            game.Abrv = Shared.Constants.GamesTypes.ImperatorRome.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.ImperatorRome.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.ImperatorRome.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
-            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.ImperatorRome.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = Shared.Constants.GamesTypes.ImperatorRome.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = false;
-            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 
@@ -199,14 +203,15 @@ namespace IronyModManager.Services.Registrations
             game.GameFolders = Shared.Constants.GamesTypes.Stellaris.GameFolders;
             game.LogLocation = Path.Combine(Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath), Shared.Constants.GamesTypes.LogLocation).StandardizeDirectorySeparator();
             game.Name = Shared.Constants.GamesTypes.Stellaris.Id;
+            game.Abrv = Shared.Constants.GamesTypes.Stellaris.Abrv;
             game.SteamAppId = Shared.Constants.GamesTypes.Stellaris.SteamAppId;
             game.UserDirectory = Path.Combine(baseUserDir, Shared.Constants.GamesTypes.Stellaris.DocsPath).StandardizeDirectorySeparator();
             game.WorkshopDirectory = SteamDirectory.GetWorkshopDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
-            game.BaseGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
+            game.BaseSteamGameDirectory = SteamDirectory.GetGameDirectory(Shared.Constants.GamesTypes.Stellaris.SteamAppId).StandardizeDirectorySeparator();
             game.LauncherSettingsFileName = Shared.Constants.GamesTypes.LauncherSettingsFileName;
             game.RemoteSteamUserDirectory = SteamDirectory.GetUserDataFolders(game.SteamAppId).Select(p => p.StandardizeDirectorySeparator()).ToList();
             game.AdvancedFeaturesSupported = true;
-            MapGameSettings(game, GetExecutableSettings(game.BaseGameDirectory, game.LauncherSettingsFileName));
+            MapGameSettings(game, GetExecutableSettings(game.BaseSteamGameDirectory, game.LauncherSettingsFileName));
             return game;
         }
 

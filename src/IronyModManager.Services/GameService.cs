@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-22-2021
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -302,7 +302,7 @@ namespace IronyModManager.Services
         public virtual bool IsSteamGame(IGameSettings settings)
         {
             var game = StorageProvider.GetGames().FirstOrDefault(p => p.Name.Equals(settings.Type));
-            var baseGameDirectory = (game.BaseGameDirectory ?? string.Empty).StandardizeDirectorySeparator();
+            var baseGameDirectory = (game.BaseSteamGameDirectory ?? string.Empty).StandardizeDirectorySeparator();
             var settingsExe = (settings.ExecutableLocation ?? string.Empty).StandardizeDirectorySeparator();
             return !string.IsNullOrWhiteSpace(baseGameDirectory) && !string.IsNullOrWhiteSpace(settingsExe) && settingsExe.StartsWith(baseGameDirectory, StringComparison.OrdinalIgnoreCase);
         }
@@ -389,11 +389,12 @@ namespace IronyModManager.Services
             game.LogLocation = gameType.LogLocation;
             game.ChecksumFolders = gameType.ChecksumFolders;
             game.GameFolders = gameType.GameFolders ?? new List<string>();
-            game.BaseGameDirectory = gameType.BaseGameDirectory;
+            game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory;
             game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
             game.LauncherSettingsFileName = gameType.LauncherSettingsFileName;
             game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix;
             game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
+            game.Abrv = gameType.Abrv;
             game.CloseAppAfterGameLaunch = true;
             var setExeLocation = true;
             var setUserDirLocation = true;

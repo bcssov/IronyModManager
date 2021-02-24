@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 07-30-2020
+// Created          : 02-16-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-24-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
-// <copyright file="ShortcutsControlView.axaml.cs" company="Mario">
+// <copyright file="PatchModControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -26,21 +26,21 @@ using ReactiveUI;
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
-    /// Class ShortcutsControlView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ShortcutsControlViewModel}" />
+    /// Class PatchModControlView.
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.PatchModControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ShortcutsControlViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.PatchModControlViewModel}" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ShortcutsControlView : BaseControl<ShortcutsControlViewModel>
+    public class PatchModControlView : BaseControl<PatchModControlViewModel>
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ShortcutsControlView" /> class.
+        /// Initializes a new instance of the <see cref="PatchModControlView" /> class.
         /// </summary>
-        public ShortcutsControlView()
+        public PatchModControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors

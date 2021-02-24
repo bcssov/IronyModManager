@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -204,6 +204,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CheckNewModsCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the context menu mod.
+        /// </summary>
+        /// <value>The context menu mod.</value>
+        public virtual IMod ContextMenuMod { get; set; }
+
+        /// <summary>
         /// Gets or sets the copy URL.
         /// </summary>
         /// <value>The copy URL.</value>
@@ -268,12 +274,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string FilterModsWatermark { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the hovered mod.
-        /// </summary>
-        /// <value>The hovered mod.</value>
-        public virtual IMod HoveredMod { get; set; }
-
-        /// <summary>
         /// Gets or sets the lock all descriptors.
         /// </summary>
         /// <value>The lock all descriptors.</value>
@@ -300,10 +300,10 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> LockDescriptorCommand { get; protected set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [mod file population in completed].
+        /// Gets or sets a value indicating whether [mod file population completed].
         /// </summary>
-        /// <value><c>true</c> if [mod file population in completed]; otherwise, <c>false</c>.</value>
-        public virtual bool ModFilePopulationInCompleted { get; protected set; }
+        /// <value><c>true</c> if [mod file population completed]; otherwise, <c>false</c>.</value>
+        public virtual bool ModFilePopulationCompleted { get; protected set; }
 
         /// <summary>
         /// Gets or sets the name of the mod.
@@ -452,28 +452,28 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Gets the hovered mod steam URL.
+        /// Gets the context menu mod mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModSteamUrl()
+        public virtual string GetContextMenuModModSteamUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildSteamUrl(HoveredMod);
+                var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
         }
 
         /// <summary>
-        /// Gets the selected mod URL.
+        /// Gets the context menu mod mod URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModUrl()
+        public virtual string GetContextMenuModModUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildModUrl(HoveredMod);
+                var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
@@ -495,21 +495,14 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Refreshes the mods.
-        /// </summary>
-        public virtual void RefreshMods()
-        {
-            RefreshModsAsync().ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// refresh mods as an asynchronous operation.
         /// </summary>
-        public virtual async Task RefreshModsAsync()
+        /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        public virtual async Task RefreshModsAsync(bool skipOverlay = false)
         {
             RefreshingMods = true;
             var previousMods = Mods;
-            await BindAsync();
+            await BindAsync(skipOverlay: skipOverlay);
             if (Mods?.Count() > 0 && previousMods?.Count() > 0)
             {
                 foreach (var item in previousMods.Where(p => p.IsSelected))
@@ -563,25 +556,30 @@ namespace IronyModManager.ViewModels.Controls
         /// Binds the specified game.
         /// </summary>
         /// <param name="game">The game.</param>
-        protected virtual void Bind(IGame game = null)
+        /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        protected virtual void Bind(IGame game = null, bool skipOverlay = false)
         {
-            BindAsync(game).ConfigureAwait(false);
+            BindAsync(game, skipOverlay).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Binds the asynchronous.
         /// </summary>
         /// <param name="game">The game.</param>
+        /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
         /// <returns>Task.</returns>
-        protected virtual async Task BindAsync(IGame game = null)
+        protected virtual async Task BindAsync(IGame game = null, bool skipOverlay = false)
         {
             var id = idGenerator.GetNextId();
-            await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
+            if (!skipOverlay)
+            {
+                await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Installed_Mods.LoadingMods));
+            }
             if (game == null)
             {
                 game = gameService.GetSelected();
             }
-            ModFilePopulationInCompleted = false;
+            ModFilePopulationCompleted = false;
             ActiveGame = game;
             if (game != null)
             {
@@ -589,7 +587,7 @@ namespace IronyModManager.ViewModels.Controls
                 await Task.Run(async () =>
                 {
                     await PopulateModFilesAsyncAsync(mods).ConfigureAwait(false);
-                    ModFilePopulationInCompleted = true;
+                    ModFilePopulationCompleted = true;
                     EvalAchievementCompatibility(mods);
                 });
                 await Task.Delay(100);
@@ -628,7 +626,10 @@ namespace IronyModManager.ViewModels.Controls
                 Mods = FilteredMods = new System.Collections.ObjectModel.ObservableCollection<IMod>();
                 AllMods = Mods.ToHashSet();
             }
-            await TriggerOverlayAsync(id, false);
+            if (!skipOverlay)
+            {
+                await TriggerOverlayAsync(id, false);
+            }
         }
 
         /// <summary>
@@ -654,7 +655,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
             }
-            RefreshMods();
+            await RefreshModsAsync();
             var title = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Title);
             var message = localizationManager.GetResource(LocalizationResources.Notifications.NewDescriptorsChecked.Message);
             notificationAction.ShowNotification(title, message, NotificationType.Info);
@@ -677,7 +678,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     await ShowInvalidModsNotificationAsync(result.Where(p => p.Invalid).ToList());
                 }
-                RefreshMods();
+                await RefreshModsAsync();
                 var title = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Title);
                 var message = localizationManager.GetResource(LocalizationResources.Notifications.DescriptorsRefreshed.Message);
                 notificationAction.ShowNotification(title, message, NotificationType.Info);
@@ -779,7 +780,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.OpenAsync(url).ConfigureAwait(true);
@@ -788,7 +789,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyUrlCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.CopyAsync(url).ConfigureAwait(true);
@@ -797,7 +798,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInSteamCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                var url = GetHoveredModSteamUrl();
+                var url = GetContextMenuModModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     await appAction.OpenAsync(url).ConfigureAwait(true);
@@ -806,9 +807,9 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInAssociatedAppCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    await appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
+                    await appAction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -839,9 +840,9 @@ namespace IronyModManager.ViewModels.Controls
 
             DeleteDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await DeleteDescriptorAsync(new List<IMod>() { HoveredMod }).ConfigureAwait(true);
+                    await DeleteDescriptorAsync(new List<IMod>() { ContextMenuMod }).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -855,9 +856,9 @@ namespace IronyModManager.ViewModels.Controls
 
             LockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, true).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, true).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -871,9 +872,9 @@ namespace IronyModManager.ViewModels.Controls
 
             UnlockDescriptorCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (HoveredMod != null)
+                if (ContextMenuMod != null)
                 {
-                    await LockDescriptorAsync(new List<IMod>() { HoveredMod }, false).ConfigureAwait(true);
+                    await LockDescriptorAsync(new List<IMod>() { ContextMenuMod }, false).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -983,7 +984,7 @@ namespace IronyModManager.ViewModels.Controls
             if (!showingInvalidNotification)
             {
                 showingInvalidNotification = true;
-                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.OK);
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
                 showingInvalidNotification = false;
             }
         }

@@ -4,15 +4,15 @@
 // Created          : 03-05-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 07-29-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="AddNewCollectionControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -144,6 +144,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (RenamingCollection != null)
                     {
                         collection.Mods = RenamingCollection.Mods;
+                        collection.PatchModEnabled = RenamingCollection.PatchModEnabled;
                         modCollectionService.Delete(RenamingCollection.Name);
                         modPatchCollectionService.InvalidatePatchModState(RenamingCollection.Name);
                     }

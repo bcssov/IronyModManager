@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-07-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="GameControlViewModel.cs" company="Mario">
 //     Mario
@@ -119,7 +119,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            activeGameRequestHandler.Message.Subscribe(m =>
+            activeGameRequestHandler.Subscribe(m =>
             {
                 if (m.Game != null)
                 {

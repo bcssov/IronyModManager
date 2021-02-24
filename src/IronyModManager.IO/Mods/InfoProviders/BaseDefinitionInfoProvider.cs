@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="BaseDefinitionInfoProvider.cs" company="Mario">
 //     Mario
@@ -245,6 +245,31 @@ namespace IronyModManager.IO.Mods.InfoProviders
         }
 
         /// <summary>
+        /// Generates the name hash.
+        /// </summary>
+        /// <param name="hash">The hash.</param>
+        /// <param name="takeLeadingFileName">if set to <c>true</c> [take leading file name].</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GenerateNameHash(string hash, bool takeLeadingFileName = false)
+        {
+            hash = Path.GetFileNameWithoutExtension(hash);
+            if (string.IsNullOrWhiteSpace(hash))
+            {
+                return hash;
+            }
+            var length = 2;
+            if (hash.Length < 2)
+            {
+                length = hash.Length;
+            }
+            if (takeLeadingFileName)
+            {
+                return $"{hash.Substring(0, length)}{hash.GenerateShortFileNameHashId()}";
+            }
+            return hash.GenerateShortFileNameHashId();
+        }
+
+        /// <summary>
         /// Generates the name of the whole text file.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -265,7 +290,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (requestDiskFileName)
             {
-                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? fileName.GenerateShortFileNameHashId() : definition.OriginalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                return Path.Combine(definition.ParentDirectory, $"{FIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
             }
             return Path.Combine(definition.ParentDirectory, $"{FIOSName}{fileName.GenerateValidFileName()}");
         }
@@ -281,7 +306,7 @@ namespace IronyModManager.IO.Mods.InfoProviders
         {
             if (requestDiskFileName)
             {
-                return Path.Combine(definition.ParentDirectory, $"{LIOSName}{definition.OriginalModName.GenerateShortFileNameHashId()}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? fileName.GenerateShortFileNameHashId() : definition.OriginalFileName.GenerateShortFileNameHashId())}{definition.Order:D4}{fileName.GenerateValidFileName()}");
+                return Path.Combine(definition.ParentDirectory, $"{LIOSName}{GenerateNameHash(definition.OriginalModName)}{(string.IsNullOrWhiteSpace(definition.OriginalFileName) ? GenerateNameHash(fileName, true) : GenerateNameHash(definition.OriginalFileName, true))}{definition.Order:D4}{fileName.GenerateValidFileName()}");
             }
             return Path.Combine(definition.ParentDirectory, $"{LIOSName}{fileName.GenerateValidFileName()}");
         }

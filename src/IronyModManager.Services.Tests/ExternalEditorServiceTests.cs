@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="ExternalEditorServiceTests.cs" company="Mario">
 //     Mario
@@ -205,10 +205,17 @@ namespace IronyModManager.Services.Tests
             public string Text { get; set; }
 
             /// <summary>
+            /// Gets or sets the temporary directory.
+            /// </summary>
+            /// <value>The temporary directory.</value>
+            public string TempDirectory { get; set; }
+
+            /// <summary>
             /// Creates the specified path.
             /// </summary>
+            /// <param name="fileName">Name of the file.</param>
             /// <returns>System.String.</returns>
-            public string Create()
+            public string Create(string fileName = "")
             {
                 return File;
             }

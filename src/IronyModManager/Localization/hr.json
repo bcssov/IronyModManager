@@ -1,15 +1,17 @@
 ﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši. Aplikacija će se ugasiti nakon što se završi.",
         "WaitBackgroundOperationMessage": "Molimo pričekajte dok se pozadinska operacija ne izvrši.",
-        "Shortcuts": {
-            "Name": "Prečaci",
+        "Actions": {
+            "Name": "Akcije",
             "Wiki": "Wiki",
             "Logs": "Logovi",
             "ErrorLog": "Error.log",
-            "Close": "Zatvori"
+            "Close": "Zatvori",
+            "DLC": "DLC"
         }
     },
     "FatalError": {
@@ -20,6 +22,10 @@
     "SavingError": {
         "Title": "Greška prilikom snimanja",
         "Message": "Čini se da nešto blokira mogućnost Ironyja da piše u mod datoteke. Prijavite ovo na GitHub tracker i pošaljite izvješće o greškama."
+    },
+    "UnableToWriteError": {
+        "Title": "Aplikacija blokirana",
+        "Message": "Čini se da je program blokiran antivirusom ili dopuštenjima i ne može pisati u direktorij korisničkih dokumenata:{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "Otkriveni su nevaljani modovi",
@@ -140,6 +146,10 @@
             "Title": "Kolekcija postoji",
             "Message": "Kolekcija postoji i bit će prebrisana, želite li nastaviti?"
         },
+        "ImportNonExistingMods": {
+            "Title": "Nepostojeći modovi",
+            "Message": "Sljedeće modove nije moguće uvesti jer se čini da nedostaju::{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Uvezi iz Paradoxos",
@@ -160,15 +170,8 @@
             "Options": {
                 "Title": "Odaberi način",
                 "Basic": "Osnovno",
-                "Advanced": "Napredno",
                 "Compress": "Kompresiraj",
                 "Close": "Zatvori"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-                "Overlay_Analyzing_Definitions": "Pričekaj dok se analiziraju definicije...",
-                "Overlay_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
-                "Overlay_Merging_Collection": "Pričekaj dok se spaja kolekcija..."
             },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Pričekaj dok se skupljaju mod informacije...",
@@ -181,6 +184,22 @@
             "OverwritePrompt": {
                 "Title": "Prebriši postojeću kolekciju?",
                 "Message": "Spojena kolekcija već postoji. Želite li je prebrisati?"
+            }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Omogućeno",
+            "Disabled": "Onemogućeno",
+            "NotAvailable": "Nije dostupno",
+            "DeletePrompt": {
+                "Title": "Potvrdi brisanje",
+                "Message": "Jeste li sigurni da želite izbrisati mod zakrpe?"
+            },
+            "Actions": {
+                "Enable": "Omogući",
+                "Disable": "Onemogući",
+                "Delete": "Obriši",
+                "Close": "Zatvori"
             }
         }
     },
@@ -425,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Ažuriranja za rješavanje konflikata",
-            "Message": "Jedan ili više modova su ažurirani. Riješavanje sukoba možda će trebati ažurirati."
+            "Message": "Redoslijed učitavanja ili neki modovi su ažurirani. U slučaju da nema sukoba, samo se vrati natrag. Primjenjuju se neki automatski popravci."
         },
         "NoUpdatesAvailable": {
             "Title": "Nema ažuriranja",

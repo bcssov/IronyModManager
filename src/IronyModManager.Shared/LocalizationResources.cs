@@ -15,14 +15,15 @@ namespace IronyModManager.Shared
             public const string Title = Prefix + "Title";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
             public const string WaitBackgroundOperationMessage = Prefix + "WaitBackgroundOperationMessage";
-            public static class Shortcuts
+            public static class Actions
             {
-                public const string Prefix = "App.Shortcuts.";
+                public const string Prefix = "App.Actions.";
                 public const string Name = Prefix + "Name";
                 public const string Wiki = Prefix + "Wiki";
                 public const string Logs = Prefix + "Logs";
                 public const string ErrorLog = Prefix + "ErrorLog";
                 public const string Close = Prefix + "Close";
+                public const string DLC = Prefix + "DLC";
             }
         }
         public static class FatalError
@@ -35,6 +36,12 @@ namespace IronyModManager.Shared
         public static class SavingError
         {
             public const string Prefix = "SavingError.";
+            public const string Title = Prefix + "Title";
+            public const string Message = Prefix + "Message";
+        }
+        public static class UnableToWriteError
+        {
+            public const string Prefix = "UnableToWriteError.";
             public const string Title = Prefix + "Title";
             public const string Message = Prefix + "Message";
         }
@@ -187,6 +194,12 @@ namespace IronyModManager.Shared
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }
+            public static class ImportNonExistingMods
+            {
+                public const string Prefix = "Collection_Mods.ImportNonExistingMods.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
             public static class ImportOther
             {
                 public const string Prefix = "Collection_Mods.ImportOther.";
@@ -215,17 +228,8 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.Options.";
                     public const string Title = Prefix + "Title";
                     public const string Basic = Prefix + "Basic";
-                    public const string Advanced = Prefix + "Advanced";
                     public const string Compress = Prefix + "Compress";
                     public const string Close = Prefix + "Close";
-                }
-                public static class Advanced
-                {
-                    public const string Prefix = "Collection_Mods.MergeCollection.Advanced.";
-                    public const string Overlay_Loading_Definitions = Prefix + "Overlay_Loading_Definitions";
-                    public const string Overlay_Analyzing_Definitions = Prefix + "Overlay_Analyzing_Definitions";
-                    public const string Overlay_Replacing_Definitions = Prefix + "Overlay_Replacing_Definitions";
-                    public const string Overlay_Merging_Collection = Prefix + "Overlay_Merging_Collection";
                 }
                 public static class Basic
                 {
@@ -244,6 +248,28 @@ namespace IronyModManager.Shared
                     public const string Prefix = "Collection_Mods.MergeCollection.OverwritePrompt.";
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
+                }
+            }
+            public static class PatchMod
+            {
+                public const string Prefix = "Collection_Mods.PatchMod.";
+                public const string Title = Prefix + "Title";
+                public const string Enabled = Prefix + "Enabled";
+                public const string Disabled = Prefix + "Disabled";
+                public const string NotAvailable = Prefix + "NotAvailable";
+                public static class DeletePrompt
+                {
+                    public const string Prefix = "Collection_Mods.PatchMod.DeletePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+                public static class Actions
+                {
+                    public const string Prefix = "Collection_Mods.PatchMod.Actions.";
+                    public const string Enable = Prefix + "Enable";
+                    public const string Disable = Prefix + "Disable";
+                    public const string Delete = Prefix + "Delete";
+                    public const string Close = Prefix + "Close";
                 }
             }
         }

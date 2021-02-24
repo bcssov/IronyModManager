@@ -4,15 +4,15 @@
 // Created          : 06-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Configuration.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Implementation;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Shared.Cache;
@@ -32,12 +32,10 @@ namespace IronyModManager.DI
         /// Registers the configurations.
         /// </summary>
         /// <param name="container">The container.</param>
-#pragma warning disable CA1822 // Mark members as static
 
         #region Methods
 
         private void RegisterConfigurations(Container container)
-#pragma warning restore CA1822 // Mark members as static
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)

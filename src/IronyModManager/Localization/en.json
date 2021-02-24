@@ -1,15 +1,17 @@
 ﻿{
+    // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans", // Do not translate this, this is the font used by this locale
         "Title": "Irony Mod Manager: v{AppVersion}",
         "BackgroundOperationMessage": "Please wait a background operation is being performed. App will shut down once it is completed...",
         "WaitBackgroundOperationMessage": "Please wait a background operation is being performed.",
-        "Shortcuts": {
-            "Name": "Shortcuts",
+        "Actions": {
+            "Name": "Actions",
             "Wiki": "Wiki",
             "Logs": "Logs",
             "ErrorLog": "Error.log",
-            "Close": "Close"
+            "Close": "Close",
+            "DLC": "DLC"
         }
     },
     "FatalError": {
@@ -20,6 +22,10 @@
     "SavingError": {
         "Title": "Save Error",
         "Message": "Something seems to be locking Irony's ability to write to mod files. Please report this on GitHub issue tracker and post the error log."
+    },
+    "UnableToWriteError": {
+        "Title": "Application Blocked",
+        "Message": "The application appears to be blocked by Antivirus or permissions and is unable to write to the user documents directory:{NewLine}{Paths}"
     },
     "InvalidModsDetected": {
         "Title": "Invalid Mods Detected",
@@ -140,6 +146,10 @@
             "Title": "Collection Exists",
             "Message": "Collection already exists and will be overwritten, do you want to proceed?"
         },
+        "ImportNonExistingMods": {
+            "Title": "Non existant mods",
+            "Message": "The following mods could not be imported as they appear to be missing:{NewLine}{Mods}"
+        },
         "ImportOther": {
             "Title": "...",
             "Paradoxos": "Import From Paradoxos",
@@ -160,15 +170,8 @@
             "Options": {
                 "Title": "Select mode",
                 "Basic": "Basic",
-                "Advanced": "Advanced",
                 "Compress": "Compress",
                 "Close": "Close"
-            },
-            "Advanced": {
-                "Overlay_Loading_Definitions": "Please wait while loading mod definitions...",
-                "Overlay_Analyzing_Definitions": "Please wait while analyzing definitions...",
-                "Overlay_Replacing_Definitions": "Please wait while replacing definitions...",
-                "Overlay_Merging_Collection": "Please wait while merging the mod collection..."
             },
             "Basic": {
                 "Overlay_Gathering_Mod_Info": "Please wait while gathering mod info...",
@@ -181,6 +184,22 @@
             "OverwritePrompt": {
                 "Title": "Overwrite existing collection?",
                 "Message": "A merged collection with the specified name already exists. Would you like to overwrite it?"
+            }
+        },
+        "PatchMod": {
+            "Title": "Patch Mod: {Status}",
+            "Enabled": "Enabled",
+            "Disabled": "Disabled",
+            "NotAvailable": "Not Available",
+            "DeletePrompt": {
+                "Title": "Confirm Delete",
+                "Message": "Are you sure you want to delete the patch mod?"
+            },
+            "Actions": {
+                "Enable": "Enable",
+                "Disable": "Disable",
+                "Delete": "Delete",
+                "Close": "Close"
             }
         }
     },
@@ -324,7 +343,7 @@
             "Title": "Game Options",
             "GameExecutable": "Game Executable",
             "UserDirectory": "Data Directory",
-            "GameArgs": "Game Args",
+            "GameArgs": "Game Launch Options",
             "RefreshMods": "Refresh Descriptors Before Playing",
             "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All..."
@@ -425,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",
-            "Message": "One or several mods have been updated. Conflict Solver might need updating."
+            "Message": "Load order or some mods have been updated. In case of no conflicts just navigate back. Some automatic fixes are applied."
         },
         "NoUpdatesAvailable": {
             "Title": "No Updates",

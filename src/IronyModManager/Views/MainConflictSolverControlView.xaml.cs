@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -44,7 +45,7 @@ namespace IronyModManager.Views
         /// </summary>
         public MainConflictSolverControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -60,14 +61,17 @@ namespace IronyModManager.Views
             var conflictList = this.FindControl<IronyModManager.Controls.ListBox>("conflictList");
             conflictList.SelectionChanged += (sender, args) =>
             {
-                if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
+                Dispatcher.UIThread.SafeInvoke(() =>
                 {
-                    ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
-                }
-                else
-                {
-                    ViewModel.SelectedConflict = null;
-                }
+                    if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentConflict != null)
+                    {
+                        ViewModel.SelectedConflict = ViewModel.SelectedParentConflict.Children.ElementAt(conflictList.SelectedIndex);
+                    }
+                    else
+                    {
+                        ViewModel.SelectedConflict = null;
+                    }
+                });
             };
             this.WhenAnyValue(p => p.IsActivated).Where(v => v).Subscribe(s =>
             {
@@ -75,7 +79,7 @@ namespace IronyModManager.Views
                 {
                     if (s?.Children.Count > 0)
                     {
-                        Dispatcher.UIThread.InvokeAsync(() =>
+                        Dispatcher.UIThread.SafeInvoke(() =>
                         {
                             if (ViewModel.PreviousConflictIndex.HasValue)
                             {
@@ -99,6 +103,20 @@ namespace IronyModManager.Views
                                 {
                                     conflictList.SelectedIndex = -1;
                                 }
+                            }
+                        });
+                    }
+                }).DisposeWith(disposables);
+
+                this.WhenAnyValue(v => v.ViewModel.SelectedConflictOverride).Subscribe(s =>
+                {
+                    if (s.HasValue)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() =>
+                        {
+                            if (conflictList.ItemCount > 0)
+                            {
+                                conflictList.SelectedIndex = s.GetValueOrDefault();
                             }
                         });
                     }

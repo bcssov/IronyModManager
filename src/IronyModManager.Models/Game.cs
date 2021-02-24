@@ -4,15 +4,15 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -31,16 +31,22 @@ namespace IronyModManager.Models
         #region Properties
 
         /// <summary>
+        /// Gets or sets the abrv.
+        /// </summary>
+        /// <value>The abrv.</value>
+        public virtual string Abrv { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [advanced features supported].
         /// </summary>
         /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
         public virtual bool AdvancedFeaturesSupported { get; set; }
 
         /// <summary>
-        /// Gets or sets the base game directory.
+        /// Gets or sets the base steam game directory.
         /// </summary>
-        /// <value>The base game directory.</value>
-        public virtual string BaseGameDirectory { get; set; }
+        /// <value>The base steam game directory.</value>
+        public virtual string BaseSteamGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.

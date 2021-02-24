@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2020
+// Last Modified On : 02-13-2021
 // ***********************************************************************
 // <copyright file="UpdaterCleanup.cs" company="Mario">
 //     Mario
@@ -42,7 +42,7 @@ namespace IronyModManager
         /// <summary>
         /// cleanup updater as an asynchronous operation.
         /// </summary>
-        private async Task CleanupUpdaterAsync()
+        private static async Task CleanupUpdaterAsync()
         {
             foreach (var path in StaticResources.GetUpdaterPath())
             {

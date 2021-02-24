@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -248,13 +248,14 @@ namespace IronyModManager.Storage.Tests
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
                 WorkshopDirectory = "workshop1",
-                BaseGameDirectory = "base",
+                BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
-                RemoteSteamUserDirectory = new List<string>() { "remotesave" }
+                RemoteSteamUserDirectory = new List<string>() { "remotesave" },
+                Abrv = "abrv"
             };
             storage.RegisterGame(game);
             dbMock.Games.Count.Should().Be(2);
@@ -265,13 +266,14 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
-            dbMock.Games.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).BaseSteamGameDirectory.Should().Be("base");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             dbMock.Games.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             dbMock.Games.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            dbMock.Games.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
         }
 
         /// <summary>
@@ -449,13 +451,14 @@ namespace IronyModManager.Storage.Tests
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
                 WorkshopDirectory = "workshop1",
-                BaseGameDirectory = "base",
+                BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
                 LauncherSettingsFileName = "settings",
                 LauncherSettingsPrefix = "prefix",
                 AdvancedFeaturesSupported = true,
-                RemoteSteamUserDirectory = new List<string>() { "remotesave" }
+                RemoteSteamUserDirectory = new List<string>() { "remotesave" },
+                Abrv = "abrv"
             };
             storage.RegisterGame(game);
             var result = storage.GetGames();
@@ -467,13 +470,14 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
-            result.FirstOrDefault(p => p.Name == key).BaseGameDirectory.Should().Be("base");
+            result.FirstOrDefault(p => p.Name == key).BaseSteamGameDirectory.Should().Be("base");
             result.FirstOrDefault(p => p.Name == key).ExecutablePath.Should().Be("exe");
             result.FirstOrDefault(p => p.Name == key).ExecutableArgs.Should().Be("args");
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsFileName.Should().Be("settings");
             result.FirstOrDefault(p => p.Name == key).LauncherSettingsPrefix.Should().Be("prefix");
             result.FirstOrDefault(p => p.Name == key).RemoteSteamUserDirectory.FirstOrDefault().Should().Be("remotesave");
             result.FirstOrDefault(p => p.Name == key).AdvancedFeaturesSupported.Should().BeTrue();
+            result.FirstOrDefault(p => p.Name == key).Abrv.Should().Be("abrv");
         }
 
         /// <summary>

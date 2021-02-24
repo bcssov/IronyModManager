@@ -1,0 +1,11 @@
+name = "Horizon Signal"
+localizable_name = "DLC_HORIZON_SIGNAL"
+archive = "dlc/dlc013_horizon_signal/dlc013.zip"
+steam_id = 554350
+rail_id = 2000069
+pops_id = "horizon_signal"
+affects_checksum = no
+affects_compatability = yes
+checksum="5b1c637b013c6ef8b5fc6bae8778b0c6"
+third_party_content = no
+category="content_pack"

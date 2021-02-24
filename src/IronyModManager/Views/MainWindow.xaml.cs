@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -19,12 +19,15 @@ using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.Views;
 using IronyModManager.DI;
 using IronyModManager.Implementation.AppState;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Services.Common;
@@ -115,6 +118,25 @@ namespace IronyModManager.Views
         }
 
         /// <summary>
+        /// Initializes the hotkeys.
+        /// </summary>
+        protected virtual void InitializeHotkeys()
+        {
+            var manager = DIResolver.Get<IHotkeyManager>();
+            KillHotkeys();
+            foreach (var item in manager.GetKeys())
+            {
+                var vm = ViewModel;
+                KeyBindings.Add(new KeyBinding()
+                {
+                    Command = vm.RegisterHotkeyCommand,
+                    CommandParameter = item,
+                    Gesture = KeyGesture.Parse(item)
+                });
+            }
+        }
+
+        /// <summary>
         /// Initializes the size of the window.
         /// </summary>
         protected virtual void InitWindowSize()
@@ -131,6 +153,14 @@ namespace IronyModManager.Views
                 pos = pos.WithY(state.LocationY.GetValueOrDefault());
                 Position = pos;
             }
+        }
+
+        /// <summary>
+        /// Kills the hotkeys.
+        /// </summary>
+        protected virtual void KillHotkeys()
+        {
+            KeyBindings.Clear();
         }
 
         /// <summary>
@@ -156,6 +186,28 @@ namespace IronyModManager.Views
                         });
                     }
                 }).DisposeWith(disposables);
+
+            this.WhenAnyValue(v => v.ViewModel.RegisterHotkeyCommand).Subscribe(s =>
+            {
+                InitializeHotkeys();
+            }).DisposeWith(disposables);
+
+            var hotkeySuspendHandler = DIResolver.Get<SuspendHotkeysHandler>();
+            hotkeySuspendHandler.Subscribe(s =>
+            {
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    if (s.SuspendHotkeys)
+                    {
+                        KillHotkeys();
+                    }
+                    else
+                    {
+                        InitializeHotkeys();
+                    }
+                });
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 

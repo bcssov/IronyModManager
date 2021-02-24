@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -40,7 +40,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public InstalledModsControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -62,8 +62,8 @@ namespace IronyModManager.Views.Controls
                     var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                     if (hoveredItem != null)
                     {
-                        ViewModel.HoveredMod = hoveredItem.Content as IMod;
-                        menuItems = !string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
+                        ViewModel.ContextMenuMod = hoveredItem.Content as IMod;
+                        menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
                     if (modList.ItemCount == 0)
                     {
@@ -123,7 +123,7 @@ namespace IronyModManager.Views.Controls
                     Command = ViewModel.UnlockAllDescriptorsCommand
                 }
             };
-            if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+            if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
                 var menuItem = new MenuItem()
                 {
@@ -147,7 +147,7 @@ namespace IronyModManager.Views.Controls
         private List<MenuItem> GetAllMenuItems()
         {
             var menuItems = new List<MenuItem>();
-            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()))
             {
                 menuItems.Add(new MenuItem()
                 {
@@ -160,7 +160,7 @@ namespace IronyModManager.Views.Controls
                     Command = ViewModel.CopyUrlCommand
                 });
             }
-            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()))
             {
                 var menuItem = new MenuItem()
                 {
@@ -176,7 +176,7 @@ namespace IronyModManager.Views.Controls
                     menuItems.Insert(1, menuItem);
                 }
             }
-            if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+            if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
                 var menuItem = new MenuItem()
                 {

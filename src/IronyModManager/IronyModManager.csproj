@@ -171,6 +171,7 @@
     <None Remove="Views\Controls\ThemeControlView.xaml" />
     <None Remove="Views\MainConflictSolverControlView.xaml" />
     <None Remove="Views\MainControlView.xaml" />
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -182,6 +183,7 @@
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="$(AvaloniaEdit)" allowedVersions="$(AvaloniaEdit)" />
     <PackageReference Include="Avalonia.Desktop" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="$(Avalonia)" allowedVersions="$(Avalonia)" />
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
     <PackageReference Include="DiffPlex" Version="1.6.3" />
     <PackageReference Include="info.lundin.math.dll" Version="1.2.7" />
     <PackageReference Include="Material.Avalonia" Version="$(MaterialAvalonia)" allowedVersions="$(MaterialAvalonia)" />
@@ -200,12 +202,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210114001" />
+    <PackageReference Include="NetSparkle.New" Version="2.0.0-preview20210131001" />
     <PackageReference Include="NLog" Version="4.7.7" />
     <PackageReference Include="ReactiveUI" Version="13.1.1" />
     <PackageReference Include="SimpleInjector" Version="5.2.1" />
     <PackageReference Include="SimpleInjector.Packaging" Version="5.0.0" />
-    <PackageReference Include="SmartFormat.NET" Version="2.5.3" />
+    <PackageReference Include="SmartFormat.NET" Version="2.6.2" />
     <PackageReference Include="Splat.NLog" Version="10.0.1" />
     <PackageReference Include="Splat.SimpleInjector" Version="10.0.1" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
@@ -381,6 +383,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Localization\de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Localization\es.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Localization\hr.json">

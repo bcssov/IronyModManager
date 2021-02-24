@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="IGameType.cs" company="Mario">
 //     Mario
@@ -24,16 +24,22 @@ namespace IronyModManager.Storage.Common
         #region Properties
 
         /// <summary>
+        /// Gets or sets the abrv.
+        /// </summary>
+        /// <value>The abrv.</value>
+        string Abrv { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [advanced features supported].
         /// </summary>
         /// <value><c>true</c> if [advanced features supported]; otherwise, <c>false</c>.</value>
         bool AdvancedFeaturesSupported { get; set; }
 
         /// <summary>
-        /// Gets or sets the base game directory.
+        /// Gets or sets the base steam game directory.
         /// </summary>
-        /// <value>The base game directory.</value>
-        string BaseGameDirectory { get; set; }
+        /// <value>The base steam game directory.</value>
+        string BaseSteamGameDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the checksum folders.

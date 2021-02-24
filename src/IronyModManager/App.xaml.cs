@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-19-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -84,6 +84,24 @@ namespace IronyModManager
             if (!Design.IsDesignMode)
             {
                 InitThemes();
+                HandleCommandLine();
+            }
+        }
+
+        /// <summary>
+        /// Handles the command line.
+        /// </summary>
+        protected virtual void HandleCommandLine()
+        {
+            if (StaticResources.CommandLineOptions != null && !string.IsNullOrWhiteSpace(StaticResources.CommandLineOptions.GameAbrv))
+            {
+                var gameService = DIResolver.Get<IGameService>();
+                var games = gameService.Get();
+                var game = games.FirstOrDefault(g => g.Abrv.Equals(StaticResources.CommandLineOptions.GameAbrv, StringComparison.OrdinalIgnoreCase));
+                if (game != null)
+                {
+                    gameService.SetSelected(games, game);
+                }
             }
         }
 
@@ -98,9 +116,27 @@ namespace IronyModManager
                 InitApp(desktop);
                 InitAppTitle(desktop);
                 InitAppSizeDefaults(desktop);
+                VerifyWritePermissionsAsync().ConfigureAwait(false);
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        /// <summary>
+        /// verify write permissions as an asynchronous operation.
+        /// </summary>
+        protected virtual async Task VerifyWritePermissionsAsync()
+        {
+            var permissionService = DIResolver.Get<IPermissionCheckService>();
+            var permissions = permissionService.VerifyPermissions();
+            if (permissions.Count > 0 && permissions.Any(p => !p.Valid))
+            {
+                var notificationAction = DIResolver.Get<INotificationAction>();
+                var locManager = DIResolver.Get<ILocalizationManager>();
+                var title = locManager.GetResource(LocalizationResources.UnableToWriteError.Title);
+                var message = Smart.Format(locManager.GetResource(LocalizationResources.UnableToWriteError.Message), new { Environment.NewLine, Paths = string.Join(Environment.NewLine, permissions.Where(p => !p.Valid).Select(p => p.Path).ToList()) });
+                await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Error, PromptType.OK);
+            }
         }
 
         /// <summary>

@@ -4,15 +4,15 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -73,11 +73,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The logger
         /// </summary>
         private readonly ILogger logger;
-
-        /// <summary>
-        /// The message bus
-        /// </summary>
-        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The notification action
@@ -148,7 +143,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="messageBus">The message bus.</param>
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -156,7 +150,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IExternalEditorService externalEditorService, IIDGenerator idGenerator, Shared.MessageBus.IMessageBus messageBus, ILogger logger,
+        public OptionsControlViewModel(IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
@@ -167,7 +161,6 @@ namespace IronyModManager.ViewModels.Controls
             this.localizationManager = localizationManager;
             this.notificationAction = notificationAction;
             this.logger = logger;
-            this.messageBus = messageBus;
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
             LeftMargin = new Thickness(20, 0, 0, 0);
@@ -177,12 +170,6 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the left child margin.
-        /// </summary>
-        /// <value>The left child margin.</value>
-        public virtual Thickness LeftChildMargin { get; protected set; }
 
         /// <summary>
         /// Gets or sets the automatic configure.
@@ -335,6 +322,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value><c>true</c> if this instance is open; otherwise, <c>false</c>.</value>
         public virtual bool IsOpen { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the left child margin.
+        /// </summary>
+        /// <value>The left child margin.</value>
+        public virtual Thickness LeftChildMargin { get; protected set; }
 
         /// <summary>
         /// Gets or sets the left margin.
@@ -798,7 +791,7 @@ namespace IronyModManager.ViewModels.Controls
             game.UserDirectory = Game.UserDirectory;
             if (gameService.Save(game) && dirChanged)
             {
-                messageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
+                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
             }
             SetGame(game);
         }

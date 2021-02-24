@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,20 +20,25 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using DynamicData;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
+using IronyModManager.Implementation.MessageBus.Events;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using Nito.AsyncEx;
 using ReactiveUI;
 using SmartFormat;
 using static IronyModManager.ViewModels.Controls.ModifyCollectionControlViewModel;
@@ -76,6 +81,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IGameService gameService;
 
         /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly MainViewHotkeyPressedHandler hotkeyPressedHandler;
+
+        /// <summary>
         /// The identifier generator
         /// </summary>
         private readonly IIDGenerator idGenerator;
@@ -84,11 +94,6 @@ namespace IronyModManager.ViewModels.Controls
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
-
-        /// <summary>
-        /// The message bus
-        /// </summary>
-        private readonly Shared.MessageBus.IMessageBus messageBus;
 
         /// <summary>
         /// The mod collection service
@@ -121,6 +126,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
 
         /// <summary>
+        /// The reorder lock
+        /// </summary>
+        private readonly AsyncLock reorderLock = new AsyncLock();
+
+        /// <summary>
         /// The reorder queue
         /// </summary>
         private readonly ConcurrentBag<IMod> reorderQueue;
@@ -151,9 +161,9 @@ namespace IronyModManager.ViewModels.Controls
         private bool refreshInProgress = false;
 
         /// <summary>
-        /// The reorder counter
+        /// The reorder token
         /// </summary>
-        private int reorderCounter = 0;
+        private CancellationTokenSource reorderToken;
 
         /// <summary>
         /// The restore collection selection
@@ -182,6 +192,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionModsControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
+        /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modReportView">The mod report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
@@ -199,13 +211,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        /// <param name="messageBus">The message bus.</param>
-        public CollectionModsControlViewModel(IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler, IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
+        public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
+            IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler,
+            IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
             SearchModsControlViewModel searchMods, SortOrderControlViewModel modNameSort, ILocalizationManager localizationManager,
-            INotificationAction notificationAction, IAppAction appAction, Shared.MessageBus.IMessageBus messageBus)
+            INotificationAction notificationAction, IAppAction appAction)
         {
+            this.PatchMod = patchMod;
             this.idGenerator = idGenerator;
             this.modCollectionService = modCollectionService;
             this.appStateService = appStateService;
@@ -220,9 +234,9 @@ namespace IronyModManager.ViewModels.Controls
             this.modService = modService;
             this.gameService = gameService;
             this.modPatchCollectionService = modPatchCollectionService;
-            this.messageBus = messageBus;
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
             ModReportView = modReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
@@ -243,8 +257,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
-        /// <param name="instant">if set to <c>true</c> [instant].</param>
-        public delegate void ModReorderedDelegate(IMod mod, bool instant);
+        public delegate void ModReorderedDelegate(IMod mod);
 
         #endregion Delegates
 
@@ -363,6 +376,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The collection jump on position change label.</value>
         public virtual string CollectionJumpOnPositionChangeLabel { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the context menu mod.
+        /// </summary>
+        /// <value>The context menu mod.</value>
+        public virtual IMod ContextMenuMod { get; set; }
 
         /// <summary>
         /// Gets or sets the copy URL.
@@ -576,6 +595,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> OpenUrlCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the patch mod.
+        /// </summary>
+        /// <value>The patch mod.</value>
+        public virtual PatchModControlViewModel PatchMod { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the remove.
         /// </summary>
         /// <value>The remove.</value>
@@ -593,6 +618,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The search mods.</value>
         public virtual SearchModsControlViewModel SearchMods { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the search mods col span.
+        /// </summary>
+        /// <value>The search mods col span.</value>
+        public virtual int SearchModsColSpan { get; protected set; }
 
         /// <summary>
         /// Gets or sets the search mods watermark.
@@ -620,6 +651,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IList<IMod> SelectedMods { get; protected set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [show advanced features].
+        /// </summary>
+        /// <value><c>true</c> if [show advanced features]; otherwise, <c>false</c>.</value>
+        public virtual bool ShowAdvancedFeatures { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
@@ -631,28 +668,28 @@ namespace IronyModManager.ViewModels.Controls
         #region Methods
 
         /// <summary>
-        /// Gets the hovered mod steam URL.
+        /// Gets the context menu mod steam URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModSteamUrl()
+        public virtual string GetContextMenuModSteamUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildSteamUrl(HoveredMod);
+                var url = modService.BuildSteamUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
         }
 
         /// <summary>
-        /// Gets the selected mod URL.
+        /// Gets the context menu mod URL.
         /// </summary>
         /// <returns>System.String.</returns>
-        public virtual string GetHoveredModUrl()
+        public virtual string GetContextMenuModUrl()
         {
-            if (HoveredMod != null)
+            if (ContextMenuMod != null)
             {
-                var url = modService.BuildModUrl(HoveredMod);
+                var url = modService.BuildModUrl(ContextMenuMod);
                 return url;
             }
             return string.Empty;
@@ -730,16 +767,21 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="newOrder">The new order.</param>
         public virtual void InstantReorderSelectedItems(IMod mod, int newOrder)
         {
-            async Task waitForQueue()
+            async Task reorder()
             {
-                while (reorderCounter != 0)
+                if (reorderToken != null)
                 {
-                    await Task.Delay(50);
+                    reorderToken.Cancel();
                 }
+                reorderToken = new CancellationTokenSource();
                 mod.Order = newOrder;
-                PerformModReorder(true, mod);
+                if (!reorderQueue.Contains(mod))
+                {
+                    reorderQueue.Add(mod);
+                }
+                await PerformModReorderAsync(true, reorderToken.Token);
             }
-            waitForQueue().ConfigureAwait(false);
+            reorder().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -760,7 +802,8 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         public virtual void Reset()
         {
-            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            PatchMod.SetParameters(SelectedModCollection);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -815,10 +858,21 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Evals the advanced features visibility.
+        /// </summary>
+        protected virtual void EvalAdvancedFeaturesVisibility()
+        {
+            var game = gameService.GetSelected();
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
+            SearchModsColSpan = ShowAdvancedFeatures ? 1 : 2;
+        }
+
+        /// <summary>
         /// export collection as an asynchronous operation.
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="providerType">Type of the provider.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ExportCollectionAsync(string path, ImportProviderType providerType)
         {
             var id = idGenerator.GetNextId();
@@ -830,6 +884,29 @@ namespace IronyModManager.ViewModels.Controls
             var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionExported.Message), new { CollectionName = collection.Name });
             notificationAction.ShowNotification(title, message, NotificationType.Success);
             await TriggerOverlayAsync(id, false);
+        }
+
+        /// <summary>
+        /// handle collection patch as an asynchronous operation.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
+        protected virtual async Task HandleCollectionPatchStateAsync(string collection)
+        {
+            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
+            if (activeGame != null && SelectedMods?.Count > 0)
+            {
+                ConflictSolverStateChanged?.Invoke(collection, true);
+                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
+                {
+                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection, SelectedMods.Select(p => p.DescriptorFile).ToList()));
+                    ConflictSolverStateChanged?.Invoke(collection, !result);
+                }
+            }
+            else
+            {
+                ConflictSolverStateChanged?.Invoke(collection, true);
+            }
         }
 
         /// <summary>
@@ -889,14 +966,19 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="type">The type.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ImportCollectionAsync(string path, ImportProviderType type)
         {
+            List<string> modNames = null;
             async Task<IModCollection> importDefault()
             {
                 var collection = await Task.Run(async () => await modCollectionService.ImportAsync(path));
                 if (collection != null)
                 {
                     collection.IsSelected = true;
+                    modNames = collection.ModNames.ToList();
+                    // Mod names are only used in export\import operations
+                    collection.ModNames = null;
                     if (modCollectionService.Save(collection))
                     {
                         return collection;
@@ -910,6 +992,9 @@ namespace IronyModManager.ViewModels.Controls
                 if (importData != null)
                 {
                     importData.IsSelected = true;
+                    modNames = importData.ModNames.ToList();
+                    // Mod names are only used in export\import operations
+                    importData.ModNames = null;
                     if (modCollectionService.Save(importData))
                     {
                         return Task.FromResult(importData);
@@ -943,6 +1028,7 @@ namespace IronyModManager.ViewModels.Controls
             {
                 proceed = true;
             }
+            var endOverlay = true;
             if (proceed)
             {
                 var result = type switch
@@ -952,16 +1038,57 @@ namespace IronyModManager.ViewModels.Controls
                 };
                 if (result != null)
                 {
+                    var modPaths = result.Mods.ToList();
                     var game = gameService.Get().FirstOrDefault(p => p.Type.Equals(result.Game, StringComparison.OrdinalIgnoreCase));
-                    await messageBus.PublishAsync(new ActiveGameRequestEvent(game));
+                    await MessageBus.PublishAsync(new ActiveGameRequestEvent(game));
+                    await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                     restoreCollectionSelection = result.Name;
                     LoadModCollections();
-                    var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
-                    var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
-                    notificationAction.ShowNotification(title, message, NotificationType.Success);
+                    var showImportNotification = true;
+                    // Check if any mods do not exist
+                    if ((modNames?.Any()).GetValueOrDefault() && Mods.Any())
+                    {
+                        var mods = Mods;
+                        var nonExistingModPaths = modPaths.Where(p => !mods.Any(m => m.DescriptorFile.Equals(p)));
+                        if (nonExistingModPaths.Any())
+                        {
+                            var nonExistingModNames = new List<string>();
+                            var hasModNames = modNames != null && modNames.Any() && modPaths.Count == modNames.Count;
+                            foreach (var item in nonExistingModPaths)
+                            {
+                                var index = modPaths.IndexOf(item);
+                                if (hasModNames)
+                                {
+                                    nonExistingModNames.Add($"{modNames[index]} ({item})");
+                                }
+                                else
+                                {
+                                    nonExistingModNames.Add(item);
+                                }
+                            }
+                            var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                            var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingModNames) });
+                            endOverlay = false;
+                            showImportNotification = false;
+                            var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                            var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                            notificationAction.ShowNotification(title, message, NotificationType.Warning);
+                            await TriggerOverlayAsync(id, false);
+                            await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                        }
+                    }
+                    if (showImportNotification)
+                    {
+                        var title = localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Title);
+                        var message = Smart.Format(localizationManager.GetResource(LocalizationResources.Notifications.CollectionImported.Message), new { CollectionName = result.Name });
+                        notificationAction.ShowNotification(title, message, NotificationType.Success);
+                    }
                 }
             }
-            await TriggerOverlayAsync(id, false);
+            if (endOverlay)
+            {
+                await TriggerOverlayAsync(id, false);
+            }
         }
 
         /// <summary>
@@ -1014,6 +1141,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            EvalAdvancedFeaturesVisibility();
             SetSelectedMods(Mods != null ? Mods.Where(p => p.IsSelected).ToObservableCollection() : new ObservableCollection<IMod>());
             SubscribeToMods();
 
@@ -1047,6 +1175,7 @@ namespace IronyModManager.ViewModels.Controls
             this.WhenAnyValue(c => c.SelectedModCollection).Subscribe(o =>
             {
                 ModifyCollection.ActiveCollection = o;
+                PatchMod.SetParameters(o);
                 HandleModCollectionChange();
             }).DisposeWith(disposables);
 
@@ -1144,7 +1273,7 @@ namespace IronyModManager.ViewModels.Controls
 
             this.WhenAnyValue(v => v.ModifyCollection.IsActivated).Where(p => p).Subscribe(activated =>
             {
-                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeAdvancedCommand, ModifyCollection.MergeBasicCommand, ModifyCollection.MergeCompressCommand).Subscribe(s =>
+                Observable.Merge(ModifyCollection.RenameCommand, ModifyCollection.DuplicateCommand, ModifyCollection.MergeBasicCommand, ModifyCollection.MergeCompressCommand).Subscribe(s =>
                 {
                     if (SelectedModCollection == null)
                     {
@@ -1282,7 +1411,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenUrlCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.OpenAsync(url).ConfigureAwait(true);
@@ -1291,7 +1420,7 @@ namespace IronyModManager.ViewModels.Controls
 
             CopyUrlCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModUrl();
+                var url = GetContextMenuModUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.CopyAsync(url).ConfigureAwait(true);
@@ -1300,7 +1429,7 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInSteamCommand = ReactiveCommand.Create(() =>
             {
-                var url = GetHoveredModSteamUrl();
+                var url = GetContextMenuModSteamUrl();
                 if (!string.IsNullOrWhiteSpace(url))
                 {
                     appAction.OpenAsync(url).ConfigureAwait(true);
@@ -1309,9 +1438,9 @@ namespace IronyModManager.ViewModels.Controls
 
             OpenInAssociatedAppCommand = ReactiveCommand.Create(() =>
             {
-                if (!string.IsNullOrWhiteSpace(HoveredMod?.FullPath))
+                if (!string.IsNullOrWhiteSpace(ContextMenuMod?.FullPath))
                 {
-                    appAction.OpenAsync(HoveredMod.FullPath).ConfigureAwait(true);
+                    appAction.OpenAsync(ContextMenuMod.FullPath).ConfigureAwait(true);
                 }
             }).DisposeWith(disposables);
 
@@ -1357,6 +1486,7 @@ namespace IronyModManager.ViewModels.Controls
                         var message = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportFromClipboard.PromptMessage);
                         if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning))
                         {
+                            await MessageBus.PublishAsync(new ModListInstallRefreshRequestEvent(true));
                             skipModSelectionSave = true;
                             skipModCollectionSave = true;
                             var mods = new List<IMod>();
@@ -1376,6 +1506,13 @@ namespace IronyModManager.ViewModels.Controls
                             RecognizeSortOrder(SelectedModCollection);
                             skipModCollectionSave = false;
                             skipModSelectionSave = false;
+                            var nonExistingMods = modNames.Where(p => !mods.Any(m => m.Name.Equals(p)));
+                            if (nonExistingMods.Any())
+                            {
+                                var notExistingModTitle = localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Title);
+                                var nonExistingModMessage = Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.ImportNonExistingMods.Message), new { Environment.NewLine, Mods = string.Join(Environment.NewLine, nonExistingMods) });
+                                await notificationAction.ShowPromptAsync(notExistingModTitle, notExistingModTitle, nonExistingModMessage, NotificationType.Warning, PromptType.OK);
+                            }
                         }
                     }
                 }
@@ -1385,7 +1522,7 @@ namespace IronyModManager.ViewModels.Controls
 
             void registerReportHandlers(long id, bool useImportOverlay = false)
             {
-                reportDisposable = modReportExportHandler.Message.Subscribe(s =>
+                reportDisposable = modReportExportHandler.Subscribe(s =>
                 {
                     TriggerOverlay(id, true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
                         Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
@@ -1447,6 +1584,56 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            hotkeyPressedHandler.Subscribe(async hotkey =>
+            {
+                var mod = HoveredMod;
+                if (mod != null)
+                {
+                    var order = mod.Order;
+                    var delay = 50;
+                    switch (hotkey.Hotkey)
+                    {
+                        case Enums.HotKeys.Ctrl_Up:
+                            await Task.Delay(delay);
+                            order--;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Down:
+                            await Task.Delay(delay);
+                            order++;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_Up:
+                            await Task.Delay(delay);
+                            order = 1;
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_Down:
+                            await Task.Delay(delay);
+                            order = MaxOrder;
+                            break;
+
+                        default:
+                            break;
+                    }
+                    if (!(order < 1 || order > MaxOrder) && order != mod.Order)
+                    {
+                        // Check access because it's probably coming from a background thread
+                        await Dispatcher.UIThread.SafeInvokeAsync(() => mod.Order = order);
+                    }
+                }
+            }).DisposeWith(disposables);
+
+            this.WhenAnyValue(p => p.PatchMod.IsActivated).Where(p => p == true).Subscribe(state =>
+            {
+                this.WhenAnyValue(p => p.PatchMod.PatchDeleted).Where(p => p == true).Subscribe(state =>
+                {
+                    modPatchCollectionService.InvalidatePatchModState(PatchMod.CollectionName);
+                    modPatchCollectionService.ResetPatchStateCache();
+                    HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+                }).DisposeWith(disposables);
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
         }
 
@@ -1457,42 +1644,66 @@ namespace IronyModManager.ViewModels.Controls
         protected override void OnSelectedGameChanged(IGame game)
         {
             base.OnSelectedGameChanged(game);
+            EvalAdvancedFeaturesVisibility();
             LoadModCollections();
         }
 
         /// <summary>
-        /// Performs the mod reorder.
+        /// perform mod reorder as an asynchronous operation.
         /// </summary>
         /// <param name="instant">if set to <c>true</c> [instant].</param>
-        /// <param name="mods">The mods.</param>
-        protected virtual void PerformModReorder(bool instant, params IMod[] mods)
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected virtual async Task PerformModReorderAsync(bool instant, CancellationToken cancellationToken)
         {
-            if (SelectedMods != null && mods.Length > 0)
+            if (!instant)
             {
-                skipModSelectionSave = true;
-                foreach (var mod in mods)
+                await Task.Delay(450, cancellationToken);
+            }
+            if (!cancellationToken.IsCancellationRequested)
+            {
+                if (SelectedMods != null)
                 {
-                    var swapItem = SelectedMods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p != mod);
-                    if (swapItem != null)
+                    using var mutex = await reorderLock.LockAsync(cancellationToken);
+                    if (reorderQueue.Any())
                     {
-                        var index = SelectedMods.IndexOf(swapItem);
-                        SelectedMods.Remove(mod);
-                        SelectedMods.Insert(index, mod);
+                        skipModSelectionSave = true;
+                        var mods = SelectedMods.Select(m => new OrderedMod { Order = m.Order, Mod = m }).ToList();
+                        foreach (var mod in reorderQueue)
+                        {
+                            var swapItem = mods.FirstOrDefault(p => p.Order.Equals(mod.Order) && p.Mod != mod);
+                            var modItem = mods.FirstOrDefault(p => p.Mod == mod);
+                            if (swapItem != null && modItem != null)
+                            {
+                                var index = mods.IndexOf(swapItem);
+                                mods.Remove(modItem);
+                                mods.Insert(index, modItem);
+                                index = mods.IndexOf(swapItem);
+                                for (int i = 0; i <= index; i++)
+                                {
+                                    if (!reorderQueue.Any(m => m == mods[i].Mod))
+                                    {
+                                        mods[i].Order = i + 1;
+                                    }
+                                }
+                            }
+                        }
+                        SetSelectedMods(mods.Select(p => p.Mod).ToList());
+                        if (CollectionJumpOnPositionChange)
+                        {
+                            SelectedMod = reorderQueue.Last();
+                        }
+                        if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
+                        {
+                            SaveSelectedCollection();
+                        }
+                        SaveState();
+                        RecognizeSortOrder(SelectedModCollection);
+                        ModReordered?.Invoke(reorderQueue.Last());
+                        skipModSelectionSave = false;
+                        reorderQueue.Clear();
                     }
+                    mutex.Dispose();
                 }
-                SetSelectedMods(SelectedMods);
-                if (CollectionJumpOnPositionChange)
-                {
-                    SelectedMod = mods.Last();
-                }
-                if (!string.IsNullOrWhiteSpace(SelectedModCollection?.Name))
-                {
-                    SaveSelectedCollection();
-                }
-                SaveState();
-                RecognizeSortOrder(SelectedModCollection);
-                ModReordered?.Invoke(mods.Last(), instant);
-                skipModSelectionSave = false;
             }
         }
 
@@ -1530,6 +1741,7 @@ namespace IronyModManager.ViewModels.Controls
         /// remove collection as an asynchronous operation.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected async Task RemoveCollectionAsync(string collectionName)
         {
             var noti = new { CollectionName = collectionName };
@@ -1577,21 +1789,6 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// reorder selected items as an asynchronous operation.
-        /// </summary>
-        /// <param name="queueNumber">The queue number.</param>
-        protected virtual async Task ReorderQueuedItemsAsync(int queueNumber)
-        {
-            await Task.Delay(300);
-            if (reorderCounter == queueNumber)
-            {
-                PerformModReorder(false, reorderQueue.ToArray());
-                reorderCounter = 0;
-                reorderQueue.Clear();
-            }
-        }
-
-        /// <summary>
         /// Saves the selected collection.
         /// </summary>
         protected virtual void SaveSelectedCollection()
@@ -1610,6 +1807,7 @@ namespace IronyModManager.ViewModels.Controls
                 collection.Mods = SelectedMods?.Where(p => p.IsSelected).Select(p => p.DescriptorFile).ToList();
                 collection.IsSelected = true;
                 collection.MergedFolderName = SelectedModCollection.MergedFolderName;
+                collection.PatchModEnabled = SelectedModCollection.PatchModEnabled;
                 if (modCollectionService.Save(collection))
                 {
                     SelectedModCollection.Mods = collection.Mods.ToList();
@@ -1629,6 +1827,24 @@ namespace IronyModManager.ViewModels.Controls
             state.CollectionModsSortColumn = ModNameKey;
             state.CollectionJumpOnPositionChange = CollectionJumpOnPositionChange;
             appStateService.Save(state);
+        }
+
+        /// <summary>
+        /// schedule to reorder queue as an asynchronous operation.
+        /// </summary>
+        /// <param name="mod">The mod.</param>
+        protected virtual async Task ScheduleToReorderQueueAsync(IMod mod)
+        {
+            if (!reorderQueue.Contains(mod))
+            {
+                reorderQueue.Add(mod);
+            }
+            if (reorderToken != null)
+            {
+                reorderToken.Cancel();
+            }
+            reorderToken = new CancellationTokenSource();
+            await PerformModReorderAsync(false, reorderToken.Token);
         }
 
         /// <summary>
@@ -1671,14 +1887,16 @@ namespace IronyModManager.ViewModels.Controls
                     oldMods.AddRange(SelectedMods);
                 }
                 previousValidatedMods.TryGetValue(SelectedModCollection.Name, out var prevMods);
-                if (SelectedMods?.Count > 0 && (prevMods == null || !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())))
+                if (SelectedMods?.Count > 0 && (prevMods == null ||
+                    !(prevMods.Count() == SelectedMods.Count && !prevMods.Select(p => p.DescriptorFile).Except(SelectedMods.Select(p => p.DescriptorFile)).Any())
+                    || !prevMods.Select(p => p.DescriptorFile).SequenceEqual(SelectedMods.Select(p => p.DescriptorFile))))
                 {
                     modPatchCollectionService.InvalidatePatchModState(SelectedModCollection.Name);
                 }
                 previousValidatedMods.AddOrUpdate(SelectedModCollection.Name, oldMods, (k, v) => oldMods);
             }
             ModifyCollection.SelectedMods = selectedMods;
-            ValidateCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
+            HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
             var order = 1;
             if (SelectedMods?.Count > 0)
             {
@@ -1750,40 +1968,38 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (!refreshInProgress && !skipReorder)
                     {
-                        reorderCounter++;
-                        var queue = reorderCounter;
-                        if (!reorderQueue.Contains(s.Sender))
-                        {
-                            reorderQueue.Add(s.Sender);
-                        }
-                        ReorderQueuedItemsAsync(queue).ConfigureAwait(false);
+                        ScheduleToReorderQueueAsync(s.Sender).ConfigureAwait(false);
                     }
                 }).DisposeWith(Disposables);
             }
         }
 
+        #endregion Methods
+
+        #region Classes
+
         /// <summary>
-        /// validate collection patch state as an asynchronous operation.
+        /// Class OrderedMod.
         /// </summary>
-        /// <param name="collection">The collection.</param>
-        protected virtual async Task ValidateCollectionPatchStateAsync(string collection)
+        private class OrderedMod
         {
-            var currentCollection = SelectedModCollection?.Name ?? string.Empty;
-            if (activeGame != null && SelectedMods?.Count > 0)
-            {
-                ConflictSolverStateChanged?.Invoke(collection, true);
-                if (!string.IsNullOrWhiteSpace(collection) && currentCollection.Equals(collection, StringComparison.OrdinalIgnoreCase) && SelectedModCollection.Game.Equals(activeGame.Type))
-                {
-                    var result = await Task.Run(async () => await modPatchCollectionService.PatchModNeedsUpdateAsync(collection));
-                    ConflictSolverStateChanged?.Invoke(collection, !result);
-                }
-            }
-            else
-            {
-                ConflictSolverStateChanged?.Invoke(collection, true);
-            }
+            #region Properties
+
+            /// <summary>
+            /// Gets or sets the mod.
+            /// </summary>
+            /// <value>The mod.</value>
+            public IMod Mod { get; set; }
+
+            /// <summary>
+            /// Gets or sets the order.
+            /// </summary>
+            /// <value>The order.</value>
+            public int Order { get; set; }
+
+            #endregion Properties
         }
 
-        #endregion Methods
+        #endregion Classes
     }
 }

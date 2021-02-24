@@ -70,9 +70,10 @@
               </DockPanel>
             </Panel>
             <Panel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
-              <DockPanel LastChildFill="True">
-                <ContentControl Content="{Binding SearchMods}" MaxHeight="30"></ContentControl>
-              </DockPanel>
+              <Grid ColumnDefinitions="1.5*,1*">
+                <ContentControl Content="{Binding SearchMods}" MaxHeight="30" Grid.Column="0" Grid.ColumnSpan="{Binding SearchModsColSpan}"></ContentControl>
+                <ContentControl Content="{Binding PatchMod}" MaxHeight="30" Grid.Column="1" IsVisible="{Binding ShowAdvancedFeatures}"></ContentControl>
+              </Grid>
             </Panel>
             <Grid Margin="0,30,0,0" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2">
               <Grid.ColumnDefinitions>
@@ -111,7 +112,7 @@
                       <ColumnDefinition Width="5*" />
                     </Grid.ColumnDefinitions>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
-                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" AllowSpin="False" MinMaxAllowSpin="False"
+                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,4,0"></controls:MinMaxNumericUpDown>
                     <Grid Grid.Column="3" ColumnDefinitions="*,14">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Center"

@@ -4,21 +4,23 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-14-2020
+// Last Modified On : 02-15-2021
 // ***********************************************************************
-// <copyright file="ShortcutsControlViewModel.cs" company="Mario">
+// <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization.Attributes;
+using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using ReactiveUI;
@@ -26,12 +28,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ShortcutsControlViewModel.
+    /// Class ActionsControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ShortcutsControlViewModel : BaseViewModel
+    public class ActionsControlViewModel : BaseViewModel
     {
         #region Fields
 
@@ -52,12 +54,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ShortcutsControlViewModel" /> class.
         /// </summary>
+        /// <param name="dlcManager">The DLC manager.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="gameService">The game service.</param>
-        public ShortcutsControlViewModel(IAppAction appAction, IGameService gameService)
+        public ActionsControlViewModel(DLCManagerControlViewModel dlcManager, IAppAction appAction, IGameService gameService)
         {
             this.appAction = appAction;
             this.gameService = gameService;
+            DLCManager = dlcManager;
         }
 
         #endregion Constructors
@@ -68,7 +72,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the close.
         /// </summary>
         /// <value>The close.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Close)]
+        [StaticLocalization(LocalizationResources.App.Actions.Close)]
         public virtual string Close { get; protected set; }
 
         /// <summary>
@@ -78,10 +82,29 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> CloseCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the DLC.
+        /// </summary>
+        /// <value>The DLC.</value>
+        [StaticLocalization(LocalizationResources.App.Actions.DLC)]
+        public virtual string DLC { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the DLC command.
+        /// </summary>
+        /// <value>The DLC command.</value>
+        public virtual ReactiveCommand<Unit, Unit> DLCCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the DLC manager.
+        /// </summary>
+        /// <value>The DLC manager.</value>
+        public virtual DLCManagerControlViewModel DLCManager { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the error log.
         /// </summary>
         /// <value>The error log.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.ErrorLog)]
+        [StaticLocalization(LocalizationResources.App.Actions.ErrorLog)]
         public virtual string ErrorLog { get; protected set; }
 
         /// <summary>
@@ -100,7 +123,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the logs.
         /// </summary>
         /// <value>The logs.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Logs)]
+        [StaticLocalization(LocalizationResources.App.Actions.Logs)]
         public virtual string Logs { get; protected set; }
 
         /// <summary>
@@ -113,7 +136,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the shortcuts.
         /// </summary>
         /// <value>The shortcuts.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Name)]
+        [StaticLocalization(LocalizationResources.App.Actions.Name)]
         public virtual string Shortcuts { get; protected set; }
 
         /// <summary>
@@ -126,7 +149,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the wiki.
         /// </summary>
         /// <value>The wiki.</value>
-        [StaticLocalization(LocalizationResources.App.Shortcuts.Wiki)]
+        [StaticLocalization(LocalizationResources.App.Actions.Wiki)]
         public virtual string Wiki { get; protected set; }
 
         /// <summary>
@@ -153,6 +176,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            Task.Run(async () => await DLCManager.RefreshDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
+
             WikiCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 await appAction.OpenAsync(Constants.WikiUrl);
@@ -188,7 +213,23 @@ namespace IronyModManager.ViewModels.Controls
                 IsOpen = false;
             }).DisposeWith(disposables);
 
+            DLCCommand = ReactiveCommand.Create(() =>
+            {
+                IsOpen = false;
+                DLCManager.Open();
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Called when [selected game changed].
+        /// </summary>
+        /// <param name="game">The game.</param>
+        protected override void OnSelectedGameChanged(IGame game)
+        {
+            Task.Run(async () => await DLCManager.RefreshDLCAsync(gameService.GetSelected()).ConfigureAwait(false)).ConfigureAwait(false);
+            base.OnSelectedGameChanged(game);
         }
 
         #endregion Methods

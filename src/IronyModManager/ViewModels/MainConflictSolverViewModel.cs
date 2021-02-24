@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-08-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -19,11 +19,13 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
@@ -62,6 +64,11 @@ namespace IronyModManager.ViewModels
         /// The application action
         /// </summary>
         private readonly IAppAction appAction;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The identifier generator
@@ -105,6 +112,7 @@ namespace IronyModManager.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="MainConflictSolverControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="localizationManager">The localization manager.</param>
@@ -119,7 +127,8 @@ namespace IronyModManager.ViewModels
         /// <param name="logger">The logger.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
-        public MainConflictSolverControlViewModel(IIDGenerator idGenerator, IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
+        public MainConflictSolverControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler, IIDGenerator idGenerator,
+            IModPatchCollectionService modPatchCollectionService, ILocalizationManager localizationManager,
             MergeViewerControlViewModel mergeViewer, MergeViewerBinaryControlViewModel binaryMergeViewer,
             ModCompareSelectorControlViewModel modCompareSelector, ModConflictIgnoreControlViewModel ignoreConflictsRules,
             ConflictSolverModFilterControlViewModel modFilter, ConflictSolverResetConflictsControlViewModel resetConflicts,
@@ -132,6 +141,7 @@ namespace IronyModManager.ViewModels
             this.logger = logger;
             this.notificationAction = notificationAction;
             this.appAction = appAction;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
             MergeViewer = mergeViewer;
             ModCompareSelector = modCompareSelector;
             BinaryMergeViewer = binaryMergeViewer;
@@ -179,6 +189,12 @@ namespace IronyModManager.ViewModels
         public virtual IConflictResult Conflicts { get; set; }
 
         /// <summary>
+        /// Gets or sets the context menu definition.
+        /// </summary>
+        /// <value>The context menu definition.</value>
+        public virtual IHierarchicalDefinitions ContextMenuDefinition { get; set; }
+
+        /// <summary>
         /// Gets or sets the custom conflicts.
         /// </summary>
         /// <value>The custom conflicts.</value>
@@ -201,12 +217,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The hierarchal conflicts.</value>
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the hovered definition.
-        /// </summary>
-        /// <value>The hovered definition.</value>
-        public virtual IHierarchicalDefinitions HoveredDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore.
@@ -404,6 +414,12 @@ namespace IronyModManager.ViewModels
         public virtual IHierarchicalDefinitions SelectedConflict { get; set; }
 
         /// <summary>
+        /// Gets or sets the selected conflict override.
+        /// </summary>
+        /// <value>The selected conflict override.</value>
+        public virtual int? SelectedConflictOverride { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the selected mod collection.
         /// </summary>
         /// <value>The selected mod collection.</value>
@@ -456,7 +472,7 @@ namespace IronyModManager.ViewModels
             {
                 if (hierarchicalDefinition.AdditionalData is IDefinition definition)
                 {
-                    HoveredDefinition = hierarchicalDefinition;
+                    ContextMenuDefinition = hierarchicalDefinition;
                     InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
                 }
             }
@@ -469,6 +485,7 @@ namespace IronyModManager.ViewModels
         {
             IsBinaryViewerVisible = IsBinaryConflict && IsConflictSolverAvailable;
             IsMergeViewerVisible = !IsBinaryConflict && IsConflictSolverAvailable;
+            MergeViewer.CanPerformHotKeyActions = IsMergeViewerVisible;
         }
 
         /// <summary>
@@ -811,7 +828,7 @@ namespace IronyModManager.ViewModels
 
             InvalidCustomPatchCommand = ReactiveCommand.Create(() =>
             {
-                if (HoveredDefinition.AdditionalData is IDefinition definition)
+                if (ContextMenuDefinition.AdditionalData is IDefinition definition)
                 {
                     CustomConflicts.SetContent(definition.File, definition.Code);
                 }
@@ -840,6 +857,150 @@ namespace IronyModManager.ViewModels
             this.WhenAnyValue(p => p.CustomConflicts.Saved).Where(p => p).Subscribe(s =>
             {
                 ResetConflicts.Refresh();
+            }).DisposeWith(disposables);
+
+            var previousEditTextState = false;
+            this.WhenAnyValue(v => v.EditingIgnoreConflictsRules).Subscribe(s =>
+            {
+                if (s != previousEditTextState)
+                {
+                    previousEditTextState = s;
+                    MessageBus.Publish(new SuspendHotkeysEvent(s));
+                }
+            }).DisposeWith(disposables);
+
+            hotkeyPressedHandler.Subscribe(m =>
+            {
+                async Task performModSelectionAction()
+                {
+                    if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
+                    {
+                        int? newSelectedConflict = null;
+                        var col = SelectedParentConflict != null ? SelectedParentConflict.Children.ToList() : new List<IHierarchicalDefinitions>();
+                        switch (m.Hotkey)
+                        {
+                            case Enums.HotKeys.Shift_Up:
+                                if (SelectedConflict == null)
+                                {
+                                    newSelectedConflict = col.Count - 1;
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedConflict);
+                                    index--;
+                                    if (index < 0)
+                                    {
+                                        index = 0;
+                                    }
+                                    newSelectedConflict = index;
+                                }
+                                break;
+
+                            case Enums.HotKeys.Shift_Down:
+                                if (SelectedConflict == null)
+                                {
+                                    newSelectedConflict = 0;
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedConflict);
+                                    index++;
+                                    if (index > col.Count - 1)
+                                    {
+                                        index = col.Count - 1;
+                                    }
+                                    newSelectedConflict = index;
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (newSelectedConflict != null)
+                        {
+                            await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                            {
+                                SelectedConflictOverride = newSelectedConflict;
+                            });
+                        }
+                    }
+                }
+                async Task performModParentSelectionAction()
+                {
+                    if (!filteringConflicts && (HierarchalConflicts?.Any()).GetValueOrDefault())
+                    {
+                        IHierarchicalDefinitions parent = null;
+                        var col = HierarchalConflicts.ToList();
+                        switch (m.Hotkey)
+                        {
+                            case Enums.HotKeys.Ctrl_Shift_P:
+                                if (SelectedParentConflict == null)
+                                {
+                                    parent = col.LastOrDefault();
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedParentConflict);
+                                    index--;
+                                    if (index < 0)
+                                    {
+                                        index = 0;
+                                    }
+                                    parent = col[index];
+                                }
+                                break;
+
+                            case Enums.HotKeys.Ctrl_Shift_N:
+                                if (SelectedParentConflict == null)
+                                {
+                                    parent = col.FirstOrDefault();
+                                }
+                                else
+                                {
+                                    var index = col.IndexOf(SelectedParentConflict);
+                                    index++;
+                                    if (index > col.Count - 1)
+                                    {
+                                        index = col.Count - 1;
+                                    }
+                                    parent = col[index];
+                                }
+                                break;
+
+                            default:
+                                break;
+                        }
+                        if (parent != null)
+                        {
+                            await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                            {
+                                SelectedParentConflict = parent;
+                            });
+                        }
+                    }
+                }
+                if (m.Hotkey == Enums.HotKeys.Shift_Down || m.Hotkey == Enums.HotKeys.Shift_Up)
+                {
+                    performModSelectionAction().ConfigureAwait(false);
+                }
+                else if (m.Hotkey == Enums.HotKeys.Ctrl_R)
+                {
+                    if (ResolveEnabled && !ResolvingConflict)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(true).ConfigureAwait(true));
+                    }
+                }
+                else if (m.Hotkey == Enums.HotKeys.Ctrl_I)
+                {
+                    if (IgnoreEnabled && !ResolvingConflict)
+                    {
+                        Dispatcher.UIThread.SafeInvoke(() => ResolveConflictAsync(false).ConfigureAwait(true));
+                    }
+                }
+                else
+                {
+                    performModParentSelectionAction().ConfigureAwait(false);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -952,6 +1113,8 @@ namespace IronyModManager.ViewModels
                     }
                     if (HierarchalConflicts.Any())
                     {
+                        // Force a refresh of the UI
+                        SelectedParentConflict = null;
                         SelectedParentConflict = HierarchalConflicts.ElementAt(parentIdx);
                     }
                 }

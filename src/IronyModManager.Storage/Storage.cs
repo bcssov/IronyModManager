@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-26-2020
+// Last Modified On : 02-21-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -184,13 +184,14 @@ namespace IronyModManager.Storage
                 game.LogLocation = gameType.LogLocation;
                 game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
                 game.GameFolders = gameType.GameFolders ?? new List<string>();
-                game.BaseGameDirectory = gameType.BaseGameDirectory ?? string.Empty;
+                game.BaseSteamGameDirectory = gameType.BaseSteamGameDirectory ?? string.Empty;
                 game.ExecutablePath = gameType.ExecutablePath ?? string.Empty;
                 game.ExecutableArgs = gameType.ExecutableArgs ?? string.Empty;
                 game.LauncherSettingsFileName = gameType.LauncherSettingsFileName ?? string.Empty;
                 game.LauncherSettingsPrefix = gameType.LauncherSettingsPrefix ?? string.Empty;
                 game.AdvancedFeaturesSupported = gameType.AdvancedFeaturesSupported;
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
+                game.Abrv = gameType.Abrv ?? string.Empty;
                 Database.Games.Add(game);
                 return true;
             }

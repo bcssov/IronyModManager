@@ -12,6 +12,9 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IronyToolTip.xaml?assembly=IronyModManager"/>
 
   <!--Individual styles-->
+  <Style Selector="NotificationCard">
+    <Setter Property="Width" Value="400" />
+  </Style>
   <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
     <Setter Property="MinHeight" Value="50" />
   </Style>
@@ -68,6 +71,14 @@
     <Setter Property="BorderBrush" Value="Green"/>
   </Style>
   <Style Selector="Border.InvalidConflictSolver">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Red"/>
+  </Style>
+  <Style Selector="Border.PatchModActive">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Green"/>
+  </Style>
+  <Style Selector="Border.PatchModInactive">
     <Setter Property="BorderThickness" Value="2,2,2,2"/>
     <Setter Property="BorderBrush" Value="Red"/>
   </Style>

@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-24-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -15,13 +15,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using IronyModManager.Common.Events;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Shared;
+using ReactiveUI;
 
 namespace IronyModManager.ViewModels
 {
@@ -44,6 +47,11 @@ namespace IronyModManager.ViewModels
         /// The loop running
         /// </summary>
         protected bool loopRunning = false;
+
+        /// <summary>
+        /// The hotkey manager
+        /// </summary>
+        private readonly IHotkeyManager hotkeyManager;
 
         /// <summary>
         /// The overlay progress handler
@@ -90,6 +98,7 @@ namespace IronyModManager.ViewModels
             ConflictSolver = DIResolver.Get<MainConflictSolverControlViewModel>();
             writingStateOperationHandler = DIResolver.Get<WritingStateOperationHandler>();
             overlayProgressHandler = DIResolver.Get<OverlayProgressHandler>();
+            hotkeyManager = DIResolver.Get<IHotkeyManager>();
             if (!StaticResources.IsVerifyingContainer)
             {
                 BindOverlay();
@@ -148,6 +157,12 @@ namespace IronyModManager.ViewModels
         /// <value><c>true</c> if [overlay visible]; otherwise, <c>false</c>.</value>
         public virtual bool OverlayVisible { get; protected set; }
 
+        /// <summary>
+        /// Gets or sets the register hotkey command.
+        /// </summary>
+        /// <value>The register hotkey command.</value>
+        public virtual ReactiveCommand<string, Unit> RegisterHotkeyCommand { get; protected set; }
+
         #endregion Properties
 
         #region Methods
@@ -196,7 +211,7 @@ namespace IronyModManager.ViewModels
         {
             InitOverlayLoop();
             overlayDisposable?.Dispose();
-            overlayDisposable = overlayProgressHandler.Message.Subscribe(s =>
+            overlayDisposable = overlayProgressHandler.Subscribe(s =>
             {
                 QueueOverlay(s);
             });
@@ -224,12 +239,14 @@ namespace IronyModManager.ViewModels
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var state = NavigationState.Main;
             BindOverlay();
 
             ReactiveUI.MessageBus.Current.Listen<NavigationEventArgs>()
                 .Subscribe(s =>
                 {
                     ReactiveUI.MessageBus.Current.SendMessage(new ForceClosePopulsEventArgs());
+                    state = s.State;
                     switch (s.State)
                     {
                         case NavigationState.ConflictSolver:
@@ -247,9 +264,17 @@ namespace IronyModManager.ViewModels
                     }
                 }).DisposeWith(disposables);
 
-            writingStateOperationHandler.Message.Subscribe(s =>
+            writingStateOperationHandler.Subscribe(s =>
             {
                 TriggerPreventShutdown(!s.CanShutdown);
+            }).DisposeWith(disposables);
+
+            RegisterHotkeyCommand = ReactiveCommand.CreateFromTask(async (string key) =>
+            {
+                if (!OverlayVisible)
+                {
+                    await hotkeyManager.HotKeyPressedAsync(state, key);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);

@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlViewModel.cs" company="Mario">
 //     Mario
@@ -18,11 +18,14 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.DI;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -48,9 +51,24 @@ namespace IronyModManager.ViewModels.Controls
         private readonly IAppAction appAction;
 
         /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
+        /// The adding virtual definition
+        /// </summary>
+        private bool addingVirtualDefinition = false;
+
+        /// <summary>
+        /// The cancel
+        /// </summary>
+        private CancellationTokenSource cancel = null;
 
         /// <summary>
         /// The previous definitions
@@ -64,12 +82,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModCompareSelectorControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ModCompareSelectorControlViewModel(IAppAction appAction, IModPatchCollectionService modPatchCollectionService)
+        public ModCompareSelectorControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+            IAppAction appAction, IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
             this.appAction = appAction;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
         }
 
         #endregion Constructors
@@ -185,8 +206,10 @@ namespace IronyModManager.ViewModels.Controls
         /// add virtual definition as an asynchronous operation.
         /// </summary>
         /// <param name="definitions">The definitions.</param>
-        protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions)
+        /// <param name="token">The token.</param>
+        protected async Task AddVirtualDefinitionAsync(IEnumerable<IDefinition> definitions, CancellationToken token)
         {
+            addingVirtualDefinition = true;
             if (previousDefinitions != definitions)
             {
                 if (!IsBinaryConflict)
@@ -211,33 +234,48 @@ namespace IronyModManager.ViewModels.Controls
                         col.Add(newDefinition);
                     }
                     VirtualDefinitions = col.ToObservableCollection();
-                    if (VirtualDefinitions.Count() > 0)
+                    var virtualDefinitions = VirtualDefinitions;
+                    if (virtualDefinitions.Any())
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                        await Task.Delay(100);
-                        LeftSelectedDefinition = null;
-                        RightSelectedDefinition = null;
-                        await Task.Delay(50);
-                        LeftSelectedDefinition = VirtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
-                        RightSelectedDefinition = newDefinition;
+                        await Task.Delay(100, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
+                        }
+                        await Task.Delay(50, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = virtualDefinitions.FirstOrDefault(p => p != newDefinition && p != priorityDefinition.Definition);
+                            RightSelectedDefinition = newDefinition;
+                        }
                     }
                 }
                 else
                 {
                     VirtualDefinitions = definitions.OrderBy(p => SelectedModsOrder.IndexOf(p.ModName)).ToHashSet();
-                    if (VirtualDefinitions.Count() > 0)
+                    var virtualDefinitions = VirtualDefinitions;
+                    if (virtualDefinitions.Any())
                     {
                         // No reason to anymore not select a default definition on either side, wait a bit first to allow the UI to settle down
-                        await Task.Delay(100);
-                        LeftSelectedDefinition = null;
-                        RightSelectedDefinition = null;
-                        await Task.Delay(50);
-                        LeftSelectedDefinition = definitions.ElementAt(0);
-                        RightSelectedDefinition = definitions.ElementAt(1);
+                        await Task.Delay(100, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = null;
+                            RightSelectedDefinition = null;
+                        }
+                        await Task.Delay(50, token);
+                        if (!token.IsCancellationRequested)
+                        {
+                            LeftSelectedDefinition = virtualDefinitions.ElementAt(0);
+                            RightSelectedDefinition = virtualDefinitions.ElementAt(1);
+                        }
                     }
                 }
             }
             previousDefinitions = definitions;
+            addingVirtualDefinition = false;
         }
 
         /// <summary>
@@ -250,7 +288,12 @@ namespace IronyModManager.ViewModels.Controls
             {
                 if (s != null)
                 {
-                    AddVirtualDefinitionAsync(s).ConfigureAwait(true);
+                    if (cancel != null)
+                    {
+                        cancel.Cancel();
+                    }
+                    cancel = new CancellationTokenSource();
+                    AddVirtualDefinitionAsync(s, cancel.Token).ConfigureAwait(true);
                 }
                 else
                 {
@@ -275,7 +318,135 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            hotkeyPressedHandler.Subscribe(m =>
+            {
+                SelectDefinitionByHotkey(m.Hotkey);
+            }).DisposeWith(disposables);
+
             base.OnActivated(disposables);
+        }
+
+        /// <summary>
+        /// Selects the definition by hotkey.
+        /// </summary>
+        /// <param name="hotKey">The hot key.</param>
+        protected virtual void SelectDefinitionByHotkey(Enums.HotKeys hotKey)
+        {
+            if (addingVirtualDefinition)
+            {
+                return;
+            }
+            var selectLeft = false;
+            int? index = null;
+            switch (hotKey)
+            {
+                case Enums.HotKeys.Ctrl_1:
+                    index = 0;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_1:
+                    index = 0;
+                    break;
+
+                case Enums.HotKeys.Ctrl_2:
+                    index = 1;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_2:
+                    index = 1;
+                    break;
+
+                case Enums.HotKeys.Ctrl_3:
+                    index = 2;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_3:
+                    index = 2;
+                    break;
+
+                case Enums.HotKeys.Ctrl_4:
+                    index = 3;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_4:
+                    index = 3;
+                    break;
+
+                case Enums.HotKeys.Ctrl_5:
+                    index = 4;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_5:
+                    index = 4;
+                    break;
+
+                case Enums.HotKeys.Ctrl_6:
+                    index = 5;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_6:
+                    index = 5;
+                    break;
+
+                case Enums.HotKeys.Ctrl_7:
+                    index = 6;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_7:
+                    index = 6;
+                    break;
+
+                case Enums.HotKeys.Ctrl_8:
+                    index = 7;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_8:
+                    index = 7;
+                    break;
+
+                case Enums.HotKeys.Ctrl_9:
+                    index = 8;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_9:
+                    index = 8;
+                    break;
+
+                case Enums.HotKeys.Ctrl_0:
+                    index = 9;
+                    selectLeft = true;
+                    break;
+
+                case Enums.HotKeys.Ctrl_Shift_0:
+                    index = 9;
+                    break;
+
+                default:
+                    break;
+            }
+            if (index.HasValue && VirtualDefinitions?.Count() - 1 >= index.GetValueOrDefault())
+            {
+                Dispatcher.UIThread.SafeInvoke(() =>
+                {
+                    if (selectLeft)
+                    {
+                        LeftSelectedDefinition = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
+                    }
+                    else
+                    {
+                        RightSelectedDefinition = VirtualDefinitions.ToList()[index.GetValueOrDefault()];
+                    }
+                });
+            }
         }
 
         #endregion Methods

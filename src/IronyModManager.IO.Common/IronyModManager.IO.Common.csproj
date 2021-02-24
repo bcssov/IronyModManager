@@ -32,6 +32,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -49,8 +53,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="RepoDb" Version="1.12.6" />
-    <PackageReference Include="RepoDb.SqLite" Version="1.1.2" />
+    <PackageReference Include="RepoDb" Version="1.12.7" />
+    <PackageReference Include="RepoDb.SqLite" Version="1.1.3" />
     <PackageReference Include="StrongNamer" Version="0.2.5" />
   </ItemGroup>
 

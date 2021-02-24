@@ -23,8 +23,6 @@
                     Grid.Row="1" Grid.Column="0"></Button>
             <Button Content="{Binding MergeCompress}" Command="{Binding MergeCompressCommand}"
                     Grid.Row="2" Grid.Column="0"></Button>
-            <Button Content="{Binding MergeAdvanced}" Command="{Binding MergeAdvancedCommand}"
-                    Grid.Row="3" Grid.Column="0" IsVisible="{Binding ShowAdvancedFeatures}"></Button>
             <Button Content="{Binding MergeClose}" Command="{Binding MergeCloseCommand}"
                     Grid.Row="4" Grid.Column="0"></Button>
           </Grid>

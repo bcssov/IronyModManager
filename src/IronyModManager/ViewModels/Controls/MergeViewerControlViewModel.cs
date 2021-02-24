@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -20,12 +20,15 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using AvaloniaEdit.Document;
 using DiffPlex;
 using DiffPlex.DiffBuilder;
 using DiffPlex.DiffBuilder.Model;
+using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
@@ -53,6 +56,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The external editor service
         /// </summary>
         private readonly IExternalEditorService externalEditorService;
+
+        /// <summary>
+        /// The hotkey pressed handler
+        /// </summary>
+        private readonly ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler;
 
         /// <summary>
         /// The localization manager
@@ -86,17 +94,20 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
+        /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(IAppAction appAction, IExternalEditorService externalEditorService,
+        public MergeViewerControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+            IAppAction appAction, IExternalEditorService externalEditorService,
             INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
             this.appAction = appAction;
             this.externalEditorService = externalEditorService;
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
+            this.hotkeyPressedHandler = hotkeyPressedHandler;
         }
 
         #endregion Constructors
@@ -109,6 +120,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="line">The line.</param>
         public delegate void ConflictFoundDelegate(int line);
 
+        /// <summary>
+        /// Delegate FocusSideDelegate
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        public delegate void FocusSideDelegate(bool leftSide);
+
         #endregion Delegates
 
         #region Events
@@ -119,9 +136,14 @@ namespace IronyModManager.ViewModels.Controls
         public event ConflictFoundDelegate ConflictFound;
 
         /// <summary>
-        /// Occurs when [stack changed].
+        /// Occurs when [focus side].
         /// </summary>
-        public event EventHandler StackChanged;
+        public event FocusSideDelegate PostFocusSide;
+
+        /// <summary>
+        /// Occurs when [pre focus side].
+        /// </summary>
+        public event FocusSideDelegate PreFocusSide;
 
         #endregion Events
 
@@ -139,6 +161,12 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The cancel command.</value>
         public virtual ReactiveCommand<Unit, Unit> CancelCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance can perform hot key actions.
+        /// </summary>
+        /// <value><c>true</c> if this instance can perform hot key actions; otherwise, <c>false</c>.</value>
+        public virtual bool CanPerformHotKeyActions { get; set; }
 
         /// <summary>
         /// Gets or sets the copy all.
@@ -566,7 +594,6 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     undoStack.Push(prevText);
                     redoStack.Clear();
-                    OnStackChanged();
                 }
             }
             var prevLeftSide = LeftSide;
@@ -580,7 +607,6 @@ namespace IronyModManager.ViewModels.Controls
             {
                 undoStack.Clear();
                 redoStack.Clear();
-                OnStackChanged();
             }
             else if (!skipStackPush)
             {
@@ -1107,19 +1133,7 @@ namespace IronyModManager.ViewModels.Controls
 
             EditThisCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                EditingLeft = leftSide;
-                EditingRight = !leftSide;
-                EditingText = true;
-                if (leftSide)
-                {
-                    CurrentEditText = LeftSide;
-                }
-                else
-                {
-                    CurrentEditText = RightSide;
-                }
-                LeftDocument = new TextDocument(LeftSide);
-                RightDocument = new TextDocument(RightSide);
+                SetEditThis(leftSide);
             }).DisposeWith(disposables);
 
             CopyTextCommand = ReactiveCommand.Create((bool leftSide) =>
@@ -1144,87 +1158,131 @@ namespace IronyModManager.ViewModels.Controls
 
             UndoCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                if (undoStack.Count == 0)
-                {
-                    return;
-                }
-                if (leftSide)
-                {
-                    redoStack.Push(LeftSide);
-                    SetText(undoStack.Pop(), RightSide, skipStackPush: true);
-                }
-                else
-                {
-                    redoStack.Push(RightSide);
-                    SetText(LeftSide, undoStack.Pop(), skipStackPush: true);
-                }
-                OnStackChanged();
+                PerformUndo(leftSide);
             }).DisposeWith(disposables);
 
             RedoCommand = ReactiveCommand.Create((bool leftSide) =>
             {
-                if (redoStack.Count == 0)
-                {
-                    return;
-                }
-                if (leftSide)
-                {
-                    undoStack.Push(LeftSide);
-                    SetText(redoStack.Pop(), RightSide, skipStackPush: true);
-                }
-                else
-                {
-                    undoStack.Push(RightSide);
-                    SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
-                }
-                OnStackChanged();
+                PerformRedo(leftSide);
             }).DisposeWith(disposables);
 
-            EditorCommand = ReactiveCommand.CreateFromTask(async (bool leftSide) =>
+            EditorCommand = ReactiveCommand.CreateFromTask((bool leftSide) =>
             {
-                var opts = externalEditorService.Get();
-                if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
+                return LaunchExternalEditor(leftSide);
+            }).DisposeWith(disposables);
+
+            var previousEditTextState = false;
+            this.WhenAnyValue(v => v.EditingText).Subscribe(s =>
+            {
+                if (s != previousEditTextState)
                 {
-                    var files = externalEditorService.GetFiles();
-                    files.LeftDiff.Text = LeftSide;
-                    files.RightDiff.Text = RightSide;
-                    var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
-                    if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
+                    previousEditTextState = s;
+                    MessageBus.Publish(new SuspendHotkeysEvent(s));
+                }
+            }).DisposeWith(disposables);
+
+            hotkeyPressedHandler.Subscribe(m =>
+            {
+                void performAction()
+                {
+                    if (LeftSideSelected.Count == 0)
                     {
-                        var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
-                        var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
-                        if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
-                        {
-                            if (leftSide)
-                            {
-                                var text = files.LeftDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                                SetText(merged, RightSide);
-                            }
-                            else
-                            {
-                                var text = files.RightDiff.Text ?? string.Empty;
-                                string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
-                                SetText(LeftSide, merged);
-                            }
-                        }
+                        LeftSideSelected.Add(LeftDiff.FirstOrDefault());
                     }
-                    files?.Dispose();
+                    switch (m.Hotkey)
+                    {
+                        case Enums.HotKeys.Ctrl_Up:
+                            FindConflict(true, false);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Down:
+                            FindConflict(true, true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_E:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                SetEditThis(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Shift_T:
+                            CopyTextAsync(false).ConfigureAwait(true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_T:
+                            CopyTextAsync(true).ConfigureAwait(true);
+                            break;
+
+                        case Enums.HotKeys.Ctrl_C:
+                            if (LeftSidePatchMod)
+                            {
+                                Copy(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            else if (RightSidePatchMod)
+                            {
+                                Copy(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_V:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyBeforeLines(RightSideSelected, RightDiff, LeftDiff, false);
+                            }
+                            else if (RightSidePatchMod)
+                            {
+                                CopyBeforeLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_B:
+                            if (LeftSidePatchMod)
+                            {
+                                CopyAfterLines(RightSideSelected, LeftDiff, RightDiff, false);
+                            }
+                            else if (RightSidePatchMod)
+                            {
+                                CopyAfterLines(LeftSideSelected, LeftDiff, RightDiff, true);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Z:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                PreFocusSide?.Invoke(LeftSidePatchMod);
+                                PerformUndo(LeftSidePatchMod);
+                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_Y:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                PreFocusSide?.Invoke(LeftSidePatchMod);
+                                PerformRedo(LeftSidePatchMod);
+                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                            }
+                            break;
+
+                        case Enums.HotKeys.Ctrl_X:
+                            if (LeftSidePatchMod || RightSidePatchMod)
+                            {
+                                LaunchExternalEditor(LeftSidePatchMod).ConfigureAwait(true);
+                            }
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                if (CanPerformHotKeyActions)
+                {
+                    Dispatcher.UIThread.SafeInvoke(performAction);
                 }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
-        }
-
-        /// <summary>
-        /// Called when [stack changed].
-        /// </summary>
-        protected virtual void OnStackChanged()
-        {
-            if (StackChanged != null)
-            {
-                StackChanged.Invoke(this, EventArgs.Empty);
-            }
         }
 
         /// <summary>
@@ -1245,6 +1303,71 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Performs the redo.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void PerformRedo(bool leftSide)
+        {
+            if (redoStack.Count == 0)
+            {
+                return;
+            }
+            if (leftSide)
+            {
+                undoStack.Push(LeftSide);
+                SetText(redoStack.Pop(), RightSide, skipStackPush: true);
+            }
+            else
+            {
+                undoStack.Push(RightSide);
+                SetText(LeftSide, redoStack.Pop(), skipStackPush: true);
+            }
+        }
+
+        /// <summary>
+        /// Performs the undo.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void PerformUndo(bool leftSide)
+        {
+            if (undoStack.Count == 0)
+            {
+                return;
+            }
+            if (leftSide)
+            {
+                redoStack.Push(LeftSide);
+                SetText(undoStack.Pop(), RightSide, skipStackPush: true);
+            }
+            else
+            {
+                redoStack.Push(RightSide);
+                SetText(LeftSide, undoStack.Pop(), skipStackPush: true);
+            }
+        }
+
+        /// <summary>
+        /// Sets the edit this.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        protected virtual void SetEditThis(bool leftSide)
+        {
+            EditingLeft = leftSide;
+            EditingRight = !leftSide;
+            EditingText = true;
+            if (leftSide)
+            {
+                CurrentEditText = LeftSide;
+            }
+            else
+            {
+                CurrentEditText = RightSide;
+            }
+            LeftDocument = new TextDocument(LeftSide);
+            RightDocument = new TextDocument(RightSide);
+        }
+
+        /// <summary>
         /// synchronize selections as an asynchronous operation.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
@@ -1255,19 +1378,62 @@ namespace IronyModManager.ViewModels.Controls
             var syncDiff = !leftSide ? LeftDiff : RightDiff;
             var sourceCol = leftSide ? LeftSideSelected : RightSideSelected;
             var syncCol = !leftSide ? LeftSideSelected : RightSideSelected;
+            bool clearCol = true;
             if (sourceCol?.Count > 0)
             {
-                syncCol.Clear();
-                foreach (var item in sourceCol)
+                var filtered = sourceCol.Where(p => p != null); // Must be an underlying bug?
+                if (filtered.Any())
                 {
-                    syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    clearCol = false;
+                    syncCol.Clear();
+                    foreach (var item in filtered)
+                    {
+                        syncCol.Add(syncDiff[sourceDiff.IndexOf(item)]);
+                    }
                 }
             }
-            else
+            if (clearCol)
             {
                 syncCol.Clear();
             }
             syncingSelection = false;
+        }
+
+        /// <summary>
+        /// Launches the external editor.
+        /// </summary>
+        /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        private async Task LaunchExternalEditor(bool leftSide)
+        {
+            var opts = externalEditorService.Get();
+            if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
+            {
+                var files = externalEditorService.GetFiles();
+                files.LeftDiff.Text = LeftSide;
+                files.RightDiff.Text = RightSide;
+                var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);
+                if (await appAction.RunAsync(opts.ExternalEditorLocation, arguments))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Conflict_Solver.Editor.Message);
+                    if (await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Info, PromptType.ConfirmCancel))
+                    {
+                        if (leftSide)
+                        {
+                            var text = files.LeftDiff.Text ?? string.Empty;
+                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                            SetText(merged, RightSide);
+                        }
+                        else
+                        {
+                            var text = files.RightDiff.Text ?? string.Empty;
+                            string merged = string.Join(Environment.NewLine, text.ReplaceTabs());
+                            SetText(LeftSide, merged);
+                        }
+                    }
+                }
+                files?.Dispose();
+            }
         }
 
         #endregion Methods

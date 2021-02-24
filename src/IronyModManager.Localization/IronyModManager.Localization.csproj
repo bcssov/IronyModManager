@@ -34,6 +34,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\IronyModManager\Assets\logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

@@ -4,7 +4,7 @@
 // Created          : 06-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-14-2020
+// Last Modified On : 02-20-2021
 // ***********************************************************************
 // <copyright file="Trie.cs" company="Mario">
 //     Mario
@@ -84,9 +84,9 @@ namespace IronyModManager.Shared.Trie
             if (node.Children.TryGetValue(text.First(), out var child))
             {
                 child.Objects.Add(obj);
-                if (text.Count() > 0)
+                if (text.Length > 0)
                 {
-                    Add(obj, child, text.Substring(1));
+                    Add(obj, child, text[1..]);
                 }
             }
             else
@@ -96,9 +96,9 @@ namespace IronyModManager.Shared.Trie
                     Character = text.First(),
                 };
                 child.Objects.Add(obj);
-                if (text.Count() > 1)
+                if (text.Length > 1)
                 {
-                    Add(obj, child, text.Substring(1));
+                    Add(obj, child, text[1..]);
                 }
                 node.Children.Add(text.First(), child);
             }
@@ -112,13 +112,13 @@ namespace IronyModManager.Shared.Trie
         /// <returns>HashSet&lt;T&gt;.</returns>
         private HashSet<T> Get(TrieNode<T> node, string text)
         {
-            if (text.Count() == 0)
+            if (text.Length == 0)
             {
                 return node.Objects;
             }
             else if (node.Children.TryGetValue(text.First(), out var child))
             {
-                return Get(child, text.Substring(1));
+                return Get(child, text[1..]);
             }
             else
             {
