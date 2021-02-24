@@ -72,7 +72,7 @@ namespace IronyModManager.Shared.MessageBus
                     await Task.Delay(25);
                     taskCache.TryGetValue(awaitableEvent, out tasksCompleted);
                 }
-                taskCache.Remove(awaitableEvent, out tasksCompleted);
+                taskCache.Remove(awaitableEvent, out _);
             }
         }
 
