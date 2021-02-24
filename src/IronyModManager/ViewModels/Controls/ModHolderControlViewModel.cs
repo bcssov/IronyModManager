@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -114,6 +114,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler;
 
         /// <summary>
+        /// The mod list refresh request handler
+        /// </summary>
+        private readonly ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler;
+
+        /// <summary>
         /// The mod service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -170,6 +175,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHolderControlViewModel" /> class.
         /// </summary>
+        /// <param name="modListInstallRefreshRequestHandler">The mod list install refresh request handler.</param>
         /// <param name="modDefinitionInvalidReplaceHandler">The mod definition invalid replace handler.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="shutDownState">State of the shut down.</param>
@@ -186,8 +192,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="modDefinitionPatchLoadHandler">The mod definition patch load handler.</param>
         /// <param name="gameDirectoryChangedHandler">The game directory changed handler.</param>
         /// <param name="logger">The logger.</param>
-        public ModHolderControlViewModel(ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler, IIDGenerator idGenerator, IShutDownState shutDownState,
-            IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
+        public ModHolderControlViewModel(ModListInstallRefreshRequestHandler modListInstallRefreshRequestHandler, ModDefinitionInvalidReplaceHandler modDefinitionInvalidReplaceHandler,
+            IIDGenerator idGenerator, IShutDownState shutDownState, IModService modService, IModPatchCollectionService modPatchCollectionService, IGameService gameService,
             INotificationAction notificationAction, IAppAction appAction, ILocalizationManager localizationManager,
             InstalledModsControlViewModel installedModsControlViewModel, CollectionModsControlViewModel collectionModsControlViewModel,
             ModDefinitionAnalyzeHandler modDefinitionAnalyzeHandler, ModDefinitionLoadHandler modDefinitionLoadHandler, ModDefinitionPatchLoadHandler modDefinitionPatchLoadHandler,
@@ -207,6 +213,7 @@ namespace IronyModManager.ViewModels.Controls
             this.modDefinitionPatchLoadHandler = modDefinitionPatchLoadHandler;
             this.modDefinitionAnalyzeHandler = modDefinitionAnalyzeHandler;
             this.gameDirectoryChangedHandler = gameDirectoryChangedHandler;
+            this.modListInstallRefreshRequestHandler = modListInstallRefreshRequestHandler;
             InstalledMods = installedModsControlViewModel;
             CollectionMods = collectionModsControlViewModel;
             if (StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.EnableResumeGameButton)
@@ -530,7 +537,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// install mods as an asynchronous operation.
         /// </summary>
-        protected virtual async Task InstallModsAsync()
+        /// <param name="skipOverlay">if set to <c>true</c> [skip overlay].</param>
+        protected virtual async Task InstallModsAsync(bool skipOverlay = false)
         {
             var result = await modService.InstallModsAsync(InstalledMods.Mods);
             if (result != null)
@@ -539,7 +547,7 @@ namespace IronyModManager.ViewModels.Controls
                 {
                     if (InstalledMods.IsActivated)
                     {
-                        InstalledMods.RefreshMods();
+                        await InstalledMods.RefreshModsAsync(skipOverlay: skipOverlay);
                     }
                 }
                 if (result.Any(p => p.Invalid))
@@ -590,9 +598,9 @@ namespace IronyModManager.ViewModels.Controls
                 CollectionMods.HandleModRefresh(s, InstalledMods.Mods, InstalledMods.ActiveGame);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(s =>
+            this.WhenAnyValue(v => v.CollectionMods.NeedsModListRefresh).Where(x => x).Subscribe(async s =>
             {
-                InstalledMods.RefreshMods();
+                await InstalledMods.RefreshModsAsync();
             }).DisposeWith(disposables);
 
             this.WhenAnyValue(p => p.InstalledMods.PerformingEnableAll).Subscribe(s =>
@@ -753,15 +761,20 @@ namespace IronyModManager.ViewModels.Controls
                 }
             };
 
-            gameDirectoryChangedHandler.Message.Subscribe(s =>
+            gameDirectoryChangedHandler.Subscribe(async s =>
             {
-                InstalledMods.RefreshMods();
+                await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
             }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.InstalledMods.ModFilePopulationInCompleted).Subscribe(s =>
+            this.WhenAnyValue(v => v.InstalledMods.ModFilePopulationCompleted).Subscribe(s =>
             {
                 CollectionMods.CanExportModHashReport = s;
+            }).DisposeWith(disposables);
+
+            modListInstallRefreshRequestHandler.Subscribe(async m =>
+            {
+                await InstallModsAsync(m.SkipOverlay);
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
@@ -775,7 +788,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             forceEnableResumeButton = false;
             EvalResumeAvailability(game);
-            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();            
+            ShowAdvancedFeatures = (game?.AdvancedFeaturesSupported).GetValueOrDefault();
             base.OnSelectedGameChanged(game);
         }
 
@@ -805,7 +818,7 @@ namespace IronyModManager.ViewModels.Controls
         private void SubscribeToProgressReport(long id, CompositeDisposable disposables)
         {
             definitionLoadHandler?.Dispose();
-            definitionLoadHandler = modDefinitionLoadHandler.Message.Subscribe(s =>
+            definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -818,7 +831,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             modInvalidReplaceHandler?.Dispose();
-            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Message.Subscribe(s =>
+            modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Replacing_Definitions);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -831,7 +844,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             definitionAnalyzeLoadHandler?.Dispose();
-            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Message.Subscribe(s =>
+            definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
@@ -844,7 +857,7 @@ namespace IronyModManager.ViewModels.Controls
             }).DisposeWith(disposables);
 
             definitionSyncHandler?.Dispose();
-            definitionSyncHandler = modDefinitionPatchLoadHandler.Message.Subscribe(s =>
+            definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
                 var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
                 var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new

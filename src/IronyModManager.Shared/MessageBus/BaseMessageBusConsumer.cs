@@ -4,7 +4,7 @@
 // Created          : 06-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-11-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="BaseMessageBusConsumer.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 
 namespace IronyModManager.Shared.MessageBus
@@ -33,6 +33,11 @@ namespace IronyModManager.Shared.MessageBus
         /// </summary>
         private readonly Subject<TMessage> messageSubject;
 
+        /// <summary>
+        /// The task cache
+        /// </summary>
+        private readonly ConcurrentDictionary<BaseAwaitableEvent, int> taskCache;
+
         #endregion Fields
 
         #region Constructors
@@ -43,19 +48,10 @@ namespace IronyModManager.Shared.MessageBus
         public BaseMessageBusConsumer()
         {
             messageSubject = new Subject<TMessage>();
+            taskCache = new ConcurrentDictionary<BaseAwaitableEvent, int>();
         }
 
         #endregion Constructors
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        public virtual IObservable<TMessage> Message => messageSubject;
-
-        #endregion Properties
 
         #region Methods
 
@@ -65,10 +61,83 @@ namespace IronyModManager.Shared.MessageBus
         /// <param name="message">The message.</param>
         /// <param name="name">The name.</param>
         /// <returns>Task.</returns>
-        public virtual Task OnHandle(TMessage message, string name)
+        public virtual async Task OnHandle(TMessage message, string name)
         {
             messageSubject.OnNext(message);
-            return Task.FromResult(true);
+            if (message is BaseAwaitableEvent awaitableEvent)
+            {
+                taskCache.TryGetValue(awaitableEvent, out var tasksCompleted);
+                while (tasksCompleted < messageSubject.Subscribers)
+                {
+                    await Task.Delay(25);
+                    taskCache.TryGetValue(awaitableEvent, out tasksCompleted);
+                }
+                taskCache.Remove(awaitableEvent, out _);
+            }
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe(Action<TMessage> action)
+        {
+            return messageSubject.Subscribe(s =>
+            {
+                action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe(Func<TMessage, Task> action)
+        {
+            return messageSubject.Subscribe(async s =>
+            {
+                await action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Subscribes the specified action.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns>IDisposable.</returns>
+        public virtual IDisposable Subscribe<T>(Func<TMessage, Task<T>> action)
+        {
+            return messageSubject.Subscribe(async s =>
+            {
+                await action(s);
+                if (s is BaseAwaitableEvent awaitableEvent)
+                {
+                    IncrementTaskCounter(awaitableEvent);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Increments the task counter.
+        /// </summary>
+        /// <param name="awaitableEvent">The awaitable event.</param>
+        protected virtual void IncrementTaskCounter(BaseAwaitableEvent awaitableEvent)
+        {
+            taskCache.AddOrUpdate(awaitableEvent, 1, (key, oldValue) =>
+            {
+                return oldValue + 1;
+            });
         }
 
         #endregion Methods

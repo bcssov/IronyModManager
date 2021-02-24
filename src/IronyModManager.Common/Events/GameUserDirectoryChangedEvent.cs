@@ -4,15 +4,15 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="GameUserDirectoryChangedEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared.MessageBus;
 
@@ -20,15 +20,15 @@ namespace IronyModManager.Common.Events
 {
     /// <summary>
     /// Class GameUserDirectoryChangedEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
-    public class GameUserDirectoryChangedEvent : IMessageBusEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
+    public class GameUserDirectoryChangedEvent : BaseNonAwaitableEvent
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GameUserDirectoryChangedEvent"/> class.
+        /// Initializes a new instance of the <see cref="GameUserDirectoryChangedEvent" /> class.
         /// </summary>
         /// <param name="game">The game.</param>
         public GameUserDirectoryChangedEvent(IGame game)
@@ -45,12 +45,6 @@ namespace IronyModManager.Common.Events
         /// </summary>
         /// <value>The game.</value>
         public IGame Game { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is fire and forget.
-        /// </summary>
-        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => true;
 
         #endregion Properties
     }

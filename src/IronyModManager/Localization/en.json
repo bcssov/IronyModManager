@@ -444,7 +444,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "Conflict Solver Updates",
-            "Message": "One or several mods have been updated. Conflict Solver might need updating."
+            "Message": "Load order or some mods have been updated. In case of no conflicts just navigate back. Some automatic fixes are applied."
         },
         "NoUpdatesAvailable": {
             "Title": "No Updates",

@@ -112,7 +112,7 @@
                       <ColumnDefinition Width="5*" />
                     </Grid.ColumnDefinitions>
                     <CheckBox IsChecked="{Binding IsSelected}" Grid.Column="0" Grid.ColumnSpan="2"></CheckBox>
-                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" AllowSpin="False" MinMaxAllowSpin="False"
+                    <controls:MinMaxNumericUpDown x:Name="order" Value="{Binding Order}" ClipValueToMinMax="True" MinMaxAllowSpin="True"
                                             Grid.Column="2" MaxHeight="30" HorizontalAlignment="Stretch" Margin="0,0,4,0"></controls:MinMaxNumericUpDown>
                     <Grid Grid.Column="3" ColumnDefinitions="*,14">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Center"

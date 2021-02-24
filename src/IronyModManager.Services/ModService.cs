@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -173,7 +173,7 @@ namespace IronyModManager.Services
                 Path = mod.FileName
             }))
             {
-                if (modCollection.PatchModEnabled && (enabledMods?.Any()).GetValueOrDefault())
+                if (modCollection.PatchModEnabled && enabledMods.Any())
                 {
                     if (await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
                     {

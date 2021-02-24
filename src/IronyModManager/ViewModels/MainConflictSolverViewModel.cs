@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -50,7 +50,7 @@ namespace IronyModManager.ViewModels
     {
         #region Fields
 
-        /// <summary>s
+        /// <summary>
         /// The invalid key
         /// </summary>
         private const string InvalidKey = "invalid";
@@ -189,6 +189,12 @@ namespace IronyModManager.ViewModels
         public virtual IConflictResult Conflicts { get; set; }
 
         /// <summary>
+        /// Gets or sets the context menu definition.
+        /// </summary>
+        /// <value>The context menu definition.</value>
+        public virtual IHierarchicalDefinitions ContextMenuDefinition { get; set; }
+
+        /// <summary>
         /// Gets or sets the custom conflicts.
         /// </summary>
         /// <value>The custom conflicts.</value>
@@ -211,12 +217,6 @@ namespace IronyModManager.ViewModels
         /// </summary>
         /// <value>The hierarchal conflicts.</value>
         public virtual IEnumerable<IHierarchicalDefinitions> HierarchalConflicts { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the hovered definition.
-        /// </summary>
-        /// <value>The hovered definition.</value>
-        public virtual IHierarchicalDefinitions HoveredDefinition { get; set; }
 
         /// <summary>
         /// Gets or sets the ignore.
@@ -472,7 +472,7 @@ namespace IronyModManager.ViewModels
             {
                 if (hierarchicalDefinition.AdditionalData is IDefinition definition)
                 {
-                    HoveredDefinition = hierarchicalDefinition;
+                    ContextMenuDefinition = hierarchicalDefinition;
                     InvalidConflictPath = modPatchCollectionService.ResolveFullDefinitionPath(definition);
                 }
             }
@@ -828,7 +828,7 @@ namespace IronyModManager.ViewModels
 
             InvalidCustomPatchCommand = ReactiveCommand.Create(() =>
             {
-                if (HoveredDefinition.AdditionalData is IDefinition definition)
+                if (ContextMenuDefinition.AdditionalData is IDefinition definition)
                 {
                     CustomConflicts.SetContent(definition.File, definition.Code);
                 }
@@ -869,14 +869,14 @@ namespace IronyModManager.ViewModels
                 }
             }).DisposeWith(disposables);
 
-            hotkeyPressedHandler.Message.Subscribe(m =>
+            hotkeyPressedHandler.Subscribe(m =>
             {
                 async Task performModSelectionAction()
                 {
                     if (!filteringConflicts && (SelectedParentConflict?.Children.Any()).GetValueOrDefault())
                     {
                         int? newSelectedConflict = null;
-                        var col = SelectedParentConflict?.Children.ToList();
+                        var col = SelectedParentConflict != null ? SelectedParentConflict.Children.ToList() : new List<IHierarchicalDefinitions>();
                         switch (m.Hotkey)
                         {
                             case Enums.HotKeys.Shift_Up:

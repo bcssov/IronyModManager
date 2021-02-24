@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -42,6 +43,11 @@ namespace IronyModManager.Views.Controls
         #region Fields
 
         /// <summary>
+        /// The white listed gestures
+        /// </summary>
+        protected static KeyGesture[] whiteListedGestures;
+
+        /// <summary>
         /// The order name
         /// </summary>
         private const string OrderName = "order";
@@ -60,7 +66,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public CollectionModsControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -93,6 +99,25 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
+        /// Gets the white listed gestures.
+        /// </summary>
+        /// <returns>KeyGesture[].</returns>
+        protected virtual KeyGesture[] GetWhiteListedGestures()
+        {
+            if (whiteListedGestures == null)
+            {
+                whiteListedGestures = new KeyGesture[]
+                {
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Up),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Down),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Up),
+                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Down)
+                };
+            }
+            return whiteListedGestures;
+        }
+
+        /// <summary>
         /// Handles the item dragged.
         /// </summary>
         protected virtual void HandleItemDragged()
@@ -102,6 +127,21 @@ namespace IronyModManager.Views.Controls
                 var sourceMod = source as IMod;
                 var destinationMod = destination as IMod;
                 ViewModel.InstantReorderSelectedItems(sourceMod, destinationMod.Order);
+            };
+        }
+
+        /// <summary>
+        /// Handles the pointer moved.
+        /// </summary>
+        protected virtual void HandlePointerMoved()
+        {
+            modList.PointerMoved += (sender, args) =>
+            {
+                var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
+                if (hoveredItem != null)
+                {
+                    ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                };
             };
         }
 
@@ -117,6 +157,7 @@ namespace IronyModManager.Views.Controls
                 SetContextMenus();
                 SetOrderParameters();
                 HandleItemDragged();
+                HandlePointerMoved();
             }
             base.OnActivated(disposables);
         }
@@ -132,7 +173,7 @@ namespace IronyModManager.Views.Controls
                 var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
                 if (hoveredItem != null)
                 {
-                    ViewModel.HoveredMod = hoveredItem.Content as IMod;
+                    ViewModel.ContextMenuMod = hoveredItem.Content as IMod;
                     menuItems = GetMenuItems();
                 }
                 if (modList.ItemCount == 0)
@@ -161,6 +202,7 @@ namespace IronyModManager.Views.Controls
                         {
                             orderCtrl.Minimum = 1;
                             orderCtrl.Maximum = ViewModel.MaxOrder;
+                            orderCtrl.RegisterWhiteListedGestures(whiteListedGestures);
                             if (setMargin)
                             {
                                 var left = 0;
@@ -214,7 +256,7 @@ namespace IronyModManager.Views.Controls
         private List<MenuItem> GetMenuItems()
         {
             List<MenuItem> menuItems = null;
-            if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()) || !string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()) || !string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+            if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()) || !string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
             {
                 menuItems = new List<MenuItem>
                 {
@@ -261,7 +303,7 @@ namespace IronyModManager.Views.Controls
                     });
                     counterOffset += 3;
                 }
-                if (!string.IsNullOrEmpty(ViewModel.GetHoveredModUrl()))
+                if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModUrl()))
                 {
                     menuItems.Add(new MenuItem()
                     {
@@ -274,7 +316,7 @@ namespace IronyModManager.Views.Controls
                         Command = ViewModel.CopyUrlCommand
                     });
                 }
-                if (!string.IsNullOrEmpty(ViewModel.GetHoveredModSteamUrl()))
+                if (!string.IsNullOrEmpty(ViewModel.GetContextMenuModSteamUrl()))
                 {
                     var menuItem = new MenuItem()
                     {
@@ -290,7 +332,7 @@ namespace IronyModManager.Views.Controls
                         menuItems.Insert(counterOffset + 1, menuItem);
                     }
                 }
-                if (!string.IsNullOrWhiteSpace(ViewModel.HoveredMod?.FullPath))
+                if (!string.IsNullOrWhiteSpace(ViewModel.ContextMenuMod?.FullPath))
                 {
                     var menuItem = new MenuItem()
                     {

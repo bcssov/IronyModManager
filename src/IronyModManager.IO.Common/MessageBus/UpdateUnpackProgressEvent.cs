@@ -4,25 +4,25 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-22-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="UpdateUnpackProgressEvent.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Shared.MessageBus;
 
 namespace IronyModManager.IO.Common.MessageBus
 {
     /// <summary>
     /// Class UpdateUnpackProgressEvent.
-    /// Implements the <see cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
+    /// Implements the <see cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Shared.MessageBus.IMessageBusEvent" />
-    public class UpdateUnpackProgressEvent : IMessageBusEvent
+    /// <seealso cref="IronyModManager.Shared.MessageBus.BaseNonAwaitableEvent" />
+    public class UpdateUnpackProgressEvent : BaseNonAwaitableEvent
     {
         #region Constructors
 
@@ -38,12 +38,6 @@ namespace IronyModManager.IO.Common.MessageBus
         #endregion Constructors
 
         #region Properties
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is fire and forget.
-        /// </summary>
-        /// <value><c>true</c> if this instance is fire and forget; otherwise, <c>false</c>.</value>
-        public bool IsFireAndForget => true;
 
         /// <summary>
         /// Gets or sets the progress.

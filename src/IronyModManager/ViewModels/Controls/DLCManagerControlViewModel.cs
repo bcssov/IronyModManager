@@ -4,7 +4,7 @@
 // Created          : 02-15-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 02-22-2021
 // ***********************************************************************
 // <copyright file="DLCManagerControlViewModel.cs" company="Mario">
 //     Mario
@@ -140,9 +140,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
-            CloseCommand = ReactiveCommand.Create(() =>
+            CloseCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                SaveDLCAsync(gameService.GetSelected(), selectedGame).ConfigureAwait(false);
+                await SaveDLCAsync(gameService.GetSelected(), selectedGame);
                 ForceClose();
             }).DisposeWith(disposables);
 

@@ -4,7 +4,7 @@
 // Created          : 09-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-14-2020
+// Last Modified On : 02-23-2021
 // ***********************************************************************
 // <copyright file="Updater.cs" company="Mario">
 //     Mario
@@ -143,7 +143,7 @@ namespace IronyModManager.Implementation.Updater
                 updatePath = path;
                 progress.OnNext(100);
             };
-            updateProgressHandler.Message.Subscribe(s =>
+            updateProgressHandler.Subscribe(s =>
             {
                 progress.OnNext(s.Progress);
             });
