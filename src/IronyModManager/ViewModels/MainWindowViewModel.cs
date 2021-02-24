@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 02-24-2021
 // ***********************************************************************
 // <copyright file="MainWindowViewModel.cs" company="Mario">
 //     Mario
@@ -269,9 +269,12 @@ namespace IronyModManager.ViewModels
                 TriggerPreventShutdown(!s.CanShutdown);
             }).DisposeWith(disposables);
 
-            RegisterHotkeyCommand = ReactiveCommand.Create((string key) =>
+            RegisterHotkeyCommand = ReactiveCommand.CreateFromTask(async (string key) =>
             {
-                hotkeyManager.HotKeyPressedAsync(state, key).ConfigureAwait(false);
+                if (!OverlayVisible)
+                {
+                    await hotkeyManager.HotKeyPressedAsync(state, key);
+                }
             }).DisposeWith(disposables);
 
             base.OnActivated(disposables);
