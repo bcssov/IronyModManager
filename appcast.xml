@@ -9,8 +9,7 @@
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to file which may or may no be there
-
+* Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -41,8 +40,7 @@ CHANGES FROM v1.11:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to file which may or may no be there
-
+* Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -73,8 +71,7 @@ CHANGES FROM v1.11:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to file which may or may no be there
-
+* Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -105,8 +102,7 @@ CHANGES FROM v1.11:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to file which may or may no be there
-
+* Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
