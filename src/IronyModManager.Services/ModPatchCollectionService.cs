@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 02-24-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -1061,7 +1061,7 @@ namespace IronyModManager.Services
         public virtual async Task<bool> PatchModNeedsUpdateAsync(string collectionName, IReadOnlyCollection<string> loadOrder)
         {
             loadOrder ??= new List<string>();
-            List<EvalState> mapEvalState(IEnumerable<IDefinition> definitions, bool useOriginalFilename)
+            List<EvalState> mapEvalState(IEnumerable<IDefinition> definitions)
             {
                 var result = new List<EvalState>();
                 if ((definitions?.Any()).GetValueOrDefault())
@@ -1069,7 +1069,8 @@ namespace IronyModManager.Services
                     result.AddRange(definitions.Select(m => new EvalState()
                     {
                         ContentSha = m.ContentSHA,
-                        FileName = useOriginalFilename ? m.OriginalFileName : m.File,
+                        FileName = m.OriginalFileName,
+                        FallBackFileName = m.File,
                         ModName = m.ModName
                     }));
                 }
@@ -1097,9 +1098,9 @@ namespace IronyModManager.Services
                     return true;
                 }
                 var conflicts = new List<EvalState>();
-                conflicts.AddRange(mapEvalState(state.Conflicts, false));
-                conflicts.AddRange(mapEvalState(state.OrphanConflicts, false));
-                conflicts.AddRange(mapEvalState(state.OverwrittenConflicts, true));
+                conflicts.AddRange(mapEvalState(state.Conflicts));
+                conflicts.AddRange(mapEvalState(state.OrphanConflicts));
+                conflicts.AddRange(mapEvalState(state.OverwrittenConflicts));
                 foreach (var groupedMods in conflicts.GroupBy(p => p.ModName))
                 {
                     foreach (var item in groupedMods.GroupBy(p => p.FileName))
@@ -1115,6 +1116,10 @@ namespace IronyModManager.Services
                         else
                         {
                             var info = Reader.GetFileInfo(mod.FullPath, definition.FileName);
+                            if (info == null)
+                            {
+                                info = Reader.GetFileInfo(mod.FullPath, definition.FallBackFileName);
+                            }
                             if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
                             {
                                 // File no longer in collection or content does not match, break further checks
@@ -2108,6 +2113,12 @@ namespace IronyModManager.Services
             /// </summary>
             /// <value>The content sha.</value>
             public string ContentSha { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the fall back file.
+            /// </summary>
+            /// <value>The name of the fall back file.</value>
+            public string FallBackFileName { get; set; }
 
             /// <summary>
             /// Gets or sets the name of the file.
