@@ -10,6 +10,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 RELEASE INFO:
 * Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
+
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -41,6 +42,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 RELEASE INFO:
 * Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
+
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -72,6 +74,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 RELEASE INFO:
 * Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
+
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
@@ -103,6 +106,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 RELEASE INFO:
 * Fix false positive when evaluating patch state by attempting to read a file which may or may no be there
+
 CHANGES FROM v1.11:
 * Update dependencies
 * Various minor fixes
