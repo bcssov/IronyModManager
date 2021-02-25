@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.110</title>
+			<title>1.12.112</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to read a file which may or may not be there
+* Fix permission check flag
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -32,16 +32,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Wed, 24 Feb 2021 18:20:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/osx-x64.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="63204139" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="93FoJ+sn3k/yqqK3AH2EkGCaQs0mdO2CmNR7V6HrORjarqdg+ly46WbGreyDCJoYq3g1j8HIKeX+9sbhmdCZDg=="/>
+			<pubDate>Thu, 25 Feb 2021 04:43:58 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/osx-x64.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="63204029" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="tyig5TqqHkKsU1HCyzLHA1yLfwT3e7VYiqFi1le+LJKBBxBtWNkHBf8NJ+L79ac6l4UtNIkAYn1wF6HPGzMnAw=="/>
 		</item>
 		<item>
-			<title>1.12.110</title>
+			<title>1.12.112</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to read a file which may or may not be there
+* Fix permission check flag
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -64,16 +64,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Wed, 24 Feb 2021 18:21:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/win-x64-setup.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="54821435" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="sWw/Fb5rPt4FEcdgLL//3qnRb6fwsSyUTm9oti36DJox1ihAwNMQL39WJeLBUh7XSKOiHpI4QBM0rmbO9gQHDA=="/>
+			<pubDate>Thu, 25 Feb 2021 04:44:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/win-x64-setup.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="54818854" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="mgeJvRR5ygqZDJ2IIC5ApNWo4Io+D4ipLjBnjgPg7zZiEHiXZfaC8f2MsN1zM1Z86FWpe17RtVBp4gWUwU2SDg=="/>
 		</item>
 		<item>
-			<title>1.12.110</title>
+			<title>1.12.112</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to read a file which may or may not be there
+* Fix permission check flag
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -96,16 +96,16 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Wed, 24 Feb 2021 18:20:59 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/win-x64.rar" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="65621581" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="6kWhVCK/Wjtlju3i9918vH2XFa2WUtvXtf7Psfsay8HhPNbMR9cWA/aAOl32ASzxVV0wAVl2owBoR5d1eYvvDA=="/>
+			<pubDate>Thu, 25 Feb 2021 04:44:01 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/win-x64.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="65621754" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z8pQar6qUTnn2x6oXTFuwSYjL/q9bP92xrv+nuvzCwIlxgID6LsvnuEgjbHAVD8/MGkX/3uE2zqF/bEnEuChDw=="/>
 		</item>
 		<item>
-			<title>1.12.110</title>
+			<title>1.12.112</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix false positive when evaluating patch state by attempting to read a file which may or may not be there
+* Fix permission check flag
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -128,8 +128,8 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Wed, 24 Feb 2021 18:20:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.110/linux-x64.zip" sparkle:version="1.12.110.38342" sparkle:shortVersionString="1.12.110" length="78749793" sparkle:os="linux" type="application/zip" sparkle:signature="fP3cS3asnMha59G7DzGR4ecepsA/qXcDhe7cCcEGNAQgF+bkyQp3tRLetE/yvZbCLoKi/xeV4i4ZNnbTsPAPAg=="/>
+			<pubDate>Thu, 25 Feb 2021 04:43:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/linux-x64.zip" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="78749611" sparkle:os="linux" type="application/zip" sparkle:signature="j2kitnFggRHuk9MBa190TRD0/hp+bzLGPsxkcURinMe83uv27D4gXajOBVr/kAyOyPhd8wnSTpm7q9xE8ZRuAA=="/>
 		</item>
 	</channel>
 </rss>
