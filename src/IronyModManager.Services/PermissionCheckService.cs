@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 02-25-2021
 // ***********************************************************************
 // <copyright file="PermissionCheckService.cs" company="Mario">
 //     Mario
@@ -119,7 +119,7 @@ namespace IronyModManager.Services
                     }
                 }
             }
-            if (result.All(p => p.Valid))
+            if (result.Any() && result.All(p => p.Valid))
             {
                 state.LastWritableCheck = DateTime.Now;
                 appStateService.Save(state);
