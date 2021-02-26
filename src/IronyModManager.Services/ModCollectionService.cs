@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-27-2020
+// Last Modified On : 02-26-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -211,7 +211,19 @@ namespace IronyModManager.Services
                 var patchModName = GenerateCollectionPatchName(collection.Name);
                 var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
                 var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
-                if (patchMod != null)
+                if (patchMod == null)
+                {
+                    var game = GameService.GetSelected();
+                    if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+                    {
+                        RootDirectory = game.UserDirectory,
+                        Path = GetModDirectory(game, patchModName)
+                    }))
+                    {
+                        patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);
+                    }
+                }
+                if (patchMod != null && collection.PatchModEnabled)
                 {
                     if (patchMod.Files == null || !patchMod.Files.Any())
                     {
@@ -322,6 +334,18 @@ namespace IronyModManager.Services
             var patchModName = GenerateCollectionPatchName(collection.Name);
             var allMods = GetInstalledModsInternal(GameService.GetSelected(), false);
             var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchModName));
+            if (patchMod == null)
+            {
+                var game = GameService.GetSelected();
+                if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+                {
+                    RootDirectory = game.UserDirectory,
+                    Path = GetModDirectory(game, patchModName)
+                }))
+                {
+                    patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);
+                }
+            }
             if (patchMod != null)
             {
                 if (patchMod.Files == null || !patchMod.Files.Any())

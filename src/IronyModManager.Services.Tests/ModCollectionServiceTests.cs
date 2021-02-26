@@ -905,9 +905,14 @@ namespace IronyModManager.Services.Tests
             {
                 ContentSHA = "2"
             });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(false);
+            });
             DISetup.SetupContainer();
 
-            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ExportHashReportAsync(new List<IMod>() {
                 new Mod()
                 {
@@ -956,9 +961,14 @@ namespace IronyModManager.Services.Tests
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
             var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(false);
+            });
             DISetup.SetupContainer();
 
-            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportHashReportAsync(new List<IMod>() {
                 new Mod()
                 {
@@ -1013,9 +1023,14 @@ namespace IronyModManager.Services.Tests
                 FileName = "2",
                 ContentSHA = "3"
             });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(false);
+            });
             DISetup.SetupContainer();
 
-            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportHashReportAsync(new List<IMod>() {
                 new Mod()
                 {
@@ -1072,9 +1087,14 @@ namespace IronyModManager.Services.Tests
                 FileName = "2",
                 ContentSHA = "3"
             });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(false);
+            });
             DISetup.SetupContainer();
 
-            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportHashReportAsync(new List<IMod>() {
                 new Mod()
                 {
@@ -1131,9 +1151,14 @@ namespace IronyModManager.Services.Tests
                 FileName = "2",
                 ContentSHA = "2"
             });
+            var modWriter = new Mock<IModWriter>();
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return Task.FromResult(false);
+            });
             DISetup.SetupContainer();
 
-            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, null, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
+            var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportHashReportAsync(new List<IMod>() {
                 new Mod()
                 {
