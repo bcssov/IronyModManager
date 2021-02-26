@@ -4,12 +4,14 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.112</title>
+			<title>1.12.113</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix permission check flag
+* Fix potential mod parser issue in dealing with quote marks
+* Hash report export takes into account patch enabled flag
+* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -32,16 +34,18 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Thu, 25 Feb 2021 04:43:58 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/osx-x64.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="63204029" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="tyig5TqqHkKsU1HCyzLHA1yLfwT3e7VYiqFi1le+LJKBBxBtWNkHBf8NJ+L79ac6l4UtNIkAYn1wF6HPGzMnAw=="/>
+			<pubDate>Fri, 26 Feb 2021 20:44:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/osx-x64.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="63211354" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="TY4J2ROVbqURApYe3vDEPnj2pOYL9GS2XYotfioVlo+z7K1hAnLO/wNCuPqXxJ9fQqtBv+cVuB9WL+POff7EAQ=="/>
 		</item>
 		<item>
-			<title>1.12.112</title>
+			<title>1.12.113</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix permission check flag
+* Fix potential mod parser issue in dealing with quote marks
+* Hash report export takes into account patch enabled flag
+* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -64,16 +68,18 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Thu, 25 Feb 2021 04:44:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/win-x64-setup.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="54818854" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="mgeJvRR5ygqZDJ2IIC5ApNWo4Io+D4ipLjBnjgPg7zZiEHiXZfaC8f2MsN1zM1Z86FWpe17RtVBp4gWUwU2SDg=="/>
+			<pubDate>Fri, 26 Feb 2021 20:44:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/win-x64-setup.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="54822781" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="DSg133oX62CjsyNG1HrCrUDpQZ6W5f8+noZEKNCliV3iPImuq/FrAwqpjjoW/VdJ/BEeaHz6AFlNYAO/+92TBA=="/>
 		</item>
 		<item>
-			<title>1.12.112</title>
+			<title>1.12.113</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix permission check flag
+* Fix potential mod parser issue in dealing with quote marks
+* Hash report export takes into account patch enabled flag
+* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -96,16 +102,18 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Thu, 25 Feb 2021 04:44:01 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/win-x64.rar" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="65621754" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z8pQar6qUTnn2x6oXTFuwSYjL/q9bP92xrv+nuvzCwIlxgID6LsvnuEgjbHAVD8/MGkX/3uE2zqF/bEnEuChDw=="/>
+			<pubDate>Fri, 26 Feb 2021 20:44:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/win-x64.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="65628915" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="H0w53wc8Zk2WJ2NderOoStVzNtiXgdgdJsbFNqoCMXMFnRG1TU79R33oFEJy6IMiLeaCBBih6tMWLIY8lLI1AA=="/>
 		</item>
 		<item>
-			<title>1.12.112</title>
+			<title>1.12.113</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix permission check flag
+* Fix potential mod parser issue in dealing with quote marks
+* Hash report export takes into account patch enabled flag
+* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -128,8 +136,8 @@ CHANGES FROM v1.11:
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area</description>
-			<pubDate>Thu, 25 Feb 2021 04:43:56 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.112/linux-x64.zip" sparkle:version="1.12.112.40114" sparkle:shortVersionString="1.12.112" length="78749611" sparkle:os="linux" type="application/zip" sparkle:signature="j2kitnFggRHuk9MBa190TRD0/hp+bzLGPsxkcURinMe83uv27D4gXajOBVr/kAyOyPhd8wnSTpm7q9xE8ZRuAA=="/>
+			<pubDate>Fri, 26 Feb 2021 20:44:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/linux-x64.zip" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="78750318" sparkle:os="linux" type="application/zip" sparkle:signature="gMvT2jCtOguHbcOVoE28ckThzh9FFaJni+pjEMIFiYHAzPFx4nZZNdNzQqSDvThIWW/CHao4mC6pxL/BX8pzDQ=="/>
 		</item>
 	</channel>
 </rss>
