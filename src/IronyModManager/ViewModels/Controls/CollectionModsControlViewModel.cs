@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 02-26-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1538,7 +1538,7 @@ namespace IronyModManager.ViewModels.Controls
                     var id = idGenerator.GetNextId();
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
                     registerReportHandlers(id, true);
-                    var reports = await modCollectionService.ImportHashReportAsync(SelectedMods, path);
+                    var reports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, path));
                     if (reports?.Count() > 0)
                     {
                         await TriggerOverlayAsync(id, false);
@@ -1563,7 +1563,7 @@ namespace IronyModManager.ViewModels.Controls
                     var id = idGenerator.GetNextId();
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
                     registerReportHandlers(id);
-                    if (await modCollectionService.ExportHashReportAsync(SelectedMods, path))
+                    if (await Task.Run(() => modCollectionService.ExportHashReportAsync(SelectedMods, path)))
                     {
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);

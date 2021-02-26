@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 02-26-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -403,6 +403,8 @@ namespace IronyModManager.Services
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.Tags = new List<string>() { "Fixes" };
+            mod.IsValid = true;
+            mod.FullPath = Path.Combine(game.UserDirectory, mod.FileName);
             return mod;
         }
 
