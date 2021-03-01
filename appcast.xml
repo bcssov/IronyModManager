@@ -4,14 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.113</title>
+			<title>1.12.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential mod parser issue in dealing with quote marks
-* Hash report export takes into account patch enabled flag
-* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
+* Update dependencies
+* Render mod names properly for latin languages (which are not in latin)
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -33,19 +32,19 @@ CHANGES FROM v1.11:
 * Add command line support (to be utilized by projects like pdx unlimiter)
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area</description>
-			<pubDate>Fri, 26 Feb 2021 20:44:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/osx-x64.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="63211354" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="TY4J2ROVbqURApYe3vDEPnj2pOYL9GS2XYotfioVlo+z7K1hAnLO/wNCuPqXxJ9fQqtBv+cVuB9WL+POff7EAQ=="/>
+* Tweak moving around mods in collection mods area
+* Render mod names properly for latin languages (which are not in latin)</description>
+			<pubDate>Mon, 01 Mar 2021 06:09:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/osx-x64.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="63200789" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="ToiTWJw6MXwTfcVoRuK/IGmJb+3WXodpNZU1py4rLLL2+rULd/mZUdhgt0b1Osl6S4jamMs1DJO/xQmVEvFbDg=="/>
 		</item>
 		<item>
-			<title>1.12.113</title>
+			<title>1.12.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential mod parser issue in dealing with quote marks
-* Hash report export takes into account patch enabled flag
-* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
+* Update dependencies
+* Render mod names properly for latin languages (which are not in latin)
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -67,19 +66,19 @@ CHANGES FROM v1.11:
 * Add command line support (to be utilized by projects like pdx unlimiter)
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area</description>
-			<pubDate>Fri, 26 Feb 2021 20:44:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/win-x64-setup.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="54822781" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="DSg133oX62CjsyNG1HrCrUDpQZ6W5f8+noZEKNCliV3iPImuq/FrAwqpjjoW/VdJ/BEeaHz6AFlNYAO/+92TBA=="/>
+* Tweak moving around mods in collection mods area
+* Render mod names properly for latin languages (which are not in latin)</description>
+			<pubDate>Mon, 01 Mar 2021 06:09:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/win-x64-setup.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="54820215" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LbRLRF1SFEZ1MabcKWVAWeLxroU36rtpKJXXOhXUULFCwVu/3lKZxTUwJOH796ArXcR0FfPrp29ZKUBihs/MCg=="/>
 		</item>
 		<item>
-			<title>1.12.113</title>
+			<title>1.12.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential mod parser issue in dealing with quote marks
-* Hash report export takes into account patch enabled flag
-* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
+* Update dependencies
+* Render mod names properly for latin languages (which are not in latin)
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -101,19 +100,19 @@ CHANGES FROM v1.11:
 * Add command line support (to be utilized by projects like pdx unlimiter)
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area</description>
-			<pubDate>Fri, 26 Feb 2021 20:44:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/win-x64.rar" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="65628915" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="H0w53wc8Zk2WJ2NderOoStVzNtiXgdgdJsbFNqoCMXMFnRG1TU79R33oFEJy6IMiLeaCBBih6tMWLIY8lLI1AA=="/>
+* Tweak moving around mods in collection mods area
+* Render mod names properly for latin languages (which are not in latin)</description>
+			<pubDate>Mon, 01 Mar 2021 06:09:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/win-x64.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="65618117" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="AQO66104b0pwGoy3XRx18VYU72aoZzmarNDujOaqlJGJkCmk4cdZfcdqYcRD2m3TeuKwXJJDq4hiWh691sinCA=="/>
 		</item>
 		<item>
-			<title>1.12.113</title>
+			<title>1.12.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential mod parser issue in dealing with quote marks
-* Hash report export takes into account patch enabled flag
-* Ensure that hash report takes into account missing descriptor for patch mod before attempting to include it in the report
+* Update dependencies
+* Render mod names properly for latin languages (which are not in latin)
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -135,9 +134,10 @@ CHANGES FROM v1.11:
 * Add command line support (to be utilized by projects like pdx unlimiter)
 * Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
 * Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area</description>
-			<pubDate>Fri, 26 Feb 2021 20:44:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.113/linux-x64.zip" sparkle:version="1.12.113.15859" sparkle:shortVersionString="1.12.113" length="78750318" sparkle:os="linux" type="application/zip" sparkle:signature="gMvT2jCtOguHbcOVoE28ckThzh9FFaJni+pjEMIFiYHAzPFx4nZZNdNzQqSDvThIWW/CHao4mC6pxL/BX8pzDQ=="/>
+* Tweak moving around mods in collection mods area
+* Render mod names properly for latin languages (which are not in latin)</description>
+			<pubDate>Mon, 01 Mar 2021 06:09:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/linux-x64.zip" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="78752024" sparkle:os="linux" type="application/zip" sparkle:signature="Oax2l8Jb+fF87dUQDCDycXULt1XaHTCtXlidrfwyrP457MgIdt4GMmchAjEm/VBbwJ6gXHSaF3F2fwqrWLNgBg=="/>
 		</item>
 	</channel>
 </rss>
