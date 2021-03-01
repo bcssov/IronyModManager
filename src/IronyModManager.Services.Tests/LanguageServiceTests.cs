@@ -374,5 +374,69 @@ namespace IronyModManager.Services.Tests
             result.Should().Be(false);
             CurrentLocale.CultureName.Should().Be("en");
         }
+
+        /// <summary>
+        /// Defines the test method Should_return_language_by_supported_name_block.
+        /// </summary>
+        [Fact]
+        public void Should_return_language_by_supported_name_block()
+        {
+            var resourceProvider = new Mock<IDefaultLocalizationResourceProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var locManager = new Mock<ILocalizationManager>();
+            SetupMockSuccessCase(locManager, resourceProvider, preferencesService);
+            locManager.Setup(p => p.GetResource(It.IsAny<string>(), It.IsAny<string>())).Returns((string l, string r) =>
+            {
+                if (r.Contains("SupportedNameBlock"))
+                {
+                    if (l.Equals("jp"))
+                    {
+                        return "IsKatakana";
+                    }
+                    return string.Empty;
+                }
+                return "Roboto";
+            });
+            resourceProvider.Setup(p => p.GetAvailableLocales()).Returns(() =>
+            {
+                return new List<string>() { "en", "de", "jp" };
+            });
+
+            var languageService = new LanguagesService(locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);            
+            var l = languageService.GetLanguageBySupportedNameBlock("テスト");
+            l.Abrv.Should().Be("jp");
+        }
+
+        /// <summary>
+        /// Defines the test method Should__not_return_language_by_supported_name_block.
+        /// </summary>
+        [Fact]
+        public void Should__not_return_language_by_supported_name_block()
+        {
+            var resourceProvider = new Mock<IDefaultLocalizationResourceProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            var locManager = new Mock<ILocalizationManager>();
+            SetupMockSuccessCase(locManager, resourceProvider, preferencesService);
+            locManager.Setup(p => p.GetResource(It.IsAny<string>(), It.IsAny<string>())).Returns((string l, string r) =>
+            {
+                if (r.Contains("SupportedNameBlock"))
+                {
+                    if (l.Equals("jp"))
+                    {
+                        return "IsKatakana";
+                    }
+                    return string.Empty;
+                }
+                return "Roboto";
+            });
+            resourceProvider.Setup(p => p.GetAvailableLocales()).Returns(() =>
+            {
+                return new List<string>() { "en", "de", "jp" };
+            });
+
+            var languageService = new LanguagesService(locManager.Object, resourceProvider.Object, preferencesService.Object, new Mock<IStorageProvider>().Object, new Mock<IMapper>().Object);
+            var l = languageService.GetLanguageBySupportedNameBlock("test");
+            l.Should().BeNull();
+        }
     }
 }
