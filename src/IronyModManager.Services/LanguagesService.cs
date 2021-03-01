@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-01-2021
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -12,9 +12,11 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using IronyModManager.Localization;
 using IronyModManager.Localization.ResourceProviders;
@@ -35,6 +37,11 @@ namespace IronyModManager.Services
     public class LanguagesService : BaseService, ILanguagesService
     {
         #region Fields
+
+        /// <summary>
+        /// The character regex
+        /// </summary>
+        private static readonly ConcurrentDictionary<string, Regex> charRegex = new ConcurrentDictionary<string, Regex>();
 
         /// <summary>
         /// The localization manager
@@ -115,6 +122,32 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Gets the language by supported name block.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>ILanguage.</returns>
+        public virtual ILanguage GetLanguageBySupportedNameBlock(string text)
+        {
+            var languages = Get().Where(p => !string.IsNullOrWhiteSpace(p.SupportedNameBlock));
+            if (languages.Any())
+            {
+                foreach (var item in languages)
+                {
+                    if (!charRegex.TryGetValue(item.Abrv, out var regex))
+                    {
+                        regex = new Regex($"\\p{{{item.SupportedNameBlock}}}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                        charRegex.TryAdd(item.Abrv, regex);
+                    }
+                    if (text.Any(c => regex.IsMatch(c.ToString())))
+                    {
+                        return item;
+                    }
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the selected.
         /// </summary>
         /// <returns>ILanguage.</returns>
@@ -150,12 +183,12 @@ namespace IronyModManager.Services
         /// <param name="languages">The languages.</param>
         /// <param name="selectedLanguage">The selected language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException">languages or selectedLanguage.</exception>
+        /// <exception cref="ArgumentNullException"></exception>
         public virtual bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
-            if (languages == null || languages.Count() == 0 || selectedLanguage == null)
+            if (languages == null || !languages.Any() || selectedLanguage == null)
             {
-                throw new ArgumentNullException("languages or selectedLanguage.");
+                throw new ArgumentNullException($"{nameof(languages)} or {nameof(selectedLanguage)}.");
             }
 
             var currentLanguage = GetSelected();
@@ -190,6 +223,7 @@ namespace IronyModManager.Services
             model.Abrv = locale;
             model.Name = $"{culture.TextInfo.ToTitleCase(culture.NativeName)}";
             model.Font = localizationManager.GetResource(locale, LocalizationResources.App.FontFamily);
+            model.SupportedNameBlock = localizationManager.GetResource(locale, LocalizationResources.App.SupportedNameBlock);
             return model;
         }
 

@@ -12,6 +12,7 @@ namespace IronyModManager.Shared
         {
             public const string Prefix = "App.";
             public const string FontFamily = Prefix + "FontFamily";
+            public const string SupportedNameBlock = Prefix + "SupportedNameBlock";
             public const string Title = Prefix + "Title";
             public const string BackgroundOperationMessage = Prefix + "BackgroundOperationMessage";
             public const string WaitBackgroundOperationMessage = Prefix + "WaitBackgroundOperationMessage";

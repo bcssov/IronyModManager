@@ -2,6 +2,7 @@
     // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
+        "SupportedNameBlock": "IsCJKUnifiedIdeographs", // Leavy empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
         "Title": "Irony 模组管理器：v{AppVersion}",
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭……",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",

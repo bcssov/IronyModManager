@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-19-2020
+// Last Modified On : 03-01-2021
 // ***********************************************************************
 // <copyright file="ILanguagesService.cs" company="Mario">
 //     Mario
@@ -39,6 +39,13 @@ namespace IronyModManager.Services.Common
         /// </summary>
         /// <returns>IEnumerable&lt;ILanguage&gt;.</returns>
         IEnumerable<ILanguage> Get();
+
+        /// <summary>
+        /// Gets the language by supported name block.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <returns>ILanguage.</returns>
+        ILanguage GetLanguageBySupportedNameBlock(string text);
 
         /// <summary>
         /// Gets the selected.

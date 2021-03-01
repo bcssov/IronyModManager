@@ -4,15 +4,15 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-01-2021
 // ***********************************************************************
 // <copyright file="Language.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Models
@@ -51,6 +51,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the supported name block.
+        /// </summary>
+        /// <value>The supported name block.</value>
+        public virtual string SupportedNameBlock { get; set; }
 
         #endregion Properties
     }

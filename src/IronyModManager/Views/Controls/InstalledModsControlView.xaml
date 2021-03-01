@@ -13,6 +13,7 @@
     <converter:BoolAndConverter x:Key="BoolAndConverter" />
     <converter:AchievementStatusCompatibleConverter x:Key="AchievementStatusCompatibleConverter" />
     <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
+    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
@@ -67,7 +68,7 @@
                   </CheckBox.IsEnabled>
                 </CheckBox>
                 <Grid Grid.Column="3" ColumnDefinitions="*,14">
-                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0"></TextBlock>
+                  <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
                   <Panel Grid.Column="1">
                     <!-- Because Avalonia sucks in this regard, that's why -->
                     <controls:IronyToolTip Background="Transparent" BorderThickness="0,0,0,0"  IsVisible="{Binding AchievementStatus, Converter={StaticResource AchievementStatusCompatibleConverter}}">
