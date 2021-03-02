@@ -4,13 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.116</title>
+			<title>1.12.118</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Render mod names properly for latin languages (which are not in latin)
+* Fix potential rare CTD when rendering images
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -34,17 +33,16 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Mon, 01 Mar 2021 06:09:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/osx-x64.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="63200789" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="ToiTWJw6MXwTfcVoRuK/IGmJb+3WXodpNZU1py4rLLL2+rULd/mZUdhgt0b1Osl6S4jamMs1DJO/xQmVEvFbDg=="/>
+			<pubDate>Tue, 02 Mar 2021 19:13:57 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/osx-x64.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="63203867" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="769BJBkBcfVqSJY7RMpiWNX9VRgdKY117gh1aH4VrsnupK7Oz6bGLmbpkHYJ1di73u1YtMKuZ5mBUrW40l7iCg=="/>
 		</item>
 		<item>
-			<title>1.12.116</title>
+			<title>1.12.118</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Render mod names properly for latin languages (which are not in latin)
+* Fix potential rare CTD when rendering images
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -68,17 +66,16 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Mon, 01 Mar 2021 06:09:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/win-x64-setup.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="54820215" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="LbRLRF1SFEZ1MabcKWVAWeLxroU36rtpKJXXOhXUULFCwVu/3lKZxTUwJOH796ArXcR0FfPrp29ZKUBihs/MCg=="/>
+			<pubDate>Tue, 02 Mar 2021 19:14:03 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/win-x64-setup.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="54824167" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rwB1J3NIdypN1jIMFBkOJDXnF33IaorZQYNN1oO8e1Py3Jao8HgNsd1sv062pkhrbL2K77IczPMsO77gO3ZrCA=="/>
 		</item>
 		<item>
-			<title>1.12.116</title>
+			<title>1.12.118</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Render mod names properly for latin languages (which are not in latin)
+* Fix potential rare CTD when rendering images
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -102,17 +99,16 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Mon, 01 Mar 2021 06:09:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/win-x64.rar" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="65618117" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="AQO66104b0pwGoy3XRx18VYU72aoZzmarNDujOaqlJGJkCmk4cdZfcdqYcRD2m3TeuKwXJJDq4hiWh691sinCA=="/>
+			<pubDate>Tue, 02 Mar 2021 19:14:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/win-x64.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="65621235" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1MZTwoPfIZCksxs/7Uk7gT88SoL+oxCapwEDTyylgn3E7+E1zkVNQ/1wveqzLT08TXrJz85IQ4K2dQtyzsTeCA=="/>
 		</item>
 		<item>
-			<title>1.12.116</title>
+			<title>1.12.118</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Update dependencies
-* Render mod names properly for latin languages (which are not in latin)
+* Fix potential rare CTD when rendering images
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -136,8 +132,8 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Mon, 01 Mar 2021 06:09:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.116/linux-x64.zip" sparkle:version="1.12.116.17400" sparkle:shortVersionString="1.12.116" length="78752024" sparkle:os="linux" type="application/zip" sparkle:signature="Oax2l8Jb+fF87dUQDCDycXULt1XaHTCtXlidrfwyrP457MgIdt4GMmchAjEm/VBbwJ6gXHSaF3F2fwqrWLNgBg=="/>
+			<pubDate>Tue, 02 Mar 2021 19:13:55 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/linux-x64.zip" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="78752749" sparkle:os="linux" type="application/zip" sparkle:signature="ik4Va8EOiyCOYfaAkyG7Ew8bwXqhnCDY0GEv6aI5Ry97hRajSj8k+BTsZgjzr8JI4jb0oi7EQ95vl0vvW/06Dg=="/>
 		</item>
 	</channel>
 </rss>
