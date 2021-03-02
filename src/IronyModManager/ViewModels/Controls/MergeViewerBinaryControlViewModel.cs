@@ -226,6 +226,7 @@ namespace IronyModManager.ViewModels.Controls
                     RightImageInfo = string.Empty;
                     RightHeight = RightWidth = 0;
                 }
+                await Task.Delay(10);
                 mutex.Dispose();
             }
 
