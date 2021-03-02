@@ -4,7 +4,7 @@
 // Created          : 03-25-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-02-2021
 // ***********************************************************************
 // <copyright file="MergeViewerBinaryControlViewModel.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
+using Nito.AsyncEx;
 using ReactiveUI;
 using SmartFormat;
 
@@ -44,6 +45,11 @@ namespace IronyModManager.ViewModels.Controls
         private const string BlockSelected = "BlockSelected";
 
         /// <summary>
+        /// The left image lock
+        /// </summary>
+        private readonly AsyncLock leftImageLock = new AsyncLock();
+
+        /// <summary>
         /// The localization manager
         /// </summary>
         private readonly ILocalizationManager localizationManager;
@@ -57,6 +63,11 @@ namespace IronyModManager.ViewModels.Controls
         /// The mod service
         /// </summary>
         private readonly IModService modService;
+
+        /// <summary>
+        /// The right image lock
+        /// </summary>
+        private readonly AsyncLock rightImageLock = new AsyncLock();
 
         #endregion Fields
 
@@ -188,20 +199,38 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="fullReset">if set to <c>true</c> [full reset].</param>
         public void Reset(bool fullReset = true)
         {
-            TakeLeftClass = string.Empty;
-            TakeRightClass = string.Empty;
-            if (fullReset)
+            async Task resetLeft(bool fullReset)
             {
-                var left = LeftImage;
-                LeftImage = null;
-                left?.Dispose();
-                var right = RightImage;
-                RightImage = null;
-                right?.Dispose();
-                LeftImageInfo = string.Empty;
-                RightImageInfo = string.Empty;
-                LeftHeight = LeftWidth = RightHeight = RightWidth = 0;
+                var mutex = await leftImageLock.LockAsync();
+                TakeLeftClass = string.Empty;
+                if (fullReset)
+                {
+                    var left = LeftImage;
+                    LeftImage = null;
+                    left?.Dispose();
+                    LeftImageInfo = string.Empty;
+                    LeftHeight = LeftWidth = 0;
+                }
+                await Task.Delay(10);
+                mutex.Dispose();
             }
+            async Task resetRight(bool fullReset)
+            {
+                var mutex = await leftImageLock.LockAsync();
+                TakeRightClass = string.Empty;
+                if (fullReset)
+                {
+                    var right = RightImage;
+                    RightImage = null;
+                    right?.Dispose();
+                    RightImageInfo = string.Empty;
+                    RightHeight = RightWidth = 0;
+                }
+                mutex.Dispose();
+            }
+
+            resetLeft(fullReset).ConfigureAwait(false);
+            resetRight(fullReset).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -210,14 +239,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetLeft(IDefinition definition)
         {
-            var loadingImage = false;
             async Task parseImage()
             {
-                while (loadingImage)
-                {
-                    await Task.Delay(25);
-                }
-                loadingImage = true;
+                var mutex = await leftImageLock.LockAsync();
                 var left = LeftImage;
                 if (definition != null)
                 {
@@ -255,7 +279,8 @@ namespace IronyModManager.ViewModels.Controls
                     left?.Dispose();
                     LeftHeight = LeftWidth = 0;
                 }
-                loadingImage = false;
+                await Task.Delay(10);
+                mutex.Dispose();
             }
 
             Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
@@ -267,14 +292,9 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="definition">The definition.</param>
         public void SetRight(IDefinition definition)
         {
-            var loadingImage = false;
             async Task parseImage()
             {
-                while (loadingImage)
-                {
-                    await Task.Delay(25);
-                }
-                loadingImage = true;
+                var mutex = await leftImageLock.LockAsync();
                 var right = RightImage;
                 if (definition != null)
                 {
@@ -312,7 +332,8 @@ namespace IronyModManager.ViewModels.Controls
                     right?.Dispose();
                     RightHeight = RightWidth = 0;
                 }
-                loadingImage = false;
+                await Task.Delay(10);
+                mutex.Dispose();
             }
             Task.Run(() => parseImage().ConfigureAwait(false)).ConfigureAwait(false);
         }
