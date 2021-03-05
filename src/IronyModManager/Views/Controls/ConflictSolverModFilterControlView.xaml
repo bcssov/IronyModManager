@@ -3,7 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverModFilterControlView">
+  <UserControl.Resources>
+    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
+  </UserControl.Resources>
   <Panel>
     <Button Content="{Binding ModFilter}" Command="{Binding ModFilterCommand}"
             BorderThickness="0,0,0,0" Background="Transparent"
@@ -17,7 +21,8 @@
                    Height="400" Width="300" Grid.Row="0">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding}" TextWrapping="Wrap"></TextBlock>
+                <TextBlock Text="{Binding}" TextWrapping="Wrap"
+                           FontFamily="{Binding,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>

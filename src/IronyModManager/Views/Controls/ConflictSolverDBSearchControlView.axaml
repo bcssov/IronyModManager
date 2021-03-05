@@ -7,6 +7,7 @@
              x:Class="IronyModManager.Views.Controls.ConflictSolverDBSearchControlView">
   <UserControl.Resources>
     <converter:DefinitionSearchTextConverter x:Key="DefinitionSearchTextConverter" />
+    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
   <Panel>
     <Button Content="{Binding DatabaseSearch}" Command="{Binding DatabaseSearchCommand}"
@@ -27,7 +28,8 @@
                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding, Converter={StaticResource DefinitionSearchTextConverter}}" TextWrapping="Wrap">
+                <TextBlock Text="{Binding, Converter={StaticResource DefinitionSearchTextConverter}}" TextWrapping="Wrap"
+                           FontFamily="{Binding,Converter={StaticResource TextTypeFontFamilyConverter}}">
                 </TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>

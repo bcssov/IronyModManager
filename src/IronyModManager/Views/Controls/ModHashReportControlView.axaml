@@ -3,7 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ModHashReportControlView">
+  <UserControl.Resources>
+    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
+  </UserControl.Resources>
   <Panel>
     <Popup PlacementMode="AnchorAndGravity" IsOpen="{Binding IsOpen}"
            Topmost="False" ObeyScreenEdges="True" StaysOpen="True" x:Name="popup">
@@ -16,7 +20,8 @@
                    SelectionMode="Single" Width="300" Height="360" Grid.Row="0" Grid.Column="0">
             <ListBox.ItemTemplate>
               <DataTemplate>
-                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
+                <TextBlock Text="{Binding Name}" TextWrapping="Wrap"
+                           FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
