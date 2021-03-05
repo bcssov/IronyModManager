@@ -4,12 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.118</title>
+			<title>1.12.121</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential rare CTD when rendering images
+* Tweak collection mods area height
+* Set proper font for other UI elements
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -33,16 +34,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 02 Mar 2021 19:13:57 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/osx-x64.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="63203867" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="769BJBkBcfVqSJY7RMpiWNX9VRgdKY117gh1aH4VrsnupK7Oz6bGLmbpkHYJ1di73u1YtMKuZ5mBUrW40l7iCg=="/>
+			<pubDate>Fri, 05 Mar 2021 19:21:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/osx-x64.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="63213043" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="73KhnBtzyFgiDmQmUShNRUrHpH2JtydXtGx33sFyrZkroJkgdJ5cFHzIpoBMLD6NuBtcALEwO58OwkBdzuf5DA=="/>
 		</item>
 		<item>
-			<title>1.12.118</title>
+			<title>1.12.121</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential rare CTD when rendering images
+* Tweak collection mods area height
+* Set proper font for other UI elements
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -66,16 +68,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 02 Mar 2021 19:14:03 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/win-x64-setup.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="54824167" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rwB1J3NIdypN1jIMFBkOJDXnF33IaorZQYNN1oO8e1Py3Jao8HgNsd1sv062pkhrbL2K77IczPMsO77gO3ZrCA=="/>
+			<pubDate>Fri, 05 Mar 2021 19:21:53 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/win-x64-setup.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="54816869" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rb3N4Rz2xONVlVVrbUxNhJ/zP2VVsOU+jyIYhed8Gz6wYYeHb6selm7a0SZmKPB3KorgNaMAhXxu6QHOjL9SCg=="/>
 		</item>
 		<item>
-			<title>1.12.118</title>
+			<title>1.12.121</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential rare CTD when rendering images
+* Tweak collection mods area height
+* Set proper font for other UI elements
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -99,16 +102,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 02 Mar 2021 19:14:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/win-x64.rar" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="65621235" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="1MZTwoPfIZCksxs/7Uk7gT88SoL+oxCapwEDTyylgn3E7+E1zkVNQ/1wveqzLT08TXrJz85IQ4K2dQtyzsTeCA=="/>
+			<pubDate>Fri, 05 Mar 2021 19:21:50 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/win-x64.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="65630301" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MPuBZg1xJlA1kyOfEzWLSlk1pBg7CK6J3YAUCHgNoNlRKuOZRehU6hXbhJGyI5xmoqLnGg3hPyzd4ByIP2lTAA=="/>
 		</item>
 		<item>
-			<title>1.12.118</title>
+			<title>1.12.121</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix potential rare CTD when rendering images
+* Tweak collection mods area height
+* Set proper font for other UI elements
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -132,8 +136,8 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 02 Mar 2021 19:13:55 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.118/linux-x64.zip" sparkle:version="1.12.118.65016" sparkle:shortVersionString="1.12.118" length="78752749" sparkle:os="linux" type="application/zip" sparkle:signature="ik4Va8EOiyCOYfaAkyG7Ew8bwXqhnCDY0GEv6aI5Ry97hRajSj8k+BTsZgjzr8JI4jb0oi7EQ95vl0vvW/06Dg=="/>
+			<pubDate>Fri, 05 Mar 2021 19:21:45 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/linux-x64.zip" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="78752537" sparkle:os="linux" type="application/zip" sparkle:signature="ihIvEHf2pEOSlxUmuFi0AkIfO1//nI5qgDQn6hEi+r5R9aV+4T/3PAuPAlePiGY61THeUGcHXuaM8Ozqi61wCQ=="/>
 		</item>
 	</channel>
 </rss>
