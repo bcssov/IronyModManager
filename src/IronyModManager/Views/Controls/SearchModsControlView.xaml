@@ -4,16 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="30"
              MinWidth="30"
+             xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.SearchModsControlView">
+  <UserControl.Resources>
+    <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
+  </UserControl.Resources>
   <Panel>
     <Grid ColumnDefinitions="7*,*,*,*" IsVisible="{Binding ShowArrows}">
-      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch" Grid.Column="0"></TextBox>
+      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
+               Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBox>
       <Button Content="{Binding DownArrowText}" Command="{Binding DownArrowCommand}" Grid.Column="1"></Button>
       <Button Content="{Binding UpArrowText}" Command="{Binding UpArrowCommand}" Grid.Column="2"></Button>
       <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="3"></Button>
     </Grid>
     <Grid ColumnDefinitions="8*,*" IsVisible="{Binding !ShowArrows}">
-      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch" Grid.Column="0"></TextBox>
+      <TextBox Text="{Binding Text}" Watermark="{Binding WatermarkText}" HorizontalAlignment="Stretch"
+               Grid.Column="0" FontFamily="{Binding Text,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBox>
       <Button Content="{Binding ClearText}" Command="{Binding ClearTextCommand}" Grid.Column="1"></Button>
     </Grid>
   </Panel>

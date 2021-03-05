@@ -16,7 +16,7 @@
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x-60}"
+         ConverterParameter=x-100}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.1}">
@@ -99,10 +99,11 @@
             </Grid>
             <ContentControl Content="{Binding ModReportView}"></ContentControl>
             <controls:DragDropListBox Margin="0,10,0,0" Items="{Binding SelectedMods}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2"
+                     x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2" 
                      Height="{Binding $parent[Window].Height, 
-                       Converter={StaticResource MathConverter} 
-                       ConverterParameter=x-270}" SelectedItem="{Binding SelectedMod}">
+                     Converter={StaticResource MathConverter} 
+                     ConverterParameter=x-270}"
+                     SelectedItem="{Binding SelectedMod}">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
                   <Grid Background="Transparent">
