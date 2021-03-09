@@ -4,13 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.121</title>
+			<title>1.12.124</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Tweak collection mods area height
-* Set proper font for other UI elements
+* Fix localization issue when falling back to iso language
+* Modify collection listbox to prevent any height offsets in mod management
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -34,17 +34,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Fri, 05 Mar 2021 19:21:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/osx-x64.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="63213043" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="73KhnBtzyFgiDmQmUShNRUrHpH2JtydXtGx33sFyrZkroJkgdJ5cFHzIpoBMLD6NuBtcALEwO58OwkBdzuf5DA=="/>
+			<pubDate>Tue, 09 Mar 2021 20:25:11 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/osx-x64.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="63206419" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6l9ghKw+OceA8drMVVBQDBG7jqyXpyoxCB/7EMY7j7/oHDVSUHmlHkTzqRaF3ccQMcyPtRoy4Y6KTKx/nS4hDA=="/>
 		</item>
 		<item>
-			<title>1.12.121</title>
+			<title>1.12.124</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Tweak collection mods area height
-* Set proper font for other UI elements
+* Fix localization issue when falling back to iso language
+* Modify collection listbox to prevent any height offsets in mod management
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -68,17 +68,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Fri, 05 Mar 2021 19:21:53 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/win-x64-setup.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="54816869" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="rb3N4Rz2xONVlVVrbUxNhJ/zP2VVsOU+jyIYhed8Gz6wYYeHb6selm7a0SZmKPB3KorgNaMAhXxu6QHOjL9SCg=="/>
+			<pubDate>Tue, 09 Mar 2021 20:25:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/win-x64-setup.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="54823526" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z4B2sblkv6bfKWStPCgJSMGtE7BfOy4yaA0oeo7G7TtG567wra1uNTjsQ2CAWaaZ+oRxySGCcEoJYxpVyovcCw=="/>
 		</item>
 		<item>
-			<title>1.12.121</title>
+			<title>1.12.124</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Tweak collection mods area height
-* Set proper font for other UI elements
+* Fix localization issue when falling back to iso language
+* Modify collection listbox to prevent any height offsets in mod management
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -102,17 +102,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Fri, 05 Mar 2021 19:21:50 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/win-x64.rar" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="65630301" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="MPuBZg1xJlA1kyOfEzWLSlk1pBg7CK6J3YAUCHgNoNlRKuOZRehU6hXbhJGyI5xmoqLnGg3hPyzd4ByIP2lTAA=="/>
+			<pubDate>Tue, 09 Mar 2021 20:25:15 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/win-x64.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="65623879" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="GYY4KhKeu/mV4xmELrJY7/hetUpkZkmsoyIanjFCv+PcodNQWzp8KZkPaWhzvzfiKt22knhglFaVaG6WPdANCw=="/>
 		</item>
 		<item>
-			<title>1.12.121</title>
+			<title>1.12.124</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Tweak collection mods area height
-* Set proper font for other UI elements
+* Fix localization issue when falling back to iso language
+* Modify collection listbox to prevent any height offsets in mod management
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -136,8 +136,8 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Fri, 05 Mar 2021 19:21:45 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.121/linux-x64.zip" sparkle:version="1.12.121.7092" sparkle:shortVersionString="1.12.121" length="78752537" sparkle:os="linux" type="application/zip" sparkle:signature="ihIvEHf2pEOSlxUmuFi0AkIfO1//nI5qgDQn6hEi+r5R9aV+4T/3PAuPAlePiGY61THeUGcHXuaM8Ozqi61wCQ=="/>
+			<pubDate>Tue, 09 Mar 2021 20:25:08 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/linux-x64.zip" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="78752767" sparkle:os="linux" type="application/zip" sparkle:signature="fRbEvAjHlE/n079PQEKsMfrbFVcqoIZAH0dtC4nq0cjxpQgk0uwp4LoZtVgdPKH8ZUKdQNQIT5s+yonW/MWAAQ=="/>
 		</item>
 	</channel>
 </rss>
