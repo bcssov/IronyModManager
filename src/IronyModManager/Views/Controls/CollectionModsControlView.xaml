@@ -14,10 +14,7 @@
     <converter:AchievementStatusNotCompatibleConverter x:Key="AchievementStatusNotCompatibleConverter" />
     <converter:TextTypeFontFamilyConverter x:Key="TextTypeFontFamilyConverter" />
   </UserControl.Resources>
-  <Panel Height="{Binding $parent[Window].Height, 
-         Converter={StaticResource MathConverter} 
-         ConverterParameter=x-100}"
-         Width="{Binding $parent[Window].Width, 
+  <Panel Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.1}">
     <Grid IsSharedSizeScope="True">
@@ -102,7 +99,7 @@
                      x:Name="modList" Grid.Row="4" Grid.ColumnSpan="2" 
                      Height="{Binding $parent[Window].Height, 
                      Converter={StaticResource MathConverter} 
-                     ConverterParameter=x-270}"
+                     ConverterParameter=x-280}"
                      SelectedItem="{Binding SelectedMod}">
               <controls:DragDropListBox.ItemTemplate>
                 <DataTemplate>
