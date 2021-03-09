@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-09-2021
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Shared.Cache;
 using Newtonsoft.Json.Linq;
@@ -27,6 +28,11 @@ namespace IronyModManager.Localization
     public class LocalizationManager : ILocalizationManager
     {
         #region Fields
+
+        /// <summary>
+        /// The cached cultures prefix
+        /// </summary>
+        protected const string CachedCulturesPrefix = "Culture";
 
         /// <summary>
         /// The cache prefix
@@ -145,6 +151,22 @@ namespace IronyModManager.Localization
         }
 
         /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <param name="locale">The locale.</param>
+        /// <returns>CultureInfo.</returns>
+        protected virtual CultureInfo GetCulture(string locale)
+        {
+            var culture = Cache.Get<CultureInfo>(CachedCulturesPrefix, locale);
+            if (culture == null)
+            {
+                culture = new CultureInfo(locale);
+                Cache.Set(CachedCulturesPrefix, locale, culture);
+            }
+            return culture;
+        }
+
+        /// <summary>
         /// Tries the get cached resource.
         /// </summary>
         /// <param name="locale">The locale.</param>
@@ -153,14 +175,18 @@ namespace IronyModManager.Localization
         protected virtual string TryGetCachedResource(string locale, string key)
         {
             var cached = GetCachedResource(locale, key);
-            if (cached == null && CurrentLocale.CurrentCulture.TwoLetterISOLanguageName != CurrentLocale.CultureName)
+            if (cached == null)
             {
-                // fallback to iso language
-                cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName, key);
-                if (cached == null)
+                var culture = GetCulture(locale);
+                if (culture.TwoLetterISOLanguageName != culture.Name)
                 {
-                    CacheLocalization(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName);
-                    cached = GetCachedResource(CurrentLocale.CurrentCulture.TwoLetterISOLanguageName, key);
+                    // fallback to iso language
+                    cached = GetCachedResource(culture.TwoLetterISOLanguageName, key);
+                    if (cached == null)
+                    {
+                        CacheLocalization(culture.TwoLetterISOLanguageName);
+                        cached = GetCachedResource(culture.TwoLetterISOLanguageName, key);
+                    }
                 }
             }
             return cached;
