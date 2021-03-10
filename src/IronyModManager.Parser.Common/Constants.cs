@@ -4,15 +4,15 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2021
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace IronyModManager.Parser.Common
@@ -323,6 +323,11 @@ namespace IronyModManager.Parser.Common
             /// The solar system initializers
             /// </summary>
             public static readonly string SolarSystemInitializers = MergePath(CommonPath, "solar_system_initializers");
+
+            /// <summary>
+            /// The species archetypes
+            /// </summary>
+            public static readonly string SpeciesArchetypes = MergePath(CommonPath, "species_archetypes");
 
             /// <summary>
             /// The species names
