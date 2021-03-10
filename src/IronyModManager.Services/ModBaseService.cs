@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -292,28 +292,19 @@ namespace IronyModManager.Services
                             isFios = provider.DefinitionUsesFIOSRules(validDefinitions.First());
                             foreach (var item in validDefinitions)
                             {
-                                var hasOverrides = validDefinitions.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(p => p.Equals(item.ModName)));
+                                var fileName = isFios ? item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First() : item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last();
+                                var hasOverrides = validDefinitions.Any(p => !p.IsCustomPatch && p.Dependencies != null && p.Dependencies.Any(d => d.Equals(item.ModName)) &&
+                                                    (isFios ? p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First().Equals(fileName) : p.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last().Equals(fileName)));
                                 if (hasOverrides)
                                 {
                                     overrideSkipped = true;
                                     continue;
                                 }
-                                if (isFios)
+                                definitionEvals.Add(new DefinitionEval()
                                 {
-                                    definitionEvals.Add(new DefinitionEval()
-                                    {
-                                        Definition = item,
-                                        FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).First()
-                                    });
-                                }
-                                else
-                                {
-                                    definitionEvals.Add(new DefinitionEval()
-                                    {
-                                        Definition = item,
-                                        FileName = item.AdditionalFileNames.OrderBy(p => Path.GetFileNameWithoutExtension(p), StringComparer.Ordinal).Last()
-                                    });
-                                }
+                                    Definition = item,
+                                    FileName = fileName
+                                });
                             }
                             IEnumerable<DefinitionEval> uniqueDefinitions;
                             if (isFios)
