@@ -4,19 +4,18 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-29-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
-using IronyModManager.Platform.x11;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Platform
@@ -80,10 +79,11 @@ namespace IronyModManager.Platform
         /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
         /// <param name="builder">The builder.</param>
 #pragma warning disable IDE0051 // Remove unused private members
+
         private static void LoadDirect2D1<TAppBuilder>(TAppBuilder builder)
 #pragma warning restore IDE0051 // Remove unused private members
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseDirect2D1();
+             => builder.UseWin32();
 
         /// <summary>
         /// Loads the skia.
@@ -110,7 +110,7 @@ namespace IronyModManager.Platform
         /// <param name="builder">The builder.</param>
         private static void LoadX11<TAppBuilder>(TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseIronyX11();
+             => builder.UseX11();
 
         #endregion Methods
     }
