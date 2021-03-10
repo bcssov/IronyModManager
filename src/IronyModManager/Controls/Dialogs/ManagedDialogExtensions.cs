@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -15,14 +15,13 @@
 // </summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
-using Avalonia.Platform;
 using IronyModManager.Controls.Themes;
 using IronyModManager.DI;
 using IronyModManager.Fonts;
@@ -88,7 +87,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="dialog">The dialog.</param>
             /// <param name="parent">The parent.</param>
             /// <returns>System.String[].</returns>
-            public async Task<string[]> ShowFileDialogAsync(FileDialog dialog, IWindowImpl parent)
+            public async Task<string[]> ShowFileDialogAsync(FileDialog dialog, Window parent)
             {
                 return await ShowAsync(dialog, parent);
             }
@@ -99,7 +98,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="dialog">The dialog.</param>
             /// <param name="parent">The parent.</param>
             /// <returns>System.String.</returns>
-            public async Task<string> ShowFolderDialogAsync(OpenFolderDialog dialog, IWindowImpl parent)
+            public async Task<string> ShowFolderDialogAsync(OpenFolderDialog dialog, Window parent)
             {
                 return (await ShowAsync(dialog, parent, new ManagedFileDialogOptions() { AllowDirectorySelection = true }))?.FirstOrDefault();
             }
@@ -111,7 +110,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="parent">The parent.</param>
             /// <param name="options">The options.</param>
             /// <returns>System.String[].</returns>
-            private async Task<string[]> ShowAsync(SystemDialog d, IWindowImpl parent, ManagedFileDialogOptions options = null)
+            private async Task<string[]> ShowAsync(SystemDialog d, Window parent, ManagedFileDialogOptions options = null)
             {
                 var model = new ManagedDialogViewModel((FileSystemDialog)d,
                     options ?? new ManagedFileDialogOptions());

@@ -4,7 +4,7 @@
 // Created          : 10-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-14-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="NumericButtonSpinner.cs" company="Mario">
 //     Mario
@@ -117,12 +117,13 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
-        /// Handles the <see cref="E:TemplateApplied" /> event.
+        /// Handles the <see cref="E:ApplyTemplate" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="TemplateAppliedEventArgs" /> instance containing the event data.</param>
-        protected override void OnTemplateApplied(TemplateAppliedEventArgs e)
+        /// <param name="e">The <see cref="TemplateAppliedEventArgs"/> instance containing the event data.</param>
+        /// <inheritdoc />
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
-            base.OnTemplateApplied(e);
+            base.OnApplyTemplate(e);
             IncreaseButton = e.NameScope.Find<Button>("PART_IncreaseButton");
             DecreaseButton = e.NameScope.Find<Button>("PART_DecreaseButton");
             SetButtonUsage();

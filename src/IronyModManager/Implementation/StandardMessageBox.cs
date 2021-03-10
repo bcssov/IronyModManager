@@ -4,27 +4,27 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-25-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="StandardMessageBox.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using MessageBox.Avalonia.BaseWindows;
+using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.Enums;
 
 namespace IronyModManager.Implementation
 {
     /// <summary>
     /// Class StandardMessageBox.
-    /// Implements the <see cref="MessageBox.Avalonia.BaseWindows.IMsBoxWindow{MessageBox.Avalonia.Enums.ButtonResult}" />
+    /// Implements the <see cref="MessageBox.Avalonia.BaseWindows.Base.IMsBoxWindow{MessageBox.Avalonia.Enums.ButtonResult}" />
     /// </summary>
-    /// <seealso cref="MessageBox.Avalonia.BaseWindows.IMsBoxWindow{MessageBox.Avalonia.Enums.ButtonResult}" />
+    /// <seealso cref="MessageBox.Avalonia.BaseWindows.Base.IMsBoxWindow{MessageBox.Avalonia.Enums.ButtonResult}" />
     public class StandardMessageBox : IMsBoxWindow<ButtonResult>
     {
         #region Fields
@@ -61,6 +61,20 @@ namespace IronyModManager.Implementation
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.Closed += delegate { tcs.TrySetResult(window.ButtonResult); };
             window.Show();
+            return tcs.Task;
+        }
+
+        /// <summary>
+        /// Shows the specified window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns>Task&lt;ButtonResult&gt;.</returns>
+        public Task<ButtonResult> Show(Window window)
+        {
+            var tcs = new TaskCompletionSource<ButtonResult>();
+            this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.window.Closed += delegate { tcs.TrySetResult(this.window.ButtonResult); };
+            this.window.Show(window);
             return tcs.Task;
         }
 

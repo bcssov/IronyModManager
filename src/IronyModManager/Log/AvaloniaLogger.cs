@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-30-2021
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="AvaloniaLogger.cs" company="Mario">
 //     Mario
@@ -45,8 +45,9 @@ namespace IronyModManager.Log
         /// Determines whether the specified level is enabled.
         /// </summary>
         /// <param name="level">The level.</param>
+        /// <param name="area">The log area.</param>
         /// <returns><c>true</c> if the specified level is enabled; otherwise, <c>false</c>.</returns>
-        public bool IsEnabled(LogEventLevel level)
+        public bool IsEnabled(LogEventLevel level, string area)
         {
             if (!loggingAllowed.HasValue)
             {

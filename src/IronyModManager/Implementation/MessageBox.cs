@@ -4,15 +4,15 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -21,9 +21,11 @@ using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
-using MsgBox = MessageBox.Avalonia;
+using MessageBox.Avalonia.ViewModels;
+using MessageBox.Avalonia.Views;
 
 namespace IronyModManager.Implementation
 {
@@ -51,32 +53,30 @@ namespace IronyModManager.Implementation
                 ContentTitle = title,
                 ContentHeader = header,
                 ContentMessage = message,
-                Icon = MsgBox.Enums.Icon.Error,
+                Icon = Icon.Error,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             if (Dispatcher.UIThread.CheckAccess())
             {
                 var font = ResolveFont();
 
-                var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
+                var window = new MsBoxCustomWindow(parameters.Style)
                 {
                     Icon = StaticResources.GetAppIcon(),
                     FontFamily = font.GetFontFamily()
                 };
-                parameters.Window = window;
-                window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
+                window.DataContext = new MsBoxCustomViewModel(parameters, window);
                 return new FatalErrorMessageBox(window);
             }
             else
             {
                 var task = Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
+                    var window = new MsBoxCustomWindow(parameters.Style)
                     {
                         Icon = StaticResources.GetAppIcon()
                     };
-                    parameters.Window = window;
-                    window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
+                    window.DataContext = new MsBoxCustomViewModel(parameters, window);
                     return new FatalErrorMessageBox(window);
                 });
                 Task.WaitAll(task);
@@ -93,7 +93,7 @@ namespace IronyModManager.Implementation
         /// <param name="icon">The icon.</param>
         /// <param name="promptyType">Type of the prompty.</param>
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
-        public static MsgBox.BaseWindows.IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
+        public static IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
         {
             var buttonEnum = promptyType switch
             {
@@ -114,11 +114,12 @@ namespace IronyModManager.Implementation
             };
             var font = ResolveFont();
 
-            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum);
-            parameters.Window = window;
-            window.Icon = StaticResources.GetAppIcon();
-            window.FontFamily = font.GetFontFamily();
-            window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
+            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum)
+            {
+                Icon = StaticResources.GetAppIcon(),
+                FontFamily = font.GetFontFamily()
+            };
+            window.DataContext = new MsBoxStandardViewModel(parameters, window);
             return new StandardMessageBox(window);
         }
 

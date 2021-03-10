@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -83,6 +83,7 @@ namespace IronyModManager.Controls
         /// Handles the <see cref="E:PointerPressed" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -98,13 +99,14 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Handles the <see cref="E:PropertyChanged" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="change">The change.</param>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
-            base.OnPropertyChanged(e);
-            if (e.Property == ContextMenuProperty)
+            base.OnPropertyChanged(change);
+            if (change.Property == ContextMenuProperty)
             {
-                HandleContextMenuEvents(e.OldValue as ContextMenu);
+                HandleContextMenuEvents(change.OldValue.GetValueOrDefault<ContextMenu>());
             }
         }
 
