@@ -4,13 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.12.124</title>
+			<title>1.12.126</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix localization issue when falling back to iso language
-* Modify collection listbox to prevent any height offsets in mod management
+* Fix evaluation of mods with dependency tags while using different filenames
+* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -34,17 +34,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 09 Mar 2021 20:25:11 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/osx-x64.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="63206419" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="6l9ghKw+OceA8drMVVBQDBG7jqyXpyoxCB/7EMY7j7/oHDVSUHmlHkTzqRaF3ccQMcyPtRoy4Y6KTKx/nS4hDA=="/>
+			<pubDate>Wed, 10 Mar 2021 20:14:16 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/osx-x64.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="63215543" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="zg/qMyFOvWxqTMe4grG/KsMFuK48+u9UcPBzdE9TqCKXpDjExc0cvKUGd/ckeJFZi6HnxpZLme90bv0a3/kPDQ=="/>
 		</item>
 		<item>
-			<title>1.12.124</title>
+			<title>1.12.126</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix localization issue when falling back to iso language
-* Modify collection listbox to prevent any height offsets in mod management
+* Fix evaluation of mods with dependency tags while using different filenames
+* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -68,17 +68,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 09 Mar 2021 20:25:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/win-x64-setup.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="54823526" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Z4B2sblkv6bfKWStPCgJSMGtE7BfOy4yaA0oeo7G7TtG567wra1uNTjsQ2CAWaaZ+oRxySGCcEoJYxpVyovcCw=="/>
+			<pubDate>Wed, 10 Mar 2021 20:14:23 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/win-x64-setup.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="54785378" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Sq3CV40AT9ETT8DCdNwTcrh+GvluUko2E1K4TGeDjxgdOTvzOoDKJcJp5wcjVQnwPl9CYWDpVz81inNles6UAQ=="/>
 		</item>
 		<item>
-			<title>1.12.124</title>
+			<title>1.12.126</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix localization issue when falling back to iso language
-* Modify collection listbox to prevent any height offsets in mod management
+* Fix evaluation of mods with dependency tags while using different filenames
+* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -102,17 +102,17 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 09 Mar 2021 20:25:15 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/win-x64.rar" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="65623879" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="GYY4KhKeu/mV4xmELrJY7/hetUpkZkmsoyIanjFCv+PcodNQWzp8KZkPaWhzvzfiKt22knhglFaVaG6WPdANCw=="/>
+			<pubDate>Wed, 10 Mar 2021 20:14:19 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/win-x64.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="65627219" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="b1/MUkxc3XQoTF5D8IcjVuPl7xX3GEWuIp/0dkCAw75nh1bQhsCsEVBU7vhsrN3KianvEKAaHrOWoNCNz96kCg=="/>
 		</item>
 		<item>
-			<title>1.12.124</title>
+			<title>1.12.126</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO:
-* Fix localization issue when falling back to iso language
-* Modify collection listbox to prevent any height offsets in mod management
+* Fix evaluation of mods with dependency tags while using different filenames
+* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
 
 CHANGES FROM v1.11:
 * Update dependencies
@@ -136,8 +136,8 @@ CHANGES FROM v1.11:
 * Refresh mod list before performing a collection import
 * Tweak moving around mods in collection mods area
 * Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Tue, 09 Mar 2021 20:25:08 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.124/linux-x64.zip" sparkle:version="1.12.124.55784" sparkle:shortVersionString="1.12.124" length="78752767" sparkle:os="linux" type="application/zip" sparkle:signature="fRbEvAjHlE/n079PQEKsMfrbFVcqoIZAH0dtC4nq0cjxpQgk0uwp4LoZtVgdPKH8ZUKdQNQIT5s+yonW/MWAAQ=="/>
+			<pubDate>Wed, 10 Mar 2021 20:14:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/linux-x64.zip" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="78755239" sparkle:os="linux" type="application/zip" sparkle:signature="53fZB85hF2cYMF7Bi6L1k4U9VIwd9J5QT8oeYNuh9I65cr4ic7gwt33vLnMemYHQXQ7Z1DXbgqRt/rKx0lq4Cw=="/>
 		</item>
 	</channel>
 </rss>
