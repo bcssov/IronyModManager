@@ -8,7 +8,7 @@
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialLightGreen.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialLightGreen.ComboBox.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.MaterialLightGreen.ComboBoxItem.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:AvaloniaEdit.AvaloniaEdit.xaml?assembly=AvaloniaEdit" />
+  <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IconsLight.xaml?assembly=IronyModManager"/>
   <StyleInclude Source="resm:IronyModManager.Controls.Themes.IronyToolTip.xaml?assembly=IronyModManager"/>
 
