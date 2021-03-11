@@ -1,10 +1,9 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
-        x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
-        xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+        x:Class="IronyModManager.Controls.Themes.CustomMessageBox"
         SizeToContent="WidthAndHeight"
         MinWidth="200"
         MaxWidth="{Binding MaxWidth}"
@@ -14,19 +13,10 @@
         CanResize="{Binding CanResize}"
         FontFamily="{Binding FontFamily}"
         Title="{Binding ContentTitle}">
-  <Window.Resources>
-    <converter:MathConverter x:Key="MathConverter" />
-  </Window.Resources>
 
   <Window.KeyBindings>
     <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
-    <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />
-    <KeyBinding Gesture="Escape" Command="{Binding EscClickCommand}" />
   </Window.KeyBindings>
-  <Design.DataContext>
-
-  </Design.DataContext>
-
   <Window.Styles>
     <Style Selector="TextBox">
       <Setter Property="BorderThickness" Value="0" />
@@ -52,7 +42,7 @@
     </Style>
 
   </Window.Styles>
-  <Grid Classes="MsBoxStandardContainer">
+  <Grid Classes="MsBoxCustomContainer">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="15" />
       <ColumnDefinition Width="Auto" />
@@ -70,7 +60,7 @@
     <!--Icon-->
     <Image Grid.Row="1" Grid.Column="1" MaxHeight="50" MaxWidth="50" VerticalAlignment="Top"
            IsVisible="{Binding Icon}"
-           Source="{Binding ImagePath}" Margin="5" />
+           Source="{Binding ImagePath}" />
     <Grid Grid.Row="1" Grid.Column="3">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
@@ -78,24 +68,31 @@
         <RowDefinition Height="*" />
       </Grid.RowDefinitions>
       <!--Bold text-->
-      <TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" FontFamily="{Binding FontFamily}" IsVisible="{Binding HasHeader}" />
+      <TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" MaxHeight="400" MaxWidth="500" TextWrapping="WrapWithOverflow" />
+      <TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" TextWrapping="WrapWithOverflow" />
     </Grid>
     <!--Buttons-->
-    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
-                HorizontalAlignment="Right">
-      <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
-      <Button Content="Ok" Tag="Colored" Command="{Binding ButtonClickCommand}"
-              CommandParameter="Ok" IsVisible="{Binding IsOkShowed}" x:Name="ok" />
-      <Button Content="Yes" Command="{Binding ButtonClickCommand}" CommandParameter="Yes"
-              IsVisible="{Binding IsYesShowed}" x:Name="yes" />
-      <Button Content="No" Command="{Binding ButtonClickCommand}" CommandParameter="No"
-              IsVisible="{Binding IsNoShowed}" x:Name="no" />
-      <Button Content="Abort" Command="{Binding ButtonClickCommand}" CommandParameter="Abort"
-              IsVisible="{Binding IsAbortShowed}" />
-      <Button Content="Cancel" Command="{Binding ButtonClickCommand}" CommandParameter="Cancel"
-              IsVisible="{Binding IsCancelShowed}" x:Name="cancel"/>
-    </StackPanel>
+    <ItemsPresenter Items="{Binding ButtonDefinitions}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
+                    HorizontalAlignment="Right">
+      <ItemsPresenter.ItemsPanel>
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center" />
+        </ItemsPanelTemplate>
+      </ItemsPresenter.ItemsPanel>
+      <ItemsPresenter.ItemTemplate>
+        <DataTemplate>
+          <Button Name="Btn"
+                  Tag="{Binding TypeName}"
+                  Command="{Binding DataContext.ButtonClick, RelativeSource={RelativeSource AncestorType=Window, AncestorLevel=1}}"
+                  CommandParameter="{Binding #Btn.Content}"
+                  Content="{Binding Name}"
+                  Margin="0 0 5 0">
+          </Button>
+        </DataTemplate>
+      </ItemsPresenter.ItemTemplate>
+    </ItemsPresenter>
   </Grid>
 </Window>

@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -25,7 +25,6 @@ using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
 using MessageBox.Avalonia.ViewModels;
-using MessageBox.Avalonia.Views;
 
 namespace IronyModManager.Implementation
 {
@@ -46,6 +45,7 @@ namespace IronyModManager.Implementation
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;System.String&gt;.</returns>
         public static FatalErrorMessageBox GetFatalErrorWindow(string title, string header, string message)
         {
+            var font = ResolveFont();
             var parameters = new MessageBoxCustomParams
             {
                 CanResize = false,
@@ -54,17 +54,13 @@ namespace IronyModManager.Implementation
                 ContentHeader = header,
                 ContentMessage = message,
                 Icon = Icon.Error,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FontFamily = font.GetFontFamily(),
+                WindowIcon = StaticResources.GetAppIcon()
             };
             if (Dispatcher.UIThread.CheckAccess())
             {
-                var font = ResolveFont();
-
-                var window = new MsBoxCustomWindow(parameters.Style)
-                {
-                    Icon = StaticResources.GetAppIcon(),
-                    FontFamily = font.GetFontFamily()
-                };
+                var window = new Controls.Themes.CustomMessageBox(parameters.Style);
                 window.DataContext = new MsBoxCustomViewModel(parameters, window);
                 return new FatalErrorMessageBox(window);
             }
@@ -72,10 +68,7 @@ namespace IronyModManager.Implementation
             {
                 var task = Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    var window = new MsBoxCustomWindow(parameters.Style)
-                    {
-                        Icon = StaticResources.GetAppIcon()
-                    };
+                    var window = new Controls.Themes.CustomMessageBox(parameters.Style);
                     window.DataContext = new MsBoxCustomViewModel(parameters, window);
                     return new FatalErrorMessageBox(window);
                 });
@@ -101,6 +94,7 @@ namespace IronyModManager.Implementation
                 PromptType.OK => ButtonEnum.Ok,
                 _ => ButtonEnum.YesNo,
             };
+            var font = ResolveFont();
             var parameters = new MessageBoxStandardParams()
             {
                 CanResize = false,
@@ -110,15 +104,11 @@ namespace IronyModManager.Implementation
                 ContentMessage = message,
                 Icon = icon,
                 ButtonDefinitions = buttonEnum,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FontFamily = font.GetFontFamily(),
+                WindowIcon = StaticResources.GetAppIcon()
             };
-            var font = ResolveFont();
-
-            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum)
-            {
-                Icon = StaticResources.GetAppIcon(),
-                FontFamily = font.GetFontFamily()
-            };
+            var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum);
             window.DataContext = new MsBoxStandardViewModel(parameters, window);
             return new StandardMessageBox(window);
         }
