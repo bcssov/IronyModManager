@@ -14,6 +14,8 @@
 using System;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
+using IronyModManager.DI;
+using IronyModManager.Services.Common;
 using MessageBox.Avalonia.Enums;
 using MessageBox.Avalonia.Views;
 
@@ -29,7 +31,7 @@ namespace IronyModManager.Controls.Themes
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomMessageBox"/> class.
+        /// Initializes a new instance of the <see cref="CustomMessageBox" /> class.
         /// </summary>
         public CustomMessageBox()
         {
@@ -49,6 +51,40 @@ namespace IronyModManager.Controls.Themes
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// Shows the window.
+        /// </summary>
+        public override void Show()
+        {
+            base.Show();
+            InitWindowSize();
+        }
+
+        /// <summary>
+        /// Initializes the size of the window.
+        /// </summary>
+        protected virtual void InitWindowSize()
+        {
+            static int calculateCenterPosition(double pos, double otherSize, double thisSize)
+            {
+                var otherCenter = pos + otherSize / 2d;
+                if (!double.IsNaN(thisSize))
+                {
+                    return Convert.ToInt32(otherCenter - thisSize / 2d);
+                }
+                return Convert.ToInt32(otherCenter);
+            }
+
+            var service = DIResolver.Get<IWindowStateService>();
+            if (service.IsDefined() && !service.IsMaximized())
+            {
+                var state = service.Get();
+                var pos = Position.WithX(calculateCenterPosition(state.LocationX.GetValueOrDefault(), state.Width.GetValueOrDefault(), Width));
+                pos = pos.WithY(calculateCenterPosition(state.LocationY.GetValueOrDefault(), state.Height.GetValueOrDefault(), Height));
+                Position = pos;
+            }
+        }
 
         /// <summary>
         /// Initializes the component.

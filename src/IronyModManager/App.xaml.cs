@@ -251,14 +251,12 @@ namespace IronyModManager
 
             SetFontFamily(messageBox);
             desktop.MainWindow = messageBox;
-            desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            var service = DIResolver.Get<IWindowStateService>();
-            var state = service.Get();
-            var pos = messageBox.Position.WithX(state.LocationX.GetValueOrDefault());
-            pos = pos.WithY(state.LocationY.GetValueOrDefault());
-            messageBox.Position = pos;
-
+            var stateService = DIResolver.Get<IWindowStateService>();
+            if (!stateService.IsDefined() || stateService.IsMaximized())
+            {
+                desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
             close().ConfigureAwait(false);
         }
 
