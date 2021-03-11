@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -69,7 +69,7 @@ namespace IronyModManager.Views.Controls
                     {
                         menuItems = GetStaticMenuItems();
                     }
-                    modList.SetContextMenu(menuItems);
+                    modList.SetContextMenuItems(menuItems);
                 };
             }
             base.OnActivated(disposables);

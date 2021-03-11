@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -160,7 +160,7 @@ namespace IronyModManager.Views
                         }
                     }
                 }
-                conflictList.SetContextMenu(menuItems);
+                conflictList.SetContextMenuItems(menuItems);
             };
 
             base.OnActivated(disposables);

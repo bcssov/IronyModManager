@@ -98,7 +98,7 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
-                listBox.SetContextMenu(menuItems);
+                listBox.SetContextMenuItems(menuItems);
             };
         }
 

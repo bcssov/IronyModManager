@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
@@ -33,9 +32,9 @@ namespace IronyModManager.Controls
         #region Fields
 
         /// <summary>
-        /// The CTX raised by pointer
+        /// The context menu
         /// </summary>
-        private bool ctxRaisedByPointer = false;
+        private ContextMenu contextMenu;
 
         #endregion Fields
 
@@ -61,21 +60,23 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
-        /// Sets the context menu.
+        /// Sets the context menu items.
         /// </summary>
         /// <param name="menuItems">The menu items.</param>
-        public void SetContextMenu(IReadOnlyCollection<MenuItem> menuItems)
+        public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
+            ContextMenu = null;
             if (menuItems?.Count > 0)
             {
-                ContextMenu = new ContextMenu
+                contextMenu = new ContextMenu
                 {
                     Items = menuItems
                 };
+                contextMenu.Open(this);
             }
             else
             {
-                ContextMenu = null;
+                contextMenu = null;
             }
         }
 
@@ -89,52 +90,6 @@ namespace IronyModManager.Controls
             base.OnPointerPressed(e);
 
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
-            {
-                ctxRaisedByPointer = true;
-                RaiseContextMenuOpening();
-                ctxRaisedByPointer = false;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:PropertyChanged" /> event.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="change">The change.</param>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            if (change.Property == ContextMenuProperty)
-            {
-                HandleContextMenuEvents(change.OldValue.GetValueOrDefault<ContextMenu>());
-            }
-        }
-
-        /// <summary>
-        /// Handles the context menu events.
-        /// </summary>
-        /// <param name="oldContextMenu">The old context menu.</param>
-        private void HandleContextMenuEvents(ContextMenu oldContextMenu)
-        {
-            if (oldContextMenu != null)
-            {
-                oldContextMenu.ContextMenuOpening -= OnContextMenuOpening;
-                oldContextMenu.Close();
-            }
-            if (ContextMenu != null && ContextMenu != oldContextMenu)
-            {
-                ContextMenu.ContextMenuOpening += OnContextMenuOpening;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:ContextMenuOpening" /> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
-        private void OnContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!ctxRaisedByPointer)
             {
                 RaiseContextMenuOpening();
             }
