@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -20,10 +20,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
 using IronyModManager.Fonts;
+using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
@@ -45,7 +47,7 @@ namespace IronyModManager
     [ExcludeFromCoverage("This should be tested via functional testing.")]
     public class App : Application
     {
-        #region Methods
+        #region Fields
 
         /// <summary>
         /// The compile theme
@@ -76,16 +78,53 @@ namespace IronyModManager
         };
 
         /// <summary>
+        /// The show fatal notification
+        /// </summary>
+        private bool showFatalNotification = false;
+
+        #endregion Fields
+
+        #region Methods
+
+        /// <summary>
         /// Initializes the application by loading XAML etc.
         /// </summary>
         public override void Initialize()
         {
+            showFatalNotification = StaticResources.CommandLineOptions != null && StaticResources.CommandLineOptions.ShowFatalErrorNotification;
             AvaloniaXamlLoader.Load(this);
             if (!Design.IsDesignMode)
             {
                 InitThemes();
-                HandleCommandLine();
+                if (!showFatalNotification)
+                {
+                    HandleCommandLine();
+                }
             }
+        }
+
+        /// <summary>
+        /// Called when [framework initialization completed].
+        /// </summary>
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                InitCulture();
+                if (!showFatalNotification)
+                {
+                    InitApp(desktop);
+                    InitAppTitle(desktop);
+                    InitAppSizeDefaults(desktop);
+                    VerifyWritePermissionsAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    InitFatalErrorMessage(desktop);
+                }
+            }
+
+            base.OnFrameworkInitializationCompleted();
         }
 
         /// <summary>
@@ -106,20 +145,56 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Called when [framework initialization completed].
+        /// Initializes the application size defaults.
         /// </summary>
-        public override void OnFrameworkInitializationCompleted()
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            var stateService = DIResolver.Get<IWindowStateService>();
+            if (!stateService.IsDefined() && !stateService.IsMaximized())
             {
-                InitCulture();
-                InitApp(desktop);
-                InitAppTitle(desktop);
-                InitAppSizeDefaults(desktop);
-                VerifyWritePermissionsAsync().ConfigureAwait(false);
+                desktop.MainWindow.SizeToContent = SizeToContent.Manual;
+                desktop.MainWindow.Height = desktop.MainWindow.MinHeight;
+                desktop.MainWindow.Width = desktop.MainWindow.MinWidth;
+                desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
+        }
 
-            base.OnFrameworkInitializationCompleted();
+        /// <summary>
+        /// Initializes the application title.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void InitAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            SetAppTitle(desktop);
+            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
+            listener.SubscribeObservable(x =>
+            {
+                SetAppTitle(desktop);
+            });
+        }
+
+        /// <summary>
+        /// Initializes the culture.
+        /// </summary>
+        protected virtual void InitCulture()
+        {
+            var langService = DIResolver.Get<ILanguagesService>();
+            langService.ApplySelected();
+        }
+
+        /// <summary>
+        /// Sets the application title.
+        /// </summary>
+        /// <param name="desktop">The desktop.</param>
+        protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            var appTitle = Smart.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
+                new
+                {
+                    AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
+                });
+            desktop.MainWindow.Title = appTitle;
         }
 
         /// <summary>
@@ -140,59 +215,6 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Initializes the application size defaults.
-        /// </summary>
-        /// <param name="desktop">The desktop.</param>
-        protected virtual void InitAppSizeDefaults(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var stateService = DIResolver.Get<IWindowStateService>();
-            if (!stateService.IsDefined() && !stateService.IsMaximized())
-            {
-                desktop.MainWindow.SizeToContent = SizeToContent.Manual;
-                desktop.MainWindow.Height = desktop.MainWindow.MinHeight;
-                desktop.MainWindow.Width = desktop.MainWindow.MinWidth;
-                desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the culture.
-        /// </summary>
-        protected virtual void InitCulture()
-        {
-            var langService = DIResolver.Get<ILanguagesService>();
-            langService.ApplySelected();
-        }
-
-        /// <summary>
-        /// Initializes the application title.
-        /// </summary>
-        /// <param name="desktop">The desktop.</param>
-        protected virtual void InitAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            SetAppTitle(desktop);
-            var listener = MessageBus.Current.Listen<LocaleChangedEventArgs>();
-            listener.SubscribeObservable(x =>
-            {
-                SetAppTitle(desktop);
-            });
-        }
-
-        /// <summary>
-        /// Sets the application title.
-        /// </summary>
-        /// <param name="desktop">The desktop.</param>
-        protected virtual void SetAppTitle(IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            var appTitle = Smart.Format(DIResolver.Get<ILocalizationManager>().GetResource(LocalizationResources.App.Title),
-                new
-                {
-                    AppVersion = FileVersionInfo.GetVersionInfo(GetType().Assembly.Location).ProductVersion.Split("+")[0]
-                });
-            desktop.MainWindow.Title = appTitle;
-        }
-
-        /// <summary>
         /// Reinitializes the application.
         /// </summary>
         /// <param name="desktop">The desktop.</param>
@@ -207,25 +229,37 @@ namespace IronyModManager
         }
 
         /// <summary>
-        /// Sets the font family.
+        /// Initializes the fatal error message.
         /// </summary>
-        /// <param name="mainWindow">The main window.</param>
-        /// <param name="locale">The locale.</param>
-        private void SetFontFamily(Window mainWindow, string locale = Shared.Constants.EmptyParam)
+        /// <param name="desktop">The desktop.</param>
+        private void InitFatalErrorMessage(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var langService = DIResolver.Get<ILanguagesService>();
-            ILanguage language;
-            if (string.IsNullOrWhiteSpace(locale))
+            async Task close()
             {
-                language = langService.GetSelected();
+                await Task.Delay(10000);
+                var appAction = DIResolver.Get<IAppAction>();
+                await Dispatcher.UIThread.SafeInvokeAsync(async () =>
+                {
+                    await appAction.ExitAppAsync();
+                });
             }
-            else
-            {
-                language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
-            }
-            var fontResolver = DIResolver.Get<IFontFamilyManager>();
-            var font = fontResolver.ResolveFontFamily(language.Font);
-            mainWindow.FontFamily = font.GetFontFamily();
+            var locManager = DIResolver.Get<ILocalizationManager>();
+            var title = locManager.GetResource(LocalizationResources.FatalError.Title);
+            var message = locManager.GetResource(LocalizationResources.FatalError.Message);
+            var header = locManager.GetResource(LocalizationResources.FatalError.Header);
+            var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
+
+            SetFontFamily(messageBox);
+            desktop.MainWindow = messageBox;
+            desktop.MainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            var service = DIResolver.Get<IWindowStateService>();
+            var state = service.Get();
+            var pos = messageBox.Position.WithX(state.LocationX.GetValueOrDefault());
+            pos = pos.WithY(state.LocationY.GetValueOrDefault());
+            messageBox.Position = pos;
+
+            close().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -274,7 +308,29 @@ namespace IronyModManager
                 }
             }
         }
-    }
 
-    #endregion Methods
+        /// <summary>
+        /// Sets the font family.
+        /// </summary>
+        /// <param name="mainWindow">The main window.</param>
+        /// <param name="locale">The locale.</param>
+        private void SetFontFamily(Window mainWindow, string locale = Shared.Constants.EmptyParam)
+        {
+            var langService = DIResolver.Get<ILanguagesService>();
+            ILanguage language;
+            if (string.IsNullOrWhiteSpace(locale))
+            {
+                language = langService.GetSelected();
+            }
+            else
+            {
+                language = langService.Get().FirstOrDefault(p => p.Abrv.Equals(locale));
+            }
+            var fontResolver = DIResolver.Get<IFontFamilyManager>();
+            var font = fontResolver.ResolveFontFamily(language.Font);
+            mainWindow.FontFamily = font.GetFontFamily();
+        }
+
+        #endregion Methods
+    }
 }

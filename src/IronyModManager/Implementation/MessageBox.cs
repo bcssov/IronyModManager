@@ -13,9 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using IronyModManager.DI;
 using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
@@ -43,7 +41,7 @@ namespace IronyModManager.Implementation
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;System.String&gt;.</returns>
-        public static FatalErrorMessageBox GetFatalErrorWindow(string title, string header, string message)
+        public static Controls.Themes.CustomMessageBox GetFatalErrorWindow(string title, string header, string message)
         {
             var font = ResolveFont();
             var parameters = new MessageBoxCustomParams
@@ -58,23 +56,9 @@ namespace IronyModManager.Implementation
                 FontFamily = font.GetFontFamily(),
                 WindowIcon = StaticResources.GetAppIcon()
             };
-            if (Dispatcher.UIThread.CheckAccess())
-            {
-                var window = new Controls.Themes.CustomMessageBox(parameters.Style);
-                window.DataContext = new MsBoxCustomViewModel(parameters, window);
-                return new FatalErrorMessageBox(window);
-            }
-            else
-            {
-                var task = Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    var window = new Controls.Themes.CustomMessageBox(parameters.Style);
-                    window.DataContext = new MsBoxCustomViewModel(parameters, window);
-                    return new FatalErrorMessageBox(window);
-                });
-                Task.WaitAll(task);
-                return task.Result;
-            }
+            var window = new Controls.Themes.CustomMessageBox(parameters.Style);
+            window.DataContext = new MsBoxCustomViewModel(parameters, window);
+            return window;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -43,21 +43,6 @@ namespace IronyModManager
         /// The public update key
         /// </summary>
         public const string PublicUpdateKey = "Oc2c/G6WMYkKL9+owAZYNIwMAMu9YqURiKw+gkY4zEw=";
-
-        /// <summary>
-        /// The unhandled error header
-        /// </summary>
-        public const string UnhandledErrorHeader = "Fatal Error";
-
-        /// <summary>
-        /// The error message
-        /// </summary>
-        public const string UnhandledErrorMessage = "Unhandled error occurred. App will close automatically.";
-
-        /// <summary>
-        /// The unhandled error title
-        /// </summary>
-        public const string UnhandledErrorTitle = "Error";
 
         /// <summary>
         /// The update settings
