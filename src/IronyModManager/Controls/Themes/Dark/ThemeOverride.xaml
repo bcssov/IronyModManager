@@ -2,12 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="IronyModManager.Controls.Themes.Dark.ThemeOverride">
   <!-- Includes -->
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.NumericUpDown.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.ButtonSpinner.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.Dark.MinMaxButtonSpinner.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/NumericUpDown.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/ButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/MinMaxButtonSpinner.xaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.IconsDark.xaml?assembly=IronyModManager"/>
-  <StyleInclude Source="resm:IronyModManager.Controls.Themes.IronyToolTip.xaml?assembly=IronyModManager"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IronyToolTip.xaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
