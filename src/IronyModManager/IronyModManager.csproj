@@ -62,7 +62,6 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <AvaloniaResource Remove="Controls\Themes\StandardMessageBox.xaml" />
-    <AvaloniaResource Remove="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\Light\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
@@ -81,7 +80,6 @@
     <AvaloniaResource Include="Controls\Themes\IronyToolTip.xaml" />
     <AvaloniaResource Include="Controls\Themes\IconsLight.xaml" />
     <AvaloniaResource Include="Controls\Themes\IconsDark.xaml" />
-    <AvaloniaResource Include="Controls\Themes\Theme.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\Light\ThemeOverride.xaml" />
     <AvaloniaResource Include="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
@@ -140,7 +138,6 @@
     <None Remove="Controls\Themes\MaterialLightGreen\ListBoxItem.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\MinMaxButtonSpinner.xaml" />
     <None Remove="Controls\Themes\StandardMessageBox.xaml" />
-    <None Remove="Controls\Themes\Theme.xaml" />
     <None Remove="Controls\Themes\Dark\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\Light\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
@@ -427,11 +424,6 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;$(SolutionDir)\cmd\copy-dependencies.bat&quot; $(ConfigurationName) $(OutDir) $(SolutionDir)" />
   </Target>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Themes\Theme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Themes\Light\ThemeOverride.xaml">
       <Generator>MSBuild:Compile</Generator>
