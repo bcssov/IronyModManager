@@ -33,7 +33,6 @@
                      Foreground="{DynamicResource ThemeForegroundBrush}"
                      Padding="{TemplateBinding Padding}"
                      Watermark="{TemplateBinding Watermark}"
-                     DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
                      IsReadOnly="{TemplateBinding IsReadOnly}"
                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
