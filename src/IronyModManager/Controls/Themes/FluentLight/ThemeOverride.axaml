@@ -3,11 +3,11 @@
         x:Class="IronyModManager.Controls.Themes.FluentLight.ThemeOverride">
   <!-- Includes -->
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/NumericUpDown.axaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/ButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/ButtonSpinner.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/MinMaxButtonSpinner.xaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsLight.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/IronyToolTip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/IronyToolTip.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
@@ -92,11 +92,11 @@
     <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyAccentColor">#FF0000</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
-    <Color x:Key="IronyEditorBackgroundColor">#FF000000</Color>
+    <Color x:Key="IronyEditorBackgroundColor">#FFFFFFFF</Color>
     <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
-    <Color x:Key="IronyMidBackgroundColor">#FFF5F5F5</Color>
+    <Color x:Key="IronyMidBackgroundColor">#8BC34A</Color>
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
-    <Color x:Key="IronyButtonBorderColor">#FFAAAAAA</Color>
+    <Color x:Key="IronyButtonBorderColor">#8BC34A</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
     <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
