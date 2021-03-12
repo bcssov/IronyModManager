@@ -79,8 +79,8 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Data="{StaticResource ButtonSpinnerIncreaseButtonIcon}" />
-                </RepeatButton>                
-                
+                </RepeatButton>
+
                 <RepeatButton Name="PART_DecreaseButton"
                               Classes="ButtonSpinnerRepeatButton"
                               Foreground="{TemplateBinding Foreground}"
