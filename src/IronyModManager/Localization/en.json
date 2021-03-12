@@ -65,9 +65,8 @@
         "Name": "Theme",
         "Light": "Light",
         "Dark": "Dark",
-        "MaterialDark": "Material Dark",
-        "MaterialLightGreen": "Material Light Green",
-        "MaterialDeepPurple": "Material Deep Purple",
+        "FluentLight": "Fluent Light",
+        "FluentDark": "Fluent Dark",
         "Restart_Title": "Needs restart",
         "Restart_Header": "App needs restart",
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"

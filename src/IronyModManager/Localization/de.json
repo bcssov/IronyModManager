@@ -65,9 +65,8 @@
         "Name": "Thema",
         "Light": "Licht",
         "Dark": "Dunkel",
-        "MaterialDark": "Material Dunkel",
-        "MaterialDeepPurple": "Material Hellgrün",
-        "MaterialLightGreen": "Material Tiefpurpurn",
+        "FluentLight": "Fließend Licht",
+        "FluentDark": "Fließend Dunkel",
         "Restart_Title": "Muss neu gestartet werden",
         "Restart_Header": "App muss neu gestartet werden",
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"

@@ -1,4 +1,4 @@
-﻿<Style xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager" 
+<Style xmlns="https://github.com/avaloniaui" xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
        Selector="controls|IronyToolTip">
   <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
   <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}"/>

@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-07-2020
+// Last Modified On : 03-12-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -90,6 +90,66 @@ namespace IronyModManager.Services
             }
 
             /// <summary>
+            /// Class FluentDark.
+            /// </summary>
+            public static class FluentDark
+            {
+                #region Fields
+
+                /// <summary>
+                /// The compact
+                /// </summary>
+                public const string Compact = "avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml";
+
+                /// <summary>
+                /// The main resource
+                /// </summary>
+                public const string MainResource = "avares://Avalonia.Themes.Fluent/FluentDark.xaml";
+
+                /// <summary>
+                /// The name
+                /// </summary>
+                public const string Name = "FluentDark";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/FluentDark/ThemeOverride.axaml";
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class FluentLight.
+            /// </summary>
+            public static class FluentLight
+            {
+                #region Fields
+
+                /// <summary>
+                /// The compact
+                /// </summary>
+                public const string Compact = "avares://Avalonia.Themes.Fluent/DensityStyles/Compact.xaml";
+
+                /// <summary>
+                /// The main resource
+                /// </summary>
+                public const string MainResource = "avares://Avalonia.Themes.Fluent/FluentLight.xaml";
+
+                /// <summary>
+                /// The name
+                /// </summary>
+                public const string Name = "FluentLight";
+
+                /// <summary>
+                /// The override theme
+                /// </summary>
+                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/FluentLight/ThemeOverride.axaml";
+
+                #endregion Fields
+            }
+
+            /// <summary>
             /// Class Light.
             /// </summary>
             public static class Light
@@ -115,96 +175,6 @@ namespace IronyModManager.Services
                 /// The override theme
                 /// </summary>
                 public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/Light/ThemeOverride.xaml";
-
-                #endregion Fields
-            }
-
-            /// <summary>
-            /// Class MaterialDark.
-            /// </summary>
-            public static class MaterialDark
-            {
-                #region Fields
-
-                /// <summary>
-                /// The accent resource
-                /// </summary>
-                public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.Dark.xaml";
-
-                /// <summary>
-                /// The main resource
-                /// </summary>
-                public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
-
-                /// <summary>
-                /// The name
-                /// </summary>
-                public const string Name = "MaterialDark";
-
-                /// <summary>
-                /// The override theme
-                /// </summary>
-                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.xaml";
-
-                #endregion Fields
-            }
-
-            /// <summary>
-            /// Class MaterialDeepPurple.
-            /// </summary>
-            public static class MaterialDeepPurple
-            {
-                #region Fields
-
-                /// <summary>
-                /// The accent resource
-                /// </summary>
-                public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml";
-
-                /// <summary>
-                /// The main resource
-                /// </summary>
-                public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
-
-                /// <summary>
-                /// The name
-                /// </summary>
-                public const string Name = "MaterialDeepPurple";
-
-                /// <summary>
-                /// The override theme
-                /// </summary>
-                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialDeepPurple/ThemeOverride.xaml";
-
-                #endregion Fields
-            }
-
-            /// <summary>
-            /// Class MaterialLightGreen.
-            /// </summary>
-            public static class MaterialLightGreen
-            {
-                #region Fields
-
-                /// <summary>
-                /// The accent resource
-                /// </summary>
-                public const string AccentResource = "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml";
-
-                /// <summary>
-                /// The main resource
-                /// </summary>
-                public const string MainResource = "avares://Material.Avalonia/Material.Avalonia.Templates.xaml";
-
-                /// <summary>
-                /// The name
-                /// </summary>
-                public const string Name = "MaterialLightGreen";
-
-                /// <summary>
-                /// The override theme
-                /// </summary>
-                public const string OverrideTheme = "avares://IronyModManager/Controls/Themes/MaterialLightGreen/ThemeOverride.xaml";
 
                 #endregion Fields
             }

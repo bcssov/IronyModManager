@@ -65,9 +65,8 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
-        "MaterialDark": "Material 暗色",
-        "MaterialLightGreen": "Material 亮绿",
-        "MaterialDeepPurple": "Material 深紫",
+        "FluentLight": "流利的光",
+        "FluentDark": "流利的黑暗",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
         "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"

@@ -95,9 +95,8 @@ namespace IronyModManager.Shared
             public const string Name = Prefix + "Name";
             public const string Light = Prefix + "Light";
             public const string Dark = Prefix + "Dark";
-            public const string MaterialDark = Prefix + "MaterialDark";
-            public const string MaterialLightGreen = Prefix + "MaterialLightGreen";
-            public const string MaterialDeepPurple = Prefix + "MaterialDeepPurple";
+            public const string FluentLight = Prefix + "FluentLight";
+            public const string FluentDark = Prefix + "FluentDark";
             public const string Restart_Title = Prefix + "Restart_Title";
             public const string Restart_Header = Prefix + "Restart_Header";
             public const string Restart_Message = Prefix + "Restart_Message";

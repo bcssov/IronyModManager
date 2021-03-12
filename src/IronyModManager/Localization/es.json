@@ -65,9 +65,8 @@
         "Name": "Tema",
         "Light": "Claro",
         "Dark": "Oscuro",
-        "MaterialDark": "Material Oscuro",
-        "MaterialLightGreen": "Material Verde Claro",
-        "MaterialDeepPurple": "Material Morado Oscuro",
+        "FluentLight": "Luz fluida",
+        "FluentDark": "Oscuro fluido",
         "Restart_Title": "Necesita Reinicio",
         "Restart_Header": "Aplicación Necesita Reinicio",
         "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"

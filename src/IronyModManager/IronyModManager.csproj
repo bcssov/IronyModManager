@@ -67,7 +67,6 @@
     <AvaloniaResource Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <AvaloniaResource Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
-    <AvaloniaResource Remove="Controls\Themes\IronyToolTip.xaml" />
     <AvaloniaResource Remove="Views\Controls\ConflictSolverModFilterControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\ExportModCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\MergeViewerBinaryControlView.xaml" />
@@ -77,7 +76,6 @@
     <AvaloniaResource Remove="Views\Controls\ModifyCollectionControlView.xaml" />
     <AvaloniaResource Remove="Views\Controls\OptionsControlView.xaml" />
     <AvaloniaResource Remove="Views\MainConflictSolverControlView.xaml" />
-    <AvaloniaResource Include="Controls\Themes\IronyToolTip.xaml" />
     <AvaloniaResource Include="Controls\Themes\IconsLight.xaml" />
     <AvaloniaResource Include="Controls\Themes\IconsDark.xaml" />
     <AvaloniaResource Include="Controls\Themes\Dark\ThemeOverride.xaml" />
@@ -143,7 +141,6 @@
     <None Remove="Controls\Themes\MaterialDark\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialDeepPurple\ThemeOverride.xaml" />
     <None Remove="Controls\Themes\MaterialLightGreen\ThemeOverride.xaml" />
-    <None Remove="Controls\Themes\IronyToolTip.xaml" />
     <None Remove="Implementation\AvaloniaEdit\Resources\PDXScript.xshd" />
     <None Remove="Implementation\AvaloniaEdit\Resources\YAML.xshd" />
     <None Remove="Views\Controls\AddNewCollectionControlView.xaml" />
@@ -229,9 +226,6 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\Dark\ButtonSpinner.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\Themes\IronyToolTip.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Themes\IconsLight.xaml">

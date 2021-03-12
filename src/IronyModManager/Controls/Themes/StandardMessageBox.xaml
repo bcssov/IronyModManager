@@ -75,12 +75,12 @@
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="15" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <!--Bold text-->
       <TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" FontFamily="{Binding FontFamily}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" MaxHeight="400" MaxWidth="500" TextWrapping="WrapWithOverflow" />
+      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
     </Grid>
     <!--Buttons-->
     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"

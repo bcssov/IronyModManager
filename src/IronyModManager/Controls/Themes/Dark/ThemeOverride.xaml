@@ -7,7 +7,7 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/MinMaxButtonSpinner.xaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IronyToolTip.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">

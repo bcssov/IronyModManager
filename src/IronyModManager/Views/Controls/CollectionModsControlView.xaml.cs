@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-12-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -189,8 +189,19 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetOrderParameters()
         {
+            var performingNumericSet = false;
+            async Task resetPerformingSetFlag()
+            {
+                await Task.Delay(100);
+                performingNumericSet = false;
+            }
             void setNumericProperties(bool setMargin = false)
             {
+                if (performingNumericSet)
+                {
+                    return;
+                }
+                performingNumericSet = true;
                 var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
                 foreach (var item in listboxItems)
                 {
@@ -224,6 +235,7 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
+                resetPerformingSetFlag().ConfigureAwait(false);
             }
 
             void setNumericPropertiesSafe(bool setMargin = false)

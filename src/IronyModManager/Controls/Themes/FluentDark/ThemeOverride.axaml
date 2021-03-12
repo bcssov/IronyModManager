@@ -1,13 +1,13 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
+<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="IronyModManager.Controls.Themes.Light.ThemeOverride">
+        x:Class="IronyModManager.Controls.Themes.FluentDark.ThemeOverride">
   <!-- Includes -->
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/NumericUpDown.axaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/ButtonSpinner.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/MinMaxButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/NumericUpDown.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/ButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/MinMaxButtonSpinner.xaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsLight.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Light/IronyToolTip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
@@ -18,13 +18,13 @@
   </Style>
   <Style Selector="ListBoxItem.MoveBottom">
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
-    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderBrush" Value="White"/>
     <Setter Property="Margin" Value="0,0,0,-2"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
   <Style Selector="ListBoxItem.MoveTop">
     <Setter Property="BorderThickness" Value="0,2,0,0"/>
-    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderBrush" Value="White"/>
     <Setter Property="Margin" Value="0,-2,0,0"/>
     <Setter Property="ZIndex" Value="1000"></Setter>
   </Style>
@@ -84,18 +84,18 @@
     <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
   </Style>
   <Styles.Resources>
-    <Color x:Key="IronyForegroundColor">#FF000000</Color>
+    <Color x:Key="IronyForegroundColor">#FFDEDEDE</Color>
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
     <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
-    <Color x:Key="IronyAccentColor">#FF0000</Color>
+    <Color x:Key="IronyAccentColor">#FFFF00</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
-    <Color x:Key="IronyEditorBackgroundColor">#FF000000</Color>
+    <Color x:Key="IronyEditorBackgroundColor">#FF282828</Color>
     <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
-    <Color x:Key="IronyMidBackgroundColor">#FFF5F5F5</Color>
+    <Color x:Key="IronyMidBackgroundColor">#FF505050</Color>
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
-    <Color x:Key="IronyButtonBorderColor">#FFAAAAAA</Color>
+    <Color x:Key="IronyButtonBorderColor">#FF505050</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
+    <Color x:Key="IronyBackgroundPopupColor">#282828</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>
 </Styles>
