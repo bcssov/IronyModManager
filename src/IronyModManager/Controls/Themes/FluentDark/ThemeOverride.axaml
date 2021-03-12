@@ -2,9 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="IronyModManager.Controls.Themes.FluentDark.ThemeOverride">
   <!-- Includes -->
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/NumericUpDown.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/NumericUpDown.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/ButtonSpinner.axaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/MinMaxButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/MinMaxButtonSpinner.axaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentDark/IronyToolTip.axaml"/>

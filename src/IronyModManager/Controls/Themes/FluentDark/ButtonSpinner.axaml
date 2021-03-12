@@ -2,24 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=netstandard"
         xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls">
-  <Design.PreviewWith>
-    <Border Padding="20"
-            Background="Black">
-      <StackPanel Spacing="20">
-        <ButtonSpinner ButtonSpinnerLocation="Right"
-                       Content="Right disabled inline spinner"
-                       AllowSpin="False">
-          <DataValidationErrors.Error>
-            <sys:Exception />
-          </DataValidationErrors.Error>
-        </ButtonSpinner>
-        <ButtonSpinner ButtonSpinnerLocation="Left"
-                       Content="Left spinner" />
-        <ButtonSpinner ShowButtonSpinner="False"
-                       Content="Hide spinner" />
-      </StackPanel>
-    </Border>
-  </Design.PreviewWith>
 
   <Styles.Resources>
     <converters:MarginMultiplierConverter x:Key="ButtonSpinner_OnlyLeftThinknessConverter"
@@ -29,8 +11,8 @@
                                           Indent="1"
                                           Right="True" />
 
-    <StreamGeometry x:Key="ButtonSpinnerIncreaseButtonIcon">M0,9 L10,0 20,9 19,10 10,2 1,10 z</StreamGeometry>
-    <StreamGeometry x:Key="ButtonSpinnerDecreaseButtonIcon">M0,1 L10,10 20,1 19,0 10,8 1,0 z</StreamGeometry>
+    <StreamGeometry x:Key="ButtonSpinnerIncreaseButtonIcon">M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z</StreamGeometry>
+    <StreamGeometry x:Key="ButtonSpinnerDecreaseButtonIcon">M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z</StreamGeometry>
   </Styles.Resources>
 
   <!--  RepeatButton.ButtonSpinnerRepeatButton  -->
@@ -81,24 +63,8 @@
                                 Padding="{TemplateBinding Padding}" />
 
               <StackPanel Name="PART_SpinnerPanel"
-                          Orientation="Horizontal"
+                          Orientation="Vertical"
                           IsVisible="{TemplateBinding ShowButtonSpinner}">
-                <RepeatButton Name="PART_DecreaseButton"
-                              Classes="ButtonSpinnerRepeatButton"
-                              Foreground="{TemplateBinding Foreground}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              Background="{TemplateBinding Background}"
-                              VerticalContentAlignment="Center"
-                              FontSize="{TemplateBinding FontSize}">
-                  <Path Fill="{TemplateBinding Foreground}"
-                        Width="16"
-                        Height="8"
-                        Stretch="Uniform"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Data="{StaticResource ButtonSpinnerDecreaseButtonIcon}" />
-                </RepeatButton>
-
                 <RepeatButton Name="PART_IncreaseButton"
                               Classes="ButtonSpinnerRepeatButton"
                               VerticalContentAlignment="Center"
@@ -107,12 +73,28 @@
                               Background="{TemplateBinding Background}"
                               FontSize="{TemplateBinding FontSize}">
                   <Path Fill="{TemplateBinding Foreground}"
-                        Width="16"
-                        Height="8"
+                        Width="9"
+                        Height="5"
                         Stretch="Uniform"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Data="{StaticResource ButtonSpinnerIncreaseButtonIcon}" />
+                </RepeatButton>                
+                
+                <RepeatButton Name="PART_DecreaseButton"
+                              Classes="ButtonSpinnerRepeatButton"
+                              Foreground="{TemplateBinding Foreground}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              Background="{TemplateBinding Background}"
+                              VerticalContentAlignment="Center"
+                              FontSize="{TemplateBinding FontSize}">
+                  <Path Fill="{TemplateBinding Foreground}"
+                        Width="9"
+                        Height="5"
+                        Stretch="Uniform"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="{StaticResource ButtonSpinnerDecreaseButtonIcon}" />
                 </RepeatButton>
               </StackPanel>
             </Grid>

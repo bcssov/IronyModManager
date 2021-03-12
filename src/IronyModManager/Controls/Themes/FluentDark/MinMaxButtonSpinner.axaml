@@ -1,7 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=netstandard"
-        xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls">
+        xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
+        xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
 
   <Styles.Resources>
     <converters:MarginMultiplierConverter x:Key="ButtonSpinner_OnlyLeftThinknessConverter"
@@ -11,8 +12,8 @@
                                           Indent="1"
                                           Right="True" />
 
-    <StreamGeometry x:Key="ButtonSpinnerIncreaseButtonIcon">M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z</StreamGeometry>
-    <StreamGeometry x:Key="ButtonSpinnerDecreaseButtonIcon">M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z</StreamGeometry>
+    <StreamGeometry x:Key="ButtonSpinnerIncreaseButtonIcon">M0,0 L3,0 4.5,1.5 6,0 9,0 4.5,4.5 z M 0,5 H9 v1 h-9 v-1</StreamGeometry>
+    <StreamGeometry x:Key="ButtonSpinnerDecreaseButtonIcon">M0,5 L4.5,.5 9,5 6,5 4.5,3.5 3,5 z M 0,0 H9 v-1 h-9 v1</StreamGeometry>
   </Styles.Resources>
 
   <!--  RepeatButton.ButtonSpinnerRepeatButton  -->
@@ -33,7 +34,7 @@
   </Style>
 
   <!--  ButtonSpinner  -->
-  <Style Selector="ButtonSpinner">
+  <Style Selector="controls|MinMaxButtonSpinner">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
     <Setter Property="Padding" Value="10, 0" />
@@ -73,8 +74,8 @@
                               Background="{TemplateBinding Background}"
                               FontSize="{TemplateBinding FontSize}">
                   <Path Fill="{TemplateBinding Foreground}"
-                        Width="9"
-                        Height="5"
+                        Width="10"
+                        Height="6"
                         Stretch="Uniform"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -89,8 +90,8 @@
                               VerticalContentAlignment="Center"
                               FontSize="{TemplateBinding FontSize}">
                   <Path Fill="{TemplateBinding Foreground}"
-                        Width="9"
-                        Height="5"
+                        Width="10"
+                        Height="6"
                         Stretch="Uniform"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -105,23 +106,23 @@
   </Style>
 
   <!--  ButtonSpinnerLocation=Right  -->
-  <Style Selector="ButtonSpinner:right /template/ StackPanel#PART_SpinnerPanel">
+  <Style Selector="controls|MinMaxButtonSpinner:right /template/ StackPanel#PART_SpinnerPanel">
     <Setter Property="Grid.Column" Value="2" />
   </Style>
-  <Style Selector="ButtonSpinner:right /template/ RepeatButton.ButtonSpinnerRepeatButton">
+  <Style Selector="controls|MinMaxButtonSpinner:right /template/ RepeatButton.ButtonSpinnerRepeatButton">
     <Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={StaticResource ButtonSpinner_OnlyLeftThinknessConverter}}" />
   </Style>
 
   <!--  ButtonSpinnerLocation=Left  -->
-  <Style Selector="ButtonSpinner:left /template/ StackPanel#PART_SpinnerPanel">
+  <Style Selector="controls|MinMaxButtonSpinner:left /template/ StackPanel#PART_SpinnerPanel">
     <Setter Property="Grid.Column" Value="0" />
   </Style>
-  <Style Selector="ButtonSpinner:left /template/ RepeatButton.ButtonSpinnerRepeatButton">
+  <Style Selector="controls|MinMaxButtonSpinner:left /template/ RepeatButton.ButtonSpinnerRepeatButton">
     <Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={StaticResource ButtonSpinner_OnlyRightThinknessConverter}}" />
   </Style>
 
   <!--  Error state  -->
-  <Style Selector="ButtonSpinner:error">
+  <Style Selector="controls|MinMaxButtonSpinner:error">
     <Setter Property="BorderBrush" Value="{DynamicResource SystemErrorTextColor}" />
   </Style>
 

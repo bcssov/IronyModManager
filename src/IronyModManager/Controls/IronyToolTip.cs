@@ -73,8 +73,12 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The tip property
         /// </summary>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         public static readonly AttachedProperty<object?> TipProperty =
             AvaloniaProperty.RegisterAttached<ToolTip, Control, object?>("Tip");
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
         /// The vertical offset property
@@ -85,8 +89,12 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The tool tip property
         /// </summary>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         internal static readonly AttachedProperty<IronyToolTip?> ToolTipProperty =
             AvaloniaProperty.RegisterAttached<IronyToolTip, Control, IronyToolTip?>("ToolTip");
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
         /// The tooltip section key
@@ -190,7 +198,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>System.Object.</returns>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         public static object? GetTip(Control element)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         {
             return element.GetValue(TipProperty);
         }
@@ -260,7 +271,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <param name="value">The value.</param>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
         public static void SetTip(Control element, object? value)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         {
             element.SetValue(TipProperty, value);
         }
@@ -292,7 +306,9 @@ namespace IronyModManager.Controls
         {
             var control = (Control)e.Sender;
             var newValue = (bool)e.NewValue!;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
             IronyToolTip? toolTip;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
             if (newValue)
             {

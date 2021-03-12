@@ -35,6 +35,8 @@
                      Watermark="{TemplateBinding Watermark}"
                      DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
                      IsReadOnly="{TemplateBinding IsReadOnly}"
+                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                      Text="{TemplateBinding Text}"
                      AcceptsReturn="False"
                      TextAlignment="Center"
