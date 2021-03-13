@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -72,18 +72,6 @@ namespace IronyModManager.Platform
         private static void LoadAvaloniaNative<TAppBuilder>(TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
              => builder.UseAvaloniaNative();
-
-        /// <summary>
-        /// Loads the direct2 d1.
-        /// </summary>
-        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
-        /// <param name="builder">The builder.</param>
-#pragma warning disable IDE0051 // Remove unused private members
-
-        private static void LoadDirect2D1<TAppBuilder>(TAppBuilder builder)
-#pragma warning restore IDE0051 // Remove unused private members
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseWin32();
 
         /// <summary>
         /// Loads the skia.
