@@ -18,7 +18,9 @@
 
   <!--  RepeatButton.ButtonSpinnerRepeatButton  -->
   <Style Selector="RepeatButton.ButtonSpinnerRepeatButton">
-    <Setter Property="MinWidth" Value="34" />
+    <Setter Property="MinWidth" Value="10" />
+    <Setter Property="MaxWidth" Value="20" />
+    <Setter Property="MaxHeight" Value="14"/>
     <Setter Property="VerticalAlignment" Value="Stretch" />
   </Style>
 
@@ -37,12 +39,12 @@
   <Style Selector="controls|MinMaxButtonSpinner">
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
-    <Setter Property="Padding" Value="10, 0" />
+    <Setter Property="Padding" Value="2, 0" />
     <Setter Property="Background" Value="{DynamicResource TextControlBackground}" />
     <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}" />
     <Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
     <Setter Property="MinHeight" Value="{DynamicResource TextControlThemeMinHeight}" />
-    <Setter Property="MinWidth" Value="{DynamicResource TextControlThemeMinWidth}" />
+    <Setter Property="MinWidth" Value="10" />
     <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Center" />

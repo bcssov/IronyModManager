@@ -13,43 +13,54 @@
     <Setter Property="Padding" Value="{DynamicResource TextControlThemePadding}" />
     <Setter Property="Template">
       <ControlTemplate>
-        <controls:MinMaxButtonSpinner Name="PART_MinMax_Spinner"
-               Background="{TemplateBinding Background}"
-               BorderThickness="{TemplateBinding BorderThickness}"
-               BorderBrush="{TemplateBinding BorderBrush}"
-               Padding="0"
-               HorizontalContentAlignment="Stretch"
-               VerticalContentAlignment="Stretch"
-               AllowSpin="{TemplateBinding MinMaxAllowSpin}"
-               ShowButtonSpinner="{TemplateBinding MinMaxShowButtonSpinner}"
-               ButtonSpinnerLocation="{TemplateBinding MinMaxButtonSpinnerLocation}">
-          <controls:NumericButtonSpinner Name="PART_Spinner"
-                         Background="{TemplateBinding Background}"
-                         BorderThickness="{TemplateBinding BorderThickness}"
-                         BorderBrush="{TemplateBinding BorderBrush}"
-                         Padding="0"
-                         HorizontalContentAlignment="Stretch"
-                         VerticalContentAlignment="Stretch"
-                         AllowSpin="{TemplateBinding AllowSpin}"
-                         ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
-                         ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
-            <TextBox Name="PART_TextBox"
-                     Background="Transparent"
-                     BorderBrush="Transparent"
-                     Margin="-1"
-                     Padding="{TemplateBinding Padding}"
-                     Watermark="{TemplateBinding Watermark}"
-                     IsReadOnly="{TemplateBinding IsReadOnly}"
-                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                     Text="{TemplateBinding Text}"
-                     AcceptsReturn="False"
-                     VerticalAlignment="Center"
-                     TextAlignment="Center"
-                     TextWrapping="NoWrap" />
-          </controls:NumericButtonSpinner>
-        </controls:MinMaxButtonSpinner>
+        <Border Background="{TemplateBinding Background}"
+          BorderBrush="{TemplateBinding BorderBrush}"
+          BorderThickness="{TemplateBinding BorderThickness}"
+          CornerRadius="{DynamicResource ControlCornerRadius}"
+          MinHeight="{TemplateBinding MinHeight}">
+          <controls:MinMaxButtonSpinner Name="PART_MinMax_Spinner"
+                 Background="Transparent"
+                 BorderBrush="Transparent"
+                 BorderThickness="0"
+                 Padding="0"
+                 HorizontalContentAlignment="Stretch"
+                 VerticalContentAlignment="Stretch"
+                 AllowSpin="{TemplateBinding MinMaxAllowSpin}"
+                 ShowButtonSpinner="{TemplateBinding MinMaxShowButtonSpinner}"
+                 ButtonSpinnerLocation="{TemplateBinding MinMaxButtonSpinnerLocation}">
+            <controls:NumericButtonSpinner Name="PART_Spinner"
+                           Background="Transparent"
+                           BorderBrush="Transparent"
+                           BorderThickness="0"
+                           Padding="0"
+                           HorizontalContentAlignment="Stretch"
+                           VerticalContentAlignment="Stretch"
+                           AllowSpin="{TemplateBinding AllowSpin}"
+                           ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
+                           ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
+              <TextBox Name="PART_TextBox"
+                       Background="Transparent"
+                       BorderBrush="Transparent"
+                       BorderThickness="0"
+                       Margin="-1"
+                       Padding="{TemplateBinding Padding}"
+                       Watermark="{TemplateBinding Watermark}"
+                       IsReadOnly="{TemplateBinding IsReadOnly}"
+                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                       Text="{TemplateBinding Text}"
+                       AcceptsReturn="False"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       TextWrapping="NoWrap" />
+            </controls:NumericButtonSpinner>
+          </controls:MinMaxButtonSpinner>
+        </Border>
       </ControlTemplate>
     </Setter>
+  </Style>
+  <Style Selector="controls|MinMaxNumericUpDown /template/ TextBox#PART_TextBox">
+    <Setter Property="Margin" Value="2"/>
+    <Setter Property="MinWidth" Value="20"/>
   </Style>
 </Styles>
