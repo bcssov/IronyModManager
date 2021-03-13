@@ -8,6 +8,7 @@
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsLight.xaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/IronyToolTip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/FluentLight/ListBoxItem.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
@@ -98,7 +99,7 @@
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
     <Color x:Key="IronyButtonBorderColor">#66000000</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
+    <Color x:Key="IronyBackgroundPopupColor">White</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
     <x:Double x:Key="ControlContentThemeFontSize">12</x:Double>
     <x:Double x:Key="ContentControlFontSize">12</x:Double>    

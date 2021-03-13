@@ -36,11 +36,14 @@
                            Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left"
                            MinHeight="20" Margin="0,5"></TextBlock>
                 <Button Content="{Binding DefaultMode}" Command="{Binding DefaultModeCommand}"
-                        Grid.Row="1" Grid.Column="0"></Button>
+                        Grid.Row="1" Grid.Column="0"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                 <Button Content="{Binding AdvancedMode}" Command="{Binding AdvancedModeCommand}"
-                        Grid.Row="2" Grid.Column="0"></Button>
+                        Grid.Row="2" Grid.Column="0"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
                 <Button Content="{Binding CloseMode}" Command="{Binding CloseModeCommand}"
-                        Grid.Row="3" Grid.Column="0"></Button>
+                        Grid.Row="3" Grid.Column="0"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
               </Grid>
             </Border>
           </Popup>

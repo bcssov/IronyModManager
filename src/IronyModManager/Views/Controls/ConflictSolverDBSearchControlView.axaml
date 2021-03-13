@@ -21,7 +21,8 @@
           <Panel Grid.Row="0">
             <Grid ColumnDefinitions="10*,1*">
               <TextBox Watermark="{Binding Watermark}" Text="{Binding SearchTerm}" Grid.Column="0"></TextBox>
-              <Button Content="{Binding Clear}" Command="{Binding ClearCommand}" Grid.Column="1"></Button>
+              <Button Content="{Binding Clear}" Command="{Binding ClearCommand}" Grid.Column="1" 
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>
           </Panel>
           <ListBox Items="{Binding Definitions}" Height="400" Width="300" Grid.Row="1"
