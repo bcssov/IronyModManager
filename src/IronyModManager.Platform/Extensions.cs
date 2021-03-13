@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Platform
@@ -61,6 +62,13 @@ namespace IronyModManager.Platform
                 LoadX11(builder);
                 LoadSkia(builder);
             }
+            builder.AfterSetup(s =>
+            {
+                // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
+                var fontManager = AvaloniaLocator.Current.GetService<IFontManagerImpl>();
+                FontManager.RegisterUnderlyingFontManager(fontManager);
+                AvaloniaLocator.CurrentMutable.Bind<IFontManagerImpl>().ToConstant(new FontManager());
+            });
             return builder;
         }
 

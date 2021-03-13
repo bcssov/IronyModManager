@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -24,12 +24,12 @@ using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
 using IronyModManager.Implementation;
 using IronyModManager.Implementation.Actions;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;

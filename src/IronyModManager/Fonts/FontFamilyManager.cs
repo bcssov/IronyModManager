@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="FontFamilyManager.cs" company="Mario">
 //     Mario
@@ -14,14 +14,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronyModManager.Platform.Fonts;
 
 namespace IronyModManager.Fonts
 {
     /// <summary>
     /// Class FontFamilyManager.
-    /// Implements the <see cref="IronyModManager.Fonts.IFontFamilyManager" />
+    /// Implements the <see cref="IronyModManager.Platform.Fonts.IFontFamilyManager" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Fonts.IFontFamilyManager" />
+    /// <seealso cref="IronyModManager.Platform.Fonts.IFontFamilyManager" />
     public class FontFamilyManager : IFontFamilyManager
     {
         #region Fields
@@ -55,13 +56,32 @@ namespace IronyModManager.Fonts
         #region Methods
 
         /// <summary>
+        /// Gets the default font family.
+        /// </summary>
+        /// <returns>IFontFamily.</returns>
+        public IFontFamily GetDefaultFontFamily()
+        {
+            return ResolveFontFamily(Constants.DefaultFont);
+        }
+
+        /// <summary>
+        /// Determines whether [is irony font] [the specified font name].
+        /// </summary>
+        /// <param name="fontName">Name of the font.</param>
+        /// <returns><c>true</c> if [is irony font] [the specified font name]; otherwise, <c>false</c>.</returns>
+        public bool IsIronyFont(string fontName)
+        {
+            return fontFamilies.Any(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.Ordinal));
+        }
+
+        /// <summary>
         /// Resolves the font family.
         /// </summary>
         /// <param name="fontName">Name of the font.</param>
         /// <returns>IFontFamily.</returns>
         public IFontFamily ResolveFontFamily(string fontName)
         {
-            var font = fontFamilies.FirstOrDefault(p => p.Name.Equals(fontName, StringComparison.OrdinalIgnoreCase));
+            var font = fontFamilies.FirstOrDefault(p => p.Name.Equals(fontName ?? string.Empty, StringComparison.Ordinal));
             if (font == null)
             {
                 SystemFontFamily systemFont = systemFonts.FirstOrDefault(p => p.Name.Equals(fontName));

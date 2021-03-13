@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -25,6 +25,7 @@ using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
 

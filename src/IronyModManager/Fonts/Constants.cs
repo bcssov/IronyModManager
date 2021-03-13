@@ -1,35 +1,34 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager
 // Author           : Mario
-// Created          : 09-30-2020
+// Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
-// <copyright file="IFontFamilyManager.cs" company="Mario">
+// <copyright file="Constants.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Fonts
 {
     /// <summary>
-    /// Interface IFontFamilyManager
+    /// Class Constants.
     /// </summary>
-    public interface IFontFamilyManager
+    public class Constants
     {
-        #region Methods
+        #region Fields
 
         /// <summary>
-        /// Resolves the font family.
+        /// The default font
         /// </summary>
-        /// <param name="fontName">Name of the font.</param>
-        /// <returns>IFontFamily.</returns>
-        IFontFamily ResolveFontFamily(string fontName);
+        public const string DefaultFont = "Noto Sans";
 
-        #endregion Methods
+        #endregion Fields
     }
 }

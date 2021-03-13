@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -15,8 +15,8 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.BaseWindows.Base;

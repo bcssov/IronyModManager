@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="FontFamilyConverter.cs" company="Mario">
 //     Mario
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
+using IronyModManager.Platform.Fonts;
 
 namespace IronyModManager.Converters
 {
@@ -37,10 +37,13 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value != null)
-            {                
+            {
                 var fontResolver = DIResolver.Get<IFontFamilyManager>();
                 var font = fontResolver.ResolveFontFamily(value.ToString());
                 return font.GetFontFamily();
@@ -56,6 +59,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;

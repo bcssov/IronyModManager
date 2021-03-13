@@ -4,24 +4,24 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-02-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="BaseFontFamily.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using Avalonia.Media;
 
-namespace IronyModManager.Fonts
+namespace IronyModManager.Platform.Fonts
 {
     /// <summary>
     /// Class BaseFontFamily.
-    /// Implements the <see cref="IronyModManager.Fonts.IFontFamily" />
+    /// Implements the <see cref="IronyModManager.Platform.Fonts.IFontFamily" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Fonts.IFontFamily" />
+    /// <seealso cref="IronyModManager.Platform.Fonts.IFontFamily" />
     public abstract class BaseFontFamily : IFontFamily
     {
         #region Fields

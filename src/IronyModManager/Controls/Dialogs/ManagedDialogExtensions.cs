@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -24,7 +24,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Platform;
 using IronyModManager.Controls.Themes;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 

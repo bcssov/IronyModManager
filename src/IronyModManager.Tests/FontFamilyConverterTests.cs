@@ -4,7 +4,7 @@
 // Created          : 02-06-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="FontFamilyConverterTests.cs" company="Mario">
 //     Mario
@@ -18,6 +18,7 @@ using FluentAssertions;
 using IronyModManager.Converters;
 using IronyModManager.Fonts;
 using IronyModManager.Localization;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Tests.Common;
 using Moq;
 using Xunit;
