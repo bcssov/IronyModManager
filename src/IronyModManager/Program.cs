@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -184,9 +184,13 @@ namespace IronyModManager
                 var logger = DIResolver.Get<ILogger>();
                 logger.Error(e);
 
-                var path = Process.GetCurrentProcess().MainModule.FileName;
-                var appAction = DIResolver.Get<IAppAction>();
-                await appAction.RunAsync(path, "--fatal-error");
+                var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+                if (runFatalErrorProcess)
+                {
+                    var path = Process.GetCurrentProcess().MainModule.FileName;
+                    var appAction = DIResolver.Get<IAppAction>();
+                    await appAction.RunAsync(path, "--fatal-error");
+                }
             }
         }
 
