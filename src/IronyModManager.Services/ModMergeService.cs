@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -53,7 +53,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The zip lock
         /// </summary>
-        private static readonly AsyncLock zipLock = new AsyncLock();
+        private static readonly AsyncLock zipLock = new();
 
         /// <summary>
         /// The message bus
@@ -379,6 +379,7 @@ namespace IronyModManager.Services
 
                     modMergeCompressExporter.Finalize(queueId, Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
+                    renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
                     exportedMods.Add(newMod);
                     exportModLock.Dispose();

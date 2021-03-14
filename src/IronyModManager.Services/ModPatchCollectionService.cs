@@ -230,13 +230,13 @@ namespace IronyModManager.Services
                 return Task.FromResult(false);
             }
             var oldPatchName = GenerateCollectionPatchName(collectionName);
-            var newPathName = GenerateCollectionPatchName(newCollectionName);
+            var newPatchName = GenerateCollectionPatchName(newCollectionName);
             return modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters()
             {
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 ModPath = oldPatchName,
-                PatchName = newPathName,
-                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPathName) }
+                PatchName = newPatchName,
+                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPatchName) }
             });
         }
 
@@ -1180,13 +1180,13 @@ namespace IronyModManager.Services
                 return Task.FromResult(false);
             }
             var oldPatchName = GenerateCollectionPatchName(collectionName);
-            var newPathName = GenerateCollectionPatchName(newCollectionName);
+            var newPatchName = GenerateCollectionPatchName(newCollectionName);
             return modPatchExporter.RenamePatchModAsync(new ModPatchExporterParameters()
             {
                 RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
                 ModPath = oldPatchName,
-                PatchName = newPathName,
-                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPathName) }
+                PatchName = newPatchName,
+                RenamePairs = new List<KeyValuePair<string, string>>() { new KeyValuePair<string, string>(oldPatchName, newPatchName) }
             }); ;
         }
 

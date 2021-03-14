@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -80,7 +80,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The write lock
         /// </summary>
-        private static readonly AsyncLock writeLock = new AsyncLock();
+        private static readonly AsyncLock writeLock = new();
 
         /// <summary>
         /// The cache
@@ -170,7 +170,9 @@ namespace IronyModManager.IO.Mods
         /// export definition as an asynchronous operation.
         /// </summary>
         /// <param name="parameters">The parameters.</param>
-        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        /// <returns>System.Threading.Tasks.Task&lt;bool&gt;.</returns>
+        /// <exception cref="ArgumentNullException">nameof(parameters), Game.</exception>
+        /// <exception cref="ArgumentNullException">nameof(parameters), Game.</exception>
         public async Task<bool> ExportDefinitionAsync(ModPatchExporterParameters parameters)
         {
             async Task<bool> export()
