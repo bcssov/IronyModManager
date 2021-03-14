@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -66,17 +66,14 @@ namespace IronyModManager.Controls
         public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
             ContextMenu = null;
+            if (contextMenu == null)
+            {
+                contextMenu = new ContextMenu();
+            }
             if (menuItems?.Count > 0)
             {
-                contextMenu = new ContextMenu
-                {
-                    Items = menuItems
-                };
+                contextMenu.Items = menuItems;
                 contextMenu.Open(this);
-            }
-            else
-            {
-                contextMenu = null;
             }
         }
 
