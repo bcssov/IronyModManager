@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="App.xaml.cs" company="Mario">
 //     Mario
@@ -19,7 +19,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Threading;
 using IronyModManager.Common;
 using IronyModManager.Common.Events;
@@ -30,6 +29,7 @@ using IronyModManager.Implementation.Overlay;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
 using IronyModManager.Platform.Fonts;
+using IronyModManager.Platform.Themes;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.ViewModels;
@@ -48,34 +48,6 @@ namespace IronyModManager
     public class App : Application
     {
         #region Fields
-
-        /// <summary>
-        /// The compile theme
-        /// </summary>
-        private static readonly Func<string, StyleInclude> compileTheme = (style) =>
-        {
-            return new StyleInclude(new Uri("resm:Styles"))
-            {
-                Source = new Uri(style)
-            };
-        };
-
-        /// <summary>
-        /// The theme setter
-        /// </summary>
-        private static readonly Func<Application, ITheme, bool> themeSetter = (app, theme) =>
-        {
-            if (app != null && theme != null)
-            {
-                foreach (var item in theme.StyleIncludes)
-                {
-                    var style = compileTheme(item);
-                    app.Styles.Add(style);
-                }
-                return true;
-            }
-            return false;
-        };
 
         /// <summary>
         /// The show fatal notification
@@ -266,7 +238,8 @@ namespace IronyModManager
         private void InitThemes()
         {
             var currentTheme = DIResolver.Get<IThemeService>().GetSelected();
-            themeSetter(this, currentTheme);
+            var themeManager = DIResolver.Get<IThemeManager>();
+            themeManager.ApplyTheme(currentTheme.Type);
 
             var themeListener = MessageBus.Current.Listen<ThemeChangedEventArgs>();
             themeListener.SubscribeObservable(x =>

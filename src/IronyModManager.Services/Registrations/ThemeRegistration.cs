@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="ThemeRegistration.cs" company="Mario">
 //     Mario
@@ -35,10 +35,10 @@ namespace IronyModManager.Services.Registrations
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterTheme(Constants.Themes.Light.Name, new List<string> { Constants.Themes.Light.MainResource, Constants.Themes.Light.AccentResource, Constants.Themes.Light.OverrideTheme }, true);
-            storage.RegisterTheme(Constants.Themes.Dark.Name, new List<string> { Constants.Themes.Dark.MainResource, Constants.Themes.Dark.AccentResource, Constants.Themes.Dark.OverrideTheme });
-            storage.RegisterTheme(Constants.Themes.FluentLight.Name, new List<string> { Constants.Themes.FluentLight.MainResource, Constants.Themes.FluentLight.Compact, Constants.Themes.FluentLight.OverrideTheme });
-            storage.RegisterTheme(Constants.Themes.FluentDark.Name, new List<string> { Constants.Themes.FluentDark.MainResource, Constants.Themes.FluentDark.Compact, Constants.Themes.FluentDark.OverrideTheme });
+            storage.RegisterTheme(Common.Constants.Themes.Light.Name, true);
+            storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
+            storage.RegisterTheme(Common.Constants.Themes.FluentLight.Name);
+            storage.RegisterTheme(Common.Constants.Themes.FluentDark.Name);
         }
 
         #endregion Methods
