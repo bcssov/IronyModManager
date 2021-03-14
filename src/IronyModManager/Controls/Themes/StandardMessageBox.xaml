@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
         x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
-        xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
         SizeToContent="WidthAndHeight"
         MinWidth="200"
         MaxWidth="{Binding MaxWidth}"
@@ -14,10 +13,6 @@
         CanResize="{Binding CanResize}"
         FontFamily="{Binding FontFamily}"
         Title="{Binding ContentTitle}">
-  <Window.Resources>
-    <converter:MathConverter x:Key="MathConverter" />
-  </Window.Resources>
-
   <Window.KeyBindings>
     <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
     <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />

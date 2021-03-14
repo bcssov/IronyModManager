@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:animations="clr-namespace:Material.Styles.Additional.Animations;assembly=Material.Styles"
-        xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles">
+        xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+        xmlns:markup="clr-namespace:IronyModManager.Markup;assembly=IronyModManager">
 
   <Styles.Resources>
     <StreamGeometry x:Key="TextBoxClearButtonData">M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z</StreamGeometry>
@@ -13,26 +14,26 @@
     <StreamGeometry x:Key="MaterialSelectAll">M9 9H15V15H9M7 17H17V7H7M15 5H17V3H15M15 21H17V19H15M19 17H21V15H19M19 9H21V7H19M19 21A2 2 0 0 0 21 19H19M19 13H21V11H19M11 21H13V19H11M9 3H7V5H9M3 17H5V15H3M5 21V19H3A2 2 0 0 0 5 21M19 3V5H21A2 2 0 0 0 19 3M13 3H11V5H13M3 9H5V7H3M7 21H9V19H7M3 13H5V11H3M3 5H5V3A2 2 0 0 0 3 5Z</StreamGeometry>
 
     <ContextMenu x:Key="DefaultTextBoxContextMenu" x:Name="TextBoxContextMenu" WindowManagerAddShadowHint="False">
-      <MenuItem x:Name="TextBoxContextMenuCutItem" Header="Cut" Command="{Binding $parent[TextBox].Cut}"
+      <MenuItem x:Name="TextBoxContextMenuCutItem" Header="{markup:Localization TextBox.Cut}"  Command="{Binding $parent[TextBox].Cut}"
                 IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentCut}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
       </MenuItem>
-      <MenuItem x:Name="TextBoxContextMenuCopyItem" Header="Copy" Command="{Binding $parent[TextBox].Copy}"
+      <MenuItem x:Name="TextBoxContextMenuCopyItem" Header="{markup:Localization TextBox.Copy}" Command="{Binding $parent[TextBox].Copy}"
                 IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentCopy}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
       </MenuItem>
-      <MenuItem x:Name="TextBoxContextMenuPasteItem" Header="Paste" Command="{Binding $parent[TextBox].Paste}"
+      <MenuItem x:Name="TextBoxContextMenuPasteItem" Header="{markup:Localization TextBox.Paste}" Command="{Binding $parent[TextBox].Paste}"
                 IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentPaste}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
       </MenuItem>
       <Separator/>
-      <MenuItem x:Name="TextBoxContextMenuSelectAllItem" Header="Select All" Command="{Binding $parent[TextBox].SelectAll}">
+      <MenuItem x:Name="TextBoxContextMenuSelectAllItem" Header="{markup:Localization TextBox.SelectAll}" Command="{Binding $parent[TextBox].SelectAll}">
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialSelectAll}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>

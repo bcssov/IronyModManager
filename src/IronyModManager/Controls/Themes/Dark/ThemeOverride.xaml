@@ -8,6 +8,7 @@
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/TextBox.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">

@@ -58,6 +58,12 @@
             "Pictures": "Pictures"
         }
     },
+    "TextBox": {
+        "Copy": "Copy",
+        "Cut": "Cut",
+        "Paste": "Paste",
+        "SelectAll": "Select All"
+    },
     "Languages": {
         "Name": "Language"
     },

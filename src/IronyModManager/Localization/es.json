@@ -61,6 +61,12 @@
     "Languages": {
         "Name": "Idioma"
     },
+    "TextBox": {
+        "Copy": "Dupdo",
+        "Cut": "Corte",
+        "Paste": "Pegar",
+        "SelectAll": "Seleccionar todo"
+    },
     "Themes": {
         "Name": "Tema",
         "Light": "Claro",

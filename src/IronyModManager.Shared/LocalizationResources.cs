@@ -84,6 +84,14 @@ namespace IronyModManager.Shared
                 public const string Pictures = Prefix + "Pictures";
             }
         }
+        public static class TextBox
+        {
+            public const string Prefix = "TextBox.";
+            public const string Copy = Prefix + "Copy";
+            public const string Cut = Prefix + "Cut";
+            public const string Paste = Prefix + "Paste";
+            public const string SelectAll = Prefix + "SelectAll";
+        }
         public static class Languages
         {
             public const string Prefix = "Languages.";

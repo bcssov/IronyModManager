@@ -58,6 +58,12 @@
             "Pictures": "Slike"
         }
     },
+    "TextBox": {
+        "Copy": "Kopiraj",
+        "Cut": "Izreži",
+        "Paste": "Zalijepi",
+        "SelectAll": "Odaberi sve"
+    },
     "Languages": {
         "Name": "Jezik"
     },

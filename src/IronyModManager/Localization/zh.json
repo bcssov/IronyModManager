@@ -58,6 +58,12 @@
             "Pictures": "图片"
         }
     },
+    "TextBox": {
+        "Copy": "复制",
+        "Cut": "切",
+        "Paste": "粘贴",
+        "SelectAll": "全选"
+    },
     "Languages": {
         "Name": "语言"
     },
