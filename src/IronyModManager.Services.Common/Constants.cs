@@ -91,6 +91,36 @@ namespace IronyModManager.Services.Common
                 #endregion Fields
             }
 
+            /// <summary>
+            /// Class MaterialDark.
+            /// </summary>
+            public static class MaterialDark
+            {
+                #region Fields
+
+                /// <summary>
+                /// The name
+                /// </summary>
+                public const string Name = "MaterialDark";
+
+                #endregion Fields
+            }
+
+            /// <summary>
+            /// Class MaterialLight.
+            /// </summary>
+            public static class MaterialLight
+            {
+                #region Fields
+
+                /// <summary>
+                /// The name
+                /// </summary>
+                public const string Name = "MaterialLight";
+
+                #endregion Fields
+            }
+
             #endregion Classes
         }
 

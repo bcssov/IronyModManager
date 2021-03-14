@@ -47,7 +47,7 @@ namespace IronyModManager.Platform.Themes
         /// <summary>
         /// Registers this instance.
         /// </summary>
-        public void Register()
+        public virtual void Register()
         {
             RegisterStyles();
         }

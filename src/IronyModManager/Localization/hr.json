@@ -67,6 +67,8 @@
         "Dark": "Tamno",
         "FluentLight": "Fluidna Svjetla",
         "FluentDark": "Fluidna Tamna",
+        "MaterialDark": "Material Tamna",
+        "MaterialLight": "Material Svjetla",
         "Restart_Title": "Potrebno je ponovno pokretanje",
         "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"

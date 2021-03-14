@@ -39,6 +39,8 @@ namespace IronyModManager.Services.Registrations
             storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
             storage.RegisterTheme(Common.Constants.Themes.FluentLight.Name);
             storage.RegisterTheme(Common.Constants.Themes.FluentDark.Name);
+            storage.RegisterTheme(Common.Constants.Themes.MaterialLight.Name);
+            storage.RegisterTheme(Common.Constants.Themes.MaterialDark.Name);
         }
 
         #endregion Methods
