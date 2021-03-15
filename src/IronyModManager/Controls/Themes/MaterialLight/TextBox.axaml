@@ -15,19 +15,19 @@
 
     <ContextMenu x:Key="DefaultTextBoxContextMenu" x:Name="TextBoxContextMenu" WindowManagerAddShadowHint="False">
       <MenuItem x:Name="TextBoxContextMenuCutItem" Header="{markup:Localization TextBox.Cut}"  Command="{Binding $parent[TextBox].Cut}"
-                IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="{x:Static TextBox.CutGesture}" >
+                IsEnabled="{Binding $parent[TextBox].CanCut}"  >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentCut}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
       </MenuItem>
       <MenuItem x:Name="TextBoxContextMenuCopyItem" Header="{markup:Localization TextBox.Copy}" Command="{Binding $parent[TextBox].Copy}"
-                IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static TextBox.CopyGesture}" >
+                IsEnabled="{Binding $parent[TextBox].CanCopy}" >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentCopy}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
       </MenuItem>
       <MenuItem x:Name="TextBoxContextMenuPasteItem" Header="{markup:Localization TextBox.Paste}" Command="{Binding $parent[TextBox].Paste}"
-                IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="{x:Static TextBox.PasteGesture}" >
+                IsEnabled="{Binding $parent[TextBox].CanPaste}" >
         <MenuItem.Icon>
           <Path Data="{StaticResource MaterialContentPaste}" Fill="{DynamicResource MaterialDesignBody}"/>
         </MenuItem.Icon>
