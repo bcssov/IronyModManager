@@ -105,18 +105,18 @@
     <sys:Double x:Key="FontSizeSmall">10</sys:Double>
     <sys:Double x:Key="FontSizeNormal">12</sys:Double>
     <sys:Double x:Key="FontSizeLarge">16</sys:Double>
-    <Color x:Key="IronyForegroundColor">#FFDEDEDE</Color>
+    <Color x:Key="IronyForegroundColor">#DDFFFFFF</Color>
     <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
     <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
     <Color x:Key="IronyAccentColor">#FFFF00</Color>
     <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
-    <Color x:Key="IronyEditorBackgroundColor">#FF282828</Color>
+    <Color x:Key="IronyEditorBackgroundColor">#FF303030</Color>
     <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
-    <Color x:Key="IronyMidBackgroundColor">#FF505050</Color>
+    <Color x:Key="IronyMidBackgroundColor">#424242</Color>
     <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
-    <Color x:Key="IronyButtonBorderColor">#FF505050</Color>
+    <Color x:Key="IronyButtonBorderColor">#9F9F9F</Color>
     <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
-    <Color x:Key="IronyBackgroundPopupColor">#282828</Color>
+    <Color x:Key="IronyBackgroundPopupColor">#424242</Color>
     <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
   </Styles.Resources>
 </Styles>
