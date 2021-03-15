@@ -16,7 +16,7 @@
         <Grid RowDefinitions="Auto,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <Panel Grid.Row="0">
             <Grid ColumnDefinitions="4*,1*">
-              <TextBox Watermark="{Binding PathWatermark}" Text="{Binding Path}" Grid.Column="0"></TextBox>
+              <controls:TextBox Watermark="{Binding PathWatermark}" Text="{Binding Path}" Grid.Column="0"></controls:TextBox>
               <Button Content="{Binding Load}" Command="{Binding LoadCommand}" Grid.Column="1"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>

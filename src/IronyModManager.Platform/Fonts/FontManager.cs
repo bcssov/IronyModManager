@@ -43,16 +43,20 @@ namespace IronyModManager.Platform.Fonts
 
         #endregion Fields
 
-        #region Methods
+        #region Constructors
 
         /// <summary>
-        /// Registers the underlying font manager.
+        /// Initializes a new instance of the <see cref="FontManager" /> class.
         /// </summary>
-        /// <param name="fontManager">The font manager.</param>
-        public static void RegisterUnderlyingFontManager(IFontManagerImpl fontManager)
+        /// <param name="underlyingFontManager">The underlying font manager.</param>
+        public FontManager(IFontManagerImpl underlyingFontManager)
         {
-            FontManager.fontManager = fontManager;
+            fontManager = underlyingFontManager;
         }
+
+        #endregion Constructors
+
+        #region Methods
 
         /// <summary>
         /// Creates a glyph typeface.

@@ -18,7 +18,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
@@ -41,11 +40,6 @@ namespace IronyModManager.Views.Controls
     public class CollectionModsControlView : BaseControl<CollectionModsControlViewModel>
     {
         #region Fields
-
-        /// <summary>
-        /// The white listed gestures
-        /// </summary>
-        protected static KeyGesture[] whiteListedGestures;
 
         /// <summary>
         /// The order name
@@ -110,25 +104,6 @@ namespace IronyModManager.Views.Controls
         }
 
         /// <summary>
-        /// Gets the white listed gestures.
-        /// </summary>
-        /// <returns>KeyGesture[].</returns>
-        protected virtual KeyGesture[] GetWhiteListedGestures()
-        {
-            if (whiteListedGestures == null)
-            {
-                whiteListedGestures = new KeyGesture[]
-                {
-                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Up),
-                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_Down),
-                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Up),
-                    KeyGesture.Parse(Implementation.Hotkey.Constants.CTRL_SHIFT_Down)
-                };
-            }
-            return whiteListedGestures;
-        }
-
-        /// <summary>
         /// Handles the item dragged.
         /// </summary>
         protected virtual void HandleItemDragged()
@@ -179,16 +154,15 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         protected virtual void SetContextMenus()
         {
-            modList.ContextMenuOpening += (sender, args) =>
+            modList.ContextMenuOpening += (item) =>
             {
                 List<MenuItem> menuItems = null;
-                var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                if (hoveredItem != null)
+                if (item != null)
                 {
-                    ViewModel.ContextMenuMod = hoveredItem.Content as IMod;
+                    ViewModel.ContextMenuMod = item.Content as IMod;
                     menuItems = GetMenuItems();
                 }
-                if (modList.ItemCount == 0)
+                if (menuItems == null)
                 {
                     menuItems = GetStaticMenuItems();
                 }
@@ -227,7 +201,6 @@ namespace IronyModManager.Views.Controls
                             {
                                 orderCtrl.Minimum = 1;
                                 orderCtrl.Maximum = ViewModel.MaxOrder;
-                                orderCtrl.RegisterWhiteListedGestures(whiteListedGestures);
                             }
                         }
                     }

@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -82,11 +82,6 @@ namespace IronyModManager.Controls
         /// </summary>
         private TextBox textBox;
 
-        /// <summary>
-        /// The whitelisted gestures
-        /// </summary>
-        private KeyGesture[] whitelistedGestures;
-
         #endregion Fields
 
         #region Constructors
@@ -155,15 +150,6 @@ namespace IronyModManager.Controls
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Registers the white listed gestures.
-        /// </summary>
-        /// <param name="keyGestures">The key gestures.</param>
-        public void RegisterWhiteListedGestures(params KeyGesture[] keyGestures)
-        {
-            whitelistedGestures = keyGestures;
-        }
 
         /// <summary>
         /// Handles the <see cref="E:TemplateApplied" /> event.
@@ -259,11 +245,6 @@ namespace IronyModManager.Controls
         /// <inheritdoc />
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (whitelistedGestures != null && whitelistedGestures.Any(p => p.KeyModifiers == e.KeyModifiers && e.Key == p.Key))
-            {
-                e.Handled = false;
-                return;
-            }
             switch (e.Key)
             {
                 case Key.Enter:

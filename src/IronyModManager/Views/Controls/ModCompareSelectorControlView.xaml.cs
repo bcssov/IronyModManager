@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -70,13 +70,12 @@ namespace IronyModManager.Views.Controls
         /// <param name="listBox">The list box.</param>
         protected virtual void BindListBoxPointer(IronyModManager.Controls.ListBox listBox)
         {
-            listBox.ContextMenuOpening += (sender, args) =>
+            listBox.ContextMenuOpening += (item) =>
             {
                 List<MenuItem> menuItems = null;
-                var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                if (hoveredItem != null)
+                if (item != null)
                 {
-                    ViewModel.SetParameters(hoveredItem.Content as IDefinition);
+                    ViewModel.SetParameters(item.Content as IDefinition);
                     if (!string.IsNullOrWhiteSpace(ViewModel.ConflictPath))
                     {
                         menuItems = new List<MenuItem>()

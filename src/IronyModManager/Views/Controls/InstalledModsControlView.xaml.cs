@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -88,16 +88,15 @@ namespace IronyModManager.Views.Controls
 
             if (modList != null && header != null)
             {
-                modList.ContextMenuOpening += (sender, args) =>
+                modList.ContextMenuOpening += (item) =>
                 {
                     List<MenuItem> menuItems = null;
-                    var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                    if (hoveredItem != null)
+                    if (item != null)
                     {
-                        ViewModel.ContextMenuMod = hoveredItem.Content as IMod;
+                        ViewModel.ContextMenuMod = item.Content as IMod;
                         menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
-                    if (modList.ItemCount == 0)
+                    if (menuItems == null)
                     {
                         menuItems = GetStaticMenuItems();
                     }

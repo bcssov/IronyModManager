@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -15,7 +15,9 @@ using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Platform;
+using IronyModManager.Platform.Clipboard;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
 
@@ -39,14 +41,6 @@ namespace IronyModManager.Platform
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
             var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
-
-            // We don't have the ability to load every assembly right now, so we are
-            // stuck with manual configuration  here
-            // Helpers are extracted to separate methods to take the advantage of the fact
-            // that CLR doesn't try to load dependencies before referencing method is jitted
-            // Additionally, by having a hard reference to each assembly,
-            // we verify that the assemblies are in the final .deps.json file
-            //  so .NET Core knows where to load the assemblies from,.
             if (os == OperatingSystemType.WinNT)
             {
                 LoadWin32(builder);
@@ -66,8 +60,10 @@ namespace IronyModManager.Platform
             {
                 // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
                 var fontManager = AvaloniaLocator.Current.GetService<IFontManagerImpl>();
-                FontManager.RegisterUnderlyingFontManager(fontManager);
-                AvaloniaLocator.CurrentMutable.Bind<IFontManagerImpl>().ToConstant(new FontManager());
+                AvaloniaLocator.CurrentMutable.Bind<IFontManagerImpl>().ToConstant(new FontManager(fontManager));
+                // Too many variations to take into consideration so escape the hacky way of getting clipboard implementation
+                var clipboard = AvaloniaLocator.Current.GetService<IClipboard>();
+                AvaloniaLocator.CurrentMutable.Bind<IClipboard>().ToConstant(new IronyClipboard(clipboard));
             });
             return builder;
         }

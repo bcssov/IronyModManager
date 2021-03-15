@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-11-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverControlView.xaml.cs" company="Mario">
 //     Mario
@@ -18,7 +18,6 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using IronyModManager.Common;
@@ -123,13 +122,12 @@ namespace IronyModManager.Views
                 }).DisposeWith(disposables);
             }).DisposeWith(disposables);
 
-            conflictList.ContextMenuOpening += (sender, args) =>
+            conflictList.ContextMenuOpening += (item) =>
             {
                 List<MenuItem> menuItems = null;
-                var hoveredItem = conflictList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                if (hoveredItem != null)
+                if (item != null)
                 {
-                    ViewModel.SetParameters(hoveredItem.Content as IHierarchicalDefinitions);
+                    ViewModel.SetParameters(item.Content as IHierarchicalDefinitions);
                     if (!string.IsNullOrWhiteSpace(ViewModel.InvalidConflictPath))
                     {
                         menuItems = new List<MenuItem>()

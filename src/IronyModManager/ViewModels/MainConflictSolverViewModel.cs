@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -865,7 +865,6 @@ namespace IronyModManager.ViewModels
                 if (s != previousEditTextState)
                 {
                     previousEditTextState = s;
-                    MessageBus.Publish(new SuspendHotkeysEvent(s));
                 }
             }).DisposeWith(disposables);
 

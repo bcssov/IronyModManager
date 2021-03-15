@@ -38,7 +38,7 @@
                            AllowSpin="{TemplateBinding AllowSpin}"
                            ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
                            ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
-              <TextBox Name="PART_TextBox"
+              <controls:TextBox Name="PART_TextBox"
                        Background="Transparent"
                        BorderBrush="Transparent"
                        BorderThickness="0"
@@ -52,6 +52,8 @@
                        AcceptsReturn="False"
                        VerticalAlignment="Center"
                        TextAlignment="Center"
+                       ShowContextMenu="False"
+                       AllowGlobalHotKeys="True"                                
                        TextWrapping="NoWrap" />
             </controls:NumericButtonSpinner>
           </controls:MinMaxButtonSpinner>

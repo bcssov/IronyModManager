@@ -5,6 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
              xmlns:dialog="clr-namespace:IronyModManager.Controls.Dialogs;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Controls.Themes.ManagedDialog">
   <UserControl.Resources>
     <converter:FileSizeStringConverter x:Key="FileSizeConverter" />
@@ -40,16 +41,16 @@
   <DockPanel>
     <DockPanel DockPanel.Dock="Top" Margin="0 0 0 5">
       <dialog:ChildFitter DockPanel.Dock="Right" Width="{Binding ElementName=Location, Path=Bounds.Height}">
-        <Button Command="{Binding GoUp}" >
+        <Button Command="{Binding GoUp}">
 
-          <DrawingPresenter Drawing="{StaticResource LevelUp}" Stretch="Fill"/>
+          <DrawingPresenter Drawing="{StaticResource LevelUp}" Stretch="Fill" />
         </Button>
       </dialog:ChildFitter>
-      <TextBox x:Name="Location" Text="{Binding Location}" Margin="0 0 5 0">
+      <controls:TextBox x:Name="Location" Text="{Binding Location}" Margin="0 0 5 0">
         <TextBox.KeyBindings>
-          <KeyBinding Command="{Binding EnterPressed}" Gesture="Enter"/>
+          <KeyBinding Command="{Binding EnterPressed}" Gesture="Enter" />
         </TextBox.KeyBindings>
-      </TextBox>
+      </controls:TextBox>
     </DockPanel>
     <DockPanel Margin="0 5 0 0"  DockPanel.Dock="Bottom">
       <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
@@ -60,7 +61,7 @@
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
         <StackPanel.Styles>
           <Style Selector="Button">
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Margin" Value="4" />
           </Style>
         </StackPanel.Styles>
         <Button Command="{Binding Ok}" Content="OK" x:Name="ok"></Button>
@@ -73,9 +74,9 @@
               Items="{Binding Filters}"
               SelectedItem="{Binding SelectedFilter}"
               Margin="0 5 0 0" x:Name="filter"
-              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
-    <TextBox x:Name="fileName" Text="{Binding FileName}" 
+    <controls:TextBox x:Name="fileName" Text="{Binding FileName}"
              Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />
 
     <ListBox Margin="0 0 5 5" BorderBrush="Transparent" x:Name="QuickLinks" Items="{Binding QuickLinks}"
@@ -84,8 +85,8 @@
       <ListBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Spacing="4" Orientation="Horizontal" Background="Transparent">
-            <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}"/>
-            <TextBlock Text="{Binding DisplayName}"/>
+            <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}" />
+            <TextBlock Text="{Binding DisplayName}" />
           </StackPanel>
         </DataTemplate>
       </ListBox.ItemTemplate>
@@ -94,7 +95,7 @@
       <Grid DockPanel.Dock="Top" Margin="15 5 0 0" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="20" SharedSizeGroup="Icon" />
-          <ColumnDefinition Width="16" SharedSizeGroup="Splitter"  />
+          <ColumnDefinition Width="16" SharedSizeGroup="Splitter" />
           <ColumnDefinition Width="400" SharedSizeGroup="Name" />
           <ColumnDefinition Width="16" SharedSizeGroup="Splitter" />
           <ColumnDefinition Width="200" SharedSizeGroup="Modified" />
@@ -104,13 +105,13 @@
           <ColumnDefinition Width="200" SharedSizeGroup="Size" />
         </Grid.ColumnDefinitions>
         <GridSplitter Grid.Column="1" />
-        <TextBlock Grid.Column="2" Text="Name" x:Name="name"/>
+        <TextBlock Grid.Column="2" Text="Name" x:Name="name" />
         <GridSplitter Grid.Column="3" />
         <TextBlock Grid.Column="4" Text="Date Modified" x:Name="dateModified" />
         <GridSplitter Grid.Column="5" />
-        <TextBlock Grid.Column="6" Text="Type" x:Name="type"/>
+        <TextBlock Grid.Column="6" Text="Type" x:Name="type" />
         <GridSplitter Grid.Column="7" />
-        <TextBlock Grid.Column="8" Text="Size" x:Name="size"/>
+        <TextBlock Grid.Column="8" Text="Size" x:Name="size" />
       </Grid>
       <ListBox x:Name="Files"
            VirtualizationMode="Simple"
@@ -124,7 +125,7 @@
             <Grid Background="Transparent">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition SharedSizeGroup="Icon" />
-                <ColumnDefinition SharedSizeGroup="Splitter"  />
+                <ColumnDefinition SharedSizeGroup="Splitter" />
                 <ColumnDefinition SharedSizeGroup="Name" />
                 <ColumnDefinition SharedSizeGroup="Splitter" />
                 <ColumnDefinition SharedSizeGroup="Modified" />
@@ -133,8 +134,8 @@
                 <ColumnDefinition SharedSizeGroup="Splitter" />
                 <ColumnDefinition SharedSizeGroup="Size" />
               </Grid.ColumnDefinitions>
-              <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}"/>
-              <TextBlock Grid.Column="2" Text="{Binding DisplayName}"/>
+              <DrawingPresenter Width="16" Height="16" Drawing="{Binding IconKey, Converter={StaticResource Icons}}" />
+              <TextBlock Grid.Column="2" Text="{Binding DisplayName}" />
               <TextBlock Grid.Column="4" Text="{Binding Modified}" />
               <TextBlock Grid.Column="6" Text="{Binding Type}" />
               <TextBlock Grid.Column="8" Text="{Binding Size, Converter={StaticResource FileSizeConverter}}" />
@@ -144,5 +145,4 @@
       </ListBox>
     </DockPanel>
   </DockPanel>
-
 </UserControl>

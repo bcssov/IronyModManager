@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -75,12 +75,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The redo stack
         /// </summary>
-        private readonly Stack<string> redoStack = new Stack<string>();
+        private readonly Stack<string> redoStack = new();
 
         /// <summary>
         /// The undo stack
         /// </summary>
-        private readonly Stack<string> undoStack = new Stack<string>();
+        private readonly Stack<string> undoStack = new();
 
         /// <summary>
         /// The syncing selection
@@ -802,6 +802,7 @@ namespace IronyModManager.ViewModels.Controls
         /// copy text as an asynchronous operation.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected async Task CopyTextAsync(bool leftSide)
         {
             await appAction.CopyAsync(leftSide ? LeftSide : RightSide);
@@ -1371,6 +1372,7 @@ namespace IronyModManager.ViewModels.Controls
         /// synchronize selections as an asynchronous operation.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task SyncSelectionsAsync(bool leftSide)
         {
             await Task.Delay(100);
@@ -1403,6 +1405,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Launches the external editor.
         /// </summary>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         private async Task LaunchExternalEditor(bool leftSide)
         {
             var opts = externalEditorService.Get();

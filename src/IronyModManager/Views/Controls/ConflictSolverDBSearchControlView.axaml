@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ConflictSolverDBSearchControlView">
   <UserControl.Resources>
     <converter:DefinitionSearchTextConverter x:Key="DefinitionSearchTextConverter" />
@@ -20,7 +21,7 @@
         <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <Panel Grid.Row="0">
             <Grid ColumnDefinitions="10*,1*">
-              <TextBox Watermark="{Binding Watermark}" Text="{Binding SearchTerm}" Grid.Column="0"></TextBox>
+              <controls:TextBox Watermark="{Binding Watermark}" Text="{Binding SearchTerm}" Grid.Column="0"></controls:TextBox>
               <Button Content="{Binding Clear}" Command="{Binding ClearCommand}" Grid.Column="1" 
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>

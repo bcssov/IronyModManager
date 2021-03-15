@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -83,7 +83,7 @@ namespace IronyModManager.Controls.Themes
             var correctingInput = false;
             fileName.PropertyChanged += (sender, args) =>
             {
-                if (args.Property != TextBox.TextProperty)
+                if (args.Property != Avalonia.Controls.TextBox.TextProperty)
                 {
                     return;
                 }

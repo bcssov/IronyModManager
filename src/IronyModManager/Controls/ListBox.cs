@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -14,9 +14,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 
 namespace IronyModManager.Controls
 {
@@ -38,12 +41,22 @@ namespace IronyModManager.Controls
 
         #endregion Fields
 
+        #region Delegates
+
+        /// <summary>
+        /// Delegate ContextMenuOpeningDelegate
+        /// </summary>
+        /// <param name="listBoxItem">The list box item.</param>
+        public delegate void ContextMenuOpeningDelegate(ListBoxItem listBoxItem);
+
+        #endregion Delegates
+
         #region Events
 
         /// <summary>
         /// Occurs when [context menu opening].
         /// </summary>
-        public event EventHandler ContextMenuOpening;
+        public event ContextMenuOpeningDelegate ContextMenuOpening;
 
         #endregion Events
 
@@ -78,6 +91,22 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// Gets the hovered item.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>ListBoxItem.</returns>
+        protected virtual ListBoxItem GetHoveredItem(Point position)
+        {
+            var visuals = this.GetVisualsAt(position);
+            if (visuals?.Count() > 0)
+            {
+                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault(p => (p.TemplatedParent as ListBoxItem) != null);
+                return contentPresenter?.TemplatedParent as ListBoxItem;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Handles the <see cref="E:PointerPressed" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
@@ -88,16 +117,18 @@ namespace IronyModManager.Controls
 
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
             {
-                RaiseContextMenuOpening();
+                var hoveredItem = GetHoveredItem(e.GetPosition(this));
+                RaiseContextMenuOpening(hoveredItem);
             }
         }
 
         /// <summary>
         /// Raises the context menu opening.
         /// </summary>
-        private void RaiseContextMenuOpening()
+        /// <param name="listBoxItem">The list box item.</param>
+        private void RaiseContextMenuOpening(ListBoxItem listBoxItem)
         {
-            ContextMenuOpening?.Invoke(this, EventArgs.Empty);
+            ContextMenuOpening?.Invoke(listBoxItem);
         }
 
         #endregion Methods

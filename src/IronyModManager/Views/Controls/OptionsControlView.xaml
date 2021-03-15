@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.OptionsControlView">
   <Panel>
     <Button Content="{Binding Options}" Command="{Binding OptionsCommand}"
@@ -21,15 +22,15 @@
               <Button Content="{Binding AutoConfigure}" Command="{Binding AutoConfigureCommand}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
               <TextBlock Text="{Binding GameExecutable}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-              <TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Margin="0,5,0,0" MaxWidth="180" Grid.Column="1" Grid.Row="1"></TextBox>
+              <controls:TextBox IsReadOnly="True" Text="{Binding Game.ExecutableLocation}" Margin="0,5,0,0" MaxWidth="180" Grid.Column="1" Grid.Row="1"></controls:TextBox>
               <Button Content="{Binding Navigate}" Command="{Binding NavigateExeCommand}" Margin="0,5,0,0" Grid.Column="2" Grid.Row="1"></Button>
               <Button Content="{Binding Reset}" Command="{Binding ResetExeCommand}" Margin="0,5,0,0" Grid.Column="3" Grid.Row="1"></Button>
               <TextBlock Margin="0,5" Text="{Binding GameArgs}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-              <TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="180" Grid.Column="1" Grid.Row="2"></TextBox>
+              <controls:TextBox Margin="0,5" Text="{Binding Game.LaunchArguments}" MaxWidth="180" Grid.Column="1" Grid.Row="2"></controls:TextBox>
               <Button Margin="0,5" Content="{Binding Reset}" Command="{Binding ResetArgsCommand}" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
               <TextBlock Text="{Binding UserDirectory}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-              <TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="180" Grid.Column="1" Grid.Row="3"></TextBox>
+              <controls:TextBox IsReadOnly="True" Text="{Binding Game.UserDirectory}" MaxWidth="180" Grid.Column="1" Grid.Row="3"></controls:TextBox>
               <Button Content="{Binding Navigate}" Command="{Binding NavigateDirectoryCommand}" Grid.Column="2" Grid.Row="3"></Button>
               <Button Content="{Binding Reset}" Command="{Binding ResetDirectoryCommand}" Grid.Column="3" Grid.Row="3"></Button>
               <CheckBox Margin="0,5,0,0" Content="{Binding RefreshDescriptors}" IsChecked="{Binding Game.RefreshDescriptors}"
@@ -44,11 +45,11 @@
             </Border>
             <Grid ColumnDefinitions="3*,3*,1*,1*" RowDefinitions="1*,1*" Margin="0,5">
               <TextBlock Text="{Binding EditorExecutable}" Margin="0,5,0,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-              <TextBox IsReadOnly="True" Text="{Binding Editor.ExternalEditorLocation}" Margin="0,5,0,0" MaxWidth="180" Grid.Column="1" Grid.Row="0"></TextBox>
+              <controls:TextBox IsReadOnly="True" Text="{Binding Editor.ExternalEditorLocation}" Margin="0,5,0,0" MaxWidth="180" Grid.Column="1" Grid.Row="0"></controls:TextBox>
               <Button Content="{Binding Navigate}" Command="{Binding NavigateEditorCommand}" Margin="0,5,0,0" Grid.Column="2" Grid.Row="0"></Button>
               <Button Content="{Binding Reset}" Command="{Binding ResetEditorExeCommand}" Margin="0,5,0,0" Grid.Column="3" Grid.Row="0"></Button>
               <TextBlock Margin="0,5" Text="{Binding EditorArgs}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-              <TextBox Margin="0,5" Text="{Binding Editor.ExternalEditorParameters}" MaxWidth="180" Grid.Column="1" Grid.Row="1" Watermark="{Binding EditorArgsPlaceholder}"></TextBox>
+              <controls:TextBox Margin="0,5" Text="{Binding Editor.ExternalEditorParameters}" MaxWidth="180" Grid.Column="1" Grid.Row="1" Watermark="{Binding EditorArgsPlaceholder}"></controls:TextBox>
               <Button Margin="0,5" Content="{Binding Reset}" Command="{Binding ResetEditorArgsCommand}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>
@@ -72,11 +73,11 @@
             <Grid Grid.Row="3" RowDefinitions="1*,1*,1*" Margin="0,5">
               <Grid Grid.Row="0" ColumnDefinitions="1*,4*">
                 <TextBlock Text="{Binding VersionTitle}" VerticalAlignment="Center" Grid.Column="0"></TextBlock>
-                <TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></TextBox>
+                <controls:TextBox Text="{Binding VersionContent}" IsReadOnly="True" HorizontalAlignment="Stretch" Grid.Column="1"></controls:TextBox>
               </Grid>
-              <TextBox Text="{Binding Changelog}" IsReadOnly="True"
+              <controls:TextBox Text="{Binding Changelog}" IsReadOnly="True"
                        MaxHeight="240" Grid.Row="1"
-                       MaxWidth="660" ScrollViewer.HorizontalScrollBarVisibility="Auto"></TextBox>
+                       MaxWidth="660" ScrollViewer.HorizontalScrollBarVisibility="Auto"></controls:TextBox>
               <Button Margin="0,5" Content="{Binding InstallUpdates}"
                       Command="{Binding InstallUpdatesCommand}" Grid.Row="2"></Button>
             </Grid>
