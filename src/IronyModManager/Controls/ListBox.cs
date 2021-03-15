@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -14,7 +14,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
@@ -33,9 +32,9 @@ namespace IronyModManager.Controls
         #region Fields
 
         /// <summary>
-        /// The CTX raised by pointer
+        /// The context menu
         /// </summary>
-        private bool ctxRaisedByPointer = false;
+        private ContextMenu contextMenu;
 
         #endregion Fields
 
@@ -61,21 +60,20 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
-        /// Sets the context menu.
+        /// Sets the context menu items.
         /// </summary>
         /// <param name="menuItems">The menu items.</param>
-        public void SetContextMenu(IReadOnlyCollection<MenuItem> menuItems)
+        public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
+            ContextMenu = null;
+            if (contextMenu == null)
+            {
+                contextMenu = new ContextMenu();
+            }
             if (menuItems?.Count > 0)
             {
-                ContextMenu = new ContextMenu
-                {
-                    Items = menuItems
-                };
-            }
-            else
-            {
-                ContextMenu = null;
+                contextMenu.Items = menuItems;
+                contextMenu.Open(this);
             }
         }
 
@@ -83,56 +81,12 @@ namespace IronyModManager.Controls
         /// Handles the <see cref="E:PointerPressed" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
 
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
-            {
-                ctxRaisedByPointer = true;
-                RaiseContextMenuOpening();
-                ctxRaisedByPointer = false;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:PropertyChanged" /> event.
-        /// </summary>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-            if (e.Property == ContextMenuProperty)
-            {
-                HandleContextMenuEvents(e.OldValue as ContextMenu);
-            }
-        }
-
-        /// <summary>
-        /// Handles the context menu events.
-        /// </summary>
-        /// <param name="oldContextMenu">The old context menu.</param>
-        private void HandleContextMenuEvents(ContextMenu oldContextMenu)
-        {
-            if (oldContextMenu != null)
-            {
-                oldContextMenu.ContextMenuOpening -= OnContextMenuOpening;
-                oldContextMenu.Close();
-            }
-            if (ContextMenu != null && ContextMenu != oldContextMenu)
-            {
-                ContextMenu.ContextMenuOpening += OnContextMenuOpening;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:ContextMenuOpening" /> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
-        private void OnContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!ctxRaisedByPointer)
             {
                 RaiseContextMenuOpening();
             }

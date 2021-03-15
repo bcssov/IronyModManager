@@ -20,11 +20,14 @@
             <TextBlock Text="{Binding MergeSelectMode}" Grid.Row="0" Grid.Column="0"
                        MinHeight="20" Margin="0,5"></TextBlock>
             <Button Content="{Binding MergeBasic}" Command="{Binding MergeBasicCommand}"
-                    Grid.Row="1" Grid.Column="0"></Button>
+                    Grid.Row="1" Grid.Column="0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             <Button Content="{Binding MergeCompress}" Command="{Binding MergeCompressCommand}"
-                    Grid.Row="2" Grid.Column="0"></Button>
+                    Grid.Row="2" Grid.Column="0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             <Button Content="{Binding MergeClose}" Command="{Binding MergeCloseCommand}"
-                    Grid.Row="4" Grid.Column="0"></Button>
+                    Grid.Row="4" Grid.Column="0"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           </Grid>
         </Border>
       </Popup>

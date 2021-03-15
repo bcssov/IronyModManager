@@ -1,0 +1,53 @@
+<Styles xmlns="https://github.com/avaloniaui"
+         xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager">
+  <Style Selector="controls|MinMaxNumericUpDown">
+    <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorderMidBrush}"/>
+    <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
+    <Setter Property="Padding" Value="2"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <controls:MinMaxButtonSpinner Name="PART_MinMax_Spinner"
+                       Background="{TemplateBinding Background}"
+                       BorderThickness="{TemplateBinding BorderThickness}"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       HorizontalContentAlignment="Stretch"
+                       VerticalContentAlignment="Stretch"
+                       AllowSpin="{TemplateBinding MinMaxAllowSpin}"
+                       ShowButtonSpinner="{TemplateBinding MinMaxShowButtonSpinner}"
+                       ButtonSpinnerLocation="{TemplateBinding MinMaxButtonSpinnerLocation}">
+          <controls:NumericButtonSpinner Name="PART_Spinner"
+                       Background="{TemplateBinding Background}"
+                       BorderThickness="0"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       HorizontalContentAlignment="Stretch"
+                       VerticalContentAlignment="Stretch"
+                       AllowSpin="{TemplateBinding AllowSpin}"
+                       ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
+                       ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
+            <TextBox Name="PART_TextBox"
+                     BorderThickness="0"
+                     VerticalAlignment="Center"
+                     Background="{TemplateBinding Background}"
+                     BorderBrush="{TemplateBinding BorderBrush}"
+                     Foreground="{DynamicResource ThemeForegroundBrush}"
+                     Padding="{TemplateBinding Padding}"
+                     Watermark="{TemplateBinding Watermark}"
+                     IsReadOnly="{TemplateBinding IsReadOnly}"
+                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                     Text="{TemplateBinding Text}"
+                     AcceptsReturn="False"
+                     TextAlignment="Center"
+                     TextWrapping="NoWrap">
+            </TextBox>
+          </controls:NumericButtonSpinner>
+        </controls:MinMaxButtonSpinner>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="controls|MinMaxNumericUpDown /template/ TextBox#PART_TextBox">
+    <Setter Property="Margin" Value="2"/>
+    <Setter Property="MinWidth" Value="20"/>
+  </Style>
+</Styles>

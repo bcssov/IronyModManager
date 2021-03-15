@@ -61,13 +61,20 @@
     "Languages": {
         "Name": "Idioma"
     },
+    "TextBox": {
+        "Copy": "Copiar",
+        "Cut": "Cortar",
+        "Paste": "Pegar",
+        "SelectAll": "Seleccionar Todo"
+    },
     "Themes": {
         "Name": "Tema",
         "Light": "Claro",
         "Dark": "Oscuro",
+        "FluentLight": "Luz Fluida",
+        "FluentDark": "Oscuro Fluido",
         "MaterialDark": "Material Oscuro",
-        "MaterialLightGreen": "Material Verde Claro",
-        "MaterialDeepPurple": "Material Morado Oscuro",
+        "MaterialLight": "Material Ligero",
         "Restart_Title": "Necesita Reinicio",
         "Restart_Header": "Aplicación Necesita Reinicio",
         "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"

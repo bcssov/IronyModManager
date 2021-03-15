@@ -4,7 +4,7 @@
 // Created          : 10-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-02-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="AssetLoader.cs" company="Mario">
 //     Mario
@@ -175,6 +175,7 @@ namespace IronyModManager.Implementation.AssetLoader
                         var fs = File.OpenRead(Path.Combine(uri.Authority, Uri.UnescapeDataString(uri.AbsolutePath).StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar)));
                         var ms = new MemoryStream();
                         fs.CopyTo(ms);
+                        ms.Seek(0, SeekOrigin.Begin);
                         fontAssets.TryAdd(uri.ToString(), ms);
                         return ms;
                     }

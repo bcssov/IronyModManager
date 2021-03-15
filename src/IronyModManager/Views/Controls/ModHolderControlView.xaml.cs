@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-24-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlView.xaml.cs" company="Mario">
 //     Mario
@@ -61,7 +61,7 @@ namespace IronyModManager.Views.Controls
             popup.Opened += (sender, args) =>
             {
                 popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, -15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Top);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Top);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

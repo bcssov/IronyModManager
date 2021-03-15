@@ -58,6 +58,12 @@
             "Pictures": "Slike"
         }
     },
+    "TextBox": {
+        "Copy": "Kopiraj",
+        "Cut": "Izreži",
+        "Paste": "Zalijepi",
+        "SelectAll": "Odaberi sve"
+    },
     "Languages": {
         "Name": "Jezik"
     },
@@ -65,9 +71,10 @@
         "Name": "Tema",
         "Light": "Svjetlo",
         "Dark": "Tamno",
+        "FluentLight": "Fluidna Svjetla",
+        "FluentDark": "Fluidna Tamna",
         "MaterialDark": "Material Tamna",
-        "MaterialLightGreen": "Material Svjetlo Zelena",
-        "MaterialDeepPurple": "Material Ljubičasta",
+        "MaterialLight": "Material Svjetla",
         "Restart_Title": "Potrebno je ponovno pokretanje",
         "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"

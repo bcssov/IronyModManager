@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -53,6 +53,11 @@ namespace IronyModManager.Views.Controls
         private const string OrderName = "order";
 
         /// <summary>
+        /// The header
+        /// </summary>
+        private Grid header;
+
+        /// <summary>
         /// The mod list
         /// </summary>
         private DragDropListBox modList;
@@ -74,15 +79,21 @@ namespace IronyModManager.Views.Controls
         #region Methods
 
         /// <summary>
-        /// focus order text box as an asynchronous operation.
+        /// focus ListBox item as an asynchronous operation.
         /// </summary>
         /// <param name="mod">The mod.</param>
-        protected virtual async Task FocusOrderTextBoxAsync(IMod mod)
+        /// <param name="scrollToSelected">if set to <c>true</c> [scroll to selected].</param>
+        protected virtual async Task FocusListBoxItemAsync(IMod mod, bool scrollToSelected)
         {
             await Task.Delay(100);
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
             if (mod != null)
             {
+                // Because avalonia
+                if (scrollToSelected)
+                {
+                    modList.ScrollIntoView(mod);
+                }
                 foreach (var item in listboxItems)
                 {
                     var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
@@ -152,10 +163,11 @@ namespace IronyModManager.Views.Controls
         protected override void OnActivated(CompositeDisposable disposables)
         {
             modList = this.FindControl<DragDropListBox>("modList");
-            if (modList != null)
+            header = this.FindControl<Grid>("header");
+            if (modList != null && header != null)
             {
                 SetContextMenus();
-                SetOrderParameters();
+                SetUIParameters();
                 HandleItemDragged();
                 HandlePointerMoved();
             }
@@ -180,72 +192,64 @@ namespace IronyModManager.Views.Controls
                 {
                     menuItems = GetStaticMenuItems();
                 }
-                modList.SetContextMenu(menuItems);
+                modList.SetContextMenuItems(menuItems);
             };
         }
 
         /// <summary>
-        /// Sets the order parameters.
+        /// Sets the UI parameters.
         /// </summary>
-        protected virtual void SetOrderParameters()
+        protected virtual void SetUIParameters()
         {
-            void setNumericProperties(bool setMargin = false)
+            var performingUISet = false;
+            async Task setUIProperties()
             {
-                var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
-                foreach (var item in listboxItems)
+                while (performingUISet)
                 {
-                    var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
-                    if (grid != null)
+                    await Task.Delay(25);
+                }
+                performingUISet = true;
+                await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                {
+                    var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
+                    foreach (var item in listboxItems)
                     {
-                        var orderCtrl = grid.GetLogicalChildren().OfType<MinMaxNumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
-                        if (orderCtrl != null)
+                        var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                        if (grid != null)
                         {
-                            orderCtrl.Minimum = 1;
-                            orderCtrl.Maximum = ViewModel.MaxOrder;
-                            orderCtrl.RegisterWhiteListedGestures(whiteListedGestures);
-                            if (setMargin)
+                            for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
                             {
-                                var left = 0;
-                                var right = 0;
-                                if (orderCtrl.Bounds.Width > 100)
-                                {
-                                    right = 10;
-                                }
-                                else
-                                {
-                                    left = 6;
-                                }
-                                var margin = new Avalonia.Thickness(left, 0, right, 0);
-                                if (orderCtrl.Margin != margin)
-                                {
-                                    orderCtrl.Margin = margin;
-                                }
+                                var col = grid.ColumnDefinitions[i];
+                                col.Width = new GridLength(header.ColumnDefinitions[i].ActualWidth);
+                            }
+                            var orderCtrl = grid.GetLogicalChildren().OfType<MinMaxNumericUpDown>().FirstOrDefault(p => p.Name == OrderName);
+                            if (orderCtrl != null)
+                            {
+                                orderCtrl.Minimum = 1;
+                                orderCtrl.Maximum = ViewModel.MaxOrder;
+                                orderCtrl.RegisterWhiteListedGestures(whiteListedGestures);
                             }
                         }
                     }
-                }
+                });
+                performingUISet = false;
             }
 
-            void setNumericPropertiesSafe(bool setMargin = false)
+            ViewModel.ModReordered += (mod, instant) =>
             {
-                Dispatcher.UIThread.SafeInvoke(() => setNumericProperties(setMargin));
-            }
-
-            ViewModel.ModReordered += (mod) =>
-            {
-                setNumericPropertiesSafe(true);
+                setUIProperties().ConfigureAwait(false);
                 modList.Focus();
-                FocusOrderTextBoxAsync(mod).ConfigureAwait(true);
+                FocusListBoxItemAsync(mod, instant).ConfigureAwait(true);
             };
 
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>
             {
-                setNumericPropertiesSafe();
+                setUIProperties().ConfigureAwait(false);
             }).DisposeWith(Disposables);
 
             modList.LayoutUpdated += (sender, args) =>
             {
-                setNumericPropertiesSafe(true);
+                setUIProperties().ConfigureAwait(false);
             };
         }
 

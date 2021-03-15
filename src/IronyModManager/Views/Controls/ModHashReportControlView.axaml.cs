@@ -4,7 +4,7 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ModHashReportControlView.axaml.cs" company="Mario">
 //     Mario
@@ -63,7 +63,7 @@ namespace IronyModManager.Views.Controls
                 var window = Helpers.GetMainWindow();
                 var verticalOffset = window.Bounds.Height / 2;
                 popup.Host.ConfigurePosition(window, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, verticalOffset),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Top, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.Top, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.None);
             };
         }
 

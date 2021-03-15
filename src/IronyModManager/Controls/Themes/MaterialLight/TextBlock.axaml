@@ -1,0 +1,84 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:cc="clr-namespace:Material.Styles;assembly=Material.Styles">
+  <Style Selector="TextBlock">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Caption">
+    <Setter Property="FontSize" Value="10" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Body1">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Body2">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Overline">
+    <Setter Property="FontSize" Value="8" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Subtitle1">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Subtitle2">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline6">
+    <Setter Property="FontSize" Value="18" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline5">
+    <Setter Property="FontSize" Value="22" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline4">
+    <Setter Property="FontSize" Value="32" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline3">
+    <Setter Property="FontSize" Value="46" />
+    <Setter Property="FontWeight" Value="Regular" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline2">
+    <Setter Property="FontSize" Value="58" />
+    <Setter Property="FontWeight" Value="Light" />
+  </Style>
+
+  <Style Selector="TextBlock.Headline1">
+    <Setter Property="FontSize" Value="98" />
+    <Setter Property="FontWeight" Value="Light" />
+  </Style>
+
+  <Style Selector="TextBlock.Link">
+    <Setter Property="Foreground" Value="Blue"/>
+  </Style>
+  <Style Selector="TextBlock.Link:pointerover, TextBlock.Link:focus">
+    <Setter Property="Foreground" Value="Purple"/>
+  </Style>
+
+  <Style Selector="Button > TextBlock, TextBlock.ButtonText">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+  <Style Selector="cc|FloatingButton > TextBlock, TextBlock.FloatingButtonText">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+</Styles>

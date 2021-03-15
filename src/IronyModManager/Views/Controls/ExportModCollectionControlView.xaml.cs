@@ -4,7 +4,7 @@
 // Created          : 03-09-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-24-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ExportModCollectionControlView.xaml.cs" company="Mario">
 //     Mario
@@ -61,7 +61,7 @@ namespace IronyModManager.Views.Controls
             popupImport.Opened += (sender, args) =>
             {
                 popupImport.Host.ConfigurePosition(popupImport.PlacementTarget, popupImport.PlacementMode, new Avalonia.Point(popupImport.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             var popupExport = this.FindControl<Popup>("popupExport");
             popupExport.Closed += (sender, args) =>
@@ -71,7 +71,7 @@ namespace IronyModManager.Views.Controls
             popupExport.Opened += (sender, args) =>
             {
                 popupExport.Host.ConfigurePosition(popupExport.PlacementTarget, popupExport.PlacementMode, new Avalonia.Point(popupExport.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>

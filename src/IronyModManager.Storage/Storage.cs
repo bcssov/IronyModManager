@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -201,12 +201,11 @@ namespace IronyModManager.Storage
         /// Registers the theme.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
+        public virtual bool RegisterTheme(string name, bool isDefault = false)
         {
             lock (dbLock)
             {
@@ -221,7 +220,6 @@ namespace IronyModManager.Storage
                 var themeType = DIResolver.Get<IThemeType>();
                 themeType.IsDefault = isDefault;
                 themeType.Name = name;
-                themeType.Styles = styles ?? new List<string>();
                 Database.Themes.Add(themeType);
                 return true;
             }

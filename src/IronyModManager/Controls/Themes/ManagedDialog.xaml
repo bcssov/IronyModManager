@@ -72,7 +72,8 @@
               IsVisible="{Binding ShowFilters}"
               Items="{Binding Filters}"
               SelectedItem="{Binding SelectedFilter}"
-              Margin="0 5 0 0" x:Name="filter" />
+              Margin="0 5 0 0" x:Name="filter"
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     <TextBox x:Name="fileName" Text="{Binding FileName}" 
              Watermark="File name" DockPanel.Dock="Bottom" IsVisible="{Binding !SelectingFolder}" />

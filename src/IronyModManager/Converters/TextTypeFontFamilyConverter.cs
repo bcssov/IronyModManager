@@ -4,7 +4,7 @@
 // Created          : 03-01-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="TextTypeFontFamilyConverter.cs" company="Mario">
 //     Mario
@@ -17,7 +17,7 @@ using System.Globalization;
 using System.Linq;
 using Avalonia.Data.Converters;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 
 namespace IronyModManager.Converters
@@ -39,6 +39,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var fontResolver = DIResolver.Get<IFontFamilyManager>();
@@ -63,6 +66,9 @@ namespace IronyModManager.Converters
         /// <param name="parameter">The parameter.</param>
         /// <param name="culture">The culture.</param>
         /// <returns>System.Object.</returns>
+        /// <remarks>This method should not throw exceptions. If the value is not convertible, return
+        /// a <see cref="T:Avalonia.Data.BindingNotification" /> in an error state. Any exceptions thrown will be
+        /// treated as an application exception.</remarks>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;

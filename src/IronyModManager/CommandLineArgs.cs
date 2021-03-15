@@ -4,7 +4,7 @@
 // Created          : 02-21-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="CommandLineArgs.cs" company="Mario">
 //     Mario
@@ -38,6 +38,13 @@ namespace IronyModManager
         /// <value>The game abrv.</value>
         [Option('g', "game", Required = false, HelpText = "Game:CK3,EU4,HOI4,IR,Stellaris")]
         public string GameAbrv { get; set; }
+
+        /// <summary>
+        /// Gets or sets the show fatal error notification.
+        /// </summary>
+        /// <value>The show fatal error notification.</value>
+        [Option("fatal-error", Required = false, HelpText = "Shows Irony fatal error notification.")]
+        public bool ShowFatalErrorNotification { get; set; }
 
         #endregion Properties
     }

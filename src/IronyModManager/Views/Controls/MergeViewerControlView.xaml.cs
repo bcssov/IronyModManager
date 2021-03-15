@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -145,7 +145,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             }
-            listBox.SetContextMenu(menuItems);
+            listBox.SetContextMenuItems(menuItems);
         }
 
         /// <summary>

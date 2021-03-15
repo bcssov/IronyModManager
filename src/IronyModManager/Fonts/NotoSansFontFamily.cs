@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="NotoSansFontFamily.cs" company="Mario">
 //     Mario
@@ -13,16 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Platform.Fonts;
 
 namespace IronyModManager.Fonts
 {
     /// <summary>
     /// Class NotoSansFontFamily.
-    /// Implements the <see cref="Avalonia.Media.FontFamily" />
-    /// Implements the <see cref="IronyModManager.Fonts.BaseFontFamily" />
+    /// Implements the <see cref="IronyModManager.Platform.Fonts.BaseFontFamily" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Fonts.BaseFontFamily" />
-    /// <seealso cref="Avalonia.Media.FontFamily" />
+    /// <seealso cref="IronyModManager.Platform.Fonts.BaseFontFamily" />
     public class NotoSansFontFamily : BaseFontFamily
     {
         #region Constructors
@@ -42,7 +41,7 @@ namespace IronyModManager.Fonts
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public override string Name => "Noto Sans";
+        public override string Name => Constants.DefaultFont;
 
         /// <summary>
         /// Gets the folder.

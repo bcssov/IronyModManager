@@ -58,6 +58,12 @@
             "Pictures": "Bilder"
         }
     },
+    "TextBox": {
+        "Copy": "Kopieren",
+        "Cut": "Schnitt",
+        "Paste": "Einfügen",
+        "SelectAll": "Wählen Sie Alle"
+    },
     "Languages": {
         "Name": "Sprache"
     },
@@ -65,9 +71,10 @@
         "Name": "Thema",
         "Light": "Licht",
         "Dark": "Dunkel",
+        "FluentLight": "Fließend Licht",
+        "FluentDark": "Fließend Dunkel",
         "MaterialDark": "Material Dunkel",
-        "MaterialDeepPurple": "Material Hellgrün",
-        "MaterialLightGreen": "Material Tiefpurpurn",
+        "MaterialLight": "Material Licht",
         "Restart_Title": "Muss neu gestartet werden",
         "Restart_Header": "App muss neu gestartet werden",
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"

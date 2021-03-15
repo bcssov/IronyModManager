@@ -4,15 +4,15 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Storage.Common
@@ -77,10 +77,9 @@ namespace IronyModManager.Storage.Common
         /// Registers the theme.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false);
+        bool RegisterTheme(string name, bool isDefault = false);
 
         /// <summary>
         /// Sets the state of the application.

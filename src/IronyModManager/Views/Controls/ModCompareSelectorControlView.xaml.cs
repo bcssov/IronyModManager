@@ -4,7 +4,7 @@
 // Created          : 03-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="ModCompareSelectorControlView.xaml.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
@@ -56,7 +57,7 @@ namespace IronyModManager.Views.Controls
         public ModCompareSelectorControlView()
         {
             logger = DIResolver.Get<ILogger>();
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -97,7 +98,7 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 }
-                listBox.SetContextMenu(menuItems);
+                listBox.SetContextMenuItems(menuItems);
             };
         }
 
@@ -118,16 +119,28 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             }
+            var invalidatingArrange = false;
+            async Task resetInvalidateFlag()
+            {
+                await Task.Delay(100);
+                invalidatingArrange = false;
+            }
             var left = this.FindControl<IronyModManager.Controls.ListBox>("leftSide");
             var right = this.FindControl<IronyModManager.Controls.ListBox>("rightSide");
             LayoutUpdated += (sender, args) =>
             {
                 try
                 {
+                    if (invalidatingArrange)
+                    {
+                        return;
+                    }
+                    invalidatingArrange = true;
                     left.InvalidateArrange();
                     right.InvalidateArrange();
                     appendClass(left);
                     appendClass(right);
+                    resetInvalidateFlag().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

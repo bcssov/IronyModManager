@@ -1,0 +1,122 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="IronyModManager.Controls.Themes.MaterialLight.ThemeOverride"
+        xmlns:sys="clr-namespace:System;assembly=netstandard">
+  <!-- Includes -->
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/NumericUpDown.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ButtonSpinner.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MinMaxButtonSpinner.axaml"/>
+  <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsLight.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/IronyTooltip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ComboBox.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MenuItem.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/TextBlock.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/TextBox.axaml"/>
+
+  <!--Individual styles-->
+  <Style Selector="NotificationCard">
+    <Setter Property="Width" Value="400" />
+    <Setter Property="FontSize" Value="12" />
+  </Style>
+  <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
+    <Setter Property="MinHeight" Value="50" />
+  </Style>
+  <Style Selector="ListBoxItem.MoveBottom">
+    <Setter Property="BorderThickness" Value="0,0,0,2"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="Margin" Value="0,0,0,-2"/>
+    <Setter Property="ZIndex" Value="1000"></Setter>
+  </Style>
+  <Style Selector="ListBoxItem.MoveTop">
+    <Setter Property="BorderThickness" Value="0,2,0,0"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="Margin" Value="0,-2,0,0"/>
+    <Setter Property="ZIndex" Value="1000"></Setter>
+  </Style>
+  <Style Selector="Border.CopiedDefinition">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="#ffc58b" />
+  </Style>
+  <Style Selector="Border.PatchMod">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="#66cc99" />
+  </Style>
+  <Style Selector="TextBlock.DiffImaginaryLine">
+    <Setter Property="Background" Value="#FF808080" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedLine">
+    <Setter Property="Background" Value="#66cc99" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedLine">
+    <Setter Property="Background" Value="#FF9999" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffUnchangedPieces">
+    <Setter Property="Background" Value="#ffe28b" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffInsertedPieces">
+    <Setter Property="Background" Value="#66cc99" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffDeletedPieces">
+    <Setter Property="Background" Value="#FF9999" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="TextBlock.DiffModifiedPieces">
+    <Setter Property="Background" Value="#ffe28b" />
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="Border.BlockSelected">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Green"/>
+  </Style>
+  <Style Selector="Border.InvalidConflictSolver">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Red"/>
+  </Style>
+  <Style Selector="Border.PatchModActive">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Green"/>
+  </Style>
+  <Style Selector="Border.PatchModInactive">
+    <Setter Property="BorderThickness" Value="2,2,2,2"/>
+    <Setter Property="BorderBrush" Value="Red"/>
+  </Style>
+  <Style Selector="ListBoxItem.ModCompare:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
+  </Style>
+  <Style Selector="Button,ToggleButton">
+    <Setter Property="TextBlock.FontSize" Value="12" />
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Padding" Value="8 2 8 2" />
+  </Style>
+  <Style Selector="ContextMenu">
+    <Setter Property="TextBlock.FontSize" Value="12" />
+  </Style>
+  <Style Selector="Window">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="TextBlock.FontSize" Value="12" />
+  </Style>
+  <Styles.Resources>
+    <sys:Double x:Key="FontSizeSmall">10</sys:Double>
+    <sys:Double x:Key="FontSizeNormal">12</sys:Double>
+    <sys:Double x:Key="FontSizeLarge">16</sys:Double>
+    <Color x:Key="IronyForegroundColor">#DD000000</Color>
+    <SolidColorBrush x:Key="IronyForegroundBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <SolidColorBrush x:Key="IronyForegroundTooltipBrush" Color="{DynamicResource IronyForegroundColor}" />
+    <Color x:Key="IronyAccentColor">#FF0000</Color>
+    <SolidColorBrush x:Key="IronyAccentBrush" Color="{DynamicResource IronyAccentColor}" />
+    <Color x:Key="IronyEditorBackgroundColor">#FFFAFAFA</Color>
+    <SolidColorBrush x:Key="IronyEditorBackgroundBrush" Color="{DynamicResource IronyEditorBackgroundColor}" />
+    <Color x:Key="IronyMidBackgroundColor">#FFFFFF</Color>
+    <SolidColorBrush x:Key="IronyMidBackgroundBrush" Color="{DynamicResource IronyMidBackgroundColor}" />
+    <Color x:Key="IronyButtonBorderColor">#747474</Color>
+    <SolidColorBrush x:Key="IronyButtonBorderBrush" Color="{DynamicResource IronyButtonBorderColor}" />
+    <Color x:Key="IronyBackgroundPopupColor">#FFFFFF</Color>
+    <SolidColorBrush x:Key="IronyBackgroundPopupBrush" Color="{DynamicResource IronyBackgroundPopupColor}" />
+  </Styles.Resources>
+</Styles>

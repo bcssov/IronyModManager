@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="MinMaxNumericUpDown.cs" company="Mario">
 //     Mario
@@ -166,6 +166,40 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// Handles the <see cref="E:TemplateApplied" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="TemplateAppliedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            // Would be kinda great if avalonia guys exposed some of these private properties. Not very customizable with this...
+            if (minMaxSpinner != null)
+            {
+                minMaxSpinner.Spin -= OnMinMaxSpinnerSpin;
+            }
+            minMaxSpinner = e.NameScope.Find<Spinner>("PART_MinMax_Spinner");
+            if (minMaxSpinner != null)
+            {
+                minMaxSpinner.Spin += OnMinMaxSpinnerSpin;
+            }
+
+            if (spinner != null)
+            {
+                spinner.Spin -= OnSpinnerSpin;
+            }
+            spinner = e.NameScope.Find<Spinner>("PART_Spinner");
+            if (spinner != null)
+            {
+                spinner.Spin += OnSpinnerSpin;
+            }
+
+            textBox = e.NameScope.Find<TextBox>("PART_TextBox");
+
+            SetValidSpinDirection();
+        }
+
+        /// <summary>
         /// Called when [culture information changed].
         /// </summary>
         /// <param name="oldValue">The old value.</param>
@@ -222,6 +256,7 @@ namespace IronyModManager.Controls
         /// Handles the <see cref="E:KeyDown" /> event.
         /// </summary>
         /// <param name="e">The <see cref="KeyEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (whitelistedGestures != null && whitelistedGestures.Any(p => p.KeyModifiers == e.KeyModifiers && e.Key == p.Key))
@@ -249,6 +284,7 @@ namespace IronyModManager.Controls
         /// Handles the <see cref="E:LostFocus" /> event.
         /// </summary>
         /// <param name="e">The <see cref="RoutedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             base.OnLostFocus(e);
@@ -281,39 +317,6 @@ namespace IronyModManager.Controls
             {
                 SetValidSpinDirection();
             }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:TemplateApplied" /> event.
-        /// </summary>
-        /// <param name="e">The <see cref="TemplateAppliedEventArgs" /> instance containing the event data.</param>
-        protected override void OnTemplateApplied(TemplateAppliedEventArgs e)
-        {
-            base.OnTemplateApplied(e);
-            // Would be kinda great if avalonia guys exposed some of these private properties. Not very customizable with this...
-            if (minMaxSpinner != null)
-            {
-                minMaxSpinner.Spin -= OnMinMaxSpinnerSpin;
-            }
-            minMaxSpinner = e.NameScope.Find<Spinner>("PART_MinMax_Spinner");
-            if (minMaxSpinner != null)
-            {
-                minMaxSpinner.Spin += OnMinMaxSpinnerSpin;
-            }
-
-            if (spinner != null)
-            {
-                spinner.Spin -= OnSpinnerSpin;
-            }
-            spinner = e.NameScope.Find<Spinner>("PART_Spinner");
-            if (spinner != null)
-            {
-                spinner.Spin += OnSpinnerSpin;
-            }
-
-            textBox = e.NameScope.Find<TextBox>("PART_TextBox");
-
-            SetValidSpinDirection();
         }
 
         /// <summary>

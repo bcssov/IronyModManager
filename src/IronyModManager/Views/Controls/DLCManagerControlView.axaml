@@ -25,7 +25,8 @@
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
-          <Button Content="{Binding Close}" Command="{Binding CloseCommand}" Grid.Row="1" Grid.Column="0" MaxHeight="30"></Button>
+          <Button Content="{Binding Close}" Command="{Binding CloseCommand}" Grid.Row="1" Grid.Column="0" MaxHeight="30"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
         </Grid>
       </Border>
     </Popup>

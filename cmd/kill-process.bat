@@ -1,0 +1,1 @@
+taskkill /im ironymodmanager.exe /f

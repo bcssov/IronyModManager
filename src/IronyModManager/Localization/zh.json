@@ -58,6 +58,12 @@
             "Pictures": "图片"
         }
     },
+    "TextBox": {
+        "Copy": "复制",
+        "Cut": "剪切",
+        "Paste": "粘贴",
+        "SelectAll": "全选"
+    },
     "Languages": {
         "Name": "语言"
     },
@@ -65,9 +71,10 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
+        "FluentLight": "流利的光",
+        "FluentDark": "流利的黑暗",
         "MaterialDark": "Material 暗色",
-        "MaterialLightGreen": "Material 亮绿",
-        "MaterialDeepPurple": "Material 深紫",
+        "MaterialLight": "Material 光",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
         "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"

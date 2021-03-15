@@ -4,26 +4,25 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
 using IronyModManager.Implementation.Actions;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using MessageBox.Avalonia.BaseWindows.Base;
 using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
-using MsgBox = MessageBox.Avalonia;
+using MessageBox.Avalonia.ViewModels;
 
 namespace IronyModManager.Implementation
 {
@@ -42,8 +41,9 @@ namespace IronyModManager.Implementation
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;System.String&gt;.</returns>
-        public static FatalErrorMessageBox GetFatalErrorWindow(string title, string header, string message)
+        public static Controls.Themes.CustomMessageBox GetFatalErrorWindow(string title, string header, string message)
         {
+            var font = ResolveFont();
             var parameters = new MessageBoxCustomParams
             {
                 CanResize = false,
@@ -51,37 +51,14 @@ namespace IronyModManager.Implementation
                 ContentTitle = title,
                 ContentHeader = header,
                 ContentMessage = message,
-                Icon = MsgBox.Enums.Icon.Error,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                Icon = Icon.Error,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FontFamily = font.GetFontFamily(),
+                WindowIcon = StaticResources.GetAppIcon()
             };
-            if (Dispatcher.UIThread.CheckAccess())
-            {
-                var font = ResolveFont();
-
-                var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
-                {
-                    Icon = StaticResources.GetAppIcon(),
-                    FontFamily = font.GetFontFamily()
-                };
-                parameters.Window = window;
-                window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
-                return new FatalErrorMessageBox(window);
-            }
-            else
-            {
-                var task = Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    var window = new MsgBox.Views.MsBoxCustomWindow(parameters.Style)
-                    {
-                        Icon = StaticResources.GetAppIcon()
-                    };
-                    parameters.Window = window;
-                    window.DataContext = new MsgBox.ViewModels.MsBoxCustomViewModel(parameters);
-                    return new FatalErrorMessageBox(window);
-                });
-                Task.WaitAll(task);
-                return task.Result;
-            }
+            var window = new Controls.Themes.CustomMessageBox(parameters.Style);
+            window.DataContext = new MsBoxCustomViewModel(parameters, window);
+            return window;
         }
 
         /// <summary>
@@ -93,7 +70,7 @@ namespace IronyModManager.Implementation
         /// <param name="icon">The icon.</param>
         /// <param name="promptyType">Type of the prompty.</param>
         /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
-        public static MsgBox.BaseWindows.IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
+        public static IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
         {
             var buttonEnum = promptyType switch
             {
@@ -101,6 +78,7 @@ namespace IronyModManager.Implementation
                 PromptType.OK => ButtonEnum.Ok,
                 _ => ButtonEnum.YesNo,
             };
+            var font = ResolveFont();
             var parameters = new MessageBoxStandardParams()
             {
                 CanResize = false,
@@ -110,15 +88,12 @@ namespace IronyModManager.Implementation
                 ContentMessage = message,
                 Icon = icon,
                 ButtonDefinitions = buttonEnum,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                FontFamily = font.GetFontFamily(),
+                WindowIcon = StaticResources.GetAppIcon()
             };
-            var font = ResolveFont();
-
             var window = new Controls.Themes.StandardMessageBox(parameters.Style, buttonEnum);
-            parameters.Window = window;
-            window.Icon = StaticResources.GetAppIcon();
-            window.FontFamily = font.GetFontFamily();
-            window.DataContext = new MsgBox.ViewModels.MsBoxStandardViewModel(parameters);
+            window.DataContext = new MsBoxStandardViewModel(parameters, window);
             return new StandardMessageBox(window);
         }
 
