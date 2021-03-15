@@ -11,7 +11,7 @@
     <Setter Property="assists:ToggleButtonAssist.UncheckedForeground" Value="{DynamicResource MaterialDesignBody}"></Setter>
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
-    <Setter Property="Padding" Value="16 4 16 4" />
+    <Setter Property="Padding" Value="2 1 2 1" />
     <Setter Property="Cursor" Value="Hand" />
     <Setter Property="ClickMode" Value="Press"/>
     <Setter Property="Template">
@@ -67,7 +67,7 @@
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="1" />
     <!-- FixBorderThickness -->
-    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="Padding" Value="1,0" />
     <Setter Property="ClipToBounds" Value="False"/>
     <Setter Property="Template">
       <ControlTemplate>
