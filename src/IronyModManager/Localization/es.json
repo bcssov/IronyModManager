@@ -62,10 +62,10 @@
         "Name": "Idioma"
     },
     "TextBox": {
-        "Copy": "Dupdo",
-        "Cut": "Corte",
+        "Copy": "Copiar",
+        "Cut": "Cortar",
         "Paste": "Pegar",
-        "SelectAll": "Seleccionar todo"
+        "SelectAll": "Seleccionar Todo"
     },
     "Themes": {
         "Name": "Tema",
