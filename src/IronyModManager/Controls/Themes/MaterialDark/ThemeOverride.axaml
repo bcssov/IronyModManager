@@ -3,9 +3,9 @@
         x:Class="IronyModManager.Controls.Themes.MaterialDark.ThemeOverride"
         xmlns:sys="clr-namespace:System;assembly=netstandard">
   <!-- Includes -->
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/NumericUpDown.axaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/ButtonSpinner.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/MinMaxButtonSpinner.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/NumericUpDown.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/ButtonSpinner.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialDark/MinMaxButtonSpinner.axaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>

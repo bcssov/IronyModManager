@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="MaterialLightTheme.cs" company="Mario">
 //     Mario
@@ -61,7 +61,7 @@ namespace IronyModManager.Implementation.Themes
         protected virtual void RegisterResources()
         {
             var helper = new PaletteHelper();
-            var theme = Theme.Create(BaseThemeMode.Dark.GetBaseTheme(), SwatchHelper.Lookup[MaterialColor.Blue], SwatchHelper.Lookup[MaterialColor.Teal400]);
+            var theme = Theme.Create(BaseThemeMode.Light.GetBaseTheme(), SwatchHelper.Lookup[MaterialColor.Grey], SwatchHelper.Lookup[MaterialColor.Brown200]);
             helper.SetTheme(theme);
         }
 
