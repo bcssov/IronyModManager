@@ -91,6 +91,8 @@
   </Style>
   <Style Selector="Button,ToggleButton">
     <Setter Property="TextBlock.FontSize" Value="12" />
+    <Setter Property="Height" Value="30" />
+    <Setter Property="Padding" Value="8 2 8 2" />
   </Style>
   <Style Selector="ContextMenu">
     <Setter Property="TextBlock.FontSize" Value="12" />
