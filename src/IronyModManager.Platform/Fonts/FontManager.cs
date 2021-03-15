@@ -4,7 +4,7 @@
 // Created          : 03-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="FontManager.cs" company="Mario">
 //     Mario
@@ -64,6 +64,10 @@ namespace IronyModManager.Platform.Fonts
         {
             if (typeface.FontFamily != null && GetFontFamilyManager().IsIronyFont(typeface.FontFamily.Name))
             {
+                if (typeface.FontFamily.Key == null)
+                {
+                    typeface = new Typeface(fontFamilyManager.ResolveFontFamily(typeface.FontFamily.Name).GetFontFamily(), typeface.Style, typeface.Weight);
+                }
                 var fontCollection = SKTypefaceCollectionCache.GetOrAddTypefaceCollection(typeface.FontFamily);
                 if (fontCollection == null)
                 {
