@@ -7,8 +7,8 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ButtonSpinner.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MinMaxButtonSpinner.axaml"/>
   <StyleInclude Source="avares://AvaloniaEdit/AvaloniaEdit.xaml" />
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsDark.xaml"/>
-  <StyleInclude Source="avares://IronyModManager/Controls/Themes/Dark/IronyToolTip.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/IconsLight.xaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/IronyTooltip.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/ComboBox.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MenuItem.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/TextBlock.axaml"/>
