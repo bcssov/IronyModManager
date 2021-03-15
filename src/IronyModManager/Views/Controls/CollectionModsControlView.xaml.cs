@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-12-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -79,15 +79,21 @@ namespace IronyModManager.Views.Controls
         #region Methods
 
         /// <summary>
-        /// focus order text box as an asynchronous operation.
+        /// focus ListBox item as an asynchronous operation.
         /// </summary>
         /// <param name="mod">The mod.</param>
-        protected virtual async Task FocusOrderTextBoxAsync(IMod mod)
+        /// <param name="scrollToSelected">if set to <c>true</c> [scroll to selected].</param>
+        protected virtual async Task FocusListBoxItemAsync(IMod mod, bool scrollToSelected)
         {
             await Task.Delay(100);
             var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
             if (mod != null)
             {
+                // Because avalonia
+                if (scrollToSelected)
+                {
+                    modList.ScrollIntoView(mod);
+                }
                 foreach (var item in listboxItems)
                 {
                     var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
@@ -229,11 +235,11 @@ namespace IronyModManager.Views.Controls
                 performingUISet = false;
             }
 
-            ViewModel.ModReordered += (mod) =>
+            ViewModel.ModReordered += (mod, instant) =>
             {
                 setUIProperties().ConfigureAwait(false);
                 modList.Focus();
-                FocusOrderTextBoxAsync(mod).ConfigureAwait(true);
+                FocusListBoxItemAsync(mod, instant).ConfigureAwait(true);
             };
 
             this.WhenAnyValue(v => v.ViewModel.MaxOrder).Subscribe(max =>

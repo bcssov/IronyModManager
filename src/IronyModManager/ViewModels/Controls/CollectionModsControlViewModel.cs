@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -257,7 +257,8 @@ namespace IronyModManager.ViewModels.Controls
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
-        public delegate void ModReorderedDelegate(IMod mod);
+        /// <param name="instant">if set to <c>true</c> [instant].</param>
+        public delegate void ModReorderedDelegate(IMod mod, bool instant);
 
         #endregion Delegates
 
@@ -1698,7 +1699,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         SaveState();
                         RecognizeSortOrder(SelectedModCollection);
-                        ModReordered?.Invoke(reorderQueue.Last());
+                        ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
                     }
