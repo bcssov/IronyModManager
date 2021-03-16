@@ -80,7 +80,6 @@
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
     },
     "NotificationPosition": {
-        "Name": "Pozicija obavijesti",
         "BottomRight": "Dolje desno",
         "BottomLeft": "Dolje lijevo",
         "TopRight": "Gore desno",
@@ -348,6 +347,10 @@
         "Close": "Zatvori",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Mogućnosti aplikacije",
+            "NotificationPosition": "Pozicija obavijesti"
+        },
         "Editor": {
             "Title": "Opcije vanjskog uređivača",
             "EditorExecutable": "Izvršna datoteka",

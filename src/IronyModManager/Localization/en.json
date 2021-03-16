@@ -80,7 +80,6 @@
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
     },
     "NotificationPosition": {
-        "Name": "Notification Position",
         "BottomRight": "Bottom Right",
         "BottomLeft": "Bottom Left",
         "TopRight": "Top Right",
@@ -348,6 +347,10 @@
         "Close": "Close",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Application Options",
+            "NotificationPosition": "Notification Position"
+        },
         "Editor": {
             "Title": "External Editor Options",
             "EditorExecutable": "Editor Executable",

@@ -114,7 +114,6 @@ namespace IronyModManager.Shared
         public static class NotificationPosition
         {
             public const string Prefix = "NotificationPosition.";
-            public const string Name = Prefix + "Name";
             public const string BottomRight = Prefix + "BottomRight";
             public const string BottomLeft = Prefix + "BottomLeft";
             public const string TopRight = Prefix + "TopRight";
@@ -460,6 +459,12 @@ namespace IronyModManager.Shared
             public const string Close = Prefix + "Close";
             public const string NavigateTo = Prefix + "NavigateTo";
             public const string Reset = Prefix + "Reset";
+            public static class AppOptions
+            {
+                public const string Prefix = "Options.AppOptions.";
+                public const string Title = Prefix + "Title";
+                public const string NotificationPosition = Prefix + "NotificationPosition";
+            }
             public static class Editor
             {
                 public const string Prefix = "Options.Editor.";

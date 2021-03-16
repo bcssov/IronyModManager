@@ -80,7 +80,6 @@
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
     },
     "NotificationPosition": {
-        "Name": "Benachrichtigungsposition",
         "BottomRight": "Unten rechts",
         "BottomLeft": "Unten links",
         "TopRight": "Oben rechts",
@@ -348,6 +347,10 @@
         "Close": "Schließen",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Anwendungsoptionen",
+            "NotificationPosition": "Benachrichtigungsposition"
+        },
         "Editor": {
             "Title": "Externe Editoroptionen",
             "EditorExecutable": "Editor Programdatei",

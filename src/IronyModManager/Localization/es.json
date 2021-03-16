@@ -80,7 +80,6 @@
         "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
     },
     "NotificationPosition": {
-        "Name": "Posición de notificación",
         "BottomRight": "Abajo a la derecha",
         "BottomLeft": "Abajo a la izquierda",
         "TopRight": "Parte superior derecha",
@@ -348,6 +347,10 @@
         "Close": "Cerrar",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Opciones de aplicación",
+            "NotificationPosition": "Posición de notificación"
+        },
         "Editor": {
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",

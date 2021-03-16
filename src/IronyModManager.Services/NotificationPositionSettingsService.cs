@@ -117,6 +117,7 @@ namespace IronyModManager.Services
         protected virtual INotificationPosition InitModel(INotificationPositionType notiItem, NotificationPosition notificationPosition)
         {
             var model = GetModelInstance<INotificationPosition>();
+            model.Name = notiItem.Position.ToString();
             model.Type = notiItem.Position;
             model.IsSelected = notiItem.Position == notificationPosition;
             return model;
