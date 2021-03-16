@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="SteamDirectory.cs" company="Mario">
 //     Mario
@@ -63,12 +63,12 @@ namespace IronyModManager.Services.Registrations
         /// <summary>
         /// The cached paths
         /// </summary>
-        private static readonly Dictionary<string, List<string>> cachedPaths = new Dictionary<string, List<string>>();
+        private static readonly Dictionary<string, List<string>> cachedPaths = new();
 
         /// <summary>
         /// The quotes regex
         /// </summary>
-        private static readonly Regex quotesRegex = new Regex("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex quotesRegex = new("\".*?\"", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// The steam common directory
@@ -167,14 +167,15 @@ namespace IronyModManager.Services.Registrations
         /// </summary>
         /// <param name="appId">The application identifier.</param>
         /// <returns>System.String.</returns>
-        public static string GetWorkshopDirectory(int appId)
+        public static IReadOnlyCollection<string> GetWorkshopDirectory(int appId)
         {
             var steamInstallDirectory = GetSteamRootPath();
+            var result = new List<string>();
             if (Directory.Exists(steamInstallDirectory))
             {
                 if (Directory.Exists(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString())))
                 {
-                    return Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString());
+                    result.Add(Path.Combine(steamInstallDirectory, SteamWorkshopDirectory, appId.ToString()));
                 }
                 var vdfPath = Path.Combine(steamInstallDirectory, SteamConfigVDF);
                 var paths = GetVdf(vdfPath);
@@ -182,11 +183,11 @@ namespace IronyModManager.Services.Registrations
                 {
                     if (Directory.Exists(Path.Combine(path, SteamWorkshopDirectory, appId.ToString())))
                     {
-                        return Path.Combine(path, SteamWorkshopDirectory, appId.ToString());
+                        result.Add(Path.Combine(path, SteamWorkshopDirectory, appId.ToString()));
                     }
                 }
             }
-            return string.Empty;
+            return result;
         }
 
         /// <summary>

@@ -121,7 +121,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(reader, modParser);
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2", Type = "Should_return_installed_mods" });
+            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods" });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
@@ -500,7 +500,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_install_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -537,7 +537,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -596,7 +596,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -684,7 +684,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_lock_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
@@ -710,7 +710,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_lock_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.SetDescriptorLockAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -760,7 +760,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_delete_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
@@ -786,7 +786,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_delete_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.DeleteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -813,7 +813,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -842,7 +842,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -874,7 +874,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
@@ -908,7 +908,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
@@ -959,7 +959,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
 
@@ -991,7 +991,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
 
@@ -1045,7 +1045,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Mod_directory_should_exist",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1096,7 +1096,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_Mod_directory_should_exist",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1147,7 +1147,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Mod_directory_should_purge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1198,7 +1198,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_directory_should_purge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);

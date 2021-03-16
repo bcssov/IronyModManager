@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -125,7 +125,7 @@ namespace IronyModManager.Services
                 model.LaunchArguments = settings.ExecutableArgs;
                 model.UserDirectory = settings.UserDirectory;
             }
-            else if (!string.IsNullOrWhiteSpace(game.WorkshopDirectory))
+            else if (game.WorkshopDirectory != null && game.WorkshopDirectory.Any())
             {
                 model.ExecutableLocation = $"{SteamLaunchArgs}{game.SteamAppId}";
             }
@@ -347,7 +347,9 @@ namespace IronyModManager.Services
         {
             if (games == null || !games.Any() || selectedGame == null)
             {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                 throw new ArgumentNullException($"{nameof(games)} or {nameof(selectedGame)}.");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
 
             var currentSelection = GetSelected();

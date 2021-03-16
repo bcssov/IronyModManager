@@ -193,7 +193,7 @@ namespace IronyModManager.Storage
                 game.Name = gameType.Name;
                 game.UserDirectory = gameType.UserDirectory ?? string.Empty;
                 game.SteamAppId = gameType.SteamAppId;
-                game.WorkshopDirectory = gameType.WorkshopDirectory ?? string.Empty;
+                game.WorkshopDirectory = gameType.WorkshopDirectory ?? new List<string>();
                 game.LogLocation = gameType.LogLocation;
                 game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
                 game.GameFolders = gameType.GameFolders ?? new List<string>();

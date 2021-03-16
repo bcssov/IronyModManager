@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -513,14 +513,14 @@ namespace IronyModManager.Services
                             {
                                 // Check user directory and workshop directory.
                                 var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
-                                var workshopDirectoryMod = Path.Combine(game.WorkshopDirectory, mod.FileName);
+                                var workshopDirectoryMod = game.WorkshopDirectory.Select(p => Path.Combine(p, mod.FileName));
                                 if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
                                 {
                                     mod.FullPath = userDirectoryMod.StandardizeDirectorySeparator();
                                 }
-                                else if (File.Exists(workshopDirectoryMod) || Directory.Exists(workshopDirectoryMod))
+                                else if (workshopDirectoryMod.Any(p => File.Exists(p) || Directory.Exists(p)))
                                 {
-                                    mod.FullPath = workshopDirectoryMod.StandardizeDirectorySeparator();
+                                    mod.FullPath = workshopDirectoryMod.FirstOrDefault(p => File.Exists(p) || Directory.Exists(p)).StandardizeDirectorySeparator();
                                 }
                             }
                         }

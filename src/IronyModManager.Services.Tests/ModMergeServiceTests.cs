@@ -98,7 +98,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\Fake"
+                WorkshopDirectory = new List<string>() { "C:\\fake" }
             });
 
             var service = new ModMergeService(null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -134,7 +134,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\Fake"
+                WorkshopDirectory = new List<string>() { "C:\\fake" }
             });
             var collections = new List<IModCollection>()
             {
@@ -237,7 +237,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\Fake"
+                WorkshopDirectory = new List<string>() { "C:\\fake" }
             });
 
             var service = new ModMergeService(null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -285,7 +285,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\Fake"
+                WorkshopDirectory = new List<string>() { "C:\\fake" }
             });
             var collections = new List<IModCollection>()
             {
