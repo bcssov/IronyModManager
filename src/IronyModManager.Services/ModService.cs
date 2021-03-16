@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -264,7 +264,7 @@ namespace IronyModManager.Services
             {
                 descriptors.AddRange(userDirectoryMods);
             }
-            var workshopDirectoryMods = GetAllModDescriptors(game.WorkshopDirectory, ModSource.Steam);
+            var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam));
             if (workshopDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(workshopDirectoryMods);

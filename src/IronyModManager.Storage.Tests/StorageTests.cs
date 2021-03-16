@@ -282,7 +282,7 @@ namespace IronyModManager.Storage.Tests
                 GameFolders = new List<string>() { "testgame" },
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
-                WorkshopDirectory = "workshop1",
+                WorkshopDirectory = new List<string>() { "workshop1" },
                 BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
@@ -297,7 +297,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
-            dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
@@ -506,7 +506,7 @@ namespace IronyModManager.Storage.Tests
                 GameFolders = new List<string>() { "testgame" },
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
-                WorkshopDirectory = "workshop1",
+                WorkshopDirectory = new List<string>() { "workshop1" },
                 BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
@@ -522,7 +522,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             result.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             result.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
-            result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");

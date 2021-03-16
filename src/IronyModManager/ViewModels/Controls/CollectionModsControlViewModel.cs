@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -1797,7 +1797,7 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
             // Due to async nature ensure that the game and mods are from the same source before saving
-            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame.Type.Equals(game))
+            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame != null && activeGame.Type.Equals(game))
             {
                 if (Mods.Any() && !Mods.All(p => p.Game.Equals(game)))
                 {
