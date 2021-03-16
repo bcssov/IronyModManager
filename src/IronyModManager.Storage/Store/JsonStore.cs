@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="JsonStore.cs" company="Mario">
 //     Mario
@@ -154,8 +154,8 @@ namespace IronyModManager.Storage
         /// <returns>System.String.</returns>
         private static string InitPath(bool useProperSeparator = true)
         {
-            string companyPart = string.Empty;
-            string appNamePart = string.Empty;
+            var fistSegment = string.Empty;
+            var secondSegment = string.Empty;
 
             var entryAssembly = Assembly.GetEntryAssembly();
             var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
@@ -163,11 +163,11 @@ namespace IronyModManager.Storage
             {
                 if (!useProperSeparator)
                 {
-                    companyPart = $"{companyAttribute.Company}\\";
+                    fistSegment = $"{companyAttribute.Company}\\";
                 }
                 else
                 {
-                    companyPart = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+                    fistSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
                 }
             }
             var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
@@ -175,15 +175,15 @@ namespace IronyModManager.Storage
             {
                 if (!useProperSeparator)
                 {
-                    appNamePart = $"{titleAttribute.Title}\\";
+                    secondSegment = $"{titleAttribute.Title}\\";
                 }
                 else
                 {
-                    appNamePart = $"{titleAttribute.Title}{Path.DirectorySeparatorChar}";
+                    secondSegment = $"{titleAttribute.Title}{Path.DirectorySeparatorChar}";
                 }
             }
 
-            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{fistSegment}{secondSegment}");
         }
 
         /// <summary>

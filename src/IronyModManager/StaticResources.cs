@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="StaticResources.cs" company="Mario">
 //     Mario
@@ -94,6 +94,40 @@ namespace IronyModManager
             return iconBitmap;
         }
 
+        private static string logLocation = string.Empty;
+
+        /// <summary>
+        /// Gets the log location.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string GetLogLocation()
+        {
+            if (!string.IsNullOrWhiteSpace(logLocation))
+            {
+                return logLocation;
+            }
+#if DEBUG
+            logLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
+#else
+            var firstSegment = string.Empty;
+            var secondSegment = string.Empty;
+
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
+            if (!string.IsNullOrEmpty(companyAttribute.Company))
+            {
+                firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+            }
+            var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
+            if (!string.IsNullOrEmpty(titleAttribute.Title))
+            {
+                secondSegment = $"{titleAttribute.Title}-Logs{Path.DirectorySeparatorChar}";
+            }
+            logLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
+#endif
+            return logLocation;
+        }
+
         /// <summary>
         /// Gets the path.
         /// </summary>
@@ -102,8 +136,8 @@ namespace IronyModManager
         {
             static string generatePath(bool useProperSeparator)
             {
-                string companyPart = string.Empty;
-                string appNamePart = string.Empty;
+                var firstSegment = string.Empty;
+                var secondSegment = string.Empty;
 
                 var entryAssembly = Assembly.GetEntryAssembly();
                 var companyAttribute = (AssemblyCompanyAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyCompanyAttribute));
@@ -111,11 +145,11 @@ namespace IronyModManager
                 {
                     if (!useProperSeparator)
                     {
-                        companyPart = $"{companyAttribute.Company}\\";
+                        firstSegment = $"{companyAttribute.Company}\\";
                     }
                     else
                     {
-                        companyPart = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
+                        firstSegment = $"{companyAttribute.Company}{Path.DirectorySeparatorChar}";
                     }
                 }
                 var titleAttribute = (AssemblyTitleAttribute)Attribute.GetCustomAttribute(entryAssembly, typeof(AssemblyTitleAttribute));
@@ -123,14 +157,14 @@ namespace IronyModManager
                 {
                     if (!useProperSeparator)
                     {
-                        appNamePart = $"{titleAttribute.Title}-Updater\\";
+                        secondSegment = $"{titleAttribute.Title}-Updater\\";
                     }
                     else
                     {
-                        appNamePart = $"{titleAttribute.Title}-Updater{Path.DirectorySeparatorChar}";
+                        secondSegment = $"{titleAttribute.Title}-Updater{Path.DirectorySeparatorChar}";
                     }
                 }
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{companyPart}{appNamePart}");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"{firstSegment}{secondSegment}");
             }
 
             if (updaterPath == null)
