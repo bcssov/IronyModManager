@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
 using Avalonia.Platform;
+using IronyModManager.Platform.Assets;
 using IronyModManager.Platform.Clipboard;
 using IronyModManager.Platform.Fonts;
 using IronyModManager.Shared;
@@ -64,6 +65,9 @@ namespace IronyModManager.Platform
                 // Too many variations to take into consideration so escape the hacky way of getting clipboard implementation
                 var clipboard = AvaloniaLocator.Current.GetService<IClipboard>();
                 AvaloniaLocator.CurrentMutable.Bind<IClipboard>().ToConstant(new IronyClipboard(clipboard));
+                // Asset loader
+                AssetLoader.RegisterResUriParsers();
+                AvaloniaLocator.CurrentMutable.Bind<IAssetLoader>().ToConstant(new AssetLoader());
             });
             return builder;
         }

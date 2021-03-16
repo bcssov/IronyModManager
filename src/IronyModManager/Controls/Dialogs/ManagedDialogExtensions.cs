@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -44,7 +44,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
         /// <param name="builder">The builder.</param>
         /// <returns>TAppBuilder.</returns>
-        public static TAppBuilder UseManagedDialogs<TAppBuilder>(this TAppBuilder builder)
+        public static TAppBuilder UseIronyManagedDialogs<TAppBuilder>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
             builder.AfterSetup(_ =>
@@ -59,7 +59,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <typeparam name="TWindow">The type of the t window.</typeparam>
         /// <param name="builder">The builder.</param>
         /// <returns>TAppBuilder.</returns>
-        public static TAppBuilder UseManagedDialogs<TAppBuilder, TWindow>(this TAppBuilder builder)
+        public static TAppBuilder UseIronyManagedDialogs<TAppBuilder, TWindow>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new() where TWindow : Window, new()
         {
             builder.AfterSetup(_ =>

@@ -4,7 +4,7 @@
 // Created          : 10-02-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="AssetLoader.cs" company="Mario">
 //     Mario
@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,14 +20,14 @@ using System.Reflection;
 using Avalonia.Platform;
 using IronyModManager.Shared;
 
-namespace IronyModManager.Implementation.AssetLoader
+namespace IronyModManager.Platform.Assets
 {
     /// <summary>
     /// Class AssetLoader.
     /// Implements the <see cref="Avalonia.Platform.IAssetLoader" />
     /// </summary>
     /// <seealso cref="Avalonia.Platform.IAssetLoader" />
-    public class AssetLoader : IAssetLoader
+    internal class AssetLoader : IAssetLoader
     {
         #region Fields
 
@@ -43,7 +44,7 @@ namespace IronyModManager.Implementation.AssetLoader
         /// <summary>
         /// The font assets
         /// </summary>
-        private readonly Dictionary<string, Stream> fontAssets;
+        private readonly ConcurrentDictionary<string, Stream> fontAssets;
 
         #endregion Fields
 
@@ -55,7 +56,7 @@ namespace IronyModManager.Implementation.AssetLoader
         public AssetLoader()
         {
             assetLoader = new Avalonia.Shared.PlatformSupport.AssetLoader(Assembly.GetEntryAssembly());
-            fontAssets = new Dictionary<string, Stream>();
+            fontAssets = new ConcurrentDictionary<string, Stream>();
         }
 
         #endregion Constructors
