@@ -4,15 +4,15 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Localization;
 using IronyModManager.Models.Common;
@@ -58,6 +58,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IModInstallationResult, ModInstallationResult>();
             container.RegisterModel<IPermissionCheckResult, PermissionCheckResult>();
             container.RegisterLocalization<IDLC, DLC>();
+            container.RegisterLocalization<INotificationPosition, NotificationPosition>();
         }
 
         #endregion Methods

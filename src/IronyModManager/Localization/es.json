@@ -79,6 +79,12 @@
         "Restart_Header": "Aplicación Necesita Reinicio",
         "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
     },
+    "NotificationPosition": {
+        "BottomRight": "Abajo a la derecha",
+        "BottomLeft": "Abajo a la izquierda",
+        "TopRight": "Parte superior derecha",
+        "TopLeft": "Arriba a la izquierda"
+    },
     "Games": {
         "Name": "Juego",
         "Stellaris": "Stellaris",
@@ -341,6 +347,10 @@
         "Close": "Cerrar",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Opciones de aplicación",
+            "NotificationPosition": "Posición de notificación"
+        },
         "Editor": {
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",

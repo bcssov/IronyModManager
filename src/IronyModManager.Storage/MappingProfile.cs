@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-19-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
@@ -46,6 +46,8 @@ namespace IronyModManager.Storage
             CreateMap<IAppState, IAppState>().ReverseMap();
             CreateMap<IGameSettings, IGameSettings>().ReverseMap();
             CreateMap<IUpdateSettings, IUpdateSettings>().ReverseMap();
+            CreateMap<INotificationPositionType, NotificationPositionType>().ReverseMap();
+            CreateMap<INotificationPositionType, INotificationPosition>().ReverseMap();
         }
 
         #endregion Constructors

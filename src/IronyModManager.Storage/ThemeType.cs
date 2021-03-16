@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ThemeType.cs" company="Mario">
 //     Mario
@@ -37,12 +37,6 @@ namespace IronyModManager.Storage
         /// </summary>
         /// <value>The name.</value>
         public virtual string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the styles.
-        /// </summary>
-        /// <value>The styles.</value>
-        public virtual IEnumerable<string> Styles { get; set; }
 
         #endregion Properties
     }

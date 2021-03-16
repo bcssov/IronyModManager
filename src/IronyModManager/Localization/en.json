@@ -79,6 +79,12 @@
         "Restart_Header": "App needs restart",
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
     },
+    "NotificationPosition": {
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left",
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left"
+    },
     "Games": {
         "Name": "Game",
         "Stellaris": "Stellaris",
@@ -341,6 +347,10 @@
         "Close": "Close",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Application Options",
+            "NotificationPosition": "Notification Position"
+        },
         "Editor": {
             "Title": "External Editor Options",
             "EditorExecutable": "Editor Executable",

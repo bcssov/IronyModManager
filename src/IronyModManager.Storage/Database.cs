@@ -4,15 +4,15 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Database.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.DI;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -41,6 +41,7 @@ namespace IronyModManager.Storage
             Games = new List<IGameType>();
             ModCollection = new List<IModCollection>();
             GameSettings = new List<IGameSettings>();
+            NotificationPosition = new List<INotificationPositionType>();
         }
 
         #endregion Constructors
@@ -73,6 +74,12 @@ namespace IronyModManager.Storage
         /// <value>The mod collection.</value>
         [Trackable]
         public virtual IEnumerable<IModCollection> ModCollection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notification position.
+        /// </summary>
+        /// <value>The notification position.</value>
+        public virtual IList<INotificationPositionType> NotificationPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.

@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -124,6 +124,19 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the notification positions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
+        public IEnumerable<INotificationPositionType> GetNotificationPositions()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<List<INotificationPositionType>>(Database.NotificationPosition);
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -193,6 +206,28 @@ namespace IronyModManager.Storage
                 game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory ?? new List<string>();
                 game.Abrv = gameType.Abrv ?? string.Empty;
                 Database.Games.Add(game);
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Registers the notification position.
+        /// </summary>
+        /// <param name="notificationPosition">The notification position.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="InvalidOperationException">Notification position is null or already registered.</exception>
+        public bool RegisterNotificationPosition(INotificationPositionType notificationPosition)
+        {
+            lock (dbLock)
+            {
+                if (notificationPosition == null || Database.NotificationPosition.Any(p => p.Position == notificationPosition.Position) || (notificationPosition.IsDefault && Database.NotificationPosition.Any(p => p.IsDefault)))
+                {
+                    throw new InvalidOperationException("Notification position is null or already registered.");
+                }
+                var model = DIResolver.Get<INotificationPositionType>();
+                model.IsDefault = notificationPosition.IsDefault;
+                model.Position = notificationPosition.Position;
+                Database.NotificationPosition.Add(model);
                 return true;
             }
         }

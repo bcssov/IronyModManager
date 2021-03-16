@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -61,6 +61,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value>The locale.</value>
         string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notification position.
+        /// </summary>
+        /// <value>The notification position.</value>
+        NotificationPosition NotificationPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the theme.

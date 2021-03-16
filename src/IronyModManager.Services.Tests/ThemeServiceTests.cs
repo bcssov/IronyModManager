@@ -4,7 +4,7 @@
 // Created          : 02-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ThemeServiceTests.cs" company="Mario">
 //     Mario
@@ -51,11 +51,11 @@ namespace IronyModManager.Services.Tests
             preferencesService.Setup(p => p.Save(It.IsAny<IPreferences>())).Returns(true);
             var themes = new List<IThemeType>
             {
-                new ThemeType() { Name = "Dark", Styles = new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseDark.xaml" }, IsDefault = false },
-                new ThemeType() { Name = "MaterialDark", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.Dark.xaml" }, IsDefault = false },
-                new ThemeType() { Name = "MaterialLightGreen", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.LightGreen.xaml" }, IsDefault = false },
-                new ThemeType() { Name = "MaterialDeepPurple", Styles = new List<string> { "avares://Material.Avalonia/Material.Avalonia.Templates.xaml", "avares://Material.Avalonia/Material.Avalonia.DeepPurple.xaml" }, IsDefault = false },
-                new ThemeType() { Name = "Light", Styles = new List<string> { "avares://Avalonia.Themes.Default/DefaultTheme.xaml", "avares://Avalonia.Themes.Default/Accents/BaseLight.xaml" }, IsDefault = true }
+                new ThemeType() { Name = "Dark", IsDefault = false },
+                new ThemeType() { Name = "MaterialDark", IsDefault = false },
+                new ThemeType() { Name = "MaterialLightGreen", IsDefault = false },
+                new ThemeType() { Name = "MaterialDeepPurple", IsDefault = false },
+                new ThemeType() { Name = "Light", IsDefault = true }
             };
             storageProvider.Setup(p => p.GetThemes()).Returns(themes);
         }
@@ -74,21 +74,6 @@ namespace IronyModManager.Services.Tests
             var result = service.Get();
             result.Count().Should().Be(5);
             result.GroupBy(p => p.Type).Select(p => p.First()).Count().Should().Be(5);
-        }
-
-        /// <summary>
-        /// Defines the test method Should_contain_all_styles.
-        /// </summary>
-        [Fact]
-        public void Should_contain_all_styles()
-        {
-            var storageProvider = new Mock<IStorageProvider>();
-            var preferencesService = new Mock<IPreferencesService>();
-            SetupMockCase(preferencesService, storageProvider);
-
-            var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
-            var result = service.Get();
-            result.SelectMany(s => s.StyleIncludes).Count().Should().Be(10);
         }
 
         /// <summary>
@@ -153,6 +138,7 @@ namespace IronyModManager.Services.Tests
             SetupMockCase(preferencesService, storageProvider);
 
             var service = new ThemeService(storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            bool exceptionThrown = false;
             try
             {
                 service.Save(new Theme()
@@ -164,7 +150,9 @@ namespace IronyModManager.Services.Tests
             catch (Exception ex)
             {
                 ex.GetType().Should().Be(typeof(InvalidOperationException));
+                exceptionThrown = true;
             }
+            exceptionThrown.Should().BeTrue();
         }
 
         /// <summary>

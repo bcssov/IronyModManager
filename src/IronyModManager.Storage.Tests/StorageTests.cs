@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -100,6 +100,25 @@ namespace IronyModManager.Storage.Tests
             var themes = storage.GetThemes();
             themes.Count().Should().Be(1);
             themes.FirstOrDefault().Name.Should().Be("test");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_same_notification_position_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_notification_position_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<INotificationPositionType>>(It.IsAny<IEnumerable<INotificationPositionType>>())).Returns(() =>
+            {
+                return dbMock.NotificationPosition.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetNotificationPositions();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Position.Should().Be(Models.Common.NotificationPosition.BottomLeft);
         }
 
         /// <summary>
@@ -224,6 +243,25 @@ namespace IronyModManager.Storage.Tests
             dbMock.Themes.Count.Should().Be(2);
             dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();            
         }
+
+        /// <summary>
+        /// Defines the test method Should_add_new_notification_position.
+        /// </summary>
+        [Fact]
+        public void Should_add_new_notification_position()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var newItem = new NotificationPositionType()
+            {
+                Position = Models.Common.NotificationPosition.TopLeft
+            };
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.RegisterNotificationPosition(newItem);
+            dbMock.NotificationPosition.Count.Should().Be(2);
+            dbMock.NotificationPosition.FirstOrDefault(p => p.Position == newItem.Position).Should().NotBeNull();
+        }
+
 
 
         /// <summary>
@@ -422,6 +460,30 @@ namespace IronyModManager.Storage.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_add_and_return_added_notification_position.
+        /// </summary>
+        [Fact]
+        public void Should_add_and_return_added_notification_position()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var newItem = new NotificationPositionType()
+            {
+                Position = Models.Common.NotificationPosition.TopLeft
+            };
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<INotificationPositionType>>(It.IsAny<IEnumerable<INotificationPositionType>>())).Returns(() =>
+            {
+                return dbMock.NotificationPosition.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            storage.RegisterNotificationPosition(newItem);
+            var result = storage.GetNotificationPositions();
+            result.Count().Should().Be(2);
+            result.FirstOrDefault(p => p.Position == newItem.Position).Should().NotBeNull();
+        }
+
+        /// <summary>
         /// Defines the test method Should_add_and_return_added_game.
         /// </summary>
         [Fact]
@@ -506,7 +568,6 @@ namespace IronyModManager.Storage.Tests
                 {
                     Name = "test",
                     IsDefault = true,
-                    Styles = new List<string> { "1", "2" }
                 } },
                 Games = new List<IGameType>()
                 {
@@ -531,6 +592,13 @@ namespace IronyModManager.Storage.Tests
                     new GameSettings()
                     {
                         Type = "fake"
+                    }
+                },
+                NotificationPosition = new List<INotificationPositionType>()
+                {
+                    new NotificationPositionType()
+                    {
+                        Position = Models.Common.NotificationPosition.BottomLeft
                     }
                 }
             };
