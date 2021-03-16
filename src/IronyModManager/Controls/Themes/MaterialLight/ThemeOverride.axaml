@@ -13,6 +13,7 @@
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/MenuItem.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/TextBlock.axaml"/>
   <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/TextBox.axaml"/>
+  <StyleInclude Source="avares://IronyModManager/Controls/Themes/MaterialLight/NotificationCard.axaml"/>
 
   <!--Individual styles-->
   <Style Selector="NotificationCard">
@@ -21,6 +22,7 @@
   </Style>
   <Style Selector="NotificationCard/template/ ContentControl#PART_Content">
     <Setter Property="MinHeight" Value="50" />
+    <Setter Property="Foreground" Value="#DD000000" />
   </Style>
   <Style Selector="ListBoxItem.MoveBottom">
     <Setter Property="BorderThickness" Value="0,0,0,2"/>
