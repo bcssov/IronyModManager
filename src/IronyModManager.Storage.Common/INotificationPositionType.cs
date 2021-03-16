@@ -1,25 +1,29 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models.Common
+// Assembly         : IronyModManager.Storage.Common
 // Author           : Mario
-// Created          : 02-07-2020
+// Created          : 03-16-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 03-16-2021
 // ***********************************************************************
-// <copyright file="IThemeType.cs" company="Mario">
+// <copyright file="INotificationPositionType.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using IronyModManager.Models.Common;
 
 namespace IronyModManager.Storage.Common
 {
     /// <summary>
-    /// Interface IThemeType
+    /// Interface INotificationPositionType
+    /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
-    public interface IThemeType
+    /// <seealso cref="IronyModManager.Models.Common.IModel" />
+    public interface INotificationPositionType
     {
         #region Properties
 
@@ -30,10 +34,10 @@ namespace IronyModManager.Storage.Common
         bool IsDefault { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the position.
         /// </summary>
-        /// <value>The name.</value>
-        string Name { get; set; }
+        /// <value>The position.</value>
+        NotificationPosition Position { get; set; }
 
         #endregion Properties
     }

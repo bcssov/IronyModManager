@@ -111,6 +111,15 @@ namespace IronyModManager.Shared
             public const string Restart_Header = Prefix + "Restart_Header";
             public const string Restart_Message = Prefix + "Restart_Message";
         }
+        public static class NotificationPosition
+        {
+            public const string Prefix = "NotificationPosition.";
+            public const string Name = Prefix + "Name";
+            public const string BottomRight = Prefix + "BottomRight";
+            public const string BottomLeft = Prefix + "BottomLeft";
+            public const string TopRight = Prefix + "TopRight";
+            public const string TopLeft = Prefix + "TopLeft";
+        }
         public static class Games
         {
             public const string Prefix = "Games.";

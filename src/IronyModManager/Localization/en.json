@@ -79,6 +79,13 @@
         "Restart_Header": "App needs restart",
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
     },
+    "NotificationPosition": {
+        "Name": "Notification Position",
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left",
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left"
+    },
     "Games": {
         "Name": "Game",
         "Stellaris": "Stellaris",

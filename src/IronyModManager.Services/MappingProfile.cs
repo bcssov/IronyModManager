@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -53,6 +53,8 @@ namespace IronyModManager.Models
                 .ForAllOtherMembers(m => m.Ignore());
             CreateMap<IDefinition, IDefinition>().ReverseMap();
             CreateMap<IMod, IMod>().ReverseMap();
+            CreateMap<INotificationPosition, IPreferences>()
+                .ForMember(p => p.NotificationPosition, o => o.MapFrom(m => m.Type)).ReverseMap().ForAllOtherMembers(p => p.Ignore());
         }
 
         #endregion Constructors

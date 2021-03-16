@@ -4,15 +4,15 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="IronyModManager.Services">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
@@ -52,6 +52,7 @@ namespace IronyModManager.Services
             container.Register<IExternalEditorService, ExternalEditorService>();
             container.Register<IPermissionCheckService, PermissionCheckService>();
             container.Register<IDLCService, DLCService>();
+            container.Register<INotificationPositionSettingsService, NotificationPositionSettingsService>();
         }
 
         #endregion Methods

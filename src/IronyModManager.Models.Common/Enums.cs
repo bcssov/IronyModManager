@@ -4,7 +4,7 @@
 // Created          : 03-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-16-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Enums.cs" company="Mario">
 //     Mario
@@ -87,6 +87,32 @@ namespace IronyModManager.Models.Common
         /// The paradox
         /// </summary>
         Paradox
+    }
+
+    /// <summary>
+    /// Enum NotificationPosition
+    /// </summary>
+    public enum NotificationPosition
+    {
+        /// <summary>
+        /// The bottom right
+        /// </summary>
+        BottomRight,
+
+        /// <summary>
+        /// The bottom left
+        /// </summary>
+        BottomLeft,
+
+        /// <summary>
+        /// The top right
+        /// </summary>
+        TopRight,
+
+        /// <summary>
+        /// The top left
+        /// </summary>
+        TopLeft
     }
 
     /// <summary>

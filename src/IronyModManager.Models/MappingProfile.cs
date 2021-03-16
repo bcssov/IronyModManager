@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="MappingProfile.cs" company="Mario">
 //     Copyright (c) Mario. All rights reserved.
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 using IronyModManager.Shared.Models;
@@ -57,6 +57,7 @@ namespace IronyModManager.Models
             CreateMap<IDLC, DLC>().ReverseMap();
             CreateMap<IDLCObject, IDLC>().ReverseMap();
             CreateMap<IDLCObject, DLC>().ReverseMap();
+            CreateMap<INotificationPosition, NotificationPosition>().ReverseMap();
         }
 
         #endregion Constructors

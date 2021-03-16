@@ -1,25 +1,30 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models.Common
+// Assembly         : IronyModManager.Storage
 // Author           : Mario
-// Created          : 02-07-2020
+// Created          : 03-16-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 03-16-2021
 // ***********************************************************************
-// <copyright file="IThemeType.cs" company="Mario">
+// <copyright file="NotificationPositionType.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using IronyModManager.Models.Common;
+using IronyModManager.Storage.Common;
 
-namespace IronyModManager.Storage.Common
+namespace IronyModManager.Storage
 {
     /// <summary>
-    /// Interface IThemeType
+    /// Class NotificationPositionType.
+    /// Implements the <see cref="IronyModManager.Storage.Common.INotificationPositionType" />
     /// </summary>
-    public interface IThemeType
+    /// <seealso cref="IronyModManager.Storage.Common.INotificationPositionType" />
+    public class NotificationPositionType : INotificationPositionType
     {
         #region Properties
 
@@ -27,13 +32,13 @@ namespace IronyModManager.Storage.Common
         /// Gets or sets a value indicating whether this instance is default.
         /// </summary>
         /// <value><c>true</c> if this instance is default; otherwise, <c>false</c>.</value>
-        bool IsDefault { get; set; }
+        public virtual bool IsDefault { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the position.
         /// </summary>
-        /// <value>The name.</value>
-        string Name { get; set; }
+        /// <value>The position.</value>
+        public virtual NotificationPosition Position { get; set; }
 
         #endregion Properties
     }

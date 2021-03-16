@@ -1,18 +1,19 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Models
 // Author           : Mario
-// Created          : 01-13-2020
+// Created          : 03-16-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 03-16-2021
 // ***********************************************************************
-// <copyright file="Theme.cs" company="Mario">
+// <copyright file="NotificationPosition.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -20,13 +21,13 @@ using IronyModManager.Shared;
 namespace IronyModManager.Models
 {
     /// <summary>
-    /// Class Theme.
+    /// Class NotificationPosition.
     /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
-    /// Implements the <see cref="IronyModManager.Models.Common.ITheme" />
+    /// Implements the <see cref="IronyModManager.Models.Common.INotificationPosition" />
     /// </summary>
     /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
-    /// <seealso cref="IronyModManager.Models.Common.ITheme" />
-    public class Theme : BaseModel, ITheme
+    /// <seealso cref="IronyModManager.Models.Common.INotificationPosition" />
+    public class NotificationPosition : BaseModel, INotificationPosition
     {
         #region Properties
 
@@ -40,14 +41,14 @@ namespace IronyModManager.Models
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        [DynamicLocalization(LocalizationResources.Themes.Prefix, nameof(Type))]
+        [DynamicLocalization(LocalizationResources.NotificationPosition.Prefix, nameof(Type))]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-        public virtual string Type { get; set; }
+        public virtual Common.NotificationPosition Type { get; set; }
 
         #endregion Properties
     }

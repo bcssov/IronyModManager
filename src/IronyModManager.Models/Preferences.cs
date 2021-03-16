@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Preferences.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
 /// <summary>
@@ -67,6 +67,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value>The locale.</value>
         public virtual string Locale { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notification position.
+        /// </summary>
+        /// <value>The notification position.</value>
+        public virtual Common.NotificationPosition NotificationPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the theme.

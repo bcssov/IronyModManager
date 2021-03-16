@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
@@ -49,6 +49,12 @@ namespace IronyModManager.Storage.Common
         IEnumerable<IModCollection> GetModCollections();
 
         /// <summary>
+        /// Gets the notification positions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
+        IEnumerable<INotificationPositionType> GetNotificationPositions();
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -72,6 +78,13 @@ namespace IronyModManager.Storage.Common
         /// <param name="gameType">Type of the game.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool RegisterGame(IGameType gameType);
+
+        /// <summary>
+        /// Registers the notification position.
+        /// </summary>
+        /// <param name="notificationPosition">The notification position.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool RegisterNotificationPosition(INotificationPositionType notificationPosition);
 
         /// <summary>
         /// Registers the theme.
