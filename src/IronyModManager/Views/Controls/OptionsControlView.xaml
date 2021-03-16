@@ -14,7 +14,7 @@
            PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*,1*,1*,1*"  ColumnDefinitions="1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-          <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" IsVisible="{Binding ShowGameOptions}">
+          <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" IsVisible="{Binding ShowGameOptions}" Margin="{Binding LeftMargin}">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
               <TextBlock Text="{Binding GameOptions}" FontSize="14" HorizontalAlignment="Center"></TextBlock>
             </Border>
@@ -39,7 +39,7 @@
                         Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="5"></CheckBox>
             </Grid>
           </StackPanel>
-          <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="{Binding LeftMargin}">
+          <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="0">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
               <TextBlock Text="{Binding AppOptionsTitle}" FontSize="14" HorizontalAlignment="Center"></TextBlock>
             </Border>
@@ -56,7 +56,7 @@
               </ComboBox>
             </Grid>
           </StackPanel>
-          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="{Binding LeftChildMargin}">
+          <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
               <TextBlock Text="{Binding EditorTitle}" FontSize="14" HorizontalAlignment="Center"></TextBlock>
             </Border>
@@ -71,7 +71,7 @@
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
             </Grid>
           </StackPanel>
-          <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="1" Margin="{Binding LeftChildMargin}">
+          <StackPanel Orientation="Vertical" Grid.Row="2" Grid.Column="0">
             <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
               <TextBlock Text="{Binding UpdateOptions}" FontSize="14" HorizontalAlignment="Center"></TextBlock>
             </Border>
