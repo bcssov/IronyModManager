@@ -14,6 +14,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 
 ### Download
 * Latest stable version: [v1.12.126](https://github.com/bcssov/IronyModManager/releases/tag/v1.12.126)
+* Latest prerelease version: [v1.13.80-alpha](https://github.com/bcssov/IronyModManager/releases/tag/v1.13.80-alpha)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
@@ -25,7 +26,7 @@ Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/
 Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues). 
 * Be sure to include as much detailed information as you can.
 * Be sure to include steps to reproduce the issue.
-* Be sure to provide logs if you report crashes. Logs can be found in the logs directory of your Irony install.
+* Be sure to provide logs if you report crashes. Logs can be found in the %AppData%\Mario\IronyModManager-Logs directory.
 
 ### Video Tutorials
 
