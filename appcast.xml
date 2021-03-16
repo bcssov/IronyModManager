@@ -4,6 +4,78 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
+			<title>1.13.80-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.12:
+* Updated dependencies
+* Updated Avalonia (UI framework)
+* Removed some themes
+* Added new themes
+* Updated parser to conform Stellaris 2.9 specs
+* Fixed Win 7 crash when using CJK fonts
+* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
+* Add option to set position of notifications (bottom or top corners)
+* Various improvements and fixes</description>
+			<pubDate>Tue, 16 Mar 2021 20:30:44 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/osx-x64.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="66984888" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="q/GFJp0vuXKP4AoX1S1yeFh3LgTNp9ymUpKZAs8SDdQGBrhE8Tu/RcgSM+Yn5ezmP0HdMSlqJN4gy282UnLTBA=="/>
+		</item>
+		<item>
+			<title>1.13.80-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.12:
+* Updated dependencies
+* Updated Avalonia (UI framework)
+* Removed some themes
+* Added new themes
+* Updated parser to conform Stellaris 2.9 specs
+* Fixed Win 7 crash when using CJK fonts
+* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
+* Add option to set position of notifications (bottom or top corners)
+* Various improvements and fixes</description>
+			<pubDate>Tue, 16 Mar 2021 20:30:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/win-x64-setup.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="57929044" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NaVGrsstaJYm675l49s2qA8FoC/PMfpgspbybkmjsu93LaVy2+Zvc4rBNOq0zdRysM1c0X+XqFAbezgQH18oBQ=="/>
+		</item>
+		<item>
+			<title>1.13.80-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.12:
+* Updated dependencies
+* Updated Avalonia (UI framework)
+* Removed some themes
+* Added new themes
+* Updated parser to conform Stellaris 2.9 specs
+* Fixed Win 7 crash when using CJK fonts
+* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
+* Add option to set position of notifications (bottom or top corners)
+* Various improvements and fixes</description>
+			<pubDate>Tue, 16 Mar 2021 20:30:48 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/win-x64.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="69738958" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="d13KszJIwGwaYNw99EtGtgzAVjk1pH31XdllGZETKunv+mj9JZYy2OA5F7N9kpjyGeyUuBy6ZMPC3dISCB1JCA=="/>
+		</item>
+		<item>
+			<title>1.13.80-alpha</title>
+			<description>NOTE:
+Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+CHANGES FROM v1.12:
+* Updated dependencies
+* Updated Avalonia (UI framework)
+* Removed some themes
+* Added new themes
+* Updated parser to conform Stellaris 2.9 specs
+* Fixed Win 7 crash when using CJK fonts
+* Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
+* Add option to set position of notifications (bottom or top corners)
+* Various improvements and fixes</description>
+			<pubDate>Tue, 16 Mar 2021 20:30:41 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/linux-x64.zip" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="83055885" sparkle:os="linux" type="application/zip" sparkle:signature="SLB8fBW3hCNoeZbekmn1TxrzCbjgrsHEfns2Tu9b4vSbwqsLYYFagN/fc97C5vDhTtZbhApbVzcsfAwBNlnwCg=="/>
+		</item>
+		<item>
 			<title>1.12.126</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
