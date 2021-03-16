@@ -123,12 +123,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The previous validated mods
         /// </summary>
-        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
+        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new();
 
         /// <summary>
         /// The reorder lock
         /// </summary>
-        private readonly AsyncLock reorderLock = new AsyncLock();
+        private readonly AsyncLock reorderLock = new();
 
         /// <summary>
         /// The reorder queue

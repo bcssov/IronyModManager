@@ -265,7 +265,7 @@ namespace IronyModManager.Services
                 descriptors.AddRange(userDirectoryMods);
             }
             var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam));
-            if (workshopDirectoryMods?.Count() > 0)
+            if (workshopDirectoryMods.Any())
             {
                 descriptors.AddRange(workshopDirectoryMods);
             }
