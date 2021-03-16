@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-13-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -57,7 +57,7 @@ namespace IronyModManager.Implementation
                 WindowIcon = StaticResources.GetAppIcon()
             };
             var window = new Controls.Themes.CustomMessageBox(parameters.Style);
-            window.DataContext = new MsBoxCustomViewModel(parameters, window);
+            window.DataContext = new MsBoxCustomViewModel(new MsCustomParams(parameters), window);
             return window;
         }
 

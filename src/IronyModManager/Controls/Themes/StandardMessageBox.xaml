@@ -19,9 +19,7 @@
     <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />
     <KeyBinding Gesture="Escape" Command="{Binding EscClickCommand}" />
   </Window.KeyBindings>
-  <Design.DataContext>
 
-  </Design.DataContext>
 
   <Window.Styles>
     <Style Selector="TextBox">
