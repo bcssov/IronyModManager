@@ -71,7 +71,7 @@
       <!--Bold text-->
       <controls:TextBox Grid.Row="0" Classes="header" FontFamily="{Binding FontFamily}" Text="{Binding ContentHeader}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="100" MinHeight="40" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
+      <controls:TextBox Grid.Row="2" FontFamily="{Binding FontFamily}" Text="{Binding ContentMessage}" MinWidth="500" MinHeight="40" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
     </Grid>
     <!--Buttons-->
     <ItemsPresenter Items="{Binding ButtonDefinitions}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
