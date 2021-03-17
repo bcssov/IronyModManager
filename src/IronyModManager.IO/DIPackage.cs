@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using IronyModManager.DI.Extensions;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.DLC;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Mods.Models;
@@ -62,6 +63,7 @@ namespace IronyModManager.IO
             container.Register<ITempFile, TempFile.TempFile>();
             container.RemoveTransientWarning<ITempFile>();
             container.Register<IDLCExporter, DLCExporter>();
+            container.Register<IDriveInfoProvider, DriveInfoProvider>();
         }
 
         #endregion Methods
