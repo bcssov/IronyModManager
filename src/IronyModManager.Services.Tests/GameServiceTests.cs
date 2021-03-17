@@ -496,7 +496,8 @@ namespace IronyModManager.Services.Tests
                 Type = "game 1",
                 WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "args",
-                ExecutableLocation = "test.exe"
+                ExecutableLocation = "test.exe",
+                BaseSteamGameDirectory = @"c:\steam\stellaris"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
