@@ -4,15 +4,15 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="IModMergeService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IronyModManager.Models.Common;
 
@@ -24,6 +24,13 @@ namespace IronyModManager.Services.Common
     public interface IModMergeService
     {
         #region Methods
+
+        /// <summary>
+        /// Determines whether [has enough free space asynchronous] [the specified collection name].
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> HasEnoughFreeSpaceAsync(string collectionName);
 
         /// <summary>
         /// Merges the collection by files asynchronous.

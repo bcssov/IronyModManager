@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -56,6 +57,11 @@ namespace IronyModManager.Services
         private static readonly AsyncLock zipLock = new();
 
         /// <summary>
+        /// The drive information provider
+        /// </summary>
+        private readonly IDriveInfoProvider driveInfoProvider;
+
+        /// <summary>
         /// The message bus
         /// </summary>
         private readonly IMessageBus messageBus;
@@ -82,6 +88,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModMergeService" /> class.
         /// </summary>
+        /// <param name="driveInfoProvider">The drive information provider.</param>
         /// <param name="modMergeCompressExporter">The mod merge compress exporter.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
@@ -94,12 +101,14 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModMergeService(IModMergeCompressExporter modMergeCompressExporter, ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
+        public ModMergeService(IDriveInfoProvider driveInfoProvider, IModMergeCompressExporter modMergeCompressExporter,
+            ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
             IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.driveInfoProvider = driveInfoProvider;
             this.modMergeCompressExporter = modMergeCompressExporter;
             this.messageBus = messageBus;
             this.modMergeExporter = modMergeExporter;
@@ -109,6 +118,51 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// has enough free space as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;bool&gt;.</returns>
+        public virtual async Task<bool> HasEnoughFreeSpaceAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return false;
+            }
+
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var collectionMods = GetCollectionMods(allMods).ToList();
+            if (collectionMods.Count == 0)
+            {
+                return false;
+            }
+            await PopulateModFilesInternalAsync(collectionMods);
+            var totalFiles = collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files).Count();
+            double lastPercentage = 0;
+            var processed = 0;
+            long requiredSize = 0;
+            foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
+            {
+                foreach (var file in collectionMod.Files)
+                {
+                    var info = Reader.GetFileInfo(collectionMod.FullPath, file);
+                    if (info != null)
+                    {
+                        requiredSize += info.Size;
+                    }
+                    processed++;
+                    var percentage = GetProgressPercentage(totalFiles, processed, 100);
+                    if (lastPercentage != percentage)
+                    {
+                        await messageBus.PublishAsync(new ModMergeFreeSpaceCheckEvent(percentage));
+                    }
+                    lastPercentage = percentage;
+                }
+            }
+            return driveInfoProvider.HasFreeSpace(game.UserDirectory, requiredSize);
+        }
 
         /// <summary>
         /// Merges the collection by files asynchronous.
