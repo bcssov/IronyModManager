@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -126,7 +126,7 @@ namespace IronyModManager.IO.Readers
             catch (Exception ex)
             {
                 logger.Error(ex);
-                return getUsingReaderFactory();            
+                return getUsingReaderFactory();
             }
         }
 
@@ -203,7 +203,7 @@ namespace IronyModManager.IO.Readers
 
             try
             {
-                return (getUsingArchiveFactory(), false);                
+                return (getUsingArchiveFactory(), false);
             }
             catch (Exception ex)
             {
@@ -239,6 +239,7 @@ namespace IronyModManager.IO.Readers
                         }
                         var info = DIResolver.Get<IFileInfo>();
                         info.IsReadOnly = false;
+                        info.Size = reader.Entry.Size;
                         using var entryStream = reader.OpenEntryStream();
                         using var memoryStream = new MemoryStream();
                         entryStream.CopyTo(memoryStream);
@@ -307,7 +308,7 @@ namespace IronyModManager.IO.Readers
             {
                 logger.Error(ex);
                 result = new List<IFileInfo>();
-                parseUsingReaderFactory();                
+                parseUsingReaderFactory();
             }
 
             return result.Count != 0 ? result : null;

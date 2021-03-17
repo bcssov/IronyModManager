@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -76,6 +76,7 @@ namespace IronyModManager.IO.Readers
                 var info = DIResolver.Get<IFileInfo>();
                 info.FileName = file;
                 info.IsReadOnly = fileInfo.Item2;
+                info.Size = stream.Length;
                 if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
                 {
                     using var streamReader = new StreamReader(stream, true);
