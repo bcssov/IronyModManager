@@ -181,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Checking available disk space...",
             "Options": {
                 "Title": "Select mode",
                 "Basic": "Basic",
@@ -479,6 +480,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Conflict Solver Refresh",
             "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Not enough free space",
+            "Message": "There is not enough free space to perform merge operation."
         }
     },
     "Mod_App_Actions": {

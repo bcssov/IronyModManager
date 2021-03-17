@@ -4,7 +4,7 @@
 // Created          : 01-17-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -145,7 +145,7 @@ namespace IronyModManager.Shared
                 /// <summary>
                 /// The map
                 /// </summary>
-                public static readonly Dictionary<string, string> Map = new Dictionary<string, string>() { { CurlyBracket, "}" } };
+                public static readonly Dictionary<string, string> Map = new() { { CurlyBracket, "}" } };
 
                 #endregion Fields
             }

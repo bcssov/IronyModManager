@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -82,6 +82,7 @@ namespace IronyModManager.DI
             container.Register<ModListInstallRefreshRequestHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<IThemeManager, ThemeManager>();
             container.Collection.Register(typeof(IThemeResources), typeof(DIPackage).Assembly);
+            container.Register<ModMergeFreeSpaceCheckHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

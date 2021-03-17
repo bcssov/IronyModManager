@@ -181,6 +181,7 @@
             "MergedCollectionPrefix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Spojeno {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Provjera dostupnog prostora na disku...",
             "Options": {
                 "Title": "Odaberi način",
                 "Basic": "Osnovno",
@@ -479,6 +480,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Osvježi rješenje za rješavanje sukoba",
             "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene zakrpe. Ponovite postupak rješavanja sukoba."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Nema dovoljno slobodnog prostora",
+            "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
         }
     },
     "Mod_App_Actions": {

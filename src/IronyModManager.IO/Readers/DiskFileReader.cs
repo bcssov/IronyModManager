@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -87,6 +87,22 @@ namespace IronyModManager.IO
         }
 
         /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetFileSize(string rootPath, string file)
+        {
+            var path = Path.Combine(rootPath, file);
+            if (File.Exists(path))
+            {
+                return new System.IO.FileInfo(path).Length;
+            }
+            return 0;
+        }
+
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -141,7 +157,9 @@ namespace IronyModManager.IO
                         continue;
                     }
                     var info = DIResolver.Get<IFileInfo>();
-                    info.IsReadOnly = new System.IO.FileInfo(file).IsReadOnly;
+                    var fileInfo = new System.IO.FileInfo(file);
+                    info.IsReadOnly = fileInfo.IsReadOnly;
+                    info.Size = fileInfo.Length;
                     using var stream = File.OpenRead(file);
                     info.FileName = relativePath;
                     if (Constants.TextExtensions.Any(s => file.EndsWith(s, StringComparison.OrdinalIgnoreCase)))
