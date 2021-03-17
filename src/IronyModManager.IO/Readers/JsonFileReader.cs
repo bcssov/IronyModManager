@@ -72,6 +72,22 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetFileSize(string rootPath, string file)
+        {
+            var path = Path.Combine(rootPath, file);
+            if (File.Exists(path))
+            {
+                return new System.IO.FileInfo(path).Length;
+            }
+            return 0;
+        }
+
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>

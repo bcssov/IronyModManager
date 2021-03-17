@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="ReaderTests.cs" company="Mario">
 //     Mario
@@ -271,6 +271,17 @@ namespace IronyModManager.IO.Tests
             }
 
             /// <summary>
+            /// Gets the size of the file.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>System.Int64.</returns>
+            public long GetFileSize(string rootPath, string file)
+            {
+                return 0;
+            }
+
+            /// <summary>
             /// Gets the stream.
             /// </summary>
             /// <param name="rootPath">The root path.</param>
@@ -346,6 +357,17 @@ namespace IronyModManager.IO.Tests
             public IEnumerable<string> GetFiles(string path)
             {
                 return new List<string>() { "fake12.txt" };
+            }
+
+            /// <summary>
+            /// Gets the size of the file.
+            /// </summary>
+            /// <param name="rootPath">The root path.</param>
+            /// <param name="file">The file.</param>
+            /// <returns>System.Int64.</returns>
+            public long GetFileSize(string rootPath, string file)
+            {
+                return 0;
             }
 
             /// <summary>

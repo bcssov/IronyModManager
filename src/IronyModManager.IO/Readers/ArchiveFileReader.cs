@@ -131,6 +131,58 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetFileSize(string rootPath, string file)
+        {
+            long getUsingReaderFactory()
+            {
+                using var fileStream = File.OpenRead(rootPath);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                        var filePath = file.StandardizeDirectorySeparator();
+                        if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return reader.Entry.Size;
+                        }
+                    }
+                }
+                return 0;
+            }
+            long getUsingArchiveFactory()
+            {
+                using var fileStream = File.OpenRead(rootPath);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
+                    var filePath = file.StandardizeDirectorySeparator();
+                    if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return entry.Size;
+                    }
+                }
+                return 0;
+            }
+            try
+            {
+                return getUsingArchiveFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return getUsingReaderFactory();
+            }
+        }
+
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>

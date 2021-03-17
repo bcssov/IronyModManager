@@ -147,11 +147,7 @@ namespace IronyModManager.Services
             {
                 foreach (var file in collectionMod.Files)
                 {
-                    var info = Reader.GetFileInfo(collectionMod.FullPath, file);
-                    if (info != null)
-                    {
-                        requiredSize += info.Size;
-                    }
+                    requiredSize += Reader.GetFileSize(collectionMod.FullPath, file);
                     processed++;
                     var percentage = GetProgressPercentage(totalFiles, processed, 100);
                     if (lastPercentage != percentage)

@@ -181,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "步骤 {Count}/{TotalCount}：{PercentDone}",
+            "DiskInfoOverlay": "正在检查可用的磁盘空间...",
             "Options": {
                 "Title": "选择模式",
                 "Basic": "基础",
@@ -479,6 +480,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "刷新冲突处理器",
             "Message": "因添加新自定义补丁，需要刷新冲突处理器。请重新运行冲突处理器。"
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "没有足够的自由空间",
+            "Message": "没有足够的可用空间来执行合并操作。"
         }
     },
     "Mod_App_Actions": {

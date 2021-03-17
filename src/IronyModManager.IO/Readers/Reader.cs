@@ -67,7 +67,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>IFileInfo.</returns>
-        public IFileInfo GetFileInfo(string rootPath, string file)
+        public virtual IFileInfo GetFileInfo(string rootPath, string file)
         {
             var fileInfo = GetStreamInternal(rootPath, file);
             using var stream = fileInfo.Item1;
@@ -113,13 +113,31 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetFileSize(string rootPath, string file)
+        {
+            rootPath ??= string.Empty;
+            file ??= string.Empty;
+            var reader = readers.FirstOrDefault(p => p.CanRead(rootPath) && p.CanListFiles(rootPath));
+            if (reader != null)
+            {
+                return reader.GetFileSize(rootPath, file);
+            }
+            return 0;
+        }
+
+        /// <summary>
         /// Gets the image stream asynchronous.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Task&lt;MemoryStream&gt;.</returns>
 
-        public Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
+        public virtual Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
@@ -135,7 +153,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="rootPath">The root path.</param>
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
-        public Stream GetStream(string rootPath, string file)
+        public virtual Stream GetStream(string rootPath, string file)
         {
             return GetStreamInternal(rootPath, file).Item1;
         }
@@ -146,7 +164,7 @@ namespace IronyModManager.IO.Readers
         /// <param name="path">The path.</param>
         /// <param name="allowedPaths">The allowed paths.</param>
         /// <returns>IEnumerable&lt;IFileInfo&gt;.</returns>
-        public IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
+        public virtual IEnumerable<IFileInfo> Read(string path, IEnumerable<string> allowedPaths = null)
         {
             path ??= string.Empty;
             var reader = readers.FirstOrDefault(r => r.CanRead(path));

@@ -181,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Comprobando el espacio disponible en disco...",
             "Options": {
                 "Title": "Seleccionar Modo",
                 "Basic": "Basico",
@@ -479,6 +480,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Actualización del Solucionador de conflictos",
             "Message": "El Solucionador de conflictos debe actualizarse para tener en cuenta los nuevos parches personalizados añadidos. Vuelva a ejecutar el solucionador de conflictos."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "No hay suficiente espacio libre",
+            "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
         }
     },
     "Mod_App_Actions": {

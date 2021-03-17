@@ -4,18 +4,19 @@
 // Created          : 03-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 01-29-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="NotificationAction.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Shared;
 using MessageBox.Avalonia.Enums;
 
@@ -70,19 +71,11 @@ namespace IronyModManager.Implementation.Actions
                 NotificationType.Error => Avalonia.Controls.Notifications.NotificationType.Error,
                 _ => Avalonia.Controls.Notifications.NotificationType.Information,
             };
-            if (Dispatcher.UIThread.CheckAccess())
+            Dispatcher.UIThread.SafeInvoke(() =>
             {
                 var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout), onClick);
                 notificationFactory.GetManager().Show(model);
-            }
-            else
-            {
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    var model = new Notification(title, message, type, TimeSpan.FromSeconds(timeout), onClick);
-                    notificationFactory.GetManager().Show(model);
-                });
-            }
+            });
         }
 
         /// <summary>
