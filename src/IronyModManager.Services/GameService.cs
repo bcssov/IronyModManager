@@ -143,6 +143,7 @@ namespace IronyModManager.Services
             {
                 model.UserDirectory = game.UserDirectory;
             }
+            model.CustomModDirectory = string.Empty;
             return model;
         }
 
@@ -174,6 +175,7 @@ namespace IronyModManager.Services
                     model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
                     model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
                     model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
+                    model.CustomModDirectory = string.Empty;
                     return model;
                 }
                 catch
@@ -223,6 +225,7 @@ namespace IronyModManager.Services
             model.RefreshDescriptors = game.RefreshDescriptors;
             model.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             model.Type = game.Type;
+            model.CustomModDirectory = string.Empty;
             return model;
         }
 
@@ -398,6 +401,7 @@ namespace IronyModManager.Services
             game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
             game.Abrv = gameType.Abrv;
             game.CloseAppAfterGameLaunch = true;
+            game.CustomModDirectory = string.Empty;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)
@@ -417,6 +421,10 @@ namespace IronyModManager.Services
                 {
                     setUserDirLocation = false;
                     game.UserDirectory = gameSettings.UserDirectory;
+                }
+                if (!string.IsNullOrWhiteSpace(gameSettings.CustomModDirectory))
+                {
+                    game.CustomModDirectory = gameSettings.CustomModDirectory;
                 }
             }
             if (setExeLocation || setUserDirLocation)
@@ -458,6 +466,7 @@ namespace IronyModManager.Services
             settings.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             settings.RefreshDescriptors = game.RefreshDescriptors;
             settings.UserDirectory = game.UserDirectory;
+            settings.CustomModDirectory = game.CustomModDirectory;
             StorageProvider.SetGameSettings(gameSettings);
         }
 
