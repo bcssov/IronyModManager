@@ -119,9 +119,13 @@ namespace IronyModManager.Services.Tests
             });
 
             SetupMockCase(reader, modParser);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods" });
+            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods", CustomModDirectory = string.Empty });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
@@ -500,7 +504,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_install_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\workshop" }
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -508,6 +513,10 @@ namespace IronyModManager.Services.Tests
                 {
                     FileName = o.FileName
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var result = await service.InstallModsAsync(null);
@@ -537,7 +546,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = new List<string>() { "C:\\workshop" }
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -567,6 +577,10 @@ namespace IronyModManager.Services.Tests
                      IsBinary = false
                  };
              });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var result = await service.InstallModsAsync(null);
             result.Count.Should().BeGreaterThan(0);
@@ -596,7 +610,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = new List<string>() { "C:\\workshop" }
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -632,6 +647,10 @@ namespace IronyModManager.Services.Tests
                     FileName = "fake.mod",
                     IsBinary = false
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var result = await service.InstallModsAsync(new List<IMod> { new Mod()
@@ -960,7 +979,12 @@ namespace IronyModManager.Services.Tests
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = new List<string>() { "C:\\workshop" },
-                ChecksumFolders = new List<string>() { "common", "events" }
+                ChecksumFolders = new List<string>() { "common", "events" },
+                CustomModDirectory = string.Empty
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             result = await service.GetImageStreamAsync("test", string.Empty);
@@ -992,11 +1016,16 @@ namespace IronyModManager.Services.Tests
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
                 WorkshopDirectory = new List<string>() { "C:\\workshop" },
-                ChecksumFolders = new List<string>() { "common", "events" }
+                ChecksumFolders = new List<string>() { "common", "events" },
+                CustomModDirectory = string.Empty
             });
 
             SetupMockCase(reader, modParser);
             reader.Setup(p => p.GetImageStreamAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new MemoryStream()));
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.GetImageStreamAsync("1", "test");

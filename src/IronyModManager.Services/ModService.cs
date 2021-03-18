@@ -169,8 +169,7 @@ namespace IronyModManager.Services
             };
             if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = mod.FileName
+                RootDirectory = mod.FullPath                
             }))
             {
                 if (modCollection.PatchModEnabled && enabledMods.Any())
@@ -263,6 +262,14 @@ namespace IronyModManager.Services
             if (userDirectoryMods?.Count() > 0)
             {
                 descriptors.AddRange(userDirectoryMods);
+            }
+            if (!string.IsNullOrWhiteSpace(game.CustomModDirectory))
+            {
+                var customMods = GetAllModDescriptors(GetModDirectoryRootPath(game), ModSource.Local);
+                if (customMods != null && customMods.Any())
+                {
+                    descriptors.AddRange(customMods);
+                }
             }
             var workshopDirectoryMods = game.WorkshopDirectory.SelectMany(p => GetAllModDescriptors(p, ModSource.Steam));
             if (workshopDirectoryMods.Any())
@@ -364,18 +371,27 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="folder">The folder.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public virtual Task<bool> ModDirectoryExistsAsync(string folder)
+        public virtual async Task<bool> ModDirectoryExistsAsync(string folder)
         {
             var game = GameService.GetSelected();
             if (game == null)
             {
-                return Task.FromResult(false);
+                return false;
             }
-            return ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {
                 RootDirectory = game.UserDirectory,
                 Path = Path.Combine(Shared.Constants.ModDirectory, folder)
             });
+            if (!result && !string.IsNullOrEmpty(game.CustomModDirectory))
+            {
+                result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+                {
+                    RootDirectory = GetModDirectoryRootPath(game),
+                    Path = folder
+                });
+            }
+            return result;
         }
 
         /// <summary>
@@ -411,10 +427,17 @@ namespace IronyModManager.Services
                 return false;
             }
             var fullPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, folder);
+            var exists = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+            {
+                RootDirectory = fullPath
+            });
+            if (!exists)
+            {
+                fullPath = Path.Combine(GetModDirectoryRootPath(game), folder);
+            }
             var result = await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, folder)
+                RootDirectory = fullPath
             }, true);
             var mods = GetInstalledModsInternal(game, false);
             if (mods.Any(p => !string.IsNullOrWhiteSpace(p.FullPath) && p.FullPath.Contains(fullPath)))
