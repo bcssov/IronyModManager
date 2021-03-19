@@ -365,7 +365,8 @@
             "GameArgs": "Game Launch Options",
             "RefreshMods": "Refresh Descriptors Before Playing",
             "CloseAfterLaunch": "Close After Launching Game",
-            "AutoConfigure": "Configure All..."
+            "AutoConfigure": "Configure All...",
+            "CustoModPath": "Custom Mod Directory"
         },
         "Updates": {
             "Title": "Update Options",
@@ -397,7 +398,14 @@
             "ExeTitle": "Find game executable",
             "GameRootTitle": "Find game root directory",
             "UserDirTitle": "Find game data directory",
-            "EditorTitle": "Find editor executable"
+            "EditorTitle": "Find editor executable",
+            "CustomModPathTitle": "Find custom mod directory"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Not Empty",
+                "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
+            }
         }
     },
     "Notifications": {

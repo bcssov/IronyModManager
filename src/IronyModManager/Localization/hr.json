@@ -365,7 +365,8 @@
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
-            "AutoConfigure": "Konfiguriraj sve..."
+            "AutoConfigure": "Konfiguriraj sve...",
+            "CustoModPath": "Prilagođeni direktorij modova"
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",
@@ -397,7 +398,14 @@
             "ExeTitle": "Nađi izvršnu datoteku igre",
             "GameRootTitle": "Pronađite osnovni direktorij igre",
             "UserDirTitle": "Pronađite direktorij podataka o igri",
-            "EditorTitle": "Nađi izvršnu dateoteku editora"
+            "EditorTitle": "Nađi izvršnu dateoteku editora",
+            "CustomModPathTitle": "Pronađite prilagođeni mod direktorij"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Nije prazno",
+                "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
+            }
         }
     },
     "Notifications": {

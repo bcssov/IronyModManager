@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -150,6 +150,11 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
 
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModService modService;
+
         #endregion Fields
 
         #region Constructors
@@ -157,6 +162,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modService">The mod service.</param>
         /// <param name="positionSettingsService">The position settings service.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
@@ -167,7 +173,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(INotificationPositionSettingsService positionSettingsService,
+        public OptionsControlViewModel(IModService modService, INotificationPositionSettingsService positionSettingsService,
             IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
@@ -182,6 +188,7 @@ namespace IronyModManager.ViewModels.Controls
             this.logger = logger;
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
+            this.modService = modService;
             LeftMargin = new Thickness(20, 0, 0, 0);
             LeftChildMargin = new Thickness(20, 10, 0, 0);
         }
@@ -189,6 +196,13 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the custo mod path.
+        /// </summary>
+        /// <value>The custo mod path.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.CustoModPath)]
+        public virtual string CustoModPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets the application options title.
@@ -415,6 +429,13 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string NavigateUserDirTitle { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the navigate custom user dir title.
+        /// </summary>
+        /// <value>The navigate custom user dir title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.CustomModPathTitle)]
+        public virtual string NavigateCustomUserDirTitle { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the notification position.
         /// </summary>
         /// <value>The notification position.</value>
@@ -471,6 +492,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The reset directory command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset custom directory command.
+        /// </summary>
+        /// <value>The reset custom directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetCustomDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate custom directory command.
+        /// </summary>
+        /// <value>The navigate custom directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateCustomDirectoryCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset editor arguments command.
@@ -773,6 +806,42 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            NavigateCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateUserDirTitle);
+                var save = !string.IsNullOrEmpty(result);
+                if (save && !await modService.CustomModDirectoryEmptyAsync(Game.Type))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+                }
+                IsOpen = true;
+                if (save)
+                {
+                    Game.CustomModDirectory = result;
+                    SaveGame();
+                }
+            }).DisposeWith(disposables);
+
+            ResetCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var save = true;
+                if (!await modService.CustomModDirectoryEmptyAsync(Game.Type))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+                }
+                if (save)
+                {
+                    var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                    Game.CustomModDirectory = defaultSettings.CustomModDirectory;
+                    SaveGame();
+                }                
+            }).DisposeWith(disposables);
+
             updater.Error.Subscribe(s =>
             {
                 var title = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorTitle);
@@ -835,9 +904,11 @@ namespace IronyModManager.ViewModels.Controls
             game.CloseAppAfterGameLaunch = Game.CloseAppAfterGameLaunch;
             bool dirChanged = game.UserDirectory != Game.UserDirectory;
             game.UserDirectory = Game.UserDirectory;
-            if (gameService.Save(game) && dirChanged)
+            bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
+            game.CustomModDirectory = Game.CustomModDirectory;
+            if (gameService.Save(game) && (dirChanged)|| customDirectoryChanged)
             {
-                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
+                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
             }
             SetGame(game);
         }

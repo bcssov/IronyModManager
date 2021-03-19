@@ -365,7 +365,8 @@
             "GameArgs": "启动参数",
             "RefreshMods": "启动前刷新模组描述文件",
             "CloseAfterLaunch": "启动游戏后关闭",
-            "AutoConfigure": "设置全部……"
+            "AutoConfigure": "设置全部……",
+            "CustoModPath": "自定义Mod目录"
         },
         "Updates": {
             "Title": "更新选项",
@@ -397,7 +398,14 @@
             "ExeTitle": "选择游戏可执行文件",
             "GameRootTitle": "选择游戏根目录",
             "UserDirTitle": "选择游戏数据目录",
-            "EditorTitle": "查找编辑器可执行文件"
+            "EditorTitle": "查找编辑器可执行文件",
+            "CustomModPathTitle": "查找自定义mod目录"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "不是空的",
+                "Message": "如果您现在更改它，自定义mod目录不为空，您可能会丢失一些mods。 你确定要改变它吗？"
+            }
         }
     },
     "Notifications": {

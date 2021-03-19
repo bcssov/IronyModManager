@@ -120,6 +120,10 @@ namespace IronyModManager.Services
             {
                 return true;
             }
+            if (string.IsNullOrWhiteSpace(game.CustomModDirectory))
+            {
+                return true;
+            }
             var path = GetModDirectoryRootPath(game);
             var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {

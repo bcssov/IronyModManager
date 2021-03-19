@@ -365,7 +365,8 @@
             "GameArgs": "Game Args",
             "RefreshMods": "Refrescar Descriptors antes de jugar",
             "CloseAfterLaunch": "Cerrar después de iniciar el juego",
-            "AutoConfigure": "Configurar todo..."
+            "AutoConfigure": "Configurar todo...",
+            "CustoModPath": "Directorio de mod personalizado"
         },
         "Updates": {
             "Title": "Opciones de Actualización",
@@ -397,7 +398,14 @@
             "ExeTitle": "Encuentra el ejecutable del juego",
             "GameRootTitle": "Encuentra el directorio raíz del juego",
             "UserDirTitle": "Encuentra el directorio de datos del juego",
-            "EditorTitle": "Buscar editor ejecutable"
+            "EditorTitle": "Buscar editor ejecutable",
+            "CustomModPathTitle": "Encuentra un directorio de mod personalizado"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "No vacío",
+                "Message": "El directorio MOD personalizado no está vacío si lo cambia ahora, puede perder algunos mods. ¿Estás seguro de que quieres cambiarlo?"
+            }
         }
     },
     "Notifications": {

@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -801,8 +801,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Resets this instance.
         /// </summary>
-        public virtual void Reset()
+        /// <param name="fullReset">The full reset.</param>
+        public virtual void Reset(bool fullReset = false)
         {
+            if (fullReset)
+            {
+                previousValidatedMods.Clear();
+            }
             PatchMod.SetParameters(SelectedModCollection);
             HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
@@ -1654,6 +1659,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="instant">if set to <c>true</c> [instant].</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task PerformModReorderAsync(bool instant, CancellationToken cancellationToken)
         {
             if (!instant)
@@ -1834,6 +1840,7 @@ namespace IronyModManager.ViewModels.Controls
         /// schedule to reorder queue as an asynchronous operation.
         /// </summary>
         /// <param name="mod">The mod.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ScheduleToReorderQueueAsync(IMod mod)
         {
             if (!reorderQueue.Contains(mod))
