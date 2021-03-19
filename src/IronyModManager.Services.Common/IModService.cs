@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="IModService.cs" company="Mario">
 //     Mario
@@ -41,6 +41,13 @@ namespace IronyModManager.Services.Common
         /// <param name="mod">The mod.</param>
         /// <returns>System.String.</returns>
         string BuildSteamUrl(IMod mod);
+
+        /// <summary>
+        /// Customs the mod directory empty asynchronous.
+        /// </summary>
+        /// <param name="gameType">Type of the game.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        Task<bool> CustomModDirectoryEmptyAsync(string gameType);
 
         /// <summary>
         /// Deletes the descriptors asynchronous.

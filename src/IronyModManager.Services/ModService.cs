@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -109,6 +109,26 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Customs the mod directory empty asynchronous.
+        /// </summary>
+        /// <param name="gameType">Type of the game.</param>
+        /// <returns>Task&lt;System.Boolean&gt;.</returns>
+        public virtual async Task<bool> CustomModDirectoryEmptyAsync(string gameType)
+        {
+            var game = GameService.Get().FirstOrDefault(p => p.Type.Equals(gameType));
+            if (game == null)
+            {
+                return true;
+            }
+            var path = GetModDirectoryRootPath(game);
+            var result = await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
+            {
+                RootDirectory = path
+            });
+            return !result;
+        }
+
+        /// <summary>
         /// delete descriptors as an asynchronous operation.
         /// </summary>
         /// <param name="mods">The mods.</param>
@@ -169,7 +189,7 @@ namespace IronyModManager.Services
             };
             if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
             {
-                RootDirectory = mod.FullPath                
+                RootDirectory = mod.FullPath
             }))
             {
                 if (modCollection.PatchModEnabled && enabledMods.Any())
