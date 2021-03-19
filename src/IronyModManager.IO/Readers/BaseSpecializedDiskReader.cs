@@ -4,7 +4,7 @@
 // Created          : 02-13-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="BaseSpecializedDiskReader.cs" company="Mario">
 //     Mario
@@ -94,22 +94,6 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
-        /// Gets the size of the file.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>System.Int64.</returns>
-        public virtual long GetFileSize(string rootPath, string file)
-        {
-            var path = Path.Combine(rootPath, file);
-            if (File.Exists(path))
-            {
-                return new System.IO.FileInfo(path).Length;
-            }
-            return 0;
-        }
-
-        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -117,6 +101,17 @@ namespace IronyModManager.IO.Readers
         /// <returns>Stream.</returns>
         /// <exception cref="NotSupportedException"></exception>
         public virtual (Stream, bool) GetStream(string rootPath, string file)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
+        /// Gets the total size.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public virtual long GetTotalSize(string path)
         {
             throw new NotSupportedException();
         }

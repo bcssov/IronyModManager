@@ -276,7 +276,7 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>System.Int64.</returns>
-            public long GetFileSize(string rootPath, string file)
+            public long GetTotalSize(string path)
             {
                 return 0;
             }
@@ -365,7 +365,7 @@ namespace IronyModManager.IO.Tests
             /// <param name="rootPath">The root path.</param>
             /// <param name="file">The file.</param>
             /// <returns>System.Int64.</returns>
-            public long GetFileSize(string rootPath, string file)
+            public long GetTotalSize(string path)
             {
                 return 0;
             }

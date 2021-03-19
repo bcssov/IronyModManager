@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -87,22 +87,6 @@ namespace IronyModManager.IO
         }
 
         /// <summary>
-        /// Gets the size of the file.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>System.Int64.</returns>
-        public virtual long GetFileSize(string rootPath, string file)
-        {
-            var path = Path.Combine(rootPath, file);
-            if (File.Exists(path))
-            {
-                return new System.IO.FileInfo(path).Length;
-            }
-            return 0;
-        }
-
-        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -133,6 +117,29 @@ namespace IronyModManager.IO
                 }
             }
             return (null, false);
+        }
+
+        /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetTotalSize(string path)
+        {
+            var files = GetFiles(path);
+            long total = 0;
+            if (files.Any())
+            {
+                foreach (var item in files)
+                {
+                    var info = new System.IO.FileInfo(item);
+                    if (info != null)
+                    {
+                        total += info.Length;
+                    }
+                }
+            }
+            return total;
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -138,24 +138,20 @@ namespace IronyModManager.Services
             {
                 return false;
             }
-            await PopulateModFilesInternalAsync(collectionMods);
-            var totalFiles = collectionMods.Where(p => p.Files != null).SelectMany(p => p.Files).Count();
+            var totalFiles = collectionMods.Count;
             double lastPercentage = 0;
             var processed = 0;
             long requiredSize = 0;
-            foreach (var collectionMod in collectionMods.Where(p => p.Files != null))
+            foreach (var collectionMod in collectionMods)
             {
-                foreach (var file in collectionMod.Files)
+                requiredSize += Reader.GetTotalSize(collectionMod.FullPath);
+                processed++;
+                var percentage = GetProgressPercentage(totalFiles, processed, 100);
+                if (lastPercentage != percentage)
                 {
-                    requiredSize += Reader.GetFileSize(collectionMod.FullPath, file);
-                    processed++;
-                    var percentage = GetProgressPercentage(totalFiles, processed, 100);
-                    if (lastPercentage != percentage)
-                    {
-                        await messageBus.PublishAsync(new ModMergeFreeSpaceCheckEvent(percentage));
-                    }
-                    lastPercentage = percentage;
+                    await messageBus.PublishAsync(new ModMergeFreeSpaceCheckEvent(percentage));
                 }
+                lastPercentage = percentage;
             }
             return driveInfoProvider.HasFreeSpace(GetPatchModDirectory(game, collectionName), requiredSize);
         }

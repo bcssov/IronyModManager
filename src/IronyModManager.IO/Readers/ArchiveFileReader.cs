@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -131,58 +131,6 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
-        /// Gets the size of the file.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>System.Int64.</returns>
-        public virtual long GetFileSize(string rootPath, string file)
-        {
-            long getUsingReaderFactory()
-            {
-                using var fileStream = File.OpenRead(rootPath);
-                using var reader = ReaderFactory.Open(fileStream);
-                while (reader.MoveToNextEntry())
-                {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        var relativePath = reader.Entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                        var filePath = file.StandardizeDirectorySeparator();
-                        if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return reader.Entry.Size;
-                        }
-                    }
-                }
-                return 0;
-            }
-            long getUsingArchiveFactory()
-            {
-                using var fileStream = File.OpenRead(rootPath);
-                using var reader = ArchiveFactory.Open(fileStream);
-                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
-                {
-                    var relativePath = entry.Key.StandardizeDirectorySeparator().Trim(Path.DirectorySeparatorChar);
-                    var filePath = file.StandardizeDirectorySeparator();
-                    if (relativePath.Equals(filePath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return entry.Size;
-                    }
-                }
-                return 0;
-            }
-            try
-            {
-                return getUsingArchiveFactory();
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex);
-                return getUsingReaderFactory();
-            }
-        }
-
-        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -261,6 +209,49 @@ namespace IronyModManager.IO.Readers
             {
                 logger.Error(ex);
                 return (getUsingReaderFactory(), false);
+            }
+        }
+
+        /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetTotalSize(string path)
+        {           
+            long getUsingReaderFactory()
+            {
+                long total = 0;
+                using var fileStream = File.OpenRead(path);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        total += reader.Entry.Size;
+                    }
+                }
+                return total;
+            }
+            long getUsingArchiveFactory()
+            {
+                long total = 0;
+                using var fileStream = File.OpenRead(path);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    total += entry.Size;
+                }
+                return total;
+            }
+            try
+            {
+                return getUsingArchiveFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return getUsingReaderFactory();
             }
         }
 

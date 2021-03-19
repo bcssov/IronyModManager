@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-17-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="Reader.cs" company="Mario">
 //     Mario
@@ -112,31 +112,6 @@ namespace IronyModManager.IO.Readers
             return null;
         }
 
-        /// <summary>
-        /// Gets the size of the file.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>System.Int64.</returns>
-        public virtual long GetFileSize(string rootPath, string file)
-        {
-            rootPath ??= string.Empty;
-            file ??= string.Empty;
-            var reader = readers.FirstOrDefault(p => p.CanRead(rootPath) && p.CanListFiles(rootPath));
-            if (reader != null)
-            {
-                return reader.GetFileSize(rootPath, file);
-            }
-            return 0;
-        }
-
-        /// <summary>
-        /// Gets the image stream asynchronous.
-        /// </summary>
-        /// <param name="rootPath">The root path.</param>
-        /// <param name="file">The file.</param>
-        /// <returns>Task&lt;MemoryStream&gt;.</returns>
-
         public virtual Task<MemoryStream> GetImageStreamAsync(string rootPath, string file)
         {
             if (Constants.ImageExtensions.Any(p => file.EndsWith(p, StringComparison.OrdinalIgnoreCase)))
@@ -148,6 +123,12 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the image stream asynchronous.
+        /// </summary>
+        /// <param name="rootPath">The root path.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>Task&lt;MemoryStream&gt;.</returns>
+        /// <summary>
         /// Gets the stream.
         /// </summary>
         /// <param name="rootPath">The root path.</param>
@@ -156,6 +137,22 @@ namespace IronyModManager.IO.Readers
         public virtual Stream GetStream(string rootPath, string file)
         {
             return GetStreamInternal(rootPath, file).Item1;
+        }
+
+        /// <summary>
+        /// Gets the total size.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetTotalSize(string path)
+        {
+            path ??= string.Empty;
+            var reader = readers.FirstOrDefault(p => p.CanRead(path) && p.CanListFiles(path));
+            if (reader != null)
+            {
+                return reader.GetTotalSize(path);
+            }
+            return 0;
         }
 
         /// <summary>
