@@ -4,9 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.13.80-alpha</title>
+			<title>1.13.94-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -17,14 +21,20 @@ CHANGES FROM v1.12:
 * Fixed Win 7 crash when using CJK fonts
 * Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
 * Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes</description>
-			<pubDate>Tue, 16 Mar 2021 20:30:44 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/osx-x64.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="66984888" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="q/GFJp0vuXKP4AoX1S1yeFh3LgTNp9ymUpKZAs8SDdQGBrhE8Tu/RcgSM+Yn5ezmP0HdMSlqJN4gy282UnLTBA=="/>
+* Various improvements and fixes
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)</description>
+			<pubDate>Fri, 19 Mar 2021 06:25:42 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/osx-x64.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="66988536" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="j4+i1ytQyWl75UTWugmXjCAl7fMF/WHajf7DtalzbbJwhGtEV0DjRZqvAjKAwS5y5tvIZcWBqcUK2iVVVYT1AQ=="/>
 		</item>
 		<item>
-			<title>1.13.80-alpha</title>
+			<title>1.13.94-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -35,14 +45,20 @@ CHANGES FROM v1.12:
 * Fixed Win 7 crash when using CJK fonts
 * Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
 * Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes</description>
-			<pubDate>Tue, 16 Mar 2021 20:30:52 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/win-x64-setup.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="57929044" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="NaVGrsstaJYm675l49s2qA8FoC/PMfpgspbybkmjsu93LaVy2+Zvc4rBNOq0zdRysM1c0X+XqFAbezgQH18oBQ=="/>
+* Various improvements and fixes
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)</description>
+			<pubDate>Fri, 19 Mar 2021 06:25:49 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/win-x64-setup.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="57943984" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="d8H+In6BnX7upQ0kLXBN4AHpbdx0LYcxPDtZeQDRRNGL3Ubfoy4HLvt4sENVSb/tmTEooP37nnPHFUk1FrhECA=="/>
 		</item>
 		<item>
-			<title>1.13.80-alpha</title>
+			<title>1.13.94-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -53,14 +69,20 @@ CHANGES FROM v1.12:
 * Fixed Win 7 crash when using CJK fonts
 * Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
 * Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes</description>
-			<pubDate>Tue, 16 Mar 2021 20:30:48 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/win-x64.rar" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="69738958" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="d13KszJIwGwaYNw99EtGtgzAVjk1pH31XdllGZETKunv+mj9JZYy2OA5F7N9kpjyGeyUuBy6ZMPC3dISCB1JCA=="/>
+* Various improvements and fixes
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)</description>
+			<pubDate>Fri, 19 Mar 2021 06:25:46 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/win-x64.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="69742593" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="gdSIF7QBiZju0xHutm2oS7fUis1h2azlIlL+BOVLBWRgrTqMrtQ4s+N4H604eP50F/7o2T50/zjRimVovYwFBw=="/>
 		</item>
 		<item>
-			<title>1.13.80-alpha</title>
+			<title>1.13.94-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
+
+RELEASE INFO
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -71,9 +93,11 @@ CHANGES FROM v1.12:
 * Fixed Win 7 crash when using CJK fonts
 * Irony will no longer cry about needing to rerun the conflict solver when performing compress merge
 * Add option to set position of notifications (bottom or top corners)
-* Various improvements and fixes</description>
-			<pubDate>Tue, 16 Mar 2021 20:30:41 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.80-alpha/linux-x64.zip" sparkle:version="1.13.80.35957" sparkle:shortVersionString="1.13.80" length="83055885" sparkle:os="linux" type="application/zip" sparkle:signature="SLB8fBW3hCNoeZbekmn1TxrzCbjgrsHEfns2Tu9b4vSbwqsLYYFagN/fc97C5vDhTtZbhApbVzcsfAwBNlnwCg=="/>
+* Various improvements and fixes
+* Check available disk space before performing a merge
+* Add custom mod directory (if set irony merges and patches will be stored there)</description>
+			<pubDate>Fri, 19 Mar 2021 06:25:39 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/linux-x64.zip" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="83064658" sparkle:os="linux" type="application/zip" sparkle:signature="zYZ7VtBu+zJKgmqSsCaSH49tHN3t1DC9zxaScUYj7oYKHoQGv0FklobCZw9P5OnWond2GevGQ3Jonv0BF5F8Bw=="/>
 		</item>
 		<item>
 			<title>1.12.126</title>
