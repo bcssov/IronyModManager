@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-18-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -141,7 +141,9 @@ namespace IronyModManager.Services
             if (game != null && mod != null)
             {
                 var fullPath = mod.FullPath ?? string.Empty;
-                return IsPatchModInternal(mod.Name) || (mod.Source == ModSource.Local && (fullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || fullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase)) && fullPath.StartsWith(game.UserDirectory));
+                return IsPatchModInternal(mod.Name) || (mod.Source == ModSource.Local &&
+                    (fullPath.EndsWith(Shared.Constants.ZipExtension, StringComparison.OrdinalIgnoreCase) || fullPath.EndsWith(Shared.Constants.BinExtension, StringComparison.OrdinalIgnoreCase)) &&
+                    (fullPath.StartsWith(game.UserDirectory) || fullPath.StartsWith(game.CustomModDirectory)));
             }
             return false;
         }
@@ -363,6 +365,28 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
+        /// Evaluates the patch name path.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="patchName">Name of the patch.</param>
+        /// <param name="modDirectoryRootPath">The mod directory root path.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string EvaluatePatchNamePath(IGame game, string patchName, string modDirectoryRootPath = Shared.Constants.EmptyParam)
+        {
+            if (string.IsNullOrWhiteSpace(modDirectoryRootPath))
+            {
+                modDirectoryRootPath = GetModDirectoryRootPath(game);
+            }
+            modDirectoryRootPath = modDirectoryRootPath.StandardizeDirectorySeparator();
+            var patchNamePath = GetPatchModDirectory(game, patchName).StandardizeDirectorySeparator();
+            if (Path.GetDirectoryName(patchNamePath).Equals(modDirectoryRootPath))
+            {
+                patchNamePath = patchName;
+            }
+            return patchNamePath;
+        }
+
+        /// <summary>
         /// Generates the name of the collection patch.
         /// </summary>
         /// <param name="collectionName">Name of the collection.</param>
@@ -389,13 +413,13 @@ namespace IronyModManager.Services
                 mod.Dependencies = dependencies;
             }
             mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{patchName}{Shared.Constants.ModExtension}";
-            mod.FileName = GetModDirectory(game, patchName).Replace("\\", "/");
+            mod.FileName = GetPatchModDirectory(game, patchName).Replace("\\", "/");
             mod.Name = patchName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
             mod.Tags = new List<string>() { "Fixes" };
             mod.IsValid = true;
-            mod.FullPath = Path.Combine(game.UserDirectory, mod.FileName);
+            mod.FullPath = mod.FileName.StandardizeDirectorySeparator();
             return mod;
         }
 
@@ -512,11 +536,11 @@ namespace IronyModManager.Services
                             else
                             {
                                 // Check user directory and workshop directory.
-                                var userDirectoryMod = Path.Combine(game.UserDirectory, mod.FileName);
-                                var workshopDirectoryMod = game.WorkshopDirectory.Select(p => Path.Combine(p, mod.FileName));
-                                if (File.Exists(userDirectoryMod) || Directory.Exists(userDirectoryMod))
+                                var userDirectoryMod = new List<string>() { Path.Combine(game.CustomModDirectory, mod.FileName), Path.Combine(game.UserDirectory, mod.FileName) }.GroupBy(p => p).Select(p => p.First());
+                                var workshopDirectoryMod = game.WorkshopDirectory.Select(p => Path.Combine(p, mod.FileName)).GroupBy(p => p).Select(p => p.First());
+                                if (userDirectoryMod.Any(p => File.Exists(p) || Directory.Exists(p)))
                                 {
-                                    mod.FullPath = userDirectoryMod.StandardizeDirectorySeparator();
+                                    mod.FullPath = userDirectoryMod.FirstOrDefault(p => File.Exists(p) || Directory.Exists(p)).StandardizeDirectorySeparator();
                                 }
                                 else if (workshopDirectoryMod.Any(p => File.Exists(p) || Directory.Exists(p)))
                                 {
@@ -536,26 +560,13 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Gets the mod directory.
+        /// Gets the mod directory root path.
         /// </summary>
         /// <param name="game">The game.</param>
-        /// <param name="modCollection">The mod collection.</param>
         /// <returns>System.String.</returns>
-        protected virtual string GetModDirectory(IGame game, IModCollection modCollection)
+        protected virtual string GetModDirectoryRootPath(IGame game)
         {
-            return GetModDirectory(game, GenerateCollectionPatchName(modCollection.Name));
-        }
-
-        /// <summary>
-        /// Gets the mod directory.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="patchName">Name of the patch.</param>
-        /// <returns>System.String.</returns>
-        protected virtual string GetModDirectory(IGame game, string patchName)
-        {
-            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchName);
-            return path.StandardizeDirectorySeparator();
+            return !string.IsNullOrWhiteSpace(game.CustomModDirectory) ? game.CustomModDirectory : Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory);
         }
 
         /// <summary>
@@ -574,6 +585,38 @@ namespace IronyModManager.Services
                 return ModSource.Steam;
             }
             return ModSource.Local;
+        }
+
+        /// <summary>
+        /// Gets the patch mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="patchOrMergeName">Name of the patch or merge.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetPatchModDirectory(IGame game, string patchOrMergeName)
+        {
+            var path = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, patchOrMergeName);
+            path = path.StandardizeDirectorySeparator();
+            var parameters = new ModWriterParameters()
+            {
+                Path = path
+            };
+            if (!ModWriter.ModDirectoryExists(parameters) && !string.IsNullOrWhiteSpace(game.CustomModDirectory))
+            {
+                path = Path.Combine(game.CustomModDirectory, patchOrMergeName).StandardizeDirectorySeparator();
+            }
+            return path;
+        }
+
+        /// <summary>
+        /// Gets the patch mod directory.
+        /// </summary>
+        /// <param name="game">The game.</param>
+        /// <param name="modCollection">The mod collection.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetPatchModDirectory(IGame game, IModCollection modCollection)
+        {
+            return GetPatchModDirectory(game, GenerateCollectionPatchName(modCollection.Name));
         }
 
         /// <summary>
@@ -675,7 +718,7 @@ namespace IronyModManager.Services
                 {
                     if (IsPatchModInternal(item.ModName))
                     {
-                        item.ModPath = GetModDirectory(GameService.GetSelected(), item.ModName);
+                        item.ModPath = GetPatchModDirectory(GameService.GetSelected(), item.ModName);
                     }
                     else
                     {

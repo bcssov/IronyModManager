@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -532,6 +532,30 @@ namespace IronyModManager.Services.Tests
         }
 
         /// <summary>
+        /// Defines the test method Should_return_empty_custom_mod_directory_location_as_default_setting.
+        /// </summary>
+        [Fact]
+        public void Should_return_empty_custom_mod_directory_location_as_default_setting()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                UserDirectory = "user-dir",
+                WorkshopDirectory = new List<string>() { "test" },
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe",                
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultGameSettings(game);
+            args.CustomModDirectory.Should().BeNullOrEmpty();         
+        }
+
+        /// <summary>
         /// Defines the test method Should_return_default_exe_location.
         /// </summary>
         [Fact]
@@ -782,6 +806,7 @@ namespace IronyModManager.Services.Tests
             result.UserDirectory.Should().Be("test");
             result.ExecutableLocation.Should().Be("test\\stellaris.exe");
             result.LaunchArguments.Should().Be("-gdpr-compliant");
+            result.CustomModDirectory.Should().BeNullOrEmpty();
         }
     }
 }

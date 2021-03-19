@@ -4,7 +4,7 @@
 // Created          : 09-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="GameUserDirectoryChangedEvent.cs" company="Mario">
 //     Mario
@@ -31,14 +31,22 @@ namespace IronyModManager.Common.Events
         /// Initializes a new instance of the <see cref="GameUserDirectoryChangedEvent" /> class.
         /// </summary>
         /// <param name="game">The game.</param>
-        public GameUserDirectoryChangedEvent(IGame game)
+        /// <param name="customDirectoryChanged">if set to <c>true</c> [custom directory changed].</param>
+        public GameUserDirectoryChangedEvent(IGame game, bool customDirectoryChanged)
         {
             Game = game;
+            CustomDirectoryChanged = customDirectoryChanged;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [custom directory changed].
+        /// </summary>
+        /// <value><c>true</c> if [custom directory changed]; otherwise, <c>false</c>.</value>
+        public bool CustomDirectoryChanged { get; set; }
 
         /// <summary>
         /// Gets or sets the game.

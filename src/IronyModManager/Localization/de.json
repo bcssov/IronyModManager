@@ -365,7 +365,8 @@
             "GameArgs": "Spiel Startoptionen",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
-            "AutoConfigure": "Alle konfigurieren..."
+            "AutoConfigure": "Alle konfigurieren...",
+            "CustoModPath": "Benutzerdefiniertes Mod-Verzeichnis"
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
@@ -397,7 +398,14 @@
             "ExeTitle": "Finde eine Programdatei Spieldatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
             "UserDirTitle": "Spieldatenverzeichnis suchen",
-            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei"
+            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei",
+            "CustomModPathTitle": "Finde ein benutzerdefiniertes Mod-Verzeichnis"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Nicht leer",
+                "Message": "Benutzerdefiniertes MOD-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, jetzt verlieren Sie möglicherweise einige Mods. Bist du sicher, dass du es ändern willst?"
+            }
         }
     },
     "Notifications": {

@@ -484,6 +484,7 @@ namespace IronyModManager.Shared
                 public const string RefreshMods = Prefix + "RefreshMods";
                 public const string CloseAfterLaunch = Prefix + "CloseAfterLaunch";
                 public const string AutoConfigure = Prefix + "AutoConfigure";
+                public const string CustoModPath = Prefix + "CustoModPath";
             }
             public static class Updates
             {
@@ -528,6 +529,17 @@ namespace IronyModManager.Shared
                 public const string GameRootTitle = Prefix + "GameRootTitle";
                 public const string UserDirTitle = Prefix + "UserDirTitle";
                 public const string EditorTitle = Prefix + "EditorTitle";
+                public const string CustomModPathTitle = Prefix + "CustomModPathTitle";
+            }
+            public static class Prompts
+            {
+                public const string Prefix = "Options.Prompts.";
+                public static class CustoModDirectory
+                {
+                    public const string Prefix = "Options.Prompts.CustoModDirectory.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
         }
         public static class Notifications

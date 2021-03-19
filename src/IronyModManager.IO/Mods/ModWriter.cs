@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-16-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -37,7 +37,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The write lock
         /// </summary>
-        private static readonly AsyncLock writeLock = new AsyncLock();
+        private static readonly AsyncLock writeLock = new();
 
         /// <summary>
         /// The json exporter
@@ -95,7 +95,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> CreateModDirectoryAsync(ModWriterParameters parameters)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
             if (!Directory.Exists(fullPath))
             {
                 Directory.CreateDirectory(fullPath);
@@ -113,7 +113,7 @@ namespace IronyModManager.IO.Mods
         {
             Task<bool> delete()
             {
-                var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+                var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
                 if (File.Exists(fullPath))
                 {
                     _ = new System.IO.FileInfo(fullPath)
@@ -136,12 +136,27 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> DescriptorExistsAsync(ModWriterParameters parameters)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
             if (File.Exists(fullPath))
             {
                 return Task.FromResult(true);
             }
             return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Mods the directory exists.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public virtual bool ModDirectoryExists(ModWriterParameters parameters)
+        {
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Path ?? string.Empty);
+            if (!Directory.Exists(fullPath))
+            {
+                return false;
+            }
+            return Directory.EnumerateFileSystemEntries(fullPath).Any();
         }
 
         /// <summary>
@@ -151,12 +166,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public virtual Task<bool> ModDirectoryExistsAsync(ModWriterParameters parameters)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Path);
-            if (!Directory.Exists(fullPath))
-            {
-                return Task.FromResult(false);
-            }
-            return Task.FromResult(Directory.EnumerateFileSystemEntries(fullPath).Any());
+            return Task.FromResult(ModDirectoryExists(parameters));
         }
 
         /// <summary>
@@ -205,7 +215,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         public Task<bool> SetDescriptorLockAsync(ModWriterParameters parameters, bool isLocked)
         {
-            var fullPath = Path.Combine(parameters.RootDirectory, parameters.Mod.DescriptorFile);
+            var fullPath = Path.Combine(parameters.RootDirectory ?? string.Empty, parameters.Mod.DescriptorFile ?? string.Empty);
             if (File.Exists(fullPath))
             {
                 _ = new System.IO.FileInfo(fullPath)
@@ -243,7 +253,7 @@ namespace IronyModManager.IO.Mods
                 }
                 if (writeDescriptorInModDirectory)
                 {
-                    var modPath = Path.Combine(parameters.Mod.FileName, Shared.Constants.DescriptorFile);
+                    var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, Shared.Constants.DescriptorFile ?? string.Empty);
                     await writeDescriptor(modPath);
                 }
                 return true;

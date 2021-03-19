@@ -824,7 +824,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_apply_mod_patch_when_nothing_to_merge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -872,7 +873,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_return_true_when_applying_patches",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -906,6 +908,10 @@ namespace IronyModManager.Services.Tests
                 {
                     return true;
                 }
+                return false;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
                 return false;
             });
 
@@ -1526,7 +1532,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_ignore_mod_patch_when_nothing_to_merge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -1575,7 +1582,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_return_true_when_ignoring_patches",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -1595,6 +1603,10 @@ namespace IronyModManager.Services.Tests
                 {
                     return true;
                 }
+                return false;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
                 return false;
             });
 
@@ -1921,7 +1933,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "SaveIgnoredPathsAsync_should_be_false",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\Fake" }
+                WorkshopDirectory = new List<string>() { "C:\\Fake" },
+                CustomModDirectory = string.Empty
             });
             modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(false));
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
@@ -1945,6 +1958,10 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
@@ -1973,7 +1990,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "SaveIgnoredPathsAsync_should_be_true",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\Fake" }
+                WorkshopDirectory = new List<string>() { "C:\\Fake" },
+                CustomModDirectory = string.Empty
             });
             modPatchExporter.Setup(p => p.SaveStateAsync(It.IsAny<ModPatchExporterParameters>())).Returns(Task.FromResult(true));
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
@@ -1997,6 +2015,10 @@ namespace IronyModManager.Services.Tests
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
             {
                 return collections;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter, null);
 
@@ -2378,7 +2400,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_resolve_full_definition_path",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2421,6 +2444,10 @@ namespace IronyModManager.Services.Tests
                     Name = "1"
                 };
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = service.ResolveFullDefinitionPath(new Definition()
@@ -2451,7 +2478,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_resolve_full_definition_archive_path",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2493,6 +2521,10 @@ namespace IronyModManager.Services.Tests
                     FileName = "fakemod.zip",
                     Name = "1"
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
@@ -2770,7 +2802,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_apply_custom_mod_patch_when_nothing_to_merge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2781,6 +2814,10 @@ namespace IronyModManager.Services.Tests
                 };
             });
             SetupMockCase(reader, parserManager, modParser);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
 
@@ -2819,7 +2856,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_return_true_when_applying_custom_patches",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -2853,6 +2891,10 @@ namespace IronyModManager.Services.Tests
                 {
                     return true;
                 }
+                return false;
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
                 return false;
             });
 
@@ -3092,7 +3134,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_not_need_update_when_mod_not_present",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3127,6 +3170,10 @@ namespace IronyModManager.Services.Tests
                 };
                 return res;
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3151,7 +3198,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_need_update_when_file_not_present",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3186,6 +3234,10 @@ namespace IronyModManager.Services.Tests
                 };
                 return res;
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3210,7 +3262,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_need_update_when_sha_not_same",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3249,6 +3302,10 @@ namespace IronyModManager.Services.Tests
             {
                 ContentSHA = "2"
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3273,7 +3330,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_need_update_when_overwritten_sha_not_same",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3312,6 +3370,10 @@ namespace IronyModManager.Services.Tests
             {
                 ContentSHA = "2"
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3336,7 +3398,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_need_update_when_overwritten_sha_not_same",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3375,6 +3438,10 @@ namespace IronyModManager.Services.Tests
             {
                 ContentSHA = "2"
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3399,7 +3466,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_need_update_when_load_order_not_same",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3438,6 +3506,10 @@ namespace IronyModManager.Services.Tests
             {
                 ContentSHA = "2"
             });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });
             result.Should().BeTrue();
@@ -3462,7 +3534,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_should_not_need_update",
                 UserDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "mod"),
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -3500,6 +3573,10 @@ namespace IronyModManager.Services.Tests
             reader.Setup(p => p.GetFileInfo(It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInfo()
             {
                 ContentSHA = "1"
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
             var service = GetService(storageProvider, modParser, parserManager, reader, mapper, modWriter, gameService, modPatchExporter);
             var result = await service.PatchModNeedsUpdateAsync("colname", new List<string>() { "mod/fake2.txt", "mod/fake1.txt" });

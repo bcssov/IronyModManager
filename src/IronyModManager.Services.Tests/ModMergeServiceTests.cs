@@ -135,7 +135,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection>()
             {
@@ -176,6 +177,10 @@ namespace IronyModManager.Services.Tests
                     FileName = o.FileName,
                     Name = o.Name
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -286,7 +291,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_create_file_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection>()
             {
@@ -327,6 +333,10 @@ namespace IronyModManager.Services.Tests
                     FileName = o.FileName,
                     Name = o.Name
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
 
@@ -390,9 +400,10 @@ namespace IronyModManager.Services.Tests
             var infoProvider = new Mock<IDefinitionInfoProvider>();
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Should_not_create_file_merge_mod_due_to_no_collection_name",
+                Type = "Should_not_have_free_space_due_to_no_collection_name",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
 
             var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
@@ -410,6 +421,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_have_free_space_to_create_merge_mod()
         {
+            DISetup.SetupContainer();
+
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
@@ -427,9 +440,10 @@ namespace IronyModManager.Services.Tests
             modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Should_create_file_merge_mod",
+                Type = "Should_have_free_space_to_create_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection>()
             {
@@ -438,7 +452,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Should_create_file_merge_mod"
+                    Game = "Should_have_free_space_to_create_merge_mod",
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -472,14 +486,18 @@ namespace IronyModManager.Services.Tests
                 };
             });
             diskInfoProvider.Setup(p => p.HasFreeSpace(It.IsAny<string>(), It.IsAny<long>())).Returns(true);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
-            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(diskInfoProvider.Object, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
-            var result = await service.MergeCollectionByFilesAsync("test");
+            var result = await service.HasEnoughFreeSpaceAsync("test");
 
-            result.Should().NotBeNull();
+            result.Should().BeTrue();
         }
 
         /// <summary>
@@ -488,6 +506,8 @@ namespace IronyModManager.Services.Tests
         [Fact]
         public async Task Should_not_have_free_space_to_create_merge_mod()
         {
+            DISetup.SetupContainer();
+
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
             messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
@@ -505,9 +525,10 @@ namespace IronyModManager.Services.Tests
             modMergeExporter.Setup(p => p.ExportFilesAsync(It.IsAny<ModMergeFileExporterParameters>())).Returns(Task.FromResult(true));
             gameService.Setup(p => p.GetSelected()).Returns(new Game()
             {
-                Type = "Should_create_file_merge_mod",
+                Type = "Should_not_have_free_space_to_create_merge_mod",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = new List<string>() { "C:\\fake" }
+                WorkshopDirectory = new List<string>() { "C:\\fake" },
+                CustomModDirectory = string.Empty
             });
             var collections = new List<IModCollection>()
             {
@@ -516,7 +537,7 @@ namespace IronyModManager.Services.Tests
                     IsSelected = true,
                     Mods = new List<string>() { "mod/fakemod.mod"},
                     Name = "test",
-                    Game = "Should_create_file_merge_mod"
+                    Game = "Should_not_have_free_space_to_create_merge_mod"
                 }
             };
             storageProvider.Setup(s => s.GetModCollections()).Returns(() =>
@@ -550,14 +571,18 @@ namespace IronyModManager.Services.Tests
                 };
             });
             diskInfoProvider.Setup(p => p.HasFreeSpace(It.IsAny<string>(), It.IsAny<long>())).Returns(false);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
-            var service = new ModMergeService(null, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
+            var service = new ModMergeService(diskInfoProvider.Object, null, new Cache(), messageBus.Object, modPatchExporter.Object, modMergeExporter.Object,
                 new List<IDefinitionInfoProvider>() { infoProvider.Object }, reader.Object, modWriter.Object,
                 modParser.Object, gameService.Object, storageProvider.Object, mapper.Object);
 
-            var result = await service.MergeCollectionByFilesAsync("test");
+            var result = await service.HasEnoughFreeSpaceAsync("test");
 
-            result.Should().NotBeNull();
+            result.Should().BeFalse();
         }
     }
 }

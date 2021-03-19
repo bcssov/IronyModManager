@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-18-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -197,31 +197,31 @@ namespace IronyModManager.IO.Mods
                     if (parameters.Definitions?.Count() > 0)
                     {
                         results.Add(await CopyBinariesAsync(parameters.Definitions.Where(p => p.ValueType == ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), false));
                         results.Add(await WriteMergedContentAsync(parameters.Definitions.Where(p => p.ValueType != ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, false, FileNameGeneration.GenerateFileName));
                     }
 
                     if (parameters.OrphanConflicts?.Count() > 0)
                     {
                         results.Add(await CopyBinariesAsync(parameters.OrphanConflicts.Where(p => p.ValueType == ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), false));
                         results.Add(await WriteMergedContentAsync(parameters.OrphanConflicts.Where(p => p.ValueType != ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.GenerateFileName));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, false, FileNameGeneration.GenerateFileName));
                     }
 
                     if (parameters.OverwrittenConflicts?.Count() > 0)
                     {
                         results.Add(await CopyBinariesAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType == ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), false));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), false));
                         results.Add(await WriteMergedContentAsync(parameters.OverwrittenConflicts.Where(p => p.ValueType != ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, false, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, false, FileNameGeneration.UseExistingFileNameAndWriteEmptyFiles));
                     }
 
                     if (parameters.CustomConflicts?.Count() > 0)
                     {
                         results.Add(await WriteMergedContentAsync(parameters.CustomConflicts.Where(p => p.ValueType != ValueType.Binary),
-                            GetPatchRootPath(parameters.RootPath, parameters.PatchName), parameters.Game, true, FileNameGeneration.UseExistingFileName));
+                            GetPatchRootPath(parameters.RootPath, parameters.PatchPath), parameters.Game, true, FileNameGeneration.UseExistingFileName));
                     }
                     return results.All(p => p);
                 }
@@ -238,7 +238,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         public IEnumerable<string> GetPatchFiles(ModPatchExporterParameters parameters)
         {
-            var path = GetPatchRootPath(parameters.RootPath, parameters.PatchName);
+            var path = GetPatchRootPath(parameters.RootPath, parameters.PatchPath);
             var files = new List<string>();
             if (Directory.Exists(path))
             {
@@ -273,7 +273,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>Task&lt;System.String&gt;.</returns>
         public Task<string> LoadDefinitionContentsAsync(ModPatchExporterParameters parameters, string path)
         {
-            var patchPath = Path.Combine(parameters.RootPath, parameters.PatchName, path);
+            var patchPath = Path.Combine(parameters.RootPath, parameters.PatchPath, path);
             if (File.Exists(patchPath))
             {
                 return File.ReadAllTextAsync(patchPath);
@@ -326,7 +326,7 @@ namespace IronyModManager.IO.Mods
                 state = DIResolver.Get<IPatchState>();
             }
             var modifiedHistory = new List<IDefinition>();
-            var path = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName));
+            var path = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath));
             state.IgnoreConflictPaths = parameters.IgnoreConflictPaths;
             state.ResolvedConflicts = MapDefinitions(parameters.ResolvedConflicts, false);
             state.Conflicts = MapDefinitions(parameters.Conflicts, false);
@@ -421,7 +421,7 @@ namespace IronyModManager.IO.Mods
         private static async Task<bool> CopyPatchModInternalAsync(ModPatchExporterParameters parameters)
         {
             var oldPath = Path.Combine(parameters.RootPath, parameters.ModPath);
-            var newPath = Path.Combine(parameters.RootPath, parameters.PatchName);
+            var newPath = Path.Combine(parameters.RootPath, parameters.PatchPath);
             if (Directory.Exists(oldPath))
             {
                 var files = Directory.EnumerateFiles(oldPath, "*", SearchOption.AllDirectories);
@@ -457,11 +457,11 @@ namespace IronyModManager.IO.Mods
         /// Gets the patch root path.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <param name="patchName">Name of the patch.</param>
-        /// <returns>System.String.</returns>
-        private static string GetPatchRootPath(string path, string patchName)
+        /// <param name="patchPath">The patch path.</param>
+        /// <returns>string.</returns>
+        private static string GetPatchRootPath(string path, string patchPath)
         {
-            return Path.Combine(path, patchName);
+            return Path.Combine(path, patchPath);
         }
 
         /// <summary>
@@ -646,7 +646,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>System.Threading.Tasks.Task&lt;IronyModManager.IO.Common.Mods.Models.IPatchState&gt;.</returns>
         private async Task<IPatchState> GetPatchStateInternalAsync(ModPatchExporterParameters parameters, bool loadExternalCode)
         {
-            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateName);
+            var statePath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath), StateName);
             var cached = GetPatchState(statePath);
             if (File.Exists(statePath) && cached == null)
             {
@@ -725,7 +725,7 @@ namespace IronyModManager.IO.Mods
                         var externallyLoadedCode = new ConcurrentBag<string>();
                         async Task loadCode(IDefinition definition)
                         {
-                            var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchName), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
+                            var historyPath = Path.Combine(GetPatchRootPath(parameters.RootPath, parameters.PatchPath), StateHistory, definition.Type, definition.Id.GenerateValidFileName() + StateConflictHistoryExtension);
                             if (File.Exists(historyPath))
                             {
                                 var code = await File.ReadAllTextAsync(historyPath);
