@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="MainWindow.xaml.cs" company="Mario">
 //     Mario
@@ -151,6 +151,12 @@ namespace IronyModManager.Views
                 // Silly setup code isn't it?
                 var pos = Position.WithX(state.LocationX.GetValueOrDefault());
                 pos = pos.WithY(state.LocationY.GetValueOrDefault());
+                var activeScreen = Screens.ScreenFromPoint(pos);
+                var totalScreenX = Screens.All.Sum(p => p.WorkingArea.Width);
+                var locX = state.LocationX.GetValueOrDefault() + state.Width.GetValueOrDefault() > totalScreenX ? totalScreenX - state.Width.GetValueOrDefault() : state.LocationX.GetValueOrDefault();
+                var locY = state.LocationY.GetValueOrDefault() + state.Height.GetValueOrDefault() > activeScreen.WorkingArea.Height ? activeScreen.WorkingArea.Height - state.Height.GetValueOrDefault() : state.LocationY.GetValueOrDefault();
+                pos = Position.WithX(locX);
+                pos = pos.WithY(locY);
                 Position = pos;
             }
         }
@@ -215,6 +221,9 @@ namespace IronyModManager.Views
         /// Handles the <see cref="E:Closing" /> event.
         /// </summary>
         /// <param name="e">The <see cref="CancelEventArgs" /> instance containing the event data.</param>
+        /// <remarks>A type that derives from <see cref="T:Avalonia.Controls.Window" />  may override <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" />. The
+        /// overridden method must call <see cref="M:Avalonia.Controls.Window.OnClosing(System.ComponentModel.CancelEventArgs)" /> on the base class if the
+        /// <see cref="E:Avalonia.Controls.Window.Closing" /> event needs to be raised.</remarks>
         protected override void OnClosing(CancelEventArgs e)
         {
             if (preventShutdown)
