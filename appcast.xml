@@ -4,12 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.13.95-alpha</title>
+			<title>1.13.98-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Fix ctd when performing merge from mods which are not stored in archive
+* Minor tweaks to file and folder browse dialog
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -23,16 +23,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 05:12:24 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/osx-x64.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="66988490" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="wt6XTJb7lRZhXxfz5JlRfLC4r1x9lZ7NzkaQmXAiM+SNod+pxHZNUkdIwveU0GUmaffFJ/WKAmF6W88GgGmsCQ=="/>
+			<pubDate>Sat, 20 Mar 2021 19:46:07 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/osx-x64.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="66997512" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="OsWPJI/MS0v98QN2LzGVsqYg91dhJGk7TydZXk4FZlrOq5o3V6OjN4OxESvCQEKov/MgMt/iVermbETfKl6TAw=="/>
 		</item>
 		<item>
-			<title>1.13.95-alpha</title>
+			<title>1.13.98-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Fix ctd when performing merge from mods which are not stored in archive
+* Minor tweaks to file and folder browse dialog
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -46,16 +46,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 05:12:31 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/win-x64-setup.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="57946330" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="82H9a/vSqb8EDhQSNQivnzelOa4sVyFQ2t+kmfdUe8LAsC08RoZRig+Fm5xW7KwkFk7NWtnwTTBDQ77ve9dXCQ=="/>
+			<pubDate>Sat, 20 Mar 2021 19:46:13 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/win-x64-setup.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="57934689" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="FwcSmlBCDZmVyDMKR239N4brIY7YBMRP5ZBbP8BOY0AeNfy2Zxz+uemVMjVgTKrraHMDR/6nZmXMA5Zvd1e7Bw=="/>
 		</item>
 		<item>
-			<title>1.13.95-alpha</title>
+			<title>1.13.98-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Fix ctd when performing merge from mods which are not stored in archive
+* Minor tweaks to file and folder browse dialog
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -69,16 +69,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 05:12:28 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/win-x64.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="69742716" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="dvBOAVaoLx1VbbpBjmhrh+S5V0HIwiI/ehFssocVGZ3EVbi/qjY8Ws6iH0SDCdvZmofLAhtZYarLzT/t64yOCg=="/>
+			<pubDate>Sat, 20 Mar 2021 19:46:10 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/win-x64.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="69751554" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7qp5dT4q8CrCfjJzt+Fg0IZQhanfi17a6LNU0p0uMiy757paQXsliJsbrKk7eYsfZDl/yC6/K2G+5YZC4sIHCQ=="/>
 		</item>
 		<item>
-			<title>1.13.95-alpha</title>
+			<title>1.13.98-rc</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Fix ctd when performing merge from mods which are not stored in archive
+* Minor tweaks to file and folder browse dialog
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -92,8 +92,8 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 05:12:21 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/linux-x64.zip" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="83064674" sparkle:os="linux" type="application/zip" sparkle:signature="FO/4Ugo4M9ByS4b59Yz57EIplrX6ABX+vb64sD34pzIda860DVoKf39DCMH4NwcvsoK74fYS7+2dPcuOEvv1CA=="/>
+			<pubDate>Sat, 20 Mar 2021 19:46:04 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/linux-x64.zip" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="83064112" sparkle:os="linux" type="application/zip" sparkle:signature="aDyhaPfnGV37Rb96Bs+hIBC/pA8I8K3FkT44bMHNovhAsan6VK3muCoI3JtCODxGH7ApF88YBSLaBZ9TcGXyCw=="/>
 		</item>
 		<item>
 			<title>1.12.126</title>
