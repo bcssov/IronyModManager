@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-20-2021
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -165,7 +165,7 @@ namespace IronyModManager.Controls.Themes
 
             if (indexOfPreselected > 1)
             {
-                filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
+                filesView.ScrollIntoView(indexOfPreselected - 1);
             }
         }
 

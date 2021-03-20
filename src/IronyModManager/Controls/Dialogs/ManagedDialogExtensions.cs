@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-20-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -128,7 +128,8 @@ namespace IronyModManager.Controls.Dialogs
                     DataContext = model,
                     SizeToContent = SizeToContent.Width,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    FontFamily = font.GetFontFamily()
+                    FontFamily = font.GetFontFamily(),
+                    MaxHeight = 700
                 };
 
                 dialog.Closed += delegate { model.Cancel(); };
