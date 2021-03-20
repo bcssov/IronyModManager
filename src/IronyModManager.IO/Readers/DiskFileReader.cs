@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-20-2021
 // ***********************************************************************
 // <copyright file="DiskFileReader.cs" company="Mario">
 //     Mario
@@ -132,7 +132,7 @@ namespace IronyModManager.IO
             {
                 foreach (var item in files)
                 {
-                    var info = new System.IO.FileInfo(item);
+                    var info = new System.IO.FileInfo(Path.Combine(path, item));
                     if (info != null)
                     {
                         total += info.Length;
