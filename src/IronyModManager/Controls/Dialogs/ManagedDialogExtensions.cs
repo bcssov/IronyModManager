@@ -129,7 +129,7 @@ namespace IronyModManager.Controls.Dialogs
                     SizeToContent = SizeToContent.Width,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     FontFamily = font.GetFontFamily(),
-                    MaxHeight = 700
+                    Height = 700
                 };
 
                 dialog.Closed += delegate { model.Cancel(); };
