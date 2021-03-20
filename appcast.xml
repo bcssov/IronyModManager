@@ -4,13 +4,12 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.13.94-alpha</title>
+			<title>1.13.95-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)
+* Fix ctd when performing merge from mods which are not stored in archive
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -24,17 +23,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Fri, 19 Mar 2021 06:25:42 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/osx-x64.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="66988536" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="j4+i1ytQyWl75UTWugmXjCAl7fMF/WHajf7DtalzbbJwhGtEV0DjRZqvAjKAwS5y5tvIZcWBqcUK2iVVVYT1AQ=="/>
+			<pubDate>Sat, 20 Mar 2021 05:12:24 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/osx-x64.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="66988490" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="wt6XTJb7lRZhXxfz5JlRfLC4r1x9lZ7NzkaQmXAiM+SNod+pxHZNUkdIwveU0GUmaffFJ/WKAmF6W88GgGmsCQ=="/>
 		</item>
 		<item>
-			<title>1.13.94-alpha</title>
+			<title>1.13.95-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)
+* Fix ctd when performing merge from mods which are not stored in archive
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -48,17 +46,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Fri, 19 Mar 2021 06:25:49 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/win-x64-setup.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="57943984" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="d8H+In6BnX7upQ0kLXBN4AHpbdx0LYcxPDtZeQDRRNGL3Ubfoy4HLvt4sENVSb/tmTEooP37nnPHFUk1FrhECA=="/>
+			<pubDate>Sat, 20 Mar 2021 05:12:31 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/win-x64-setup.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="57946330" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="82H9a/vSqb8EDhQSNQivnzelOa4sVyFQ2t+kmfdUe8LAsC08RoZRig+Fm5xW7KwkFk7NWtnwTTBDQ77ve9dXCQ=="/>
 		</item>
 		<item>
-			<title>1.13.94-alpha</title>
+			<title>1.13.95-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)
+* Fix ctd when performing merge from mods which are not stored in archive
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -72,17 +69,16 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Fri, 19 Mar 2021 06:25:46 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/win-x64.rar" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="69742593" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="gdSIF7QBiZju0xHutm2oS7fUis1h2azlIlL+BOVLBWRgrTqMrtQ4s+N4H604eP50F/7o2T50/zjRimVovYwFBw=="/>
+			<pubDate>Sat, 20 Mar 2021 05:12:28 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/win-x64.rar" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="69742716" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="dvBOAVaoLx1VbbpBjmhrh+S5V0HIwiI/ehFssocVGZ3EVbi/qjY8Ws6iH0SDCdvZmofLAhtZYarLzT/t64yOCg=="/>
 		</item>
 		<item>
-			<title>1.13.94-alpha</title>
+			<title>1.13.95-alpha</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Check available disk space before performing a merge
-* Add custom mod directory (if set irony merges and patches will be stored there)
+* Fix ctd when performing merge from mods which are not stored in archive
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -96,8 +92,8 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Fri, 19 Mar 2021 06:25:39 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.94-alpha/linux-x64.zip" sparkle:version="1.13.94.46880" sparkle:shortVersionString="1.13.94" length="83064658" sparkle:os="linux" type="application/zip" sparkle:signature="zYZ7VtBu+zJKgmqSsCaSH49tHN3t1DC9zxaScUYj7oYKHoQGv0FklobCZw9P5OnWond2GevGQ3Jonv0BF5F8Bw=="/>
+			<pubDate>Sat, 20 Mar 2021 05:12:21 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.95-alpha/linux-x64.zip" sparkle:version="1.13.95.48463" sparkle:shortVersionString="1.13.95" length="83064674" sparkle:os="linux" type="application/zip" sparkle:signature="FO/4Ugo4M9ByS4b59Yz57EIplrX6ABX+vb64sD34pzIda860DVoKf39DCMH4NwcvsoK74fYS7+2dPcuOEvv1CA=="/>
 		</item>
 		<item>
 			<title>1.12.126</title>
