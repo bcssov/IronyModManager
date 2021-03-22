@@ -4,12 +4,13 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.13.98-rc</title>
+			<title>1.13.102</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Minor tweaks to file and folder browse dialog
+* Conflict reset mode is not multi select
+* Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -23,16 +24,17 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 19:46:07 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/osx-x64.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="66997512" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="OsWPJI/MS0v98QN2LzGVsqYg91dhJGk7TydZXk4FZlrOq5o3V6OjN4OxESvCQEKov/MgMt/iVermbETfKl6TAw=="/>
+			<pubDate>Mon, 22 Mar 2021 20:32:02 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/osx-x64.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="66991634" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="QYO6EfYo6M312sY/SI6iCZ9+esHL6BToHdXOHNJ7i80iD5KKLJKfP7lGUzu7oKTqqEtxgJCTt9EobkzW1ljpBQ=="/>
 		</item>
 		<item>
-			<title>1.13.98-rc</title>
+			<title>1.13.102</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Minor tweaks to file and folder browse dialog
+* Conflict reset mode is not multi select
+* Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -46,16 +48,17 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 19:46:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/win-x64-setup.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="57934689" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="FwcSmlBCDZmVyDMKR239N4brIY7YBMRP5ZBbP8BOY0AeNfy2Zxz+uemVMjVgTKrraHMDR/6nZmXMA5Zvd1e7Bw=="/>
+			<pubDate>Mon, 22 Mar 2021 20:32:09 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/win-x64-setup.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="57945264" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="52aGMpJyF7XL10b+FGrBTuE1NYrq4UuZ0E2i9lRPHJLT0NESefU2/aqZqWua0MBekCfyoDSyTPRqnf0IA3+rCg=="/>
 		</item>
 		<item>
-			<title>1.13.98-rc</title>
+			<title>1.13.102</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Minor tweaks to file and folder browse dialog
+* Conflict reset mode is not multi select
+* Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -69,16 +72,17 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 19:46:10 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/win-x64.rar" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="69751554" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="7qp5dT4q8CrCfjJzt+Fg0IZQhanfi17a6LNU0p0uMiy757paQXsliJsbrKk7eYsfZDl/yC6/K2G+5YZC4sIHCQ=="/>
+			<pubDate>Mon, 22 Mar 2021 20:32:05 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/win-x64.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="69745695" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kOFolOuTeeGybuFw9ou0LN/Jq3EHDJQdq/DTAbk/Q9Fz71D3xxCg1CINiuXHnu0FnA6czSLRyBOAd26RQFCWCg=="/>
 		</item>
 		<item>
-			<title>1.13.98-rc</title>
+			<title>1.13.102</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Minor tweaks to file and folder browse dialog
+* Conflict reset mode is not multi select
+* Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -92,144 +96,8 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Sat, 20 Mar 2021 19:46:04 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.98-rc/linux-x64.zip" sparkle:version="1.13.98.2444" sparkle:shortVersionString="1.13.98" length="83064112" sparkle:os="linux" type="application/zip" sparkle:signature="aDyhaPfnGV37Rb96Bs+hIBC/pA8I8K3FkT44bMHNovhAsan6VK3muCoI3JtCODxGH7ApF88YBSLaBZ9TcGXyCw=="/>
-		</item>
-		<item>
-			<title>1.12.126</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Fix evaluation of mods with dependency tags while using different filenames
-* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
-
-CHANGES FROM v1.11:
-* Update dependencies
-* Various minor fixes
-* Add Spanish translation (by Werety)
-* Removed advanced mod merge (use compress instead)
-* German localization changes (by Cranky)
-* Added periodic permission check which verifies whether Irony is blocked by AV
-* Added DLC Manager
-* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
-* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
-* Irony patch mod control added (ability to disable it, ability to delete it)
-* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
-* Image preview fixes and improvements
-* Image preview should now show dds cubemaps properly
-* Add keyboard shortcuts
-* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Wed, 10 Mar 2021 20:14:16 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/osx-x64.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="63215543" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="zg/qMyFOvWxqTMe4grG/KsMFuK48+u9UcPBzdE9TqCKXpDjExc0cvKUGd/ckeJFZi6HnxpZLme90bv0a3/kPDQ=="/>
-		</item>
-		<item>
-			<title>1.12.126</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Fix evaluation of mods with dependency tags while using different filenames
-* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
-
-CHANGES FROM v1.11:
-* Update dependencies
-* Various minor fixes
-* Add Spanish translation (by Werety)
-* Removed advanced mod merge (use compress instead)
-* German localization changes (by Cranky)
-* Added periodic permission check which verifies whether Irony is blocked by AV
-* Added DLC Manager
-* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
-* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
-* Irony patch mod control added (ability to disable it, ability to delete it)
-* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
-* Image preview fixes and improvements
-* Image preview should now show dds cubemaps properly
-* Add keyboard shortcuts
-* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Wed, 10 Mar 2021 20:14:23 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/win-x64-setup.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="54785378" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="Sq3CV40AT9ETT8DCdNwTcrh+GvluUko2E1K4TGeDjxgdOTvzOoDKJcJp5wcjVQnwPl9CYWDpVz81inNles6UAQ=="/>
-		</item>
-		<item>
-			<title>1.12.126</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Fix evaluation of mods with dependency tags while using different filenames
-* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
-
-CHANGES FROM v1.11:
-* Update dependencies
-* Various minor fixes
-* Add Spanish translation (by Werety)
-* Removed advanced mod merge (use compress instead)
-* German localization changes (by Cranky)
-* Added periodic permission check which verifies whether Irony is blocked by AV
-* Added DLC Manager
-* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
-* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
-* Irony patch mod control added (ability to disable it, ability to delete it)
-* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
-* Image preview fixes and improvements
-* Image preview should now show dds cubemaps properly
-* Add keyboard shortcuts
-* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Wed, 10 Mar 2021 20:14:19 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/win-x64.rar" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="65627219" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="b1/MUkxc3XQoTF5D8IcjVuPl7xX3GEWuIp/0dkCAw75nh1bQhsCsEVBU7vhsrN3KianvEKAaHrOWoNCNz96kCg=="/>
-		</item>
-		<item>
-			<title>1.12.126</title>
-			<description>NOTE:
-Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
-
-RELEASE INFO:
-* Fix evaluation of mods with dependency tags while using different filenames
-* Bypass game modifier bug by applying autofix in conflict solver for species archetypes
-
-CHANGES FROM v1.11:
-* Update dependencies
-* Various minor fixes
-* Add Spanish translation (by Werety)
-* Removed advanced mod merge (use compress instead)
-* German localization changes (by Cranky)
-* Added periodic permission check which verifies whether Irony is blocked by AV
-* Added DLC Manager
-* Fix issue in certain cases where Irony autofix caused game items to not show due to dependency load cycle (this is a breaking change)
-* Round up numeric values in script values to allow Irony for even greater precision when comparing definition code (this is a breaking change)
-* Irony patch mod control added (ability to disable it, ability to delete it)
-* Wrap certain IO functions into retry strategy to hopefully prevent any CTDs (in cases where a file is locked)
-* Image preview fixes and improvements
-* Image preview should now show dds cubemaps properly
-* Add keyboard shortcuts
-* Reduce conflict solver memory usage (in testing ~300 mods in v1.11 used ~5.2GB of memory and v1.12 ~2.8GB)
-* Show notification if Irony cannot import a certain mod in a collection
-* Add command line support (to be utilized by projects like pdx unlimiter)
-* Expand patch refresh evaluation to take into account load order and other variables to more accurately notify users that conflict solver needs a re-run
-* Refresh mod list before performing a collection import
-* Tweak moving around mods in collection mods area
-* Render mod names properly for latin languages (which are not in latin)</description>
-			<pubDate>Wed, 10 Mar 2021 20:14:13 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.12.126/linux-x64.zip" sparkle:version="1.12.126.29928" sparkle:shortVersionString="1.12.126" length="78755239" sparkle:os="linux" type="application/zip" sparkle:signature="53fZB85hF2cYMF7Bi6L1k4U9VIwd9J5QT8oeYNuh9I65cr4ic7gwt33vLnMemYHQXQ7Z1DXbgqRt/rKx0lq4Cw=="/>
+			<pubDate>Mon, 22 Mar 2021 20:32:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/linux-x64.zip" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="83065133" sparkle:os="linux" type="application/zip" sparkle:signature="VrgTNjTJOXbNvOQuTneEnKwAwciqG4W3cFGxAczQFgF2tHVFWSBqXE6/P8VkcI90T/ji9rpozNhF9cHpj8YuDg=="/>
 		</item>
 	</channel>
 </rss>
