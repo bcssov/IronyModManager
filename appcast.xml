@@ -9,7 +9,7 @@
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is not multi select
+* Conflict reset mode is now multi select
 * Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
@@ -33,7 +33,7 @@ CHANGES FROM v1.12:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is not multi select
+* Conflict reset mode is now multi select
 * Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
@@ -57,7 +57,7 @@ CHANGES FROM v1.12:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is not multi select
+* Conflict reset mode is now multi select
 * Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
@@ -81,7 +81,7 @@ CHANGES FROM v1.12:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is not multi select
+* Conflict reset mode is now multi select
 * Fix undo\redo positioning hotkeys
 
 CHANGES FROM v1.12:
