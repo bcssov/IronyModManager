@@ -13,8 +13,7 @@ Check out the detailed overview on the [wiki](https://github.com/bcssov/IronyMod
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 ### Download
-* Latest stable version: [v1.12.126](https://github.com/bcssov/IronyModManager/releases/tag/v1.12.126)
-* Latest prerelease version: [v1.13.98-rc](https://github.com/bcssov/IronyModManager/releases/tag/v1.13.98-rc)
+* Latest stable version: [v1.13.102](https://github.com/bcssov/IronyModManager/releases/tag/v1.13.102)
 
 ### New users
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
