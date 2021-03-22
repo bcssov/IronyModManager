@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-22-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using Avalonia.Collections;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
@@ -70,24 +71,8 @@ namespace IronyModManager.ViewModels.Controls
         public ConflictSolverResetConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
-            Modes = new List<Mode>()
-            {
-                new Mode()
-                {
-                    Name = Resolved,
-                    Value = ResolvedValue
-                },
-                new Mode()
-                {
-                    Name = Ignored,
-                    Value = IgnoredValue
-                },
-                new Mode()
-                {
-                    Name = Custom,
-                    Value = CustomValue
-                }
-            };
+            InitModes();
+            SelectedHierarchicalDefinitions = new AvaloniaList<IHierarchicalDefinitions>();
         }
 
         #endregion Constructors
@@ -152,12 +137,6 @@ namespace IronyModManager.ViewModels.Controls
         public virtual IEnumerable<Mode> Modes { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the index of the previous conflict.
-        /// </summary>
-        /// <value>The index of the previous conflict.</value>
-        public virtual int? PreviousConflictIndex { get; set; }
-
-        /// <summary>
         /// Gets or sets the reset.
         /// </summary>
         /// <value>The reset.</value>
@@ -194,7 +173,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the selected parent hierarchical definition.
         /// </summary>
         /// <value>The selected parent hierarchical definition.</value>
-        public virtual IHierarchicalDefinitions SelectedHierarchicalDefinition { get; set; }
+        public virtual AvaloniaList<IHierarchicalDefinitions> SelectedHierarchicalDefinitions { get; set; }
 
         /// <summary>
         /// Gets or sets the selected mode.
@@ -218,6 +197,17 @@ namespace IronyModManager.ViewModels.Controls
         public virtual void ForceClosePopup()
         {
             IsOpen = false;
+        }
+
+        /// <summary>
+        /// Called when [locale changed].
+        /// </summary>
+        /// <param name="newLocale">The new locale.</param>
+        /// <param name="oldLocale">The old locale.</param>
+        public override void OnLocaleChanged(string newLocale, string oldLocale)
+        {
+            base.OnLocaleChanged(newLocale, oldLocale);
+            InitModes(true);
         }
 
         /// <summary>
@@ -246,14 +236,24 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="hierarchicalDefinitions">The hierarchical definitions.</param>
         protected virtual void Bind(IEnumerable<IHierarchicalDefinitions> hierarchicalDefinitions)
         {
-            var index = PreviousConflictIndex;
-            PreviousConflictIndex = null;
             if (hierarchicalDefinitions != null)
             {
-                HierarchicalDefinitions = hierarchicalDefinitions.ToObservableCollection();
-                if (HierarchicalDefinitions.Any() && SelectedHierarchicalDefinition == null)
+                IHierarchicalDefinitions selectedParent = null;
+                if (SelectedParentHierarchicalDefinition != null)
                 {
-                    SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault();
+                    selectedParent = SelectedParentHierarchicalDefinition;
+                }
+                HierarchicalDefinitions = hierarchicalDefinitions.ToObservableCollection();
+                if (HierarchicalDefinitions.Any() && SelectedHierarchicalDefinitions.Count == 0)
+                {
+                    if (selectedParent != null)
+                    {
+                        SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault(p => p.Name.Equals(selectedParent.Name));
+                    }
+                    else
+                    {
+                        SelectedParentHierarchicalDefinition = HierarchicalDefinitions.FirstOrDefault();
+                    }
                 }
                 if (SelectedParentHierarchicalDefinition != null)
                 {
@@ -262,16 +262,7 @@ namespace IronyModManager.ViewModels.Controls
                     var newSelected = HierarchicalDefinitions.FirstOrDefault(p => p.Name.Equals(conflictName));
                     if (newSelected != null)
                     {
-                        PreviousConflictIndex = index;
-                        if (PreviousConflictIndex.GetValueOrDefault() > (newSelected.Children.Count - 1))
-                        {
-                            PreviousConflictIndex = newSelected.Children.Count - 1;
-                        }
                         SelectedParentHierarchicalDefinition = newSelected;
-                    }
-                    if (SelectedParentHierarchicalDefinition.Children.Count > 0)
-                    {
-                        SelectedHierarchicalDefinition = SelectedParentHierarchicalDefinition.Children.FirstOrDefault();
                     }
                 }
             }
@@ -307,6 +298,41 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
+        /// Initializes the modes.
+        /// </summary>
+        /// <param name="refreshOnly">if set to <c>true</c> [refresh only].</param>
+        protected virtual void InitModes(bool refreshOnly = false)
+        {
+            if (refreshOnly)
+            {
+                Modes.FirstOrDefault(p => p.Value == ResolvedValue).Name = Resolved;
+                Modes.FirstOrDefault(p => p.Value == IgnoredValue).Name = Ignored;
+                Modes.FirstOrDefault(p => p.Value == CustomValue).Name = Custom;
+            }
+            else
+            {
+                Modes = new List<Mode>()
+                {
+                    new Mode()
+                    {
+                        Name = Resolved,
+                        Value = ResolvedValue
+                    },
+                    new Mode()
+                    {
+                        Name = Ignored,
+                        Value = IgnoredValue
+                    },
+                    new Mode()
+                    {
+                        Name = Custom,
+                        Value = CustomValue
+                    }
+                };
+            }
+        }
+
+        /// <summary>
         /// Called when [activated].
         /// </summary>
         /// <param name="disposables">The disposables.</param>
@@ -331,12 +357,17 @@ namespace IronyModManager.ViewModels.Controls
 
             ResetCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (SelectedHierarchicalDefinition != null && !string.IsNullOrWhiteSpace(SelectedHierarchicalDefinition.Key))
+                if (SelectedHierarchicalDefinitions != null && SelectedHierarchicalDefinitions.Any(p => !string.IsNullOrWhiteSpace(p.Key)))
                 {
+                    var definitions = SelectedHierarchicalDefinitions.Where(p => !string.IsNullOrWhiteSpace(p.Key));
                     if (SelectedMode?.Value == IgnoredValue)
                     {
-                        var result = await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, SelectedHierarchicalDefinition.Key, CollectionName);
-                        if (result)
+                        var results = new List<bool>();
+                        foreach (var item in definitions)
+                        {
+                            results.Add(await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName));
+                        }
+                        if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);
@@ -344,8 +375,12 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else if (SelectedMode?.Value == ResolvedValue)
                     {
-                        var result = await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, SelectedHierarchicalDefinition.Key, CollectionName);
-                        if (result)
+                        var results = new List<bool>();
+                        foreach (var item in definitions)
+                        {
+                            results.Add(await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName));
+                        }
+                        if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);
@@ -353,8 +388,12 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else if (SelectedMode?.Value == CustomValue)
                     {
-                        var result = await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, SelectedHierarchicalDefinition.Key, CollectionName);
-                        if (result)
+                        var results = new List<bool>();
+                        foreach (var item in definitions)
+                        {
+                            results.Add(await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName));
+                        }
+                        if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
                             return new CommandResult<bool>(true, CommandState.Success);

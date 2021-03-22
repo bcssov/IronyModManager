@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-22-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -1251,18 +1251,24 @@ namespace IronyModManager.ViewModels.Controls
                         case Enums.HotKeys.Ctrl_Z:
                             if (LeftSidePatchMod || RightSidePatchMod)
                             {
-                                PreFocusSide?.Invoke(LeftSidePatchMod);
-                                PerformUndo(LeftSidePatchMod);
-                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                                if (undoStack.Count > 0)
+                                {
+                                    PreFocusSide?.Invoke(LeftSidePatchMod);
+                                    PerformUndo(LeftSidePatchMod);
+                                    PostFocusSide?.Invoke(LeftSidePatchMod);
+                                }
                             }
                             break;
 
                         case Enums.HotKeys.Ctrl_Y:
                             if (LeftSidePatchMod || RightSidePatchMod)
                             {
-                                PreFocusSide?.Invoke(LeftSidePatchMod);
-                                PerformRedo(LeftSidePatchMod);
-                                PostFocusSide?.Invoke(LeftSidePatchMod);
+                                if (redoStack.Count > 0)
+                                {
+                                    PreFocusSide?.Invoke(LeftSidePatchMod);
+                                    PerformRedo(LeftSidePatchMod);
+                                    PostFocusSide?.Invoke(LeftSidePatchMod);
+                                }
                             }
                             break;
 

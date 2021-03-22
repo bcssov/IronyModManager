@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-22-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -227,21 +227,13 @@ namespace IronyModManager.Views.Controls
             {
                 async Task delay()
                 {
-                    await Task.Delay(1);
+                    await Task.Delay(50);
                     var listBox = left ? leftSide : rightSide;
                     listBox.Focus();
                     if (focusSideScrollItem.HasValue)
                     {
-                        if (listBox.Items is IEnumerable<DiffPieceWithIndex> items)
-                        {
-                            var itemsList = items.ToList();
-                            var item = itemsList.FirstOrDefault(p => p.Index == focusSideScrollItem.GetValueOrDefault());
-                            if (item == null)
-                            {
-                                item = itemsList.LastOrDefault();
-                            }
-                            listBox.ScrollIntoView(item);
-                        }
+                        FocusConflict(-1, leftSide, rightSide);
+                        listBox.ScrollIntoView(focusSideScrollItem.GetValueOrDefault());
                     }
                     focusSideScrollItem = null;
                 }
