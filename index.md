@@ -20,7 +20,7 @@ Auto update was broken by an external component or GitHub breaking change which 
 Check this [checklist](https://github.com/bcssov/IronyModManager/wiki/New-User-Checklist) if you are a first time user of Irony.
 
 ### Documentation
-Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/wiki). if you're looking for PDF Documentation see [here](https://github.com/bcssov/IronyModManager/discussions/210).
+Documentation is hosted on the [wiki](https://github.com/bcssov/IronyModManager/wiki). If you're looking for PDF Documentation see [here](https://github.com/bcssov/IronyModManager/discussions/210).
 
 ### Issues\Bugs
 Reports issues and bugs [here](https://github.com/bcssov/IronyModManager/issues). 
