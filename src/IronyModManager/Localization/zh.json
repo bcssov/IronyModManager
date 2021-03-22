@@ -58,6 +58,12 @@
             "Pictures": "图片"
         }
     },
+    "TextBox": {
+        "Copy": "复制",
+        "Cut": "剪切",
+        "Paste": "粘贴",
+        "SelectAll": "全选"
+    },
     "Languages": {
         "Name": "语言"
     },
@@ -65,12 +71,19 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
+        "FluentLight": "流利的光",
+        "FluentDark": "流利的黑暗",
         "MaterialDark": "Material 暗色",
-        "MaterialLightGreen": "Material 亮绿",
-        "MaterialDeepPurple": "Material 深紫",
+        "MaterialLight": "Material 光",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
         "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"
+    },
+    "NotificationPosition": {
+        "BottomRight": "右下",
+        "BottomLeft": "左下方",
+        "TopRight": "右上",
+        "TopLeft": "左上方"
     },
     "Games": {
         "Name": "游戏",
@@ -168,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "步骤 {Count}/{TotalCount}：{PercentDone}",
+            "DiskInfoOverlay": "正在检查可用的磁盘空间...",
             "Options": {
                 "Title": "选择模式",
                 "Basic": "基础",
@@ -334,6 +348,10 @@
         "Close": "关闭",
         "NavigateTo": "…",
         "Reset": "×",
+        "AppOptions": {
+            "Title": "应用选项",
+            "NotificationPosition": "通知位置"
+        },
         "Editor": {
             "Title": "外部编辑器选项",
             "EditorExecutable": "可执行文件",
@@ -347,7 +365,8 @@
             "GameArgs": "启动参数",
             "RefreshMods": "启动前刷新模组描述文件",
             "CloseAfterLaunch": "启动游戏后关闭",
-            "AutoConfigure": "设置全部……"
+            "AutoConfigure": "设置全部……",
+            "CustoModPath": "自定义Mod目录"
         },
         "Updates": {
             "Title": "更新选项",
@@ -379,7 +398,14 @@
             "ExeTitle": "选择游戏可执行文件",
             "GameRootTitle": "选择游戏根目录",
             "UserDirTitle": "选择游戏数据目录",
-            "EditorTitle": "查找编辑器可执行文件"
+            "EditorTitle": "查找编辑器可执行文件",
+            "CustomModPathTitle": "查找自定义mod目录"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "不是空的",
+                "Message": "如果您现在更改它，自定义mod目录不为空，您可能会丢失一些mods。 你确定要改变它吗？"
+            }
         }
     },
     "Notifications": {
@@ -462,6 +488,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "刷新冲突处理器",
             "Message": "因添加新自定义补丁，需要刷新冲突处理器。请重新运行冲突处理器。"
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "没有足够的自由空间",
+            "Message": "没有足够的可用空间来执行合并操作。"
         }
     },
     "Mod_App_Actions": {

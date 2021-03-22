@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-17-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -13,7 +13,6 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace IronyModManager
 {
@@ -45,21 +44,6 @@ namespace IronyModManager
         public const string PublicUpdateKey = "Oc2c/G6WMYkKL9+owAZYNIwMAMu9YqURiKw+gkY4zEw=";
 
         /// <summary>
-        /// The unhandled error header
-        /// </summary>
-        public const string UnhandledErrorHeader = "Fatal Error";
-
-        /// <summary>
-        /// The error message
-        /// </summary>
-        public const string UnhandledErrorMessage = "Unhandled error occurred. App will close automatically.";
-
-        /// <summary>
-        /// The unhandled error title
-        /// </summary>
-        public const string UnhandledErrorTitle = "Error";
-
-        /// <summary>
         /// The update settings
         /// </summary>
         public const string UpdateSettings = "update-settings.json";
@@ -68,11 +52,6 @@ namespace IronyModManager
         /// The wiki URL
         /// </summary>
         public const string WikiUrl = "https://github.com/bcssov/IronyModManager/wiki";
-
-        /// <summary>
-        /// The logs location
-        /// </summary>
-        public static readonly string LogsLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
 
         #endregion Fields
 

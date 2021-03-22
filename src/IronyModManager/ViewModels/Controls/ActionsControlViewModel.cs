@@ -4,7 +4,7 @@
 // Created          : 07-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ActionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -185,9 +185,9 @@ namespace IronyModManager.ViewModels.Controls
 
             LogsCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (Directory.Exists(Constants.LogsLocation))
+                if (Directory.Exists(StaticResources.GetLogLocation()))
                 {
-                    await appAction.OpenAsync(Constants.LogsLocation);
+                    await appAction.OpenAsync(StaticResources.GetLogLocation());
                 }
             }).DisposeWith(disposables);
 

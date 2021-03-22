@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using IronyModManager.DI;
+using IronyModManager.IO.Common;
 using IronyModManager.IO.Common.Mods;
 using IronyModManager.IO.Common.Readers;
 using IronyModManager.Models.Common;
@@ -53,7 +54,12 @@ namespace IronyModManager.Services
         /// <summary>
         /// The zip lock
         /// </summary>
-        private static readonly AsyncLock zipLock = new AsyncLock();
+        private static readonly AsyncLock zipLock = new();
+
+        /// <summary>
+        /// The drive information provider
+        /// </summary>
+        private readonly IDriveInfoProvider driveInfoProvider;
 
         /// <summary>
         /// The message bus
@@ -82,6 +88,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ModMergeService" /> class.
         /// </summary>
+        /// <param name="driveInfoProvider">The drive information provider.</param>
         /// <param name="modMergeCompressExporter">The mod merge compress exporter.</param>
         /// <param name="cache">The cache.</param>
         /// <param name="messageBus">The message bus.</param>
@@ -94,12 +101,14 @@ namespace IronyModManager.Services
         /// <param name="gameService">The game service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ModMergeService(IModMergeCompressExporter modMergeCompressExporter, ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
+        public ModMergeService(IDriveInfoProvider driveInfoProvider, IModMergeCompressExporter modMergeCompressExporter,
+            ICache cache, IMessageBus messageBus, IModPatchExporter modPatchExporter,
             IModMergeExporter modMergeExporter, IEnumerable<IDefinitionInfoProvider> definitionInfoProviders,
             IReader reader, IModWriter modWriter,
             IModParser modParser, IGameService gameService,
             IStorageProvider storageProvider, IMapper mapper) : base(cache, definitionInfoProviders, reader, modWriter, modParser, gameService, storageProvider, mapper)
         {
+            this.driveInfoProvider = driveInfoProvider;
             this.modMergeCompressExporter = modMergeCompressExporter;
             this.messageBus = messageBus;
             this.modMergeExporter = modMergeExporter;
@@ -109,6 +118,43 @@ namespace IronyModManager.Services
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// has enough free space as an asynchronous operation.
+        /// </summary>
+        /// <param name="collectionName">Name of the collection.</param>
+        /// <returns>System.Threading.Tasks.Task&lt;bool&gt;.</returns>
+        public virtual async Task<bool> HasEnoughFreeSpaceAsync(string collectionName)
+        {
+            var game = GameService.GetSelected();
+            if (game == null || string.IsNullOrWhiteSpace(collectionName))
+            {
+                return false;
+            }
+
+            var allMods = GetInstalledModsInternal(game, false).ToList();
+            var collectionMods = GetCollectionMods(allMods).ToList();
+            if (collectionMods.Count == 0)
+            {
+                return false;
+            }
+            var totalFiles = collectionMods.Count;
+            double lastPercentage = 0;
+            var processed = 0;
+            long requiredSize = 0;
+            foreach (var collectionMod in collectionMods)
+            {
+                requiredSize += Reader.GetTotalSize(collectionMod.FullPath);
+                processed++;
+                var percentage = GetProgressPercentage(totalFiles, processed, 100);
+                if (lastPercentage != percentage)
+                {
+                    await messageBus.PublishAsync(new ModMergeFreeSpaceCheckEvent(percentage));
+                }
+                lastPercentage = percentage;
+            }
+            return driveInfoProvider.HasFreeSpace(GetPatchModDirectory(game, collectionName), requiredSize);
+        }
 
         /// <summary>
         /// Merges the collection by files asynchronous.
@@ -131,10 +177,10 @@ namespace IronyModManager.Services
             }
 
             var mergeCollectionPath = collectionName.GenerateValidFileName();
+            var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                Path = modDirPath
             }, true);
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
             {
@@ -143,17 +189,16 @@ namespace IronyModManager.Services
             });
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                RootDirectory = modDirPath
             });
 
             var mod = DIResolver.Get<IMod>();
             mod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{mergeCollectionPath}{Shared.Constants.ModExtension}";
-            mod.FileName = GetModDirectory(game, mergeCollectionPath).Replace("\\", "/");
+            mod.FileName = modDirPath.Replace("\\", "/");
             mod.Name = collectionName;
             mod.Source = ModSource.Local;
             mod.Version = allMods.OrderByDescending(p => p.VersionData).FirstOrDefault() != null ? allMods.OrderByDescending(p => p.VersionData).FirstOrDefault().Version : string.Empty;
-            mod.FullPath = GetModDirectory(game, mergeCollectionPath);
+            mod.FullPath = modDirPath;
             await ModWriter.WriteDescriptorAsync(new ModWriterParameters()
             {
                 Mod = mod,
@@ -163,7 +208,6 @@ namespace IronyModManager.Services
             }, true);
             Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
 
-            var exportPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath);
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
             var patchMod = allMods.FirstOrDefault(p => p.Name.Equals(patchName));
@@ -217,13 +261,14 @@ namespace IronyModManager.Services
 
             IMod cloneMod(IMod mod, string fileName, int order)
             {
+                var modDirPath = GetPatchModDirectory(game, fileName);
                 var newMod = DIResolver.Get<IMod>();
                 newMod.DescriptorFile = $"{Shared.Constants.ModDirectory}/{Path.GetFileNameWithoutExtension(fileName)}{Shared.Constants.ModExtension}";
-                newMod.FileName = GetModDirectory(game, fileName).Replace("\\", "/");
+                newMod.FileName = modDirPath.Replace("\\", "/");
                 newMod.Name = !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {mod.Name}" : mod.Name;
                 newMod.Source = ModSource.Local;
                 newMod.Version = mod.Version;
-                newMod.FullPath = GetModDirectory(game, fileName);
+                newMod.FullPath = modDirPath;
                 newMod.RemoteId = mod.RemoteId;
                 newMod.Picture = mod.Picture;
                 newMod.ReplacePath = mod.ReplacePath;
@@ -250,10 +295,11 @@ namespace IronyModManager.Services
                 return null;
             }
             var mergeCollectionPath = collectionName.GenerateValidFileName();
+            var modDirPath = GetPatchModDirectory(game, mergeCollectionPath);
+            var modDirRootPath = GetModDirectoryRootPath(game);
             await ModWriter.PurgeModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                Path = modDirPath,
             }, true);
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
             {
@@ -262,8 +308,7 @@ namespace IronyModManager.Services
             });
             await ModWriter.CreateModDirectoryAsync(new ModWriterParameters()
             {
-                RootDirectory = game.UserDirectory,
-                Path = Path.Combine(Shared.Constants.ModDirectory, mergeCollectionPath)
+                Path = modDirPath
             });
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
@@ -377,8 +422,10 @@ namespace IronyModManager.Services
                     lastPercentage = outerPercentage;
                     outerProgressLock.Dispose();
 
-                    modMergeCompressExporter.Finalize(queueId, Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory, mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ? $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
+                    modMergeCompressExporter.Finalize(queueId, Path.Combine(modDirRootPath, mergeCollectionPath, !string.IsNullOrWhiteSpace(copiedNamePrefix) ?
+                        $"{copiedNamePrefix} {collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName() : $"{collectionMod.Name.GenerateValidFileName()}{Shared.Constants.ZipExtension}".GenerateValidFileName()));
                     renamePairs.Add(new KeyValuePair<string, string>(collectionMod.Name, newMod.Name));
+                    renamePairs.Add(new KeyValuePair<string, string>(collectionMod.DescriptorFile, newMod.DescriptorFile));
                     using var exportModLock = await zipLock.LockAsync();
                     exportedMods.Add(newMod);
                     exportModLock.Dispose();
@@ -402,9 +449,9 @@ namespace IronyModManager.Services
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 99.99));
             await modPatchExporter.CopyPatchModAsync(new ModPatchExporterParameters()
             {
-                RootPath = Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory),
-                ModPath = patchName,
-                PatchName = newPatchName,
+                RootPath = modDirRootPath,
+                ModPath = EvaluatePatchNamePath(game, patchName, modDirRootPath),
+                PatchPath = EvaluatePatchNamePath(game, newPatchName, modDirRootPath),
                 RenamePairs = renamePairs
             });
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 100));

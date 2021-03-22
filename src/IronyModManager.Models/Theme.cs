@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-25-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Theme.cs" company="Mario">
 //     Mario
@@ -42,12 +42,6 @@ namespace IronyModManager.Models
         /// <value>The name.</value>
         [DynamicLocalization(LocalizationResources.Themes.Prefix, nameof(Type))]
         public virtual string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the style includes.
-        /// </summary>
-        /// <value>The style includes.</value>
-        public virtual IEnumerable<string> StyleIncludes { get; set; }
 
         /// <summary>
         /// Gets or sets the type.

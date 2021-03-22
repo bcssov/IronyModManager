@@ -4,15 +4,15 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 05-30-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="IDatabase.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
 
@@ -50,6 +50,12 @@ namespace IronyModManager.Storage.Common
         /// </summary>
         /// <value>The mod collection.</value>
         IEnumerable<IModCollection> ModCollection { get; set; }
+
+        /// <summary>
+        /// Gets or sets the notification position.
+        /// </summary>
+        /// <value>The notification position.</value>
+        IList<INotificationPositionType> NotificationPosition { get; set; }
 
         /// <summary>
         /// Gets or sets the preferences.

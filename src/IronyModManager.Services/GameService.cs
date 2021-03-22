@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="GameService.cs" company="Mario">
 //     Mario
@@ -125,7 +125,7 @@ namespace IronyModManager.Services
                 model.LaunchArguments = settings.ExecutableArgs;
                 model.UserDirectory = settings.UserDirectory;
             }
-            else if (!string.IsNullOrWhiteSpace(game.WorkshopDirectory))
+            else if (!string.IsNullOrWhiteSpace(game.BaseSteamGameDirectory))
             {
                 model.ExecutableLocation = $"{SteamLaunchArgs}{game.SteamAppId}";
             }
@@ -143,6 +143,7 @@ namespace IronyModManager.Services
             {
                 model.UserDirectory = game.UserDirectory;
             }
+            model.CustomModDirectory = string.Empty;
             return model;
         }
 
@@ -174,6 +175,7 @@ namespace IronyModManager.Services
                     model.LaunchArguments = string.Join(" ", settingsObject.ExeArgs);
                     model.UserDirectory = pathResolver.Parse(settingsObject.GameDataPath);
                     model.ExecutableLocation = Path.Combine(path, settingsObject.ExePath).StandardizeDirectorySeparator();
+                    model.CustomModDirectory = string.Empty;
                     return model;
                 }
                 catch
@@ -223,6 +225,7 @@ namespace IronyModManager.Services
             model.RefreshDescriptors = game.RefreshDescriptors;
             model.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             model.Type = game.Type;
+            model.CustomModDirectory = string.Empty;
             return model;
         }
 
@@ -347,7 +350,9 @@ namespace IronyModManager.Services
         {
             if (games == null || !games.Any() || selectedGame == null)
             {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                 throw new ArgumentNullException($"{nameof(games)} or {nameof(selectedGame)}.");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
 
             var currentSelection = GetSelected();
@@ -396,6 +401,7 @@ namespace IronyModManager.Services
             game.RemoteSteamUserDirectory = gameType.RemoteSteamUserDirectory;
             game.Abrv = gameType.Abrv;
             game.CloseAppAfterGameLaunch = true;
+            game.CustomModDirectory = string.Empty;
             var setExeLocation = true;
             var setUserDirLocation = true;
             if (gameSettings != null)
@@ -415,6 +421,10 @@ namespace IronyModManager.Services
                 {
                     setUserDirLocation = false;
                     game.UserDirectory = gameSettings.UserDirectory;
+                }
+                if (!string.IsNullOrWhiteSpace(gameSettings.CustomModDirectory))
+                {
+                    game.CustomModDirectory = gameSettings.CustomModDirectory;
                 }
             }
             if (setExeLocation || setUserDirLocation)
@@ -456,6 +466,7 @@ namespace IronyModManager.Services
             settings.CloseAppAfterGameLaunch = game.CloseAppAfterGameLaunch;
             settings.RefreshDescriptors = game.RefreshDescriptors;
             settings.UserDirectory = game.UserDirectory;
+            settings.CustomModDirectory = game.CustomModDirectory;
             StorageProvider.SetGameSettings(gameSettings);
         }
 

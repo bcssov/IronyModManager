@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-13-2020
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="IReader.cs" company="Mario">
 //     Mario
@@ -55,6 +55,13 @@ namespace IronyModManager.IO.Common.Readers
         /// <param name="file">The file.</param>
         /// <returns>Stream.</returns>
         Stream GetStream(string rootPath, string file);
+
+        /// <summary>
+        /// Gets the total size.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        long GetTotalSize(string path);
 
         /// <summary>
         /// Reads the specified path.

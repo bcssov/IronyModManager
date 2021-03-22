@@ -15,15 +15,20 @@
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
         <Grid RowDefinitions="1*,1*,1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
           <Button Content="{Binding DLC}" Command="{Binding DLCCommand}"
-                                   Grid.Row="0" Grid.Column="0"></Button>
+                  Grid.Row="0" Grid.Column="0"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding Wiki}" Command="{Binding WikiCommand}"
-                                   Grid.Row="1" Grid.Column="0"></Button>
+                  Grid.Row="1" Grid.Column="0"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding Logs}" Command="{Binding LogsCommand}"
-                                   Grid.Row="2" Grid.Column="0"></Button>
+                  Grid.Row="2" Grid.Column="0"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding ErrorLog}" Command="{Binding ErrorLogCommand}"
-                                   Grid.Row="3" Grid.Column="0"></Button>
+                  Grid.Row="3" Grid.Column="0"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
           <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
-                                   Grid.Row="4" Grid.Column="0"></Button>
+                  Grid.Row="4" Grid.Column="0"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
         </Grid>
       </Border>
     </Popup>

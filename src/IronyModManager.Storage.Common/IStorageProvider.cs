@@ -4,15 +4,15 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-12-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="IStorageProvider.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Storage.Common
@@ -49,6 +49,12 @@ namespace IronyModManager.Storage.Common
         IEnumerable<IModCollection> GetModCollections();
 
         /// <summary>
+        /// Gets the notification positions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
+        IEnumerable<INotificationPositionType> GetNotificationPositions();
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -74,13 +80,19 @@ namespace IronyModManager.Storage.Common
         bool RegisterGame(IGameType gameType);
 
         /// <summary>
+        /// Registers the notification position.
+        /// </summary>
+        /// <param name="notificationPosition">The notification position.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool RegisterNotificationPosition(INotificationPositionType notificationPosition);
+
+        /// <summary>
         /// Registers the theme.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false);
+        bool RegisterTheme(string name, bool isDefault = false);
 
         /// <summary>
         /// Sets the state of the application.

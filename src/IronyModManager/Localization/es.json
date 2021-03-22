@@ -61,16 +61,29 @@
     "Languages": {
         "Name": "Idioma"
     },
+    "TextBox": {
+        "Copy": "Copiar",
+        "Cut": "Cortar",
+        "Paste": "Pegar",
+        "SelectAll": "Seleccionar Todo"
+    },
     "Themes": {
         "Name": "Tema",
         "Light": "Claro",
         "Dark": "Oscuro",
+        "FluentLight": "Luz Fluida",
+        "FluentDark": "Oscuro Fluido",
         "MaterialDark": "Material Oscuro",
-        "MaterialLightGreen": "Material Verde Claro",
-        "MaterialDeepPurple": "Material Morado Oscuro",
+        "MaterialLight": "Material Ligero",
         "Restart_Title": "Necesita Reinicio",
         "Restart_Header": "Aplicación Necesita Reinicio",
         "Restart_Message": "La aplicación debe reiniciarse para que el nuevo tema se aplique correctamente. ¿Quieres reiniciar la aplicación?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Abajo a la derecha",
+        "BottomLeft": "Abajo a la izquierda",
+        "TopRight": "Parte superior derecha",
+        "TopLeft": "Arriba a la izquierda"
     },
     "Games": {
         "Name": "Juego",
@@ -168,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Comprobando el espacio disponible en disco...",
             "Options": {
                 "Title": "Seleccionar Modo",
                 "Basic": "Basico",
@@ -334,6 +348,10 @@
         "Close": "Cerrar",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Opciones de aplicación",
+            "NotificationPosition": "Posición de notificación"
+        },
         "Editor": {
             "Title": "Opciones del Editor externo",
             "EditorExecutable": "Editor Ejecutable",
@@ -347,7 +365,8 @@
             "GameArgs": "Game Args",
             "RefreshMods": "Refrescar Descriptors antes de jugar",
             "CloseAfterLaunch": "Cerrar después de iniciar el juego",
-            "AutoConfigure": "Configurar todo..."
+            "AutoConfigure": "Configurar todo...",
+            "CustoModPath": "Directorio de mod personalizado"
         },
         "Updates": {
             "Title": "Opciones de Actualización",
@@ -379,7 +398,14 @@
             "ExeTitle": "Encuentra el ejecutable del juego",
             "GameRootTitle": "Encuentra el directorio raíz del juego",
             "UserDirTitle": "Encuentra el directorio de datos del juego",
-            "EditorTitle": "Buscar editor ejecutable"
+            "EditorTitle": "Buscar editor ejecutable",
+            "CustomModPathTitle": "Encuentra un directorio de mod personalizado"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "No vacío",
+                "Message": "El directorio MOD personalizado no está vacío si lo cambia ahora, puede perder algunos mods. ¿Estás seguro de que quieres cambiarlo?"
+            }
         }
     },
     "Notifications": {
@@ -462,6 +488,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Actualización del Solucionador de conflictos",
             "Message": "El Solucionador de conflictos debe actualizarse para tener en cuenta los nuevos parches personalizados añadidos. Vuelva a ejecutar el solucionador de conflictos."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "No hay suficiente espacio libre",
+            "Message": "No hay suficiente espacio libre para realizar una operación de combinación."
         }
     },
     "Mod_App_Actions": {

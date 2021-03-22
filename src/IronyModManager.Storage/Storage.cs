@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Storage.cs" company="Mario">
 //     Mario
@@ -124,6 +124,19 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Gets the notification positions.
+        /// </summary>
+        /// <returns>IEnumerable&lt;INotificationPositionType&gt;.</returns>
+        public IEnumerable<INotificationPositionType> GetNotificationPositions()
+        {
+            lock (dbLock)
+            {
+                var result = Mapper.Map<List<INotificationPositionType>>(Database.NotificationPosition);
+                return result;
+            }
+        }
+
+        /// <summary>
         /// Gets the preferences.
         /// </summary>
         /// <returns>IPreferences.</returns>
@@ -180,7 +193,7 @@ namespace IronyModManager.Storage
                 game.Name = gameType.Name;
                 game.UserDirectory = gameType.UserDirectory ?? string.Empty;
                 game.SteamAppId = gameType.SteamAppId;
-                game.WorkshopDirectory = gameType.WorkshopDirectory ?? string.Empty;
+                game.WorkshopDirectory = gameType.WorkshopDirectory ?? new List<string>();
                 game.LogLocation = gameType.LogLocation;
                 game.ChecksumFolders = gameType.ChecksumFolders ?? new List<string>();
                 game.GameFolders = gameType.GameFolders ?? new List<string>();
@@ -198,15 +211,36 @@ namespace IronyModManager.Storage
         }
 
         /// <summary>
+        /// Registers the notification position.
+        /// </summary>
+        /// <param name="notificationPosition">The notification position.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="InvalidOperationException">Notification position is null or already registered.</exception>
+        public bool RegisterNotificationPosition(INotificationPositionType notificationPosition)
+        {
+            lock (dbLock)
+            {
+                if (notificationPosition == null || Database.NotificationPosition.Any(p => p.Position == notificationPosition.Position) || (notificationPosition.IsDefault && Database.NotificationPosition.Any(p => p.IsDefault)))
+                {
+                    throw new InvalidOperationException("Notification position is null or already registered.");
+                }
+                var model = DIResolver.Get<INotificationPositionType>();
+                model.IsDefault = notificationPosition.IsDefault;
+                model.Position = notificationPosition.Position;
+                Database.NotificationPosition.Add(model);
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Registers the theme.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="styles">The styles.</param>
         /// <param name="isDefault">if set to <c>true</c> [is default].</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         /// <exception cref="InvalidOperationException">There is already a default theme registered.</exception>
         /// <exception cref="InvalidOperationException"></exception>
-        public virtual bool RegisterTheme(string name, IEnumerable<string> styles, bool isDefault = false)
+        public virtual bool RegisterTheme(string name, bool isDefault = false)
         {
             lock (dbLock)
             {
@@ -221,7 +255,6 @@ namespace IronyModManager.Storage
                 var themeType = DIResolver.Get<IThemeType>();
                 themeType.IsDefault = isDefault;
                 themeType.Name = name;
-                themeType.Styles = styles ?? new List<string>();
                 Database.Themes.Add(themeType);
                 return true;
             }

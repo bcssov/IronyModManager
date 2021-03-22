@@ -4,7 +4,7 @@
 // Created          : 03-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="DragDropListBox.cs" company="Mario">
 //     Mario
@@ -17,11 +17,9 @@ using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
-using Avalonia.VisualTree;
 using IronyModManager.Shared;
 
 namespace IronyModManager.Controls
@@ -191,6 +189,7 @@ namespace IronyModManager.Controls
         /// Handles the <see cref="E:PointerPressed" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
@@ -226,22 +225,6 @@ namespace IronyModManager.Controls
                 draggedItemContent = null;
                 Cursor = originalCursor;
             }
-        }
-
-        /// <summary>
-        /// Gets the hovered item.
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <returns>ListBoxItem.</returns>
-        private ListBoxItem GetHoveredItem(Point position)
-        {
-            var visuals = this.GetVisualsAt(position);
-            if (visuals?.Count() > 0)
-            {
-                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault(p => (p.TemplatedParent as ListBoxItem) != null);
-                return contentPresenter?.TemplatedParent as ListBoxItem;
-            }
-            return null;
         }
 
         #endregion Methods

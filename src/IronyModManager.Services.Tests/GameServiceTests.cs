@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-21-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="GameServiceTests.cs" company="Mario">
 //     Mario
@@ -59,14 +59,14 @@ namespace IronyModManager.Services.Tests
                     Name = "game 1",
                     UserDirectory = "user1",
                     SteamAppId = 1,
-                    WorkshopDirectory = "workshop1"
+                    WorkshopDirectory = new List<string>() {  "workshop1" }
                 },
                 new GameType()
                 {
                     Name = "game 2",
                     UserDirectory = "user2",
                     SteamAppId = 2,
-                    WorkshopDirectory = "workshop2",
+                    WorkshopDirectory = new List<string>() {  "workshop2" },
                     ExecutableArgs = "args",
                     ExecutablePath = "exePath.exe",
                     BaseSteamGameDirectory = "exePath"
@@ -123,7 +123,7 @@ namespace IronyModManager.Services.Tests
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
             result.FirstOrDefault(p => p.IsSelected).UserDirectory.Should().Be("user1");
             result.FirstOrDefault(p => p.IsSelected).SteamAppId.Should().Be(1);
-            result.FirstOrDefault(p => p.IsSelected).WorkshopDirectory.Should().Be("workshop1");
+            result.FirstOrDefault(p => p.IsSelected).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace IronyModManager.Services.Tests
             result.FirstOrDefault(p => p.IsSelected).Type.Should().Be("game 1");
             result.FirstOrDefault(p => p.IsSelected).UserDirectory.Should().Be("user1");
             result.FirstOrDefault(p => p.IsSelected).SteamAppId.Should().Be(1);
-            result.FirstOrDefault(p => p.IsSelected).WorkshopDirectory.Should().Be("workshop1");
+            result.FirstOrDefault(p => p.IsSelected).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
             result.FirstOrDefault(p => p.IsSelected).ExecutableLocation.Should().Be("test.exe");
             result.FirstOrDefault(p => p.IsSelected).LaunchArguments.Should().Be("test");
         }
@@ -163,7 +163,7 @@ namespace IronyModManager.Services.Tests
             result.Type.Should().Be("game 1");
             result.UserDirectory.Should().Be("user1");
             result.SteamAppId.Should().Be(1);
-            result.WorkshopDirectory.Should().Be("workshop1");
+            result.WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 ExecutableLocation = "steam://run/1"
             };
             var storageProvider = new Mock<IStorageProvider>();
@@ -399,7 +399,7 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "test",
                 ExecutableLocation = "steam://run/1"
             };
@@ -423,7 +423,7 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 ExecutableLocation = "test.exe"
             };
             var storageProvider = new Mock<IStorageProvider>();
@@ -446,7 +446,7 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "args",
                 ExecutableLocation = "test.exe"
             };
@@ -470,7 +470,7 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = " -args",
                 ExecutableLocation = "test.exe"
             };
@@ -494,9 +494,10 @@ namespace IronyModManager.Services.Tests
                 SteamAppId = 1,
                 IsSelected = true,
                 Type = "game 1",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "args",
-                ExecutableLocation = "test.exe"
+                ExecutableLocation = "test.exe",
+                BaseSteamGameDirectory = @"c:\steam\stellaris"
             };
             var storageProvider = new Mock<IStorageProvider>();
             var preferencesService = new Mock<IPreferencesService>();
@@ -518,7 +519,7 @@ namespace IronyModManager.Services.Tests
                 IsSelected = true,
                 Type = "game 1",
                 UserDirectory = "user-dir",
-                WorkshopDirectory = "test",
+                WorkshopDirectory = new List<string>() { "test" },
                 LaunchArguments = "args",
                 ExecutableLocation = "test.exe"
             };
@@ -528,6 +529,30 @@ namespace IronyModManager.Services.Tests
             var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
             var args = service.GetDefaultGameSettings(game);
             args.UserDirectory.Should().Be("user-dir");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_empty_custom_mod_directory_location_as_default_setting.
+        /// </summary>
+        [Fact]
+        public void Should_return_empty_custom_mod_directory_location_as_default_setting()
+        {
+            var game = new Game()
+            {
+                SteamAppId = 1,
+                IsSelected = true,
+                Type = "game 1",
+                UserDirectory = "user-dir",
+                WorkshopDirectory = new List<string>() { "test" },
+                LaunchArguments = "args",
+                ExecutableLocation = "test.exe",                
+            };
+            var storageProvider = new Mock<IStorageProvider>();
+            var preferencesService = new Mock<IPreferencesService>();
+            SetupMockCase(preferencesService, storageProvider);
+            var service = new GameService(new Mock<IReader>().Object, storageProvider.Object, preferencesService.Object, new Mock<IMapper>().Object);
+            var args = service.GetDefaultGameSettings(game);
+            args.CustomModDirectory.Should().BeNullOrEmpty();         
         }
 
         /// <summary>
@@ -781,6 +806,7 @@ namespace IronyModManager.Services.Tests
             result.UserDirectory.Should().Be("test");
             result.ExecutableLocation.Should().Be("test\\stellaris.exe");
             result.LaunchArguments.Should().Be("-gdpr-compliant");
+            result.CustomModDirectory.Should().BeNullOrEmpty();
         }
     }
 }

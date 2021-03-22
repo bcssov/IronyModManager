@@ -4,7 +4,7 @@
 // Created          : 01-13-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="ThemeService.cs" company="Mario">
 //     Mario
@@ -116,7 +116,9 @@ namespace IronyModManager.Services
         {
             if (themes == null || !themes.Any() || selectedTheme == null)
             {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                 throw new ArgumentNullException($"{nameof(themes)} or {nameof(selectedTheme)}");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
             var currentlySelected = GetSelected();
             if (currentlySelected.Type == selectedTheme.Type)
@@ -160,7 +162,6 @@ namespace IronyModManager.Services
             var theme = GetModelInstance<ITheme>();
             theme.Type = themeItem.Name;
             theme.IsSelected = themeItem.Name == selectedType;
-            theme.StyleIncludes = themeItem.Styles;
             theme.Name = themeItem.Name;
             return theme;
         }

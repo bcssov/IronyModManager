@@ -4,7 +4,7 @@
 // Created          : 01-10-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="Program.cs" company="IronyModManager">
 //     Copyright (c) Mario. All rights reserved.
@@ -13,16 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using CommandLine;
 using IronyModManager.Controls.Dialogs;
 using IronyModManager.DI;
-using IronyModManager.Implementation;
-using IronyModManager.Implementation.AssetLoader;
+using IronyModManager.Implementation.Actions;
 using IronyModManager.Localization;
 using IronyModManager.Platform;
 using IronyModManager.Shared;
@@ -46,8 +45,7 @@ namespace IronyModManager
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UseIronyPlatformDetect()
-                .UseIronyAssetLoader()
-                .UseManagedDialogs().AfterSetup((s) =>
+                .UseIronyManagedDialogs().AfterSetup((s) =>
                 {
                     if (!Design.IsDesignMode)
                     {
@@ -177,30 +175,20 @@ namespace IronyModManager
         /// Logs the error.
         /// </summary>
         /// <param name="e">The e.</param>
-        private static void LogError(Exception e)
+        private static async void LogError(Exception e)
         {
             if (e != null)
             {
                 var logger = DIResolver.Get<ILogger>();
                 logger.Error(e);
 
-                var title = Constants.UnhandledErrorTitle;
-                var message = Constants.UnhandledErrorMessage;
-                var header = Constants.UnhandledErrorHeader;
-                try
+                var runFatalErrorProcess = StaticResources.CommandLineOptions == null || !StaticResources.CommandLineOptions.ShowFatalErrorNotification;
+                if (runFatalErrorProcess)
                 {
-                    var locManager = DIResolver.Get<ILocalizationManager>();
-                    title = locManager.GetResource(LocalizationResources.FatalError.Title);
-                    message = locManager.GetResource(LocalizationResources.FatalError.Message);
-                    header = locManager.GetResource(LocalizationResources.FatalError.Header);
+                    var path = Process.GetCurrentProcess().MainModule.FileName;
+                    var appAction = DIResolver.Get<IAppAction>();
+                    await appAction.RunAsync(path, "--fatal-error");
                 }
-                catch
-                {
-                }
-                var messageBox = MessageBoxes.GetFatalErrorWindow(title, header, message);
-                // We're deadlocking the thread, so kill the task after x amount of seconds.
-                messageBox.ShowAsync().Wait(TimeSpan.FromSeconds(10));
-                Dispatcher.UIThread.InvokeAsync(() => Environment.Exit(0));
             }
         }
 

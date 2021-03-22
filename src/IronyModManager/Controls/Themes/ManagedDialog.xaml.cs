@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 03-20-2021
 // ***********************************************************************
 // <copyright file="ManagedDialog.xaml.cs" company="Avalonia">
 //     Avalonia
@@ -83,7 +83,7 @@ namespace IronyModManager.Controls.Themes
             var correctingInput = false;
             fileName.PropertyChanged += (sender, args) =>
             {
-                if (args.Property != TextBox.TextProperty)
+                if (args.Property != Avalonia.Controls.TextBox.TextProperty)
                 {
                     return;
                 }
@@ -165,7 +165,7 @@ namespace IronyModManager.Controls.Themes
 
             if (indexOfPreselected > 1)
             {
-                filesView.ScrollIntoView(model.Items[indexOfPreselected - 1]);
+                filesView.ScrollIntoView(indexOfPreselected - 1);
             }
         }
 
@@ -178,7 +178,7 @@ namespace IronyModManager.Controls.Themes
         {
             async Task deselectItems()
             {
-                if (filesView.IsLogicalParentOf(e.Source as Control) && !filter.IsLogicalParentOf(e.Source as Control) && !fileName.IsLogicalParentOf(e.Source as Control))
+                if (filesView.IsLogicalAncestorOf(e.Source as Control) && !filter.IsLogicalAncestorOf(e.Source as Control) && !fileName.IsLogicalAncestorOf(e.Source as Control))
                 {
                     await Task.Delay(25);
                     if (Model.SelectedItems?.Count > 0)
@@ -191,7 +191,7 @@ namespace IronyModManager.Controls.Themes
                     }
                 }
             }
-            if (!((e.Source as StyledElement)?.DataContext is ManagedDialogItemViewModel model))
+            if ((e.Source as StyledElement)?.DataContext is not ManagedDialogItemViewModel model)
             {
                 Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
@@ -202,7 +202,7 @@ namespace IronyModManager.Controls.Themes
                 Dispatcher.UIThread.InvokeAsync(() => deselectItems());
                 return;
             }
-            var isQuickLink = quickLinksRoot.IsLogicalParentOf(e.Source as Control);
+            var isQuickLink = quickLinksRoot.IsLogicalAncestorOf(e.Source as Control);
 #pragma warning disable CS0618 // Type or member is obsolete
             // Yes, use doubletapped event... if only it would work properly.
             if (e.ClickCount == 2 || isQuickLink)

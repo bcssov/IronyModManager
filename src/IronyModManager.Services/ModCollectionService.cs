@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified On : 03-18-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -186,7 +186,7 @@ namespace IronyModManager.Services
             {
                 return Task.FromResult(false);
             }
-            var path = GetModDirectory(game, modCollection);
+            var path = GetPatchModDirectory(game, modCollection);
             return modCollectionExporter.ExportAsync(new ModCollectionExporterParams()
             {
                 File = file,
@@ -216,8 +216,7 @@ namespace IronyModManager.Services
                     var game = GameService.GetSelected();
                     if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
                     {
-                        RootDirectory = game.UserDirectory,
-                        Path = GetModDirectory(game, patchModName)
+                        RootDirectory = GetPatchModDirectory(game, patchModName)
                     }))
                     {
                         patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);
@@ -307,7 +306,7 @@ namespace IronyModManager.Services
             var instance = await GetImportedCollectionDetailsAsync(file);
             if (instance != null)
             {
-                var path = GetModDirectory(game, instance);
+                var path = GetPatchModDirectory(game, instance);
                 if (await modCollectionExporter.ImportModDirectoryAsync(new ModCollectionExporterParams()
                 {
                     File = file,
@@ -339,8 +338,7 @@ namespace IronyModManager.Services
                 var game = GameService.GetSelected();
                 if (await ModWriter.ModDirectoryExistsAsync(new ModWriterParameters()
                 {
-                    RootDirectory = game.UserDirectory,
-                    Path = GetModDirectory(game, patchModName)
+                    RootDirectory = GetPatchModDirectory(game, patchModName)
                 }))
                 {
                     patchMod = GeneratePatchModDescriptor(allMods, game, patchModName);

@@ -17,7 +17,7 @@
   </UserControl.Resources>
   <Panel Height="{Binding $parent[Window].Height, 
          Converter={StaticResource MathConverter} 
-         ConverterParameter=x-70}"
+         ConverterParameter=x-80}"
          Width="{Binding $parent[Window].Width, 
          Converter={StaticResource MathConverter} 
          ConverterParameter=x/2.1}">
@@ -25,12 +25,13 @@
       <DockPanel LastChildFill="True">
         <TextBlock FontSize="14" Text="{Binding Title}" DockPanel.Dock="Top" HorizontalAlignment="Center"></TextBlock>
         <ContentControl Content="{Binding FilterMods}" DockPanel.Dock="Top" Margin="0,10,0,0" MaxHeight="30"></ContentControl>
-        <Grid DockPanel.Dock="Top" Margin="0,10,0,0">
+        <Grid DockPanel.Dock="Top" Margin="0,10,0,0" x:Name="header">
           <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="50" Width="1.5*" />
             <ColumnDefinition MaxWidth="100" Width="2*" />
             <ColumnDefinition Width="8" />
             <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="8" />
             <ColumnDefinition Width="3*" />
           </Grid.ColumnDefinitions>
           <Border BorderThickness="1,1,0,0" Grid.Column="0" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
@@ -40,18 +41,15 @@
           <Border BorderThickness="0,1,0,0" Grid.Column="1" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
             <ContentControl Content="{Binding ModSelectedSortOrder}"></ContentControl>
           </Border>
-          <Border BorderThickness="1,1,0,0" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+          <Border BorderThickness="1,1,0,0" Grid.Column="2" Grid.ColumnSpan="3" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
             <ContentControl Content="{Binding ModNameSortOrder}"></ContentControl>
           </Border>
-          <Border BorderThickness="1,1,1,0" Grid.Column="4" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
+          <Border BorderThickness="1,1,1,0" Grid.Column="5" BorderBrush="{DynamicResource ThemeBorderMidBrush}" Height="40">
             <ContentControl Content="{Binding ModVersionSortOrder}"></ContentControl>
           </Border>
         </Grid>
-        <controls:ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}" 
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList"
-                          MinHeight="{Binding $parent[Window].Height, 
-                          Converter={StaticResource MathConverter} 
-                          ConverterParameter=x-300}">
+        <controls:ListBox Items="{Binding FilteredMods}" SelectedItem="{Binding SelectedMod}"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="modList">
           <controls:ListBox.ItemTemplate>
             <DataTemplate>
               <Grid Background="Transparent">
@@ -60,6 +58,7 @@
                   <ColumnDefinition MaxWidth="100" Width="2*" />
                   <ColumnDefinition Width="8" />
                   <ColumnDefinition Width="5*" />
+                  <ColumnDefinition Width="8" />
                   <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
                 <CheckBox IsChecked="{Binding IsSelected}"
@@ -71,7 +70,7 @@
                     </MultiBinding>
                   </CheckBox.IsEnabled>
                 </CheckBox>
-                <Grid Grid.Column="3" ColumnDefinitions="*,14">
+                <Grid Grid.Column="3" ColumnDefinitions="*,16">
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" FontFamily="{Binding Name,Converter={StaticResource TextTypeFontFamilyConverter}}"></TextBlock>
                   <Panel Grid.Column="1">
                     <!-- Because Avalonia sucks in this regard, that's why -->
@@ -87,7 +86,7 @@
                     </controls:IronyToolTip>
                   </Panel>
                 </Grid>
-                <TextBlock Text="{Binding Version}" Grid.Column="4" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Version}" Grid.Column="5" TextWrapping="Wrap" HorizontalAlignment="Center"></TextBlock>
               </Grid>
             </DataTemplate>
           </controls:ListBox.ItemTemplate>

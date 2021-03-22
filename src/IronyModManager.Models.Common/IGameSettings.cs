@@ -4,7 +4,7 @@
 // Created          : 05-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="IGameSettings.cs" company="Mario">
 //     Mario
@@ -30,6 +30,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>null</c> if [close application after game launch] contains no value, <c>true</c> if [close application after game launch]; otherwise, <c>false</c>.</value>
         bool? CloseAppAfterGameLaunch { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom mod directory.
+        /// </summary>
+        /// <value>The custom mod directory.</value>
+        string CustomModDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.

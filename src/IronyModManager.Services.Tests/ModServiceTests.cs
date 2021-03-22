@@ -119,9 +119,13 @@ namespace IronyModManager.Services.Tests
             });
 
             SetupMockCase(reader, modParser);
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
-            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = "fake2", Type = "Should_return_installed_mods" });
+            var result = service.GetInstalledMods(new Game() { UserDirectory = "fake1", WorkshopDirectory = new List<string>() { "fake2" }, Type = "Should_return_installed_mods", CustomModDirectory = string.Empty });
             result.Count().Should().Be(2);
             result.First().FileName.Should().Be("1");
             result.Last().FileName.Should().Be("2");
@@ -500,7 +504,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_install_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -508,6 +513,10 @@ namespace IronyModManager.Services.Tests
                 {
                     FileName = o.FileName
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var result = await service.InstallModsAsync(null);
@@ -537,7 +546,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -567,6 +577,10 @@ namespace IronyModManager.Services.Tests
                      IsBinary = false
                  };
              });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var result = await service.InstallModsAsync(null);
             result.Count.Should().BeGreaterThan(0);
@@ -596,7 +610,8 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_install_mods",
                 UserDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                CustomModDirectory = string.Empty
             });
             mapper.Setup(s => s.Map<IMod>(It.IsAny<IModObject>())).Returns((IModObject o) =>
             {
@@ -632,6 +647,10 @@ namespace IronyModManager.Services.Tests
                     FileName = "fake.mod",
                     IsBinary = false
                 };
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             var result = await service.InstallModsAsync(new List<IMod> { new Mod()
@@ -684,7 +703,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_lock_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
@@ -710,7 +729,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_lock_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.SetDescriptorLockAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -760,7 +779,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_delete_descriptors_when_no_mods",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
@@ -786,7 +805,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_delete_descriptors",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.DeleteDescriptorAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -813,7 +832,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -842,7 +861,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_load_file_lists",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -874,7 +893,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
@@ -908,7 +927,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_be_achievement_compatible",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
                 ChecksumFolders = new List<string>() { "common", "events" }
             });
             reader.Setup(p => p.GetFiles(It.IsAny<string>())).Returns(new List<string>() { "test" });
@@ -959,8 +978,13 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
-                ChecksumFolders = new List<string>() { "common", "events" }
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                ChecksumFolders = new List<string>() { "common", "events" },
+                CustomModDirectory = string.Empty
+            });
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
             });
 
             result = await service.GetImageStreamAsync("test", string.Empty);
@@ -991,12 +1015,17 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Should_not_return_mod_image_stream",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop",
-                ChecksumFolders = new List<string>() { "common", "events" }
+                WorkshopDirectory = new List<string>() { "C:\\workshop" },
+                ChecksumFolders = new List<string>() { "common", "events" },
+                CustomModDirectory = string.Empty
             });
 
             SetupMockCase(reader, modParser);
             reader.Setup(p => p.GetImageStreamAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new MemoryStream()));
+            modWriter.Setup(p => p.ModDirectoryExists(It.IsAny<ModWriterParameters>())).Returns((ModWriterParameters p) =>
+            {
+                return false;
+            });
 
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
             var result = await service.GetImageStreamAsync("1", "test");
@@ -1045,7 +1074,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Mod_directory_should_exist",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1096,7 +1125,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_Mod_directory_should_exist",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1147,7 +1176,7 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Mod_directory_should_purge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
@@ -1198,13 +1227,104 @@ namespace IronyModManager.Services.Tests
             {
                 Type = "Patch_mod_directory_should_purge",
                 UserDirectory = "C:\\Users\\Fake",
-                WorkshopDirectory = "C:\\workshop"
+                WorkshopDirectory = new List<string>() { "C:\\workshop" }
             });
             modWriter.Setup(p => p.PurgeModDirectoryAsync(It.IsAny<ModWriterParameters>(), It.IsAny<bool>())).Returns(Task.FromResult(true));
             var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
 
             var result = await service.PurgeModPatchAsync("test");
             result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Custom_mod_directory_empty_should_return_true_when_invalid_game.
+        /// </summary>
+        [Fact]
+        public async Task Custom_mod_directory_empty_should_return_true_when_invalid_game()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
+            {
+                new Game()
+                {
+                    Type = "Custom_mod_directory_empty_should_return_true_when_no_game"
+                }
+            });
+
+            var result = await service.CustomModDirectoryEmptyAsync("test");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Custom_mod_directory_empty_should_return_true.
+        /// </summary>
+        [Fact]
+        public async Task Custom_mod_directory_empty_should_return_true()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
+            {
+                new Game()
+                {
+                    Type = "Custom_mod_directory_empty_should_return_true",
+                    CustomModDirectory = "c:\\test"
+                }
+            });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(false));
+
+            var result = await service.CustomModDirectoryEmptyAsync("Custom_mod_directory_empty_should_return_true");
+            result.Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Defines the test method Custom_mod_directory_empty_should_return_false.
+        /// </summary>
+        [Fact]
+        public async Task Custom_mod_directory_empty_should_return_false()
+        {
+            DISetup.SetupContainer();
+
+            var storageProvider = new Mock<IStorageProvider>();
+            var modParser = new Mock<IModParser>();
+            var reader = new Mock<IReader>();
+            var modWriter = new Mock<IModWriter>();
+            var gameService = new Mock<IGameService>();
+            var mapper = new Mock<IMapper>();
+
+            var service = GetService(storageProvider, modParser, reader, mapper, modWriter, gameService);
+
+            gameService.Setup(p => p.Get()).Returns(new List<IGame>()
+            {
+                new Game()
+                {
+                    Type = "Custom_mod_directory_empty_should_return_true",
+                    CustomModDirectory = "c:\\test"
+                }
+            });
+            modWriter.Setup(p => p.ModDirectoryExistsAsync(It.IsAny<ModWriterParameters>())).Returns(Task.FromResult(true));
+
+            var result = await service.CustomModDirectoryEmptyAsync("Custom_mod_directory_empty_should_return_true");
+            result.Should().BeFalse();
         }
     }
 }

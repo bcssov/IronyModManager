@@ -2,26 +2,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
         mc:Ignorable="d" d:DesignWidth="150" d:DesignHeight="100"
         x:Class="IronyModManager.Controls.Themes.StandardMessageBox"
-        xmlns:converter="clr-namespace:IronyModManager.Converters;assembly=IronyModManager"
         SizeToContent="WidthAndHeight"
         MinWidth="200"
         MaxWidth="{Binding MaxWidth}"
+        Icon="{Binding WindowIconPath}"
         WindowStartupLocation="{Binding LocationOfMyWindow}"
         MinHeight="100"
         CanResize="{Binding CanResize}"
+        FontFamily="{Binding FontFamily}"
         Title="{Binding ContentTitle}">
-  <Window.Resources>
-    <converter:MathConverter x:Key="MathConverter" />
-  </Window.Resources>
-
   <Window.KeyBindings>
     <KeyBinding Gesture="Ctrl+C" Command="{Binding Copy}" />
+    <KeyBinding Gesture="Enter" Command="{Binding EnterClickCommand}" />
+    <KeyBinding Gesture="Escape" Command="{Binding EscClickCommand}" />
   </Window.KeyBindings>
-  <Design.DataContext>
 
-  </Design.DataContext>
 
   <Window.Styles>
     <Style Selector="TextBox">
@@ -31,6 +29,12 @@
       <Setter Property="IsReadOnly" Value="True" />
       <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
       <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+    </Style>
+    <Style Selector="TextBox:focus /template/ Border#border">
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+      <Setter Property="BorderThickness" Value="0" />
     </Style>
     <Style Selector="TextBox.header">
       <Setter Property="FontWeight" Value="Bold" />
@@ -42,7 +46,7 @@
     </Style>
 
   </Window.Styles>
-  <Grid>
+  <Grid Classes="MsBoxStandardContainer">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="15" />
       <ColumnDefinition Width="Auto" />
@@ -60,31 +64,31 @@
     <!--Icon-->
     <Image Grid.Row="1" Grid.Column="1" MaxHeight="50" MaxWidth="50" VerticalAlignment="Top"
            IsVisible="{Binding Icon}"
-           Source="{Binding ImagePath}" />
+           Source="{Binding ImagePath}" Margin="5" />
     <Grid Grid.Row="1" Grid.Column="3">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="15" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <!--Bold text-->
-      <TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" IsVisible="{Binding HasHeader}" />
+      <controls:TextBox Grid.Row="0" Classes="header" Text="{Binding ContentHeader}" FontFamily="{Binding FontFamily}" IsVisible="{Binding HasHeader}" />
       <!--Content text-->
-      <TextBox Grid.Row="2" Text="{Binding ContentMessage}" MaxHeight="400" MaxWidth="500"/>
+      <controls:TextBox Grid.Row="2" Text="{Binding ContentMessage}" FontFamily="{Binding FontFamily}" MinWidth="500" MinHeight="40" MaxHeight="400" MaxWidth="500" TextWrapping="Wrap" />
     </Grid>
     <!--Buttons-->
     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"
                 HorizontalAlignment="Right">
       <!-- Seriously, binding strings in implementation of MessageBox Avalonia? -->
-      <Button Content="Ok" Tag="Colored" Command="{Binding ButtonClick}"
+      <Button Content="Ok" Tag="Colored" Command="{Binding ButtonClickCommand}"
               CommandParameter="Ok" IsVisible="{Binding IsOkShowed}" x:Name="ok" />
-      <Button Content="Yes" Command="{Binding ButtonClick}" CommandParameter="Yes"
+      <Button Content="Yes" Command="{Binding ButtonClickCommand}" CommandParameter="Yes"
               IsVisible="{Binding IsYesShowed}" x:Name="yes" />
-      <Button Content="No" Command="{Binding ButtonClick}" CommandParameter="No"
+      <Button Content="No" Command="{Binding ButtonClickCommand}" CommandParameter="No"
               IsVisible="{Binding IsNoShowed}" x:Name="no" />
-      <Button Content="Abort" Command="{Binding ButtonClick}" CommandParameter="Abort"
+      <Button Content="Abort" Command="{Binding ButtonClickCommand}" CommandParameter="Abort"
               IsVisible="{Binding IsAbortShowed}" />
-      <Button Content="Cancel" Command="{Binding ButtonClick}" CommandParameter="Cancel"
+      <Button Content="Cancel" Command="{Binding ButtonClickCommand}" CommandParameter="Cancel"
               IsVisible="{Binding IsCancelShowed}" x:Name="cancel"/>
     </StackPanel>
   </Grid>

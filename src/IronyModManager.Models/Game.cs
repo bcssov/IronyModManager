@@ -4,7 +4,7 @@
 // Created          : 02-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="Game.cs" company="Mario">
 //     Mario
@@ -59,6 +59,12 @@ namespace IronyModManager.Models
         /// </summary>
         /// <value><c>true</c> if [close application after game launch]; otherwise, <c>false</c>.</value>
         public virtual bool CloseAppAfterGameLaunch { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom mod directory.
+        /// </summary>
+        /// <value>The custom mod directory.</value>
+        public virtual string CustomModDirectory { get; set; }
 
         /// <summary>
         /// Gets or sets the executable location.
@@ -143,7 +149,7 @@ namespace IronyModManager.Models
         /// Gets or sets the workshop directory.
         /// </summary>
         /// <value>The workshop directory.</value>
-        public virtual string WorkshopDirectory { get; set; }
+        public virtual IEnumerable<string> WorkshopDirectory { get; set; }
 
         #endregion Properties
     }

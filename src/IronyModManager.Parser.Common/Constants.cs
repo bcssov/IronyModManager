@@ -4,7 +4,7 @@
 // Created          : 02-16-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-11-2021
 // ***********************************************************************
 // <copyright file="Constants.cs" company="Mario">
 //     Mario
@@ -180,6 +180,11 @@ namespace IronyModManager.Parser.Common
             public const string Namespace = "namespace";
 
             /// <summary>
+            /// The not equal operator
+            /// </summary>
+            public const char NotEqualOperator = '!';
+
+            /// <summary>
             /// The opening bracket
             /// </summary>
             public const char OpenObject = '{';
@@ -232,7 +237,7 @@ namespace IronyModManager.Parser.Common
             /// <summary>
             /// The operators
             /// </summary>
-            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator };
+            public static readonly char[] Operators = new char[] { EqualsOperator, GreaterThanOperator, LowerThanOperator, NotEqualOperator };
 
             #endregion Fields
         }

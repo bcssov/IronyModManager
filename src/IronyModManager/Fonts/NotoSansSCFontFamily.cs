@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-13-2021
 // ***********************************************************************
 // <copyright file="NotoSansSCFontFamily.cs" company="Mario">
 //     Mario
@@ -13,14 +13,15 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Platform.Fonts;
 
 namespace IronyModManager.Fonts
 {
     /// <summary>
     /// Class NotoSansSCFontFamily.
-    /// Implements the <see cref="IronyModManager.Fonts.BaseFontFamily" />
+    /// Implements the <see cref="IronyModManager.Platform.Fonts.BaseFontFamily" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Fonts.BaseFontFamily" />
+    /// <seealso cref="IronyModManager.Platform.Fonts.BaseFontFamily" />
     public class NotoSansSCFontFamily : BaseFontFamily
     {
         #region Constructors

@@ -58,6 +58,12 @@
             "Pictures": "Bilder"
         }
     },
+    "TextBox": {
+        "Copy": "Kopieren",
+        "Cut": "Schnitt",
+        "Paste": "Einfügen",
+        "SelectAll": "Wählen Sie Alle"
+    },
     "Languages": {
         "Name": "Sprache"
     },
@@ -65,12 +71,19 @@
         "Name": "Thema",
         "Light": "Licht",
         "Dark": "Dunkel",
+        "FluentLight": "Fließend Licht",
+        "FluentDark": "Fließend Dunkel",
         "MaterialDark": "Material Dunkel",
-        "MaterialDeepPurple": "Material Hellgrün",
-        "MaterialLightGreen": "Material Tiefpurpurn",
+        "MaterialLight": "Material Licht",
         "Restart_Title": "Muss neu gestartet werden",
         "Restart_Header": "App muss neu gestartet werden",
         "Restart_Message": "Die App muss neu gestartet werden, damit das neue Design ordnungsgemäß angewendet wird. Möchten Sie die App neu starten?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Unten rechts",
+        "BottomLeft": "Unten links",
+        "TopRight": "Oben rechts",
+        "TopLeft": "Oben links"
     },
     "Games": {
         "Name": "Spiele",
@@ -168,6 +181,7 @@
             "MergedCollectionPrefix": "(Zusammengeführt)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Zusammengeführt {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Überprüfen des verfügbaren Speicherplatzes...",
             "Options": {
                 "Title": "Auswahlmodus",
                 "Basic": "Basic",
@@ -334,6 +348,10 @@
         "Close": "Schließen",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Anwendungsoptionen",
+            "NotificationPosition": "Benachrichtigungsposition"
+        },
         "Editor": {
             "Title": "Externe Editoroptionen",
             "EditorExecutable": "Editor Programdatei",
@@ -347,7 +365,8 @@
             "GameArgs": "Spiel Startoptionen",
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
-            "AutoConfigure": "Alle konfigurieren..."
+            "AutoConfigure": "Alle konfigurieren...",
+            "CustoModPath": "Benutzerdefiniertes Mod-Verzeichnis"
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
@@ -379,7 +398,14 @@
             "ExeTitle": "Finde eine Programdatei Spieldatei",
             "GameRootTitle": "Finde das Stammverzeichnis des Spiels",
             "UserDirTitle": "Spieldatenverzeichnis suchen",
-            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei"
+            "EditorTitle": "Suchen Sie die Programdatei Editor-Datei",
+            "CustomModPathTitle": "Finde ein benutzerdefiniertes Mod-Verzeichnis"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Nicht leer",
+                "Message": "Benutzerdefiniertes MOD-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, jetzt verlieren Sie möglicherweise einige Mods. Bist du sicher, dass du es ändern willst?"
+            }
         }
     },
     "Notifications": {
@@ -462,6 +488,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Konfliktlöser aktualisieren",
             "Message": "Conflict Solver muss aktualisiert werden, um neue benutzerdefinierte Patches zu berücksichtigen. Bitte führen Sie den Konfliktlöser erneut aus."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Nicht genügend freier Speicherplatz",
+            "Message": "Es ist nicht genügend freier Speicherplatz, um den Zusammenführungsvorgang durchzuführen."
         }
     },
     "Mod_App_Actions": {

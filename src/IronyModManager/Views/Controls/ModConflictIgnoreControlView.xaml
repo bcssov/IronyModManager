@@ -3,11 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:controls="clr-namespace:IronyModManager.Controls;assembly=IronyModManager"
              x:Class="IronyModManager.Views.Controls.ModConflictIgnoreControlView">
-  <Grid RowDefinitions="9*,1*">
-    <TextBox Watermark="{Binding Watermark}" Grid.Row="0"
-             Text="{Binding ConflictResult.IgnoredPaths}" TextWrapping="Wrap" AcceptsReturn="True" Margin="5,0,5,0"></TextBox>
-    <Panel Margin="0,10" Grid.Row="1">
+  <Grid RowDefinitions="*,Auto">
+    <controls:TextBox Watermark="{Binding Watermark}" Grid.Row="0"
+             Text="{Binding ConflictResult.IgnoredPaths}" TextWrapping="Wrap" AcceptsReturn="True" Margin="5,0,5,0"></controls:TextBox>
+    <Panel Margin="0,10" Grid.Row="1" MaxHeight="30">
       <Button Content="{Binding Save}" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="5,0,0,0"></Button>
       <Button Content="{Binding Cancel}" Command="{Binding CancelCommand}" HorizontalAlignment="Right" Margin="0,0,5,0"></Button>
     </Panel>

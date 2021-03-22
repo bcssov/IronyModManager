@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-22-2021
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="DIPackage.Implementations.cs" company="Mario">
 //     Mario
@@ -23,8 +23,11 @@ using IronyModManager.Implementation.AppState;
 using IronyModManager.Implementation.Hotkey;
 using IronyModManager.Implementation.MessageBus;
 using IronyModManager.Implementation.Overlay;
+using IronyModManager.Implementation.Themes;
 using IronyModManager.Implementation.Updater;
 using IronyModManager.Log;
+using IronyModManager.Platform.Fonts;
+using IronyModManager.Platform.Themes;
 using IronyModManager.Shared;
 using Container = SimpleInjector.Container;
 
@@ -77,6 +80,9 @@ namespace IronyModManager.DI
             container.Register<IHotkeyManager, HotkeyManager>();
             container.Register<SuspendHotkeysHandler>(SimpleInjector.Lifestyle.Singleton);
             container.Register<ModListInstallRefreshRequestHandler>(SimpleInjector.Lifestyle.Singleton);
+            container.Register<IThemeManager, ThemeManager>();
+            container.Collection.Register(typeof(IThemeResources), typeof(DIPackage).Assembly);
+            container.Register<ModMergeFreeSpaceCheckHandler>(SimpleInjector.Lifestyle.Singleton);
         }
 
         #endregion Methods

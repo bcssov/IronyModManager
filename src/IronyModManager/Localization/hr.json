@@ -58,6 +58,12 @@
             "Pictures": "Slike"
         }
     },
+    "TextBox": {
+        "Copy": "Kopiraj",
+        "Cut": "Izreži",
+        "Paste": "Zalijepi",
+        "SelectAll": "Odaberi sve"
+    },
     "Languages": {
         "Name": "Jezik"
     },
@@ -65,12 +71,19 @@
         "Name": "Tema",
         "Light": "Svjetlo",
         "Dark": "Tamno",
+        "FluentLight": "Fluidna Svjetla",
+        "FluentDark": "Fluidna Tamna",
         "MaterialDark": "Material Tamna",
-        "MaterialLightGreen": "Material Svjetlo Zelena",
-        "MaterialDeepPurple": "Material Ljubičasta",
+        "MaterialLight": "Material Svjetla",
         "Restart_Title": "Potrebno je ponovno pokretanje",
         "Restart_Header": "Aplikaciju je potrebno ponovno pokrenuti",
         "Restart_Message": "Aplikaciju treba ponovo pokrenuti kako bi se nova tema pravilno primijenila. Želite li ponovno pokrenuti aplikaciju?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Dolje desno",
+        "BottomLeft": "Dolje lijevo",
+        "TopRight": "Gore desno",
+        "TopLeft": "Gore lijevo"
     },
     "Games": {
         "Name": "Igra",
@@ -168,6 +181,7 @@
             "MergedCollectionPrefix": "(Spojeno)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Spojeno {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Provjera dostupnog prostora na disku...",
             "Options": {
                 "Title": "Odaberi način",
                 "Basic": "Osnovno",
@@ -334,6 +348,10 @@
         "Close": "Zatvori",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Mogućnosti aplikacije",
+            "NotificationPosition": "Pozicija obavijesti"
+        },
         "Editor": {
             "Title": "Opcije vanjskog uređivača",
             "EditorExecutable": "Izvršna datoteka",
@@ -347,7 +365,8 @@
             "GameArgs": "Argumenti",
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
-            "AutoConfigure": "Konfiguriraj sve..."
+            "AutoConfigure": "Konfiguriraj sve...",
+            "CustoModPath": "Prilagođeni direktorij modova"
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",
@@ -379,7 +398,14 @@
             "ExeTitle": "Nađi izvršnu datoteku igre",
             "GameRootTitle": "Pronađite osnovni direktorij igre",
             "UserDirTitle": "Pronađite direktorij podataka o igri",
-            "EditorTitle": "Nađi izvršnu dateoteku editora"
+            "EditorTitle": "Nađi izvršnu dateoteku editora",
+            "CustomModPathTitle": "Pronađite prilagođeni mod direktorij"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Nije prazno",
+                "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
+            }
         }
     },
     "Notifications": {
@@ -462,6 +488,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Osvježi rješenje za rješavanje sukoba",
             "Message": "Rješavač sukoba treba osvježiti kako bi se uzele u obzir nove prilagođene zakrpe. Ponovite postupak rješavanja sukoba."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Nema dovoljno slobodnog prostora",
+            "Message": "Nema dovoljno slobodnog prostora za spajanje kolekcije."
         }
     },
     "Mod_App_Actions": {

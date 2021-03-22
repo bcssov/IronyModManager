@@ -4,7 +4,7 @@
 // Created          : 01-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-16-2021
 // ***********************************************************************
 // <copyright file="StorageTests.cs" company="Mario">
 //     Mario
@@ -100,6 +100,25 @@ namespace IronyModManager.Storage.Tests
             var themes = storage.GetThemes();
             themes.Count().Should().Be(1);
             themes.FirstOrDefault().Name.Should().Be("test");
+        }
+
+        /// <summary>
+        /// Defines the test method Should_return_same_notification_position_object.
+        /// </summary>
+        [Fact]
+        public void Should_return_same_notification_position_object()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<INotificationPositionType>>(It.IsAny<IEnumerable<INotificationPositionType>>())).Returns(() =>
+            {
+                return dbMock.NotificationPosition.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            var result = storage.GetNotificationPositions();
+            result.Count().Should().Be(1);
+            result.FirstOrDefault().Position.Should().Be(Models.Common.NotificationPosition.BottomLeft);
         }
 
         /// <summary>
@@ -218,15 +237,31 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var newThemeKey = "test2";
-            var newThemeUris = new List<string>() { "4", "5" };
+            var newThemeKey = "test2";            
             var storage = new Storage(dbMock, new Mock<IMapper>().Object);
-            storage.RegisterTheme(newThemeKey, newThemeUris);
+            storage.RegisterTheme(newThemeKey);
             dbMock.Themes.Count.Should().Be(2);
-            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
-            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
-            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
+            dbMock.Themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();            
         }
+
+        /// <summary>
+        /// Defines the test method Should_add_new_notification_position.
+        /// </summary>
+        [Fact]
+        public void Should_add_new_notification_position()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var newItem = new NotificationPositionType()
+            {
+                Position = Models.Common.NotificationPosition.TopLeft
+            };
+            var storage = new Storage(dbMock, new Mock<IMapper>().Object);
+            storage.RegisterNotificationPosition(newItem);
+            dbMock.NotificationPosition.Count.Should().Be(2);
+            dbMock.NotificationPosition.FirstOrDefault(p => p.Position == newItem.Position).Should().NotBeNull();
+        }
+
 
 
         /// <summary>
@@ -247,7 +282,7 @@ namespace IronyModManager.Storage.Tests
                 GameFolders = new List<string>() { "testgame" },
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
-                WorkshopDirectory = "workshop1",
+                WorkshopDirectory = new List<string>() { "workshop1" },
                 BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
@@ -262,7 +297,7 @@ namespace IronyModManager.Storage.Tests
             dbMock.Games.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             dbMock.Games.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             dbMock.Games.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
-            dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            dbMock.Games.FirstOrDefault(p => p.Name == key).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
             dbMock.Games.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             dbMock.Games.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             dbMock.Games.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
@@ -411,20 +446,41 @@ namespace IronyModManager.Storage.Tests
         {
             DISetup.SetupContainer();
             var dbMock = GetDbMock();
-            var newThemeKey = "test2";
-            var newThemeUris = new List<string>() { "4", "5" };
+            var newThemeKey = "test2";            
             var mapper = new Mock<IMapper>();
             mapper.Setup(p => p.Map<List<IThemeType>>(It.IsAny<IEnumerable<IThemeType>>())).Returns(() =>
             {
                 return dbMock.Themes.ToList();
             });
             var storage = new Storage(dbMock, mapper.Object);
-            storage.RegisterTheme(newThemeKey, newThemeUris);
+            storage.RegisterTheme(newThemeKey);
             var themes = storage.GetThemes();
             themes.Count().Should().Be(2);
-            themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();
-            themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.First().Should().Be(newThemeUris.First());
-            themes.FirstOrDefault(p => p.Name == newThemeKey).Styles.Last().Should().Be(newThemeUris.Last());
+            themes.FirstOrDefault(p => p.Name == newThemeKey).Should().NotBeNull();            
+        }
+
+        /// <summary>
+        /// Defines the test method Should_add_and_return_added_notification_position.
+        /// </summary>
+        [Fact]
+        public void Should_add_and_return_added_notification_position()
+        {
+            DISetup.SetupContainer();
+            var dbMock = GetDbMock();
+            var newItem = new NotificationPositionType()
+            {
+                Position = Models.Common.NotificationPosition.TopLeft
+            };
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(p => p.Map<List<INotificationPositionType>>(It.IsAny<IEnumerable<INotificationPositionType>>())).Returns(() =>
+            {
+                return dbMock.NotificationPosition.ToList();
+            });
+            var storage = new Storage(dbMock, mapper.Object);
+            storage.RegisterNotificationPosition(newItem);
+            var result = storage.GetNotificationPositions();
+            result.Count().Should().Be(2);
+            result.FirstOrDefault(p => p.Position == newItem.Position).Should().NotBeNull();
         }
 
         /// <summary>
@@ -450,7 +506,7 @@ namespace IronyModManager.Storage.Tests
                 GameFolders = new List<string>() { "testgame" },
                 LogLocation = "test.log",
                 UserDirectory = "user_directory",
-                WorkshopDirectory = "workshop1",
+                WorkshopDirectory = new List<string>() { "workshop1" },
                 BaseSteamGameDirectory = "base",
                 ExecutablePath = "exe",
                 ExecutableArgs = "args",
@@ -466,7 +522,7 @@ namespace IronyModManager.Storage.Tests
             result.FirstOrDefault(p => p.Name == key).Should().NotBeNull();
             result.FirstOrDefault(p => p.Name == key).UserDirectory.Should().Be("user_directory");
             result.FirstOrDefault(p => p.Name == key).SteamAppId.Should().Be(1);
-            result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.Should().Be("workshop1");
+            result.FirstOrDefault(p => p.Name == key).WorkshopDirectory.FirstOrDefault().Should().Be("workshop1");
             result.FirstOrDefault(p => p.Name == key).LogLocation.Should().Be("test.log");
             result.FirstOrDefault(p => p.Name == key).ChecksumFolders.FirstOrDefault().Should().Be("test");
             result.FirstOrDefault(p => p.Name == key).GameFolders.FirstOrDefault().Should().Be("testgame");
@@ -512,7 +568,6 @@ namespace IronyModManager.Storage.Tests
                 {
                     Name = "test",
                     IsDefault = true,
-                    Styles = new List<string> { "1", "2" }
                 } },
                 Games = new List<IGameType>()
                 {
@@ -537,6 +592,13 @@ namespace IronyModManager.Storage.Tests
                     new GameSettings()
                     {
                         Type = "fake"
+                    }
+                },
+                NotificationPosition = new List<INotificationPositionType>()
+                {
+                    new NotificationPositionType()
+                    {
+                        Position = Models.Common.NotificationPosition.BottomLeft
                     }
                 }
             };

@@ -4,15 +4,15 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 11-26-2020
+// Last Modified On : 03-17-2021
 // ***********************************************************************
 // <copyright file="IModWriter.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -52,6 +52,13 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="parameters">The parameters.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
         Task<bool> DescriptorExistsAsync(ModWriterParameters parameters);
+
+        /// <summary>
+        /// Mods the directory exists.
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        bool ModDirectoryExists(ModWriterParameters parameters);
 
         /// <summary>
         /// Mods the directory exists asynchronous.

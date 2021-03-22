@@ -4,20 +4,22 @@
 // Created          : 06-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-24-2020
+// Last Modified On : 03-12-2021
 // ***********************************************************************
 // <copyright file="IronyToolTip.cs" company="Avalonia">
 //     Avalonia
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -33,6 +35,7 @@ namespace IronyModManager.Controls
     /// </summary>
     /// <seealso cref="Avalonia.Controls.ContentControl" />
     /// <seealso cref="Avalonia.Styling.IStyleable" />
+    [PseudoClasses(":open")]
     public class IronyToolTip : ContentControl, IStyleable
     {
         #region Fields
@@ -70,14 +73,28 @@ namespace IronyModManager.Controls
         /// <summary>
         /// The tip property
         /// </summary>
-        public static readonly AttachedProperty<object> TipProperty =
-            AvaloniaProperty.RegisterAttached<IronyToolTip, Control, object>("Tip");
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+        public static readonly AttachedProperty<object?> TipProperty =
+            AvaloniaProperty.RegisterAttached<ToolTip, Control, object?>("Tip");
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
         /// The vertical offset property
         /// </summary>
         public static readonly AttachedProperty<double> VerticalOffsetProperty =
             AvaloniaProperty.RegisterAttached<IronyToolTip, Control, double>("VerticalOffset", 20);
+
+        /// <summary>
+        /// The tool tip property
+        /// </summary>
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+        internal static readonly AttachedProperty<IronyToolTip?> ToolTipProperty =
+            AvaloniaProperty.RegisterAttached<IronyToolTip, Control, IronyToolTip?>("ToolTip");
+
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
         /// <summary>
         /// The tooltip section key
@@ -88,12 +105,6 @@ namespace IronyModManager.Controls
         /// The tooltip state key
         /// </summary>
         private const string TooltipStateKey = "Disable";
-
-        /// <summary>
-        /// The tool tip property
-        /// </summary>
-        private static readonly AttachedProperty<IronyToolTip> ToolTipProperty =
-            AvaloniaProperty.RegisterAttached<IronyToolTip, Control, IronyToolTip>("ToolTip");
 
         /// <summary>
         /// The popup
@@ -110,7 +121,12 @@ namespace IronyModManager.Controls
         static IronyToolTip()
         {
             TipProperty.Changed.Subscribe(ToolTipService.Instance.TipChanged);
+            IsOpenProperty.Changed.Subscribe(ToolTipService.Instance.TipOpenChanged);
             IsOpenProperty.Changed.Subscribe(IsOpenChanged);
+
+            HorizontalOffsetProperty.Changed.Subscribe(RecalculatePositionOnPropertyChanged);
+            VerticalOffsetProperty.Changed.Subscribe(RecalculatePositionOnPropertyChanged);
+            PlacementProperty.Changed.Subscribe(RecalculatePositionOnPropertyChanged);
         }
 
         #endregion Constructors
@@ -182,7 +198,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>System.Object.</returns>
-        public static object GetTip(Control element)
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+        public static object? GetTip(Control element)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         {
             return element.GetValue(TipProperty);
         }
@@ -252,7 +271,10 @@ namespace IronyModManager.Controls
         /// </summary>
         /// <param name="element">The element.</param>
         /// <param name="value">The value.</param>
-        public static void SetTip(Control element, object value)
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+
+        public static void SetTip(Control element, object? value)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         {
             element.SetValue(TipProperty, value);
         }
@@ -268,19 +290,32 @@ namespace IronyModManager.Controls
         }
 
         /// <summary>
+        /// Recalculates the position.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        internal void RecalculatePosition(Control control)
+        {
+            _popup?.ConfigurePosition(control, GetPlacement(control), new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
+        }
+
+        /// <summary>
         /// Determines whether [is open changed] [the specified e].
         /// </summary>
         /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
         private static void IsOpenChanged(AvaloniaPropertyChangedEventArgs e)
         {
             var control = (Control)e.Sender;
+            var newValue = (bool)e.NewValue!;
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
+            IronyToolTip? toolTip;
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
-            if ((bool)e.NewValue)
+            if (newValue)
             {
                 var tip = GetTip(control);
                 if (tip == null) return;
 
-                var toolTip = control.GetValue(ToolTipProperty);
+                toolTip = control.GetValue(ToolTipProperty);
                 if (toolTip == null || (tip != toolTip && tip != toolTip.Content))
                 {
                     toolTip?.Close();
@@ -293,9 +328,26 @@ namespace IronyModManager.Controls
             }
             else
             {
-                var toolTip = control.GetValue(ToolTipProperty);
+                toolTip = control.GetValue(ToolTipProperty);
                 toolTip?.Close();
             }
+            toolTip?.UpdatePseudoClasses(newValue);
+        }
+
+        /// <summary>
+        /// Recalculates the position on property changed.
+        /// </summary>
+        /// <param name="args">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+        private static void RecalculatePositionOnPropertyChanged(AvaloniaPropertyChangedEventArgs args)
+        {
+            var control = (Control)args.Sender;
+            var tooltip = control.GetValue(ToolTipProperty);
+            if (tooltip == null)
+            {
+                return;
+            }
+
+            tooltip.RecalculatePosition(control);
         }
 
         /// <summary>
@@ -330,6 +382,29 @@ namespace IronyModManager.Controls
             _popup.ConfigurePosition(control, GetPlacement(control),
                 new Point(GetHorizontalOffset(control), GetVerticalOffset(control)));
             _popup.Show();
+            WindowManagerAddShadowHintChanged(_popup, false);
+        }
+
+        /// <summary>
+        /// Updates the pseudo classes.
+        /// </summary>
+        /// <param name="newValue">if set to <c>true</c> [new value].</param>
+        private void UpdatePseudoClasses(bool newValue)
+        {
+            PseudoClasses.Set(":open", newValue);
+        }
+
+        /// <summary>
+        /// Windows the manager add shadow hint changed.
+        /// </summary>
+        /// <param name="host">The host.</param>
+        /// <param name="hint">if set to <c>true</c> [hint].</param>
+        private void WindowManagerAddShadowHintChanged(IPopupHost host, bool hint)
+        {
+            if (host is PopupRoot pr)
+            {
+                pr.PlatformImpl.SetWindowManagerAddShadowHint(hint);
+            }
         }
 
         #endregion Methods
@@ -434,6 +509,33 @@ namespace IronyModManager.Controls
                         control.Parent.PointerEnter += parentControlEnter;
                     }
                 }
+
+                if (GetIsOpen(control) && e.NewValue != e.OldValue && !(e.NewValue is IronyToolTip))
+                {
+                    var tip = control.GetValue(ToolTipProperty);
+
+                    tip.Content = e.NewValue;
+                }
+            }
+
+            /// <summary>
+            /// Tips the open changed.
+            /// </summary>
+            /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs"/> instance containing the event data.</param>
+            internal void TipOpenChanged(AvaloniaPropertyChangedEventArgs e)
+            {
+                var control = (Control)e.Sender;
+
+                if (e.OldValue is false && e.NewValue is true)
+                {
+                    control.DetachedFromVisualTree += ControlDetaching;
+                    control.EffectiveViewportChanged += ControlEffectiveViewportChanged;
+                }
+                else if (e.OldValue is true && e.NewValue is false)
+                {
+                    control.DetachedFromVisualTree -= ControlDetaching;
+                    control.EffectiveViewportChanged -= ControlEffectiveViewportChanged;
+                }
             }
 
             /// <summary>
@@ -445,6 +547,31 @@ namespace IronyModManager.Controls
                 StopTimer();
 
                 SetIsOpen(control, false);
+            }
+
+            /// <summary>
+            /// Controls the detaching.
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="e">The <see cref="VisualTreeAttachmentEventArgs"/> instance containing the event data.</param>
+            private void ControlDetaching(object sender, VisualTreeAttachmentEventArgs e)
+            {
+                var control = (Control)sender;
+                control.DetachedFromVisualTree -= ControlDetaching;
+                control.EffectiveViewportChanged -= ControlEffectiveViewportChanged;
+                Close(control);
+            }
+
+            /// <summary>
+            /// Controls the effective viewport changed.
+            /// </summary>
+            /// <param name="sender">The sender.</param>
+            /// <param name="e">The <see cref="EffectiveViewportChangedEventArgs"/> instance containing the event data.</param>
+            private void ControlEffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e)
+            {
+                var control = (Control)sender;
+                var toolTip = control.GetValue(ToolTipProperty);
+                toolTip?.RecalculatePosition(control);
             }
 
             /// <summary>

@@ -35,7 +35,8 @@
             </ListBox.ItemTemplate>
           </ListBox>
           <Button Content="{Binding Close}" Command="{Binding CloseCommand}"
-                  Grid.Row="1" Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="2"></Button>
+                  Grid.Row="1" Grid.Column="0" MaxHeight="30" Grid.ColumnSpan="2"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Button>
         </Grid>
       </Border>
     </Popup>

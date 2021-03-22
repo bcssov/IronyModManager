@@ -84,6 +84,14 @@ namespace IronyModManager.Shared
                 public const string Pictures = Prefix + "Pictures";
             }
         }
+        public static class TextBox
+        {
+            public const string Prefix = "TextBox.";
+            public const string Copy = Prefix + "Copy";
+            public const string Cut = Prefix + "Cut";
+            public const string Paste = Prefix + "Paste";
+            public const string SelectAll = Prefix + "SelectAll";
+        }
         public static class Languages
         {
             public const string Prefix = "Languages.";
@@ -95,12 +103,21 @@ namespace IronyModManager.Shared
             public const string Name = Prefix + "Name";
             public const string Light = Prefix + "Light";
             public const string Dark = Prefix + "Dark";
+            public const string FluentLight = Prefix + "FluentLight";
+            public const string FluentDark = Prefix + "FluentDark";
             public const string MaterialDark = Prefix + "MaterialDark";
-            public const string MaterialLightGreen = Prefix + "MaterialLightGreen";
-            public const string MaterialDeepPurple = Prefix + "MaterialDeepPurple";
+            public const string MaterialLight = Prefix + "MaterialLight";
             public const string Restart_Title = Prefix + "Restart_Title";
             public const string Restart_Header = Prefix + "Restart_Header";
             public const string Restart_Message = Prefix + "Restart_Message";
+        }
+        public static class NotificationPosition
+        {
+            public const string Prefix = "NotificationPosition.";
+            public const string BottomRight = Prefix + "BottomRight";
+            public const string BottomLeft = Prefix + "BottomLeft";
+            public const string TopRight = Prefix + "TopRight";
+            public const string TopLeft = Prefix + "TopLeft";
         }
         public static class Games
         {
@@ -224,6 +241,7 @@ namespace IronyModManager.Shared
                 public const string MergedCollectionPrefix = Prefix + "MergedCollectionPrefix";
                 public const string MergeCompressModPrefix = Prefix + "MergeCompressModPrefix";
                 public const string Overlay_Progress = Prefix + "Overlay_Progress";
+                public const string DiskInfoOverlay = Prefix + "DiskInfoOverlay";
                 public static class Options
                 {
                     public const string Prefix = "Collection_Mods.MergeCollection.Options.";
@@ -442,6 +460,12 @@ namespace IronyModManager.Shared
             public const string Close = Prefix + "Close";
             public const string NavigateTo = Prefix + "NavigateTo";
             public const string Reset = Prefix + "Reset";
+            public static class AppOptions
+            {
+                public const string Prefix = "Options.AppOptions.";
+                public const string Title = Prefix + "Title";
+                public const string NotificationPosition = Prefix + "NotificationPosition";
+            }
             public static class Editor
             {
                 public const string Prefix = "Options.Editor.";
@@ -460,6 +484,7 @@ namespace IronyModManager.Shared
                 public const string RefreshMods = Prefix + "RefreshMods";
                 public const string CloseAfterLaunch = Prefix + "CloseAfterLaunch";
                 public const string AutoConfigure = Prefix + "AutoConfigure";
+                public const string CustoModPath = Prefix + "CustoModPath";
             }
             public static class Updates
             {
@@ -504,6 +529,17 @@ namespace IronyModManager.Shared
                 public const string GameRootTitle = Prefix + "GameRootTitle";
                 public const string UserDirTitle = Prefix + "UserDirTitle";
                 public const string EditorTitle = Prefix + "EditorTitle";
+                public const string CustomModPathTitle = Prefix + "CustomModPathTitle";
+            }
+            public static class Prompts
+            {
+                public const string Prefix = "Options.Prompts.";
+                public static class CustoModDirectory
+                {
+                    public const string Prefix = "Options.Prompts.CustoModDirectory.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
         }
         public static class Notifications
@@ -626,6 +662,12 @@ namespace IronyModManager.Shared
             public static class CustomPatchRerunConflictSolver
             {
                 public const string Prefix = "Notifications.CustomPatchRerunConflictSolver.";
+                public const string Title = Prefix + "Title";
+                public const string Message = Prefix + "Message";
+            }
+            public static class CollectionMergeNotEnoughSpace
+            {
+                public const string Prefix = "Notifications.CollectionMergeNotEnoughSpace.";
                 public const string Title = Prefix + "Title";
                 public const string Message = Prefix + "Message";
             }

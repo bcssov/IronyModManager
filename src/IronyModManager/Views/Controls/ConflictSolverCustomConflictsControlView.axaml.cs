@@ -4,7 +4,7 @@
 // Created          : 07-28-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-23-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverCustomConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -101,7 +101,7 @@ namespace IronyModManager.Views.Controls
             popup.Opened += (sender, args) =>
             {
                 popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>
@@ -207,7 +207,7 @@ namespace IronyModManager.Views.Controls
                 // It's a hack I know see: https://github.com/AvaloniaUI/AvaloniaEdit/issues/99.
                 // I'd need to go into the code to fix it and it ain't worth it. There doesn't seem to be any feedback on this issue as well.
                 var lines = editor.Text.SplitOnNewLine(false).ToList();
-                if (lines.Count() > 3)
+                if (lines.Count > 3)
                 {
                     if (manualAppend)
                     {
@@ -217,7 +217,7 @@ namespace IronyModManager.Views.Controls
                     var carretOffset = editor.CaretOffset;
                     for (int i = 1; i <= 3; i++)
                     {
-                        var last = lines[lines.Count() - i];
+                        var last = lines[^i];
                         if (!string.IsNullOrWhiteSpace(last))
                         {
                             manualAppend = true;

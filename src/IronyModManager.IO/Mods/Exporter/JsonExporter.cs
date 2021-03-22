@@ -4,7 +4,7 @@
 // Created          : 08-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-14-2021
+// Last Modified On : 03-14-2021
 // ***********************************************************************
 // <copyright file="JsonExporter.cs" company="Mario">
 //     Mario
@@ -42,7 +42,7 @@ namespace IronyModManager.IO.Mods.Exporter
         /// <summary>
         /// The write lock
         /// </summary>
-        private static readonly AsyncLock writeLock = new AsyncLock();
+        private static readonly AsyncLock writeLock = new();
 
         #endregion Fields
 

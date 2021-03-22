@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-21-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -80,6 +81,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly INotificationAction notificationAction;
 
         /// <summary>
+        /// The position settings service
+        /// </summary>
+        private readonly INotificationPositionSettingsService positionSettingsService;
+
+        /// <summary>
         /// The updater
         /// </summary>
         private readonly IUpdater updater;
@@ -125,14 +131,29 @@ namespace IronyModManager.ViewModels.Controls
         private bool isGameReloading = false;
 
         /// <summary>
+        /// The is notification position reloading
+        /// </summary>
+        private bool isNotificationPositionReloading = false;
+
+        /// <summary>
         /// The is update reloading
         /// </summary>
         private bool isUpdateReloading = false;
 
         /// <summary>
+        /// The notification position changed
+        /// </summary>
+        private IDisposable notificationPositionChanged;
+
+        /// <summary>
         /// The refresh descriptors changed
         /// </summary>
         private IDisposable refreshDescriptorsChanged;
+
+        /// <summary>
+        /// The mod service
+        /// </summary>
+        private readonly IModService modService;
 
         #endregion Fields
 
@@ -141,6 +162,8 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OptionsControlViewModel" /> class.
         /// </summary>
+        /// <param name="modService">The mod service.</param>
+        /// <param name="positionSettingsService">The position settings service.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="logger">The logger.</param>
@@ -150,10 +173,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="updaterService">The updater service.</param>
         /// <param name="gameService">The game service.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
-        public OptionsControlViewModel(IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
+        public OptionsControlViewModel(IModService modService, INotificationPositionSettingsService positionSettingsService,
+            IExternalEditorService externalEditorService, IIDGenerator idGenerator, ILogger logger,
             INotificationAction notificationAction, ILocalizationManager localizationManager, IUpdater updater,
             IUpdaterService updaterService, IGameService gameService, IFileDialogAction fileDialogAction)
         {
+            this.positionSettingsService = positionSettingsService;
             this.gameService = gameService;
             this.fileDialogAction = fileDialogAction;
             this.updaterService = updaterService;
@@ -163,6 +188,7 @@ namespace IronyModManager.ViewModels.Controls
             this.logger = logger;
             this.idGenerator = idGenerator;
             this.externalEditorService = externalEditorService;
+            this.modService = modService;
             LeftMargin = new Thickness(20, 0, 0, 0);
             LeftChildMargin = new Thickness(20, 10, 0, 0);
         }
@@ -170,6 +196,20 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Constructors
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the custo mod path.
+        /// </summary>
+        /// <value>The custo mod path.</value>
+        [StaticLocalization(LocalizationResources.Options.Game.CustoModPath)]
+        public virtual string CustoModPath { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the application options title.
+        /// </summary>
+        /// <value>The application options title.</value>
+        [StaticLocalization(LocalizationResources.Options.AppOptions.Title)]
+        public virtual string AppOptionsTitle { get; protected set; }
 
         /// <summary>
         /// Gets or sets the automatic configure.
@@ -389,6 +429,32 @@ namespace IronyModManager.ViewModels.Controls
         public virtual string NavigateUserDirTitle { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the navigate custom user dir title.
+        /// </summary>
+        /// <value>The navigate custom user dir title.</value>
+        [StaticLocalization(LocalizationResources.Options.Dialog.CustomModPathTitle)]
+        public virtual string NavigateCustomUserDirTitle { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the notification position.
+        /// </summary>
+        /// <value>The notification position.</value>
+        public virtual INotificationPosition NotificationPosition { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the notification position label.
+        /// </summary>
+        /// <value>The notification position label.</value>
+        [StaticLocalization(LocalizationResources.Options.AppOptions.NotificationPosition)]
+        public virtual string NotificationPositionLabel { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the notification positions.
+        /// </summary>
+        /// <value>The notification positions.</value>
+        public virtual IEnumerable<INotificationPosition> NotificationPositions { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the options.
         /// </summary>
         /// <value>The options.</value>
@@ -426,6 +492,18 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The reset directory command.</value>
         public virtual ReactiveCommand<Unit, Unit> ResetDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the reset custom directory command.
+        /// </summary>
+        /// <value>The reset custom directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ResetCustomDirectoryCommand { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the navigate custom directory command.
+        /// </summary>
+        /// <value>The navigate custom directory command.</value>
+        public virtual ReactiveCommand<Unit, Unit> NavigateCustomDirectoryCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the reset editor arguments command.
@@ -554,6 +632,7 @@ namespace IronyModManager.ViewModels.Controls
         {
             SetGame(gameService.GetSelected());
             SetEditor(externalEditorService.Get());
+            SetNotificationPosition(positionSettingsService.Get());
             var updateSettings = updaterService.Get();
             if (updateSettings.AutoUpdates == null)
             {
@@ -727,6 +806,42 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
+            NavigateCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                IsOpen = false;
+                var result = await fileDialogAction.OpenFolderDialogAsync(NavigateUserDirTitle);
+                var save = !string.IsNullOrEmpty(result);
+                if (save && !await modService.CustomModDirectoryEmptyAsync(Game.Type))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+                }
+                IsOpen = true;
+                if (save)
+                {
+                    Game.CustomModDirectory = result;
+                    SaveGame();
+                }
+            }).DisposeWith(disposables);
+
+            ResetCustomDirectoryCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var save = true;
+                if (!await modService.CustomModDirectoryEmptyAsync(Game.Type))
+                {
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
+                }
+                if (save)
+                {
+                    var defaultSettings = gameService.GetDefaultGameSettings(Game);
+                    Game.CustomModDirectory = defaultSettings.CustomModDirectory;
+                    SaveGame();
+                }                
+            }).DisposeWith(disposables);
+
             updater.Error.Subscribe(s =>
             {
                 var title = localizationManager.GetResource(LocalizationResources.Options.Updates.Errors.DownloadErrorTitle);
@@ -789,11 +904,22 @@ namespace IronyModManager.ViewModels.Controls
             game.CloseAppAfterGameLaunch = Game.CloseAppAfterGameLaunch;
             bool dirChanged = game.UserDirectory != Game.UserDirectory;
             game.UserDirectory = Game.UserDirectory;
-            if (gameService.Save(game) && dirChanged)
+            bool customDirectoryChanged = game.CustomModDirectory != Game.CustomModDirectory;
+            game.CustomModDirectory = Game.CustomModDirectory;
+            if (gameService.Save(game) && (dirChanged)|| customDirectoryChanged)
             {
-                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game));
+                MessageBus.PublishAsync(new GameUserDirectoryChangedEvent(game, customDirectoryChanged));
             }
             SetGame(game);
+        }
+
+        /// <summary>
+        /// Saves the notification option.
+        /// </summary>
+        protected virtual void SaveNotificationOption()
+        {
+            positionSettingsService.Save(NotificationPosition);
+            SetNotificationPosition(resubscribeOnly: true);
         }
 
         /// <summary>
@@ -851,6 +977,34 @@ namespace IronyModManager.ViewModels.Controls
             LeftMargin = new Thickness(ShowGameOptions ? 20 : 0, 0, 0, 0);
             LeftChildMargin = new Thickness(ShowGameOptions ? 20 : 0, 10, 0, 0);
             isGameReloading = false;
+        }
+
+        /// <summary>
+        /// Sets the notification position.
+        /// </summary>
+        /// <param name="notificationPositions">The notification positions.</param>
+        /// <param name="resubscribeOnly">if set to <c>true</c> [resubscribe only].</param>
+        protected virtual void SetNotificationPosition(IEnumerable<INotificationPosition> notificationPositions = null, bool resubscribeOnly = false)
+        {
+            isNotificationPositionReloading = true;
+            if (!resubscribeOnly && notificationPositions != null)
+            {
+                NotificationPositions = notificationPositions.ToAvaloniaList();
+            }
+            notificationPositionChanged?.Dispose();
+            notificationPositionChanged = this.WhenAnyValue(p => p.NotificationPosition).Where(p => !isNotificationPositionReloading).Subscribe(s =>
+            {
+                foreach (var item in NotificationPositions)
+                {
+                    item.IsSelected = item == s;
+                }
+                SaveNotificationOption();
+            }).DisposeWith(Disposables);
+            if (!resubscribeOnly && notificationPositions != null)
+            {
+                NotificationPosition = NotificationPositions.FirstOrDefault(p => p.IsSelected);
+            }
+            isNotificationPositionReloading = false;
         }
 
         /// <summary>

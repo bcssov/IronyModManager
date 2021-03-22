@@ -4,7 +4,7 @@
 // Created          : 02-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ArchiveFileReader.cs" company="Mario">
 //     Mario
@@ -126,7 +126,7 @@ namespace IronyModManager.IO.Readers
             catch (Exception ex)
             {
                 logger.Error(ex);
-                return getUsingReaderFactory();            
+                return getUsingReaderFactory();
             }
         }
 
@@ -203,12 +203,55 @@ namespace IronyModManager.IO.Readers
 
             try
             {
-                return (getUsingArchiveFactory(), false);                
+                return (getUsingArchiveFactory(), false);
             }
             catch (Exception ex)
             {
                 logger.Error(ex);
                 return (getUsingReaderFactory(), false);
+            }
+        }
+
+        /// <summary>
+        /// Gets the size of the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        public virtual long GetTotalSize(string path)
+        {           
+            long getUsingReaderFactory()
+            {
+                long total = 0;
+                using var fileStream = File.OpenRead(path);
+                using var reader = ReaderFactory.Open(fileStream);
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        total += reader.Entry.Size;
+                    }
+                }
+                return total;
+            }
+            long getUsingArchiveFactory()
+            {
+                long total = 0;
+                using var fileStream = File.OpenRead(path);
+                using var reader = ArchiveFactory.Open(fileStream);
+                foreach (var entry in reader.Entries.Where(entry => !entry.IsDirectory))
+                {
+                    total += entry.Size;
+                }
+                return total;
+            }
+            try
+            {
+                return getUsingArchiveFactory();
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return getUsingReaderFactory();
             }
         }
 
@@ -239,6 +282,7 @@ namespace IronyModManager.IO.Readers
                         }
                         var info = DIResolver.Get<IFileInfo>();
                         info.IsReadOnly = false;
+                        info.Size = reader.Entry.Size;
                         using var entryStream = reader.OpenEntryStream();
                         using var memoryStream = new MemoryStream();
                         entryStream.CopyTo(memoryStream);
@@ -307,7 +351,7 @@ namespace IronyModManager.IO.Readers
             {
                 logger.Error(ex);
                 result = new List<IFileInfo>();
-                parseUsingReaderFactory();                
+                parseUsingReaderFactory();
             }
 
             return result.Count != 0 ? result : null;

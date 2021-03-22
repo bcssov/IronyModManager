@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-26-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -123,12 +123,12 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// The previous validated mods
         /// </summary>
-        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new ConcurrentDictionary<string, IEnumerable<IMod>>();
+        private readonly ConcurrentDictionary<string, IEnumerable<IMod>> previousValidatedMods = new();
 
         /// <summary>
         /// The reorder lock
         /// </summary>
-        private readonly AsyncLock reorderLock = new AsyncLock();
+        private readonly AsyncLock reorderLock = new();
 
         /// <summary>
         /// The reorder queue
@@ -257,7 +257,8 @@ namespace IronyModManager.ViewModels.Controls
         /// Delegate ModReorderedDelegate
         /// </summary>
         /// <param name="mod">The mod.</param>
-        public delegate void ModReorderedDelegate(IMod mod);
+        /// <param name="instant">if set to <c>true</c> [instant].</param>
+        public delegate void ModReorderedDelegate(IMod mod, bool instant);
 
         #endregion Delegates
 
@@ -800,8 +801,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Resets this instance.
         /// </summary>
-        public virtual void Reset()
+        /// <param name="fullReset">The full reset.</param>
+        public virtual void Reset(bool fullReset = false)
         {
+            if (fullReset)
+            {
+                previousValidatedMods.Clear();
+            }
             PatchMod.SetParameters(SelectedModCollection);
             HandleCollectionPatchStateAsync(SelectedModCollection?.Name).ConfigureAwait(false);
         }
@@ -1653,6 +1659,7 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <param name="instant">if set to <c>true</c> [instant].</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task PerformModReorderAsync(bool instant, CancellationToken cancellationToken)
         {
             if (!instant)
@@ -1698,7 +1705,7 @@ namespace IronyModManager.ViewModels.Controls
                         }
                         SaveState();
                         RecognizeSortOrder(SelectedModCollection);
-                        ModReordered?.Invoke(reorderQueue.Last());
+                        ModReordered?.Invoke(reorderQueue.Last(), instant);
                         skipModSelectionSave = false;
                         reorderQueue.Clear();
                     }
@@ -1796,7 +1803,7 @@ namespace IronyModManager.ViewModels.Controls
             var game = gameService.GetSelected()?.Type ?? string.Empty;
             var collection = modCollectionService.Create();
             // Due to async nature ensure that the game and mods are from the same source before saving
-            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame.Type.Equals(game))
+            if (collection != null && SelectedModCollection != null && Mods != null && game.Equals(SelectedModCollection.Game) && activeGame != null && activeGame.Type.Equals(game))
             {
                 if (Mods.Any() && !Mods.All(p => p.Game.Equals(game)))
                 {
@@ -1833,6 +1840,7 @@ namespace IronyModManager.ViewModels.Controls
         /// schedule to reorder queue as an asynchronous operation.
         /// </summary>
         /// <param name="mod">The mod.</param>
+        /// <returns>System.Threading.Tasks.Task.</returns>
         protected virtual async Task ScheduleToReorderQueueAsync(IMod mod)
         {
             if (!reorderQueue.Contains(mod))

@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-16-2020
+// Last Modified On : 03-22-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlView.axaml.cs" company="Mario">
 //     Mario
@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Markup.Xaml;
@@ -39,7 +40,7 @@ namespace IronyModManager.Views.Controls
         /// </summary>
         public ConflictSolverResetConflictsControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
@@ -60,7 +61,7 @@ namespace IronyModManager.Views.Controls
             popup.Opened += (sender, args) =>
             {
                 popup.Host.ConfigurePosition(popup.PlacementTarget, popup.PlacementMode, new Avalonia.Point(popup.HorizontalOffset, 15),
-                    Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.None, Avalonia.Controls.Primitives.PopupPositioning.PopupPositioningEdge.Bottom);
+                    Avalonia.Controls.Primitives.PopupPositioning.PopupAnchor.None, Avalonia.Controls.Primitives.PopupPositioning.PopupGravity.Bottom);
             };
             MessageBus.Current.Listen<ForceClosePopulsEventArgs>()
             .SubscribeObservable(x =>
@@ -70,50 +71,36 @@ namespace IronyModManager.Views.Controls
                     ViewModel.ForceClosePopup();
                 });
             }).DisposeWith(disposables);
-
             var conflictList = this.FindControl<Avalonia.Controls.ListBox>("conflictList");
-            conflictList.SelectionChanged += (sender, args) =>
+            this.WhenAnyValue(p => p.ViewModel.IsActivated).Where(p => p).SubscribeObservable(s =>
             {
-                if (conflictList?.SelectedIndex > -1 && ViewModel.SelectedParentHierarchicalDefinition != null)
+                int? index = null;
+                ViewModel.ResetCommand.IsExecuting.SubscribeObservable(s =>
                 {
-                    ViewModel.SelectedHierarchicalDefinition = ViewModel.SelectedParentHierarchicalDefinition.Children.ElementAt(conflictList.SelectedIndex);
-                }
-                else
-                {
-                    ViewModel.SelectedHierarchicalDefinition = null;
-                }
-            };
-            this.WhenAnyValue(v => v.ViewModel.SelectedParentHierarchicalDefinition).SubscribeObservable(s =>
-            {
-                if (s?.Children.Count > 0)
-                {
-                    Dispatcher.UIThread.InvokeAsync(() =>
+                    if (s)
                     {
-                        if (ViewModel.PreviousConflictIndex.HasValue)
+                        if (conflictList.ItemContainerGenerator != null && conflictList.ItemContainerGenerator.Containers != null)
                         {
-                            if (conflictList.ItemCount > 0)
+                            var info = conflictList.ItemContainerGenerator.Containers.ToList().LastOrDefault();
+                            if (info != null)
                             {
-                                conflictList.SelectedIndex = -1;
-                                conflictList.SelectedIndex = ViewModel.PreviousConflictIndex.GetValueOrDefault();
-                            }
-                            else
-                            {
-                                conflictList.SelectedIndex = -1;
+                                index = info.Index;
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (index.HasValue)
                         {
-                            if (conflictList.ItemCount > 0)
+                            if (index.GetValueOrDefault() >= conflictList.ItemCount)
                             {
-                                conflictList.SelectedIndex = 0;
+                                index = conflictList.ItemCount - 1;
                             }
-                            else
-                            {
-                                conflictList.SelectedIndex = -1;
-                            }
+                            conflictList.ScrollIntoView(index.GetValueOrDefault());
                         }
-                    });
-                }
+                        index = null;
+                    }
+                }).DisposeWith(disposables);
             }).DisposeWith(disposables);
             base.OnActivated(disposables);
         }

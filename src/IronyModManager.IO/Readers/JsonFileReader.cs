@@ -4,7 +4,7 @@
 // Created          : 09-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="JsonFileReader.cs" company="Mario">
 //     Mario
@@ -84,6 +84,17 @@ namespace IronyModManager.IO.Readers
         }
 
         /// <summary>
+        /// Gets the total size.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>System.Int64.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public virtual long GetTotalSize(string path)
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
         /// Reads the specified path.
         /// </summary>
         /// <param name="path">The path.</param>
@@ -96,7 +107,9 @@ namespace IronyModManager.IO.Readers
                 var result = new List<IFileInfo>();
                 var content = File.ReadAllText(path);
                 var info = DIResolver.Get<IFileInfo>();
-                info.IsReadOnly = new System.IO.FileInfo(path).IsReadOnly;
+                var fileInfo = new System.IO.FileInfo(path);
+                info.IsReadOnly = fileInfo.IsReadOnly;
+                info.Size = fileInfo.Length;
                 info.FileName = path;
                 info.IsBinary = false;
                 info.Content = content.SplitOnNewLine(false);

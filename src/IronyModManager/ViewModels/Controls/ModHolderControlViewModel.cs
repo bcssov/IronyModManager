@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-19-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -763,6 +763,10 @@ namespace IronyModManager.ViewModels.Controls
 
             gameDirectoryChangedHandler.Subscribe(async s =>
             {
+                if (s.CustomDirectoryChanged)
+                {
+                    CollectionMods.Reset(true);
+                }
                 await InstalledMods.RefreshModsAsync();
                 EvalResumeAvailability(s.Game);
             }).DisposeWith(disposables);

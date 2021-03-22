@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -15,9 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using IronyModManager.Common;
 using IronyModManager.Common.Views;
 using IronyModManager.Models.Common;
 using IronyModManager.Shared;
@@ -53,23 +56,55 @@ namespace IronyModManager.Views.Controls
         /// <param name="disposables">The disposables.</param>
         protected override void OnActivated(CompositeDisposable disposables)
         {
+            var header = this.FindControl<Grid>("header");
             var modList = this.FindControl<IronyModManager.Controls.ListBox>("modList");
-            if (modList != null)
+            var performingLayoutUpate = false;
+
+            async Task updateLayout()
             {
-                modList.ContextMenuOpening += (sender, args) =>
+                while (performingLayoutUpate)
+                {
+                    await Task.Delay(25);
+                }
+                performingLayoutUpate = true;
+                await Dispatcher.UIThread.SafeInvokeAsync(() =>
+                {
+                    var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
+                    foreach (var item in listboxItems)
+                    {
+                        var grid = item.GetLogicalChildren().OfType<Grid>().FirstOrDefault();
+                        if (grid != null)
+                        {
+                            for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                            {
+                                var col = grid.ColumnDefinitions[i];
+                                col.Width = new GridLength(header.ColumnDefinitions[i].ActualWidth);
+                            }
+                        }
+                    }
+                });
+                performingLayoutUpate = false;
+            }
+
+            if (modList != null && header != null)
+            {
+                modList.ContextMenuOpening += (item) =>
                 {
                     List<MenuItem> menuItems = null;
-                    var hoveredItem = modList.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
-                    if (hoveredItem != null)
+                    if (item != null)
                     {
-                        ViewModel.ContextMenuMod = hoveredItem.Content as IMod;
+                        ViewModel.ContextMenuMod = item.Content as IMod;
                         menuItems = !string.IsNullOrEmpty(ViewModel.GetContextMenuModModUrl()) || !string.IsNullOrEmpty(ViewModel.GetContextMenuModModSteamUrl()) ? GetAllMenuItems() : GetActionMenuItems();
                     }
-                    if (modList.ItemCount == 0)
+                    if (menuItems == null)
                     {
                         menuItems = GetStaticMenuItems();
                     }
-                    modList.SetContextMenu(menuItems);
+                    modList.SetContextMenuItems(menuItems);
+                };
+                modList.LayoutUpdated += (sender, args) =>
+                {
+                    updateLayout().ConfigureAwait(false);
                 };
             }
             base.OnActivated(disposables);

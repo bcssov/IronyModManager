@@ -4,7 +4,7 @@
 // Created          : 03-21-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 04-05-2020
+// Last Modified On : 03-10-2021
 // ***********************************************************************
 // <copyright file="BoundClassTextBlock.cs" company="Mario">
 //     Mario
@@ -99,13 +99,14 @@ namespace IronyModManager.Controls
         /// <summary>
         /// Handles the <see cref="E:PropertyChanged" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="change">The change.</param>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
-            base.OnPropertyChanged(e);
-            if (e.Property == BoundClassesProperty)
+            base.OnPropertyChanged(change);
+            if (change.Property == BoundClassesProperty)
             {
-                AddClasses(e.NewValue != null ? e.NewValue.ToString() : string.Empty);
+                AddClasses(change.NewValue.GetValueOrDefault<string>());
             }
         }
 

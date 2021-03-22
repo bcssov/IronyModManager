@@ -58,6 +58,12 @@
             "Pictures": "Pictures"
         }
     },
+    "TextBox": {
+        "Copy": "Copy",
+        "Cut": "Cut",
+        "Paste": "Paste",
+        "SelectAll": "Select All"
+    },
     "Languages": {
         "Name": "Language"
     },
@@ -65,12 +71,19 @@
         "Name": "Theme",
         "Light": "Light",
         "Dark": "Dark",
+        "FluentLight": "Fluent Light",
+        "FluentDark": "Fluent Dark",
         "MaterialDark": "Material Dark",
-        "MaterialLightGreen": "Material Light Green",
-        "MaterialDeepPurple": "Material Deep Purple",
+        "MaterialLight": "Material Light",
         "Restart_Title": "Needs restart",
         "Restart_Header": "App needs restart",
         "Restart_Message": "App needs to be restarted in order for the new theme to properly apply. Do you want to restart the app?"
+    },
+    "NotificationPosition": {
+        "BottomRight": "Bottom Right",
+        "BottomLeft": "Bottom Left",
+        "TopRight": "Top Right",
+        "TopLeft": "Top Left"
     },
     "Games": {
         "Name": "Game",
@@ -168,6 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "DiskInfoOverlay": "Checking available disk space...",
             "Options": {
                 "Title": "Select mode",
                 "Basic": "Basic",
@@ -334,6 +348,10 @@
         "Close": "Close",
         "NavigateTo": "...",
         "Reset": "X",
+        "AppOptions": {
+            "Title": "Application Options",
+            "NotificationPosition": "Notification Position"
+        },
         "Editor": {
             "Title": "External Editor Options",
             "EditorExecutable": "Editor Executable",
@@ -347,7 +365,8 @@
             "GameArgs": "Game Launch Options",
             "RefreshMods": "Refresh Descriptors Before Playing",
             "CloseAfterLaunch": "Close After Launching Game",
-            "AutoConfigure": "Configure All..."
+            "AutoConfigure": "Configure All...",
+            "CustoModPath": "Custom Mod Directory"
         },
         "Updates": {
             "Title": "Update Options",
@@ -379,7 +398,14 @@
             "ExeTitle": "Find game executable",
             "GameRootTitle": "Find game root directory",
             "UserDirTitle": "Find game data directory",
-            "EditorTitle": "Find editor executable"
+            "EditorTitle": "Find editor executable",
+            "CustomModPathTitle": "Find custom mod directory"
+        },
+        "Prompts": {
+            "CustoModDirectory": {
+                "Title": "Not Empty",
+                "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
+            }
         }
     },
     "Notifications": {
@@ -462,6 +488,10 @@
         "CustomPatchRerunConflictSolver": {
             "Title": "Conflict Solver Refresh",
             "Message": "Conflict Solver needs to be refreshed to take into account new custom patches added. Please rerun conflict solver."
+        },
+        "CollectionMergeNotEnoughSpace": {
+            "Title": "Not enough free space",
+            "Message": "There is not enough free space to perform merge operation."
         }
     },
     "Mod_App_Actions": {

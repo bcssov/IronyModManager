@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-23-2021
+// Last Modified On : 03-22-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlView.xaml.cs" company="Mario">
 //     Mario
@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using System.Xml;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaEdit;
@@ -122,11 +121,11 @@ namespace IronyModManager.Views.Controls
         /// Handles the context menu.
         /// </summary>
         /// <param name="listBox">The list box.</param>
+        /// <param name="hoveredItem">The hovered item.</param>
         /// <param name="leftSide">if set to <c>true</c> [left side].</param>
-        protected virtual void HandleContextMenu(IronyModManager.Controls.ListBox listBox, bool leftSide)
+        protected virtual void HandleContextMenu(IronyModManager.Controls.ListBox listBox, ListBoxItem hoveredItem, bool leftSide)
         {
             List<MenuItem> menuItems = null;
-            var hoveredItem = listBox.GetLogicalChildren().Cast<ListBoxItem>().FirstOrDefault(p => p.IsPointerOver);
             if (hoveredItem != null)
             {
                 if (!ViewModel.RightSidePatchMod && !ViewModel.LeftSidePatchMod)
@@ -145,7 +144,7 @@ namespace IronyModManager.Views.Controls
                     }
                 }
             }
-            listBox.SetContextMenu(menuItems);
+            listBox.SetContextMenuItems(menuItems);
         }
 
         /// <summary>
@@ -203,13 +202,13 @@ namespace IronyModManager.Views.Controls
             {
                 HandleListBoxPropertyChanged(args, rightSide, leftSide);
             };
-            leftSide.ContextMenuOpening += (sender, args) =>
+            leftSide.ContextMenuOpening += (item) =>
             {
-                HandleContextMenu(leftSide, true);
+                HandleContextMenu(leftSide, item, true);
             };
-            rightSide.ContextMenuOpening += (sender, args) =>
+            rightSide.ContextMenuOpening += (item) =>
             {
-                HandleContextMenu(rightSide, false);
+                HandleContextMenu(rightSide, item, false);
             };
             ViewModel.ConflictFound += (line) =>
             {
@@ -228,21 +227,13 @@ namespace IronyModManager.Views.Controls
             {
                 async Task delay()
                 {
-                    await Task.Delay(1);
+                    await Task.Delay(50);
                     var listBox = left ? leftSide : rightSide;
                     listBox.Focus();
                     if (focusSideScrollItem.HasValue)
                     {
-                        if (listBox.Items is IEnumerable<DiffPieceWithIndex> items)
-                        {
-                            var itemsList = items.ToList();
-                            var item = itemsList.FirstOrDefault(p => p.Index == focusSideScrollItem.GetValueOrDefault());
-                            if (item == null)
-                            {
-                                item = itemsList.LastOrDefault();
-                            }
-                            listBox.ScrollIntoView(item);
-                        }
+                        FocusConflict(-1, leftSide, rightSide);
+                        listBox.ScrollIntoView(focusSideScrollItem.GetValueOrDefault());
                     }
                     focusSideScrollItem = null;
                 }

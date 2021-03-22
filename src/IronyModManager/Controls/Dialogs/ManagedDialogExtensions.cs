@@ -4,7 +4,7 @@
 // Created          : 05-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-01-2020
+// Last Modified On : 03-20-2021
 // ***********************************************************************
 // <copyright file="ManagedDialogExtensions.cs" company="Avalonia">
 //     Avalonia
@@ -15,17 +15,16 @@
 // </summary>
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Platform;
-using Avalonia.Platform;
 using IronyModManager.Controls.Themes;
 using IronyModManager.DI;
-using IronyModManager.Fonts;
+using IronyModManager.Platform.Fonts;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 
@@ -45,7 +44,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
         /// <param name="builder">The builder.</param>
         /// <returns>TAppBuilder.</returns>
-        public static TAppBuilder UseManagedDialogs<TAppBuilder>(this TAppBuilder builder)
+        public static TAppBuilder UseIronyManagedDialogs<TAppBuilder>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
             builder.AfterSetup(_ =>
@@ -60,7 +59,7 @@ namespace IronyModManager.Controls.Dialogs
         /// <typeparam name="TWindow">The type of the t window.</typeparam>
         /// <param name="builder">The builder.</param>
         /// <returns>TAppBuilder.</returns>
-        public static TAppBuilder UseManagedDialogs<TAppBuilder, TWindow>(this TAppBuilder builder)
+        public static TAppBuilder UseIronyManagedDialogs<TAppBuilder, TWindow>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new() where TWindow : Window, new()
         {
             builder.AfterSetup(_ =>
@@ -88,7 +87,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="dialog">The dialog.</param>
             /// <param name="parent">The parent.</param>
             /// <returns>System.String[].</returns>
-            public async Task<string[]> ShowFileDialogAsync(FileDialog dialog, IWindowImpl parent)
+            public async Task<string[]> ShowFileDialogAsync(FileDialog dialog, Window parent)
             {
                 return await ShowAsync(dialog, parent);
             }
@@ -99,7 +98,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="dialog">The dialog.</param>
             /// <param name="parent">The parent.</param>
             /// <returns>System.String.</returns>
-            public async Task<string> ShowFolderDialogAsync(OpenFolderDialog dialog, IWindowImpl parent)
+            public async Task<string> ShowFolderDialogAsync(OpenFolderDialog dialog, Window parent)
             {
                 return (await ShowAsync(dialog, parent, new ManagedFileDialogOptions() { AllowDirectorySelection = true }))?.FirstOrDefault();
             }
@@ -111,7 +110,7 @@ namespace IronyModManager.Controls.Dialogs
             /// <param name="parent">The parent.</param>
             /// <param name="options">The options.</param>
             /// <returns>System.String[].</returns>
-            private async Task<string[]> ShowAsync(SystemDialog d, IWindowImpl parent, ManagedFileDialogOptions options = null)
+            private async Task<string[]> ShowAsync(SystemDialog d, Window parent, ManagedFileDialogOptions options = null)
             {
                 var model = new ManagedDialogViewModel((FileSystemDialog)d,
                     options ?? new ManagedFileDialogOptions());
@@ -129,7 +128,8 @@ namespace IronyModManager.Controls.Dialogs
                     DataContext = model,
                     SizeToContent = SizeToContent.Width,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    FontFamily = font.GetFontFamily()
+                    FontFamily = font.GetFontFamily(),
+                    Height = 700
                 };
 
                 dialog.Closed += delegate { model.Cancel(); };

@@ -4,7 +4,7 @@
 // Created          : 12-14-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-14-2020
+// Last Modified On : 03-15-2021
 // ***********************************************************************
 // <copyright file="ListBox.cs" company="Mario">
 //     Mario
@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 
 namespace IronyModManager.Controls
 {
@@ -33,18 +35,28 @@ namespace IronyModManager.Controls
         #region Fields
 
         /// <summary>
-        /// The CTX raised by pointer
+        /// The context menu
         /// </summary>
-        private bool ctxRaisedByPointer = false;
+        private ContextMenu contextMenu;
 
         #endregion Fields
+
+        #region Delegates
+
+        /// <summary>
+        /// Delegate ContextMenuOpeningDelegate
+        /// </summary>
+        /// <param name="listBoxItem">The list box item.</param>
+        public delegate void ContextMenuOpeningDelegate(ListBoxItem listBoxItem);
+
+        #endregion Delegates
 
         #region Events
 
         /// <summary>
         /// Occurs when [context menu opening].
         /// </summary>
-        public event EventHandler ContextMenuOpening;
+        public event ContextMenuOpeningDelegate ContextMenuOpening;
 
         #endregion Events
 
@@ -61,89 +73,62 @@ namespace IronyModManager.Controls
         #region Methods
 
         /// <summary>
-        /// Sets the context menu.
+        /// Sets the context menu items.
         /// </summary>
         /// <param name="menuItems">The menu items.</param>
-        public void SetContextMenu(IReadOnlyCollection<MenuItem> menuItems)
+        public void SetContextMenuItems(IReadOnlyCollection<MenuItem> menuItems)
         {
+            ContextMenu = null;
+            if (contextMenu == null)
+            {
+                contextMenu = new ContextMenu();
+            }
             if (menuItems?.Count > 0)
             {
-                ContextMenu = new ContextMenu
-                {
-                    Items = menuItems
-                };
+                contextMenu.Items = menuItems;
+                contextMenu.Open(this);
             }
-            else
+        }
+
+        /// <summary>
+        /// Gets the hovered item.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>ListBoxItem.</returns>
+        protected virtual ListBoxItem GetHoveredItem(Point position)
+        {
+            var visuals = this.GetVisualsAt(position);
+            if (visuals?.Count() > 0)
             {
-                ContextMenu = null;
+                var contentPresenter = visuals.OfType<ContentPresenter>().FirstOrDefault(p => (p.TemplatedParent as ListBoxItem) != null);
+                return contentPresenter?.TemplatedParent as ListBoxItem;
             }
+            return null;
         }
 
         /// <summary>
         /// Handles the <see cref="E:PointerPressed" /> event.
         /// </summary>
         /// <param name="e">The <see cref="PointerPressedEventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
 
             if (e.GetCurrentPoint(null).Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed)
             {
-                ctxRaisedByPointer = true;
-                RaiseContextMenuOpening();
-                ctxRaisedByPointer = false;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:PropertyChanged" /> event.
-        /// </summary>
-        /// <param name="e">The <see cref="AvaloniaPropertyChangedEventArgs" /> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-            if (e.Property == ContextMenuProperty)
-            {
-                HandleContextMenuEvents(e.OldValue as ContextMenu);
-            }
-        }
-
-        /// <summary>
-        /// Handles the context menu events.
-        /// </summary>
-        /// <param name="oldContextMenu">The old context menu.</param>
-        private void HandleContextMenuEvents(ContextMenu oldContextMenu)
-        {
-            if (oldContextMenu != null)
-            {
-                oldContextMenu.ContextMenuOpening -= OnContextMenuOpening;
-                oldContextMenu.Close();
-            }
-            if (ContextMenu != null && ContextMenu != oldContextMenu)
-            {
-                ContextMenu.ContextMenuOpening += OnContextMenuOpening;
-            }
-        }
-
-        /// <summary>
-        /// Handles the <see cref="E:ContextMenuOpening" /> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.CancelEventArgs" /> instance containing the event data.</param>
-        private void OnContextMenuOpening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!ctxRaisedByPointer)
-            {
-                RaiseContextMenuOpening();
+                var hoveredItem = GetHoveredItem(e.GetPosition(this));
+                RaiseContextMenuOpening(hoveredItem);
             }
         }
 
         /// <summary>
         /// Raises the context menu opening.
         /// </summary>
-        private void RaiseContextMenuOpening()
+        /// <param name="listBoxItem">The list box item.</param>
+        private void RaiseContextMenuOpening(ListBoxItem listBoxItem)
         {
-            ContextMenuOpening?.Invoke(this, EventArgs.Empty);
+            ContextMenuOpening?.Invoke(listBoxItem);
         }
 
         #endregion Methods
