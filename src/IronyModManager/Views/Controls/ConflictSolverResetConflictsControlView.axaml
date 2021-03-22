@@ -32,9 +32,9 @@
               </ComboBox.ItemTemplate>
             </ComboBox>
             <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
-                     SelectedItem="SelectedHierarchicalDefinition"
+                     SelectedItems="{Binding SelectedHierarchicalDefinitions}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     SelectionMode="Single" x:Name="conflictList" Height="350" Width="300">
+                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="300">
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
