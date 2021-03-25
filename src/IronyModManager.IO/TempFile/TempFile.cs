@@ -4,15 +4,15 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="TempFile.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IronyModManager.Shared;
@@ -27,6 +27,11 @@ namespace IronyModManager.IO.TempFile
     public class TempFile : ITempFile
     {
         #region Fields
+
+        /// <summary>
+        /// The temporary extension
+        /// </summary>
+        private const string TempExtension = "tmp";
 
         /// <summary>
         /// The logger
@@ -139,25 +144,9 @@ namespace IronyModManager.IO.TempFile
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                if (string.IsNullOrWhiteSpace(fileName))
-                {
-                    if (string.IsNullOrWhiteSpace(tempDirectory))
-                    {
-                        path = Path.GetTempFileName();
-                    }
-                    else
-                    {
-                        path = Path.Combine(tempDirectory, Path.GetRandomFileName());
-                        var fs = System.IO.File.Create(path);
-                        fs.Dispose();
-                    }
-                }
-                else
-                {
-                    path = Path.Combine(TempDirectory, fileName);
-                    var fs = System.IO.File.Create(path);
-                    fs.Dispose();
-                }
+                path = Path.ChangeExtension(Path.Combine(TempDirectory, string.IsNullOrWhiteSpace(fileName) ? Path.GetRandomFileName() : Path.GetRandomFileName()), TempExtension);
+                var fs = System.IO.File.Create(path);
+                fs.Dispose();
             }
             return path;
         }
