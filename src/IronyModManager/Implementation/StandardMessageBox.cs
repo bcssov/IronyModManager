@@ -4,7 +4,7 @@
 // Created          : 05-12-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="StandardMessageBox.cs" company="Mario">
 //     Mario
@@ -72,7 +72,10 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> Show(Window window)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            if (window == null)
+            {
+                this.window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
             this.window.Closed += delegate { tcs.TrySetResult(this.window.ButtonResult); };
             this.window.Show(window);
             return tcs.Task;
@@ -86,7 +89,10 @@ namespace IronyModManager.Implementation
         public Task<ButtonResult> ShowDialog(Window ownerWindow)
         {
             var tcs = new TaskCompletionSource<ButtonResult>();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            if (ownerWindow == null)
+            {
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
             window.Closed += delegate { tcs.TrySetResult(window.ButtonResult); };
             window.ShowDialog(ownerWindow);
             window.BringIntoView();

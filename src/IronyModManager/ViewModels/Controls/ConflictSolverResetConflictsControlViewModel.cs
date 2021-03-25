@@ -4,7 +4,7 @@
 // Created          : 06-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ConflictSolverResetConflictsControlViewModel.cs" company="Mario">
 //     Mario
@@ -21,6 +21,8 @@ using Avalonia.Collections;
 using IronyModManager.Common;
 using IronyModManager.Common.ViewModels;
 using IronyModManager.Implementation;
+using IronyModManager.Implementation.Overlay;
+using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
@@ -56,6 +58,16 @@ namespace IronyModManager.ViewModels.Controls
         private const string ResolvedValue = "resolved";
 
         /// <summary>
+        /// The identifier generator
+        /// </summary>
+        private readonly IIDGenerator idGenerator;
+
+        /// <summary>
+        /// The localization manager
+        /// </summary>
+        private readonly ILocalizationManager localizationManager;
+
+        /// <summary>
         /// The mod patch collection service
         /// </summary>
         private readonly IModPatchCollectionService modPatchCollectionService;
@@ -67,10 +79,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ConflictSolverResetConflictsControlViewModel" /> class.
         /// </summary>
+        /// <param name="localizationManager">The localization manager.</param>
+        /// <param name="idGenerator">The identifier generator.</param>
         /// <param name="modPatchCollectionService">The mod patch collection service.</param>
-        public ConflictSolverResetConflictsControlViewModel(IModPatchCollectionService modPatchCollectionService)
+        public ConflictSolverResetConflictsControlViewModel(ILocalizationManager localizationManager, IIDGenerator idGenerator, IModPatchCollectionService modPatchCollectionService)
         {
             this.modPatchCollectionService = modPatchCollectionService;
+            this.idGenerator = idGenerator;
+            this.localizationManager = localizationManager;
             InitModes();
             SelectedHierarchicalDefinitions = new AvaloniaList<IHierarchicalDefinitions>();
         }
@@ -362,11 +378,14 @@ namespace IronyModManager.ViewModels.Controls
                     var definitions = SelectedHierarchicalDefinitions.Where(p => !string.IsNullOrWhiteSpace(p.Key));
                     if (SelectedMode?.Value == IgnoredValue)
                     {
+                        var id = idGenerator.GetNextId();
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetConflicts.Overlay));
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
                             results.Add(await modPatchCollectionService.ResetIgnoredConflictAsync(Conflicts, item.Key, CollectionName));
                         }
+                        await TriggerOverlayAsync(id, false);
                         if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
@@ -375,11 +394,14 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else if (SelectedMode?.Value == ResolvedValue)
                     {
+                        var id = idGenerator.GetNextId();
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetConflicts.Overlay));
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
                             results.Add(await modPatchCollectionService.ResetResolvedConflictAsync(Conflicts, item.Key, CollectionName));
                         }
+                        await TriggerOverlayAsync(id, false);
                         if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));
@@ -388,11 +410,14 @@ namespace IronyModManager.ViewModels.Controls
                     }
                     else if (SelectedMode?.Value == CustomValue)
                     {
+                        var id = idGenerator.GetNextId();
+                        await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Conflict_Solver.ResetConflicts.Overlay));
                         var results = new List<bool>();
                         foreach (var item in definitions)
                         {
                             results.Add(await modPatchCollectionService.ResetCustomConflictAsync(Conflicts, item.Key, CollectionName));
                         }
+                        await TriggerOverlayAsync(id, false);
                         if (results.Any())
                         {
                             Bind(GetHierarchicalDefinitions(SelectedMode));

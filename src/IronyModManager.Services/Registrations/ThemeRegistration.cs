@@ -4,7 +4,7 @@
 // Created          : 02-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-14-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ThemeRegistration.cs" company="Mario">
 //     Mario
@@ -35,10 +35,10 @@ namespace IronyModManager.Services.Registrations
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterTheme(Common.Constants.Themes.Light.Name, true);
-            storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
-            storage.RegisterTheme(Common.Constants.Themes.FluentLight.Name);
+            storage.RegisterTheme(Common.Constants.Themes.FluentLight.Name, true);
             storage.RegisterTheme(Common.Constants.Themes.FluentDark.Name);
+            storage.RegisterTheme(Common.Constants.Themes.Light.Name);
+            storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
             storage.RegisterTheme(Common.Constants.Themes.MaterialLight.Name);
             storage.RegisterTheme(Common.Constants.Themes.MaterialDark.Name);
         }

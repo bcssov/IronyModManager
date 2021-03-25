@@ -4,7 +4,7 @@
 // Created          : 06-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 06-23-2020
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ICache.cs" company="Mario">
 //     Mario
@@ -23,39 +23,25 @@ namespace IronyModManager.Shared.Cache
         #region Methods
 
         /// <summary>
-        /// Gets the specified prefix.
+        /// Gets the specified parameters.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>T.</returns>
-        T Get<T>(string prefix, string key) where T : class;
+        T Get<T>(CacheGetParameters parameters) where T : class;
 
         /// <summary>
-        /// Invalidates the specified prefix.
+        /// Invalidates the specified parameters.
         /// </summary>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="keys">The keys.</param>
-        void Invalidate(string prefix, params string[] keys);
+        /// <param name="parameters">The parameters.</param>
+        void Invalidate(CacheInvalidateParameters parameters);
 
         /// <summary>
-        /// Sets the specified prefix.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        void Set<T>(string prefix, string key, T value) where T : class;
-
-        /// <summary>
-        /// Sets the specified prefix.
+        /// Sets the specified parameters.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="expiration">The expiration.</param>
-        void Set<T>(string prefix, string key, T value, TimeSpan? expiration) where T : class;
+        /// <param name="parameters">The parameters.</param>
+        void Set<T>(CacheAddParameters<T> parameters) where T : class;
 
         #endregion Methods
     }

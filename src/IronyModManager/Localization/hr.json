@@ -318,7 +318,8 @@
             "Ignored": "Zanemareni",
             "Custom": "Prilagođen",
             "Close": "Zatvori",
-            "Reset": "Poništi"
+            "Reset": "Poništi",
+            "Overlay": "Pričekajte dok se poništavaju sukobi..."
         },
         "DBSearch": {
             "Title": "Pretraživanje baze podataka",

@@ -12,10 +12,9 @@
        Topmost="True" ObeyScreenEdges="True" StaysOpen="False" x:Name="popup"
        PlacementTarget="{Binding #openPopupButton}">
       <Border BorderThickness="1,1,1,1" BorderBrush="{DynamicResource IronyButtonBorderBrush}">
-        <Grid RowDefinitions="1*,1*,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">
-          <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0">
+        <Grid RowDefinitions="1*,1*,350,1*" Background="{DynamicResource IronyBackgroundPopupBrush}">          
             <ComboBox SelectedItem="{Binding SelectedMode}" Items="{Binding Modes}"
-                      HorizontalAlignment="Stretch" MinHeight="30">
+                      HorizontalAlignment="Stretch" MinHeight="30" Grid.Row="0">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
                   <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
@@ -24,7 +23,7 @@
             </ComboBox>
             <ComboBox Items="{Binding HierarchicalDefinitions}"
                       SelectedItem="{Binding SelectedParentHierarchicalDefinition}"
-                      HorizontalAlignment="Stretch" MinHeight="30">
+                      HorizontalAlignment="Stretch" MinHeight="30" Grid.Row="1">
               <ComboBox.ItemTemplate>
                 <DataTemplate>
                   <ComboBoxItem Content="{Binding Name}"></ComboBoxItem>
@@ -34,15 +33,14 @@
             <ListBox Items="{Binding SelectedParentHierarchicalDefinition.Children}"
                      SelectedItems="{Binding SelectedHierarchicalDefinitions}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="300">
+                     SelectionMode="Multiple" x:Name="conflictList" Height="350" Width="300" Grid.Row="2">
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Name}" TextWrapping="Wrap"></TextBlock>
                 </DataTemplate>
               </ListBox.ItemTemplate>
-            </ListBox>
-          </StackPanel>
-          <Panel Grid.Row="1" Margin="0,5">
+            </ListBox>          
+          <Panel Grid.Row="3" Margin="0,5">
             <Button Content="{Binding Reset}" Command="{Binding ResetCommand}" HorizontalAlignment="Left"></Button>
             <Button Content="{Binding Close}" Command="{Binding CloseCommand}" HorizontalAlignment="Right"></Button>
           </Panel>

@@ -4,7 +4,7 @@
 // Created          : 06-19-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModMergeService.cs" company="Mario">
 //     Mario
@@ -206,7 +206,7 @@ namespace IronyModManager.Services
                 Path = mod.DescriptorFile,
                 LockDescriptor = CheckIfModShouldBeLocked(game, mod)
             }, true);
-            Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+            Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string>() { GetModsCacheKey(true), GetModsCacheKey(false) } });
 
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchName = GenerateCollectionPatchName(collection.Name);
@@ -456,7 +456,7 @@ namespace IronyModManager.Services
             });
             await messageBus.PublishAsync(new ModCompressMergeProgressEvent(2, 100));
 
-            Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+            Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string>() { GetModsCacheKey(true), GetModsCacheKey(false) } });
             var ordered = exportedMods.OrderBy(p => p.Order).ToList();
             return ordered;
         }

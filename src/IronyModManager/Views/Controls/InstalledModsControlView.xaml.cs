@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="InstalledModsControlView.xaml.cs" company="Mario">
 //     Mario
@@ -58,15 +58,15 @@ namespace IronyModManager.Views.Controls
         {
             var header = this.FindControl<Grid>("header");
             var modList = this.FindControl<IronyModManager.Controls.ListBox>("modList");
-            var performingLayoutUpate = false;
+            var performingLayoutUpdate = false;
 
             async Task updateLayout()
             {
-                while (performingLayoutUpate)
+                while (performingLayoutUpdate)
                 {
                     await Task.Delay(25);
                 }
-                performingLayoutUpate = true;
+                performingLayoutUpdate = true;
                 await Dispatcher.UIThread.SafeInvokeAsync(() =>
                 {
                     var listboxItems = modList.GetLogicalChildren().Cast<ListBoxItem>();
@@ -83,7 +83,7 @@ namespace IronyModManager.Views.Controls
                         }
                     }
                 });
-                performingLayoutUpate = false;
+                performingLayoutUpdate = false;
             }
 
             if (modList != null && header != null)

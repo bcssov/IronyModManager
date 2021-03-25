@@ -4,7 +4,7 @@
 // Created          : 04-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModBaseService.cs" company="Mario">
 //     Mario
@@ -47,7 +47,7 @@ namespace IronyModManager.Services
         /// <summary>
         /// The mods cache prefix
         /// </summary>
-        protected const string ModsCachePrefix = "Mods";
+        protected const string ModsCacheRegion = "Mods";
 
         /// <summary>
         /// The patch collection name
@@ -149,17 +149,6 @@ namespace IronyModManager.Services
         }
 
         /// <summary>
-        /// Constructs the mods cache key.
-        /// </summary>
-        /// <param name="game">The game.</param>
-        /// <param name="regularMods">if set to <c>true</c> [regular mods].</param>
-        /// <returns>System.String.</returns>
-        protected virtual string ConstructModsCacheKey(IGame game, bool regularMods)
-        {
-            return $"{game.Type}-{(regularMods ? RegularModsCacheKey : AllModsCacheKey)}";
-        }
-
-        /// <summary>
         /// Copies the definition.
         /// </summary>
         /// <param name="definition">The definition.</param>
@@ -220,7 +209,7 @@ namespace IronyModManager.Services
                     tasks.Add(task);
                 }
                 await Task.WhenAll(tasks);
-                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                 return true;
             }
             return false;
@@ -496,7 +485,7 @@ namespace IronyModManager.Services
             {
                 throw new ArgumentNullException(nameof(game));
             }
-            var mods = Cache.Get<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods));
+            var mods = Cache.Get<IEnumerable<IMod>>(new CacheGetParameters() { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods) });
             if (mods != null)
             {
                 return mods;
@@ -554,7 +543,7 @@ namespace IronyModManager.Services
                         result.Add(mod);
                     }
                 }
-                Cache.Set<IEnumerable<IMod>>(ModsCachePrefix, ConstructModsCacheKey(game, ignorePatchMods), result);
+                Cache.Set(new CacheAddParameters<IEnumerable<IMod>>() { Region = ModsCacheRegion, Prefix = game.Type, Key = GetModsCacheKey(ignorePatchMods), Value = result });
                 return result;
             }
         }
@@ -567,6 +556,16 @@ namespace IronyModManager.Services
         protected virtual string GetModDirectoryRootPath(IGame game)
         {
             return !string.IsNullOrWhiteSpace(game.CustomModDirectory) ? game.CustomModDirectory : Path.Combine(game.UserDirectory, Shared.Constants.ModDirectory);
+        }
+
+        /// <summary>
+        /// Constructs the mods cache key.
+        /// </summary>
+        /// <param name="regularMods">if set to <c>true</c> [regular mods].</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetModsCacheKey(bool regularMods)
+        {
+            return regularMods ? RegularModsCacheKey : AllModsCacheKey;
         }
 
         /// <summary>

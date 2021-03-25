@@ -318,7 +318,8 @@
             "Ignored": "Ignored",
             "Custom": "Custom",
             "Close": "Close",
-            "Reset": "Reset"
+            "Reset": "Reset",
+            "Overlay": "Please wait while undoing conflicts..."
         },
         "DBSearch": {
             "Title": "Database Search",
