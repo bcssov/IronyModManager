@@ -77,7 +77,7 @@ namespace IronyModManager.Shared.Cache
             }
             var regionCache = cache[region];
             var cacheKey = ConstructKey(parameters.Prefix, parameters.Key);
-            if (!regionCache.ContainsKey(cacheKey))
+            if (!regionCache.Contains(cacheKey))
             {
                 return default;
             }
@@ -116,10 +116,7 @@ namespace IronyModManager.Shared.Cache
                 foreach (var key in parameters.Keys)
                 {
                     var cacheKey = ConstructKey(parameters.Prefix, key);
-                    if (regionCache.ContainsKey(cacheKey))
-                    {
-                        regionCache.Remove(cacheKey);
-                    }
+                    regionCache.Remove(cacheKey);
                 }
             }
         }
@@ -149,16 +146,8 @@ namespace IronyModManager.Shared.Cache
                     regionCache = cache[region];
                 }
                 regionCache.MaxItems = parameters.MaxItems;
-                regionCache.EnsureMaxItems();
                 var cacheKey = ConstructKey(parameters.Prefix, parameters.Key);
-                if (regionCache.ContainsKey(cacheKey))
-                {
-                    regionCache[cacheKey] = new CacheItem(parameters.Value, parameters.Expiration);
-                }
-                else
-                {
-                    regionCache.Add(cacheKey, new CacheItem(parameters.Value, parameters.Expiration));
-                }
+                regionCache.Add(cacheKey, new CacheItem(parameters.Value, parameters.Expiration));
             }
         }
 
