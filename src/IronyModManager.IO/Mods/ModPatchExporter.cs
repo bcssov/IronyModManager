@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModPatchExporter.cs" company="Mario">
 //     Mario
@@ -55,7 +55,7 @@ namespace IronyModManager.IO.Mods
         /// <summary>
         /// The cache state prefix
         /// </summary>
-        private const string CacheStatePrefix = "ModPatchExporter";
+        private const string CacheStateRegion = "ModPatchExporter";
 
         /// <summary>
         /// The state backup
@@ -310,7 +310,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         public void ResetCache()
         {
-            cache.Invalidate(CacheStatePrefix, CacheStateKey);
+            cache.Invalidate(new CacheInvalidateParameters() { Region = CacheStateRegion, Keys = new List<string>() { CacheStateKey } });
         }
 
         /// <summary>
@@ -369,11 +369,11 @@ namespace IronyModManager.IO.Mods
                 }
             }
             state.ConflictHistory = MapDefinitions(history, true);
-            var externallyLoadedCode = cache.Get<HashSet<string>>(CacheStatePrefix, CacheExternalCodeKey);
+            var externallyLoadedCode = cache.Get<HashSet<string>>(new CacheGetParameters() { Key = CacheExternalCodeKey, Region = CacheStateRegion });
             if (externallyLoadedCode == null)
             {
                 externallyLoadedCode = new HashSet<string>();
-                cache.Set(CacheStatePrefix, CacheExternalCodeKey, externallyLoadedCode);
+                cache.Set(new CacheAddParameters<HashSet<string>>() { Key = CacheExternalCodeKey, Value = externallyLoadedCode, Region = CacheStateRegion });
             }
             return StoreState(state, modifiedHistory, externallyLoadedCode, path);
         }
@@ -624,7 +624,7 @@ namespace IronyModManager.IO.Mods
         /// <returns>IPatchState.</returns>
         private IPatchState GetPatchState(string path)
         {
-            var cachedItem = cache.Get<CachedState>(CacheStatePrefix, CacheStateKey);
+            var cachedItem = cache.Get<CachedState>(new CacheGetParameters() { Key = CacheStateKey, Region = CacheStateRegion });
             if (cachedItem != null)
             {
                 var lastPath = cachedItem.LastCachedPath ?? string.Empty;
@@ -744,8 +744,8 @@ namespace IronyModManager.IO.Mods
                             PatchState = cached
                         };
                         await Task.WhenAll(tasks);
-                        cache.Set(CacheStatePrefix, CacheStateKey, cachedItem);
-                        cache.Set(CacheStatePrefix, CacheExternalCodeKey, externallyLoadedCode.Distinct().ToHashSet());
+                        cache.Set(new CacheAddParameters<CachedState>() { Region = CacheStateRegion, Key = CacheStateKey, Value = cachedItem });
+                        cache.Set(new CacheAddParameters<HashSet<string>>() { Region = CacheStateRegion, Key = CacheExternalCodeKey, Value = externallyLoadedCode.Distinct().ToHashSet() });
                     }
                 }
                 mutex.Dispose();
@@ -771,14 +771,14 @@ namespace IronyModManager.IO.Mods
         {
             var statePath = Path.Combine(path, StateName);
 
-            var cachedItem = cache.Get<CachedState>(CacheStatePrefix, CacheStateKey);
+            var cachedItem = cache.Get<CachedState>(new CacheGetParameters() { Key = CacheStateKey, Region = CacheStateRegion });
             if (cachedItem == null)
             {
                 cachedItem = new CachedState();
             }
             cachedItem.LastCachedPath = statePath;
             cachedItem.PatchState = model;
-            cache.Set(CacheStatePrefix, CacheStateKey, cachedItem);
+            cache.Set(new CacheAddParameters<CachedState>() { Key = CacheStateKey, Value = cachedItem, Region = CacheStateRegion });
 
             WriteStateInBackground(model, modifiedHistory, externalCode, path).ConfigureAwait(false);
             return true;
@@ -940,14 +940,14 @@ namespace IronyModManager.IO.Mods
                     });
                 }
 
-                var existingLoadedCode = cache.Get<HashSet<string>>(CacheStatePrefix, CacheExternalCodeKey);
+                var existingLoadedCode = cache.Get<HashSet<string>>(new CacheGetParameters() { Key = CacheExternalCodeKey, Region = CacheStateRegion });
                 if (existingLoadedCode != null)
                 {
                     foreach (var item in loadedCode)
                     {
                         existingLoadedCode.Add(item);
                     }
-                    cache.Set(CacheStatePrefix, CacheExternalCodeKey, existingLoadedCode);
+                    cache.Set(new CacheAddParameters<HashSet<string>>() { Key = CacheExternalCodeKey, Value = existingLoadedCode, Region = CacheStateRegion });
                 }
 
                 var dirPath = Path.GetDirectoryName(statePath);

@@ -318,7 +318,8 @@
             "Ignored": "已忽略",
             "Custom": "自定义",
             "Close": "关闭",
-            "Reset": "重置"
+            "Reset": "重置",
+            "Overlay": "请稍等，消除冲突..."
         },
         "DBSearch": {
             "Title": "数据库搜索",

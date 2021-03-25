@@ -4,7 +4,7 @@
 // Created          : 01-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-01-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="LanguagesService.cs" company="Mario">
 //     Mario
@@ -23,6 +23,7 @@ using IronyModManager.Localization.ResourceProviders;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Cache;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -39,9 +40,24 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// The font region
+        /// </summary>
+        private const string FontRegion = "Font";
+
+        /// <summary>
+        /// The maximum cached font records
+        /// </summary>
+        private const int MaxCachedFontRecords = 5000;
+
+        /// <summary>
         /// The character regex
         /// </summary>
-        private static readonly ConcurrentDictionary<string, Regex> charRegex = new ConcurrentDictionary<string, Regex>();
+        private static readonly ConcurrentDictionary<string, Regex> charRegex = new();
+
+        /// <summary>
+        /// The cache
+        /// </summary>
+        private readonly ICache cache;
 
         /// <summary>
         /// The localization manager
@@ -65,17 +81,19 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguagesService" /> class.
         /// </summary>
+        /// <param name="cache">The cache.</param>
         /// <param name="localizationManager">The localization manager.</param>
         /// <param name="resourceProvider">The resource provider.</param>
         /// <param name="preferencesService">The preferences service.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public LanguagesService(ILocalizationManager localizationManager, IDefaultLocalizationResourceProvider resourceProvider,
+        public LanguagesService(ICache cache, ILocalizationManager localizationManager, IDefaultLocalizationResourceProvider resourceProvider,
             IPreferencesService preferencesService, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.resourceProvider = resourceProvider;
             this.preferencesService = preferencesService;
             this.localizationManager = localizationManager;
+            this.cache = cache;
         }
 
         #endregion Constructors
@@ -128,23 +146,40 @@ namespace IronyModManager.Services
         /// <returns>ILanguage.</returns>
         public virtual ILanguage GetLanguageBySupportedNameBlock(string text)
         {
-            var languages = Get().Where(p => !string.IsNullOrWhiteSpace(p.SupportedNameBlock));
-            if (languages.Any())
+            var all = Get();
+            var selectedLanguage = all.FirstOrDefault(p => p.IsSelected);
+            var languages = all.Where(p => !string.IsNullOrWhiteSpace(p.SupportedNameBlock) && p != selectedLanguage);
+            var cached = cache.Get<string>(new CacheGetParameters() { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text });
+            if (!string.IsNullOrWhiteSpace(cached))
+            {
+                return all.FirstOrDefault(p => p.Abrv.Equals(cached));
+            }
+            else if (languages.Any())
             {
                 foreach (var item in languages)
                 {
-                    if (!charRegex.TryGetValue(item.Abrv, out var regex))
+                    cached = cache.Get<string>(new CacheGetParameters() { Region = ConstructFontRegionCacheKey(item), Key = text });
+                    if (string.IsNullOrWhiteSpace(cached))
                     {
-                        regex = new Regex($"\\p{{{item.SupportedNameBlock}}}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                        charRegex.TryAdd(item.Abrv, regex);
+                        if (!charRegex.TryGetValue(item.Abrv, out var regex))
+                        {
+                            regex = new Regex($"\\p{{{item.SupportedNameBlock}}}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                            charRegex.TryAdd(item.Abrv, regex);
+                        }
+                        if (text.Any(c => regex.IsMatch(c.ToString())))
+                        {
+                            cache.Set(new CacheAddParameters<string>() { Region = ConstructFontRegionCacheKey(item), Key = text, Value = item.Abrv, MaxItems = MaxCachedFontRecords });
+                            return item;
+                        }
                     }
-                    if (text.Any(c => regex.IsMatch(c.ToString())))
+                    else
                     {
-                        return item;
+                        return all.FirstOrDefault(p => p.Abrv.Equals(cached));
                     }
                 }
             }
-            return null;
+            cache.Set(new CacheAddParameters<string>() { Region = ConstructFontRegionCacheKey(selectedLanguage), Key = text, Value = selectedLanguage.Abrv, MaxItems = MaxCachedFontRecords });
+            return selectedLanguage;
         }
 
         /// <summary>
@@ -183,12 +218,14 @@ namespace IronyModManager.Services
         /// <param name="languages">The languages.</param>
         /// <param name="selectedLanguage">The selected language.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">$"{nameof(languages)} or {nameof(selectedLanguage)}.</exception>
         public virtual bool SetSelected(IEnumerable<ILanguage> languages, ILanguage selectedLanguage)
         {
             if (languages == null || !languages.Any() || selectedLanguage == null)
             {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                 throw new ArgumentNullException($"{nameof(languages)} or {nameof(selectedLanguage)}.");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
 
             var currentLanguage = GetSelected();
@@ -207,6 +244,16 @@ namespace IronyModManager.Services
 
             selectedLanguage.IsSelected = true;
             return Save(selectedLanguage);
+        }
+
+        /// <summary>
+        /// Constructs the font cache key.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <returns>string.</returns>
+        protected virtual string ConstructFontRegionCacheKey(ILanguage language)
+        {
+            return $"{FontRegion}-{language.Abrv}";
         }
 
         /// <summary>

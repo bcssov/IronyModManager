@@ -4,7 +4,7 @@
 // Created          : 06-23-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 08-13-2020
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="Cache.cs" company="Mario">
 //     Mario
@@ -28,9 +28,14 @@ namespace IronyModManager.Shared.Cache
         #region Fields
 
         /// <summary>
+        /// The default region
+        /// </summary>
+        private const string DefaultRegion = "default_region";
+
+        /// <summary>
         /// The cache
         /// </summary>
-        private readonly Dictionary<string, CacheItem> cache;
+        private readonly Dictionary<string, LimitedDictionary<string, CacheItem>> cache;
 
         /// <summary>
         /// The service lock
@@ -46,7 +51,7 @@ namespace IronyModManager.Shared.Cache
         /// </summary>
         public Cache()
         {
-            cache = new Dictionary<string, CacheItem>();
+            cache = new Dictionary<string, LimitedDictionary<string, CacheItem>>();
         }
 
         #endregion Constructors
@@ -54,23 +59,37 @@ namespace IronyModManager.Shared.Cache
         #region Methods
 
         /// <summary>
-        /// Gets the specified prefix.
+        /// Gets the specified key.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
+        /// <param name="parameters">The parameters.</param>
         /// <returns>T.</returns>
-        public T Get<T>(string prefix, string key) where T : class
+        public T Get<T>(CacheGetParameters parameters) where T : class
         {
-            var cacheKey = ConstructKey(prefix, key);
-            if (!cache.ContainsKey(cacheKey))
+            if (parameters == null)
             {
                 return default;
             }
-            var item = cache[cacheKey];
-            if ((item.Expiration != null && DateTimeOffset.Now - item.Created >= item.Expiration) || !(item.Value is T value))
+            var region = GetRegion(parameters.Region);
+            if (!cache.ContainsKey(region))
             {
-                Invalidate(prefix, key);
+                return default;
+            }
+            var regionCache = cache[region];
+            var cacheKey = ConstructKey(parameters.Prefix, parameters.Key);
+            if (!regionCache.Contains(cacheKey))
+            {
+                return default;
+            }
+            var item = regionCache[cacheKey];
+            if ((item.Expiration != null && DateTimeOffset.Now - item.Created >= item.Expiration) || item.Value is not T value)
+            {
+                Invalidate(new CacheInvalidateParameters()
+                {
+                    Prefix = parameters.Prefix,
+                    Region = parameters.Region,
+                    Keys = new List<string>() { parameters.Key }
+                });
                 return default;
             }
             return value;
@@ -79,56 +98,56 @@ namespace IronyModManager.Shared.Cache
         /// <summary>
         /// Invalidates the specified prefix.
         /// </summary>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="keys">The keys.</param>
-        public void Invalidate(string prefix, params string[] keys)
+        /// <param name="parameters">The parameters.</param>
+        public void Invalidate(CacheInvalidateParameters parameters)
         {
             lock (serviceLock)
             {
-                foreach (var key in keys)
+                if (parameters == null)
                 {
-                    var cacheKey = ConstructKey(prefix, key);
-                    if (cache.ContainsKey(cacheKey))
-                    {
-                        cache.Remove(cacheKey);
-                    }
+                    return;
+                }
+                var region = GetRegion(parameters.Region);
+                if (!cache.ContainsKey(region))
+                {
+                    return;
+                }
+                var regionCache = cache[region];
+                foreach (var key in parameters.Keys)
+                {
+                    var cacheKey = ConstructKey(parameters.Prefix, key);
+                    regionCache.Remove(cacheKey);
                 }
             }
         }
 
         /// <summary>
-        /// Sets the specified prefix.
+        /// Sets the specified key.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public void Set<T>(string prefix, string key, T value) where T : class
-        {
-            Set(prefix, key, value, null);
-        }
-
-        /// <summary>
-        /// Sets the specified prefix.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="prefix">The prefix.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="expiration">The expiration.</param>
-        public void Set<T>(string prefix, string key, T value, TimeSpan? expiration) where T : class
+        /// <param name="parameters">The parameters.</param>
+        public void Set<T>(CacheAddParameters<T> parameters) where T : class
         {
             lock (serviceLock)
             {
-                var cacheKey = ConstructKey(prefix, key);
-                if (cache.ContainsKey(cacheKey))
+                if (parameters == null)
                 {
-                    cache[cacheKey] = new CacheItem(value, expiration);
+                    return;
+                }
+                var region = GetRegion(parameters.Region);
+                LimitedDictionary<string, CacheItem> regionCache;
+                if (!cache.ContainsKey(region))
+                {
+                    regionCache = new LimitedDictionary<string, CacheItem>();
+                    cache.Add(region, regionCache);
                 }
                 else
                 {
-                    cache.Add(cacheKey, new CacheItem(value, expiration));
+                    regionCache = cache[region];
                 }
+                regionCache.MaxItems = parameters.MaxItems;
+                var cacheKey = ConstructKey(parameters.Prefix, parameters.Key);
+                regionCache.Add(cacheKey, new CacheItem(parameters.Value, parameters.Expiration));
             }
         }
 
@@ -137,10 +156,28 @@ namespace IronyModManager.Shared.Cache
         /// </summary>
         /// <param name="prefix">The prefix.</param>
         /// <param name="key">The key.</param>
-        /// <returns>System.String.</returns>
+        /// <returns>string.</returns>
         private string ConstructKey(string prefix, string key)
         {
-            return $"{prefix}.{key}";
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                return $"{prefix}.{key}";
+            }
+            return key;
+        }
+
+        /// <summary>
+        /// Gets the region.
+        /// </summary>
+        /// <param name="region">The region.</param>
+        /// <returns>string.</returns>
+        private string GetRegion(string region)
+        {
+            if (string.IsNullOrWhiteSpace(region))
+            {
+                return DefaultRegion;
+            }
+            return region;
         }
 
         #endregion Methods

@@ -31,7 +31,7 @@
             <ListBox.ItemTemplate>
               <DataTemplate>
                 <TextBlock Text="{Binding, Converter={StaticResource DefinitionSearchTextConverter}}" TextWrapping="Wrap"
-                           FontFamily="{Binding,Converter={StaticResource TextTypeFontFamilyConverter}}">
+                           FontFamily="{Binding $self.Text, Converter={StaticResource TextTypeFontFamilyConverter}}">
                 </TextBlock>
               </DataTemplate>
             </ListBox.ItemTemplate>

@@ -4,7 +4,7 @@
 // Created          : 01-22-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="MessageBox.cs" company="Mario">
 //     Mario
@@ -62,17 +62,17 @@ namespace IronyModManager.Implementation
         }
 
         /// <summary>
-        /// Gets the confirm cancel window.
+        /// Gets the prompt window.
         /// </summary>
         /// <param name="title">The title.</param>
         /// <param name="header">The header.</param>
         /// <param name="message">The message.</param>
         /// <param name="icon">The icon.</param>
-        /// <param name="promptyType">Type of the prompty.</param>
-        /// <returns>MsgBox.BaseWindows.IMsBoxWindow&lt;MsgBox.Enums.ButtonResult&gt;.</returns>
-        public static IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptyType)
+        /// <param name="promptType">Type of the prompt.</param>
+        /// <returns>IMsBoxWindow&lt;ButtonResult&gt;.</returns>
+        public static IMsBoxWindow<ButtonResult> GetPromptWindow(string title, string header, string message, Icon icon, PromptType promptType)
         {
-            var buttonEnum = promptyType switch
+            var buttonEnum = promptType switch
             {
                 PromptType.ConfirmCancel => ButtonEnum.OkCancel,
                 PromptType.OK => ButtonEnum.Ok,
