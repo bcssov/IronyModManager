@@ -367,7 +367,7 @@
             "RefreshMods": "Aktualisieren Sie die Deskriptoren vor dem Spielen",
             "CloseAfterLaunch": "Nach dem Start des Spiels schließen",
             "AutoConfigure": "Alle konfigurieren...",
-            "CustoModPath": "Benutzerdefiniertes Mod-Verzeichnis"
+            "CustomModPath": "Benutzerdefiniertes Mod-Verzeichnis"
         },
         "Updates": {
             "Title": "Aktualisierungsoptionen",
@@ -403,7 +403,7 @@
             "CustomModPathTitle": "Finde ein benutzerdefiniertes Mod-Verzeichnis"
         },
         "Prompts": {
-            "CustoModDirectory": {
+            "CustomModDirectory": {
                 "Title": "Nicht leer",
                 "Message": "Benutzerdefiniertes MOD-Verzeichnis ist nicht leer, wenn Sie es jetzt ändern, jetzt verlieren Sie möglicherweise einige Mods. Bist du sicher, dass du es ändern willst?"
             }

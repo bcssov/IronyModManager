@@ -485,7 +485,7 @@ namespace IronyModManager.Shared
                 public const string RefreshMods = Prefix + "RefreshMods";
                 public const string CloseAfterLaunch = Prefix + "CloseAfterLaunch";
                 public const string AutoConfigure = Prefix + "AutoConfigure";
-                public const string CustoModPath = Prefix + "CustoModPath";
+                public const string CustomModPath = Prefix + "CustomModPath";
             }
             public static class Updates
             {
@@ -535,9 +535,9 @@ namespace IronyModManager.Shared
             public static class Prompts
             {
                 public const string Prefix = "Options.Prompts.";
-                public static class CustoModDirectory
+                public static class CustomModDirectory
                 {
-                    public const string Prefix = "Options.Prompts.CustoModDirectory.";
+                    public const string Prefix = "Options.Prompts.CustomModDirectory.";
                     public const string Title = Prefix + "Title";
                     public const string Message = Prefix + "Message";
                 }

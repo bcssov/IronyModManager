@@ -4,7 +4,7 @@
 // Created          : 03-31-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModWriter.cs" company="Mario">
 //     Mario
@@ -253,7 +253,7 @@ namespace IronyModManager.IO.Mods
                 }
                 if (writeDescriptorInModDirectory)
                 {
-                    var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, Shared.Constants.DescriptorFile ?? string.Empty);
+                    var modPath = Path.Combine(parameters.Mod.FileName ?? string.Empty, Shared.Constants.DescriptorFile);
                     await writeDescriptor(modPath);
                 }
                 return true;

@@ -367,7 +367,7 @@
             "RefreshMods": "Refresh Descriptors Before Playing",
             "CloseAfterLaunch": "Close After Launching Game",
             "AutoConfigure": "Configure All...",
-            "CustoModPath": "Custom Mod Directory"
+            "CustomModPath": "Custom Mod Directory"
         },
         "Updates": {
             "Title": "Update Options",
@@ -403,7 +403,7 @@
             "CustomModPathTitle": "Find custom mod directory"
         },
         "Prompts": {
-            "CustoModDirectory": {
+            "CustomModDirectory": {
                 "Title": "Not Empty",
                 "Message": "Custom mod directory is not empty if you change it now you may lose some mods. Are you sure you want to change it?"
             }

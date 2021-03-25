@@ -4,17 +4,18 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 12-07-2020
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="IExternalEditorService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared.Models;
 
 namespace IronyModManager.Services.Common
 {
@@ -36,8 +37,10 @@ namespace IronyModManager.Services.Common
         /// <summary>
         /// Gets the files.
         /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
         /// <returns>IExternalEditorFiles.</returns>
-        IExternalEditorFiles GetFiles();
+        IExternalEditorFiles GetFiles(IDefinition left, IDefinition right);
 
         /// <summary>
         /// Gets the launch arguments.

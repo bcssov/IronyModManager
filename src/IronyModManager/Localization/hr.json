@@ -367,7 +367,7 @@
             "RefreshMods": "Osvježite deskriptore prije startanja igre",
             "CloseAfterLaunch": "Zatvori nakon pokretanja igre",
             "AutoConfigure": "Konfiguriraj sve...",
-            "CustoModPath": "Prilagođeni direktorij modova"
+            "CustomModPath": "Prilagođeni direktorij modova"
         },
         "Updates": {
             "Title": "Mogućnosti ažuriranja",
@@ -403,7 +403,7 @@
             "CustomModPathTitle": "Pronađite prilagođeni mod direktorij"
         },
         "Prompts": {
-            "CustoModDirectory": {
+            "CustomModDirectory": {
                 "Title": "Nije prazno",
                 "Message": "Prilagođeni direktorij modova nije prazan ako ga promijenite sada možete izgubiti neke modove. Jeste li sigurni da ga želite promijeniti?"
             }

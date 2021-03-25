@@ -31,12 +31,12 @@ namespace IronyModManager.Shared
         /// <summary>
         /// The dictionary
         /// </summary>
-        private Dictionary<TKey, TValue> dict;
+        private readonly Dictionary<TKey, TValue> dict;
 
         /// <summary>
         /// The keys
         /// </summary>
-        private Queue<TKey> keys;
+        private readonly Queue<TKey> keys;
 
         #endregion Fields
 
