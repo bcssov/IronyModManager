@@ -421,6 +421,7 @@ namespace IronyModManager.Shared
                 public const string Custom = Prefix + "Custom";
                 public const string Close = Prefix + "Close";
                 public const string Reset = Prefix + "Reset";
+                public const string Overlay = Prefix + "Overlay";
             }
             public static class DBSearch
             {

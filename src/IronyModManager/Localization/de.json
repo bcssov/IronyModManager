@@ -318,7 +318,8 @@
             "Ignored": "Ignoriert",
             "Custom": "Benutzerdefiniert",
             "Close": "Schließen",
-            "Reset": "Zurücksetzen"
+            "Reset": "Zurücksetzen",
+            "Overlay": "Bitte warten Sie, während Sie Konflikte rückgängig machen..."
         },
         "DBSearch": {
             "Title": "Datenbanksuche",

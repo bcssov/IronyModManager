@@ -318,7 +318,8 @@
             "Ignored": "Ignorado",
             "Custom": "Personalizado",
             "Close": "Cerrar",
-            "Reset": "Reiniciar"
+            "Reset": "Reiniciar",
+            "Overlay": "Espere mientras deshace los conflictos..."
         },
         "DBSearch": {
             "Title": "Búsqueda en Base de Datos",
