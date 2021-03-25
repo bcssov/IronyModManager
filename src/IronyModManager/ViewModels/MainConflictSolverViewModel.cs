@@ -4,7 +4,7 @@
 // Created          : 03-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="MainConflictSolverViewModel.cs" company="Mario">
 //     Mario
@@ -687,7 +687,7 @@ namespace IronyModManager.ViewModels
                     ModCompareSelector.CollectionName = SelectedModCollection.Name;
                     ModCompareSelector.IsBinaryConflict = IsBinaryConflict = conflicts?.FirstOrDefault()?.ValueType == ValueType.Binary;
                     ModCompareSelector.Definitions = conflicts;
-                    MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                    MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
                     MergeViewer.SetText(string.Empty, string.Empty, true);
                     MergeViewer.ExitEditMode();
                     EvalViewerVisibility();
@@ -713,7 +713,7 @@ namespace IronyModManager.ViewModels
                     if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
-                        MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                        MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
                         MergeViewer.SetText(s.Code, MergeViewer.RightSide);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)
@@ -745,7 +745,7 @@ namespace IronyModManager.ViewModels
                     if (s != null && IsConflictSolverAvailable)
                     {
                         MergeViewer.EditingYaml = s.Type.StartsWith(Shared.Constants.LocalizationDirectory);
-                        MergeViewer.SetSidePatchMod(modPatchCollectionService.IsPatchMod(ModCompareSelector.LeftSelectedDefinition?.ModName), modPatchCollectionService.IsPatchMod(ModCompareSelector.RightSelectedDefinition?.ModName));
+                        MergeViewer.SetSidePatchMod(ModCompareSelector.LeftSelectedDefinition, ModCompareSelector.RightSelectedDefinition);
                         MergeViewer.SetText(MergeViewer.LeftSide, s.Code);
                         MergeViewer.ExitEditMode();
                         if (!IsBinaryConflict)

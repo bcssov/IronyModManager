@@ -144,7 +144,7 @@ namespace IronyModManager.IO.TempFile
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                path = Path.ChangeExtension(Path.Combine(TempDirectory, string.IsNullOrWhiteSpace(fileName) ? Path.GetRandomFileName() : Path.GetRandomFileName()), TempExtension);
+                path = Path.Combine(TempDirectory, string.IsNullOrWhiteSpace(fileName) ? Path.ChangeExtension(Path.GetRandomFileName(), TempExtension) : fileName);
                 var fs = System.IO.File.Create(path);
                 fs.Dispose();
             }
@@ -186,6 +186,16 @@ namespace IronyModManager.IO.TempFile
                 Delete();
                 disposed = true;
             }
+        }
+
+        /// <summary>
+        /// Gets the name of the temporary file.
+        /// </summary>
+        /// <param name="desiredFilename">The desired filename.</param>
+        /// <returns>System.String.</returns>
+        public string GetTempFileName(string desiredFilename)
+        {
+            return $"{desiredFilename}.{TempExtension}".GenerateValidFileName();
         }
 
         #endregion Methods

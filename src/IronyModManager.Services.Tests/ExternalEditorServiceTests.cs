@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ExternalEditorServiceTests.cs" company="Mario">
 //     Mario
@@ -21,6 +21,7 @@ using FluentAssertions;
 using IronyModManager.DI.Extensions;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
+using IronyModManager.Parser.Definitions;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
 using IronyModManager.Storage.Common;
@@ -148,9 +149,9 @@ namespace IronyModManager.Services.Tests
             var mapper = new Mock<IMapper>();
 
             var service = new ExternalEditorService(preferencesService.Object, storageProvider.Object, mapper.Object);
-            var result = service.GetFiles();
-            result.LeftDiff.File.Should().Be("test");
-            result.RightDiff.File.Should().Be("test");
+            var result = service.GetFiles(new Definition() { ModName = "m1", Id = "id1" }, new Definition() { ModName = "m2", Id = "id2" });
+            result.LeftDiff.File.Should().Be("m1 - id1.tmp");
+            result.RightDiff.File.Should().Be("m2 - id2.tmp");
         }
 
         /// <summary>
@@ -196,7 +197,7 @@ namespace IronyModManager.Services.Tests
             /// Gets the file.
             /// </summary>
             /// <value>The file.</value>
-            public string File => "test";
+            public string File { get; set; } = "test";
 
             /// <summary>
             /// Gets the text.
@@ -217,6 +218,11 @@ namespace IronyModManager.Services.Tests
             /// <returns>System.String.</returns>
             public string Create(string fileName = "")
             {
+                if (!string.IsNullOrWhiteSpace(fileName))
+                {
+                    File = fileName;
+                    return fileName;
+                }
                 return File;
             }
 
@@ -235,6 +241,16 @@ namespace IronyModManager.Services.Tests
             public void Dispose()
             {
                 GC.SuppressFinalize(this);
+            }
+
+            /// <summary>
+            /// Gets the name of the temporary file.
+            /// </summary>
+            /// <param name="desiredFilename">The desired filename.</param>
+            /// <returns>System.String.</returns>
+            public string GetTempFileName(string desiredFilename)
+            {
+                return desiredFilename + ".tmp";
             }
         }
     }

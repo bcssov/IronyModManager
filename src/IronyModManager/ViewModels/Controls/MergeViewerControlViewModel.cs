@@ -4,7 +4,7 @@
 // Created          : 03-20-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-22-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="MergeViewerControlViewModel.cs" company="Mario">
 //     Mario
@@ -33,6 +33,7 @@ using IronyModManager.Localization;
 using IronyModManager.Localization.Attributes;
 using IronyModManager.Services.Common;
 using IronyModManager.Shared;
+using IronyModManager.Shared.Models;
 using ReactiveUI;
 
 namespace IronyModManager.ViewModels.Controls
@@ -68,6 +69,11 @@ namespace IronyModManager.ViewModels.Controls
         private readonly ILocalizationManager localizationManager;
 
         /// <summary>
+        /// The mod patch collection service
+        /// </summary>
+        private readonly IModPatchCollectionService modPatchCollectionService;
+
+        /// <summary>
         /// The notification action
         /// </summary>
         private readonly INotificationAction notificationAction;
@@ -83,6 +89,16 @@ namespace IronyModManager.ViewModels.Controls
         private readonly Stack<string> undoStack = new();
 
         /// <summary>
+        /// The left definition
+        /// </summary>
+        private IDefinition leftDefinition;
+
+        /// <summary>
+        /// The right definition
+        /// </summary>
+        private IDefinition rightDefinition;
+
+        /// <summary>
         /// The syncing selection
         /// </summary>
         private bool syncingSelection = false;
@@ -94,12 +110,13 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="MergeViewerControlViewModel" /> class.
         /// </summary>
+        /// <param name="modPatchCollectionService">The mod patch collection service.</param>
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="appAction">The application action.</param>
         /// <param name="externalEditorService">The external editor service.</param>
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="localizationManager">The localization manager.</param>
-        public MergeViewerControlViewModel(ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
+        public MergeViewerControlViewModel(IModPatchCollectionService modPatchCollectionService, ConflictSolverViewHotkeyPressedHandler hotkeyPressedHandler,
             IAppAction appAction, IExternalEditorService externalEditorService,
             INotificationAction notificationAction, ILocalizationManager localizationManager)
         {
@@ -108,6 +125,7 @@ namespace IronyModManager.ViewModels.Controls
             this.notificationAction = notificationAction;
             this.localizationManager = localizationManager;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
+            this.modPatchCollectionService = modPatchCollectionService;
         }
 
         #endregion Constructors
@@ -557,12 +575,14 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Sets the side patch mod.
         /// </summary>
-        /// <param name="leftSidePatchMod">if set to <c>true</c> [left side patch mod].</param>
-        /// <param name="rightSidePatchMod">if set to <c>true</c> [right side patch mod].</param>
-        public virtual void SetSidePatchMod(bool leftSidePatchMod, bool rightSidePatchMod)
+        /// <param name="leftDefinition">The left definition.</param>
+        /// <param name="rightDefinition">The right definition.</param>
+        public virtual void SetSidePatchMod(IDefinition leftDefinition, IDefinition rightDefinition)
         {
-            LeftSidePatchMod = leftSidePatchMod;
-            RightSidePatchMod = rightSidePatchMod;
+            this.leftDefinition = leftDefinition;
+            this.rightDefinition = rightDefinition;
+            LeftSidePatchMod = modPatchCollectionService.IsPatchMod(leftDefinition?.ModName);
+            RightSidePatchMod = modPatchCollectionService.IsPatchMod(rightDefinition?.ModName);
         }
 
         /// <summary>
@@ -1415,9 +1435,11 @@ namespace IronyModManager.ViewModels.Controls
         private async Task LaunchExternalEditor(bool leftSide)
         {
             var opts = externalEditorService.Get();
-            if (!string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
+            var left = leftDefinition;
+            var right = rightDefinition;
+            if (left != null && right != null && !string.IsNullOrWhiteSpace(opts.ExternalEditorLocation) && !string.IsNullOrWhiteSpace(opts.ExternalEditorParameters) && File.Exists(opts.ExternalEditorLocation))
             {
-                var files = externalEditorService.GetFiles();
+                var files = externalEditorService.GetFiles(left, right);
                 files.LeftDiff.Text = LeftSide;
                 files.RightDiff.Text = RightSide;
                 var arguments = externalEditorService.GetLaunchArguments(files.LeftDiff.File, files.RightDiff.File);

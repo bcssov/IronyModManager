@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ITempFile.cs" company="Mario">
 //     Mario
@@ -12,8 +12,8 @@
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IronyModManager.Shared
 {
@@ -60,6 +60,13 @@ namespace IronyModManager.Shared
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         bool Delete();
+
+        /// <summary>
+        /// Gets the name of the temporary file.
+        /// </summary>
+        /// <param name="desiredFilename">The desired filename.</param>
+        /// <returns>System.String.</returns>
+        string GetTempFileName(string desiredFilename);
 
         #endregion Methods
     }

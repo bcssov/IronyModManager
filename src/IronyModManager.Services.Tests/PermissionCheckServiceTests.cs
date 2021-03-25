@@ -4,7 +4,7 @@
 // Created          : 12-07-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 02-13-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="PermissionCheckServiceTests.cs" company="Mario">
 //     Mario
@@ -282,6 +282,16 @@ namespace IronyModManager.Services.Tests
             {
                 GC.SuppressFinalize(this);
             }
+
+            /// <summary>
+            /// Gets the name of the temporary file.
+            /// </summary>
+            /// <param name="desiredFilename">The desired filename.</param>
+            /// <returns>System.String.</returns>
+            public string GetTempFileName(string desiredFilename)
+            {
+                return desiredFilename;
+            }
         }
 
         /// <summary>
@@ -347,6 +357,16 @@ namespace IronyModManager.Services.Tests
             {
                 GC.SuppressFinalize(this);
             }
+
+            /// <summary>
+            /// Gets the name of the temporary file.
+            /// </summary>
+            /// <param name="desiredFilename">The desired filename.</param>
+            /// <returns>System.String.</returns>
+            public string GetTempFileName(string desiredFilename)
+            {
+                return desiredFilename;
+            }
         }
 
         /// <summary>
@@ -401,6 +421,16 @@ namespace IronyModManager.Services.Tests
             {
                 GC.SuppressFinalize(this);
             }
+
+            /// <summary>
+            /// Gets the name of the temporary file.
+            /// </summary>
+            /// <param name="desiredFilename">The desired filename.</param>
+            /// <returns>System.String.</returns>
+            public string GetTempFileName(string desiredFilename)
+            {
+                return desiredFilename;
+            }
         }
 
         /// <summary>
@@ -453,6 +483,16 @@ namespace IronyModManager.Services.Tests
             public void Dispose()
             {
                 GC.SuppressFinalize(this);
+            }
+
+            /// <summary>
+            /// Gets the name of the temporary file.
+            /// </summary>
+            /// <param name="desiredFilename">The desired filename.</param>
+            /// <returns>System.String.</returns>
+            public string GetTempFileName(string desiredFilename)
+            {
+                return desiredFilename;
             }
         }
     }
