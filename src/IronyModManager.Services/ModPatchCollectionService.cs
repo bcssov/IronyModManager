@@ -4,7 +4,7 @@
 // Created          : 05-26-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModPatchCollectionService.cs" company="Mario">
 //     Mario
@@ -49,6 +49,11 @@ namespace IronyModManager.Services
     public class ModPatchCollectionService : ModBaseService, IModPatchCollectionService
     {
         #region Fields
+
+        /// <summary>
+        /// The cache region
+        /// </summary>
+        private const string CacheRegion = "CollectionPatchState";
 
         /// <summary>
         /// The mod name ignore identifier
@@ -1006,8 +1011,7 @@ namespace IronyModManager.Services
             if (game != null)
             {
                 var patchName = GenerateCollectionPatchName(collectionName);
-                var cachePrefix = $"CollectionPatchState-{game.Type}";
-                Cache.Invalidate(cachePrefix, patchName);
+                Cache.Invalidate(new CacheInvalidateParameters() { Region = CacheRegion, Prefix = game.Type, Keys = new List<string>() { patchName } });
                 return true;
             }
             return false;
@@ -1078,9 +1082,9 @@ namespace IronyModManager.Services
                 }
                 return result;
             }
-            async Task<bool> evalState(IGame game, string cachePrefix, string patchName)
+            async Task<bool> evalState(IGame game, string patchName)
             {
-                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { CheckInProgress = true });
+                Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { CheckInProgress = true } });
                 var allMods = GetInstalledModsInternal(game, false);
                 var mods = allMods.Where(p => loadOrder.Any(x => x.Equals(p.DescriptorFile))).ToList();
                 var state = await modPatchExporter.GetPatchStateAsync(new ModPatchExporterParameters()
@@ -1090,13 +1094,13 @@ namespace IronyModManager.Services
                 }, false);
                 if (state == null)
                 {
-                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
+                    Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false } });
                     return false;
                 }
                 // Check load order first
                 if (!state.LoadOrder.SequenceEqual(loadOrder))
                 {
-                    Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                    Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
                     return true;
                 }
                 var conflicts = new List<EvalState>();
@@ -1112,7 +1116,7 @@ namespace IronyModManager.Services
                         if (mod == null)
                         {
                             // Mod no longer in collection, needs refresh break further checks...
-                            Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                            Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
                             return true;
                         }
                         else
@@ -1125,13 +1129,13 @@ namespace IronyModManager.Services
                             if (info == null || !info.ContentSHA.Equals(definition.ContentSha))
                             {
                                 // File no longer in collection or content does not match, break further checks
-                                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false });
+                                Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = true, CheckInProgress = false } });
                                 return true;
                             }
                         }
                     }
                 }
-                Cache.Set(cachePrefix, patchName, new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false });
+                Cache.Set(new CacheAddParameters<PatchCollectionState>() { Region = CacheRegion, Prefix = game.Type, Key = patchName, Value = new PatchCollectionState() { NeedsUpdate = false, CheckInProgress = false } });
                 return false;
             }
             var game = GameService.GetSelected();
@@ -1143,26 +1147,25 @@ namespace IronyModManager.Services
                     return false;
                 }
                 var patchName = GenerateCollectionPatchName(collectionName);
-                var cachePrefix = $"CollectionPatchState-{game.Type}";
-                var result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                var result = Cache.Get<PatchCollectionState>(new CacheGetParameters() { Region = CacheRegion, Prefix = game.Type, Key = patchName });
                 if (result != null)
                 {
                     while (result.CheckInProgress)
                     {
                         // Since another check is queued, wait and periodically check if the task is done...
                         await Task.Delay(10);
-                        result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                        result = Cache.Get<PatchCollectionState>(new CacheGetParameters() { Region = CacheRegion, Prefix = game.Type, Key = patchName });
                         if (result == null)
                         {
-                            await evalState(game, cachePrefix, patchName);
-                            result = Cache.Get<PatchCollectionState>(cachePrefix, patchName);
+                            await evalState(game, patchName);
+                            result = Cache.Get<PatchCollectionState>(new CacheGetParameters() { Region = CacheRegion, Prefix = game.Type, Key = patchName });
                         }
                     }
                     return result.NeedsUpdate;
                 }
                 else
                 {
-                    return await evalState(game, cachePrefix, patchName);
+                    return await evalState(game, patchName);
                 }
             }
             return false;
@@ -1590,7 +1593,7 @@ namespace IronyModManager.Services
                         LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                     }, IsPatchMod(mod));
                     allMods.Add(mod);
-                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                    Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                 }
                 else
                 {
@@ -2066,7 +2069,7 @@ namespace IronyModManager.Services
                             LockDescriptor = CheckIfModShouldBeLocked(game, mod)
                         }, IsPatchMod(mod));
                         allMods.Add(mod);
-                        Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                        Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                     }
                     else
                     {

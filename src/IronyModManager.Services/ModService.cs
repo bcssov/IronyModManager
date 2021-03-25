@@ -4,7 +4,7 @@
 // Created          : 02-24-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="ModService.cs" company="Mario">
 //     Mario
@@ -207,7 +207,7 @@ namespace IronyModManager.Services
                     }, IsPatchModInternal(mod)))
                     {
                         applyModParams.TopPriorityMods = new List<IMod>() { mod };
-                        Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                        Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                     }
                 }
             }
@@ -263,7 +263,7 @@ namespace IronyModManager.Services
         {
             if (game != null)
             {
-                Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
             }
             return GetInstalledModsInternal(game, true);
         }
@@ -343,7 +343,7 @@ namespace IronyModManager.Services
                 if (tasks.Count > 0)
                 {
                     await Task.WhenAll(tasks);
-                    Cache.Invalidate(ModsCachePrefix, ConstructModsCacheKey(game, true), ConstructModsCacheKey(game, false));
+                    Cache.Invalidate(new CacheInvalidateParameters() { Region = ModsCacheRegion, Prefix = game.Type, Keys = new List<string> { GetModsCacheKey(true), GetModsCacheKey(false) } });
                 }
                 if (descriptors.Any(p => p.Invalid))
                 {

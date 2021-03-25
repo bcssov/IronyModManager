@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="DLCService.cs" company="Mario">
 //     Mario
@@ -38,9 +38,9 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
-        /// The cache prefix
+        /// The cache region
         /// </summary>
-        private const string CachePrefix = "DLC";
+        private const string CacheRegion = "DLC";
 
         /// <summary>
         /// The DLC folder
@@ -121,7 +121,7 @@ namespace IronyModManager.Services
         {
             if (game != null)
             {
-                var cached = cache.Get<List<IDLC>>(CachePrefix, game.Type);
+                var cached = cache.Get<List<IDLC>>(new CacheGetParameters() { Region = CacheRegion, Key = game.Type });
                 if (cached != null)
                 {
                     return Task.FromResult((IReadOnlyCollection<IDLC>)cached);
@@ -151,7 +151,7 @@ namespace IronyModManager.Services
                                 result.Add(Mapper.Map<IDLC>(dlcObject));
                             }
                         }
-                        cache.Set(CachePrefix, game.Type, result);
+                        cache.Set(new CacheAddParameters<List<IDLC>>() { Region = CacheRegion, Key = game.Type, Value = result });
                     }
                 }
                 return Task.FromResult((IReadOnlyCollection<IDLC>)result);

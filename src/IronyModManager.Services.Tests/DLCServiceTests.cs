@@ -4,7 +4,7 @@
 // Created          : 02-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 02-15-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="DLCServiceTests.cs" company="Mario">
 //     Mario
@@ -104,7 +104,7 @@ namespace IronyModManager.Services.Tests
                 Path = "test"
             } };
             var cache = new Cache();
-            cache.Set("DLC", "Should_return_dlc_object_from_cache", dlcs);
+            cache.Set(new CacheAddParameters<List<IDLC>>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache", Value = dlcs });
 
             var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
@@ -128,13 +128,13 @@ namespace IronyModManager.Services.Tests
                 Path = "test"
             } };
             var cache = new Cache();
-            cache.Set("DLC", "Should_return_dlc_object_from_cache", dlcs);
+            cache.Set(new CacheAddParameters<List<IDLC>>() { Region = "DLC", Key = "Should_return_dlc_object_from_cache_when_exe_path_in_subfolder", Value = dlcs });            
 
             var service = new DLCService(null, cache, null, null, null, null);
             var result = await service.GetAsync(new Game()
             {
                 ExecutableLocation = AppDomain.CurrentDomain.BaseDirectory + "\\subfolder\\test.exe",
-                Type = "Should_return_dlc_object_from_cache"
+                Type = "Should_return_dlc_object_from_cache_when_exe_path_in_subfolder"
             });
             result.Count.Should().Be(1);
             result.Should().BeEquivalentTo(dlcs);
@@ -276,7 +276,7 @@ namespace IronyModManager.Services.Tests
                 IsEnabled = true
             };
             var dlcExport = new Mock<IDLCExporter>();
-            dlcExport.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync(() => new List<IDLCObject>() { new DLCObject() {  Path = "dlc/dlc01.dlc"} });
+            dlcExport.Setup(p => p.GetDisabledDLCAsync(It.IsAny<DLCParameters>())).ReturnsAsync(() => new List<IDLCObject>() { new DLCObject() { Path = "dlc/dlc01.dlc" } });
             var service = new DLCService(dlcExport.Object, null, null, null, null, null);
             var result = await service.SyncStateAsync(new Game()
             {

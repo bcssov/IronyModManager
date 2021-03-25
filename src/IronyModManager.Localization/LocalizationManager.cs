@@ -4,7 +4,7 @@
 // Created          : 01-18-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-09-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="LocalizationManager.cs" company="Mario">
 //     Mario
@@ -30,14 +30,19 @@ namespace IronyModManager.Localization
         #region Fields
 
         /// <summary>
-        /// The cached cultures prefix
+        /// The cached cultures region
         /// </summary>
         protected const string CachedCulturesPrefix = "Culture";
 
         /// <summary>
         /// The cache prefix
         /// </summary>
-        protected const string CachePrefix = "Localization";
+        protected const string CachePrefix = "Resources";
+
+        /// <summary>
+        /// The cache region
+        /// </summary>
+        protected const string CacheRegion = "Localization";
 
         #endregion Fields
 
@@ -123,7 +128,7 @@ namespace IronyModManager.Localization
                     });
                 }
             }
-            Cache.Set(CachePrefix, locale, resource);
+            Cache.Set(new CacheAddParameters<JObject>() { Key = locale, Value = resource, Region = CacheRegion, Prefix = CachePrefix });
         }
 
         /// <summary>
@@ -134,7 +139,7 @@ namespace IronyModManager.Localization
         /// <returns>System.String.</returns>
         protected virtual string GetCachedResource(string locale, string key)
         {
-            var resource = Cache.Get<JObject>(CachePrefix, locale);
+            var resource = Cache.Get<JObject>(new CacheGetParameters() { Region = CacheRegion, Key = locale, Prefix = CachePrefix });
             if (resource != null)
             {
                 var token = resource.SelectToken(key);
@@ -157,11 +162,11 @@ namespace IronyModManager.Localization
         /// <returns>CultureInfo.</returns>
         protected virtual CultureInfo GetCulture(string locale)
         {
-            var culture = Cache.Get<CultureInfo>(CachedCulturesPrefix, locale);
+            var culture = Cache.Get<CultureInfo>(new CacheGetParameters() { Key = locale, Region = CacheRegion, Prefix = CachedCulturesPrefix });
             if (culture == null)
             {
                 culture = new CultureInfo(locale);
-                Cache.Set(CachedCulturesPrefix, locale, culture);
+                Cache.Set(new CacheAddParameters<CultureInfo>() { Key = locale, Value = culture, Region = CacheRegion, Prefix = CachedCulturesPrefix });
             }
             return culture;
         }
