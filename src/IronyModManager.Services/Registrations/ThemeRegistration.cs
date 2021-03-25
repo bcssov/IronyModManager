@@ -35,10 +35,10 @@ namespace IronyModManager.Services.Registrations
         public override void OnPostStartup()
         {
             var storage = DIResolver.Get<IStorageProvider>();
-            storage.RegisterTheme(Common.Constants.Themes.Light.Name);
-            storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
             storage.RegisterTheme(Common.Constants.Themes.FluentLight.Name, true);
             storage.RegisterTheme(Common.Constants.Themes.FluentDark.Name);
+            storage.RegisterTheme(Common.Constants.Themes.Light.Name);
+            storage.RegisterTheme(Common.Constants.Themes.Dark.Name);
             storage.RegisterTheme(Common.Constants.Themes.MaterialLight.Name);
             storage.RegisterTheme(Common.Constants.Themes.MaterialDark.Name);
         }
