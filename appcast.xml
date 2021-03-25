@@ -4,13 +4,17 @@
 		<title>Irony Mod Manager</title>
 		<language>en</language>
 		<item>
-			<title>1.13.102</title>
+			<title>1.13.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is now multi select
-* Fix undo\redo positioning hotkeys
+* Fix dialog window positioning
+* Fluent light is now the default theme
+* Fix mod management slowdown on larger window sizes
+* External editor filenames are not random anymore
+* Update chinese localization (by Clazex)
+* Various fixes
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -24,17 +28,21 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Mon, 22 Mar 2021 20:32:02 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/osx-x64.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="66991634" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="QYO6EfYo6M312sY/SI6iCZ9+esHL6BToHdXOHNJ7i80iD5KKLJKfP7lGUzu7oKTqqEtxgJCTt9EobkzW1ljpBQ=="/>
+			<pubDate>Thu, 25 Mar 2021 18:36:52 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/osx-x64.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="67002704" sparkle:os="osx" type="application/vnd.rar" sparkle:signature="LbO9sNg1iUB+wqZ9zpWQDTq9LE3W1nhJk2waNN06xv/zXHzl4ORS9jKem34sPoVcPLUoL3kfWw4HYunL1kglBA=="/>
 		</item>
 		<item>
-			<title>1.13.102</title>
+			<title>1.13.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is now multi select
-* Fix undo\redo positioning hotkeys
+* Fix dialog window positioning
+* Fluent light is now the default theme
+* Fix mod management slowdown on larger window sizes
+* External editor filenames are not random anymore
+* Update chinese localization (by Clazex)
+* Various fixes
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -48,17 +56,21 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Mon, 22 Mar 2021 20:32:09 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/win-x64-setup.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="57945264" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="52aGMpJyF7XL10b+FGrBTuE1NYrq4UuZ0E2i9lRPHJLT0NESefU2/aqZqWua0MBekCfyoDSyTPRqnf0IA3+rCg=="/>
+			<pubDate>Thu, 25 Mar 2021 18:37:00 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/win-x64-setup.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="57942139" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="2zrrs/c+WtyeAMF7XStVQu8HU/foTpjM+WkkSY1JUHhUtQ2USebZj695N9/YFiI4+k2nQVTt/5oFbsGUKYOnCw=="/>
 		</item>
 		<item>
-			<title>1.13.102</title>
+			<title>1.13.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is now multi select
-* Fix undo\redo positioning hotkeys
+* Fix dialog window positioning
+* Fluent light is now the default theme
+* Fix mod management slowdown on larger window sizes
+* External editor filenames are not random anymore
+* Update chinese localization (by Clazex)
+* Various fixes
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -72,17 +84,21 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Mon, 22 Mar 2021 20:32:05 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/win-x64.rar" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="69745695" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="kOFolOuTeeGybuFw9ou0LN/Jq3EHDJQdq/DTAbk/Q9Fz71D3xxCg1CINiuXHnu0FnA6czSLRyBOAd26RQFCWCg=="/>
+			<pubDate>Thu, 25 Mar 2021 18:36:56 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/win-x64.rar" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="69756919" sparkle:os="windows" type="application/vnd.rar" sparkle:signature="jE0Z8BNUajdeymiGlY98fAtR5B8Kj784HnpqCVsjx0XnGxHwWI73YcNSE2qMimMN+tgoHuNOiO73WXmtafmtBw=="/>
 		</item>
 		<item>
-			<title>1.13.102</title>
+			<title>1.13.116</title>
 			<description>NOTE:
 Auto update was broken by an external component or GitHub breaking change which is outside of my control. If an update fails please update manually to at least v1.11.30 which fixes this problem.
 
 RELEASE INFO
-* Conflict reset mode is now multi select
-* Fix undo\redo positioning hotkeys
+* Fix dialog window positioning
+* Fluent light is now the default theme
+* Fix mod management slowdown on larger window sizes
+* External editor filenames are not random anymore
+* Update chinese localization (by Clazex)
+* Various fixes
 
 CHANGES FROM v1.12:
 * Updated dependencies
@@ -96,8 +112,8 @@ CHANGES FROM v1.12:
 * Various improvements and fixes
 * Check available disk space before performing a merge
 * Add custom mod directory (if set irony merges and patches will be stored there)</description>
-			<pubDate>Mon, 22 Mar 2021 20:32:00 +01:00</pubDate>
-			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.102/linux-x64.zip" sparkle:version="1.13.102.10384" sparkle:shortVersionString="1.13.102" length="83065133" sparkle:os="linux" type="application/zip" sparkle:signature="VrgTNjTJOXbNvOQuTneEnKwAwciqG4W3cFGxAczQFgF2tHVFWSBqXE6/P8VkcI90T/ji9rpozNhF9cHpj8YuDg=="/>
+			<pubDate>Thu, 25 Mar 2021 18:36:48 +01:00</pubDate>
+			<enclosure url="https://github.com/bcssov/IronyModManager/releases/download/v1.13.116/linux-x64.zip" sparkle:version="1.13.116.39762" sparkle:shortVersionString="1.13.116" length="83073245" sparkle:os="linux" type="application/zip" sparkle:signature="qlXFWkM1uW/nBdKIMsj9pKrdmievbDZ8/dmPy3RjdIknhXHeG2K28Ab4IG2k2iYvO1gat3E3OGZsv5Rsfo2vBw=="/>
 		</item>
 	</channel>
 </rss>
