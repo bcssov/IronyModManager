@@ -317,7 +317,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Initializes the modes.
         /// </summary>
         /// <param name="refreshOnly">if set to <c>true</c> [refresh only].</param>
-        protected virtual void InitModes(bool refreshOnly = false)
+        protected void InitModes(bool refreshOnly = false)
         {
             if (refreshOnly)
             {
