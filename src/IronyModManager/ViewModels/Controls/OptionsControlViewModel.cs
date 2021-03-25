@@ -4,7 +4,7 @@
 // Created          : 05-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="OptionsControlViewModel.cs" company="Mario">
 //     Mario
@@ -201,7 +201,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the custo mod path.
         /// </summary>
         /// <value>The custo mod path.</value>
-        [StaticLocalization(LocalizationResources.Options.Game.CustoModPath)]
+        [StaticLocalization(LocalizationResources.Options.Game.CustomModPath)]
         public virtual string CustoModPath { get; protected set; }
 
         /// <summary>
@@ -813,8 +813,8 @@ namespace IronyModManager.ViewModels.Controls
                 var save = !string.IsNullOrEmpty(result);
                 if (save && !await modService.CustomModDirectoryEmptyAsync(Game.Type))
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
                 IsOpen = true;
@@ -830,8 +830,8 @@ namespace IronyModManager.ViewModels.Controls
                 var save = true;
                 if (!await modService.CustomModDirectoryEmptyAsync(Game.Type))
                 {
-                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Title);
-                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustoModDirectory.Message);
+                    var title = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Title);
+                    var message = localizationManager.GetResource(LocalizationResources.Options.Prompts.CustomModDirectory.Message);
                     save = await notificationAction.ShowPromptAsync(title, title, message, NotificationType.Warning);
                 }
                 if (save)
