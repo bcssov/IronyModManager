@@ -2,7 +2,7 @@
     // Do NOT Translate anything in curly ({}) braces inside strings. These are used for formatting.
     "App": {
         "FontFamily": "Noto Sans SC", // Do not translate this, this is the font used by this locale
-        "SupportedNameBlock": "IsCJKUnifiedIdeographs", // Leavy empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
+        "SupportedNameBlock": "IsCJKUnifiedIdeographs", // Leave empty for latin alphabets. Reference here: https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#supported-named-blocks
         "Title": "Irony 模组管理器：v{AppVersion}",
         "BackgroundOperationMessage": "请等待后台任务完成，应用程序会在完成后台任务后关闭……",
         "WaitBackgroundOperationMessage": "请等待后台任务完成",
@@ -71,18 +71,18 @@
         "Name": "主题",
         "Light": "亮色",
         "Dark": "暗色",
-        "FluentLight": "流利的光",
-        "FluentDark": "流利的黑暗",
+        "FluentLight": "Fluent 亮色",
+        "FluentDark": "Fluent 暗色",
         "MaterialDark": "Material 暗色",
-        "MaterialLight": "Material 光",
+        "MaterialLight": "Material 亮色",
         "Restart_Title": "需要重启",
         "Restart_Header": "应用程序需要重启",
         "Restart_Message": "应用程序需要重启以应用新主题。是否现在重启？"
     },
     "NotificationPosition": {
-        "BottomRight": "右下",
+        "BottomRight": "右下方",
         "BottomLeft": "左下方",
-        "TopRight": "右上",
+        "TopRight": "右上方",
         "TopLeft": "左上方"
     },
     "Games": {
@@ -161,8 +161,8 @@
             "Message": "合集已存在并将被覆盖, 是否继续？"
         },
         "ImportNonExistingMods": {
-            "Title": "不存在的mod",
-            "Message": "无法导入以下mod，因为它们似乎丢失了：{NewLine}{Mods}"
+            "Title": "不存在的模组",
+            "Message": "无法导入下列模组，因其似乎已丢失：{NewLine}{Mods}"
         },
         "ImportOther": {
             "Title": "…",
@@ -181,7 +181,7 @@
             "MergedCollectionPrefix": "(Merged)", // It's used in path generation so should not be translated (depending on the type of language)
             "MergeCompressModPrefix": "(Merged {Name})", // It's used in path generation so should not be translated (depending on the type of language)
             "Overlay_Progress": "步骤 {Count}/{TotalCount}：{PercentDone}",
-            "DiskInfoOverlay": "正在检查可用的磁盘空间...",
+            "DiskInfoOverlay": "正在检查可用磁盘空间……",
             "Options": {
                 "Title": "选择模式",
                 "Basic": "基础",
@@ -367,7 +367,7 @@
             "RefreshMods": "启动前刷新模组描述文件",
             "CloseAfterLaunch": "启动游戏后关闭",
             "AutoConfigure": "设置全部……",
-            "CustoModPath": "自定义Mod目录"
+            "CustoModPath": "自定义模组目录"
         },
         "Updates": {
             "Title": "更新选项",
@@ -400,12 +400,12 @@
             "GameRootTitle": "选择游戏根目录",
             "UserDirTitle": "选择游戏数据目录",
             "EditorTitle": "查找编辑器可执行文件",
-            "CustomModPathTitle": "查找自定义mod目录"
+            "CustomModPathTitle": "查找自定义模组目录"
         },
         "Prompts": {
             "CustoModDirectory": {
-                "Title": "不是空的",
-                "Message": "如果您现在更改它，自定义mod目录不为空，您可能会丢失一些mods。 你确定要改变它吗？"
+                "Title": "目录非空",
+                "Message": "自定义模组目录非空，若现在更改，则可能会丢失一些模组。是否确定更改？"
             }
         }
     },
@@ -472,7 +472,7 @@
         },
         "ConflictSolverUpdate": {
             "Title": "刷新冲突处理器",
-            "Message": "加载顺序或某些模组已更新。如果没有冲突，请向后浏览。应用了一些自动修复程序。"
+            "Message": "加载顺序或某些模组已更新。若无冲突则可直接返回。已应用若干自动修复。"
         },
         "NoUpdatesAvailable": {
             "Title": "无更新",
@@ -491,8 +491,8 @@
             "Message": "因添加新自定义补丁，需要刷新冲突处理器。请重新运行冲突处理器。"
         },
         "CollectionMergeNotEnoughSpace": {
-            "Title": "没有足够的自由空间",
-            "Message": "没有足够的可用空间来执行合并操作。"
+            "Title": "存储空间不足",
+            "Message": "没有足够的可用存储空间以执行合并操作。"
         }
     },
     "Mod_App_Actions": {
