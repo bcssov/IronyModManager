@@ -4,7 +4,7 @@
 // Created          : 10-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-25-2021
 // ***********************************************************************
 // <copyright file="Extensions.cs" company="Mario">
 //     Mario
@@ -41,22 +41,7 @@ namespace IronyModManager.Platform
         public static TAppBuilder UseIronyPlatformDetect<TAppBuilder>(this TAppBuilder builder)
             where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
         {
-            var os = builder.RuntimePlatform.GetRuntimeInfo().OperatingSystem;
-            if (os == OperatingSystemType.WinNT)
-            {
-                LoadWin32(builder);
-                LoadSkia(builder);
-            }
-            else if (os == OperatingSystemType.OSX)
-            {
-                LoadAvaloniaNative(builder);
-                LoadSkia(builder);
-            }
-            else
-            {
-                LoadX11(builder);
-                LoadSkia(builder);
-            }
+            builder.UsePlatformDetect();
             builder.AfterSetup(s =>
             {
                 // Use already registered manager as a proxy -- doing it like this because the implementation is hidden away as internal
@@ -72,42 +57,7 @@ namespace IronyModManager.Platform
             return builder;
         }
 
-        /// <summary>
-        /// Loads the avalonia native.
-        /// </summary>
-        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
-        /// <param name="builder">The builder.</param>
-        private static void LoadAvaloniaNative<TAppBuilder>(TAppBuilder builder)
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseAvaloniaNative();
-
-        /// <summary>
-        /// Loads the skia.
-        /// </summary>
-        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
-        /// <param name="builder">The builder.</param>
-        private static void LoadSkia<TAppBuilder>(TAppBuilder builder)
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseSkia();
-
-        /// <summary>
-        /// Loads the win32.
-        /// </summary>
-        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
-        /// <param name="builder">The builder.</param>
-        private static void LoadWin32<TAppBuilder>(TAppBuilder builder)
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseWin32();
-
-        /// <summary>
-        /// Loads the X11.
-        /// </summary>
-        /// <typeparam name="TAppBuilder">The type of the t application builder.</typeparam>
-        /// <param name="builder">The builder.</param>
-        private static void LoadX11<TAppBuilder>(TAppBuilder builder)
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
-             => builder.UseX11();
-
         #endregion Methods
+
     }
 }
