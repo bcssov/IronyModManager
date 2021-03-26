@@ -4,7 +4,7 @@
 // Created          : 03-14-2021
 //
 // Last Modified By : Mario
-// Last Modified On : 03-15-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="MaterialDarkTheme.cs" company="Mario">
 //     Mario
@@ -34,7 +34,7 @@ namespace IronyModManager.Implementation.Themes
         /// Gets the styles.
         /// </summary>
         /// <value>The styles.</value>
-        public override IReadOnlyCollection<string> Styles => new List<string>() { "avares://IronyModManager/Controls/Themes/MaterialDark/Theme.axaml", "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.axaml" };
+        public override IReadOnlyCollection<string> Styles => new List<string>() { "avares://IronyModManager/Controls/Themes/MaterialDark/Theme.axaml", "avares://Material.Icons.Avalonia/App.xaml", "avares://IronyModManager/Controls/Themes/MaterialDark/ThemeOverride.axaml" };
 
         /// <summary>
         /// Gets the name of the theme.
@@ -61,7 +61,7 @@ namespace IronyModManager.Implementation.Themes
         protected virtual void RegisterResources()
         {
             var helper = new PaletteHelper();
-            var theme = Theme.Create(BaseThemeMode.Dark.GetBaseTheme(), SwatchHelper.Lookup[MaterialColor.Brown], SwatchHelper.Lookup[MaterialColor.BlueGrey200]);
+            var theme = Theme.Create(BaseThemeMode.Dark.GetBaseTheme(), SwatchHelper.Lookup[MaterialColor.Blue800], SwatchHelper.Lookup[MaterialColor.LightBlue800]);
             helper.SetTheme(theme);
         }
 
