@@ -227,7 +227,11 @@
             "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
             "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
             "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
-            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}"
+            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+            "FirstUsePrompt": {
+                "Title": "Attention",
+                "Message": "The conflict solver is not for the faint of heart. It requires knowledge of, and experience with patching code. Users of small mod collections should ignore it, users of larger mod collections should consider either trimming their mod collections or researching code patching. Support cannot be provided should you proceed."
+            }
         },
         "LaunchGame": {
             "Launch": "Launch Game",

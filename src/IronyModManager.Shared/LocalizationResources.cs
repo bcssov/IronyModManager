@@ -306,6 +306,12 @@ namespace IronyModManager.Shared
                 public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
                 public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
                 public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+                public static class FirstUsePrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.FirstUsePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
             }
             public static class LaunchGame
             {
