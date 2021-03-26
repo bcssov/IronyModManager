@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -59,6 +59,7 @@ namespace IronyModManager.Models
             container.RegisterModel<IPermissionCheckResult, PermissionCheckResult>();
             container.RegisterLocalization<IDLC, DLC>();
             container.RegisterLocalization<INotificationPosition, NotificationPosition>();
+            container.RegisterModel<IPromptNotifications, PromptNotifications>();
         }
 
         #endregion Methods

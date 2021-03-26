@@ -4,7 +4,7 @@
 // Created          : 01-11-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-16-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="IPreferences.cs" company="Mario">
 //     Mario
@@ -37,6 +37,12 @@ namespace IronyModManager.Models.Common
         /// </summary>
         /// <value><c>true</c> if [check for prerelease]; otherwise, <c>false</c>.</value>
         bool CheckForPrerelease { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [conflict solver prompt shown].
+        /// </summary>
+        /// <value><c>true</c> if [conflict solver prompt shown]; otherwise, <c>false</c>.</value>
+        bool ConflictSolverPromptShown { get; set; }
 
         /// <summary>
         /// Gets or sets the external editor location.
