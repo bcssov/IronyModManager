@@ -193,7 +193,9 @@ namespace IronyModManager.IO.Images
                     return CompressionFormat.AtcInterpolatedAlpha;
 
                 default:
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             }
         }
 
