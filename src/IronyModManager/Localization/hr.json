@@ -221,12 +221,18 @@
     "Mod_Actions": {
         "Apply": "Primjeni",
         "Overlay_Apply_Message": "Pričekajte dok se primjenjuje kolekcija...",
-        "Conflict": "Rješavanje sukoba",
-        "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
-        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
-        "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+        "ConflictSolver": {
+            "Conflict": "Rješavanje sukoba",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Pričekaj dok se učitavaju definicije modova...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Pričekaj dok se zamjenjuju definicije...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Pričekaj dok se analiziraju definicije za sukobe...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Pričekaj dok se analiziraju riješene definicije...",
+            "Overlay_Conflict_Solver_Progress": "Korak {Count}/{TotalCount}: {PercentDone}",
+            "FirstUsePrompt": {
+                "Title": "Pažnja",
+                "Message": "Rješavač sukoba nije za osobe slabog srca. Ono zahtijeva znanje i iskustvo s krpanjem koda. Korisnici manjih kolekcija ga slobodno trebaju ugnorirati, korisnici većih kolekcija trebaju ili smanjiti broj modifikacija ili istražiti krpanje koda. Ne može se pružiti podrška ako nastaviš."
+            }
+        },
         "LaunchGame": {
             "Launch": "Pokreni igru",
             "Resume": "Nastavi igru",

@@ -221,12 +221,18 @@
     "Mod_Actions": {
         "Apply": "Anwenden",
         "Overlay_Apply_Message": "Bitte warten Sie, während Sie die Mod-Kollektion anwenden...",
-        "Conflict": "Konfliktlöser",
-        "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
-        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
-        "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
+        "ConflictSolver": {
+            "Conflict": "Konfliktlöser",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Bitte warten Sie beim Laden der Mod-Definitionen...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Bitte warten Sie, während Sie Definitionen auf Konflikte analysieren...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Bitte warten Sie, während Sie aufgelöste Definitionen analysieren...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Bitte warten Sie, während Sie Definitionen ersetzen...",
+            "Overlay_Conflict_Solver_Progress": "Schritt {Count}/{TotalCount}: {PercentDone}",
+            "FirstUsePrompt": {
+                "Title": "Beachtung",
+                "Message": "Der Konfliktlöser ist nicht für das schwache Herz. Es erfordert Kenntnisse und Erfahrungen mit dem Patch-Code. Benutzer von kleinen Mod-Kollektionen sollten ignorieren, Benutzer mit größeren Mod-Sammlungen sollten entweder in Betracht ziehen, ihre Mod-Sammlungen zu trimmen oder Code-Patching zu erforschen. Unterstützung kann nicht bereitgestellt werden, wenn Sie fortfahren."
+            }
+        },
         "LaunchGame": {
             "Launch": "Spiel starten",
             "Resume": "Setzen Sie Gameg fort",

@@ -1,51 +1,44 @@
 ﻿// ***********************************************************************
 // Assembly         : IronyModManager.Services.Common
 // Author           : Mario
-// Created          : 09-17-2020
+// Created          : 03-26-2021
 //
 // Last Modified By : Mario
 // Last Modified On : 03-26-2021
 // ***********************************************************************
-// <copyright file="IUpdaterService.cs" company="Mario">
+// <copyright file="IPromptNotificationsService.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using IronyModManager.Models.Common;
 
 namespace IronyModManager.Services.Common
 {
     /// <summary>
-    /// Interface IUpdaterService
+    /// Interface IPromptNotificationsService
     /// Implements the <see cref="IronyModManager.Services.Common.IBaseService" />
     /// </summary>
     /// <seealso cref="IronyModManager.Services.Common.IBaseService" />
-    public interface IUpdaterService : IBaseService
+    public interface IPromptNotificationsService : IBaseService
     {
         #region Methods
 
         /// <summary>
         /// Gets this instance.
         /// </summary>
-        /// <returns>IUpdateSettings.</returns>
-        IUpdateSettings Get();
+        /// <returns>IPromptNotifications.</returns>
+        IPromptNotifications Get();
 
         /// <summary>
-        /// Saves the specified settings.
+        /// Saves the specified model.
         /// </summary>
-        /// <param name="settings">The settings.</param>
+        /// <param name="model">The model.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        bool Save(IUpdateSettings settings);
-
-        /// <summary>
-        /// Unpacks the update asynchronous.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>Task&lt;System.String&gt;.</returns>
-        Task<string> UnpackUpdateAsync(string path);
+        bool Save(IPromptNotifications model);
 
         #endregion Methods
     }

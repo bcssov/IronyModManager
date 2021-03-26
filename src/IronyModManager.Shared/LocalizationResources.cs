@@ -297,12 +297,22 @@ namespace IronyModManager.Shared
             public const string Prefix = "Mod_Actions.";
             public const string Apply = Prefix + "Apply";
             public const string Overlay_Apply_Message = Prefix + "Overlay_Apply_Message";
-            public const string Conflict = Prefix + "Conflict";
-            public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
-            public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
-            public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
-            public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
-            public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+            public static class ConflictSolver
+            {
+                public const string Prefix = "Mod_Actions.ConflictSolver.";
+                public const string Conflict = Prefix + "Conflict";
+                public const string Overlay_Conflict_Solver_Loading_Definitions = Prefix + "Overlay_Conflict_Solver_Loading_Definitions";
+                public const string Overlay_Conflict_Solver_Analyzing_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Conflicts";
+                public const string Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts = Prefix + "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts";
+                public const string Overlay_Conflict_Solver_Replacing_Definitions = Prefix + "Overlay_Conflict_Solver_Replacing_Definitions";
+                public const string Overlay_Conflict_Solver_Progress = Prefix + "Overlay_Conflict_Solver_Progress";
+                public static class FirstUsePrompt
+                {
+                    public const string Prefix = "Mod_Actions.ConflictSolver.FirstUsePrompt.";
+                    public const string Title = Prefix + "Title";
+                    public const string Message = Prefix + "Message";
+                }
+            }
             public static class LaunchGame
             {
                 public const string Prefix = "Mod_Actions.LaunchGame.";
