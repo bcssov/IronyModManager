@@ -53,7 +53,7 @@
     <Setter Property="CaretBrush" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}"/>
     <Setter Property="Template">
       <ControlTemplate>
-        <StackPanel>
+        <Panel>
           <Border Name="PART_RootBorder" Cursor="Ibeam"
                   Background="{TemplateBinding Background}"
                   BorderBrush="{TemplateBinding BorderBrush}"
@@ -130,7 +130,7 @@
           <TextBlock Name="HintsTextBlock" Classes="Caption" Margin="0,3,0,0"
                      Text="{TemplateBinding (wpf:TextFieldAssist.Hints)}"
                      IsVisible="{Binding !!Text, RelativeSource={RelativeSource Self}}"/>
-        </StackPanel>
+        </Panel>
       </ControlTemplate>
     </Setter>
   </Style>
