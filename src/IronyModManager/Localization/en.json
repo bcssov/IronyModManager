@@ -221,12 +221,14 @@
     "Mod_Actions": {
         "Apply": "Apply",
         "Overlay_Apply_Message": "Please wait while applying mod collection...",
-        "Conflict": "Conflict Solver",
-        "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
-        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
-        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+        "ConflictSolver": {
+            "Conflict": "Conflict Solver",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Please wait while loading mod definitions...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Please wait while analyzing definitions for conflicts...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Please wait while analyzing resolved definitions...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Please wait while replacing definitions...",
+            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}"
+        },
         "LaunchGame": {
             "Launch": "Launch Game",
             "Resume": "Resume Game",

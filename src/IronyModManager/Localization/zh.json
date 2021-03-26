@@ -221,12 +221,14 @@
     "Mod_Actions": {
         "Apply": "加载合集",
         "Overlay_Apply_Message": "正在加载合集……",
-        "Conflict": "冲突处理器",
-        "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
-        "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
-        "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}",
+        "ConflictSolver": {
+            "Conflict": "冲突处理器",
+            "Overlay_Conflict_Solver_Loading_Definitions": "正在加载模组数据……",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "正在分析模组冲突……",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "正在分析已处理的冲突……",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "正在应用模组补丁……",
+            "Overlay_Conflict_Solver_Progress": "步骤 {Count}/{TotalCount}: {PercentDone}"
+        },
         "LaunchGame": {
             "Launch": "启动游戏",
             "Resume": "继续游戏",

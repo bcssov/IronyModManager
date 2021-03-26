@@ -221,12 +221,14 @@
     "Mod_Actions": {
         "Apply": "Aplicar",
         "Overlay_Apply_Message": "Espere mientras aplica la colección de mods...",
-        "Conflict": "Solucionador de conflictos",
-        "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
-        "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
-        "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
-        "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
-        "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}",
+        "ConflictSolver": {
+            "Conflict": "Solucionador de conflictos",
+            "Overlay_Conflict_Solver_Loading_Definitions": "Espere mientras se cargan las definiciones de mod...",
+            "Overlay_Conflict_Solver_Analyzing_Conflicts": "Espere mientras se analizan las definiciones en busca de conflictos...",
+            "Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts": "Espere mientras se analizan las definiciones resueltas...",
+            "Overlay_Conflict_Solver_Replacing_Definitions": "Espere mientras se reemplazan las definiciones...",
+            "Overlay_Conflict_Solver_Progress": "Step {Count}/{TotalCount}: {PercentDone}"
+        },
         "LaunchGame": {
             "Launch": "Inciar Juego",
             "Resume": "Reanudar Juego",

@@ -4,7 +4,7 @@
 // Created          : 02-29-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-26-2021
 // ***********************************************************************
 // <copyright file="ModHolderControlViewModel.cs" company="Mario">
 //     Mario
@@ -249,7 +249,7 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the analyze.
         /// </summary>
         /// <value>The analyze.</value>
-        [StaticLocalization(LocalizationResources.Mod_Actions.Conflict)]
+        [StaticLocalization(LocalizationResources.Mod_Actions.ConflictSolver.Conflict)]
         public virtual string Analyze { get; protected set; }
 
         /// <summary>
@@ -402,13 +402,13 @@ namespace IronyModManager.ViewModels.Controls
         {
             SubscribeToProgressReport(id, Disposables);
 
-            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+            var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
             {
                 PercentDone = 0.ToLocalizedPercentage(),
                 Count = 1,
                 TotalCount = 4
             });
-            var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
+            var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
             await TriggerOverlayAsync(id, true, message, overlayProgress);
             modPatchCollectionService.InvalidatePatchModState(CollectionMods.SelectedModCollection.Name);
             modPatchCollectionService.ResetPatchStateCache();
@@ -824,8 +824,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionLoadHandler?.Dispose();
             definitionLoadHandler = modDefinitionLoadHandler.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Loading_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Loading_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 1,
@@ -837,8 +837,8 @@ namespace IronyModManager.ViewModels.Controls
             modInvalidReplaceHandler?.Dispose();
             modInvalidReplaceHandler = modDefinitionInvalidReplaceHandler.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Replacing_Definitions);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Replacing_Definitions);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 2,
@@ -850,8 +850,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionAnalyzeLoadHandler?.Dispose();
             definitionAnalyzeLoadHandler = modDefinitionAnalyzeHandler.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Conflicts);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Conflicts);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 3,
@@ -863,8 +863,8 @@ namespace IronyModManager.ViewModels.Controls
             definitionSyncHandler?.Dispose();
             definitionSyncHandler = modDefinitionPatchLoadHandler.Subscribe(s =>
             {
-                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
-                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.Overlay_Conflict_Solver_Progress), new
+                var message = localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Analyzing_Resolved_Conflicts);
+                var overlayProgress = Smart.Format(localizationManager.GetResource(LocalizationResources.Mod_Actions.ConflictSolver.Overlay_Conflict_Solver_Progress), new
                 {
                     PercentDone = s.Percentage.ToLocalizedPercentage(),
                     Count = 4,
