@@ -19,6 +19,8 @@ using AutoMapper;
 using IronyModManager.IO.Common;
 using IronyModManager.Models.Common;
 using IronyModManager.Services.Common;
+using IronyModManager.Services.Common.MessageBus;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 
 namespace IronyModManager.Services
@@ -35,6 +37,11 @@ namespace IronyModManager.Services
         #region Fields
 
         /// <summary>
+        /// The message bus
+        /// </summary>
+        private readonly IMessageBus messageBus;
+
+        /// <summary>
         /// The report exporter
         /// </summary>
         private readonly IReportExporter reportExporter;
@@ -46,12 +53,15 @@ namespace IronyModManager.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="ReportExportService" /> class.
         /// </summary>
+        /// <param name="messageBus">The message bus.</param>
         /// <param name="reportExporter">The report exporter.</param>
         /// <param name="storageProvider">The storage provider.</param>
         /// <param name="mapper">The mapper.</param>
-        public ReportExportService(IReportExporter reportExporter, IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
+        public ReportExportService(IMessageBus messageBus, IReportExporter reportExporter,
+            IStorageProvider storageProvider, IMapper mapper) : base(storageProvider, mapper)
         {
             this.reportExporter = reportExporter;
+            this.messageBus = messageBus;
         }
 
         #endregion Constructors
@@ -68,12 +78,24 @@ namespace IronyModManager.Services
         {
             firstReport ??= new List<IHashReport>();
             secondReport ??= new List<IHashReport>();
+
+            var total = firstReport.Sum(p => p.Reports.Count) + secondReport.Sum(p => p.Reports.Count);
+            var progress = 0;
+            double lastPercentage = 0;
+
             void compareReports(List<IHashReport> reports, IEnumerable<IHashReport> firstReports, IEnumerable<IHashReport> secondReports)
             {
                 foreach (var first in firstReports)
                 {
                     if (!secondReports.Any(p => p.Name.Equals(first.Name)))
                     {
+                        progress += first.Reports.Count;
+                        var percentage = GetProgressPercentage(total, progress);
+                        if (percentage != lastPercentage)
+                        {
+                            messageBus.Publish(new ModReportExportEvent(2, percentage));
+                        }
+                        lastPercentage = percentage;
                         if (!reports.Any(p => p.Name.Equals(first.Name)))
                         {
                             reports.Add(first);
@@ -109,6 +131,13 @@ namespace IronyModManager.Services
                                 report.Reports.Add(hashReport);
                             }
                         }
+                        progress++;
+                        var percentage = GetProgressPercentage(total, progress);
+                        if (percentage != lastPercentage)
+                        {
+                            messageBus.Publish(new ModReportExportEvent(2, percentage));
+                        }
+                        lastPercentage = percentage;
                     }
                 }
             }
@@ -166,6 +195,27 @@ namespace IronyModManager.Services
         public Task<IEnumerable<IHashReport>> ImportAsync(string path)
         {
             return reportExporter.ImportAsync(path);
+        }
+
+        /// <summary>
+        /// Gets the progress percentage.
+        /// </summary>
+        /// <param name="total">The total.</param>
+        /// <param name="processed">The processed.</param>
+        /// <param name="maxPerc">The maximum perc.</param>
+        /// <returns>System.Double.</returns>
+        protected virtual double GetProgressPercentage(double total, double processed, double maxPerc = 100)
+        {
+            var perc = Math.Round(processed / total * 100, 2);
+            if (perc < 0)
+            {
+                perc = 0;
+            }
+            else if (perc > maxPerc)
+            {
+                perc = maxPerc;
+            }
+            return perc;
         }
 
         #endregion Methods

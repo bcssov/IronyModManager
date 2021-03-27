@@ -149,7 +149,8 @@
             "DialogTitleImport": "Wählen Sie den zu importierenden JSON-Bericht aus",
             "ExportOverlay": "Bitte warten Sie beim Exportieren...",
             "ImportOverlay": "Bitte warten Sie, während Sie überprüfen...",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "Schritt {Count}/{TotalCount}: {Progress}",
             "Close": "Schließen"
         },
         "JumpOnDragAndDrop": {

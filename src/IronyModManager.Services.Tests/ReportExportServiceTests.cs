@@ -21,6 +21,7 @@ using FluentAssertions;
 using IronyModManager.IO.Common;
 using IronyModManager.Models;
 using IronyModManager.Models.Common;
+using IronyModManager.Shared.MessageBus;
 using IronyModManager.Storage.Common;
 using Moq;
 using Xunit;
@@ -45,7 +46,7 @@ namespace IronyModManager.Services.Tests
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports } };
             exporter.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync(outerReports);
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportAsync("test");
             result.Should().NotBeNull();
         }
@@ -61,7 +62,7 @@ namespace IronyModManager.Services.Tests
             var exporter = new Mock<IReportExporter>();
             exporter.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((IEnumerable<IHashReport>)null);
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportAsync("test");
             result.Should().BeNull();
         }
@@ -80,7 +81,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = await service.ExportAsync(outerReports, "test");
             result.Should().BeTrue();
         }
@@ -98,7 +99,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = await service.ExportAsync(outerReports, "test");
             result.Should().BeFalse();
         }
@@ -116,7 +117,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetCollectionReports(outerReports.ToList());
             result.Count().Should().Be(1);
         }
@@ -134,7 +135,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports, ReportType = HashReportType.Game } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetCollectionReports(outerReports.ToList());
             result.Count().Should().Be(0);
         }
@@ -150,7 +151,7 @@ namespace IronyModManager.Services.Tests
             var exporter = new Mock<IReportExporter>();
             exporter.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync(true);
             
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetCollectionReports(null);
             result.Should().BeNull();
         }
@@ -168,7 +169,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports, ReportType = HashReportType.Game } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetGameReports(outerReports.ToList());
             result.Count().Should().Be(1);
         }
@@ -186,7 +187,7 @@ namespace IronyModManager.Services.Tests
 
             var innerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
             var outerReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReports, ReportType = HashReportType.Collection } };
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetGameReports(outerReports.ToList());
             result.Count().Should().Be(0);
         }
@@ -202,7 +203,7 @@ namespace IronyModManager.Services.Tests
             var exporter = new Mock<IReportExporter>();
             exporter.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync(true);
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var service = new ReportExportService(null, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.GetGameReports(null);
             result.Should().BeNull();
         }
@@ -224,10 +225,14 @@ namespace IronyModManager.Services.Tests
             var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
             var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+
+            var service = new ReportExportService(messageBus.Object, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.CompareReports(firstOuterReports, secondOuterReports);
             result.Should().NotBeNull();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             result.FirstOrDefault().Reports.Count.Should().Be(2);
         }
 
@@ -248,10 +253,14 @@ namespace IronyModManager.Services.Tests
             var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
             var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+
+            var service = new ReportExportService(messageBus.Object, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.CompareReports(firstOuterReports, secondOuterReports);
             result.Should().NotBeNull();
-            result.Count().Should().Be(1);
+            result.Count.Should().Be(1);
             result.FirstOrDefault().Reports.Count.Should().Be(1);
         }
 
@@ -272,10 +281,14 @@ namespace IronyModManager.Services.Tests
             var secondInnerReports = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
             var secondOuterReports = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = secondInnerReports, ReportType = HashReportType.Game } };
 
-            var service = new ReportExportService(exporter.Object, storageProvider.Object, mapper.Object);
+            var messageBus = new Mock<IMessageBus>();
+            messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
+            messageBus.Setup(p => p.Publish(It.IsAny<IMessageBusEvent>()));
+
+            var service = new ReportExportService(messageBus.Object, exporter.Object, storageProvider.Object, mapper.Object);
             var result = service.CompareReports(firstOuterReports, secondOuterReports);
             result.Should().NotBeNull();
-            result.Count().Should().Be(0);
+            result.Count.Should().Be(0);
         }
     }
 }

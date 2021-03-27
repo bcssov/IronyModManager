@@ -286,15 +286,15 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IGame game, IReadOnlyCollection<IHashReport> hashReports)
         {
+            var importedReports = reportExportService.GetGameReports(hashReports);
+            if (importedReports == null || !importedReports.Any())
+            {
+                return null;
+            }
             var basePath = Path.GetDirectoryName(game.ExecutableLocation);
             var files = reader.GetFiles(basePath);
             var currentReports = await ParseReportAsync(game, basePath, files);
-            var importedReports = reportExportService.GetGameReports(hashReports);
-            if (importedReports != null)
-            {
-                return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
-            }
-            return null;
+            return reportExportService.CompareReports(currentReports.ToList(), importedReports.ToList());
         }
 
         /// <summary>
@@ -536,15 +536,15 @@ namespace IronyModManager.Services
         /// <returns>IEnumerable&lt;IHashReport&gt;.</returns>
         protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IGame game, string basePath, IEnumerable<string> files)
         {
-            var reports = new List<IHashReport>();
-            var report = GetModelInstance<IHashReport>();
+            var reports = new List<IHashReport>();           
 
-            var total = files.Where(p => game.GameFolders.Any(x => x.StartsWith(p))).Count();
+            var total = files.Where(p => game.GameFolders.Any(x => p.StartsWith(x))).Count();
             var progress = 0;
             double lastPercentage = 0;
 
             foreach (var item in game.GameFolders)
             {
+                var report = GetModelInstance<IHashReport>();
                 report.Name = item;
                 report.ReportType = HashReportType.Game;
                 var hashReports = new List<IHashFileReport>();
@@ -562,7 +562,7 @@ namespace IronyModManager.Services
                     var percentage = GetProgressPercentage(total, progress);
                     if (percentage != lastPercentage)
                     {
-                        await messageBus.PublishAsync(new ModReportExportEvent(percentage));
+                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
                     }
                     lastPercentage = percentage;
                 }

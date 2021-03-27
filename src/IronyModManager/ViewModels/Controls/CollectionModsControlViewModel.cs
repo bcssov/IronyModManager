@@ -462,6 +462,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the export game report.
+        /// </summary>
+        /// <value>The export game report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.ExportGame)]
+        public virtual string ExportGameReport { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export game report command.
+        /// </summary>
+        /// <value>The export game report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportGameReportCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the hash report view.
         /// </summary>
         /// <value>The hash report view.</value>
@@ -674,6 +687,15 @@ namespace IronyModManager.ViewModels.Controls
         #endregion Properties
 
         #region Methods
+
+        /// <summary>
+        /// Determines whether this instance [can export game].
+        /// </summary>
+        /// <returns>bool.</returns>
+        public virtual bool CanExportGame()
+        {
+            return activeGame != null && !string.IsNullOrWhiteSpace(activeGame.ExecutableLocation) && System.IO.File.Exists(activeGame.ExecutableLocation);
+        }
 
         /// <summary>
         /// Gets the context menu mod steam URL.
@@ -1537,8 +1559,16 @@ namespace IronyModManager.ViewModels.Controls
             {
                 reportDisposable = modReportExportHandler.Subscribe(s =>
                 {
-                    TriggerOverlay(id, true, localizationManager.GetResource(useImportOverlay ? LocalizationResources.Collection_Mods.FileHash.ImportOverlay : LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
-                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.Progress), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                    if (useImportOverlay)
+                    {
+                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay),
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressImport), new { Progress = s.Percentage.ToLocalizedPercentage(), Count = s.Step, TotalCount = 2 }));
+                    }
+                    else
+                    {
+                        TriggerOverlay(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay),
+                        Smart.Format(localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ProgressExport), new { Progress = s.Percentage.ToLocalizedPercentage() }));
+                    }
                 }).DisposeWith(disposables);
             }
 
@@ -1552,8 +1582,18 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ImportOverlay));
                     registerReportHandlers(id, true);
                     var rawReports = await reportExportService.ImportAsync(path);
-                    var reports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, rawReports.ToList()));
-                    if (reports?.Count() > 0)
+                    var reports = new List<IHashReport>();
+                    var collectionReports = await Task.Run(() => modCollectionService.ImportHashReportAsync(SelectedMods, rawReports.ToList()));
+                    if (collectionReports != null && collectionReports.Any())
+                    {
+                        reports.AddRange(collectionReports);
+                    }
+                    var gameReports = await Task.Run(() => gameService.ImportHashReportAsync(activeGame, rawReports.ToList()));
+                    if (gameReports != null && gameReports.Any())
+                    {
+                        reports.AddRange(gameReports);
+                    }
+                    if (reports != null && reports.Any())
                     {
                         await TriggerOverlayAsync(id, false);
                         HashReportView.SetParameters(reports);
@@ -1578,6 +1618,25 @@ namespace IronyModManager.ViewModels.Controls
                     await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
                     registerReportHandlers(id);
                     if (await Task.Run(() => modCollectionService.ExportHashReportAsync(SelectedMods, path)))
+                    {
+                        notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
+                            localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);
+                    }
+                    await TriggerOverlayAsync(id, false);
+                    reportDisposable?.Dispose();
+                }
+            }).DisposeWith(disposables);
+
+            ExportGameReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
+                var path = await fileDialogAction.SaveDialogAsync(title, activeGame?.Name, Shared.Constants.JsonExtensionWithoutDot);
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    var id = idGenerator.GetNextId();
+                    await TriggerOverlayAsync(id, true, localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.ExportOverlay));
+                    registerReportHandlers(id);
+                    if (await Task.Run(() => gameService.ExportHashReportAsync(activeGame, path)))
                     {
                         notificationAction.ShowNotification(localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Title),
                             localizationManager.GetResource(LocalizationResources.Notifications.ReportExported.Message), NotificationType.Success);

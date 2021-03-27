@@ -197,7 +197,8 @@ namespace IronyModManager.Shared
                 public const string DialogTitleImport = Prefix + "DialogTitleImport";
                 public const string ExportOverlay = Prefix + "ExportOverlay";
                 public const string ImportOverlay = Prefix + "ImportOverlay";
-                public const string Progress = Prefix + "Progress";
+                public const string ProgressExport = Prefix + "ProgressExport";
+                public const string ProgressImport = Prefix + "ProgressImport";
                 public const string Close = Prefix + "Close";
             }
             public static class JumpOnDragAndDrop

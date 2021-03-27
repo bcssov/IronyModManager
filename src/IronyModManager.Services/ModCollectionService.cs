@@ -328,6 +328,11 @@ namespace IronyModManager.Services
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
         public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, IReadOnlyCollection<IHashReport> hashReports)
         {
+            var importedReports = exportService.GetCollectionReports(hashReports);
+            if (importedReports == null || !importedReports.Any())
+            {
+                return null;
+            }
             var modExport = mods.ToList();
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
             var patchModName = GenerateCollectionPatchName(collection.Name);
@@ -353,12 +358,7 @@ namespace IronyModManager.Services
                 modExport.Add(patchMod);
             }
             var currentReports = await ParseReportAsync(modExport);
-            var importedReports = exportService.GetCollectionReports(hashReports);
-            if (importedReports != null)
-            {
-                return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
-            }
-            return null;
+            return exportService.CompareReports(currentReports.ToList(), importedReports.ToList());
         }
 
         /// <summary>
@@ -532,7 +532,7 @@ namespace IronyModManager.Services
                     var percentage = GetProgressPercentage(total, progress);
                     if (percentage != lastPercentage)
                     {
-                        await messageBus.PublishAsync(new ModReportExportEvent(percentage));
+                        await messageBus.PublishAsync(new ModReportExportEvent(1, percentage));
                     }
                     lastPercentage = percentage;
                 }

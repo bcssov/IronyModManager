@@ -149,7 +149,8 @@
             "DialogTitleImport": "选择要导入的 JSON 报告",
             "ExportOverlay": "正在导出……",
             "ImportOverlay": "正在验证……",
-            "Progress": "{Progress}",
+            "ProgressExport": "{Progress}",
+            "ProgressImport": "步骤 {Count}/{TotalCount}: {Progress}",
             "Close": "关闭"
         },
         "JumpOnDragAndDrop": {
