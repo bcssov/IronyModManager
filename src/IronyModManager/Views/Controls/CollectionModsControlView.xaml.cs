@@ -270,8 +270,8 @@ namespace IronyModManager.Views.Controls
                 {
                     menuItems.Add(new MenuItem()
                     {
-                        Header = ViewModel.ExportReport,
-                        Command = ViewModel.ExportReportCommand
+                        Header = ViewModel.ExportCollectionReport,
+                        Command = ViewModel.ExportCollectionReportCommand
                     });
                     menuItems.Add(new MenuItem()
                     {

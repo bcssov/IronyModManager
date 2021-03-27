@@ -4,7 +4,7 @@
 // Created          : 03-03-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-19-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="CollectionModsControlViewModel.cs" company="Mario">
 //     Mario
@@ -429,6 +429,19 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ExportModCollectionControlViewModel ExportCollection { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the export collection report.
+        /// </summary>
+        /// <value>The export collection report.</value>
+        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.ExportCollection)]
+        public virtual string ExportCollectionReport { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the export collection report command.
+        /// </summary>
+        /// <value>The export collection report command.</value>
+        public virtual ReactiveCommand<Unit, Unit> ExportCollectionReportCommand { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the export collection to clipboard.
         /// </summary>
         /// <value>The export collection to clipboard.</value>
@@ -440,19 +453,6 @@ namespace IronyModManager.ViewModels.Controls
         /// </summary>
         /// <value>The export collection to clipboard command.</value>
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the export report.
-        /// </summary>
-        /// <value>The export report.</value>
-        [StaticLocalization(LocalizationResources.Collection_Mods.FileHash.Export)]
-        public virtual string ExportReport { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the export report command.
-        /// </summary>
-        /// <value>The export report command.</value>
-        public virtual ReactiveCommand<Unit, Unit> ExportReportCommand { get; protected set; }
 
         /// <summary>
         /// Gets or sets the hovered mod.
@@ -1560,7 +1560,7 @@ namespace IronyModManager.ViewModels.Controls
                 }
             }).DisposeWith(disposables);
 
-            ExportReportCommand = ReactiveCommand.CreateFromTask(async () =>
+            ExportCollectionReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var title = localizationManager.GetResource(LocalizationResources.Collection_Mods.FileHash.DialogTitleExport);
                 var path = await fileDialogAction.SaveDialogAsync(title, SelectedModCollection?.Name, Shared.Constants.JsonExtensionWithoutDot);

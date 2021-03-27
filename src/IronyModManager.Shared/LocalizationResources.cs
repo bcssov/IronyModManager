@@ -190,7 +190,8 @@ namespace IronyModManager.Shared
             public static class FileHash
             {
                 public const string Prefix = "Collection_Mods.FileHash.";
-                public const string Export = Prefix + "Export";
+                public const string ExportCollection = Prefix + "ExportCollection";
+                public const string ExportGame = Prefix + "ExportGame";
                 public const string Import = Prefix + "Import";
                 public const string DialogTitleExport = Prefix + "DialogTitleExport";
                 public const string DialogTitleImport = Prefix + "DialogTitleImport";
