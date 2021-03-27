@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="ModReportExporter.cs" company="Mario">
 //     Mario
@@ -61,7 +61,7 @@ namespace IronyModManager.IO.Mods
         /// <param name="modHashes">The mod hashes.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        public Task<bool> ExportAsync(IEnumerable<IModHashReport> modHashes, string path)
+        public Task<bool> ExportAsync(IEnumerable<IHashReport> modHashes, string path)
         {
             var retryStrategy = new RetryStrategy();
             if (modHashes?.Count() > 0)
@@ -81,7 +81,7 @@ namespace IronyModManager.IO.Mods
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashFileReport&gt;&gt;.</returns>
-        public async Task<IEnumerable<IModHashReport>> ImportAsync(string path)
+        public async Task<IEnumerable<IHashReport>> ImportAsync(string path)
         {
             if (File.Exists(path))
             {
@@ -90,7 +90,7 @@ namespace IronyModManager.IO.Mods
                 {
                     try
                     {
-                        var result = JsonDISerializer.Deserialize<IEnumerable<IModHashReport>>(json);
+                        var result = JsonDISerializer.Deserialize<IEnumerable<IHashReport>>(json);
                         return result;
                     }
                     catch (Exception ex)

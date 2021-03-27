@@ -4,7 +4,7 @@
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="IModReportExporter.cs" company="Mario">
 //     Mario
@@ -31,14 +31,14 @@ namespace IronyModManager.IO.Common.Mods
         /// <param name="modHashes">The mod hashes.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;System.Boolean&gt;.</returns>
-        Task<bool> ExportAsync(IEnumerable<IModHashReport> modHashes, string path);
+        Task<bool> ExportAsync(IEnumerable<IHashReport> modHashes, string path);
 
         /// <summary>
         /// Imports the asynchronous.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        Task<IEnumerable<IModHashReport>> ImportAsync(string path);
+        /// <returns>Task&lt;IEnumerable&lt;IHashReport&gt;&gt;.</returns>
+        Task<IEnumerable<IHashReport>> ImportAsync(string path);
 
         #endregion Methods
     }

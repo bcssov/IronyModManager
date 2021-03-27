@@ -4,7 +4,7 @@
 // Created          : 01-15-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-26-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="DIPackage.cs" company="Mario">
 //     Mario
@@ -50,8 +50,8 @@ namespace IronyModManager.Models
             container.RegisterModel<IPriorityDefinitionResult, PriorityDefinitionResult>();
             container.RegisterModel<IGameSettings, GameSettings>();
             container.RegisterModel<IUpdateSettings, UpdateSettings>();
-            container.RegisterModel<IModHashFileReport, ModHashFileReport>();
-            container.RegisterModel<IModHashReport, ModHashReport>();
+            container.RegisterModel<IHashFileReport, HashFileReport>();
+            container.RegisterModel<IHashReport, HashReport>();
             container.RegisterModel<IExternalEditor, ExternalEditor>();
             container.RegisterModel<IExternalEditorFiles, ExternalEditorFiles>();
             container.RemoveTransientWarning<IExternalEditorFiles>();

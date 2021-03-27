@@ -1,30 +1,27 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models
+// Assembly         : IronyModManager.Models.Common
 // Author           : Mario
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="ModHashReport.cs" company="Mario">
+// <copyright file="IHashReport.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
-using IronyModManager.Models.Common;
 
-namespace IronyModManager.Models
+namespace IronyModManager.Models.Common
 {
     /// <summary>
-    /// Class ModHashReport.
-    /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
-    /// Implements the <see cref="IronyModManager.Models.Common.IModHashReport" />
+    /// Interface IHashReport
+    /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
-    /// <seealso cref="IronyModManager.Models.Common.IModHashReport" />
-    public class ModHashReport : BaseModel, IModHashReport
+    /// <seealso cref="IronyModManager.Models.Common.IModel" />
+    public interface IHashReport : IModel
     {
         #region Properties
 
@@ -32,13 +29,13 @@ namespace IronyModManager.Models
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name { get; set; }
+        string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        public IList<IModHashFileReport> Reports { get; set; } = new List<IModHashFileReport>();
+        IList<IHashFileReport> Reports { get; set; }
 
         #endregion Properties
     }

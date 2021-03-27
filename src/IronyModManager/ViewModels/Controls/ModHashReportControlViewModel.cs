@@ -4,15 +4,15 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 10-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="ModHashReportControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -57,13 +57,13 @@ namespace IronyModManager.ViewModels.Controls
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        public virtual IEnumerable<ModHashReport> Reports { get; protected set; }
+        public virtual IEnumerable<HashReport> Reports { get; protected set; }
 
         /// <summary>
         /// Gets or sets the selected report.
         /// </summary>
         /// <value>The selected report.</value>
-        public virtual ModHashReport SelectedReport { get; protected set; }
+        public virtual HashReport SelectedReport { get; protected set; }
 
         #endregion Properties
 
@@ -81,14 +81,14 @@ namespace IronyModManager.ViewModels.Controls
         /// Sets the parameters.
         /// </summary>
         /// <param name="reports">The reports.</param>
-        public virtual void SetParameters(IEnumerable<IModHashReport> reports)
+        public virtual void SetParameters(IEnumerable<IHashReport> reports)
         {
-            var converted = new List<ModHashReport>();
+            var converted = new List<HashReport>();
             if (reports?.Count() > 0)
             {
                 foreach (var item in reports)
                 {
-                    converted.Add(new ModHashReport(item));
+                    converted.Add(new HashReport(item));
                 }
             }
             Reports = converted;
@@ -120,15 +120,15 @@ namespace IronyModManager.ViewModels.Controls
         /// <summary>
         /// Class ModFileHashReport.
         /// </summary>
-        public class ModFileHashReport
+        public class FileHashReport
         {
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ModFileHashReport" /> class.
+            /// Initializes a new instance of the <see cref="FileHashReport" /> class.
             /// </summary>
             /// <param name="item">The item.</param>
-            public ModFileHashReport(IModHashFileReport item)
+            public FileHashReport(IHashFileReport item)
             {
                 File = item?.File;
                 Hash = item?.Hash;
@@ -188,25 +188,25 @@ namespace IronyModManager.ViewModels.Controls
         }
 
         /// <summary>
-        /// Class ModHashReport.
+        /// Class HashReport.
         /// </summary>
-        public class ModHashReport
+        public class HashReport
         {
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ModHashReport" /> class.
+            /// Initializes a new instance of the <see cref="HashReport" /> class.
             /// </summary>
             /// <param name="item">The item.</param>
-            public ModHashReport(IModHashReport item)
+            public HashReport(IHashReport item)
             {
                 Name = item?.Name;
-                var reports = new List<ModFileHashReport>();
-                if (item?.Reports?.Count() > 0)
+                var reports = new List<FileHashReport>();
+                if (item != null && item.Reports.Any())
                 {
                     foreach (var report in item.Reports)
                     {
-                        reports.Add(new ModFileHashReport(report));
+                        reports.Add(new FileHashReport(report));
                     }
                 }
                 Reports = reports;
@@ -226,7 +226,7 @@ namespace IronyModManager.ViewModels.Controls
             /// Gets or sets the reports.
             /// </summary>
             /// <value>The reports.</value>
-            public IList<ModFileHashReport> Reports { get; set; }
+            public IList<FileHashReport> Reports { get; set; }
 
             #endregion Properties
         }

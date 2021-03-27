@@ -1,27 +1,30 @@
 ﻿// ***********************************************************************
-// Assembly         : IronyModManager.Models.Common
+// Assembly         : IronyModManager.Models
 // Author           : Mario
 // Created          : 09-30-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 09-30-2020
+// Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="IModHashReport.cs" company="Mario">
+// <copyright file="ModHashReport.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using IronyModManager.Models.Common;
 
-namespace IronyModManager.Models.Common
+namespace IronyModManager.Models
 {
     /// <summary>
-    /// Interface IModHashReport
-    /// Implements the <see cref="IronyModManager.Models.Common.IModel" />
+    /// Class HashReport.
+    /// Implements the <see cref="IronyModManager.Models.Common.BaseModel" />
+    /// Implements the <see cref="IronyModManager.Models.Common.IHashReport" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Models.Common.IModel" />
-    public interface IModHashReport : IModel
+    /// <seealso cref="IronyModManager.Models.Common.BaseModel" />
+    /// <seealso cref="IronyModManager.Models.Common.IHashReport" />
+    public class HashReport : BaseModel, IHashReport
     {
         #region Properties
 
@@ -29,13 +32,13 @@ namespace IronyModManager.Models.Common
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
-        string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the reports.
         /// </summary>
         /// <value>The reports.</value>
-        IList<IModHashFileReport> Reports { get; set; }
+        public IList<IHashFileReport> Reports { get; set; } = new List<IHashFileReport>();
 
         #endregion Properties
     }

@@ -4,7 +4,7 @@
 // Created          : 03-04-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-18-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
 // <copyright file="ModCollectionService.cs" company="Mario">
 //     Mario
@@ -326,7 +326,7 @@ namespace IronyModManager.Services
         /// <param name="mods">The mods.</param>
         /// <param name="path">The path.</param>
         /// <returns>Task&lt;IEnumerable&lt;IModHashReport&gt;&gt;.</returns>
-        public virtual async Task<IEnumerable<IModHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
+        public virtual async Task<IEnumerable<IHashReport>> ImportHashReportAsync(IEnumerable<IMod> mods, string path)
         {
             var modExport = mods.ToList();
             var collection = GetAllModCollectionsInternal().FirstOrDefault(p => p.IsSelected);
@@ -356,7 +356,7 @@ namespace IronyModManager.Services
             var importedReports = await modReportExporter.ImportAsync(path);
             if (importedReports != null)
             {
-                static void compareReports(List<IModHashReport> reports, IEnumerable<IModHashReport> firstReports, IEnumerable<IModHashReport> secondReports)
+                static void compareReports(List<IHashReport> reports, IEnumerable<IHashReport> firstReports, IEnumerable<IHashReport> secondReports)
                 {
                     foreach (var first in firstReports)
                     {
@@ -376,17 +376,17 @@ namespace IronyModManager.Services
                                 var report = reports.FirstOrDefault(p => p.Name.Equals(first.Name));
                                 if (report == null)
                                 {
-                                    report = DIResolver.Get<IModHashReport>();
+                                    report = DIResolver.Get<IHashReport>();
                                     report.Name = first.Name;
                                     reports.Add(report);
                                 }
                                 if (report.Reports == null)
                                 {
-                                    report.Reports = new List<IModHashFileReport>();
+                                    report.Reports = new List<IHashFileReport>();
                                 }
                                 if (!report.Reports.Any(p => p.File.Equals(item.File)))
                                 {
-                                    var hashReport = DIResolver.Get<IModHashFileReport>();
+                                    var hashReport = DIResolver.Get<IHashFileReport>();
                                     hashReport.File = item.File;
                                     hashReport.Hash = item.Hash;
                                     var secondHash = secondReport.Reports.FirstOrDefault(p => p.File.Equals(item.File));
@@ -400,7 +400,7 @@ namespace IronyModManager.Services
                         }
                     }
                 }
-                var reports = new List<IModHashReport>();
+                var reports = new List<IHashReport>();
                 compareReports(reports, currentReports, importedReports);
                 compareReports(reports, importedReports, currentReports);
                 return reports;
@@ -552,24 +552,24 @@ namespace IronyModManager.Services
         /// </summary>
         /// <param name="mods">The mods.</param>
         /// <returns>IEnumerable&lt;IModHashReport&gt;.</returns>
-        protected virtual async Task<IEnumerable<IModHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
+        protected virtual async Task<IEnumerable<IHashReport>> ParseReportAsync(IEnumerable<IMod> mods)
         {
             var game = GameService.GetSelected();
-            var reports = new List<IModHashReport>();
+            var reports = new List<IHashReport>();
             var total = mods.SelectMany(p => p.Files).Count(p => game.GameFolders.Any(a => p.StartsWith(a)));
             var progress = 0;
             double lastPercentage = 0;
             foreach (var mod in mods)
             {
-                var report = GetModelInstance<IModHashReport>();
+                var report = GetModelInstance<IHashReport>();
                 report.Name = mod.Name;
-                var hashReports = new List<IModHashFileReport>();
+                var hashReports = new List<IHashFileReport>();
                 foreach (var item in mod.Files.Where(p => game.GameFolders.Any(a => p.StartsWith(a))))
                 {
                     var info = Reader.GetFileInfo(mod.FullPath, item);
                     if (info != null)
                     {
-                        var fileReport = GetModelInstance<IModHashFileReport>();
+                        var fileReport = GetModelInstance<IHashFileReport>();
                         fileReport.File = item;
                         fileReport.Hash = info.ContentSHA;
                         hashReports.Add(fileReport);

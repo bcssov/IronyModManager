@@ -909,7 +909,7 @@ namespace IronyModManager.Services.Tests
             });
             var modExport = new Mock<IModCollectionExporter>();
             var hashExport = new Mock<IModReportExporter>();
-            hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IModHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IModHashReport> report, string path) =>
+            hashExport.Setup(p => p.ExportAsync(It.IsAny<IEnumerable<IHashReport>>(), It.IsAny<string>())).ReturnsAsync((IEnumerable<IHashReport> report, string path) =>
             {
                 if (report.Count() == 1 && report.FirstOrDefault().Reports.Count == 1 && report.FirstOrDefault().Reports.FirstOrDefault().File == "test\\test" && report.FirstOrDefault().Reports.FirstOrDefault().Hash == "2")
                 {
@@ -1031,8 +1031,8 @@ namespace IronyModManager.Services.Tests
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
             {
-                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\1", Hash = "2" } };
-                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
+                var hashReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\1", Hash = "2" } };
+                return new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = hashReport } };
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
@@ -1095,8 +1095,8 @@ namespace IronyModManager.Services.Tests
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
             {
-                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\test", Hash = "2" } };
-                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
+                var hashReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+                return new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = hashReport } };
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
@@ -1159,8 +1159,8 @@ namespace IronyModManager.Services.Tests
             var hashExport = new Mock<IModReportExporter>();
             hashExport.Setup(p => p.ImportAsync(It.IsAny<string>())).ReturnsAsync((string path) =>
             {
-                var hashReport = new List<IModHashFileReport>() { new ModHashFileReport() { File = "test\\test", Hash = "2" } };
-                return new List<IModHashReport>() { new ModHashReport() { Name = "testreport", Reports = hashReport } };
+                var hashReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+                return new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = hashReport } };
             });
             var messageBus = new Mock<IMessageBus>();
             messageBus.Setup(p => p.PublishAsync(It.IsAny<IMessageBusEvent>()));
