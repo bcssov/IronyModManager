@@ -6,7 +6,7 @@
 // Last Modified By : Mario
 // Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="ModHashReportControlViewModel.cs" company="Mario">
+// <copyright file="HashReportControlViewModel.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -25,12 +25,12 @@ using ReactiveUI;
 namespace IronyModManager.ViewModels.Controls
 {
     /// <summary>
-    /// Class ModHashReportControlViewModel.
+    /// Class HashReportControlViewModel.
     /// Implements the <see cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     /// </summary>
     /// <seealso cref="IronyModManager.Common.ViewModels.BaseViewModel" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ModHashReportControlViewModel : BaseViewModel
+    public class HashReportControlViewModel : BaseViewModel
     {
         #region Properties
 

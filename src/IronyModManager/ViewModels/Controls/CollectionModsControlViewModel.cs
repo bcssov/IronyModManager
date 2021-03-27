@@ -195,7 +195,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="hotkeyPressedHandler">The hotkey pressed handler.</param>
         /// <param name="patchMod">The patch mod.</param>
         /// <param name="idGenerator">The identifier generator.</param>
-        /// <param name="modReportView">The mod report view.</param>
+        /// <param name="hashReportView">The hash report view.</param>
         /// <param name="modReportExportHandler">The mod report export handler.</param>
         /// <param name="fileDialogAction">The file dialog action.</param>
         /// <param name="modCollectionService">The mod collection service.</param>
@@ -212,7 +212,7 @@ namespace IronyModManager.ViewModels.Controls
         /// <param name="notificationAction">The notification action.</param>
         /// <param name="appAction">The application action.</param>
         public CollectionModsControlViewModel(MainViewHotkeyPressedHandler hotkeyPressedHandler, PatchModControlViewModel patchMod,
-            IIDGenerator idGenerator, ModHashReportControlViewModel modReportView, ModReportExportHandler modReportExportHandler,
+            IIDGenerator idGenerator, HashReportControlViewModel hashReportView, ModReportExportHandler modReportExportHandler,
             IFileDialogAction fileDialogAction, IModCollectionService modCollectionService,
             IAppStateService appStateService, IModPatchCollectionService modPatchCollectionService, IModService modService, IGameService gameService,
             AddNewCollectionControlViewModel addNewCollection, ExportModCollectionControlViewModel exportCollection, ModifyCollectionControlViewModel modifyCollection,
@@ -237,7 +237,7 @@ namespace IronyModManager.ViewModels.Controls
             this.fileDialogAction = fileDialogAction;
             this.modReportExportHandler = modReportExportHandler;
             this.hotkeyPressedHandler = hotkeyPressedHandler;
-            ModReportView = modReportView;
+            HashReportView = hashReportView;
             SearchMods.ShowArrows = true;
             reorderQueue = new ConcurrentBag<IMod>();
         }
@@ -455,6 +455,12 @@ namespace IronyModManager.ViewModels.Controls
         public virtual ReactiveCommand<Unit, Unit> ExportCollectionToClipboardCommand { get; protected set; }
 
         /// <summary>
+        /// Gets or sets the hash report view.
+        /// </summary>
+        /// <value>The hash report view.</value>
+        public virtual HashReportControlViewModel HashReportView { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the hovered mod.
         /// </summary>
         /// <value>The hovered mod.</value>
@@ -523,12 +529,6 @@ namespace IronyModManager.ViewModels.Controls
         /// <value>The mod order.</value>
         [StaticLocalization(LocalizationResources.Collection_Mods.Order)]
         public virtual string ModOrder { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the mod report view.
-        /// </summary>
-        /// <value>The mod report view.</value>
-        public virtual ModHashReportControlViewModel ModReportView { get; protected set; }
 
         /// <summary>
         /// Gets or sets the mods.
@@ -1548,7 +1548,7 @@ namespace IronyModManager.ViewModels.Controls
                     if (reports?.Count() > 0)
                     {
                         await TriggerOverlayAsync(id, false);
-                        ModReportView.SetParameters(reports);
+                        HashReportView.SetParameters(reports);
                     }
                     else
                     {

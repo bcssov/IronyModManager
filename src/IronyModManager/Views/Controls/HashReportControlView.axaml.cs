@@ -4,9 +4,9 @@
 // Created          : 10-01-2020
 //
 // Last Modified By : Mario
-// Last Modified On : 03-10-2021
+// Last Modified On : 03-27-2021
 // ***********************************************************************
-// <copyright file="ModHashReportControlView.axaml.cs" company="Mario">
+// <copyright file="HashReportControlView.axaml.cs" company="Mario">
 //     Mario
 // </copyright>
 // <summary></summary>
@@ -24,21 +24,23 @@ using IronyModManager.ViewModels.Controls;
 namespace IronyModManager.Views.Controls
 {
     /// <summary>
-    /// Class ModHashReportControlView.
-    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ModHashReportControlViewModel}" />
+    /// Class HashReportControlView.
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl`1" />
+    /// Implements the <see cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.HashReportControlViewModel}" />
     /// </summary>
-    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.ModHashReportControlViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl{IronyModManager.ViewModels.Controls.HashReportControlViewModel}" />
+    /// <seealso cref="IronyModManager.Common.Views.BaseControl`1" />
     [ExcludeFromCoverage("This should be tested via functional testing.")]
-    public class ModHashReportControlView : BaseControl<ModHashReportControlViewModel>
+    public class HashReportControlView : BaseControl<HashReportControlViewModel>
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModHashReportControlView" /> class.
         /// </summary>
-        public ModHashReportControlView()
+        public HashReportControlView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         #endregion Constructors
