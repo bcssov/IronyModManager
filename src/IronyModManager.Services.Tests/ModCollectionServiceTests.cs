@@ -874,7 +874,7 @@ namespace IronyModManager.Services.Tests
             var result = await service.ExportHashReportAsync(null, "test");
             result.Should().BeFalse();
 
-            await service.ExportHashReportAsync(new List<IMod>(), string.Empty);
+            result = await service.ExportHashReportAsync(new List<IMod>(), string.Empty);
             result.Should().BeFalse();
         }
 
@@ -1195,8 +1195,8 @@ namespace IronyModManager.Services.Tests
             });
             DISetup.SetupContainer();
 
-            var innterReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
-            var outerReport = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innterReport } };
+            var innerReport = new List<IHashFileReport>() { new HashFileReport() { File = "test\\test", Hash = "2" } };
+            var outerReport = new List<IHashReport>() { new HashReport() { Name = "testreport", Reports = innerReport } };
             var service = new ModCollectionService(messageBus.Object, hashExport.Object, new Cache(), null, reader.Object, modWriter.Object, null, gameService.Object, modExport.Object, storageProvider.Object, mapper.Object);
             var result = await service.ImportHashReportAsync(new List<IMod>() {
                 new Mod()
